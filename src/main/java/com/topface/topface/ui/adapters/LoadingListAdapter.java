@@ -118,13 +118,14 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
             return T_OTHER;
         }
         //noinspection ConstantConditions
-        if (getItem(position).isLoader())
+        if (getItem(position).isLoader()) {
             return T_LOADER;
-        else //noinspection ConstantConditions
-            if (getItem(position).isRetrier())
+        } else //noinspection ConstantConditions
+            if (getItem(position).isRetrier()) {
                 return T_RETRIER;
-            else
+            } else {
                 return T_OTHER;
+            }
     }
 
     @Override

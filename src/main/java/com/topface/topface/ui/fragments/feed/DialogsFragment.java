@@ -175,7 +175,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
                 @Override
                 public View construct() {
-                    AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
+                    AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
                     binding.setClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -189,7 +190,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             bucket.addFilter(new IViewInjectRule() {
                 @Override
                 public boolean isNeedInject(int pos) {
-                    return pos == 0 || pos == 2 || pos == 8;
+                    return pos == 0;
                 }
             });
             adapter.registerViewBucket(bucket);

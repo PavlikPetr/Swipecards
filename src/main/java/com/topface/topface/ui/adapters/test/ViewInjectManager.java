@@ -62,10 +62,10 @@ public class ViewInjectManager {
      *
      * @param type - тип контейнера с вьюхой.
      */
-    private void throwExceptionIfNeed(@InjectViewBucket.MetamorphoseType int type) {
+    private void throwExceptionIfNeed(@InjectViewBucket.InjectViewBucketType int type) {
         if (mFakePositions.size() == 1 || type != InjectViewBucket.FACTORY) {
             try {
-                throw new Exception("U can can use once. Use IInjectViewFactory");
+                throw new Exception("U can use single view once. Use IInjectViewFactory");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -104,10 +104,10 @@ public class ViewInjectManager {
 
     @Nullable
     private InjectViewBucket getInjectableViewForPos(int pos) {
-        for (InjectViewBucket metamorphose : mViewBuckets) {
-            IViewInjectRule filter = metamorphose.getFilter();
+        for (InjectViewBucket bucket : mViewBuckets) {
+            IViewInjectRule filter = bucket.getFilter();
             if (filter != null && filter.isNeedInject(pos)) {
-                return metamorphose;
+                return bucket;
             }
         }
         return null;
