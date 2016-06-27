@@ -128,8 +128,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!App.from(context).getProfile().showAd) {
-                getListAdapter().removeAdItems();
+            if (!App.get().getProfile().showAd) {
+                FeedAdapter adapter = getListAdapter();
+                if (adapter != null) {
+                    adapter.removeAdItems();
+                }
             }
         }
     };
