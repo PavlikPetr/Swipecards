@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -159,12 +160,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.hasExtra(INTENT_EXIT)) {
-                if (intent.getBooleanExtra(INTENT_EXIT, false)) {
-                    finish();
-                }
+        try {
+            if (intent.getBooleanExtra(INTENT_EXIT, false)) {
+                finish();
             }
+        } catch (BadParcelableException e) {
+            Debug.error(e);
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);

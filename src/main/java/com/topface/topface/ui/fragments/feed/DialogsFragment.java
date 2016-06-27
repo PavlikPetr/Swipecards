@@ -95,8 +95,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isPromoExpressMessagesDialogAttached() {
-        Fragment promoFragment = getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
-        return promoFragment != null;
+        return isAdded() && getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
     }
 
     private void showExpressMessagesPopupIfNeeded() {

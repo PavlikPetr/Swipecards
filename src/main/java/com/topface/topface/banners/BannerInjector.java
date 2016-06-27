@@ -27,11 +27,9 @@ class BannerInjector implements IBannerInjector {
 
     private final AdProvidersFactory mProvidersFactory;
     private final List<WeakReference<IPageWithAds>> mUsedPages = new ArrayList<>();
-    private Context mContext;
 
     public BannerInjector(AdProvidersFactory providersFactory, Context context) {
         mProvidersFactory = providersFactory;
-        mContext = context;
     }
 
     @Override
@@ -49,7 +47,7 @@ class BannerInjector implements IBannerInjector {
         }
         PageInfo.PageName pageId = page.getPageName();
         String pageName = pageId.getName();
-        Map<String, PageInfo> pagesInfo = App.from(mContext).getOptions().getPagesInfo();
+        Map<String, PageInfo> pagesInfo = App.get().getOptions().getPagesInfo();
         if (pagesInfo.containsKey(pageName)) {
             String floatType = pagesInfo.get(pageName).floatType;
             if (floatType.equals(PageInfo.FLOAT_TYPE_BANNER)) {
@@ -99,15 +97,15 @@ class BannerInjector implements IBannerInjector {
     }
 
     private void injectGag(IPageWithAds page) {
-        showAd(page, getProvider(App.from(mContext).getOptions().fallbackTypeBanner), true);
+        showAd(page, getProvider(App.get().getOptions().fallbackTypeBanner), true);
     }
 
     private IAdsProvider getProvider(String banner) {
-        return mProvidersFactory != null ? mProvidersFactory.createProvider(banner, App.from(mContext).getOptions()) : null;
+        return mProvidersFactory != null ? mProvidersFactory.createProvider(banner, App.get().getOptions()) : null;
     }
 
     private String lookupBannerFor(IPageWithAds page) {
-        Map<String, PageInfo> pagesInfo = App.from(mContext).getOptions() != null ? App.from(mContext).getOptions().getPagesInfo() : null;
+        Map<String, PageInfo> pagesInfo = App.get().getOptions().getPagesInfo();
         String pageName = page.getPageName().getName();
         if (pagesInfo != null && pagesInfo.containsKey(pageName)) {
             PageInfo pageInfo = pagesInfo.get(pageName);
