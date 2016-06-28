@@ -189,7 +189,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu((IActivityDelegate) getActivity(), barActions, mRateController, mSavedResponse);
+        return new OverflowMenu(this, barActions, mRateController, mSavedResponse);
     }
 
     @Override

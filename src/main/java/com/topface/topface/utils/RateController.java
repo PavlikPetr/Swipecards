@@ -25,23 +25,23 @@ public class RateController {
 
     @SendLikeRequest.Place
     private final int mPlace;
-    private FragmentActivity fragmentActivity;
+    private FragmentActivity mFragmentActivity;
     private OnRateControllerListener mOnRateControllerUiListener;
 
     public RateController(FragmentActivity fragmentActivity, @SendLikeRequest.Place int place) {
-        this.fragmentActivity = fragmentActivity;
+        mFragmentActivity = fragmentActivity;
         mPlace = place;
     }
 
     public void onLike(final int userId, final int mutualId
             , final OnRateRequestListener requestListener, boolean blockUnconfirmed) {
-        sendRate(new SendLikeRequest(fragmentActivity, userId, mutualId, mPlace, blockUnconfirmed), requestListener);
+        sendRate(new SendLikeRequest(mFragmentActivity, userId, mutualId, mPlace, blockUnconfirmed), requestListener);
     }
 
     public boolean onAdmiration(BalanceData balanceData, final int userId, final int mutualId
             , final OnRateRequestListener requestListener, Options options) {
         if (balanceData.money < options.priceAdmiration) {
-            fragmentActivity.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
+            mFragmentActivity.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
                     , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
@@ -51,7 +51,7 @@ public class RateController {
             }
             return false;
         }
-        sendRate(new SendAdmirationRequest(fragmentActivity, userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
+        sendRate(new SendAdmirationRequest(mFragmentActivity, userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
         return true;
     }
 
@@ -121,7 +121,7 @@ public class RateController {
 
     public void destroyController() {
         mOnRateControllerUiListener = null;
-        fragmentActivity = null;
+        mFragmentActivity = null;
     }
 
     /**
