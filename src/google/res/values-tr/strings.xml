@@ -531,7 +531,7 @@
     <string name="incorrect_photo">Uygunsuz fotoğraf. Başka bir tane yüklemeyi deneyin.</string>
     <string name="incorrect_photo_format">Geçersiz fotoğraf formatı. .jpg veya .png yükleyin.</string>
     <string name="incorrect_photo_size">Fotoğrafın uygunsun boyutu</string>
-    <string name="incorrect_photo_size_show_restrictions">Bu fotoğraf çok küçük (minimum fotoğraf boyutu
+    <string name="incorrect_photo_size_show_restrictions">Bu fotoğraf çok küçük (minimum fotoğraf boyutu 
         — %1$dx%2$d piksel)</string>
     <string name="input_contact_name">Kişinin ismi yazın</string>
     <string name="incorrect_locale">Yorumunuzu okumamızı istiyorsanız Rusça veya İngilizce 
@@ -569,7 +569,7 @@
     <string name="likes_can_help_you">Beğeniler diğer insanlarla tanışmanıza yardımcı olur.</string>
     <string name="general_get_dating">Tanış</string>
     <string name="settings_select_language">Uygulamanın dilini swçin</string>
-    <string name="settings_select_preload_photo_type">Fotoğrafların önyüklemesi aktif
+    <string name="settings_select_preload_photo_type">Fotoğrafların önyüklemesi aktif 
         olduğunda seçin</string>
     <string name="restart_to_change_locale">Dilin değişmesi için uygulama yeniden başlamalıdır</string>
     <string name="locale_changing">Dili değiştirin</string>
@@ -651,7 +651,7 @@
         <item quantity="other">ve daha %d</item>
         <item quantity="one">ve daha %d</item>
     </plurals>
-    <string name="subscriptions_can_be_changed">Abonelik oluşmuştur. Abonelik ayarlarınızı Google Play\'den
+    <string name="subscriptions_can_be_changed">Abonelik oluşmuştur. Abonelik ayarlarınızı Google Play\'den 
         değiştirebilirsiniz.</string>
     <string name="people_nearby">Yakındaki insanlar</string>
     <string name="nobody_nearby">Ortalık bomboş!</string>
@@ -679,7 +679,7 @@
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçtiniz</string>
     <string name="logout_if_email_already_registred">Bu email adresini kullanan bir kullanıcı bulunuyor. 
         Bu sizin mail adresinizse, mevcut hesabınızdan çıkış yapıp %s hesabına giriş yapınız.</string>
-    <string name="recover_password_instructions">Şifrenizi kurtarmak için gerekli adımları içeren bir mesajı
+    <string name="recover_password_instructions">Şifrenizi kurtarmak için gerekli adımları içeren bir mesajı 
         e-posta adresinize gönderdik.</string>
     <string name="email_changing">E-mail adresini değiştir</string>
     <string name="hint_faces_filter">Arama filtrelerinizi değiştirin ve ilginç insanlar ile
@@ -707,8 +707,8 @@
     <string name="send_feedback">Mesaj gönder</string>
     <string name="get_vip_free">Bedava VIP üyelik kazan</string>
     <string name="buy_more_sympathies">Daha çok beğeni alın, daha popüler olun</string>
-    <string name="transaction_code_help">Bize işlem kodunu göndermeniz, bu talebinizi daha hızlı bir şekilde
-        tamamlamanıza yardımcı olacaktır. Siparişle ilgili daha fazla bilgi
+    <string name="transaction_code_help">Bize işlem kodunu göndermeniz, bu talebinizi daha hızlı bir şekilde 
+        tamamlamanıza yardımcı olacaktır. Siparişle ilgili daha fazla bilgi 
         %s içerisinde bulunabilir.</string>
     <string name="google_wallet">Google Cüzdan</string>
     <string name="google_service_general_title">Hatırlartmalar mevcut değil</string>
@@ -778,8 +778,7 @@
     <string name="vk_friends_success_invite">Davet gönderildi</string>
     <string name="join_group_success">Gruba üye oldunuz</string>
     <string name="settings_auto_greeting_title">Otomatik-selam</string>
-    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi
-        ve sohbet başlatılması için Topface\'e izin verin.</string>
+    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.</string>
     <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.</string>
     <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
     <string name="unlock_by_viewed_ad_video_button_text">%s ile ücretsiz aç</string>
