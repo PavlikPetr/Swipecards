@@ -494,7 +494,6 @@
     <string name="choose_cool_photo">Одаберите своју најбољу фотографију и статус који одражава Ваше
         расположење!
     </string>
-    <string name="email_confirmed">адреса е-поште је потврђена!</string>
     <string name="sympathy_sended">Свиђање је послато.</string>
     <string name="general_photo_deleted">Ваша фотографија је уклоњена јер крши једно од правила.
     </string>
@@ -580,7 +579,8 @@
     <string name="incorrect_photo_format">Неподесан формат фотографије. Покушајте да поставите .jpg
         или .png формат
     </string>
-    <string name="incorrect_photo_size">Ова фотографија је превише мала (најмања дозвољена величина је
+    <string name="incorrect_photo_size">Неодговарајућа величина фотографије</string>
+    <string name="incorrect_photo_size_show_restrictions">Ова фотографија је превише мала (најмања дозвољена величина је 
         — %1$dx%2$d пиксела).</string>
     <string name="input_contact_name">Унеси име контакта</string>
     <string name="incorrect_locale">Ако желите да прочитамо Ваше критике, напишите је на руском или
@@ -848,7 +848,7 @@
     <string name="novice_sympathy">Шаљите свиђања само онима који\nВас заиста привлаче.\nМожда ћете
         наћи неког посебног!
     </string>
-    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника
+    <string name="go_dating_message">Почните да упознајете људе и овде ће се појавити имена оних корисника 
         који су посетили Ваш профил</string>
     <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
           профилна слика</string>

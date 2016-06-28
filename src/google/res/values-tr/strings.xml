@@ -459,7 +459,6 @@
     <string name="we_detect_your_city">Biz şehrinizi belirledik:</string>
     <string name="reselect_city">Başka bir şehir seçin</string>
     <string name="choose_cool_photo">En iyi fotoğrafınızı ve moralinizi en iyi anlatan durum bilginizi seçin!</string>
-    <string name="email_confirmed">e-mail onaylandı!</string>
     <string name="sympathy_sended">Beğeni gönderildi</string>
     <string name="general_photo_deleted">Fotoğrafınız kurallara aykırı olduğu için kaldırıldı
     </string>
@@ -531,7 +530,8 @@
     <string name="avatar_set_successfully">Profil fotoğrafınız başarıyla yüklendi</string>
     <string name="incorrect_photo">Uygunsuz fotoğraf. Başka bir tane yüklemeyi deneyin.</string>
     <string name="incorrect_photo_format">Geçersiz fotoğraf formatı. .jpg veya .png yükleyin.</string>
-    <string name="incorrect_photo_size">Bu fotoğraf çok küçük (minimum fotoğraf boyutu 
+    <string name="incorrect_photo_size">Fotoğrafın uygunsun boyutu</string>
+    <string name="incorrect_photo_size_show_restrictions">Bu fotoğraf çok küçük (minimum fotoğraf boyutu 
         — %1$dx%2$d piksel)</string>
     <string name="input_contact_name">Kişinin ismi yazın</string>
     <string name="incorrect_locale">Yorumunuzu okumamızı istiyorsanız Rusça veya İngilizce 
