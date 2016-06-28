@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
-import com.topface.topface.ui.adapters.test.IInjectViewBucketRegistrator;
-import com.topface.topface.ui.adapters.test.InjectViewBucket;
-import com.topface.topface.ui.adapters.test.ViewInjectManager;
+import com.topface.topface.utils.adapter_utils.IInjectViewBucketRegistrator;
+import com.topface.topface.utils.adapter_utils.InjectViewBucket;
+import com.topface.topface.utils.adapter_utils.ViewInjectManager;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,10 +78,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
             return null;
         }
         int pos = injectManager.getTruePosition(position);
-        if (mData == null) {
-            return null;
-        }
-        return mData.hasItem(pos) ? mData.get(pos) : null;
+        return ListUtils.isEntry(pos, mData) ? mData.get(pos) : null;
     }
 
     @Override

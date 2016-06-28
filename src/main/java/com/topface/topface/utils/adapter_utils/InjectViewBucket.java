@@ -1,4 +1,4 @@
-package com.topface.topface.ui.adapters.test;
+package com.topface.topface.utils.adapter_utils;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;

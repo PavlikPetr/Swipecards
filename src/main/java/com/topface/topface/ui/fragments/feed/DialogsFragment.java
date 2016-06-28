@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -34,9 +32,9 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.test.IInjectViewFactory;
-import com.topface.topface.ui.adapters.test.IViewInjectRule;
-import com.topface.topface.ui.adapters.test.InjectViewBucket;
+import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
+import com.topface.topface.utils.adapter_utils.IViewInjectRule;
+import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
@@ -107,8 +105,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isPromoExpressMessagesDialogAttached() {
-        Fragment promoFragment = getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
-        return promoFragment != null;
+        return isAdded() && getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
     }
 
     private void showExpressMessagesPopupIfNeeded() {

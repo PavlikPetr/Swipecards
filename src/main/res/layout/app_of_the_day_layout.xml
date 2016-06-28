@@ -59,7 +59,7 @@
                     android:gravity="end"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="@string/ad"
+                    android:text="@string/app_of_the_day_ad_badge"
                     android:textColor="@color/text_white"
                     android:textSize="12sp" />
 

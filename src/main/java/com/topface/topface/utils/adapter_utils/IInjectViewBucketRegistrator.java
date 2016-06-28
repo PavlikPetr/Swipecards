@@ -1,4 +1,4 @@
-package com.topface.topface.ui.adapters.test;
+package com.topface.topface.utils.adapter_utils;
 
 /**
  * Интерфейс для регистрации вставляемых вьюх.

@@ -52,8 +52,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.UnlockFunctionalityOptionsRequest;
-import com.topface.topface.requests.UnlockFunctionalityRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -77,9 +75,6 @@ import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.ad.NativeAd;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.AdToAppHelper;
-import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -133,8 +128,11 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!App.from(context).getProfile().showAd) {
-                getListAdapter().removeAdItems();
+            if (!App.get().getProfile().showAd) {
+                FeedAdapter adapter = getListAdapter();
+                if (adapter != null) {
+                    adapter.removeAdItems();
+                }
             }
         }
     };
@@ -522,7 +520,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCountersDataProvider.unsubscribe();
+        if (mCountersDataProvider != null) {
+            mCountersDataProvider.unsubscribe();
+        }
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
@@ -1300,6 +1300,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return true;
     }
 
+    //TODO в момент перепиливания фидов надо оставить метод инициализирующий кнопку разболокировки за выполнение задания
+    // start
     protected String getUnlockFunctionalityType() {
         return Utils.EMPTY;
     }
@@ -1310,65 +1312,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void setUnlockButtonView(final Button view) {
-        final String unlockType = getUnlockFunctionalityType();
-        if (view == null || unlockType.isEmpty()) {
-            return;
-        }
-        final AdToAppController controller = new AdToAppHelper(getActivity()).getController();
-        controller.isAdsAvailable(AdToAppController.AdsMasks.VIDEO, new AdToAppController.AdsAvailableListener() {
-            @Override
-            public void isAvailable(final boolean available) {
-                if (available) {
-                    new UnlockFunctionalityOptionsRequest(App.getContext()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-
-                        }
-
-                        @Override
-                        protected void success(UnlockFunctionalityOption data, IApiResponse response) {
-                            UnlockScreenCondition unlockScreenCondition = getUnlockScreenCondition(data);
-                            if (unlockScreenCondition != null) {
-                                view.setText(Utils.getUnlockButtonText(unlockScreenCondition.getUnlockDuration()));
-                                view.setVisibility(unlockScreenCondition.isEnabled() ? View.VISIBLE : View.GONE);
-                            }
-                        }
-
-                        @Override
-                        protected UnlockFunctionalityOption parseResponse(ApiResponse response) {
-                            return UnlockFunctionalityOption.fillData(response);
-                        }
-                    }).exec();
-                }
-            }
-        });
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.addListener(new SimpleAdToAppListener() {
-                    @Override
-                    public void onClosed() {
-                    }
-
-                    @Override
-                    public void onVideoWatched() {
-                        super.onVideoWatched();
-                        new UnlockFunctionalityRequest(unlockType, App.getContext()).callback(new ApiHandler() {
-                            @Override
-                            public void success(IApiResponse response) {
-                                updateData(false, false);
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-
-                            }
-                        }).exec();
-                    }
-                }, getFeedListItemClass().getName());
-                controller.showAds(AdToAppController.AdsMasks.VIDEO);
-                view.setVisibility(View.GONE);
-            }
-        });
     }
+    // end
 }

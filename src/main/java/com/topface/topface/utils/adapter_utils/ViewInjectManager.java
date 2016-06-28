@@ -1,4 +1,4 @@
-package com.topface.topface.ui.adapters.test;
+package com.topface.topface.utils.adapter_utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 
 /**
+ * Этот волшебный класс поможет вам наткать разных View в лист, не вставляя при этом фейковых итемов в данные адаптера.
+ * И вообще адаптер будет думать, что все ок и он работает в штатном режиме.
  * Created by tiberal on 23.06.16.
  */
 @SuppressWarnings("unused")
@@ -57,13 +59,13 @@ public class ViewInjectManager {
     }
 
     /**
-     * Бросаем exception если тип не FACTORY и фейков больше одного. Только с FACTORY можно
+     * Бросаем exception если тип не FACTORY и фейков больше или равно обному. Только с FACTORY можно
      * вставлять несколько одинаковых вьюх.
      *
      * @param type - тип контейнера с вьюхой.
      */
     private void throwExceptionIfNeed(@InjectViewBucket.InjectViewBucketType int type) {
-        if (mFakePositions.size() == 1 || type != InjectViewBucket.FACTORY) {
+        if (mFakePositions.size() >= 1 && type != InjectViewBucket.FACTORY) {
             try {
                 throw new Exception("U can use single view once. Use IInjectViewFactory");
             } catch (Exception e) {
