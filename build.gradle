@@ -44,6 +44,7 @@ def getTimestamp() {
 }
 
 buildscript {
+    ext.retrofit_version = '2.1.0'
     repositories {
         jcenter()
         //костыль. как тольок будет выложена новыя версия плагина это можно убрать
@@ -361,8 +362,9 @@ dependencies {
     // Offerwalls
     compile 'com.supersonic.sdk:mediationsdk:6.4.7@jar'
 
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
 }
 
 project(':libs:IllustratedTextView') {

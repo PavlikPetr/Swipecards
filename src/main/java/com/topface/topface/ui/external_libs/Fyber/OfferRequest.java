@@ -24,17 +24,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
+import rx.Observable;
 import rx.Single;
 import rx.SingleSubscriber;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func2;
 import rx.schedulers.Schedulers;
 
 import static com.adjust.sdk.Util.convertToHex;
@@ -67,27 +68,108 @@ public class OfferRequest {
 
     public void sendRequest(TreeMap<String, String> params) {
         params.put(HASHKEY_KEY, getHash(params));
-        OffersRequest request = OffersRequest.retrofit.create(OffersRequest.class);
-        Call<FyberOffersResponse> call = request.list(params);
-        call.enqueue(new Callback<FyberOffersResponse>() {
+        Observable<FyberOffersResponse> observable = getRequestInstance().create(OffersRequest.class).list(params);
+        observable.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<FyberOffersResponse>() {
             @Override
-            public void onResponse(Call<FyberOffersResponse> call, Response<FyberOffersResponse> response) {
-                Debug.showChunkedLogError("OfferRequestTest", "" + response);
-            }
+            public void call(FyberOffersResponse fyberOffersResponse) {
+                Debug.showChunkedLogError("OfferRequestTest", "" + fyberOffersResponse);
 
+            }
+        }, new Action1<Throwable>() {
             @Override
-            public void onFailure(Call<FyberOffersResponse> call, Throwable t) {
-                Debug.showChunkedLogError("OfferRequestTest", "error " + t);
+            public void call(Throwable throwable) {
+                Debug.showChunkedLogError("OfferRequestTest", "error " + throwable);
             }
         });
     }
 
+    ///////////////////////////////
+    public void test() {
+        createRequestObservable().subscribe(new Action1<RequestObject>() {
+            @Override
+            public void call(RequestObject requestObject) {
+                System.out.println("RESULT " + requestObject.toString() + Calendar.getInstance().getTime());
+            }
+        });
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("COMPLETE " + Calendar.getInstance().getTime());
+    }
+
+    public Observable<RequestObject> createRequestObservable() {
+        System.out.println("GO!!!!! " + Calendar.getInstance().getTime());
+        return Observable.<RequestObject>empty().startWith(observable().zipWith(observable1(), new Func2<Integer, Boolean, RequestObject>() {
+            @Override
+            public RequestObject call(Integer integer, Boolean aBoolean) {
+                return new RequestObject(integer, aBoolean);
+            }
+        }));
+    }
+
+    public Observable<Integer> observable() {
+        return Observable.create(new Observable.OnSubscribe<Integer>() {
+            @Override
+            public void call(Subscriber<? super Integer> subscriber) {
+                System.out.println("FIRST SUBSCRIBE " + Calendar.getInstance().getTime());
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("FIRST DELAY " + Calendar.getInstance().getTime());
+                subscriber.onNext(1);
+            }
+        }).subscribeOn(Schedulers.io());
+    }
+
+    public Observable<Boolean> observable1() {
+        return Observable.create(new Observable.OnSubscribe<Boolean>() {
+            @Override
+            public void call(Subscriber<? super Boolean> subscriber) {
+                System.out.println("SECOND SUBSCRIBE " + Calendar.getInstance().getTime());
+                try {
+                    Thread.sleep(7000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("SECOND DELAY " + Calendar.getInstance().getTime());
+                subscriber.onNext(true);
+            }
+        }).subscribeOn(Schedulers.io());
+    }
+
+    public static class RequestObject {
+
+        public RequestObject(int first, boolean second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        public int first;
+        public boolean second;
+
+        @Override
+        public String toString() {
+            return "#1 " + first + " #2 " + second + " -> ";
+        }
+    }
+    //////////////////////////
+
+    private Retrofit getRequestInstance() {
+        return new Retrofit.Builder()
+                .baseUrl(BASE_FYBER_LINK)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+    }
 
     private interface OffersRequest {
         @GET(GET_OFFERS_LINK)
-        Call<FyberOffersResponse> list(@QueryMap Map<String, String> params);
-
-        public static final Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_FYBER_LINK).addConverterFactory(GsonConverterFactory.create()).build();
+        Observable<FyberOffersResponse> list(@QueryMap Map<String, String> params);
     }
 
 
