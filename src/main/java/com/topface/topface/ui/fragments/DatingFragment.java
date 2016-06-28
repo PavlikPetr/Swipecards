@@ -316,6 +316,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onDetach() {
         super.onDetach();
+        if(mRateController != null) mRateController.setContext(null);
         mFragmentSwitcherListener = null;
         if (getTitleSetter() != null) {
             getTitleSetter().setOnline(false);

@@ -30,7 +30,7 @@ public class RateController {
     private OnRateControllerListener mOnRateControllerUiListener;
 
     public RateController(final Context context, @SendLikeRequest.Place int place) {
-        mContext = context.getApplicationContext();
+        mContext = context;
         mPlace = place;
     }
 
@@ -119,6 +119,10 @@ public class RateController {
 
     public void setOnRateControllerUiListener(OnRateControllerListener onRateControllerUiListener) {
         mOnRateControllerUiListener = onRateControllerUiListener;
+    }
+
+    public void setContext(Context context) {
+        this.mContext = context;
     }
 
     /**
