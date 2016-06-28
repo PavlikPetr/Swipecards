@@ -134,6 +134,9 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
+        if(mRateController != null) {
+            mRateController.destroyController();
+        }
     }
 
     @Override

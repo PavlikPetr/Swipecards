@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
@@ -29,7 +30,7 @@ public class RateController {
     private Context mContext;
     private OnRateControllerListener mOnRateControllerUiListener;
 
-    public RateController(final Context context, @SendLikeRequest.Place int place) {
+    public RateController(FragmentActivity context, @SendLikeRequest.Place int place) {
         mContext = context;
         mPlace = place;
     }
@@ -43,8 +44,7 @@ public class RateController {
             , final OnRateRequestListener requestListener, Options options) {
         if (balanceData.money < options.priceAdmiration) {
             mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
-                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }
@@ -121,8 +121,9 @@ public class RateController {
         mOnRateControllerUiListener = onRateControllerUiListener;
     }
 
-    public void setContext(Context context) {
-        this.mContext = context;
+    public void destroyController() {
+        mOnRateControllerUiListener = null;
+        mContext = null;
     }
 
     /**

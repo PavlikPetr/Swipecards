@@ -163,6 +163,14 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRateController != null) {
+            mRateController.destroyController();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
