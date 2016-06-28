@@ -44,12 +44,15 @@ def getTimestamp() {
 }
 
 buildscript {
+    ext.kotlin_version = '1.0.2-1'
+    ext.anko_version = '0.9'
     repositories {
         jcenter()
         //костыль. как тольок будет выложена новыя версия плагина это можно убрать
         maven { url 'https://jitpack.io' }
     }
     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         //продолжэение костыля. с новой версией заменить на нормальную зависимость
 //        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
@@ -70,6 +73,7 @@ allprojects {
 
 //apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -277,6 +281,13 @@ android {
 }
 
 dependencies {
+    //Kotlin
+    compile "org.jetbrains.anko:anko-sdk15:$anko_version"
+    compile "org.jetbrains.anko:anko-support-v4:$anko_version"
+    compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    compile "org.jetbrains.anko:anko-sqlite:$anko_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kapt 'com.android.databinding:compiler:1.0-rc5'
     //Android Support libs
     compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
@@ -316,9 +327,12 @@ dependencies {
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.7'
     //OpenIAB
-    compile 'org.onepf:openiab:0.9.8.4'
+    compile ('org.onepf:openiab:0.9.8.4') {
+        exclude group: 'com.intellij'
+    }
     //View Bind
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.0.1'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
@@ -327,6 +341,7 @@ dependencies {
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    kapt 'com.squareup.dagger:dagger-compiler:1.2.2'
     //Social networks SDK
     compile 'com.vk:androidsdk:1.6.1'
     compile 'com.facebook.android:facebook-android-sdk:4.5.0'
@@ -419,3 +434,7 @@ task runScript(type: Exec) {
     commandLine 'groovy', projectDir.toString().concat('/src/main/groovy/MoveStrings.groovy'), listFlavours, listBuildTypes
 }
 defaultTasks 'runScript'
+
+kapt {
+    generateStubs = true
+}
