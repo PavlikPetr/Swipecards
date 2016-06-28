@@ -1,7 +1,5 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 
 import com.topface.topface.App;
@@ -27,23 +25,23 @@ public class RateController {
 
     @SendLikeRequest.Place
     private final int mPlace;
-    private Context mContext;
+    private FragmentActivity fragmentActivity;
     private OnRateControllerListener mOnRateControllerUiListener;
 
-    public RateController(FragmentActivity context, @SendLikeRequest.Place int place) {
-        mContext = context;
+    public RateController(FragmentActivity fragmentActivity, @SendLikeRequest.Place int place) {
+        this.fragmentActivity = fragmentActivity;
         mPlace = place;
     }
 
     public void onLike(final int userId, final int mutualId
             , final OnRateRequestListener requestListener, boolean blockUnconfirmed) {
-        sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace, blockUnconfirmed), requestListener);
+        sendRate(new SendLikeRequest(fragmentActivity, userId, mutualId, mPlace, blockUnconfirmed), requestListener);
     }
 
     public boolean onAdmiration(BalanceData balanceData, final int userId, final int mutualId
             , final OnRateRequestListener requestListener, Options options) {
         if (balanceData.money < options.priceAdmiration) {
-            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
+            fragmentActivity.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
                     , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
@@ -53,7 +51,7 @@ public class RateController {
             }
             return false;
         }
-        sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
+        sendRate(new SendAdmirationRequest(fragmentActivity, userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
         return true;
     }
 
@@ -123,7 +121,7 @@ public class RateController {
 
     public void destroyController() {
         mOnRateControllerUiListener = null;
-        mContext = null;
+        fragmentActivity = null;
     }
 
     /**
