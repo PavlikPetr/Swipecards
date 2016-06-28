@@ -109,7 +109,7 @@ public class OverflowMenu {
         App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
-        mContext = iFragmentDelegate.getActivity();
+        mContext = iFragmentDelegate.getActivity().getApplicationContext();
         registerBroadcastReceiver();
         mFragmentDelegate = iFragmentDelegate;
     }
@@ -486,7 +486,7 @@ public class OverflowMenu {
                         setBookmarkedState(null);
                         initOverfowMenu();
                     }
-                }) : new BookmarkAddRequest(userId, mContext, App.from(mContext).getOptions().blockUnconfirmed).
+                }) : new BookmarkAddRequest(userId, mFragmentDelegate.getActivity(), App.get().getOptions().blockUnconfirmed).
                 callback(new BlackListAndBookmarkHandler(mContext,
                         BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                         userId,

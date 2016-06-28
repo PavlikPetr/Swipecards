@@ -96,7 +96,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     @Override
     protected void init() {
-        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_FEED);
+        mRateController = new RateController(this, SendLikeRequest.FROM_FEED);
     }
 
     @Override
