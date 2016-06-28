@@ -244,7 +244,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(LAST_OPENED_PAGE, mPager.getCurrentItem());
+        outState.putInt(LAST_OPENED_PAGE, mPager != null ? mPager.getCurrentItem() : 0);
     }
 
     /**
@@ -281,11 +281,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        for (Fragment fr : getChildFragmentManager().getFragments()) {
-            if (fr != null) {
-                fr.onActivityResult(requestCode, resultCode, data);
-            }
-        }
+        Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
 
     @Override

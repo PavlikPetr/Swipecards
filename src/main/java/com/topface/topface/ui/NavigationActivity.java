@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -87,7 +88,7 @@ import rx.subscriptions.CompositeSubscription;
 import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
-    public static final String INTENT_EXIT = "EXIT";
+    public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     private static final String FRAGMENT_SETTINGS = "fragment_settings";
 
@@ -159,8 +160,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
-        if (intent.getBooleanExtra(INTENT_EXIT, false)) {
-            finish();
+        try {
+            if (intent.getBooleanExtra(INTENT_EXIT, false)) {
+                finish();
+            }
+        } catch (BadParcelableException e) {
+            Debug.error(e);
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);

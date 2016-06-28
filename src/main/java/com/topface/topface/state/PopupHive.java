@@ -67,7 +67,8 @@ public class PopupHive {
     }
 
     public boolean isSequencedExecuted(Class clazz) {
-        return mSequenceHolderMap.get(clazz).mIsExecuted;
+        PopupSequencedHolder popupSequencedHolder = mSequenceHolderMap.get(clazz);
+        return popupSequencedHolder != null && popupSequencedHolder.mIsExecuted;
     }
 
     public void releaseHive() {

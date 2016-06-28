@@ -146,7 +146,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             //Если мы узнаем что пользователь премиум после обновления профиля, то закрываем фрагмент
-            if (App.from(getActivity()).getProfile().premium) {
+            if (App.get().getProfile().premium) {
                 Debug.log("Promo: Close fragment after profile update");
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);

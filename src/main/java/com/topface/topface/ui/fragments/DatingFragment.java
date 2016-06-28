@@ -185,7 +185,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         if (null != mDelightBtn) {
                             mDelightBtn.setEnabled(false);
                         }
-                        mCurrentUser.rated = true;
+                        if (mCurrentUser != null) {
+                            mCurrentUser.rated = true;
+                        }
                         break;
                 }
             }

@@ -495,7 +495,6 @@
     <string name="choose_cool_photo">¡Elige tu mejor fotografía y un estado que refleja tu estado de
         humor!
     </string>
-    <string name="email_confirmed">¡correo electrónico confirmado!</string>
     <string name="sympathy_sended">Simpatía enviada</string>
     <string name="general_photo_deleted">Tu fotografía no cumple con el reglamento y fue eliminada
     </string>
@@ -579,7 +578,8 @@
     <string name="incorrect_photo">Foto incorrecta. Intenta subir otra</string>
     <string name="incorrect_photo_format">Formato de foto incorrecto. Prueba subir jpg o png
     </string>
-    <string name="incorrect_photo_size">Esta fotografía es pequeña (el tamaño mínimo de las fotos es de
+    <string name="incorrect_photo_size">Tamaño de fotografía no permitido</string>
+    <string name="incorrect_photo_size_show_restrictions">Esta fotografía es pequeña (el tamaño mínimo de las fotos es de
         — %1$dx%2$d píxeles).</string>
     <string name="input_contact_name">Escribe el nombre de contacto</string>
     <string name="incorrect_locale">Si quieres que nosotros seamos capaces de leer tu comentario,
