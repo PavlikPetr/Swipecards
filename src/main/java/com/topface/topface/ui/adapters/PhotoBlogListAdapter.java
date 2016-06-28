@@ -50,7 +50,7 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         final FeedPhotoBlog leader = getItem(position);
-        if (holder != null) {
+        if (holder != null && leader != null) {
             holder.heart.setActivated(isSympathySent(leader.user.id));
             holder.text.setText(leader.user.status);
             ViewHelper.setAlpha(holder.heart, (leader.user.deleted || leader.user.banned) ? 0.1f : 1f);
