@@ -36,5 +36,7 @@
         android:layout_height="wrap_content"
         android:drawablePadding="4dp"
         android:text="@string/settings_auto_greeting_subtitle"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:maxLines="2"
+        android:ellipsize="end" />
 </LinearLayout>
