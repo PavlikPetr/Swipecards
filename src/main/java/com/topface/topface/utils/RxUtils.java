@@ -1,7 +1,10 @@
 package com.topface.topface.utils;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Ништяки для упрощения работы с rx
@@ -34,5 +37,16 @@ public class RxUtils {
 
         }
     }
+
+    public static <T> Observable.Transformer<T, T> applySchedulers() {
+        return new Observable.Transformer<T, T>() {
+            @Override
+            public Observable<T> call(Observable<T> observable) {
+                return observable.subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread());
+            }
+        };
+    }
+
 
 }

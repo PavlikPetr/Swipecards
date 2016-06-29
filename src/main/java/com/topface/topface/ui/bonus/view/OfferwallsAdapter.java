@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import com.topface.topface.databinding.OfferwallItemBinding;
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter;
-import com.topface.topface.ui.bonus.models.OfferwallBaseModel;
+import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 
 import org.jetbrains.annotations.NotNull;
 
-public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBinding, OfferwallBaseModel> {
+public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBinding, IOfferwallBaseModel> {
     @Override
     protected Bundle getUpdaterEmmitObject() {
         return null;

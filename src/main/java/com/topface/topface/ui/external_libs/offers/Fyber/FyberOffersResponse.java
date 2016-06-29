@@ -1,26 +1,31 @@
-package com.topface.topface.ui.bonus.models;
+package com.topface.topface.ui.external_libs.offers.Fyber;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class FyberOffersResponse {
-
+    @SuppressWarnings("unused")
     @SerializedName("code")
     private String mCode;
 
+    @SuppressWarnings("unused")
     @SerializedName("message")
     private String mMessage;
 
+    @SuppressWarnings("unused")
     @SerializedName("count")
     private int mCount;
 
+    @SuppressWarnings("unused")
     @SerializedName("pages")
     private int mPages;
 
+    @SuppressWarnings("unused")
     @SerializedName("information")
     private Information mInformation;
 
+    @SuppressWarnings("unused")
     @SerializedName("offers")
     private List<FyberOfferwallModel> mOffers;
 
@@ -44,6 +49,7 @@ public class FyberOffersResponse {
         return mInformation;
     }
 
+    @SuppressWarnings("unused")
     public List<FyberOfferwallModel> getOffers() {
         return mOffers;
     }
@@ -78,8 +84,8 @@ public class FyberOffersResponse {
         return result;
     }
 
+    @SuppressWarnings("unused")
     public class Information {
-
         @SerializedName("app_name")
         private String mAppName;
 

@@ -1,51 +1,63 @@
-package com.topface.topface.ui.bonus.models;
+package com.topface.topface.ui.external_libs.offers.Fyber;
 
 
 import com.google.gson.annotations.SerializedName;
+import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 
-public class FyberOfferwallModel extends OfferwallBaseModel {
+import org.jetbrains.annotations.NotNull;
+
+public class FyberOfferwallModel implements IOfferwallBaseModel {
+    @SuppressWarnings("unused")
     @SerializedName("title")
     private String mTitle;
 
+    @SuppressWarnings("unused")
     @SerializedName("teaser")
     private String mDescription;
 
+    @SuppressWarnings("unused")
     @SerializedName("payout")
     private int mPayout;
 
+    @SuppressWarnings("unused")
     @SerializedName("thumbnail")
     private IconLinks mIconLinks;
 
+    @SuppressWarnings("unused")
     @SerializedName("link")
     private String mLink;
 
+    @NotNull
     @Override
-    String getTitle() {
+    public String getTitle() {
         return mTitle;
     }
 
+    @NotNull
     @Override
-    String getDescription() {
+    public String getDescription() {
         return mDescription;
     }
 
     @Override
-    int getRewardValue() {
+    public int getRewardValue() {
         return mPayout;
     }
 
+    @NotNull
     @Override
-    String getIconUrl() {
+    public String getIconUrl() {
         return mIconLinks.mLowRes;
     }
 
+    @NotNull
     @Override
-    String getLink() {
+    public String getLink() {
         return mLink;
     }
 
     @Override
-    int getOfferwallsType() {
+    public int getOfferwallsType() {
         return FYBER;
     }
 
@@ -73,9 +85,11 @@ public class FyberOfferwallModel extends OfferwallBaseModel {
     }
 
     private class IconLinks {
+        @SuppressWarnings("unused")
         @SerializedName("lowres")
         private String mLowRes;
 
+        @SuppressWarnings("unused")
         @SerializedName("hires")
         private String mHiRes;
 
