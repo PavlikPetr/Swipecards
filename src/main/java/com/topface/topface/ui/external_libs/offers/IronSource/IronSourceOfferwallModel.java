@@ -44,7 +44,7 @@ public class IronSourceOfferwallModel implements IOfferwallBaseModel {
     private String mTitle;
 
     @SuppressWarnings("unused")
-    @SerializedName("title")
+    @SerializedName("creatives")
     private Creatives mCreatives;
 
     @NotNull

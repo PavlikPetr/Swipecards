@@ -2,7 +2,6 @@ package com.topface.topface.ui.external_libs.offers.Fyber;
 
 import android.os.Build;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.ui.external_libs.offers.GoogleAdParams;
 import com.topface.topface.ui.external_libs.offers.OffersUtils;
@@ -16,9 +15,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import rx.Observable;
@@ -65,13 +61,7 @@ public class FyberOffersRequest {
         }).switchMap(new Func1<TreeMap<String, String>, Observable<FyberOffersResponse>>() {
             @Override
             public Observable<FyberOffersResponse> call(TreeMap<String, String> stringStringTreeMap) {
-                Retrofit retrofit = OffersUtils.getRequestInstance(BASE_FYBER_LINK);
-                Observable<FyberOffersResponse> obs = retrofit.create(OffersRequest.class).list(stringStringTreeMap);
-                Retrofit retr = new Retrofit.Builder().baseUrl(BASE_FYBER_LINK).addConverterFactory(GsonConverterFactory.create()).build();
-                Call<FyberOffersResponse> call = retr.create(OffersRequest.class).listTest(stringStringTreeMap);
-                Debug.error("");
-                return obs;
-//                return OffersUtils.getRequestInstance(BASE_FYBER_LINK).create(OffersRequest.class).list(stringStringTreeMap);
+                return OffersUtils.getRequestInstance(BASE_FYBER_LINK).create(OffersRequest.class).list(stringStringTreeMap);
             }
         });
     }
@@ -79,9 +69,6 @@ public class FyberOffersRequest {
     private interface OffersRequest {
         @GET(GET_OFFERS_LINK)
         Observable<FyberOffersResponse> list(@QueryMap Map<String, String> params);
-
-        @GET(GET_OFFERS_LINK)
-        Call<FyberOffersResponse> listTest(@QueryMap Map<String, String> params);
     }
 
 

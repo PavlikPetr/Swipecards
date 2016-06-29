@@ -10,9 +10,6 @@ import com.topface.topface.utils.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Retrofit;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import rx.Observable;
@@ -57,21 +54,13 @@ public class IronSourceOffersRequest {
         }).switchMap(new Func1<Map<String, String>, Observable<IronSourceOffersResponse>>() {
             @Override
             public Observable<IronSourceOffersResponse> call(Map<String, String> stringStringTreeMap) {
-                Retrofit retr = new Retrofit.Builder().baseUrl(BASE_IRON_SOURCE_LINK).build();
-                Call<ResponseBody> call = retr.create(OffersRequest1.class).listTest(stringStringTreeMap);
-                Retrofit retrofit = OffersUtils.getRequestInstance(BASE_IRON_SOURCE_LINK);
-                Observable<IronSourceOffersResponse> obs = retrofit.create(OffersRequest1.class).list(stringStringTreeMap);
-                return obs;
-//                return OffersUtils.getRequestInstance(BASE_IRON_SOURCE_LINK).create(OffersRequest.class).list(stringStringTreeMap);
+                return OffersUtils.getRequestInstance(BASE_IRON_SOURCE_LINK).create(OffersRequest.class).list(stringStringTreeMap);
             }
         });
     }
 
-    private interface OffersRequest1 {
+    private interface OffersRequest {
         @GET(GET_OFFERS_LINK)
         Observable<IronSourceOffersResponse> list(@QueryMap Map<String, String> params);
-
-        @GET(GET_OFFERS_LINK)
-        Call<ResponseBody> listTest(@QueryMap Map<String, String> params);
     }
 }
