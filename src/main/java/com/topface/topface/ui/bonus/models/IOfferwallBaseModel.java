@@ -1,18 +1,18 @@
 package com.topface.topface.ui.bonus.models;
 
 
-import android.support.annotation.IntDef;
+import android.support.annotation.StringDef;
 
 import org.jetbrains.annotations.NotNull;
 
 
 public interface IOfferwallBaseModel {
 
-    public static final int UNDEFINED = 0;
-    public static final int FYBER = 1;
-    public static final int IRON_SOURCE = 2;
+    public static final String UNDEFINED = com.topface.topface.utils.Utils.EMPTY;
+    public static final String FYBER = "FYBER";
+    public static final String IRON_SOURCE = "IRON_SOURCE";
 
-    @IntDef({UNDEFINED, FYBER, IRON_SOURCE})
+    @StringDef({UNDEFINED, FYBER, IRON_SOURCE})
     @interface OfferwallType {
 
     }
@@ -32,5 +32,5 @@ public interface IOfferwallBaseModel {
     public String getLink();
 
     @OfferwallType
-    public int getOfferwallsType();
+    public String getOfferwallsType();
 }

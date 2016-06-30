@@ -24,9 +24,8 @@ import java.util.ArrayList;
 import rx.Observable;
 import rx.Subscriber;
 
-/**
- * Created by tiberal on 02.05.16.
- */
+import static android.databinding.tool.util.GenerationalClassUtil.ExtensionFilter.BR;
+
 public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ItemViewHolder> implements IAdapterDataInteractor<D> {
 
     public static final int EMPTY_POS = -1;

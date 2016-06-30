@@ -42,8 +42,9 @@ public class OfferwallsSettings {
          * TODO
          *    до ввода поодержки rewarded video считаем, что эта настройка всегда выключена.
          *    с добавлением видео-функционала добавить в условие mCoinsForVideoAd>0
+         *    && mVideoOfferwalls.size() > 0
          */
-        return mOfferwalls.size() > 0 || mVideoOfferwalls.size() > 0;
+        return mOfferwalls.size() > 0;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

@@ -1,30 +1,38 @@
 package com.topface.topface.ui.bonus.presenter;
 
+import android.view.View;
+
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
+import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.ui.bonus.view.IBonusView;
-import com.topface.topface.ui.external_libs.offers.Fyber.FyberOffersRequest;
-import com.topface.topface.ui.external_libs.offers.Fyber.FyberOffersResponse;
-import com.topface.topface.ui.external_libs.offers.Fyber.FyberOfferwallModel;
-import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersRequest;
-import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersResponse;
-import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOfferwallModel;
+import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
+import com.topface.topface.ui.external_libs.offers.OffersUtils;
 import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
+import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
 
 
 public class BonusPresenter implements IBonusPresenter {
 
+    private static final int OFFERS_DELAY = 500; //увеличиваем время показа лоадера
+
     private IBonusView mIBonusView;
     private ArrayList<IOfferwallBaseModel> mOffers = new ArrayList<>();
+    private BonusFragmentViewModel mViewModel;
+    private Subscription mSubscription;
 
     @Override
     public void bindView(@NotNull IBonusView iBonusView) {
@@ -34,63 +42,76 @@ public class BonusPresenter implements IBonusPresenter {
     @Override
     public void unbindView() {
         mIBonusView = null;
+        RxUtils.safeUnsubscribe(mSubscription);
+    }
+
+    private void showLoader() {
+        if (mViewModel != null) {
+            mViewModel.offersVisibility.set(View.GONE);
+            mViewModel.emptyViewVisibility.set(View.VISIBLE);
+            mViewModel.emptyViewText.set(App.getContext().getResources().getString(R.string.offers_loading_text));
+            mViewModel.emptyViewIcon.set(R.drawable.ill_positive);
+        }
+    }
+
+    private void showEmptyView() {
+        if (mViewModel != null) {
+            mViewModel.offersVisibility.set(View.GONE);
+            mViewModel.emptyViewVisibility.set(View.VISIBLE);
+            mViewModel.emptyViewText.set(App.getContext().getResources().getString(R.string.offers_empty_text));
+            mViewModel.emptyViewIcon.set(R.drawable.ill_sorrow);
+        }
+    }
+
+    private void showOffersList() {
+        if (mViewModel != null) {
+            mViewModel.offersVisibility.set(View.VISIBLE);
+            mViewModel.emptyViewVisibility.set(View.GONE);
+        }
     }
 
     @Override
     public void loadOfferwalls() {
         if (App.get().getOptions().offerwallsSettings.isEnable()) {
-            if (mIBonusView != null) {
-                mIBonusView.setProgressState(true);
-                mIBonusView.showEmptyViewVisibility(false);
-                mIBonusView.showOfferwallsVisibility(false);
-            }
+            showLoader();
             getOfferwalls();
         } else {
             showEmptyView();
         }
     }
 
+    @Override
+    public void setViewModel(BonusFragmentViewModel viewModel) {
+        mViewModel = viewModel;
+    }
+
+    @Override
+    public void itemClicked(IOfferwallBaseModel data) {
+        Utils.goToUrl(App.getContext(), data.getLink());
+    }
+
+    private Observable<ArrayList<IOfferwallBaseModel>>[] getObservables() {
+        OfferwallsSettings settings = App.get().getOptions().offerwallsSettings;
+        List<String> offersType = settings.getOfferwallsList();
+        List<Observable<ArrayList<IOfferwallBaseModel>>> observables = new ArrayList<>();
+        for (String s : offersType) {
+            Observable<ArrayList<IOfferwallBaseModel>> obs = OffersUtils.getOffersObservableByType(s);
+            if (obs != null) {
+                observables.add(obs);
+            }
+        }
+        return observables.toArray(new Observable[observables.size()]);
+    }
+
     private void getOfferwalls() {
-        new FyberOffersRequest().getRequestObservable()
-                .reduce(new ArrayList<IOfferwallBaseModel>(),
-                        new Func2<ArrayList<IOfferwallBaseModel>, FyberOffersResponse, ArrayList<IOfferwallBaseModel>>() {
-                            @Override
-                            public ArrayList<IOfferwallBaseModel> call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels,
-                                                                       FyberOffersResponse fyberOffersResponse) {
-                                ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
-                                ArrayList<FyberOfferwallModel> initialList = fyberOffersResponse != null ?
-                                        fyberOffersResponse.getOffers() : new ArrayList<FyberOfferwallModel>();
-                                if (initialList != null) {
-                                    for (FyberOfferwallModel item : initialList) {
-                                        res.add(item);
-                                    }
-                                }
-                                return res;
-                            }
-                        })
-                .mergeWith(new IronSourceOffersRequest().getRequestObservable()
-                        .reduce(new ArrayList<IOfferwallBaseModel>(),
-                                new Func2<ArrayList<IOfferwallBaseModel>, IronSourceOffersResponse, ArrayList<IOfferwallBaseModel>>() {
-                                    @Override
-                                    public ArrayList<IOfferwallBaseModel> call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels,
-                                                                               IronSourceOffersResponse ironSourceOffersResponse) {
-                                        ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
-                                        ArrayList<IronSourceOfferwallModel> initialList = ironSourceOffersResponse != null
-                                                && ironSourceOffersResponse.getResponse() != null
-                                                ? ironSourceOffersResponse.getResponse().getOffers()
-                                                : new ArrayList<IronSourceOfferwallModel>();
-                                        for (IronSourceOfferwallModel item : initialList) {
-                                            res.add(item);
-                                        }
-                                        return res;
-                                    }
-                                }))
+        mSubscription = Observable.merge(getObservables())
                 .filter(new Func1<ArrayList<IOfferwallBaseModel>, Boolean>() {
                     @Override
                     public Boolean call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels) {
                         return !iOfferwallBaseModels.isEmpty();
                     }
                 })
+                .delay(OFFERS_DELAY, TimeUnit.MILLISECONDS)
                 .compose(RxUtils.<ArrayList<IOfferwallBaseModel>>applySchedulers())
                 .subscribe(new Action1<ArrayList<IOfferwallBaseModel>>() {
                     @Override
@@ -110,24 +131,14 @@ public class BonusPresenter implements IBonusPresenter {
                 });
     }
 
-    private void showEmptyView() {
-        if (mIBonusView != null) {
-            mIBonusView.showEmptyViewVisibility(true);
-            mIBonusView.showOfferwallsVisibility(false);
-            mIBonusView.setProgressState(false);
-        }
-    }
-
     private void showOffers() {
         if (mOffers.isEmpty()) {
             showEmptyView();
         } else {
             if (mIBonusView != null) {
                 mIBonusView.showOffers(mOffers);
-                mIBonusView.showEmptyViewVisibility(false);
-                mIBonusView.showOfferwallsVisibility(true);
-                mIBonusView.setProgressState(false);
             }
+            showOffersList();
         }
     }
 }

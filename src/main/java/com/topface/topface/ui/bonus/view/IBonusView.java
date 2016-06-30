@@ -6,11 +6,5 @@ import java.util.ArrayList;
 
 public interface IBonusView {
 
-    void setProgressState(boolean isVisible);
-
-    void showEmptyViewVisibility(boolean isVisible);
-
-    void showOfferwallsVisibility(boolean isVisible);
-
     void showOffers(ArrayList<IOfferwallBaseModel> offers);
 }

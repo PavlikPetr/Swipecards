@@ -3,6 +3,7 @@ package com.topface.topface.ui.bonus.view;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,11 @@ import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.databinding.FragmentBonus1Binding;
 import com.topface.topface.statistics.FlurryOpenEvent;
+import com.topface.topface.ui.adapters.ItemEventListener;
 import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
+import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.fragments.BaseFragment;
 
 import java.util.ArrayList;
@@ -54,12 +57,15 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mPresenter = new BonusPresenter();
-        View root = inflater.inflate(R.layout.fragment_bonus1, null);
-        mBinding = DataBindingUtil.bind(root);
-//        mBinding.rvOfferwalls.setAdapter(getAdapter());
+        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.fragment_bonus1, null));
+        BonusFragmentViewModel viewModel = new BonusFragmentViewModel();
+        mPresenter.setViewModel(viewModel);
+        mBinding.setViewModel(viewModel);
+        mBinding.rvOfferwalls.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.rvOfferwalls.setAdapter(getAdapter());
         mPresenter.bindView(this);
         mPresenter.loadOfferwalls();
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return mBinding.getRoot();
     }
 
     @Override
@@ -69,38 +75,23 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     }
 
     @Override
-    public void setProgressState(boolean isVisible) {
-        if (mBinding != null) {
-            mBinding.prsOfferwalls.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    @Override
-    public void showEmptyViewVisibility(boolean isVisible) {
-        if (mBinding != null) {
-            mBinding.emptyOfferwalls.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    @Override
-    public void showOfferwallsVisibility(boolean isVisible) {
-        if (mBinding != null) {
-            mBinding.rvOfferwalls.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    @Override
     public void showOffers(ArrayList<IOfferwallBaseModel> offers) {
-        OfferwallsAdapter adapter = new OfferwallsAdapter(offers);
-        mBinding.rvOfferwalls.setAdapter(adapter);
-//        OfferwallsAdapter adapter = getAdapter();
-//        adapter.clearData();
-//        adapter.addData(offers);
+        OfferwallsAdapter adapter = getAdapter();
+        adapter.clearData();
+        adapter.addData(offers);
     }
 
     private OfferwallsAdapter getAdapter() {
         if (mAdapter == null) {
-//            mAdapter = new OfferwallsAdapter();
+            mAdapter = new OfferwallsAdapter();
+            mAdapter.setOnItemClickListener(new ItemEventListener.OnRecyclerViewItemClickListener<IOfferwallBaseModel>() {
+                @Override
+                public void itemClick(View view, int itemPosition, IOfferwallBaseModel data) {
+                    if (mPresenter != null) {
+                        mPresenter.itemClicked(data);
+                    }
+                }
+            });
         }
         return mAdapter;
     }

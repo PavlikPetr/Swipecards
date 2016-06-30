@@ -9,13 +9,18 @@
             name="viewModel"
             type="com.topface.topface.ui.bonus.viewModel.OfferwallItemViewModel" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <LinearLayout style="@style/OfferwallItem">
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:layout_width="46dp"
-            android:layout_height="46dp" />
+            android:layout_height="46dp"
+            app:remoteSrc="@{viewModel.iconUrl}" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -39,6 +44,7 @@
 
         <Button
             style="@style/OfferwallsButton"
+            android:onClick="@{clickListener.onClick}"
             android:text="@{viewModel.buttonText}"
             tools:text="+1000" />
     </LinearLayout>
