@@ -278,10 +278,20 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         super.onPause();
     }
 
+    private int getCountFakeItems() {
+        int count = 0;
+        for(int i = 0; i < getAdapter().getItemCount(); i++) {
+            if(getAdapter().getAdapterData().get(i).isFake()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = App.from(this).getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (getAdapter().getItemCount() > 1) {
+        if (getAdapter().getItemCount() > getCountFakeItems()) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
             } else if (selectedPhotoId > LeadersRecyclerViewAdapter.EMPTY_SELECTED_ID) {
