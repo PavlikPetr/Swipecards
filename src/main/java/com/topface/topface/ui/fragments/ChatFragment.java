@@ -883,7 +883,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
+        return new OverflowMenu(this, barActions);
     }
 
     private void release() {

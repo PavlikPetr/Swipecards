@@ -188,6 +188,8 @@
     <color name="left_menu_bage_background">#499AFF</color>
     <color name="left_mneu_users_city_color">#80ffffff</color>
 
+    <color name="our_ad_feed_banner">#607a86</color>
+
     <!-- Google text colors -->
     <!-- Dark colors for usage on light backgrounds -->
     <color name="dark_primary_text">#DE000000</color>

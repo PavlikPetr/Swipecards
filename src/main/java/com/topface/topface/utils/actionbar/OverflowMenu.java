@@ -34,6 +34,7 @@ import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
 
@@ -102,19 +103,19 @@ public class OverflowMenu {
         }
     };
 
-    private IActivityDelegate mActivityDelegate;
+    private IFragmentDelegate mFragmentDelegate;
 
-    public OverflowMenu(IActivityDelegate iActivityDelegate, Menu barActions) {
+    public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions) {
         App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
-        mContext = iActivityDelegate.getApplicationContext();
+        mContext = iFragmentDelegate.getActivity().getApplicationContext();
         registerBroadcastReceiver();
-        mActivityDelegate = iActivityDelegate;
+        mFragmentDelegate = iFragmentDelegate;
     }
 
-    public OverflowMenu(IActivityDelegate iActivityDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
-        this(iActivityDelegate, barActions);
+    public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
+        this(iFragmentDelegate, barActions);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
             @Override
             public void call(BalanceData balanceData) {
@@ -283,13 +284,13 @@ public class OverflowMenu {
                     onClickSendGiftAction();
                     break;
                 case COMPLAIN_ACTION:
-                    if (profileId != null && mActivityDelegate != null) {
-                        mActivityDelegate.startActivity(ComplainsActivity.createIntent(profileId));
+                    if (profileId != null && mFragmentDelegate != null) {
+                        mFragmentDelegate.getActivity().startActivity(ComplainsActivity.createIntent(profileId));
                     }
                     break;
                 case OPEN_PROFILE_FOR_EDITOR_STUB:
-                    if (mSavedResponse != null && profileId != null && mActivityDelegate != null) {
-                        mActivityDelegate.startActivity(EditorProfileActionsActivity.createIntent(profileId, mSavedResponse));
+                    if (mSavedResponse != null && profileId != null && mFragmentDelegate != null) {
+                        mFragmentDelegate.getActivity().startActivity(EditorProfileActionsActivity.createIntent(profileId, mSavedResponse));
                     }
                     break;
                 case ADD_TO_BLACK_LIST_ACTION:
@@ -378,8 +379,8 @@ public class OverflowMenu {
     }
 
     private void showBuyVipActivity(int resourceId) {
-        if (mActivityDelegate != null) {
-            mActivityDelegate.startActivityForResult(
+        if (mFragmentDelegate != null) {
+            mFragmentDelegate.getActivity().startActivityForResult(
                     PurchasesActivity.createVipBuyIntent(mContext != null ? mContext.getString(resourceId) : Utils.EMPTY, INTENT_BUY_VIP_FROM),
                     PurchasesActivity.INTENT_BUY_VIP);
         }
@@ -485,7 +486,7 @@ public class OverflowMenu {
                         setBookmarkedState(null);
                         initOverfowMenu();
                     }
-                }) : new BookmarkAddRequest(userId, mContext, App.from(mContext).getOptions().blockUnconfirmed).
+                }) : new BookmarkAddRequest(userId, mFragmentDelegate.getActivity(), App.get().getOptions().blockUnconfirmed).
                 callback(new BlackListAndBookmarkHandler(mContext,
                         BlackListAndBookmarkHandler.ActionTypes.BOOKMARK,
                         userId,
@@ -555,10 +556,10 @@ public class OverflowMenu {
 
     private void openChat() {
         Intent openChatIntent = getOpenChatIntent();
-        if (openChatIntent == null || mActivityDelegate == null) {
+        if (openChatIntent == null || mFragmentDelegate == null) {
             return;
         }
-        mActivityDelegate.startActivityForResult(openChatIntent, ChatActivity.REQUEST_CHAT);
+        mFragmentDelegate.getActivity().startActivityForResult(openChatIntent, ChatActivity.REQUEST_CHAT);
     }
 
     private void setSympathySentState(boolean state, boolean isNeedSentBroadcast) {
@@ -649,7 +650,7 @@ public class OverflowMenu {
         if (mContext != null) {
             LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver);
         }
-        mActivityDelegate = null;
+        mFragmentDelegate = null;
         mOverflowMenuFields = null;
         mContext = null;
     }
