@@ -2,7 +2,7 @@ package com.topface.topface.ui.external_libs.offers.Fyber;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class FyberOffersResponse {
     @SuppressWarnings("unused")
@@ -27,7 +27,7 @@ public class FyberOffersResponse {
 
     @SuppressWarnings("unused")
     @SerializedName("offers")
-    private List<FyberOfferwallModel> mOffers;
+    private ArrayList<FyberOfferwallModel> mOffers;
 
     public String getCode() {
         return mCode;
@@ -49,8 +49,7 @@ public class FyberOffersResponse {
         return mInformation;
     }
 
-    @SuppressWarnings("unused")
-    public List<FyberOfferwallModel> getOffers() {
+    public ArrayList<FyberOfferwallModel> getOffers() {
         return mOffers;
     }
 

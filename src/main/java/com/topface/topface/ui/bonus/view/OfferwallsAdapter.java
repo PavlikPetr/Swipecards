@@ -6,10 +6,19 @@ import android.os.Bundle;
 import com.topface.topface.databinding.OfferwallItemBinding;
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter;
 import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
+import com.topface.topface.ui.bonus.viewModel.OfferwallItemViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBinding, IOfferwallBaseModel> {
+
+    public OfferwallsAdapter(ArrayList<IOfferwallBaseModel> data) {
+        super();
+        addData(data);
+    }
+
     @Override
     protected Bundle getUpdaterEmmitObject() {
         return null;
@@ -22,7 +31,7 @@ public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBind
 
     @Override
     protected void bindData(OfferwallItemBinding binding, int position) {
-
+        binding.setViewModel(new OfferwallItemViewModel(getData().get(position)));
     }
 
     @Override
@@ -38,6 +47,10 @@ public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBind
     @NotNull
     @Override
     protected Class<OfferwallItemBinding> getItemBindingClass() {
-        return null;
+        return OfferwallItemBinding.class;
+    }
+
+    public void clearData() {
+        getData().clear();
     }
 }

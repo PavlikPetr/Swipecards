@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import com.topface.topface.R;
 import com.topface.topface.databinding.FragmentBonus1Binding;
 import com.topface.topface.statistics.FlurryOpenEvent;
+import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
 import com.topface.topface.ui.fragments.BaseFragment;
+
+import java.util.ArrayList;
 
 import static com.topface.topface.ui.fragments.BonusFragment.NEED_SHOW_TITLE;
 
@@ -22,6 +25,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
 
     private FragmentBonus1Binding mBinding;
     private IBonusPresenter mPresenter;
+    private OfferwallsAdapter mAdapter;
 
     public static BonusFragment newInstance(boolean needShowTitle) {
         BonusFragment fragment = new BonusFragment();
@@ -52,6 +56,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
         mPresenter = new BonusPresenter();
         View root = inflater.inflate(R.layout.fragment_bonus1, null);
         mBinding = DataBindingUtil.bind(root);
+//        mBinding.rvOfferwalls.setAdapter(getAdapter());
         mPresenter.bindView(this);
         mPresenter.loadOfferwalls();
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -82,5 +87,21 @@ public class BonusFragment extends BaseFragment implements IBonusView {
         if (mBinding != null) {
             mBinding.rvOfferwalls.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         }
+    }
+
+    @Override
+    public void showOffers(ArrayList<IOfferwallBaseModel> offers) {
+        OfferwallsAdapter adapter = new OfferwallsAdapter(offers);
+        mBinding.rvOfferwalls.setAdapter(adapter);
+//        OfferwallsAdapter adapter = getAdapter();
+//        adapter.clearData();
+//        adapter.addData(offers);
+    }
+
+    private OfferwallsAdapter getAdapter() {
+        if (mAdapter == null) {
+//            mAdapter = new OfferwallsAdapter();
+        }
+        return mAdapter;
     }
 }

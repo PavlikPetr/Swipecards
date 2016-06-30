@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.bonus.viewModel.OfferwallItemViewModel" />
+
+    </data>
+
     <LinearLayout style="@style/OfferwallItem">
 
         <com.topface.topface.ui.views.ImageViewRemote
@@ -17,10 +25,12 @@
 
             <TextView
                 style="@style/OfferwallsText"
+                android:text="@{viewModel.title}"
                 tools:text="Dream Vacation" />
 
             <TextView
                 style="@style/OfferwallsText"
+                android:text="@{viewModel.description}"
                 android:textColor="@color/offerwalls_description_text_color"
                 android:textSize="14sp"
                 tools:text="Download and START" />
@@ -29,7 +39,7 @@
 
         <Button
             style="@style/OfferwallsButton"
+            android:text="@{viewModel.buttonText}"
             tools:text="+1000" />
-
     </LinearLayout>
 </layout>

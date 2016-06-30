@@ -20,7 +20,6 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
@@ -72,7 +71,7 @@ public class NavigationManager {
         App.get().inject(this);
         mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
-        mNavigationStateSubscription =  mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
+        mNavigationStateSubscription = mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData data) {
                 return data != null
@@ -194,7 +193,8 @@ public class NavigationManager {
                 fragment = new PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
-                fragment = BonusFragment.newInstance(true);
+//                fragment = BonusFragment.newInstance(true);
+                fragment = com.topface.topface.ui.bonus.view.BonusFragment.newInstance(true);
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;

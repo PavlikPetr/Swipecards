@@ -3,7 +3,6 @@ package com.topface.topface.ui.external_libs.offers.IronSource;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class IronSourceOffersResponse {
     @SerializedName("response")
@@ -52,13 +51,13 @@ public class IronSourceOffersResponse {
 
         @SuppressWarnings("unused")
         @SerializedName("offers")
-        private List<IronSourceOfferwallModel> mOffers = new ArrayList<>();
+        private ArrayList<IronSourceOfferwallModel> mOffers;
 
         @SuppressWarnings("unused")
         @SerializedName("generalInformation")
         private Info mGeneralInfo;
 
-        public List<IronSourceOfferwallModel> getOffers() {
+        public ArrayList<IronSourceOfferwallModel> getOffers() {
             return mOffers;
         }
 

@@ -12,12 +12,28 @@
             android:layout_marginTop="8dp"
             android:visibility="visible" />
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/emptyOfferwalls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"></LinearLayout>
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/emptyOfferImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emptyOfferImg"
+                android:textSize="16sp"
+                android:textColor="#232C35"
+                android:text="@string/preload_photo_type_preload_off"
+                android:gravity="center"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/prsOfferwalls"

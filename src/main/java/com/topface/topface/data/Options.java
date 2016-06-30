@@ -326,6 +326,7 @@ public class Options extends AbstractData {
             JSONObject bonusObject = response.optJSONObject("bonus");
             if (bonusObject != null) {
                 bonus.enabled = bonusObject.optBoolean("enabled");
+                bonus.enabled = true;
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");

@@ -73,10 +73,6 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.FilterFragment;
-import com.topface.topface.ui.external_libs.offers.Fyber.FyberOffersRequest;
-import com.topface.topface.ui.external_libs.offers.Fyber.FyberOffersResponse;
-import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersRequest;
-import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersResponse;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -89,7 +85,6 @@ import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
@@ -106,6 +101,7 @@ import rx.subscriptions.CompositeSubscription;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+import static com.topface.topface.App.getUserConfig;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -199,7 +195,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Action1<Options> mOptionsAction = new Action1<Options>() {
         @Override
         public void call(Options options) {
-            UserConfig userConfig = App.getUserConfig();
+            UserConfig userConfig = getUserConfig();
             Options.InstantMessageFromSearch message = options.instantMessageFromSearch;
             String instantMessage = userConfig.getDatingMessage();
             // в приоритете данные из кэша, но если там пусто, то возьмем данные из опций
@@ -325,7 +321,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isValidUserCache() {
-        UserConfig config = App.getUserConfig();
+        UserConfig config = getUserConfig();
         if (config.isUserCityChanged()) {
             config.setUserCityChanged(false);
             config.saveConfig();
@@ -824,50 +820,15 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             }
             break;
             case R.id.btnDatingSympathy: {
-//                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
-//                    sendSympathy();
-//                }
-                new FyberOffersRequest().getRequestObservable().compose(RxUtils.<FyberOffersResponse>applySchedulers()).subscribe(new Action1<FyberOffersResponse>() {
-                    @Override
-                    public void call(FyberOffersResponse fyberOffersResponse) {
-                        Debug.showChunkedLogError("OfferRequestTest", "" + fyberOffersResponse);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Debug.showChunkedLogError("OfferRequestTest", "error " + throwable);
-                    }
-                });
+                if (!takePhotoIfNeed(TakePhotoStatistics.PLC_DATING_LIKE)) {
+                    sendSympathy();
+                }
             }
             break;
             case R.id.skip_btn:
             case R.id.btnDatingSkip: {
-//                skipUser(mCurrentUser);
-//                showNextUser();
-
-
-//                new FyberOffersRequest().getRequestObservable().compose(RxUtils.<FyberOffersResponse>applySchedulers()).subscribe(new Action1<FyberOffersResponse>() {
-//                    @Override
-//                    public void call(FyberOffersResponse fyberOffersResponse) {
-//                        Debug.showChunkedLogError("OfferRequestTest", "" + fyberOffersResponse);
-//                    }
-//                }, new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        Debug.showChunkedLogError("OfferRequestTest", "error " + throwable);
-//                    }
-//                });
-                new IronSourceOffersRequest().getRequestObservable().compose(RxUtils.<IronSourceOffersResponse>applySchedulers()).subscribe(new Action1<IronSourceOffersResponse>() {
-                    @Override
-                    public void call(IronSourceOffersResponse ironSourceOffersResponse) {
-                        Debug.showChunkedLogError("OfferRequestTest", "" + ironSourceOffersResponse);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Debug.showChunkedLogError("OfferRequestTest", "error " + throwable);
-                    }
-                });
+                skipUser(mCurrentUser);
+                showNextUser();
             }
             break;
             case R.id.btnDatingProfile: {
