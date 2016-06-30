@@ -563,7 +563,7 @@ public class AddPhotoHelper {
             Photo photo = (Photo) msg.obj;
             if (profile.photos != null && photo != null) {
                 // ставим фото на аватарку только если она едиснтвенная
-                if(profile.photos.size() == 0){
+                if (profile.photos.size() == 0) {
                     profile.photo = photo;
                 }
                 // добавляется фото в начало списка

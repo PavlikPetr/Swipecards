@@ -11,7 +11,7 @@ public class CitiesRequest extends ApiRequest {
     private String type; // тип выборки перечня городов. Пока поддерживается только “top”
     private String prefix;
 
-    public CitiesRequest(Context context, Boolean isTop) {
+    public CitiesRequest(Context context, boolean isTop) {
         super(context);
         if (isTop) {
             type = "top";

@@ -1,81 +1,47 @@
 package com.topface.topface.ui.dialogs;
 
-import android.content.Context;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
-import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.state.EventBus;
-import com.topface.topface.ui.views.CitySearchView;
+import com.topface.topface.databinding.CitySearchPopupBinding;
+import com.topface.topface.ui.adapters.CityAdapter;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
+import com.topface.topface.viewModels.CitySearchPopupViewModel;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
 
 /**
- * Выбираем город
- * Created by tiberal on 14.03.16.
+ * Попап выбора города
+ * Created by tiberal on 28.06.16.
  */
-public class CitySearchPopup extends AbstractDialogFragment {
+public class CitySearchPopup extends AbstractDialogFragment implements ICityPopupCloseListener {
 
+    public static final String CITY_LIST_DATA = "city_list_data";
+    public static final String INPUT_DATA = "input_data";
     public static final String TAG = "city_search_popup";
 
-    @Inject
-    EventBus mEventBus;
-    private CitySearchView mCitySearch;
-
-    public CitySearchPopup() {
-        App.get().inject(this);
-    }
+    private CitySearchPopupViewModel mModel;
+    private CityAdapter mAdapter;
+    private CitySearchPopupBinding mBinding;
 
     @Override
-    @FuckingVoodooMagic(description = "если в портрете запрещаем переворот")
-    protected void initViews(final View root) {
-        Debug.log(this, "+onCreate");
-        final Context context = getActivity().getApplicationContext();
-        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-             getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        mCitySearch = (CitySearchView) root.findViewById(R.id.city_search);
-        mCitySearch.setOnCityClickListener(new CitySearchView.onCityClickListener() {
-            @Override
-            public void onClick(City city) {
-                UserConfig config = App.getUserConfig();
-                config.setUserCityChanged(true);
-                config.saveConfig();
-                mEventBus.setData(city);
-                getDialog().cancel();
-            }
-        });
-        mCitySearch.setOnRootViewListener(new CitySearchView.onRootViewListener() {
-            @Override
-            public int getHeight() {
-                return root.getHeight();
-            }
-        });
-        mCitySearch.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mCitySearch.showDropDown();
-            }
-        });
-        mCitySearch.post(new Runnable() {
-            @Override
-            public void run() {
-                if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    Utils.hideSoftKeyboard(context, mCitySearch);
-                } else {
-                    Utils.showSoftKeyboard(context, mCitySearch);
-                }
-            }
-        });
+    @FuckingVoodooMagic(description = "как только тулбар будет переделан нужно, установку титула и up кнопки переделать на data binding")
+    protected void initViews(View root) {
+        mAdapter = new CityAdapter();
+        mBinding = DataBindingUtil.bind(root);
+        mBinding.cityList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        mBinding.cityList.setAdapter(mAdapter);
+        mModel = new CitySearchPopupViewModel(mBinding, this);
+        mAdapter.setOnItemClickListener(mModel);
+        mBinding.setViewModel(mModel);
         ((TextView) root.findViewById(R.id.title)).setText(R.string.edit_my_city);
         root.findViewById(R.id.title_clickable).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,12 +49,41 @@ public class CitySearchPopup extends AbstractDialogFragment {
                 getDialog().cancel();
             }
         });
-        mCitySearch.findFocus();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Utils.showSoftKeyboard(getActivity().getApplicationContext(), mBinding.enterCity);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(CITY_LIST_DATA, mAdapter.getData());
+        outState.putString(INPUT_DATA, mBinding.enterCity.getText().toString());
+    }
+
+    @Override
+    public void onViewStateRestored(@android.support.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            ArrayList<City> cities = savedInstanceState.getParcelableArrayList(CITY_LIST_DATA);
+            String input = savedInstanceState.getString(INPUT_DATA);
+            if (ListUtils.isNotEmpty(cities)) {
+                mAdapter.addData(cities, input);
+                mModel.editTextObservable.setIgnoreEmit(input);
+            } else {
+                mModel.editTextObservable.set(input);
+            }
+        } else {
+            mModel.editTextObservable.set(Utils.EMPTY);
+        }
     }
 
     @Override
     protected int getDialogLayoutRes() {
-        return R.layout.city_dialog;
+        return R.layout.city_search_popup;
     }
 
     @Override
@@ -97,18 +92,14 @@ public class CitySearchPopup extends AbstractDialogFragment {
     }
 
     @Override
-    public boolean isUnderActionBar() {
-        return false;
+    public void onStop() {
+        super.onStop();
+        mModel.release();
     }
 
     @Override
-    @FuckingVoodooMagic(description = "отключаем принудительны портрет, чтоб дольше все ок работало")
-    public void onDestroyView() {
-        super.onDestroyView();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        View focus = getActivity().getCurrentFocus();
-        if (focus != null) {
-            Utils.hideSoftKeyboard(getContext(), focus.getWindowToken());
-        }
+    public void onClose() {
+        getDialog().cancel();
     }
+
 }
