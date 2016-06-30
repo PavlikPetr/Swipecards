@@ -320,7 +320,7 @@ dependencies {
         exclude group: 'org.json'
     }
     compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.code.gson:gson:2.7'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.7'
     //OpenIAB

@@ -334,7 +334,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
     }
 
     private void checkPreload() {
-        if (isNeedPreload()) {
+        if (isNeedPreload() && mOnEmptyListener != null) {
             log(String.format(Locale.ENGLISH, "Search preload on position #%d with size %d", mPosition, size()));
             mOnEmptyListener.onPreload(this);
         }

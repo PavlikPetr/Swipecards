@@ -169,7 +169,7 @@ public class Options extends AbstractData {
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
      */
     public ExperimentTags experimentTags;
-
+    public AppOfTheDay appOfTheDay;
     public Bonus bonus = new Bonus();
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
@@ -382,6 +382,10 @@ public class Options extends AbstractData {
             }
             if (response.has(OFFERWALL_SETTINGS_KEY)) {
                 offerwallsSettings = JsonUtils.fromJson(response.getJSONObject(OFFERWALL_SETTINGS_KEY).toString(), OfferwallsSettings.class);
+            }
+            JSONObject appOfTheDayJsonObject = response.optJSONObject("appOfTheDay");
+            if (appOfTheDayJsonObject != null) {
+                appOfTheDay = JsonUtils.optFromJson(appOfTheDayJsonObject.toString(), AppOfTheDay.class, new AppOfTheDay());
             }
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
@@ -805,4 +809,53 @@ public class Options extends AbstractData {
             this.external = external;
         }
     }
+
+    public static class AppOfTheDay {
+
+        /**
+         * Информация об элементе "Приложение дня" или null, если для этого пользователя нет подходящего элемента ~ #49836
+         */
+
+        public String title;
+        /**
+         * {String} title - Название
+         */
+        public String description;
+        /**
+         * {String} description - Описание
+         */
+        public String iconUrl;
+        /**
+         * {String} iconUrl - URL-адрес иконки
+         */
+        public String url;
+
+        /**
+         * {String} url - URL-адрес страницы для перехода
+         */
+
+        @SuppressWarnings("SimplifiableIfStatement")
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof AppOfTheDay)) return false;
+            AppOfTheDay that = (AppOfTheDay) o;
+            if (title != null ? !title.equals(that.title) : that.title != null) return false;
+            if (description != null ? !description.equals(that.description) : that.description != null)
+                return false;
+            if (iconUrl != null ? !iconUrl.equals(that.iconUrl) : that.iconUrl != null)
+                return false;
+            return url != null ? url.equals(that.url) : that.url == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = title != null ? title.hashCode() : 0;
+            result = 31 * result + (description != null ? description.hashCode() : 0);
+            result = 31 * result + (iconUrl != null ? iconUrl.hashCode() : 0);
+            result = 31 * result + (url != null ? url.hashCode() : 0);
+            return result;
+        }
+    }
+
 }

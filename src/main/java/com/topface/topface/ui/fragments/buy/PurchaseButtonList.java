@@ -210,7 +210,7 @@ public class PurchaseButtonList {
         price = getPriceByTemplate(price, buyBtn);
         for (String replaceTemplate : Products.PRICE_TEMPLATES) {
             if (buyBtn.titleTemplate.contains(replaceTemplate)) {
-                return buyBtn.titleTemplate.replace(replaceTemplate, currencyFormatter.format(price));
+                return buyBtn.titleTemplate.replace(replaceTemplate, getFormatedPrice(price, currencyFormatter));
             }
         }
         return buyBtn.title;

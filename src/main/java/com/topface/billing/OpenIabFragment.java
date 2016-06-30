@@ -438,95 +438,97 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     private void validatePurchaseRequest(final Purchase purchase, final Context context) {
         // Отправлем покупку на сервер для проверки и начисления
         final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
-        validateRequest.callback(new DataApiHandler<Verify>() {
-            @Override
-            protected void success(Verify verify, IApiResponse response) {
-                AdWords adWords = new AdWords();
-                boolean isTrialPurchase = PurchasesUtils.isTrial(purchase);
-                boolean isTestPurchase = PurchasesUtils.isTestPurchase(purchase);
-                //После удачной покупки (не подписки), которая была проверена сервером,
-                //нужно "потратить" элемент, что бы можно было купить следующий
-                if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
-                    App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
-                }
-                JSONObject balance = response.getBalance();
-                if (balance != null && balance.optBoolean("premium")) {
-                    //Если покупка произошла из какого либо таб-фрагмента,
-                    // то отправляем интент, чтобы скрыть баннер снизу
-                    LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
-                }
-                UserConfig userConfig = App.getUserConfig();
-                if (!userConfig.getFirstPayFlag()) {
-                    mAdjustManager.sendFirstPayEvent(verify.revenue);
-                    if (!isTestPurchase) {
-                        if (isTrialPurchase) {
-                            adWords.trackTrial();
-                        } else {
-                            adWords.trackFirstPurchase();
-                        }
+        if (validateRequest != null) {
+            validateRequest.callback(new DataApiHandler<Verify>() {
+                @Override
+                protected void success(Verify verify, IApiResponse response) {
+                    AdWords adWords = new AdWords();
+                    boolean isTrialPurchase = PurchasesUtils.isTrial(purchase);
+                    boolean isTestPurchase = PurchasesUtils.isTestPurchase(purchase);
+                    //После удачной покупки (не подписки), которая была проверена сервером,
+                    //нужно "потратить" элемент, что бы можно было купить следующий
+                    if (TextUtils.equals(purchase.getItemType(), OpenIabHelper.ITEM_TYPE_INAPP)) {
+                        App.getOpenIabHelperManager().consumeAsync(purchase, OpenIabFragment.this);
                     }
-                    try {
-                        AppsFlyerLib.sendTrackingWithEvent(
-                                context,
-                                App.getContext().getResources().getString(R.string.appsflyer_first_pay),
-                                Double.toString(verify.revenue)
-                        );
-                    } catch (Exception e) {
-                        Debug.error("AppsFlyer exception", e);
+                    JSONObject balance = response.getBalance();
+                    if (balance != null && balance.optBoolean("premium")) {
+                        //Если покупка произошла из какого либо таб-фрагмента,
+                        // то отправляем интент, чтобы скрыть баннер снизу
+                        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
                     }
-                    userConfig.setFirstPayFlag(true);
-                    userConfig.saveConfig();
-                }
-                onPurchased(purchase);
-                if (isNeedSendPurchasesStatistics()) {
-                    //Статистика AppsFlyer
-                    if (verify.revenue > 0) {
-                        mAdjustManager.sendPurchaseEvent(verify.revenue);
+                    UserConfig userConfig = App.getUserConfig();
+                    if (!userConfig.getFirstPayFlag()) {
+                        mAdjustManager.sendFirstPayEvent(verify.revenue);
                         if (!isTestPurchase) {
                             if (isTrialPurchase) {
                                 adWords.trackTrial();
                             } else {
-                                adWords.trackPurchase();
+                                adWords.trackFirstPurchase();
                             }
                         }
                         try {
                             AppsFlyerLib.sendTrackingWithEvent(
                                     context,
-                                    App.getContext().getResources().getString(R.string.appsflyer_purchase),
+                                    App.getContext().getResources().getString(R.string.appsflyer_first_pay),
                                     Double.toString(verify.revenue)
                             );
                         } catch (Exception e) {
                             Debug.error("AppsFlyer exception", e);
                         }
+                        userConfig.setFirstPayFlag(true);
+                        userConfig.saveConfig();
                     }
+                    onPurchased(purchase);
+                    if (isNeedSendPurchasesStatistics()) {
+                        //Статистика AppsFlyer
+                        if (verify.revenue > 0) {
+                            mAdjustManager.sendPurchaseEvent(verify.revenue);
+                            if (!isTestPurchase) {
+                                if (isTrialPurchase) {
+                                    adWords.trackTrial();
+                                } else {
+                                    adWords.trackPurchase();
+                                }
+                            }
+                            try {
+                                AppsFlyerLib.sendTrackingWithEvent(
+                                        context,
+                                        App.getContext().getResources().getString(R.string.appsflyer_purchase),
+                                        Double.toString(verify.revenue)
+                                );
+                            } catch (Exception e) {
+                                Debug.error("AppsFlyer exception", e);
+                            }
+                        }
 
-                    // Google analytics statisctics
-                    EasyTracker.getTracker().send(new HitBuilders.ItemBuilder()
-                            .setTransactionId(purchase.getOrderId())
-                            .setName(purchase.getSku())
-                            .setSku(purchase.getSku())
-                            .setCategory(purchase.getItemType())
-                            .setPrice(verify.revenue)
-                            .setQuantity(1l)
-                            .set(APP_STORE_NAME, purchase.getAppstoreName()).build());
+                        // Google analytics statisctics
+                        EasyTracker.getTracker().send(new HitBuilders.ItemBuilder()
+                                .setTransactionId(purchase.getOrderId())
+                                .setName(purchase.getSku())
+                                .setSku(purchase.getSku())
+                                .setCategory(purchase.getItemType())
+                                .setPrice(verify.revenue)
+                                .setQuantity(1l)
+                                .set(APP_STORE_NAME, purchase.getAppstoreName()).build());
+                    }
                 }
-            }
 
-            @Override
-            protected Verify parseResponse(ApiResponse response) {
-                return new Verify(response);
-            }
-
-            @Override
-            public void fail(int codeError, final IApiResponse response) {
-                boolean consumed = consumeTestPurchase(purchase, validateRequest);
-                consumed |= consumeDuplicatePurchase(codeError, purchase);
-                if (!consumed) {
-                    Debug.error("BillindFragment: verify error: " + response);
+                @Override
+                protected Verify parseResponse(ApiResponse response) {
+                    return new Verify(response);
                 }
-            }
 
-        }).exec();
+                @Override
+                public void fail(int codeError, final IApiResponse response) {
+                    boolean consumed = consumeTestPurchase(purchase, validateRequest);
+                    consumed |= consumeDuplicatePurchase(codeError, purchase);
+                    if (!consumed) {
+                        Debug.error("BillindFragment: verify error: " + response);
+                    }
+                }
+
+            }).exec();
+        }
     }
 
     private boolean isNeedSendPurchasesStatistics() {

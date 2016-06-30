@@ -808,10 +808,10 @@
   <string name="chat_auto_reply_title">Текст сообщения скрыт</string>
   <string name="chat_auto_reply_message">Чтобы открыть и ответить на него, станьте VIP-пользователем</string>
   <string name="chat_auto_reply_button">Стать VIP</string>
-  <string name="photo_list_load_info">Поделитесь фотографиями и вас увидят миллионы</string>
+  <string name="photo_list_load_info">Поделитесь фотографиями, и вас увидят миллионы</string>
   <string name="vk_profile_button_tf_group">Группа Spark</string>
   <string name="vk_profile_button_join_tf_group">Вступить в группу Spark</string>
-  <string name="vk_profile_button_join_vkgames_group">Вступить в группу &quot;Игры ВК&quot;</string>
+  <string name="vk_profile_button_join_vkgames_group">Вступить в группу \&quot;Игры ВК\&quot;</string>
   <string name="vk_profile_button_invite_friends">Пригласить друзей</string>
   <string name="vk_profile_invite_friends_title">Пригласить друзей</string>
   <string name="invite_friend_button">Пригласить</string>
@@ -820,8 +820,7 @@
   <string name="vk_friends_success_invite">Приглашение отправлено</string>
   <string name="join_group_success">Вы вступили в группу</string>
   <string name="settings_auto_greeting_title">Автоприветствие</string>
-  <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог
-        приветствием при получении симпатии</string>
+  <string name="settings_auto_greeting_subtitle">Позволяет автоматически начинать диалог приветствием при получении симпатии</string>
   <string name="take_photo_text_1">Пожалуйста, загрузите свою фотографию, чтобы начать знакомиться.</string>
   <string name="take_photo_text_2">На фото должны быть именно вы. Все фотографии модерируются.</string>
   <string name="unlock_by_viewed_ad_video_button_text">Разблокировать бесплатно на %s</string>
@@ -859,4 +858,19 @@
   <string name="like_liberty_title">Симпатии</string>
   <string name="like_liberty_description">Посмотрите, кому вы нравитесь</string>
   <string name="refill_balance_view_title">На вашем счете</string>
+  <string name="access_to_location_popup_title">Геопозиция недоступна</string>
+  <string name="access_to_location_popup_description">К сожалению, ваша геопозиция недоступна, чтобы продолжить необходимо разрешить доступ</string>
+  <string name="access_to_location_popup_access_button">Включить</string>
+  <string name="city_selector_set_your_city">Укажите ваш город</string>
+  <string name="city_selector_detect_automatically">Определить автоматически</string>
+  <string name="city_selector_your_city">Ваш город</string>
+  <string name="photo_gallery_photo_deleted">Фотография удалена</string>
+  <string name="photofeed_add_photo_to_feed_title">Подняться на первое место!</string>
+  <string name="photofeed_add_photo_to_feed_description">Разместите фото с приветствием, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
+  <string name="offers_screen_title">Бонусы</string>
+  <string name="offers_loading_text">Загружаем доступные для вас задания...</string>
+  <string name="offers_empty_text">К сожалению, доступных заданий для вас нет, попробуйте позже!</string>
+  <string name="offers_rewarded_video_title">Бесплатные монеты</string>
+  <string name="offers_rewarded_video_description">За просмотр видео</string>
+  <string name="app_of_the_day_ad_badge">Реклама</string>
 </resources>

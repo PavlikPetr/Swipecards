@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.topface.topface.utils.ContactsProvider;
 
@@ -27,7 +28,7 @@ public class InviteContactsRequest extends ConfirmedApiRequest {
         JSONObject phonesObject = new JSONObject();
 
         for (ContactsProvider.Contact email : emails) {
-            emailsObject.put(email.getPhone(), email.getName());
+            emailsObject.put(email.getEmail(), email.getName());
         }
         for (ContactsProvider.Contact phone : phones) {
             phonesObject.put(phone.getPhone(), phone.getName());
@@ -37,13 +38,16 @@ public class InviteContactsRequest extends ConfirmedApiRequest {
     }
 
     private void parseContacts(ArrayList<ContactsProvider.Contact> contacts) {
-        emails = new ArrayList<ContactsProvider.Contact>();
-        phones = new ArrayList<ContactsProvider.Contact>();
+        emails = new ArrayList<>();
+        phones = new ArrayList<>();
 
         for (ContactsProvider.Contact contact : contacts) {
-            if (contact.hasEmail()) {
+            String email = contact.getEmail();
+            if (!TextUtils.isEmpty(email)) {
                 emails.add(contact);
-            } else {
+            }
+            String phone = contact.getPhone();
+            if (!TextUtils.isEmpty(phone)) {
                 phones.add(contact);
             }
         }
