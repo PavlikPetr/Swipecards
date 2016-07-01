@@ -80,6 +80,7 @@ public class IronSourceOfferwallModel implements IOfferwallBaseModel {
         return mCreatives != null ? mCreatives.mClickUrl : Utils.EMPTY;
     }
 
+    @NotNull
     @OfferwallType
     @Override
     public String getOfferwallsType() {

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IOfferwallBaseModel {
 
-    public static final String UNDEFINED = com.topface.topface.utils.Utils.EMPTY;
+    public static final String UNDEFINED = "";
     public static final String FYBER = "FYBER";
     public static final String IRON_SOURCE = "IRON_SOURCE";
 
@@ -31,6 +31,7 @@ public interface IOfferwallBaseModel {
     @NotNull
     public String getLink();
 
+    @NotNull
     @OfferwallType
     public String getOfferwallsType();
 }

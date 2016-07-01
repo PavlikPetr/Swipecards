@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.ui.bonus.view.IBonusView;
@@ -20,10 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import rx.Observable;
+import rx.Observer;
 import rx.Subscription;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.functions.Func1;
 
 import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_NAME;
@@ -33,10 +35,17 @@ public class BonusPresenter implements IBonusPresenter {
 
     private static final int OFFERS_DELAY = 500; //увеличиваем время показа лоадера
 
+    @Inject
+    EventBus mEvenBus;
+
     private IBonusView mIBonusView;
     private ArrayList<IOfferwallBaseModel> mOffers = new ArrayList<>();
     private BonusFragmentViewModel mViewModel;
     private Subscription mSubscription;
+
+    public BonusPresenter(){
+        App.get().inject(this);
+    }
 
     @Override
     public void bindView(@NotNull IBonusView iBonusView) {
@@ -115,20 +124,20 @@ public class BonusPresenter implements IBonusPresenter {
                 })
                 .delay(OFFERS_DELAY, TimeUnit.MILLISECONDS)
                 .compose(RxUtils.<ArrayList<IOfferwallBaseModel>>applySchedulers())
-                .subscribe(new Action1<ArrayList<IOfferwallBaseModel>>() {
+                .subscribe(new Observer<ArrayList<IOfferwallBaseModel>>() {
                     @Override
-                    public void call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels) {
-                        mOffers.addAll(iOfferwallBaseModels);
+                    public void onCompleted() {
+                        showOffers();
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    public void onError(Throwable e) {
                         showEmptyView();
                     }
-                }, new Action0() {
+
                     @Override
-                    public void call() {
-                        showOffers();
+                    public void onNext(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels) {
+                        mOffers.addAll(iOfferwallBaseModels);
                     }
                 });
     }
@@ -146,6 +155,7 @@ public class BonusPresenter implements IBonusPresenter {
 
     private void sendOfferwallOpenedBroadcast(List<String> availableOfferwalls) {
         if (ListUtils.isNotEmpty(availableOfferwalls)) {
+//            mEvenBus.setData(new OffersModels.OfferOpened(availableOfferwalls.toArray()));
             Intent intent = new Intent(OFFERWALL_OPENED);
             intent.putStringArrayListExtra(OFFERWALL_NAME, new ArrayList<>(availableOfferwalls));
             LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);

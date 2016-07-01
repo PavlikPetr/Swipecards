@@ -56,6 +56,7 @@ public class FyberOfferwallModel implements IOfferwallBaseModel {
         return mLink;
     }
 
+    @NotNull
     @OfferwallType
     @Override
     public String getOfferwallsType() {
