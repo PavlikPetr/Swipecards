@@ -125,4 +125,8 @@
     <dimen name="offerwalls_button_height">32dp</dimen>
     <dimen name="offerwalls_button_margin_left">10dp</dimen>
     <dimen name="offerwalls_button_padding_right">8dp</dimen>
+
+
+    <dimen name="city_item_height">64dp</dimen>
+
 </resources>

@@ -824,10 +824,10 @@ public class Options extends AbstractData {
         /**
          * {String} iconUrl - URL-адрес иконки
          */
-        public String url;
+        public String targetUrl;
 
         /**
-         * {String} url - URL-адрес страницы для перехода
+         * {String} targetUrl - URL-адрес страницы для перехода
          */
 
         @SuppressWarnings("SimplifiableIfStatement")
@@ -840,7 +840,7 @@ public class Options extends AbstractData {
                 return false;
             if (iconUrl != null ? !iconUrl.equals(that.iconUrl) : that.iconUrl != null)
                 return false;
-            return url != null ? url.equals(that.url) : that.url == null;
+            return targetUrl != null ? targetUrl.equals(that.targetUrl) : that.targetUrl == null;
 
         }
 
@@ -849,7 +849,7 @@ public class Options extends AbstractData {
             int result = title != null ? title.hashCode() : 0;
             result = 31 * result + (description != null ? description.hashCode() : 0);
             result = 31 * result + (iconUrl != null ? iconUrl.hashCode() : 0);
-            result = 31 * result + (url != null ? url.hashCode() : 0);
+            result = 31 * result + (targetUrl != null ? targetUrl.hashCode() : 0);
             return result;
         }
     }

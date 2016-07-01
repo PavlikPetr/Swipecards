@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
+import com.topface.topface.data.City;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -83,15 +84,17 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if (!getData().isEmpty()) {
-                        int firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-                        int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                        int visibleItemCount = lastVisibleItem - firstVisibleItem;
-                        if (mUpdateSubscriber != null && visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= mAdapterData.size() - 1) {
-                            mUpdateSubscriber.onNext(getUpdaterEmmitObject());
+                    if (mUpdateSubscriber != null) {
+                        if (!getData().isEmpty()) {
+                            int firstVisibleItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                            int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                            int visibleItemCount = lastVisibleItem - firstVisibleItem;
+                            if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= mAdapterData.size() - 1) {
+                                mUpdateSubscriber.onNext(getUpdaterEmmitObject());
+                            }
+                        } else {
+                            mUpdateSubscriber.onNext(new Bundle());
                         }
-                    } else {
-                        mUpdateSubscriber.onNext(new Bundle());
                     }
                 }
             });
@@ -100,7 +103,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         }
     }
 
-    protected int getPositionByView(View v){
+    protected int getPositionByView(View v) {
         return mRecyclerView.getLayoutManager().getPosition(v);
     }
 
@@ -124,6 +127,11 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     public void addData(ArrayList<D> data) {
         mAdapterData.addAll(data);
         // TODO: 04.05.16 обновлять только вставленное
+        notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        mAdapterData.clear();
         notifyDataSetChanged();
     }
 
@@ -155,6 +163,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         }
     }
 
+    @Nullable
     protected abstract Bundle getUpdaterEmmitObject();
 
     @LayoutRes
@@ -162,9 +171,11 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
     protected abstract void bindData(T binding, int position);
 
-    protected abstract void bindHeader(ViewDataBinding binding, int position);
+    protected void bindHeader(ViewDataBinding binding, int position) {
+    }
 
-    protected abstract void bindFooter(ViewDataBinding binding, int position);
+    protected void bindFooter(ViewDataBinding binding, int position) {
+    }
 
     @NotNull
     protected abstract Class<T> getItemBindingClass();
