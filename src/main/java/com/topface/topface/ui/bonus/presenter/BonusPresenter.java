@@ -11,6 +11,7 @@ import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.ui.bonus.view.IBonusView;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.external_libs.offers.OffersUtils;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -145,8 +146,10 @@ public class BonusPresenter implements IBonusPresenter {
     }
 
     private void sendOfferwallOpenedBroadcast(List<String> availableOfferwalls) {
-        Intent intent = new Intent(OFFERWALL_OPENED);
-        intent.putStringArrayListExtra(OFFERWALL_NAME, new ArrayList<>(availableOfferwalls));
-        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+        if (ListUtils.isNotEmpty(availableOfferwalls)) {
+            Intent intent = new Intent(OFFERWALL_OPENED);
+            intent.putStringArrayListExtra(OFFERWALL_NAME, new ArrayList<>(availableOfferwalls));
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+        }
     }
 }

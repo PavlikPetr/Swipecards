@@ -17,6 +17,7 @@
 
     <LinearLayout
         style="@style/OfferwallItem"
+        android:background="@drawable/main_item_selector"
         android:onClick="@{clickListener.onClick}">
 
         <com.topface.topface.ui.views.ImageViewRemote
