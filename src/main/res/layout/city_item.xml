@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/top_menu_disabled_text_color"
+        android:onClick="@{clickListener::onClick}">
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/city"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:background="@drawable/city_item_selector"
+            android:duplicateParentState="true"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:textColor="@color/dark_primary_text"
+            android:textSize="16sp" />
+
+    </FrameLayout>
+
+</layout>

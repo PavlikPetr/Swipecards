@@ -21,7 +21,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
             android:background="@{handler.containerBackgroundRes}"
-            android:onClick="@{handler.onButtonClick}"
+            android:onClick="@{handler::onButtonClick}"
             android:paddingBottom="@{handler.containerPaddingBottom}"
             android:paddingLeft="@{handler.containerPaddingLeft}"
             android:paddingRight="@{handler.containerPaddingRight}"

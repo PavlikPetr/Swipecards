@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -277,10 +278,20 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         super.onPause();
     }
 
+    private int getCountFakeItems() {
+        int count = 0;
+        for(int i = 0; i < getAdapter().getItemCount(); i++) {
+            if(getAdapter().getAdapterData().get(i).isFake()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = App.from(this).getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (getAdapter().getItemCount() > 0) {
+        if (getAdapter().getItemCount() > getCountFakeItems()) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
             } else if (selectedPhotoId > LeadersRecyclerViewAdapter.EMPTY_SELECTED_ID) {
