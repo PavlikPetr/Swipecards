@@ -1,9 +1,9 @@
 package com.topface.topface.ui.bonus.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import com.topface.topface.App;
 import com.topface.topface.ui.SingleFragmentActivity;
 
 public class BonusActivity extends SingleFragmentActivity {
@@ -18,7 +18,7 @@ public class BonusActivity extends SingleFragmentActivity {
         return new BonusFragment().newInstance(true);
     }
 
-    public static Intent getIntent(Context context) {
-        return new Intent(context, BonusActivity.class);
+    public static Intent createIntent() {
+        return new Intent(App.getContext(), BonusActivity.class);
     }
 }

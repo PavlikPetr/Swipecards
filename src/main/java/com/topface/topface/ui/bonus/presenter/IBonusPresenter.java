@@ -1,6 +1,5 @@
 package com.topface.topface.ui.bonus.presenter;
 
-
 import com.topface.topface.ui.bonus.view.IBonusView;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 

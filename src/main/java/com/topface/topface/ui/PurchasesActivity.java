@@ -275,7 +275,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
 
                 case TOPFACE_OFFERWALL_SCREEN:
                     finish();
-                    startActivity(BonusActivity.getIntent(this));
+                    startActivity(BonusActivity.createIntent());
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;
             }

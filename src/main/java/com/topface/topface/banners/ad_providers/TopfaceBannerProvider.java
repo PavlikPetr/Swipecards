@@ -192,7 +192,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     intent = Utils.getIntentToOpenUrl(mBanner.parameter);
                     break;
                 case Banner.ACTION_OFFERWALL:
-                    intent = BonusActivity.getIntent(mPage.getActivity());
+                    intent = BonusActivity.createIntent();
                     break;
             }
             sendStat(mBanner, CLICK);

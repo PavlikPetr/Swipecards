@@ -42,8 +42,4 @@ public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBind
     protected Class<OfferwallItemBinding> getItemBindingClass() {
         return OfferwallItemBinding.class;
     }
-
-    public void clearData() {
-        getData().clear();
-    }
 }

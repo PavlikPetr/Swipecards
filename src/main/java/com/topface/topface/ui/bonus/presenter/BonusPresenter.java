@@ -29,7 +29,6 @@ import rx.functions.Func1;
 import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_NAME;
 import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_OPENED;
 
-
 public class BonusPresenter implements IBonusPresenter {
 
     private static final int OFFERS_DELAY = 500; //увеличиваем время показа лоадера
