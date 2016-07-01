@@ -1,4 +1,4 @@
-package com.topface.topface.ui.adapters.test;
+package com.topface.topface.utils.adapter_utils;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
@@ -22,27 +22,27 @@ public class InjectViewBucket {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({VIEW, RES, FACTORY})
-    @interface MetamorphoseType {
+    @interface InjectViewBucketType {
     }
 
     @Nullable
     private IViewInjectRule mFilter;
     @LayoutRes
-    private int mMetamorphoseRes;
+    private int mInjectViewRes;
     @Nullable
     private View mInjectView;
     @Nullable
     private IInjectViewFactory mFactory;
-    @MetamorphoseType
+    @InjectViewBucketType
     private int mType;
 
-    public InjectViewBucket(@LayoutRes int metamorphoseRes) {
-        mMetamorphoseRes = metamorphoseRes;
+    public InjectViewBucket(@LayoutRes int injectViewRes) {
+        mInjectViewRes = injectViewRes;
         mType = RES;
     }
 
-    public InjectViewBucket(@NotNull View metamorphoseView) {
-        mInjectView = metamorphoseView;
+    public InjectViewBucket(@NotNull View injectView) {
+        mInjectView = injectView;
         mType = VIEW;
     }
 
@@ -62,7 +62,7 @@ public class InjectViewBucket {
 
     @LayoutRes
     public int getInjectLayoutRes() {
-        return mMetamorphoseRes;
+        return mInjectViewRes;
     }
 
     @Nullable
@@ -75,6 +75,7 @@ public class InjectViewBucket {
         return mFactory;
     }
 
+    @InjectViewBucketType
     public int getType() {
         return mType;
     }

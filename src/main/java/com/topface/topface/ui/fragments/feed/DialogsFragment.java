@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -34,12 +32,12 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.ui.adapters.test.IInjectViewFactory;
-import com.topface.topface.ui.adapters.test.IViewInjectRule;
-import com.topface.topface.ui.adapters.test.InjectViewBucket;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
+import com.topface.topface.utils.adapter_utils.IViewInjectRule;
+import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -107,8 +105,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isPromoExpressMessagesDialogAttached() {
-        Fragment promoFragment = getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
-        return promoFragment != null;
+        return isAdded() && getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
     }
 
     private void showExpressMessagesPopupIfNeeded() {
@@ -175,21 +172,23 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
                 @Override
                 public View construct() {
-                    AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
+                    AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
                     binding.setClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Utils.goToUrl(getActivity(), appOfTheDay.url);
+                            Utils.goToUrl(getActivity(), appOfTheDay.targetUrl);
                         }
                     });
                     binding.setAppOfTheDay(appOfTheDay);
+                    binding.executePendingBindings();
                     return binding.getRoot();
                 }
             });
             bucket.addFilter(new IViewInjectRule() {
                 @Override
                 public boolean isNeedInject(int pos) {
-                    return pos == 0 || pos == 2 || pos == 8;
+                    return pos == 0;
                 }
             });
             adapter.registerViewBucket(bucket);

@@ -32,7 +32,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         FeedDialog dialog = getItem(position);
-        if (holder != null) {
+        if (holder != null && dialog!=null) {
             holder.time.setText(dialog.createdRelative);
             int itemType = getItemViewType(position);
             FeedItemViewConstructor.setCounter(holder.unreadCounter,

@@ -451,6 +451,7 @@
     <string name="incorrect_photo_format">Некоректний формат фото. Спробуйте завантажити jpg або
         png
     </string>
+    <string name="incorrect_photo_size">Неприпустимий розмір фотографії</string>
     <string name="input_contact_name">Введіть ім\'я контакту</string>
     <string name="incorrect_locale">Якщо Ви хочете, щоб ми змогли прочитати Ваш відгук, пишіть його
         російською або англійською мовою

@@ -45,6 +45,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.Ssid;
 import com.topface.topface.data.Profile;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiResponse;
@@ -58,6 +59,7 @@ import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.acra.sender.ReportSenderException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +93,8 @@ public class Utils {
     private static PluralResources mPluralResources;
     private static float mDensity = App.getContext().getResources().getDisplayMetrics().density;
     private static String mCarrier;
+    public static final String USER_ID = "{userId}";
+    public static final String SECRET_KEY = "{secretKey}";
 
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
@@ -192,7 +196,11 @@ public class Utils {
     }
 
     public static boolean isEmptyJson(JSONObject object) {
-        return object.toString().equals(EMPTY_JSON);
+        return isEmptyJsonString(object.toString());
+    }
+
+    public static boolean isEmptyJsonString(String object) {
+        return object.equals(EMPTY_JSON);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -431,7 +439,7 @@ public class Utils {
     public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
         if (fm != null) {
             List<Fragment> bodyFragments = fm.getFragments();
-            if (bodyFragments != null) {
+            if (!bodyFragments.isEmpty()) {
                 for (Fragment fragment : bodyFragments) {
                     if (fragment != null && !fragment.isDetached() && !fragment.isRemoving()) {
                         fragment.onActivityResult(requestCode, resultCode, data);
@@ -654,4 +662,11 @@ public class Utils {
             }
         }).exec();
     }
+
+    @NotNull
+    public static String prepareUrl(@NotNull String url) {
+        return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId())
+                .replace(SECRET_KEY, Ssid.get());
+    }
+
 }
