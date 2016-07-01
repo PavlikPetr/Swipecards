@@ -196,7 +196,11 @@ public class Utils {
     }
 
     public static boolean isEmptyJson(JSONObject object) {
-        return object.toString().equals(EMPTY_JSON);
+        return isEmptyJsonString(object.toString());
+    }
+
+    public static boolean isEmptyJsonString(String object) {
+        return object.equals(EMPTY_JSON);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

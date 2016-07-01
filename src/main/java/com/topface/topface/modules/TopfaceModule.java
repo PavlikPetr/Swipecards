@@ -29,7 +29,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -73,6 +72,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
+import com.topface.topface.viewModels.CitySearchPopupViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -134,12 +134,12 @@ import dagger.Provides;
                 AuthFragment.class,
                 ChatActivity.class,
                 AddPhotoHelper.class,
-                CitySearchPopup.class,
                 ProfileFormFragment.class,
                 FbAuthorizer.class,
                 BaseAuthFragment.class,
                 TopfaceAuthFragment.class,
-                UserProfileFragment.class
+                UserProfileFragment.class,
+                CitySearchPopupViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
