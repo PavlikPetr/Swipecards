@@ -18,15 +18,20 @@ public class FullscreenSettings implements Parcelable {
     public static final String OFFERWALL = "OFFERWALL";
     public static final String PURCHASE = "PURCHASE";
     public static final String VIP = "VIP";
-    public Banner banner;
+
     /**
      * {Object} banner - информация о баннере для показа
      */
-    public long nextShowNoEarlierThen;
+    public Banner banner;
+
+    /**
+     * {Number} nextRequestNoEarlierThen - минимальный интервал между показами стартового фул-скрин баннера в секундах
+     */
+    public long nextRequestNoEarlierThen;
 
     public FullscreenSettings(Parcel parcel) {
         banner = parcel.readParcelable(((Object) this).getClass().getClassLoader());
-        nextShowNoEarlierThen = parcel.readLong();
+        nextRequestNoEarlierThen = parcel.readLong();
     }
 
     @SuppressWarnings("unused")
@@ -37,10 +42,6 @@ public class FullscreenSettings implements Parcelable {
         return banner == null;
     }
 
-    /**
-     * {Number} nextShowNoEarlierThen - минимальный интервал между показами стартового фул-скрин баннера в секундах
-     */
-
     @Override
     public int describeContents() {
         return 0;
@@ -49,7 +50,7 @@ public class FullscreenSettings implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(banner, flags);
-        dest.writeLong(nextShowNoEarlierThen);
+        dest.writeLong(nextRequestNoEarlierThen);
     }
 
     public static final Parcelable.Creator<FullscreenSettings> CREATOR = new Creator<FullscreenSettings>() {
@@ -69,15 +70,14 @@ public class FullscreenSettings implements Parcelable {
     public boolean equals(Object o) {
         if (!(o instanceof FullscreenSettings)) return false;
         FullscreenSettings that = (FullscreenSettings) o;
-        if (nextShowNoEarlierThen != that.nextShowNoEarlierThen) return false;
+        if (nextRequestNoEarlierThen != that.nextRequestNoEarlierThen) return false;
         return banner != null ? banner.equals(that.banner) : that.banner == null;
-
     }
 
     @Override
     public int hashCode() {
         int result = banner != null ? banner.hashCode() : 0;
-        result = 31 * result + (int) (nextShowNoEarlierThen ^ (nextShowNoEarlierThen >>> 32));
+        result = 31 * result + (int) (nextRequestNoEarlierThen ^ (nextRequestNoEarlierThen >>> 32));
         return result;
     }
 

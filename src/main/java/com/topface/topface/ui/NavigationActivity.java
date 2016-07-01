@@ -285,6 +285,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Debug.log("PopupHive onCreate");
         if (savedInstanceState != null) {
             startPopupRush(true, true);
+        } else {
+            registerPopupSequence();
         }
 
     }
@@ -322,12 +324,18 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         return startActions;
     }
 
+    private void registerPopupSequence() {
+        if (!mPopupHive.containSequence(NavigationActivity.class)) {
+            mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class, false);
+        }
+    }
+
     private void startPopupRush(boolean isNeedResetOldSequence, boolean stateChanged) {
         if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-            if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
-                mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class, false);
+            if (stateChanged) {
+                registerPopupSequence();
             }
             mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
         }

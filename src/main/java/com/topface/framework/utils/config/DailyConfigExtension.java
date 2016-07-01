@@ -70,17 +70,15 @@ public class DailyConfigExtension {
         switch (info.mMode) {
             case EVERY_DAY:
                 calculateAmount(DateUtils.isDayBeforeToday(info.getLastWriteTime()), info);
-                info.setWriteTime(currentTime);
                 break;
             case DAY_AFTER_LAST_EXTRACT:
                 calculateAmount(currentTime - info.getLastWriteTime() >= DateUtils.DAY_IN_MILLISECONDS, info);
-                info.setWriteTime(currentTime);
                 break;
             case DEFAULT:
-                info.setWriteTime(currentTime);
                 info.incrementAmount();
                 break;
         }
+        info.setWriteTime(currentTime);
         return new DailyConfigField<>(data, info);
     }
 
@@ -170,6 +168,9 @@ public class DailyConfigExtension {
         }
 
         public long getAmount() {
+            if (DateUtils.isDayBeforeToday(getLastWriteTime())) {
+                resetAmount();
+            }
             return mAmount;
         }
 
