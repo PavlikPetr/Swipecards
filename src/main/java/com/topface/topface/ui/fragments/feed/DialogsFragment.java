@@ -32,12 +32,12 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
-import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
-import com.topface.topface.utils.adapter_utils.IViewInjectRule;
-import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
+import com.topface.topface.utils.adapter_utils.IViewInjectRule;
+import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -177,10 +177,11 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     binding.setClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Utils.goToUrl(getActivity(), appOfTheDay.url);
+                            Utils.goToUrl(getActivity(), appOfTheDay.targetUrl);
                         }
                     });
                     binding.setAppOfTheDay(appOfTheDay);
+                    binding.executePendingBindings();
                     return binding.getRoot();
                 }
             });

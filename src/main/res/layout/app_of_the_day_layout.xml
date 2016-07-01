@@ -23,8 +23,6 @@
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ifp_avatar_image"
             style="@style/ListAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:foreground="@drawable/feed_avatar_overlay_selector"
             app:remoteSrc="@{appOfTheDay.iconUrl}" />
@@ -72,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
+                android:lines="2"
                 android:text="@{appOfTheDay.description}" />
         </LinearLayout>
     </LinearLayout>

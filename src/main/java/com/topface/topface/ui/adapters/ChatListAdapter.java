@@ -460,7 +460,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private boolean setMessageHtmlContent(ViewHolder holder, History item) {
         if (holder != null && holder.message != null) {
             if (item.text != null && !item.text.equals(Utils.EMPTY)) {
-                holder.message.setText(Html.fromHtml(item.text));
+                holder.message.setText(Html.fromHtml(item.text.replace("\n","<br />")));
                 // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
                 // Если нашли, то добавим им кликабельность
                 // в остальных случаях holder.message будет кликаться на onItemClickListener
