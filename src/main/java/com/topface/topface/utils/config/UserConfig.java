@@ -9,7 +9,6 @@ import android.text.TextUtils;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.data.Options;
@@ -204,7 +203,7 @@ public class UserConfig extends AbstractConfig {
         // флаг о том, что в профиле пользователя изменился город и еще не был сброшен список в dating
         addField(settingsMap, IS_USER_CITY_CHANGED, false);
         //опции фулскрина
-        addField(settingsMap, FULLSCREEN_SETTINGS, new DailyConfigExtension.DailyConfigField<>(1, DailyConfigExtension.EVERY_DAY).toString());
+        addField(settingsMap, FULLSCREEN_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
     }
 
     @Override
@@ -228,7 +227,8 @@ public class UserConfig extends AbstractConfig {
     }
 
     public <T> DailyConfigExtension.DailyConfigField<T> getFullscreenInterval() {
-        return mConfigExtension.getDailyConfigField(FULLSCREEN_SETTINGS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {}.getType());
+        return mConfigExtension.getDailyConfigField(FULLSCREEN_SETTINGS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
     }
 
     public boolean getTestPaymentFlag() {
