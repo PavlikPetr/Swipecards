@@ -101,7 +101,6 @@ import rx.subscriptions.CompositeSubscription;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
-import static com.topface.topface.App.getUserConfig;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -198,7 +197,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private Action1<Options> mOptionsAction = new Action1<Options>() {
         @Override
         public void call(Options options) {
-            UserConfig userConfig = getUserConfig();
+            UserConfig userConfig = App.getUserConfig();
             Options.InstantMessageFromSearch message = options.instantMessageFromSearch;
             String instantMessage = userConfig.getDatingMessage();
             // в приоритете данные из кэша, но если там пусто, то возьмем данные из опций
@@ -324,7 +323,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private boolean isValidUserCache() {
-        UserConfig config = getUserConfig();
+        UserConfig config = App.getUserConfig();
         if (config.isUserCityChanged()) {
             config.setUserCityChanged(false);
             config.saveConfig();
@@ -423,7 +422,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingSubscriptions.unsubscribe();
         }
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateActionsReceiver);
-        if(mRateController != null) {
+        if (mRateController != null) {
             mRateController.destroyController();
         }
     }

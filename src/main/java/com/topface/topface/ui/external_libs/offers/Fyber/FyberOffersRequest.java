@@ -61,14 +61,14 @@ public class FyberOffersRequest {
         }).switchMap(new Func1<TreeMap<String, String>, Observable<FyberOffersResponse>>() {
             @Override
             public Observable<FyberOffersResponse> call(TreeMap<String, String> stringStringTreeMap) {
-                return OffersUtils.getRequestInstance(BASE_FYBER_LINK).create(OffersRequest.class).list(stringStringTreeMap);
+                return OffersUtils.getRequestInstance(BASE_FYBER_LINK).create(OffersRequest.class).setParams(stringStringTreeMap);
             }
         });
     }
 
     private interface OffersRequest {
         @GET(GET_OFFERS_LINK)
-        Observable<FyberOffersResponse> list(@QueryMap Map<String, String> params);
+        Observable<FyberOffersResponse> setParams(@QueryMap Map<String, String> params);
     }
 
 

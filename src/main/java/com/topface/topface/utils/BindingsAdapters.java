@@ -3,7 +3,6 @@ package com.topface.topface.utils;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.view.View;
@@ -53,24 +52,7 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:drawableTop")
     public static void setDrawableTop(TextView view, @DrawableRes int bgResource) {
-        replaceDrawable(view, bgResource, 1);
-    }
-
-    private static TextView replaceDrawable(TextView view, @DrawableRes int bgResource, int replacedPos) {
-        Drawable[] editedDrawables = new Drawable[4];
-        if (replacedPos >= editedDrawables.length) {
-            throw new IllegalArgumentException("Wrong replaced position");
-        }
-        Drawable[] drawables = view.getCompoundDrawables();
-        int drawablesLength = drawables.length;
-        for (int i = 0; i < editedDrawables.length; i++) {
-            editedDrawables[i] = i < drawablesLength ? drawables[i] : null;
-        }
-        if (replacedPos < editedDrawables.length) {
-            editedDrawables[replacedPos] = App.getContext().getResources().getDrawable(bgResource);
-        }
-        view.setCompoundDrawablesWithIntrinsicBounds(editedDrawables[0], editedDrawables[1], editedDrawables[2], editedDrawables[3]);
-        return view;
+        BindingsUtils.replaceDrawable(view, bgResource, 1);
     }
 
     @BindingAdapter("app:textColorSelector")

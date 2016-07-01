@@ -54,13 +54,13 @@ public class IronSourceOffersRequest {
         }).switchMap(new Func1<Map<String, String>, Observable<IronSourceOffersResponse>>() {
             @Override
             public Observable<IronSourceOffersResponse> call(Map<String, String> stringStringTreeMap) {
-                return OffersUtils.getRequestInstance(BASE_IRON_SOURCE_LINK).create(OffersRequest.class).list(stringStringTreeMap);
+                return OffersUtils.getRequestInstance(BASE_IRON_SOURCE_LINK).create(OffersRequest.class).setParams(stringStringTreeMap);
             }
         });
     }
 
     private interface OffersRequest {
         @GET(GET_OFFERS_LINK)
-        Observable<IronSourceOffersResponse> list(@QueryMap Map<String, String> params);
+        Observable<IronSourceOffersResponse> setParams(@QueryMap Map<String, String> params);
     }
 }
