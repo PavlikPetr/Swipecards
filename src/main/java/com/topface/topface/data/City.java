@@ -128,11 +128,7 @@ public class City extends AbstractData implements SerializableToJson, Cloneable,
     }
 
     public String getName() {
-        if (this.id == ALL_CITIES) {
-            return App.getContext().getString(R.string.filter_cities_all);
-        } else {
-            return name;
-        }
+        return this.id == ALL_CITIES ? App.getContext().getString(R.string.filter_cities_all) : name;
     }
 
     public String getFullName() {
@@ -149,14 +145,5 @@ public class City extends AbstractData implements SerializableToJson, Cloneable,
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(full);
-    }
-
-    @Override
-    public String toString() {
-        return "City{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", full='" + full + '\'' +
-                '}';
     }
 }

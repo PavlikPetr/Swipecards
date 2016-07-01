@@ -54,7 +54,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Utils.showSoftKeyboard(getActivity().getApplicationContext(), mBinding.enterCity);
+        mBinding.enterCity.requestFocus();
     }
 
     @Override

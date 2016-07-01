@@ -115,4 +115,8 @@
     <dimen name="left_menu_header_pading_left">16dp</dimen>
     <dimen name="left_menu_header_pading_top">16dp</dimen>
     <dimen name="left_menu_header_pading_right">10dp</dimen>
+
+
+    <dimen name="city_item_height">64dp</dimen>
+
 </resources>

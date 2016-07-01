@@ -42,7 +42,7 @@
             <FrameLayout
                 android:id="@+id/current_city_item"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="@dimen/city_item_height"
                 android:background="@color/bg_white"
                 android:elevation="3dp"
                 android:paddingBottom="5dp"
@@ -75,11 +75,12 @@
         <EditText
             android:id="@+id/enter_city"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/city_item_height"
             android:background="@color/bg_white"
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="16dp"
-            android:gravity="center_vertical|start"
+            android:maxLines="1"
+            android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:text="@={viewModel.editTextObservable}" />
 
