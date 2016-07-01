@@ -1,5 +1,7 @@
 package com.topface.topface.ui.bonus.presenter;
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
 import com.topface.topface.App;
@@ -10,7 +12,6 @@ import com.topface.topface.ui.bonus.view.IBonusView;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.external_libs.offers.OffersUtils;
 import com.topface.topface.utils.RxUtils;
-import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +24,9 @@ import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
+
+import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_NAME;
+import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_OPENED;
 
 
 public class BonusPresenter implements IBonusPresenter {
@@ -85,11 +89,6 @@ public class BonusPresenter implements IBonusPresenter {
         mViewModel = viewModel;
     }
 
-    @Override
-    public void itemClicked(IOfferwallBaseModel data) {
-        Utils.goToUrl(App.getContext(), data.getLink());
-    }
-
     private Observable<ArrayList<IOfferwallBaseModel>>[] getObservables() {
         OfferwallsSettings settings = App.get().getOptions().offerwallsSettings;
         List<String> offersType = settings.getOfferwallsList();
@@ -98,8 +97,11 @@ public class BonusPresenter implements IBonusPresenter {
             Observable<ArrayList<IOfferwallBaseModel>> obs = OffersUtils.getOffersObservableByType(s);
             if (obs != null) {
                 observables.add(obs);
+            } else {
+                offersType.remove(s);
             }
         }
+        sendOfferwallOpenedBroadcast(offersType);
         return observables.toArray(new Observable[observables.size()]);
     }
 
@@ -140,5 +142,11 @@ public class BonusPresenter implements IBonusPresenter {
             }
             showOffersList();
         }
+    }
+
+    private void sendOfferwallOpenedBroadcast(List<String> availableOfferwalls) {
+        Intent intent = new Intent(OFFERWALL_OPENED);
+        intent.putStringArrayListExtra(OFFERWALL_NAME, new ArrayList<>(availableOfferwalls));
+        LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
     }
 }

@@ -26,8 +26,9 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.bonus.view.BonusActivity;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
-import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
@@ -273,7 +274,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
                     return true;
 
                 case TOPFACE_OFFERWALL_SCREEN:
-                    //TODO отправить на страницу офферов
+                    finish();
+                    startActivity(BonusActivity.getIntent(this));
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;
             }

@@ -1,7 +1,6 @@
 package com.topface.topface.ui.bonus.presenter;
 
 
-import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.bonus.view.IBonusView;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 
@@ -13,6 +12,4 @@ public interface IBonusPresenter {
     void loadOfferwalls();
 
     void setViewModel(BonusFragmentViewModel viewModel);
-
-    void itemClicked(IOfferwallBaseModel data);
 }

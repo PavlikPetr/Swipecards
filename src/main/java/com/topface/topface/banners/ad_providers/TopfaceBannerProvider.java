@@ -20,6 +20,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.bonus.view.BonusActivity;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Device;
@@ -191,7 +192,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     intent = Utils.getIntentToOpenUrl(mBanner.parameter);
                     break;
                 case Banner.ACTION_OFFERWALL:
-                    //TODO открыть офферы
+                    intent = BonusActivity.getIntent(mPage.getActivity());
                     break;
             }
             sendStat(mBanner, CLICK);

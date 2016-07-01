@@ -46,6 +46,7 @@
 
         <Button
             style="@style/OfferwallsButton"
+            android:clickable="false"
             android:text="@{viewModel.buttonText}"
             tools:text="+1000" />
     </LinearLayout>

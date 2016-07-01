@@ -17,13 +17,15 @@ import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-import static com.topface.topface.ui.fragments.BonusFragment.NEED_SHOW_TITLE;
-
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends BaseFragment implements IBonusView {
+    public static final String NEED_SHOW_TITLE = "need_show_title";
+    public static final String OFFERWALL_OPENED = "com.topface.topface.offerwall.opened";
+    public static final String OFFERWALL_NAME = "offerwall_name";
     public static final String PAGE_NAME = "bonus";
 
     private FragmentBonus1Binding mBinding;
@@ -87,9 +89,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
             mAdapter.setOnItemClickListener(new ItemEventListener.OnRecyclerViewItemClickListener<IOfferwallBaseModel>() {
                 @Override
                 public void itemClick(View view, int itemPosition, IOfferwallBaseModel data) {
-                    if (mPresenter != null) {
-                        mPresenter.itemClicked(data);
-                    }
+                    Utils.goToUrl(getActivity(), data.getLink());
                 }
             });
         }

@@ -234,6 +234,8 @@
 
         <activity android:name=".ui.BlackListActivity" />
 
+        <activity android:name=".ui.bonus.view.BonusActivity" />
+
         <activity
             android:name=".ui.ChatActivity"
             android:parentActivityName=".ui.NavigationActivity"
