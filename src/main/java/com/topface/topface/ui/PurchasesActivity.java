@@ -35,7 +35,6 @@ import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
 import com.topface.topface.utils.actionbar.ActionBarView;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,18 +127,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         Options options = App.from(this).getOptions();
         mBonusRedirect = options.forceOfferwallRedirect;
         mTopfaceOfferwallRedirect = options.topfaceOfferwallRedirect;
-        if (!TFOfferwallSDK.isInitialized()) {
-            OfferwallsManager.initTfOfferwall(this, new TFCredentials.OnInitializeListener() {
-                @Override
-                public void onInitialized() {
-                    mIsOfferwallsReady = true;
-                }
-
-                @Override
-                public void onError() {
-                }
-            });
-        }
     }
 
     @Override
@@ -286,9 +273,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
                     return true;
 
                 case TOPFACE_OFFERWALL_SCREEN:
-                    OfferwallPayload payload = new OfferwallPayload();
-                    payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
-                    OfferwallsManager.startTfOfferwall(this, payload);
+                    //TODO отправить на страницу офферов
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;
             }

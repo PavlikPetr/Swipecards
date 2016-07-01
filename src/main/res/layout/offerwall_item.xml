@@ -15,7 +15,9 @@
 
     </data>
 
-    <LinearLayout style="@style/OfferwallItem">
+    <LinearLayout
+        style="@style/OfferwallItem"
+        android:onClick="@{clickListener.onClick}">
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:layout_width="46dp"
@@ -44,7 +46,6 @@
 
         <Button
             style="@style/OfferwallsButton"
-            android:onClick="@{clickListener.onClick}"
             android:text="@{viewModel.buttonText}"
             tools:text="+1000" />
     </LinearLayout>

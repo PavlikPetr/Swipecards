@@ -25,7 +25,6 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 /**
  * Created by kirussell on 12/01/15.
@@ -192,14 +191,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     intent = Utils.getIntentToOpenUrl(mBanner.parameter);
                     break;
                 case Banner.ACTION_OFFERWALL:
-                    switch (mBanner.parameter) {
-                        case OfferwallsManager.SPONSORPAY:
-                            OfferwallsManager.startSponsorpay(mPage.getActivity());
-                            break;
-                        default:
-                            OfferwallsManager.startOfferwall(mPage.getActivity(), mOptions);
-                            break;
-                    }
+                    //TODO открыть офферы
                     break;
             }
             sendStat(mBanner, CLICK);

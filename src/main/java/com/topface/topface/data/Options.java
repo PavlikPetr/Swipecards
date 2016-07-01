@@ -26,7 +26,6 @@ import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -135,8 +134,6 @@ public class Options extends AbstractData {
     public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
-    public String offerwall = OfferwallsManager.SPONSORPAY;
-
     public int premium_period;
     public int contacts_count = Integer.MAX_VALUE;
     public long popup_timeout;
@@ -242,7 +239,6 @@ public class Options extends AbstractData {
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             updateUrl = response.optString("updateUrl", App.getContext().getString(R.string.app_update_url));
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
-            offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
             blockChatNotMutual = response.optBoolean("blockChatNotMutual");

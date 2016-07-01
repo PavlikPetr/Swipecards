@@ -13,13 +13,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.topface.offerwall.common.TFCredentials;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends WebViewFragment {
@@ -65,24 +63,6 @@ public class BonusFragment extends WebViewFragment {
     }
 
     @Override
-    protected void onLoadProfile() {
-        super.onLoadProfile();
-        OfferwallsManager.init(getActivity(), App.from(getActivity()).getOptions());
-        OfferwallsManager.initTfOfferwall(getActivity(), new TFCredentials.OnInitializeListener() {
-            @Override
-            public void onInitialized() {
-                if (tfOfferwallButton != null) {
-                    tfOfferwallButton.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void onError() {
-            }
-        });
-    }
-
-    @Override
     protected String getTitle() {
         return getString(R.string.general_bonus);
     }
@@ -108,10 +88,6 @@ public class BonusFragment extends WebViewFragment {
         for (Options.Offerwalls.Offer offer : offerwalls.extraOffers) {
             Button offerwallButton = createButton(getActivity(), offer);
             extraOffersContainer.addView(offerwallButton);
-            if (offer.action.equals(OfferwallsManager.TFOFFERWALL) && TFCredentials.getAdId() == null) {
-                tfOfferwallButton = offerwallButton;
-                tfOfferwallButton.setEnabled(false);
-            }
         }
         return root;
     }
@@ -139,7 +115,6 @@ public class BonusFragment extends WebViewFragment {
         return createButton(activity, style, offer.text, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OfferwallsManager.startOfferwall(activity, offer.action, App.from(getActivity()).getOptions());
                 Intent intent = new Intent(OFFERWALL_OPENED);
                 intent.putExtra(OFFERWALL_NAME, offer.action);
                 LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
