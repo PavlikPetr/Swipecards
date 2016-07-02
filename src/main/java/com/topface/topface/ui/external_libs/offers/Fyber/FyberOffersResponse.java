@@ -84,7 +84,7 @@ public class FyberOffersResponse {
     }
 
     @SuppressWarnings("unused")
-    public class Information {
+    public static class Information {
         @SerializedName("app_name")
         private String mAppName;
 

@@ -19,7 +19,7 @@ public class BindingsUtils {
             editedDrawables[i] = i < drawablesLength ? drawables[i] : null;
         }
         if (replacedPos < editedDrawables.length) {
-            editedDrawables[replacedPos] = App.getContext().getResources().getDrawable(bgResource);
+            editedDrawables[replacedPos] = view.getResources().getDrawable(bgResource);
         }
         view.setCompoundDrawablesWithIntrinsicBounds(editedDrawables[0], editedDrawables[1], editedDrawables[2], editedDrawables[3]);
         return view;

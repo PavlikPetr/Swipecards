@@ -21,8 +21,8 @@
         android:onClick="@{clickListener.onClick}">
 
         <com.topface.topface.ui.views.ImageViewRemote
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+            android:layout_width="@dimen/offerwalls_image_width"
+            android:layout_height="@dimen/offerwalls_image_heighr"
             app:remoteSrc="@{viewModel.iconUrl}" />
 
         <LinearLayout

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class OffersModels {
 
-    public class OfferOpened {
+    public static class OfferOpened {
         private String mOffers[];
 
         public OfferOpened(String offers[]) {

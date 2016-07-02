@@ -130,7 +130,7 @@ public class IronSourceOfferwallModel implements IOfferwallBaseModel {
     }
 
     @SuppressWarnings("unused")
-    private class Creatives {
+    private static class Creatives {
         @SerializedName("creativeId")
         private String mCreativeId;
         @SerializedName("clickUrl")
@@ -164,7 +164,7 @@ public class IronSourceOfferwallModel implements IOfferwallBaseModel {
     }
 
     @SuppressWarnings("unused")
-    private class Assets {
+    private static class Assets {
         @SerializedName("Icon")
         private Image mIcon;
 
@@ -186,7 +186,7 @@ public class IronSourceOfferwallModel implements IOfferwallBaseModel {
     }
 
     @SuppressWarnings("unused")
-    private class Image {
+    private static class Image {
         @SerializedName("url")
         private String mUrl;
 

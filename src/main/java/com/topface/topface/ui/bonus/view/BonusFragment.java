@@ -24,8 +24,6 @@ import java.util.ArrayList;
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends BaseFragment implements IBonusView {
     public static final String NEED_SHOW_TITLE = "need_show_title";
-    public static final String OFFERWALL_OPENED = "com.topface.topface.offerwall.opened";
-    public static final String OFFERWALL_NAME = "offerwall_name";
     public static final String PAGE_NAME = "bonus";
 
     private FragmentBonus1Binding mBinding;
@@ -59,11 +57,11 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mPresenter = new BonusPresenter();
-        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.fragment_bonus1, null));
+        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.fragment_bonus, null));
         BonusFragmentViewModel viewModel = new BonusFragmentViewModel();
         mPresenter.setViewModel(viewModel);
         mBinding.setViewModel(viewModel);
-        mBinding.rvOfferwalls.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.rvOfferwalls.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mBinding.rvOfferwalls.setAdapter(getAdapter());
         mPresenter.bindView(this);
         mPresenter.loadOfferwalls();

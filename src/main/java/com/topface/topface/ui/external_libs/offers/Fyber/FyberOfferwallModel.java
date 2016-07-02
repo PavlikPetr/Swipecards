@@ -86,7 +86,7 @@ public class FyberOfferwallModel implements IOfferwallBaseModel {
         return res;
     }
 
-    private class IconLinks {
+    private static class IconLinks {
         @SuppressWarnings("unused")
         @SerializedName("lowres")
         private String mLowRes;

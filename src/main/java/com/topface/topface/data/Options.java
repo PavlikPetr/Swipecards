@@ -63,7 +63,6 @@ public class Options extends AbstractData {
     protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
     private final static int TRIAL_VIP_MAX_SHOW_COUNT = 10;
-    private static final String OFFERWALL_SETTINGS_KEY = "offerwallsSettings";
 
     /**
      * Настройки для каждого типа страниц
@@ -375,8 +374,9 @@ public class Options extends AbstractData {
                 leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
                 });
             }
-            if (response.has(OFFERWALL_SETTINGS_KEY)) {
-                offerwallsSettings = JsonUtils.fromJson(response.getJSONObject(OFFERWALL_SETTINGS_KEY).toString(), OfferwallsSettings.class);
+            JSONObject offerwallsSettingsJsonObject = response.optJSONObject("offerwallsSettings");
+            if (offerwallsSettingsJsonObject != null) {
+                offerwallsSettings = JsonUtils.fromJson(offerwallsSettingsJsonObject.toString(), OfferwallsSettings.class);
             }
             JSONObject appOfTheDayJsonObject = response.optJSONObject("appOfTheDay");
             if (appOfTheDayJsonObject != null) {

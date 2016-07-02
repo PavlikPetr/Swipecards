@@ -28,7 +28,7 @@ public class IronSourceOffersResponse {
         return data != null ? data.hashCode() : 0;
     }
 
-    public class Response {
+    public static class Response {
         @SuppressWarnings("unused")
         @SerializedName("errorCode")
         private int mErrorCode;
@@ -61,7 +61,7 @@ public class IronSourceOffersResponse {
             return mOffers;
         }
 
-        public class Info {
+        public static class Info {
             public String applicationName;
             public String currencyName;
             public int totalEarnedRewards;

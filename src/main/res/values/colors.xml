@@ -191,6 +191,7 @@
     <!--Offerwalls-->
     <color name="offerwalls_title_text_color">#232C35</color>
     <color name="offerwalls_description_text_color">#607D8B</color>
+    <color name="offerwall_empty_view_text_color">#232C35</color>
 
     <color name="our_ad_feed_banner">#607a86</color>
 

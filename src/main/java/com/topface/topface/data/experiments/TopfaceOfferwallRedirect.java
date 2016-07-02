@@ -100,10 +100,8 @@ public class TopfaceOfferwallRedirect extends BaseExperiment {
 
     /**
      * Check completness by broadcast from BonusFragment when topface offerwall is opened.
-     *
-     * @param intent broadcast from BonusFragment
      */
-    public void setCompletedByBroadcast(Intent intent) {
+    public void setCompletedByBroadcast() {
         // TF оферволы удалил, поэтому всегда false
         mIsCompleted = false;
     }

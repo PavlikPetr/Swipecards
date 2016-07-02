@@ -11,6 +11,7 @@ import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.ui.bonus.view.IBonusView;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
+import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.external_libs.offers.OffersUtils;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.RxUtils;
@@ -18,6 +19,7 @@ import com.topface.topface.utils.RxUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -28,22 +30,18 @@ import rx.Observer;
 import rx.Subscription;
 import rx.functions.Func1;
 
-import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_NAME;
-import static com.topface.topface.ui.bonus.view.BonusFragment.OFFERWALL_OPENED;
-
 public class BonusPresenter implements IBonusPresenter {
 
     private static final int OFFERS_DELAY = 500; //увеличиваем время показа лоадера
 
     @Inject
     EventBus mEvenBus;
-
     private IBonusView mIBonusView;
     private ArrayList<IOfferwallBaseModel> mOffers = new ArrayList<>();
     private BonusFragmentViewModel mViewModel;
     private Subscription mSubscription;
 
-    public BonusPresenter(){
+    public BonusPresenter() {
         App.get().inject(this);
     }
 
@@ -102,12 +100,13 @@ public class BonusPresenter implements IBonusPresenter {
         OfferwallsSettings settings = App.get().getOptions().offerwallsSettings;
         List<String> offersType = settings.getOfferwallsList();
         List<Observable<ArrayList<IOfferwallBaseModel>>> observables = new ArrayList<>();
-        for (String s : offersType) {
-            Observable<ArrayList<IOfferwallBaseModel>> obs = OffersUtils.getOffersObservableByType(s);
+        for (Iterator<String> it = offersType.iterator(); it.hasNext(); ) {
+            String item = it.next();
+            Observable<ArrayList<IOfferwallBaseModel>> obs = OffersUtils.getOffersObservableByType(item);
             if (obs != null) {
                 observables.add(obs);
             } else {
-                offersType.remove(s);
+                it.remove();
             }
         }
         sendOfferwallOpenedBroadcast(offersType);
@@ -155,10 +154,7 @@ public class BonusPresenter implements IBonusPresenter {
 
     private void sendOfferwallOpenedBroadcast(List<String> availableOfferwalls) {
         if (ListUtils.isNotEmpty(availableOfferwalls)) {
-//            mEvenBus.setData(new OffersModels.OfferOpened(availableOfferwalls.toArray()));
-            Intent intent = new Intent(OFFERWALL_OPENED);
-            intent.putStringArrayListExtra(OFFERWALL_NAME, new ArrayList<>(availableOfferwalls));
-            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
+            mEvenBus.setData(new OffersModels.OfferOpened(availableOfferwalls.toArray(new String[availableOfferwalls.size()])));
         }
     }
 }

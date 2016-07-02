@@ -19,7 +19,6 @@ import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 import rx.functions.Func1;
-import rx.functions.Func2;
 
 import static com.adjust.sdk.Util.convertToHex;
 
@@ -43,27 +42,29 @@ public class FyberOffersRequest {
     private static final String RESPONSE_FORMAT = "json";
 
     public Observable<FyberOffersResponse> getRequestObservable() {
-        return OffersUtils.getGoogleAdParamsObservable().reduce(new TreeMap<String, String>(), new Func2<TreeMap<String, String>, GoogleAdParams, TreeMap<String, String>>() {
-            @Override
-            public TreeMap<String, String> call(TreeMap<String, String> stringStringTreeMap, GoogleAdParams googleAdParams) {
-                TreeMap<String, String> params = new TreeMap<>();
-                params.put(APP_ID_KEY, APP_ID);
-                params.put(UID_KEY, String.valueOf(App.get().getProfile().uid));
-                params.put(LOCALE_KEY, App.getCurrentLocale().getLanguage());
-                params.put(FORMAT_KEY, RESPONSE_FORMAT);
-                params.put(OS_VERSION_KEY, Build.VERSION.RELEASE);
-                params.put(TIMESTAMP_KEY, String.valueOf(Calendar.getInstance().getTimeInMillis() / 1000L));
-                params.put(IS_LIMITED_KEY, String.valueOf(googleAdParams.isLimitAdTrackingEnabled()));
-                params.put(GOOGLE_AD_ID_KEY, googleAdParams.getId());
-                params.put(HASHKEY_KEY, getHash(params));
-                return params;
-            }
-        }).switchMap(new Func1<TreeMap<String, String>, Observable<FyberOffersResponse>>() {
-            @Override
-            public Observable<FyberOffersResponse> call(TreeMap<String, String> stringStringTreeMap) {
-                return OffersUtils.getRequestInstance(BASE_FYBER_LINK).create(OffersRequest.class).setParams(stringStringTreeMap);
-            }
-        });
+        return OffersUtils.getGoogleAdParamsObservable()
+                .map(new Func1<GoogleAdParams, Map<String, String>>() {
+                    @Override
+                    public Map<String, String> call(GoogleAdParams googleAdParams) {
+                        TreeMap<String, String> params = new TreeMap<>();
+                        params.put(APP_ID_KEY, APP_ID);
+                        params.put(UID_KEY, String.valueOf(App.get().getProfile().uid));
+                        params.put(LOCALE_KEY, App.getCurrentLocale().getLanguage());
+                        params.put(FORMAT_KEY, RESPONSE_FORMAT);
+                        params.put(OS_VERSION_KEY, Build.VERSION.RELEASE);
+                        params.put(TIMESTAMP_KEY, String.valueOf(Calendar.getInstance().getTimeInMillis() / 1000L));
+                        params.put(IS_LIMITED_KEY, String.valueOf(googleAdParams.isLimitAdTrackingEnabled()));
+                        params.put(GOOGLE_AD_ID_KEY, googleAdParams.getId());
+                        params.put(HASHKEY_KEY, getHash(params));
+                        return params;
+                    }
+                })
+                .flatMap(new Func1<Map<String, String>, Observable<FyberOffersResponse>>() {
+                    @Override
+                    public Observable<FyberOffersResponse> call(Map<String, String> params) {
+                        return OffersUtils.getRequestInstance(BASE_FYBER_LINK).create(OffersRequest.class).setParams(params);
+                    }
+                });
     }
 
     private interface OffersRequest {
@@ -86,8 +87,7 @@ public class FyberOffersRequest {
     private String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         md.update(text.getBytes("iso-8859-1"), 0, text.length());
-        byte[] sha1hash = md.digest();
-        return convertToHex(sha1hash);
+        return convertToHex(md.digest());
     }
 
     private String getSHA1(String text) {
