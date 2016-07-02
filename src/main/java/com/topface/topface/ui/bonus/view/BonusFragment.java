@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.topface.R;
-import com.topface.topface.databinding.FragmentBonus1Binding;
+import com.topface.topface.databinding.FragmentBonusBinding;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.adapters.ItemEventListener;
 import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
@@ -26,7 +26,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     public static final String NEED_SHOW_TITLE = "need_show_title";
     public static final String PAGE_NAME = "bonus";
 
-    private FragmentBonus1Binding mBinding;
+    private FragmentBonusBinding mBinding;
     private IBonusPresenter mPresenter;
     private OfferwallsAdapter mAdapter;
 
