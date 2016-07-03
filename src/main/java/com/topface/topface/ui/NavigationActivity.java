@@ -1,11 +1,11 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.BadParcelableException;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -93,13 +93,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     private static final String FRAGMENT_SETTINGS = "fragment_settings";
+    private static final int EXIT_TIMEOUT = 3000;
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
     private DrawerLayoutManager<HackyDrawerLayout> mDrawerLayout;
     private FullscreenController mFullscreenController;
-    private boolean isPopupVisible = false;
+    private boolean mIsPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
     @SuppressWarnings("deprecation")
@@ -595,14 +596,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     public void setPopupVisible(boolean visibility) {
-        isPopupVisible = visibility;
+        mIsPopupVisible = visibility;
     }
 
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         IOnBackPressed backPressedListener = null;
-        for (android.support.v4.app.Fragment fragment : fm.getFragments()) {
+        for (Fragment fragment : fm.getFragments()) {
             if (fragment instanceof IOnBackPressed) {
                 backPressedListener = (IOnBackPressed) fragment;
                 break;
@@ -610,21 +611,22 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         if (backPressedListener == null || !backPressedListener.onBackPressed()) {
             if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
-                if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
+                if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !mIsPopupVisible) {
                     mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-                } else if (!mBackPressedOnce.get()) {
-                    (new Timer()).schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            mBackPressedOnce.set(false);
-                        }
-                    }, 3000);
-                    mBackPressedOnce.set(true);
-                    Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
-                    isPopupVisible = false;
                 } else {
-                    isPopupVisible = false;
-                    finish();
+                    if (!mBackPressedOnce.get()) {
+                        (new Timer()).schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                mBackPressedOnce.set(false);
+                            }
+                        }, EXIT_TIMEOUT);
+                        mBackPressedOnce.set(true);
+                        Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
+                    } else {
+                        finish();
+                    }
+                    mIsPopupVisible = false;
                 }
             }
         }

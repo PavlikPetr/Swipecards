@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,18 +9,17 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.databinding.WebViewFragmentBinding;
 
 import java.util.Locale;
 
 abstract public class WebViewFragment extends BaseFragment {
 
-    private FrameLayout mFullScreenContainer;
     private View mFullScreenView;
-    private WebView mWebView;
+    private WebViewFragmentBinding mBinding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,22 +38,19 @@ abstract public class WebViewFragment extends BaseFragment {
     }
 
     protected View getView(LayoutInflater inflater) {
-        View root = inflater.inflate(R.layout.ac_web_auth, null);
-
-        mWebView = (WebView) root.findViewById(R.id.wvWebFrame);
-        mFullScreenContainer = (FrameLayout) root.findViewById(R.id.fullscreen_container);
-        mWebView.setWebChromeClient(mWebChromeClient);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setVerticalScrollbarOverlay(true);
-        mWebView.setWebViewClient(new LoaderClient(mWebView));
-        return root;
+        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.web_view_fragment, null));
+        mBinding.wvWebFrame.setWebChromeClient(mWebChromeClient);
+        mBinding.wvWebFrame.getSettings().setJavaScriptEnabled(true);
+        mBinding.wvWebFrame.setVerticalScrollbarOverlay(true);
+        mBinding.wvWebFrame.setWebViewClient(new LoaderClient(mBinding.wvWebFrame));
+        return mBinding.getRoot();
     }
 
     @Override
     public boolean onBackPressed() {
-        if (mWebView != null) {
-            if (mWebView.canGoBack()) {
-                mWebView.goBack();
+        if (mBinding != null) {
+            if (mBinding.wvWebFrame.canGoBack()) {
+                mBinding.wvWebFrame.goBack();
                 return true;
             } else {
                 return false;
@@ -65,21 +62,17 @@ abstract public class WebViewFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        mWebView.onPause();
+        if (mBinding != null) {
+            mBinding.wvWebFrame.onPause();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mWebView.onResume();
-    }
-
-    @SuppressWarnings("unused")
-    private Options.Offerwalls.Offer getFakeTfOfferwall() {
-        Options.Offerwalls.Offer offer = new Options.Offerwalls.Offer();
-        offer.action = OfferwallsManager.TFOFFERWALL;
-        offer.text = "tf offerwall";
-        return offer;
+        if (mBinding != null) {
+            mBinding.wvWebFrame.onResume();
+        }
     }
 
     private final WebChromeClient mWebChromeClient = new WebChromeClient() {
@@ -99,10 +92,9 @@ abstract public class WebViewFragment extends BaseFragment {
             }
 
             mFullScreenView = view;
-            mWebView.setVisibility(View.GONE);
-
-            mFullScreenContainer.setVisibility(View.VISIBLE);
-            mFullScreenContainer.addView(view);
+            mBinding.wvWebFrame.setVisibility(View.GONE);
+            mBinding.fullscreenContainer.setVisibility(View.VISIBLE);
+            mBinding.fullscreenContainer.addView(view);
             mFullscreenViewCallback = callback;
         }
 
@@ -112,10 +104,10 @@ abstract public class WebViewFragment extends BaseFragment {
             if (mFullScreenView == null) {
                 return;
             }
-            mWebView.setVisibility(View.VISIBLE);
+            mBinding.wvWebFrame.setVisibility(View.VISIBLE);
             mFullScreenView.setVisibility(View.GONE);
-            mFullScreenContainer.setVisibility(View.GONE);
-            mFullScreenContainer.removeView(mFullScreenView);
+            mBinding.fullscreenContainer.setVisibility(View.GONE);
+            mBinding.fullscreenContainer.removeView(mFullScreenView);
             mFullscreenViewCallback.onCustomViewHidden();
             mFullScreenView = null;
         }
