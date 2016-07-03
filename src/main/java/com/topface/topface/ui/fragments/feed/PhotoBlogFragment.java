@@ -27,6 +27,7 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
+import com.topface.topface.ui.debug.EmptyActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
@@ -87,8 +88,16 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRateController != null) {
+            mRateController.destroyController();
+        }
+    }
+
+    @Override
     protected void init() {
-        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_FEED);
+        mRateController = new RateController(this, SendLikeRequest.FROM_FEED);
     }
 
     @Override

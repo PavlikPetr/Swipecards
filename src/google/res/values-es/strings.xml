@@ -854,7 +854,7 @@
     <string name="chat_auto_reply_title">El texto del mensaje está oculto</string>
     <string name="chat_auto_reply_message">Para abrir y responder a esto, hazte usuario VIP</string>
     <string name="chat_auto_reply_button">Hacerse VIP</string>
-    <string name="photo_list_load_info">Si compartas tus fotografías te verán millones</string>
+    <string name="photo_list_load_info">Comparte las fotografías y te verán millones de personas</string>
     <string name="vk_profile_button_tf_group">Grupo Topface</string>
     <string name="vk_profile_button_join_tf_group">Entrar en el grupo Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Entrar en el grupo \"Juegos VK\"</string>
@@ -866,7 +866,7 @@
     <string name="vk_friends_success_invite">Invitación enviado</string>
     <string name="join_group_success">Has entrado en el grupo</string>
     <string name="settings_auto_greeting_title">Saludo automático</string>
-    <string name="settings_auto_greeting_subtitle">Permite comenzar automáticamente la conversación con un saludo al obtener simpatías</string>
+    <string name="settings_auto_greeting_subtitle">Permite comenzar un diálogo de manera automática al saludar, para obtener simpatías</string>
     <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.</string>
     <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están sujetas a moderación.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Bloquear gratis por %s</string>
@@ -902,4 +902,18 @@
     <string name="like_liberty_title">Simpatías</string>
     <string name="like_liberty_description">Mira a quién le gustas</string>
     <string name="refill_balance_view_title">En tu cuenta</string>
+    <string name="access_to_location_popup_title">No es accesible la geolocalización</string>
+    <string name="access_to_location_popup_description">Por desgracia, tu geolocalización no es accesible. Para continuar, es necesario que permitas el acceso</string>
+    <string name="access_to_location_popup_access_button">Incluir</string>
+    <string name="city_selector_set_your_city">Indica tu ciudad</string>
+    <string name="city_selector_detect_automatically">Determinar de forma automática</string>
+    <string name="city_selector_your_city">Tu ciudad</string>
+    <string name="photo_gallery_photo_deleted">La fotografía ha sido eliminada</string>
+    <string name="photofeed_add_photo_to_feed_title">¡Subir al primer puesto!</string>
+    <string name="photofeed_add_photo_to_feed_description">Añade una foto con saludo y te verán miles de personas. Llama la atención y conoce a gente nueva ahora mismo.</string>
+    <string name="offers_screen_title">Bonificaciones</string>
+    <string name="offers_loading_text">Estamos cargando las tareas disponibles para ti…</string>
+    <string name="offers_empty_text">Desgraciadamente, no hay tareas disponibles para ti, ¡inténtalo más tarde!</string>
+    <string name="offers_rewarded_video_title">Monedas gratis</string>
+    <string name="offers_rewarded_video_description">Por la revisión de vídeos</string>
 </resources>

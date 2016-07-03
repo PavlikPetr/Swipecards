@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -70,7 +71,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -162,12 +162,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
-        if (intent != null) {
-            if (intent.hasExtra(INTENT_EXIT)) {
-                if (intent.getBooleanExtra(INTENT_EXIT, false)) {
-                    finish();
-                }
+        try {
+            if (intent.getBooleanExtra(INTENT_EXIT, false)) {
+                finish();
             }
+        } catch (BadParcelableException e) {
+            Debug.error(e);
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
@@ -458,6 +458,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
+            if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
+                    mFullscreenController.canShowFullscreen() && !AuthToken.getInstance().isEmpty()) {
+                mFullscreenController.requestFullscreen();
+            }
         }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
@@ -656,10 +660,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
             Debug.log("Current User ID:" + profile.uid);
         }
-        /*
-        Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
-         */
-        OfferwallsManager.initTfOfferwall(this, null);
         AdmobInterstitialUtils.preloadInterstitials(this, App.from(this).getOptions().interstitial);
     }
 

@@ -24,6 +24,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.AppConfig;

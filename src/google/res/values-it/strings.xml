@@ -849,10 +849,10 @@
     <string name="chat_auto_reply_title">Il testo del messaggio è nascosto</string>
     <string name="chat_auto_reply_message">Per aprirlo e rispondere diventa utente- VIP</string>
     <string name="chat_auto_reply_button">Diventa VIP</string>
-    <string name="photo_list_load_info">Condividi le tue foto e ti vedranno milioni di persone</string>
+    <string name="photo_list_load_info">Condividi le tue foto e ti vedranno milioni di persone!</string>
     <string name="vk_profile_button_tf_group">Gruppo Topface</string>
     <string name="vk_profile_button_join_tf_group">Entra nel gruppo Topface</string>
-    <string name="vk_profile_button_join_vkgames_group">Unisciti al gruppo \" Giochi  Vkontakte\"</string>
+    <string name="vk_profile_button_join_vkgames_group">Unisciti al gruppo \"VK Games\"</string>
     <string name="vk_profile_button_invite_friends">Invita amici</string>
     <string name="vk_profile_invite_friends_title">Invita amici</string>
     <string name="invite_friend_button">Invita</string>
@@ -861,8 +861,8 @@
     <string name="vk_friends_success_invite">Invito inviato</string>
     <string name="join_group_success">Adesso fai parte del gruppo</string>
     <string name="settings_auto_greeting_title">Auto</string>
-    <string name="settings_auto_greeting_subtitle">Permette di cominciare automaticamente un dialogo 
-         di conoscenza dopo la ricezione della simpatia</string>
+    <string name="settings_auto_greeting_subtitle">Consenti al sistema di iniziare automaticamente una conversazione con un saluto quando ricevi un Like
+Allow the system to automatically start a conversation with a greeting when you receive Like</string>
     <string name="take_photo_text_1">Carica la tua foto per cominciare a fare conoscenza.</string>
     <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da moderatori.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Sblocca gratis a %s</string>
@@ -898,4 +898,18 @@
     <string name="like_liberty_title">Mi piace</string>
     <string name="like_liberty_description">Scopri a chi piaci</string>
     <string name="refill_balance_view_title">Il tuo saldo</string>
+    <string name="access_to_location_popup_title">Geo localizzazione non disponibile</string>
+    <string name="access_to_location_popup_description">Sfortunatamente la geo localizzazione non è disponibile per la tua posizione. Per continuare, devi consentire l\'accesso.</string>
+    <string name="access_to_location_popup_access_button">Consenti l\'accesso</string>
+    <string name="city_selector_set_your_city">Seleziona la tua città</string>
+    <string name="city_selector_detect_automatically">Imposta automaticamente</string>
+    <string name="city_selector_your_city">La tua città</string>
+    <string name="photo_gallery_photo_deleted">La foto è stata eliminata</string>
+    <string name="photofeed_add_photo_to_feed_title">Ottieni il 1° posto!</string>
+    <string name="photofeed_add_photo_to_feed_description">Carica una foto con un saluto e migliaia di persone potranno vederti. Risalta e inizia ad incontrare subito!</string>
+    <string name="offers_screen_title">Bonus</string>
+    <string name="offers_loading_text">Caricamento dei compiti disponibili…</string>
+    <string name="offers_empty_text">Sfortunatamente, adesso non ci sono compiti disponibile per te, controlla più tardi!</string>
+    <string name="offers_rewarded_video_title">Monete Gratis</string>
+    <string name="offers_rewarded_video_description">per guardare video</string>
 </resources>

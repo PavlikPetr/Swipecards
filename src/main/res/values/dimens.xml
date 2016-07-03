@@ -115,4 +115,23 @@
     <dimen name="left_menu_header_pading_left">16dp</dimen>
     <dimen name="left_menu_header_pading_top">16dp</dimen>
     <dimen name="left_menu_header_pading_right">10dp</dimen>
+
+    <!--Offerwalls-->
+    <dimen name="offerwall_item_height">72dp</dimen>
+    <dimen name="offerwall_item_padding_left">16dp</dimen>
+    <dimen name="offerwall_item_padding_right">16dp</dimen>
+    <dimen name="offerwalls_text_padding_left">10dp</dimen>
+    <dimen name="offerwalls_button_width">66dp</dimen>
+    <dimen name="offerwalls_button_height">32dp</dimen>
+    <dimen name="offerwalls_button_margin_left">10dp</dimen>
+    <dimen name="offerwalls_button_padding_right">8dp</dimen>
+    <dimen name="offerwalls_image_width">46dp</dimen>
+    <dimen name="offerwalls_image_heighr">46dp</dimen>
+    <dimen name="offerwalls_list_margin_top">8dp</dimen>
+    <dimen name="offerwalls_empty_view_between_text_and_image">60dp</dimen>
+    <dimen name="offerwalls_empty_view_text_side_paddings">20dp</dimen>
+
+
+    <dimen name="city_item_height">64dp</dimen>
+
 </resources>

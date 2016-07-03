@@ -12,8 +12,6 @@ import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.Locale;
 
@@ -29,9 +27,9 @@ abstract public class WebViewFragment extends BaseFragment {
         setNeedTitles(isNeedTitles());
     }
 
-    abstract String getIntegrationUrl();
+    public abstract String getIntegrationUrl();
 
-    abstract boolean isNeedTitles();
+    public abstract boolean isNeedTitles();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

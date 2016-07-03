@@ -227,7 +227,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         @Override
         public void keyboardChangeState() {
             ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null
+            if (isAdded() && actionBar != null
                     && getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
                     && !getSupportActionBar().isShowing()) {
                 setActionbarVisibility(true);
@@ -368,7 +368,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private int getScreenOrientation() {
-        return getResources().getConfiguration().orientation;
+        return App.get().getResources().getConfiguration().orientation;
     }
 
     @Override
@@ -883,7 +883,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
+        return new OverflowMenu(this, barActions);
     }
 
     private void release() {

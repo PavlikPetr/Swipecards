@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="appOfTheDay"
+            type="com.topface.topface.data.Options.AppOfTheDay" />
+
+        <variable
+            name="click"
+            type="android.view.View.OnClickListener" />
+
+        <import type="com.topface.topface.utils.Utils" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/ListItemContainer"
+        android:onClick="@{click}"
+        android:orientation="horizontal">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ifp_avatar_image"
+            style="@style/ListAvatar"
+            android:layout_marginRight="10dp"
+            android:foreground="@drawable/feed_avatar_overlay_selector"
+            app:remoteSrc="@{appOfTheDay.iconUrl}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/ListName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:text="@{appOfTheDay.title}" />
+
+                <TextView
+                    android:id="@+id/ad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/our_ad_badge"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="@string/app_of_the_day_ad_badge"
+                    android:textColor="@color/text_white"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/description"
+                style="@style/ListMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:lines="2"
+                android:text="@{appOfTheDay.description}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

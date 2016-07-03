@@ -766,10 +766,10 @@
     <string name="chat_auto_reply_title">Mesaj metni gizlenmiş.</string>
     <string name="chat_auto_reply_message">Bu mesajı açmak/okumak için VIP üye olmanız gerekiyor.</string>
     <string name="chat_auto_reply_button">VIP üye ol</string>
-    <string name="photo_list_load_info">Fotoğraflarını paylaş ve milyonlarca kişi tarafından görüntülen</string>
+    <string name="photo_list_load_info">Fotoğraflarını paylaş ki milyonlar seni görebilsin</string>
     <string name="vk_profile_button_tf_group">Topface grubu</string>
     <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>
-    <string name="vk_profile_button_join_vkgames_group">\"VK oyunları\" grubuna katıl</string>
+    <string name="vk_profile_button_join_vkgames_group">\"VK Oyunları\" grubuna katıl</string>
     <string name="vk_profile_button_invite_friends">Arkadaşlarını davet et</string>
     <string name="vk_profile_invite_friends_title">Arkadaşlarını davet et</string>
     <string name="invite_friend_button">Davet et</string>
@@ -778,8 +778,7 @@
     <string name="vk_friends_success_invite">Davet gönderildi</string>
     <string name="join_group_success">Gruba üye oldunuz</string>
     <string name="settings_auto_greeting_title">Otomatik-selam</string>
-    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi 
-        ve sohbet başlatılması için Topface\'e izin verin.</string>
+    <string name="settings_auto_greeting_subtitle">Birisi size beğeni gönderdiğinde otomatik olarak selam gönderilmesi ve sohbet başlatılması için Topface\'e izin verin.</string>
     <string name="take_photo_text_1">Arkadaşlık kurmaya başlamak için lütfen fotoğrafınızı yükleyin.</string>
     <string name="take_photo_text_2">Fotoğraf size ait olmalı ve içerisinde siz olmalısınız. Modaratörlerimiz tüm fotoğrafları kontrol etmektedir.</string>
     <string name="unlock_by_viewed_ad_video_button_text">%s ile ücretsiz aç</string>
@@ -814,4 +813,18 @@
     <string name="like_liberty_title">Beğeni</string>
     <string name="like_liberty_description">Bak bakalım seni kimler beğeniyor</string>
     <string name="refill_balance_view_title">Hesap bakiyeniz</string>
+    <string name="access_to_location_popup_title">Lokasyon hedefleme mümkün değil</string>
+    <string name="access_to_location_popup_description">Maalesef, bulunduğunuz konum için lokasyon hedefleme mümkün değil. Devam etmek için erişime izin vermeniz gerekiyor.</string>
+    <string name="access_to_location_popup_access_button">Erişime izin ver</string>
+    <string name="city_selector_set_your_city">Şehrinizi belirtin</string>
+    <string name="city_selector_detect_automatically">Otomatik belirle</string>
+    <string name="city_selector_your_city">Şehriniz</string>
+    <string name="photo_gallery_photo_deleted">Fotoğraf silindi</string>
+    <string name="photofeed_add_photo_to_feed_title">1. yeri kap!</string>
+    <string name="photofeed_add_photo_to_feed_description">Merhaba diyerek bir fotoğraf yükle ki binlerce insan seni görebilsim. Kendini göster ve arkadaşlık kurmaya başla!</string>
+    <string name="offers_screen_title">Bonus</string>
+    <string name="offers_loading_text">Mevcut görevler yükleniyor…</string>
+    <string name="offers_empty_text">Maalesef şu an sizin için görevimiz yok, lütfen daha sonra tekrar denetin!</string>
+    <string name="offers_rewarded_video_title">Bedava kredi</string>
+    <string name="offers_rewarded_video_description">vidyo izlediğiniz için</string>
 </resources>

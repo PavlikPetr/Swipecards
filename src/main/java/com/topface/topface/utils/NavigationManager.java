@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.Ssid;
 import com.topface.topface.data.FragmentLifreCycleData;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
@@ -19,8 +18,8 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
@@ -31,7 +30,6 @@ import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
-import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,8 +49,6 @@ import rx.functions.Func1;
 public class NavigationManager {
 
     public static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
-    private static final String USER_ID = "{userId}";
-    private static final String SECRET_KEY = "{secretKey}";
 
     @Inject
     NavigationState mNavigationState;
@@ -72,7 +68,7 @@ public class NavigationManager {
         App.get().inject(this);
         mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
-        mNavigationStateSubscription =  mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
+        mNavigationStateSubscription = mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData data) {
                 return data != null
@@ -200,7 +196,7 @@ public class NavigationManager {
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;
                 String url = fragmentSettings.getUrl();
                 if (!TextUtils.isEmpty(url)) {
-                    url = url.replace(USER_ID, AuthToken.getInstance().getUserSocialId()).replace(SECRET_KEY, Ssid.get());
+                    url = Utils.prepareUrl(url);
                 }
                 fragment = IntegrationWebViewFragment.newInstance(fragmentSettings.getPageName(), url);
                 break;
