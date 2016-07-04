@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.topface.framework.JsonUtils;
-import com.topface.topface.utils.ad.NativeAd;
 
 import org.json.JSONObject;
 
@@ -32,10 +31,6 @@ public class FeedPhotoBlog extends FeedItem implements Parcelable {
 
     protected FeedPhotoBlog(Parcel in) {
         super(in);
-    }
-
-    public FeedPhotoBlog(NativeAd nativeAd) {
-        super(nativeAd);
     }
 
     @Override

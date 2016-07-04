@@ -26,7 +26,6 @@ import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
-import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
@@ -181,22 +180,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                boolean needNativeAd = false;
-                if (mBodyPagerAdapter != null) {
-                    for (int i = 0; i < mBodyPagerAdapter.getCount(); i++) {
-                        Fragment feed = mBodyPagerAdapter.getItem(i);
-                        if (feed instanceof FeedFragment) {
-                            FeedAdapter adapter = ((FeedFragment) feed).getListAdapter();
-                            if (adapter != null && adapter.isNeedFeedAd()) {
-                                needNativeAd = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (!needNativeAd) {
-                    mBannersController = new BannersController(TabbedFeedFragment.this, App.get().getOptions());
-                }
+                mBannersController = new BannersController(TabbedFeedFragment.this, App.get().getOptions());
             }
         });
     }

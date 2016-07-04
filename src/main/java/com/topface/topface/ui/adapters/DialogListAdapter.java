@@ -12,7 +12,6 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ad.NativeAd;
 
 import java.util.Collections;
 
@@ -191,16 +190,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                 FeedDialog result = new FeedDialog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
-            }
-        };
-    }
-
-    @Override
-    protected INativeAdItemCreator<FeedDialog> getNativeAdItemCreator() {
-        return new INativeAdItemCreator<FeedDialog>() {
-            @Override
-            public FeedDialog getAdItem(NativeAd nativeAd) {
-                return new FeedDialog(nativeAd);
             }
         };
     }
