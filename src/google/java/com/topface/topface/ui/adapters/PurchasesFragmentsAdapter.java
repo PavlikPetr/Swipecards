@@ -8,7 +8,7 @@ import android.support.v4.app.HackyFragmentStatePagerAdapter;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.PurchasesTabData;
-import com.topface.topface.ui.fragments.BonusFragment;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.AmazonBuyingFragment;
 import com.topface.topface.ui.fragments.buy.MarketBuyingFragment;

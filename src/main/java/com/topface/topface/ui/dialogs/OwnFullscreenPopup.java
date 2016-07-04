@@ -97,7 +97,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                 }
                 break;
             case FullscreenSettings.URL:
-                Utils.getIntentToOpenUrl(settings.banner.action);
+                Utils.getIntentToOpenUrl(settings.banner.parameter);
                 break;
             case FullscreenSettings.METHOD:
                 //прост

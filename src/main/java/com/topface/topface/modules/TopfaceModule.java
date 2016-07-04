@@ -29,6 +29,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -139,7 +140,8 @@ import dagger.Provides;
                 BaseAuthFragment.class,
                 TopfaceAuthFragment.class,
                 UserProfileFragment.class,
-                CitySearchPopupViewModel.class
+                CitySearchPopupViewModel.class,
+                BonusPresenter.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

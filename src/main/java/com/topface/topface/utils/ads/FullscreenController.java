@@ -140,7 +140,7 @@ public class FullscreenController {
         UserConfig config = App.getUserConfig();
         DailyConfigExtension.DailyConfigField<Integer> configField = config.getFullscreenInterval();
         int interval = configField.getConfigField();
-        return interval == 0 || System.currentTimeMillis() - configField.getConfigFieldInfo().getLastWriteTime() <= interval * 1000;
+        return interval == 0 || System.currentTimeMillis() - configField.getConfigFieldInfo().getLastWriteTime() >= interval * 1000;
     }
 
     private void showOwnFullscreen(FullscreenSettings settings) {
@@ -159,8 +159,8 @@ public class FullscreenController {
     private void handleFullscreenSettings(FullscreenSettings settings) {
         UserConfig config = App.getUserConfig();
         PageInfo startPageInfo = App.get().getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
-        if (settings.nextShowNoEarlierThen != 0) {
-            config.setFullscreenInterval(settings.nextShowNoEarlierThen);
+        if (settings.nextRequestNoEarlierThen != 0) {
+            config.setFullscreenInterval(settings.nextRequestNoEarlierThen);
         }
         if (!settings.isEmpty()) {
             mIsFullscreenSkipped = false;
