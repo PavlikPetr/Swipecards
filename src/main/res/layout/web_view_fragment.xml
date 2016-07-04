@@ -5,7 +5,7 @@
         android:id="@+id/rlWebViewContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#080808">
+        android:background="@color/web_view_background">
 
         <FrameLayout
             android:layout_width="match_parent"

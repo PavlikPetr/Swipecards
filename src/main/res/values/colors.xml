@@ -210,5 +210,7 @@
 
     <color name="city_pressed">#eceff1</color>
 
+    <color name="web_view_background">#080808</color>
+
 
 </resources>
