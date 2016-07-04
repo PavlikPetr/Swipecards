@@ -11,6 +11,7 @@ import com.topface.topface.ui.external_libs.offers.Fyber.FyberOfferwallModel;
 import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersRequest;
 import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersResponse;
 import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOfferwallModel;
+import com.topface.topface.utils.ListUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +23,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func2;
+import rx.functions.Func1;
 
 import static com.topface.topface.ui.bonus.models.IOfferwallBaseModel.FYBER;
 import static com.topface.topface.ui.bonus.models.IOfferwallBaseModel.IRON_SOURCE;
@@ -57,42 +58,40 @@ public class OffersUtils {
 
     public static Observable<ArrayList<IOfferwallBaseModel>> getFyberOffersObservable() {
         return new FyberOffersRequest().getRequestObservable()
-                .reduce(new ArrayList<IOfferwallBaseModel>(),
-                        new Func2<ArrayList<IOfferwallBaseModel>, FyberOffersResponse, ArrayList<IOfferwallBaseModel>>() {
-                            @Override
-                            public ArrayList<IOfferwallBaseModel> call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels,
-                                                                       FyberOffersResponse fyberOffersResponse) {
-                                ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
-                                ArrayList<FyberOfferwallModel> initialList = fyberOffersResponse != null ?
-                                        fyberOffersResponse.getOffers() : new ArrayList<FyberOfferwallModel>();
-                                if (initialList != null) {
-                                    for (FyberOfferwallModel item : initialList) {
-                                        res.add(item);
-                                    }
-                                }
-                                return res;
+                .map(new Func1<FyberOffersResponse, ArrayList<IOfferwallBaseModel>>() {
+                    @Override
+                    public ArrayList<IOfferwallBaseModel> call(FyberOffersResponse fyberOffersResponse) {
+                        ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
+                        ArrayList<FyberOfferwallModel> initialList = fyberOffersResponse != null ?
+                                fyberOffersResponse.getOffers() : new ArrayList<FyberOfferwallModel>();
+                        if (ListUtils.isNotEmpty(initialList)) {
+                            for (FyberOfferwallModel item : initialList) {
+                                res.add(item);
                             }
-                        });
+                        }
+                        return res;
+                    }
+                });
     }
 
     public static Observable<ArrayList<IOfferwallBaseModel>> getIronSourceOffersObservable() {
         return new IronSourceOffersRequest().getRequestObservable()
-                .reduce(new ArrayList<IOfferwallBaseModel>(),
-                        new Func2<ArrayList<IOfferwallBaseModel>, IronSourceOffersResponse, ArrayList<IOfferwallBaseModel>>() {
-                            @Override
-                            public ArrayList<IOfferwallBaseModel> call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels,
-                                                                       IronSourceOffersResponse ironSourceOffersResponse) {
-                                ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
-                                ArrayList<IronSourceOfferwallModel> initialList = ironSourceOffersResponse != null
-                                        && ironSourceOffersResponse.getResponse() != null
-                                        ? ironSourceOffersResponse.getResponse().getOffers()
-                                        : new ArrayList<IronSourceOfferwallModel>();
-                                for (IronSourceOfferwallModel item : initialList) {
-                                    res.add(item);
-                                }
-                                return res;
+                .map(new Func1<IronSourceOffersResponse, ArrayList<IOfferwallBaseModel>>() {
+                    @Override
+                    public ArrayList<IOfferwallBaseModel> call(IronSourceOffersResponse ironSourceOffersResponse) {
+                        ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
+                        ArrayList<IronSourceOfferwallModel> initialList = ironSourceOffersResponse != null
+                                && ironSourceOffersResponse.getResponse() != null
+                                ? ironSourceOffersResponse.getResponse().getOffers()
+                                : new ArrayList<IronSourceOfferwallModel>();
+                        if (ListUtils.isNotEmpty(initialList)) {
+                            for (IronSourceOfferwallModel item : initialList) {
+                                res.add(item);
                             }
-                        });
+                        }
+                        return res;
+                    }
+                });
     }
 
     @Nullable
