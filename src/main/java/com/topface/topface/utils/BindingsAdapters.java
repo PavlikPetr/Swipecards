@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,16 @@ public class BindingsAdapters {
     @BindingAdapter("android:background")
     public static void setBackgroundResource(View view, @DrawableRes int bgResource) {
         view.setBackgroundResource(bgResource);
+    }
+
+    @BindingAdapter("android:src")
+    public static void setImageResource(ImageView view, @DrawableRes int bgResource) {
+        view.setImageResource(bgResource);
+    }
+
+    @BindingAdapter("android:drawableTop")
+    public static void setDrawableTop(TextView view, @DrawableRes int bgResource) {
+        BindingsUtils.replaceDrawable(view, bgResource, 1);
     }
 
     @BindingAdapter("app:textColorSelector")

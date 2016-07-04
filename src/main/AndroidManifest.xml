@@ -98,6 +98,7 @@
         <activity
             android:name=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Navigation"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -233,6 +234,8 @@
             android:theme="@style/Theme.Topface.RestoreAccountActivity" />
 
         <activity android:name=".ui.BlackListActivity" />
+
+        <activity android:name=".ui.bonus.view.BonusActivity" />
 
         <activity
             android:name=".ui.ChatActivity"
@@ -528,8 +531,7 @@
 
         <service
             android:name="com.topface.topface.utils.gcmutils.RegistrationService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <!--Приведенная ниже херь, есть результат внедрения appodeal, и при удалении этой рекломной сети-->
         <!--все это нужно выпилить, быстро, решительно!-->

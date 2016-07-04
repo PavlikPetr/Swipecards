@@ -1220,7 +1220,7 @@
         <item name="android:textSize">@dimen/left_menu_bage_text_size</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:background">@drawable/left_menu_bage_selector</item>
+        <item name="android:background">@drawable/small_blue_button_selector</item>
     </style>
 
     <style name="LeftMenuBadge" parent="LeftMenuBadgeBase">
@@ -1381,4 +1381,47 @@
     </style>
 
     <style name="EmptyFeedsViewGravity" />
+
+    <style name="OfferwallItemBase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/offerwall_item_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="OfferwallItem" parent="OfferwallItemBase">
+        <item name="android:paddingLeft">@dimen/offerwall_item_padding_left</item>
+        <item name="android:paddingRight">@dimen/offerwall_item_padding_right</item>
+    </style>
+
+    <style name="OfferwallsTextBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/offerwalls_title_text_color</item>
+    </style>
+
+    <style name="OfferwallsText" parent="OfferwallsTextBase">
+        <item name="android:paddingLeft">@dimen/offerwalls_text_padding_left</item>
+    </style>
+
+    <style name="OfferwallsButtonBase">
+        <item name="android:layout_width">@dimen/offerwalls_button_width</item>
+        <item name="android:layout_height">@dimen/offerwalls_button_height</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:background">@drawable/small_blue_button_selector</item>
+        <item name="android:drawablePadding">3dp</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="OfferwallsButton" parent="OfferwallsButtonBase">
+        <item name="android:drawableRight">@drawable/ic_pay</item>
+        <item name="android:paddingRight">@dimen/offerwalls_button_padding_right</item>
+        <item name="android:layout_marginLeft">@dimen/offerwalls_button_margin_left</item>
+        <item name="android:gravity">center_vertical|right</item>
+    </style>
 </resources>
