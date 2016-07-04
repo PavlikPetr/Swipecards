@@ -83,17 +83,6 @@
 # RxAndroid
 -dontwarn rx.internal.util.unsafe.**
 
-# ButterKnife
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
--keepclasseswithmembernames class * {
-    @butterknife.* <fields>;
-}
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
-}
-
 # Dagger
 -dontwarn dagger.internal.codegen.**
 -keepclassmembers,allowobfuscation class * {
@@ -140,12 +129,6 @@
   -keep class com.ifree.monetize.core.HandlerType
   -dontwarn com.ifree.monetize.core.HandlerType
 
-  #AdToApp proguard rules
-  -keepattributes Exceptions, InnerClasses, Signature, Deprecated,  SourceFile, LineNumberTable, *Annotation*, EnclosingMethod
-  -dontwarn android.webkit.**
-  #adtoapp
-  -keep class com.appintop.** {*;}
-  -dontwarn com.appintop.**
   #adcolony
   -keep class com.immersion.** {*;}
   -dontwarn com.immersion.**
