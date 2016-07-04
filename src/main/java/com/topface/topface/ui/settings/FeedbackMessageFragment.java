@@ -36,7 +36,7 @@ import com.topface.topface.utils.social.AuthToken;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -47,15 +47,15 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
 
     public static final String INTENT_FEEDBACK_TYPE = "feedback_message_type";
     private static final String GOOGLE_WALLET_URL = "https://wallet.google.com";
-    @Bind(R.id.edText)
+    @BindView(R.id.edText)
     EditText mEditText;
-    @Bind(R.id.edEmail)
+    @BindView(R.id.edEmail)
     EditText mEditEmail;
-    @Bind(R.id.fbLoadingLocker)
+    @BindView(R.id.fbLoadingLocker)
     View mLoadingLocker;
-    @Bind(R.id.tvTransactionIdInfoLink)
+    @BindView(R.id.tvTransactionIdInfoLink)
     TextView mTransactionIdInfo;
-    @Bind(R.id.tvLocale)
+    @BindView(R.id.tvLocale)
     TextView mIncorrectLocaleTv;
     private FeedbackType mFeedbackType;
     private String mFeedback = Utils.EMPTY;

@@ -36,7 +36,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
@@ -66,19 +66,19 @@ public class SettingsNotificationsFragment extends BaseFragment {
                     }
                 }
             };
-    @Bind(R.id.notification_sympathies)
+    @BindView(R.id.notification_sympathies)
     View mLoLikes;
-    @Bind(R.id.notification_mutuals)
+    @BindView(R.id.notification_mutuals)
     View mLoMutual;
-    @Bind(R.id.notification_messages)
+    @BindView(R.id.notification_messages)
     View mLoChat;
-    @Bind(R.id.notification_guests)
+    @BindView(R.id.notification_guests)
     View mLoGuests;
-    @Bind(R.id.notification_vibro)
+    @BindView(R.id.notification_vibro)
     CheckBox mLoVibration;
-    @Bind(R.id.notification_led)
+    @BindView(R.id.notification_led)
     CheckBox mLoLED;
-    @Bind(R.id.notification_melody)
+    @BindView(R.id.notification_melody)
     View mLoMelody;
 
     @SuppressWarnings("unused")

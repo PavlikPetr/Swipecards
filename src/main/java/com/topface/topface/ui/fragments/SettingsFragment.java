@@ -32,7 +32,7 @@ import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
@@ -48,13 +48,13 @@ public class SettingsFragment extends ProfileInnerFragment {
     private TextView preloadPhotoName;
     private boolean mIsAllowedAutoReply;
 
-    @Bind(R.id.loNotifications)
+    @BindView(R.id.loNotifications)
     View mLoNotifications;
-    @Bind(R.id.loNoNotifications)
+    @BindView(R.id.loNoNotifications)
     ViewGroup mNoNotificationViewGroup;
-    @Bind(R.id.loHelp)
+    @BindView(R.id.loHelp)
     View mHelp;
-    @Bind(R.id.auto_reply_state)
+    @BindView(R.id.auto_reply_state)
     CheckBox mAutoReplySettings;
 
     @SuppressWarnings("unused")

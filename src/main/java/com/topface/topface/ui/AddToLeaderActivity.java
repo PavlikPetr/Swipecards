@@ -55,8 +55,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -101,15 +100,15 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private boolean mIsKeyBoardShown;
     private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
-    @Bind(R.id.user_photos_grid)
+    @BindView(R.id.user_photos_grid)
     RecyclerView mRecyclerView;
-    @Bind(R.id.llvLeaderSending)
+    @BindView(R.id.llvLeaderSending)
     LockerView mLoadingLocker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
+        bindView(this);
         App.get().inject(this);
         mSubscriptions.add(mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction));
         if (savedInstanceState != null) {
@@ -202,7 +201,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
         }
-        ButterKnife.unbind(this);
     }
 
     @Override

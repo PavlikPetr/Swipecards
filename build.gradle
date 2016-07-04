@@ -53,6 +53,7 @@ buildscript {
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         //продолжэение костыля. с новой версией заменить на нормальную зависимость
 //        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
@@ -70,6 +71,7 @@ allprojects {
 
 //apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -318,7 +320,8 @@ dependencies {
     //OpenIAB
     compile 'org.onepf:openiab:0.9.8.4'
     //View Bind
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.1.0'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava

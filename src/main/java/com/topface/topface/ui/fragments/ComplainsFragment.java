@@ -11,8 +11,7 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.ui.ComplainsMessageActivity;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public class ComplainsFragment extends BaseFragment {
 
@@ -23,14 +22,14 @@ public class ComplainsFragment extends BaseFragment {
     private int userId;
     private String feedId;
 
-    @Bind(R.id.complains_scroll)
+    @BindView(R.id.complains_scroll)
     ScrollView mScroll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
-        ButterKnife.bind(this, root);
+        bindView(this, root);
         Bundle args = getArguments();
         int scroll = 0;
         if (savedInstanceState != null) {

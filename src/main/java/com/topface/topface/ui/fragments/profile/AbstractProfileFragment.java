@@ -33,8 +33,7 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 public abstract class AbstractProfileFragment extends AnimatedFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
@@ -76,7 +75,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     };
 
     private ViewPager mBodyPager;
-    @Bind(R.id.profileTabs)
+    @BindView(R.id.profileTabs)
     TabLayout mTabLayout;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -167,7 +166,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);
-        ButterKnife.bind(this, root);
+        bindView(this, root);
         initBodyPages(root);
         mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
         mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
@@ -214,7 +213,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
         mTabLayoutCreator.release();
         mBodyPager.setAdapter(null);
         mBodyPager.setOnPageChangeListener(null);

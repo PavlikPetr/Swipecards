@@ -35,6 +35,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
@@ -46,6 +47,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver mProfileLoadReceiver;
     protected ActionBarTitleSetterDelegate mTitleSetter;
     private boolean mNeedTitles = true;
+    private Unbinder mUnbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,9 +94,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onDestroyView() {
         super.onDestroyView();
         mTitleSetter = null;
-        if (isButterKnifeAvailable()) {
-            ButterKnife.unbind(this);
+        if (isButterKnifeAvailable() && mUnbinder != null) {
+            mUnbinder.unbind();
         }
+    }
+
+    protected void bindView(Object target, View view) {
+        mUnbinder = ButterKnife.bind(target, view);
     }
 
     protected boolean isButterKnifeAvailable() {

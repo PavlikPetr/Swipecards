@@ -44,8 +44,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 
@@ -70,21 +69,21 @@ public class RegistrationFragment extends BaseFragment {
     private Timer mTimer = new Timer();
     private DateObject mDateObject = new DateObject();
 
-    @Bind(R.id.ivShowPassword)
+    @BindView(R.id.ivShowPassword)
     ImageButton mShowPassword;
-    @Bind(R.id.etMail)
+    @BindView(R.id.etMail)
     EditText mEdEmail;
-    @Bind(R.id.edPassword)
+    @BindView(R.id.edPassword)
     EditText mEdPassword;
-    @Bind(R.id.etName)
+    @BindView(R.id.etName)
     EditText mEdName;
-    @Bind(R.id.tvSex)
+    @BindView(R.id.tvSex)
     TextView mTvSex;
-    @Bind(R.id.tvRedAlert)
+    @BindView(R.id.tvRedAlert)
     TextView mRedAlertView;
-    @Bind(R.id.btnStartChat)
+    @BindView(R.id.btnStartChat)
     Button mBtnRegister;
-    @Bind(R.id.tvBirthday)
+    @BindView(R.id.tvBirthday)
     TextView mBirthdayText;
 
     @SuppressWarnings("unused")
@@ -182,7 +181,7 @@ public class RegistrationFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         setNeedTitles(true);
         View root = inflater.inflate(R.layout.topface_registration, null);
-        ButterKnife.bind(this, root);
+        bindView(this, root);
         initViews();
         if (savedInstanceState != null) {
             mEdEmail.setText(savedInstanceState.getString(EMAIL));

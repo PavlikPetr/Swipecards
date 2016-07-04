@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -44,6 +45,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Locale;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
 
     public static final String AUTH_TAG = "AUTH";
@@ -84,6 +88,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
     private boolean mHasContent = true;
+    private Unbinder mUnbinder;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -115,6 +120,18 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
         LocaleConfig.updateConfiguration(getBaseContext());
         initActionBar(getSupportActionBar());
+    }
+
+    protected void bindView(Activity target) {
+        mUnbinder = ButterKnife.bind(target);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mUnbinder != null) {
+            mUnbinder.unbind();
+        }
     }
 
     public void setToolBarVisibility(boolean isVisible) {

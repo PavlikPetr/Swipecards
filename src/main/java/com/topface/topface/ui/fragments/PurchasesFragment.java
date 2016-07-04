@@ -41,7 +41,7 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -62,7 +62,7 @@ public class PurchasesFragment extends BaseFragment {
     public static final int TYPE_PEOPLE_NEARBY = 5;
     public static final String ARG_ITEM_PRICE = "quantity_of_coins";
     private static final String SKIP_BONUS = "SKIP_BONUS";
-    @Bind(R.id.purchasesPager)
+    @BindView(R.id.purchasesPager)
     ViewPager mPager;
     private PurchasesFragmentsAdapter mPagerAdapter;
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
@@ -85,7 +85,7 @@ public class PurchasesFragment extends BaseFragment {
         }
     };
     private Subscription mBalanceSubscription;
-    @Bind(R.id.purchasesTabs)
+    @BindView(R.id.purchasesTabs)
     TabLayout mTabLayout;
     private TabLayoutCreator mTabLayoutCreator;
     private ArrayList<String> mPagesTitle = new ArrayList<>();
@@ -160,7 +160,6 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipPurchasedReceiver);
     }
 

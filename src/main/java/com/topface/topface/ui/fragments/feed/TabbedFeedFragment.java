@@ -36,8 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 /**
  * base class for feeds with tabs
@@ -51,7 +50,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
-    @Bind(R.id.feedTabs)
+    @BindView(R.id.feedTabs)
     TabLayout mTabLayout;
     private CountersDataProvider mCountersDataProvider;
     private TabbedFeedPageAdapter mBodyPagerAdapter;
@@ -118,7 +117,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
-        ButterKnife.bind(this, root);
+        bindView(this, root);
         initPages(root);
         mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
             @Override
@@ -216,7 +215,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
         mCountersDataProvider.unsubscribe();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
     }

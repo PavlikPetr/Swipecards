@@ -86,7 +86,7 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
@@ -174,13 +174,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     };
     CountersDataProvider mCountersDataProvider;
 
-    @Bind(R.id.feedContainer)
+    @BindView(R.id.feedContainer)
     RelativeLayout mContainer;
-    @Bind(R.id.lvFeedList)
+    @BindView(R.id.lvFeedList)
     ListView mListView;
-    @Bind(R.id.llvFeedLoading)
+    @BindView(R.id.llvFeedLoading)
     View mLockView;
-    @Bind(R.id.stubForEmptyFeed)
+    @BindView(R.id.stubForEmptyFeed)
     ViewStub mEmptyScreenStub;
 
     public void saveToCache() {

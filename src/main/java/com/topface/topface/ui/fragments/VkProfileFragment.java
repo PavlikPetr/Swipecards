@@ -30,7 +30,7 @@ import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -56,19 +56,19 @@ public class VkProfileFragment extends ProfileInnerFragment {
     private VKRequest mVkGamesMemberRequest;
     private VKRequest mCommunityRequest;
 
-    @Bind(R.id.vkProfileAvatar)
+    @BindView(R.id.vkProfileAvatar)
     ImageViewRemote mAvatar;
-    @Bind(R.id.vkProfileName)
+    @BindView(R.id.vkProfileName)
     TextView mUserName;
-    @Bind(R.id.vkProfileButtonEnterTopfaceTeam)
+    @BindView(R.id.vkProfileButtonEnterTopfaceTeam)
     Button mEnterTopfaceTeamButton;
-    @Bind(R.id.vkProfileButtonEnterVkGamesTeam)
+    @BindView(R.id.vkProfileButtonEnterVkGamesTeam)
     Button mEnterVkGamesTeamButton;
-    @Bind(R.id.vkProfileButtonTopfaceTeam)
+    @BindView(R.id.vkProfileButtonTopfaceTeam)
     Button mShowTopfaceTeamButton;
-    @Bind(R.id.rootControlView)
+    @BindView(R.id.rootControlView)
     ScrollView mRootControlView;
-    @Bind(R.id.mainProgressBar)
+    @BindView(R.id.mainProgressBar)
     ProgressBar mMainProgress;
 
     @OnClick(R.id.vkProfileButtonTopfaceTeam)
