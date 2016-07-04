@@ -22,9 +22,10 @@
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ifp_avatar_image"
-            style="@style/ListAvatar"
+            style="@style/AppOfDay"
             android:layout_marginRight="10dp"
             android:foreground="@drawable/feed_avatar_overlay_selector"
+            android:scaleType="centerCrop"
             app:remoteSrc="@{appOfTheDay.iconUrl}" />
 
         <LinearLayout
