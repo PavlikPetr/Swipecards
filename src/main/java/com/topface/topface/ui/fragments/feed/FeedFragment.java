@@ -42,7 +42,6 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.UnlockFunctionalityOption.UnlockScreenCondition;
 import com.topface.topface.requests.ApiResponse;
@@ -118,6 +117,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mReadItemReceiver;
+    private BannersController mBannersController;
     private TextView mActionModeTitle;
     private Boolean isNeedFirstShowListDelay = null;
     private CountDownTimer mListShowDelayCountDownTimer;
@@ -358,14 +358,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
             currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
-            Profile profile = App.from(getActivity()).getProfile();
             Parcelable[] feeds = saved.getParcelableArray(FEEDS);
             FeedList<T> feedsList = new FeedList<>();
             if (feeds != null) {
                 for (Parcelable p : feeds) {
-                    if (!profile.showAd) {
-                        continue;
-                    }
                     feedsList.add((T) p);
                 }
             }
@@ -375,6 +371,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 mBackgroundController.hide();
             }
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mBannersController = new BannersController(this, App.get().getOptions());
     }
 
     private void registerGcmReceiver() {
@@ -487,6 +489,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         super.onDestroy();
         if (mCountersDataProvider != null) {
             mCountersDataProvider.unsubscribe();
+        }
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);

@@ -153,11 +153,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
-        return super.getViewByType(type, position, view, viewGroup);
-    }
-
-    @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         FeedViewHolder holder = null;
         if (convertView != null) {
