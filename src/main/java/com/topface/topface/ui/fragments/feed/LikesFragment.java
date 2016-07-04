@@ -471,7 +471,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     }
 
     private int getSenderId(FeedItem item) {
-        return item != null && !item.isAd() && item.user != null ? item.user.id : 0;
+        return item != null && item.user != null ? item.user.id : 0;
     }
 
     private void sendLikeReadRequest(int senderId) {

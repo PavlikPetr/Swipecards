@@ -16,7 +16,6 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
-import com.topface.topface.utils.ad.NativeAd;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,16 +98,6 @@ public class PhotoBlogListAdapter extends FeedAdapter<FeedPhotoBlog> {
                 FeedPhotoBlog result = new FeedPhotoBlog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
-            }
-        };
-    }
-
-    @Override
-    protected INativeAdItemCreator<FeedPhotoBlog> getNativeAdItemCreator() {
-        return new INativeAdItemCreator<FeedPhotoBlog>() {
-            @Override
-            public FeedPhotoBlog getAdItem(NativeAd nativeAd) {
-                return new FeedPhotoBlog(nativeAd);
             }
         };
     }
