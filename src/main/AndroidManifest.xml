@@ -234,6 +234,8 @@
 
         <activity android:name=".ui.BlackListActivity" />
 
+        <activity android:name=".ui.bonus.view.BonusActivity" />
+
         <activity
             android:name=".ui.ChatActivity"
             android:parentActivityName=".ui.NavigationActivity"
@@ -528,8 +530,7 @@
 
         <service
             android:name="com.topface.topface.utils.gcmutils.RegistrationService"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <!--Приведенная ниже херь, есть результат внедрения appodeal, и при удалении этой рекломной сети-->
         <!--все это нужно выпилить, быстро, решительно!-->

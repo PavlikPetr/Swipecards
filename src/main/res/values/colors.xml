@@ -189,6 +189,11 @@
     <color name="left_menu_bage_background">#499AFF</color>
     <color name="left_mneu_users_city_color">#80ffffff</color>
 
+    <!--Offerwalls-->
+    <color name="offerwalls_title_text_color">#232C35</color>
+    <color name="offerwalls_description_text_color">#607D8B</color>
+    <color name="offerwall_empty_view_text_color">#232C35</color>
+
     <color name="our_ad_feed_banner">#607a86</color>
 
     <!-- Google text colors -->

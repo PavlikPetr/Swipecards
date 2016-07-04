@@ -23,7 +23,7 @@ public class IntegrationWebViewFragment extends WebViewFragment {
     }
 
     @Override
-    String getIntegrationUrl() {
+    public String getIntegrationUrl() {
         return getArguments().getString(INTEGRATION_FRAGMENT_URL);
     }
 
@@ -38,7 +38,7 @@ public class IntegrationWebViewFragment extends WebViewFragment {
     }
 
     @Override
-    boolean isNeedTitles() {
+    public boolean isNeedTitles() {
         return true;
     }
 }

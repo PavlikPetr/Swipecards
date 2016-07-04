@@ -68,7 +68,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -656,10 +655,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
             Debug.log("Current User ID:" + profile.uid);
         }
-        /*
-        Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
-         */
-        OfferwallsManager.initTfOfferwall(this, null);
         AdmobInterstitialUtils.preloadInterstitials(this, App.from(this).getOptions().interstitial);
     }
 

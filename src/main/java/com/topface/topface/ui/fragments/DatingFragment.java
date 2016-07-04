@@ -422,7 +422,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingSubscriptions.unsubscribe();
         }
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateActionsReceiver);
-        if(mRateController != null) {
+        if (mRateController != null) {
             mRateController.destroyController();
         }
     }
