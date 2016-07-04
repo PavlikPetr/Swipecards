@@ -13,7 +13,7 @@ public class FullscreenSettings implements Parcelable {
     public static final String IMG = "IMG";
     public static final String WEB = "WEB";
     public static final String PAGE = "PAGE";
-    public static final String URL = "WURLEB";
+    public static final String URL = "URL";
     public static final String METHOD = "METHOD";
     public static final String OFFERWALL = "OFFERWALL";
     public static final String PURCHASE = "PURCHASE";
