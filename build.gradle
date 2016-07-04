@@ -359,9 +359,6 @@ dependencies {
     )
     ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
 
-    // Offerwalls
-    compile 'com.supersonic.sdk:mediationsdk:6.4.7@jar'
-
     // Retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
