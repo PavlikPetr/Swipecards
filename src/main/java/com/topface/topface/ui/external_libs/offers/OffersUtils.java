@@ -11,6 +11,7 @@ import com.topface.topface.ui.external_libs.offers.Fyber.FyberOfferwallModel;
 import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersRequest;
 import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOffersResponse;
 import com.topface.topface.ui.external_libs.offers.IronSource.IronSourceOfferwallModel;
+import com.topface.topface.utils.ListUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -63,7 +64,7 @@ public class OffersUtils {
                         ArrayList<IOfferwallBaseModel> res = new ArrayList<>();
                         ArrayList<FyberOfferwallModel> initialList = fyberOffersResponse != null ?
                                 fyberOffersResponse.getOffers() : new ArrayList<FyberOfferwallModel>();
-                        if (initialList != null) {
+                        if (ListUtils.isNotEmpty(initialList)) {
                             for (FyberOfferwallModel item : initialList) {
                                 res.add(item);
                             }
@@ -83,8 +84,10 @@ public class OffersUtils {
                                 && ironSourceOffersResponse.getResponse() != null
                                 ? ironSourceOffersResponse.getResponse().getOffers()
                                 : new ArrayList<IronSourceOfferwallModel>();
-                        for (IronSourceOfferwallModel item : initialList) {
-                            res.add(item);
+                        if (ListUtils.isNotEmpty(initialList)) {
+                            for (IronSourceOfferwallModel item : initialList) {
+                                res.add(item);
+                            }
                         }
                         return res;
                     }
