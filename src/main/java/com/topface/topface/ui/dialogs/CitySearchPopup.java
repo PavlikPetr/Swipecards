@@ -42,7 +42,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
         mModel = new CitySearchPopupViewModel(mBinding, this);
         mAdapter.setOnItemClickListener(mModel);
         mBinding.setViewModel(mModel);
-        ((TextView) root.findViewById(R.id.title)).setText(R.string.edit_my_city);
+        ((TextView) root.findViewById(R.id.title)).setText(R.string.my_location);
         root.findViewById(R.id.title_clickable).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

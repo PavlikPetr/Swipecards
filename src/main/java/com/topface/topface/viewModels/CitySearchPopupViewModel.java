@@ -78,7 +78,9 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
         config.setUserCityChanged(true);
         config.saveConfig();
         mEventBus.setData(data);
-        mCloseListener.onClose();
+        if(mCloseListener != null){
+            mCloseListener.onClose();
+        }
     }
 
     private void sendRequest(final String prefix) {
