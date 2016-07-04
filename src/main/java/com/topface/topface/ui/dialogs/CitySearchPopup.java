@@ -39,7 +39,6 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
         mBinding = DataBindingUtil.bind(root);
         mBinding.cityList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mBinding.cityList.setAdapter(mAdapter);
-        mBinding.cityList.setNestedScrollingEnabled(false);
         mModel = new CitySearchPopupViewModel(mBinding, this);
         mAdapter.setOnItemClickListener(mModel);
         mBinding.setViewModel(mModel);
