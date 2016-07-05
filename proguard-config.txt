@@ -290,3 +290,4 @@
 -keepattributes Signature
 -keepattributes Exceptions
 -dontwarn com.squareup.okhttp.**
+-dontwarn okio.**

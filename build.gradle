@@ -238,7 +238,7 @@ android {
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
         qa.initWith(buildTypes.debug)
         qa {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
