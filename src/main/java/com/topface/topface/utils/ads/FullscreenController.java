@@ -197,7 +197,7 @@ public class FullscreenController {
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
-                if (!isFullScreenBannerVisible) {
+                if (!isFullScreenBannerVisible && mOnNextActionListener != null) {
                     mOnNextActionListener.onNextAction();
                 }
             }
