@@ -80,7 +80,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                         public void onClick(View v) {
                             clickImgBannerSettings(mFullscreenSettings);
                             AdStatistics.sendFullscreenClicked(OwnFullscreenPopup.IMPROVED_BANNER_TOPFACE);
-
+                            OwnFullscreenPopup.this.cancel();
                         }
                     });
                     return view;
@@ -135,6 +135,10 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        cancel();
+    }
+
+    private void cancel() {
         getDialog().cancel();
     }
 }

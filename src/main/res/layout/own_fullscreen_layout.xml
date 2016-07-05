@@ -33,7 +33,7 @@
                 android:layout_gravity="top|end"
                 android:onClick="@{click::onClick}"
                 android:padding="10dp"
-                android:src="@drawable/ic_close_dating_lock_popup" />
+                android:src="@drawable/ic_close_own_fullscreen" />
 
         </FrameLayout>
     </ScrollView>
