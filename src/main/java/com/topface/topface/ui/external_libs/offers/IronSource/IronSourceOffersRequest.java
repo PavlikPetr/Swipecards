@@ -28,6 +28,7 @@ public class IronSourceOffersRequest {
     private static final String DEVICE_OS_VERSION_KEY = "deviceOSVersion";
     private static final String IS_LIMITAD_TRACKING_ENABLED_KEY = "isLimitAdTrackingEnabled";
     private static final String PAGE_SIZE_KEY = "pageSize";
+    private static final String LANGUAGE_KEY = "language";
 
     private static final String APPLICATION_KEY_VALUE = "2cf0ad4d";
     private static final String PAGE_SIZE_VALUE = "30";
@@ -47,6 +48,7 @@ public class IronSourceOffersRequest {
                         params.put(DEVICE_OS_KEY, Utils.PLATFORM.toLowerCase());
                         params.put(DEVICE_OS_VERSION_KEY, String.valueOf(Build.VERSION.SDK_INT));
                         params.put(PAGE_SIZE_KEY, PAGE_SIZE_VALUE);
+                        params.put(LANGUAGE_KEY, App.getCurrentLocale().getLanguage());
                         params.put(DEVICE_IDS_KEY, googleAdParams.getId());
                         params.put(IS_LIMITAD_TRACKING_ENABLED_KEY, String.valueOf(googleAdParams.isLimitAdTrackingEnabled()));
                         return params;
