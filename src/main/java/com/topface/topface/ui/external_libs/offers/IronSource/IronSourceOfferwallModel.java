@@ -133,7 +133,7 @@ public class IronSourceOfferwallModel implements IOfferwallBaseModel {
     private static class Creatives {
         @SerializedName("creativeId")
         private String mCreativeId;
-        @SerializedName("clickUrl")
+        @SerializedName("clickurl")
         private String mClickUrl;
         @SerializedName("Assets")
         private Assets mAssets;
