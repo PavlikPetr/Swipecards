@@ -58,6 +58,9 @@ public class FullscreenController {
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
     private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
+    public static final String ADMOB_NEW = "ADMOB";
+    public static final String APPODEAL_NEW = "APPODEAL";
+
     private static boolean isFullScreenBannerVisible = false;
     private Activity mActivity;
     private String mCurrentBannerType;
@@ -157,25 +160,26 @@ public class FullscreenController {
     }
 
     private void handleFullscreenSettings(FullscreenSettings settings) {
-        UserConfig config = App.getUserConfig();
-        PageInfo startPageInfo = App.get().getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
         if (settings.nextRequestNoEarlierThen != 0) {
-            config.setFullscreenInterval(settings.nextRequestNoEarlierThen);
+            App.getUserConfig().setFullscreenInterval(settings.nextRequestNoEarlierThen);
         }
         if (!settings.isEmpty()) {
             mIsFullscreenSkipped = false;
             if (settings.banner.type.equals(FullscreenSettings.SDK)) {
-                Debug.log("NEW_FULLSCREEN try show interstitial");
-                if (App.get().getOptions().interstitial.enabled) {
-                    Debug.log("NEW_FULLSCREEN try show BANNER_ADMOB_FULLSCREEN_START_APP");
-                    FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
-                } else if (startPageInfo != null) {
-                    Debug.log("NEW_FULLSCREEN try show getBanner");
-                    FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
-                }
+                FullscreenController.this.requestFullscreenByServerSettings(settings);
             } else {
                 showOwnFullscreen(settings);
             }
+        }
+    }
+
+    private void requestFullscreenByServerSettings(FullscreenSettings settings) {
+        switch (settings.banner.name) {
+            case ADMOB_NEW:
+                requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
+                break;
+            case APPODEAL_NEW:
+                requestAppodealFullscreen();
         }
     }
 
