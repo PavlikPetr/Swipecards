@@ -67,12 +67,13 @@ public class DailyConfigExtension {
     @NotNull
     private <T> DailyConfigField constructDailyConfigField(@NotNull DailyConfigFieldInfo info, @NotNull T data) {
         long currentTime = System.currentTimeMillis();
+        long lastWriteTime = info.getLastWriteTime();
         switch (info.mMode) {
             case EVERY_DAY:
-                calculateAmount(DateUtils.isDayBeforeToday(info.getLastWriteTime()), info);
+                calculateAmount(lastWriteTime != 0 && DateUtils.isDayBeforeToday(lastWriteTime), info);
                 break;
             case DAY_AFTER_LAST_EXTRACT:
-                calculateAmount(currentTime - info.getLastWriteTime() >= DateUtils.DAY_IN_MILLISECONDS, info);
+                calculateAmount(lastWriteTime != 0 && currentTime - lastWriteTime >= DateUtils.DAY_IN_MILLISECONDS, info);
                 break;
             case DEFAULT:
                 info.incrementAmount();

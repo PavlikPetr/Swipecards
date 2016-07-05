@@ -92,8 +92,8 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDetach() {
+        super.onDetach();
         mModel.release();
     }
 
