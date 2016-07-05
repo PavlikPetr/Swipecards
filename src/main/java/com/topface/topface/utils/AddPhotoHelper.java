@@ -464,6 +464,7 @@ public class AddPhotoHelper {
         return new Intent(App.getContext(), NavigationActivity.class)
                 .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(FragmentIdData.PROFILE))
                 .putExtra(GCMUtils.NOTIFICATION_INTENT, true)
+                .putExtra(GCMUtils.GCM_LABEL, GCMUtils.NOTIFICATION_LABEL)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
