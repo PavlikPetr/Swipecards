@@ -165,9 +165,12 @@ public class FullscreenController {
         if (!settings.isEmpty()) {
             mIsFullscreenSkipped = false;
             if (settings.banner.type.equals(FullscreenSettings.SDK)) {
+                Debug.log("NEW_FULLSCREEN try show interstitial");
                 if (App.get().getOptions().interstitial.enabled) {
+                    Debug.log("NEW_FULLSCREEN try show BANNER_ADMOB_FULLSCREEN_START_APP");
                     FullscreenController.this.requestFullscreen(BANNER_ADMOB_FULLSCREEN_START_APP);
                 } else if (startPageInfo != null) {
+                    Debug.log("NEW_FULLSCREEN try show getBanner");
                     FullscreenController.this.requestFullscreen(startPageInfo.getBanner());
                 }
             } else {
