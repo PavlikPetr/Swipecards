@@ -917,4 +917,5 @@
     <string name="offers_empty_text">Malheureusement, il n\'y a pas de tâches disponibles pour vous dès maintenant, revenez bientôt !</string>
     <string name="offers_rewarded_video_title">Pièces gratuites</string>
     <string name="offers_rewarded_video_description">pour regarder une vidéo</string>
+    <string name="app_of_the_day_ad_badge">Publicités</string>
 </resources>

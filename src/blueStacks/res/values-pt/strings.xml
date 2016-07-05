@@ -822,4 +822,5 @@
   <string name="offers_empty_text">Infelizmente, não existem tarefas disponíveis de momento. Volta mais tarde!</string>
   <string name="offers_rewarded_video_title">Moedas Grátis</string>
   <string name="offers_rewarded_video_description">por ver um vídeo</string>
+  <string name="app_of_the_day_ad_badge">Publicidade</string>
 </resources>

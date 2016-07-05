@@ -112,13 +112,13 @@
   <string name="profile_form_eyes_male_2">Gri</string>
   <string name="profile_form_eyes_male_3">Mavi</string>
   <string name="profile_form_eyes_male_4">Siyah</string>
-  <string name="profile_form_eyes_male_5">Moralime güre</string>
+  <string name="profile_form_eyes_male_5">Moralime göre</string>
   <string name="profile_form_eyes_female_0">Kahverengi</string>
   <string name="profile_form_eyes_female_1">Yeşil</string>
   <string name="profile_form_eyes_female_2">Gri</string>
   <string name="profile_form_eyes_female_3">Mavi</string>
   <string name="profile_form_eyes_female_4">Siyah</string>
-  <string name="profile_form_eyes_female_5">Moralime güre</string>
+  <string name="profile_form_eyes_female_5">Moralime göre</string>
   <string name="profile_form_breast_female_0">Dürüst birinci</string>
   <string name="profile_form_breast_female_1">Optimal ikinci</string>
   <string name="profile_form_breast_female_2">Cazip üçüncü</string>

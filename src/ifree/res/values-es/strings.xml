@@ -385,6 +385,7 @@
     </string>
     <string name="buying_vip_status">Comprar estatus de VIP</string>
     <string name="edit_my_city">Mi ciudad</string>
+    <string name="my_location">Mi localización</string>
     <string name="settings_feedback_email">Correo electrónico de contacto</string>
     <string name="settings_invalid_email">Correo electrónico incorrecto</string>
     <string name="chat_write_message">Escribir mensaje</string>
@@ -592,9 +593,8 @@
     <string name="complain_type_ero">Motivo erótico en la foto principal</string>
     <string name="complain_type_picture">Dibujo</string>
     <string name="complain_type_fake_user">Persona conocida</string>
-    <string name="complain_type_spam_msg">Oferta comercial, spam, propaganda, enlaces a las páginas,
-        teléfonos
-    </string>
+    <string name="complain_type_spam_msg">Oferta comercial, spam, anúncio, enlaces a las páginas,
+        teléfonos</string>
     <string name="complain_type_spam_profile">Campos \"estado\", \"sobre mi\", contienen oferta
         comercial
     </string>
@@ -916,4 +916,5 @@
     <string name="offers_empty_text">Desgraciadamente, no hay tareas disponibles para ti, ¡inténtalo más tarde!</string>
     <string name="offers_rewarded_video_title">Monedas gratis</string>
     <string name="offers_rewarded_video_description">Por la revisión de vídeos</string>
+    <string name="app_of_the_day_ad_badge">Anúncio</string>
 </resources>

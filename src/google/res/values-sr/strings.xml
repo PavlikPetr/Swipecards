@@ -389,6 +389,7 @@
     </string>
     <string name="buying_vip_status">Купи VIP-статус</string>
     <string name="edit_my_city">Мој град</string>
+    <string name="my_location">Локација</string>
     <string name="settings_feedback_email">Оставите адресу своје е-поште да бисте добили одговор од нас.</string>
     <string name="settings_invalid_email">Неважећа адреса е-поште</string>
     <string name="chat_write_message">Написати поруку</string>
@@ -922,4 +923,5 @@
     <string name="offers_empty_text">На жалост, тренутно нема доступних задатака, проверите касније!</string>
     <string name="offers_rewarded_video_title">Бесплатни новчићи</string>
     <string name="offers_rewarded_video_description">За гледање видеа</string>
+    <string name="app_of_the_day_ad_badge">Оглас</string>
 </resources>

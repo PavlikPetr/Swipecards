@@ -375,6 +375,7 @@
     </string>
     <string name="buying_vip_status">Get VIP-status</string>
     <string name="edit_my_city">My city</string>
+    <string name="my_location">My Location</string>
     <string name="settings_feedback_email">Enter your email to get a reply from us.</string>
     <string name="settings_invalid_email">Invalid email</string>
     <string name="chat_write_message">Write a message</string>
@@ -887,4 +888,5 @@
     <string name="offers_empty_text">Unfortunately there are no tasks available for you right now, check back soon!</string>
     <string name="offers_rewarded_video_title">Free Coins</string>
     <string name="offers_rewarded_video_description">for watching a video</string>
+    <string name="app_of_the_day_ad_badge">Ad</string>
 </resources>
