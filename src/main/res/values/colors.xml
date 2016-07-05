@@ -213,5 +213,6 @@
 
     <color name="web_view_background">#080808</color>
 
+    <color name="city_item_bg">#eceff1</color>
 
 </resources>

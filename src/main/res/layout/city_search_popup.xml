@@ -35,7 +35,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/top_menu_disabled_text_color"
+            android:background="@color/city_item_bg"
             android:paddingBottom="4dp"
             android:paddingTop="4dp">
 
@@ -56,7 +56,8 @@
                     android:layout_marginLeft="20dp"
                     android:text="@string/city_selector_your_city"
                     android:textColor="@color/dark_primary_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/current_city"
@@ -80,11 +81,12 @@
             android:drawableLeft="@drawable/ic_search"
             android:drawablePadding="16dp"
             android:gravity="center_vertical"
+            android:hint="@string/city_selector_set_your_city"
             android:imeOptions="actionDone"
-            android:singleLine="true"
             android:lines="1"
             android:maxLines="1"
             android:paddingLeft="16dp"
+            android:singleLine="true"
             android:text="@={viewModel.editTextObservable}" />
 
         <View
