@@ -381,6 +381,7 @@
     </string>
     <string name="buying_vip_status">Compra lo stato VIP</string>
     <string name="edit_my_city">Mia città</string>
+    <string name="my_location">La mia posizione</string>
     <string name="settings_feedback_email">E-mail</string>
     <string name="settings_invalid_email">E-mail erronea</string>
     <string name="chat_write_message">Scrivi un messaggio</string>
@@ -912,4 +913,5 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="offers_empty_text">Sfortunatamente, adesso non ci sono compiti disponibile per te, controlla più tardi!</string>
     <string name="offers_rewarded_video_title">Monete Gratis</string>
     <string name="offers_rewarded_video_description">per guardare video</string>
+    <string name="app_of_the_day_ad_badge">Pubblicità</string>
 </resources>

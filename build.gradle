@@ -331,7 +331,6 @@ dependencies {
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
     compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'io.reactivex:rxjava:1.1.5'
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
@@ -361,8 +360,14 @@ dependencies {
 
     // Retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
-    compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
+    compile("com.squareup.retrofit2:converter-gson:$retrofit_version") {
+        exclude group: 'com.squareup.retrofit2'
+        exclude group: 'com.google.code.gson'
+    }
+    compile("com.squareup.retrofit2:adapter-rxjava:$retrofit_version") {
+        exclude group: 'com.squareup.retrofit2'
+        exclude group: 'io.reactivex'
+    }
 }
 
 project(':libs:IllustratedTextView') {
