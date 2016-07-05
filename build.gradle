@@ -278,10 +278,11 @@ android {
 
 dependencies {
     //Android Support libs
-    compile rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION
+    compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
+        exclude group: 'com.android.support'
+    }
     compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
     compile rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION
-    compile rootProject.ANDROID_BUILD_ANNOTATIONS_SUPPORT_VERSION
     //Google play services
     compile "com.google.android.gms:play-services-gcm:7.8.0"
     compile "com.google.android.gms:play-services-ads:7.8.0"
@@ -299,11 +300,19 @@ dependencies {
     compile 'com.flurry.android:analytics:6.2.0'
     //Topface sub libs
     compile project(':libs:IllustratedTextView')
-    compile project(':libs:statistics-android')
+    compile(project(':libs:statistics-android')) {
+        exclude group: 'com.google.code.gson'
+        exclude group: 'com.android.support'
+    }
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
-    compile project(':libs:tf-offerwall:sdk')
-    compile project(':libs:odnoklassniki')
+    compile(project(':libs:tf-offerwall:sdk')) {
+        exclude group: 'com.android.support'
+        exclude group: 'com.google.android.gms'
+    }
+    compile(project(':libs:odnoklassniki')) {
+        exclude group: 'com.android.support'
+    }
     compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
     //Acra
     compile('ch.acra:acra:4.6.0RC2') {
@@ -311,8 +320,10 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
-    compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile('com.android.support:recyclerview-v7:23.1.1') {
+        exclude group: 'com.android.support'
+    }
+    compile 'com.google.code.gson:gson:2.7'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.7'
     //OpenIAB
@@ -322,14 +333,17 @@ dependencies {
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
-    compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'io.reactivex:rxjava:1.1.5'
+    compile 'io.reactivex:rxandroid:1.2.1'
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     //Social networks SDK
-    compile 'com.vk:androidsdk:1.6.1'
-    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
+    compile('com.vk:androidsdk:1.6.1') {
+        exclude group: 'com.android.support'
+    }
+    compile('com.facebook.android:facebook-android-sdk:4.5.0') {
+        exclude group: 'com.android.support'
+    }
     //Animations: NineOldAndroids, ListViewAnimations
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
