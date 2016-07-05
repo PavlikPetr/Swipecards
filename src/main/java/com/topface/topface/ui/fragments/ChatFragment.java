@@ -935,7 +935,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat()) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            Utils.showSoftKeyboard(getActivity().getApplicationContext(), mEditBox);
         }
     }
 
@@ -1256,11 +1256,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private boolean isShowKeyboardInChat() {
-        DisplayMetrics displayMetrics = Device.getDisplayMetrics(App.getContext());
+        Context context = getActivity().getApplicationContext();
+        DisplayMetrics displayMetrics = Device.getDisplayMetrics(context);
         int height = getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
                 ? displayMetrics.heightPixels : displayMetrics.widthPixels;
         float dpHeight = height / displayMetrics.density;
-        return dpHeight >= getActivity().getResources().
+        return dpHeight >= context.getResources().
                 getInteger(R.integer.min_screen_height_chat_fragment);
     }
 
