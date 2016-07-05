@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.databinding.FragmentBonusBinding;
 import com.topface.topface.statistics.FlurryOpenEvent;
@@ -87,6 +88,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
             mAdapter.setOnItemClickListener(new ItemEventListener.OnRecyclerViewItemClickListener<IOfferwallBaseModel>() {
                 @Override
                 public void itemClick(View view, int itemPosition, IOfferwallBaseModel data) {
+                    Debug.showChunkedLogDebug("Offerwalls", "try open " + data.getOfferwallsType() + " url " + data.getLink());
                     Utils.goToUrl(getActivity(), data.getLink());
                 }
             });

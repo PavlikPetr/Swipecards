@@ -1,9 +1,8 @@
 package com.topface.topface.ui.bonus.presenter;
 
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.state.EventBus;
@@ -19,6 +18,9 @@ import com.topface.topface.utils.RxUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,8 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.functions.Action2;
+import rx.functions.Func0;
 import rx.functions.Func1;
 
 public class BonusPresenter implements IBonusPresenter {
@@ -100,9 +104,14 @@ public class BonusPresenter implements IBonusPresenter {
         OfferwallsSettings settings = App.get().getOptions().offerwallsSettings;
         List<String> offersType = settings.getOfferwallsList();
         List<Observable<ArrayList<IOfferwallBaseModel>>> observables = new ArrayList<>();
+        Debug.showChunkedLogDebug("Offerwalls",
+                "Available offerwalls type: " + (ListUtils.isNotEmpty(offersType)
+                        ? Arrays.toString(offersType.toArray(new String[offersType.size()]))
+                        : "no one"));
         for (Iterator<String> it = offersType.iterator(); it.hasNext(); ) {
             String item = it.next();
             Observable<ArrayList<IOfferwallBaseModel>> obs = OffersUtils.getOffersObservableByType(item);
+            Debug.showChunkedLogDebug("Offerwalls", item + (obs != null ? " available" : " not available"));
             if (obs != null) {
                 observables.add(obs);
             } else {
@@ -118,7 +127,34 @@ public class BonusPresenter implements IBonusPresenter {
                 .filter(new Func1<ArrayList<IOfferwallBaseModel>, Boolean>() {
                     @Override
                     public Boolean call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels) {
-                        return !iOfferwallBaseModels.isEmpty();
+                        boolean isEmpty = iOfferwallBaseModels.isEmpty();
+                        Debug.showChunkedLogDebug("Offerwalls",
+                                (isEmpty
+                                        ? "offerwalls list is empty"
+                                        : iOfferwallBaseModels.get(0).getOfferwallsType() + " has " + iOfferwallBaseModels.size() + " offerwalls"));
+                        return !isEmpty;
+                    }
+                }).collect(new Func0<ArrayList<IOfferwallBaseModel>>() {
+                    @Override
+                    public ArrayList<IOfferwallBaseModel> call() {
+                        return new ArrayList<>();
+                    }
+                }, new Action2<ArrayList<IOfferwallBaseModel>, ArrayList<IOfferwallBaseModel>>() {
+                    @Override
+                    public void call(ArrayList<IOfferwallBaseModel> result, ArrayList<IOfferwallBaseModel> iOfferwallBaseModels) {
+                        result.addAll(iOfferwallBaseModels);
+                    }
+                })
+                .map(new Func1<ArrayList<IOfferwallBaseModel>, ArrayList<IOfferwallBaseModel>>() {
+                    @Override
+                    public ArrayList<IOfferwallBaseModel> call(ArrayList<IOfferwallBaseModel> iOfferwallBaseModels) {
+                        Collections.sort(iOfferwallBaseModels, new Comparator<IOfferwallBaseModel>() {
+                            @Override
+                            public int compare(IOfferwallBaseModel lhs, IOfferwallBaseModel rhs) {
+                                return Integer.valueOf(rhs.getRewardValue()).compareTo(lhs.getRewardValue());
+                            }
+                        });
+                        return iOfferwallBaseModels;
                     }
                 })
                 .delay(OFFERS_DELAY, TimeUnit.MILLISECONDS)
@@ -142,7 +178,9 @@ public class BonusPresenter implements IBonusPresenter {
     }
 
     private void showOffers() {
-        if (mOffers.isEmpty()) {
+        boolean isEmpty = mOffers.isEmpty();
+        Debug.showChunkedLogDebug("Offerwalls", isEmpty ? "nothing to show" : "try show " + mOffers.size() + " offers");
+        if (isEmpty) {
             showEmptyView();
         } else {
             if (mIBonusView != null) {
