@@ -22,14 +22,14 @@ import com.topface.topface.ui.views.ImageViewRemote;
  */
 public class BindingsAdapters {
 
-    @BindingAdapter("bind:animate")
+    @BindingAdapter("animate")
     public static void animateDisplaying(ImageViewRemote imageView, int duration) {
         AlphaAnimation animation = new AlphaAnimation(0, 1);
         animation.setDuration(duration);
         imageView.setViewDisplayAnimate(animation);
     }
 
-    @BindingAdapter("bind:onLongItemClick")
+    @BindingAdapter("onLongItemClick")
     public static void onLongItemClick(View view, View.OnLongClickListener longClickListener) {
         view.setOnLongClickListener(longClickListener);
     }
@@ -55,7 +55,7 @@ public class BindingsAdapters {
         BindingsUtils.replaceDrawable(view, bgResource, 1);
     }
 
-    @BindingAdapter("app:textColorSelector")
+    @BindingAdapter("textColorSelector")
     public static void setTextColorSelector(View view, int colorSelector) {
         try {
             XmlResourceParser xrp = App.getContext().getResources().getXml(colorSelector);
@@ -66,7 +66,7 @@ public class BindingsAdapters {
         }
     }
 
-    @BindingAdapter("app:remoteSrc")
+    @BindingAdapter("remoteSrc")
     public static void setremoteSrc(ImageViewRemote view, String res) {
         if (!TextUtils.isEmpty(res)) {
             view.setRemoteSrc(res);
@@ -75,12 +75,12 @@ public class BindingsAdapters {
         }
     }
 
-    @BindingAdapter("app:selected")
+    @BindingAdapter("selected")
     public static void setSelected(View view, boolean isSelected) {
         view.setSelected(isSelected);
     }
 
-    @BindingAdapter("app:setPhoto")
+    @BindingAdapter("setPhoto")
     public static void setPhoto(ImageViewRemote view, IPhoto photo) {
         view.setPhoto((photo));
     }

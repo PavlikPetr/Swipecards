@@ -125,6 +125,7 @@
 -keep class com.appodeal.** { *; }
 -keep class org.nexage.** { *; }
 -keepattributes EnclosingMethod, InnerClasses, Signature, JavascriptInterface
+-dontwarn com.appodeal.**
 
  # Mopub
 -keep public class com.mopub.**
@@ -151,6 +152,7 @@
 -keepattributes SourceFile,LineNumberTable
 -keep class com.unity3d.ads.** { *; }
 -keep class com.applifier.** { *; }
+-dontwarn com.unity3d.**
 
  # Yandex
 -keep class com.yandex.metrica.** { *; }
@@ -288,6 +290,12 @@
 -dontwarn retrofit2.**
 -keep class retrofit2.** { *; }
 -keepattributes Signature
+
 -keepattributes Exceptions
 -dontwarn com.squareup.okhttp.**
+
 -dontwarn okio.**
+-dontwarn com.smaato.soma.**
+-dontwarn android.databinding.**
+-dontwarn com.tapsense.android.**
+-dontwarn com.personagraph.**
