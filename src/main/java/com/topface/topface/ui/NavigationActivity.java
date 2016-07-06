@@ -31,7 +31,6 @@ import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.promo.PromoPopupManager;
-import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -65,6 +64,7 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ChosenStartAction;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
+import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -298,12 +298,13 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private List<IStartAction> getActionsList() {
         List<IStartAction> startActions = new ArrayList<>();
         mPopupManager = new PopupManager(this);
-        startActions.add(PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
-            @Override
-            public void onRedirect() {
-                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
-            }
-        }));
+//        startActions.add(PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
+//            @Override
+//            public void onRedirect() {
+//                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
+//            }
+//        }));
+        startActions.add(new ExpressMessageAction(this, AC_PRIORITY_HIGH));
         startActions.add(new ChosenStartAction().chooseFrom(
                 new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
                 new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,

@@ -31,7 +31,6 @@ public class PromoExpressMessages extends PromoDialog {
 
     private int mCurrentPosition = Integer.MAX_VALUE;
 
-    private int mExtraPaddingTop = 0;
     private Random mRandom;
     private static OnNextActionListener mOnNextActionListener;
 
@@ -67,6 +66,16 @@ public class PromoExpressMessages extends PromoDialog {
         if (mOnNextActionListener != null) {
             mOnNextActionListener.onNextAction();
         }
+    }
+
+    @Override
+    protected int getDialogStyleResId() {
+        return R.style.Theme_Topface_NoActionBar_DatingLockPopup;
+    }
+
+    @Override
+    public boolean isUnderActionBar() {
+        return false;
     }
 
     @Override
@@ -149,16 +158,6 @@ public class PromoExpressMessages extends PromoDialog {
         return mRandom;
     }
 
-    @Override
-    protected int getPopupPaddingTop() {
-        return getActionBarHeight() + mExtraPaddingTop;
-    }
-
-    public PromoExpressMessages setExtraPaddingTop(int extraPaddingTopValue) {
-        mExtraPaddingTop = extraPaddingTopValue;
-        return this;
-    }
-
     public interface PopupRedirectListener {
         void onRedirect();
     }
@@ -200,6 +199,5 @@ public class PromoExpressMessages extends PromoDialog {
 
     public static boolean isPromoExpressMessagesAvailable() {
         return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
-
     }
 }

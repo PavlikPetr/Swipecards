@@ -117,7 +117,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 if (fragment != null && fragment instanceof TabbedDialogsFragment) {
                     paddingTop = ((TabbedDialogsFragment) fragment).getTabLayoutHeight();
                 }
-                PromoExpressMessages popup = new PromoExpressMessages().setExtraPaddingTop(paddingTop);
+//                PromoExpressMessages popup = new PromoExpressMessages().setExtraPaddingTop(paddingTop);
+                PromoExpressMessages popup = new PromoExpressMessages();
                 popup.setOnCloseListener(new PromoDialog.OnCloseListener() {
                     @Override
                     public void onClose() {
@@ -330,6 +331,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isExpressPopupAvailable() {
-        return PromoExpressMessages.isPromoExpressMessagesAvailable();
+        return false;
+//        return PromoExpressMessages.isPromoExpressMessagesAvailable();
     }
 }
