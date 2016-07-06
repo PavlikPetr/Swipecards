@@ -92,6 +92,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
+                        if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
+                            showExpressMessagesPopupIfNeeded();
+                        }
                     }
                 });
     }
