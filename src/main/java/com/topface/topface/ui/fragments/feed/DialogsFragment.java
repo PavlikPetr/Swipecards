@@ -105,7 +105,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isPromoExpressMessagesDialogAttached() {
-        return isAdded() && getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
+        return isAdded() && getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
     }
 
     private void showExpressMessagesPopupIfNeeded() {
@@ -126,8 +126,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 });
                 popup.show(getActivity().getSupportFragmentManager(), PromoExpressMessages.TAG);
             }
-        } else if (!isPopupAvailable) {
-            PromoExpressMessages expressPopup = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
+        } else if (!isPopupAvailable && isAdded()) {
+            PromoExpressMessages expressPopup = (PromoExpressMessages) getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
             if (expressPopup != null) {
                 expressPopup.dismiss();
                 updateData(true, false);
