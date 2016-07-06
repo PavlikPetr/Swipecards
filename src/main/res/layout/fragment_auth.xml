@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@null"
-                android:onClick="@{handler.otherSocButtonClick}"
+                android:onClick="@{handler::otherSocButtonClick}"
                 android:text="@{handler.getOtherServicesButtonText}"
                 android:textColor="@color/auth_fragment_text_color" />
         </LinearLayout>
