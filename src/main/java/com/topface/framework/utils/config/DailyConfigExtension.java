@@ -1,8 +1,10 @@
 package com.topface.framework.utils.config;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.IntDef;
 
 import com.topface.framework.JsonUtils;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.DateUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +39,10 @@ public class DailyConfigExtension {
 
     public <T> void setDailyConfigField(@NotNull String configObjectKey, @NotNull T configObject) {
         DailyConfigField field = constructDailyConfigField(getConfigInfoByKey(configObjectKey), configObject);
+        saveDailyConfigField(configObjectKey, field);
+    }
+
+    private void saveDailyConfigField(@NotNull String configObjectKey, @NotNull DailyConfigField field) {
         mAbstractConfig.setField(mAbstractConfig.getSettingsMap(), configObjectKey, field.toString());
         mAbstractConfig.saveConfig();
     }
@@ -46,7 +52,21 @@ public class DailyConfigExtension {
      */
     @Nullable
     public <T> DailyConfigField<T> getDailyConfigField(@NotNull String configObjectKey, Type type) {
-        return JsonUtils.fromJson(getDailyConfigFieldJSON(configObjectKey), type);
+        DailyConfigField<T> configField = JsonUtils.fromJson(getDailyConfigFieldJSON(configObjectKey), type);
+        resetAndSaveFieldInfoIfNeed(configObjectKey, configField);
+        return configField;
+    }
+
+    /**
+     * Если на момент запроса поля прошел заданные интервал, то обнуляем информацию о поле
+     */
+    private void resetAndSaveFieldInfoIfNeed(@NotNull String configObjectKey, @NotNull DailyConfigField configField) {
+        DailyConfigFieldInfo info = configField.getConfigFieldInfo();
+        if (isNeedResetAmount(info)) {
+            info.resetAmount();
+            info.setWriteTime(0);
+            saveDailyConfigField(configObjectKey, configField);
+        }
     }
 
     @NotNull
@@ -67,13 +87,10 @@ public class DailyConfigExtension {
     @NotNull
     private <T> DailyConfigField constructDailyConfigField(@NotNull DailyConfigFieldInfo info, @NotNull T data) {
         long currentTime = System.currentTimeMillis();
-        long lastWriteTime = info.getLastWriteTime();
         switch (info.mMode) {
             case EVERY_DAY:
-                calculateAmount(lastWriteTime != 0 && DateUtils.isDayBeforeToday(lastWriteTime), info);
-                break;
             case DAY_AFTER_LAST_EXTRACT:
-                calculateAmount(lastWriteTime != 0 && currentTime - lastWriteTime >= DateUtils.DAY_IN_MILLISECONDS, info);
+                calculateAmount(isNeedResetAmount(info), info);
                 break;
             case DEFAULT:
                 info.incrementAmount();
@@ -81,6 +98,20 @@ public class DailyConfigExtension {
         }
         info.setWriteTime(currentTime);
         return new DailyConfigField<>(data, info);
+    }
+
+    @SuppressLint("SwitchIntDef")
+    private boolean isNeedResetAmount(@NotNull DailyConfigFieldInfo info) {
+        long lastWriteTime = info.getLastWriteTime();
+        switch (info.mMode) {
+            case EVERY_DAY:
+                return lastWriteTime != 0 && DateUtils.isDayBeforeToday(lastWriteTime);
+            case DAY_AFTER_LAST_EXTRACT:
+                long currentTime = System.currentTimeMillis();
+                return lastWriteTime != 0 && currentTime - lastWriteTime >= DateUtils.DAY_IN_MILLISECONDS;
+            default:
+                return false;
+        }
     }
 
     private void calculateAmount(boolean isNeedReset, DailyConfigFieldInfo info) {
@@ -161,17 +192,16 @@ public class DailyConfigExtension {
         }
 
         private void incrementAmount() {
+            Debug.log("FullscreenController : DailyConfigExtension incrementAmount ");
             mAmount++;
         }
 
         private void resetAmount() {
+            Debug.log("FullscreenController : DailyConfigExtension resetAmount ");
             mAmount = DEFAULT_AMOUNT;
         }
 
         public long getAmount() {
-            if (DateUtils.isDayBeforeToday(getLastWriteTime())) {
-                resetAmount();
-            }
             return mAmount;
         }
 
