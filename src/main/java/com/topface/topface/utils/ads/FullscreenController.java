@@ -166,8 +166,10 @@ public class FullscreenController {
         if (!settings.isEmpty()) {
             mIsFullscreenSkipped = false;
             if (settings.banner.type.equals(FullscreenSettings.SDK)) {
+                Debug.log("FullscreenController : FullscreenSettingsRequest AD " + settings.banner.name);
                 FullscreenController.this.requestFullscreenByServerSettings(settings);
             } else {
+                Debug.log("FullscreenController : showOwnFullscreen ");
                 showOwnFullscreen(settings);
             }
         }
@@ -186,11 +188,14 @@ public class FullscreenController {
     public void requestFullscreen() {
         mCurrentBannerType = OwnFullscreenPopup.IMPROVED_BANNER_TOPFACE;
         final UserConfig config = App.getUserConfig();
-        ApiRequest request = new FullscreenSettingsRequest(mActivity.getApplicationContext(), config.getFullscreenInterval().getConfigFieldInfo().getAmount());
+        long amount = config.getFullscreenInterval().getConfigFieldInfo().getAmount();
+        Debug.log("FullscreenController : FullscreenSettingsRequest exec  amount " + amount);
+        ApiRequest request = new FullscreenSettingsRequest(mActivity.getApplicationContext(), amount);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
                 handleFullscreenSettings(JsonUtils.fromJson(response.toString(), FullscreenSettings.class));
+                Debug.log("FullscreenController : FullscreenSettingsRequest success ");
                 if (mFullScreenBannerListener != null) {
                     mFullScreenBannerListener.onLoaded();
                 }
