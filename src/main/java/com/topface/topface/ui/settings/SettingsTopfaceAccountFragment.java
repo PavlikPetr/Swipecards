@@ -345,7 +345,9 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                mLockerView.setVisibility(View.GONE);
+                if (mLockerView != null) {
+                    mLockerView.setVisibility(View.GONE);
+                }
                 Activity activity = getActivity();
                 if (activity != null) {
                     AuthorizationManager.showRetryLogoutDialog(activity, logoutRequest);

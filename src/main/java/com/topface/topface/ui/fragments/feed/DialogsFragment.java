@@ -92,9 +92,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-                        if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
-                            showExpressMessagesPopupIfNeeded();
-                        }
                     }
                 });
     }
@@ -126,7 +123,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 });
                 popup.show(getActivity().getSupportFragmentManager(), PromoExpressMessages.TAG);
             }
-        } else if (!isPopupAvailable) {
+        } else if (!isPopupAvailable && isAdded()) {
             PromoExpressMessages expressPopup = (PromoExpressMessages) getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
             if (expressPopup != null) {
                 expressPopup.dismiss();
