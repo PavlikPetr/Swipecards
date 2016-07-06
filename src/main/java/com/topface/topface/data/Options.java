@@ -181,10 +181,6 @@ public class Options extends AbstractData {
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
     @Inject
     transient TopfaceAppState mAppState;
-    /**
-     * (FullScreenCondition) all settings for show fullScrenn ads
-     */
-    public FullScreenCondition fullScreenCondition = new FullScreenCondition();
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
@@ -369,7 +365,6 @@ public class Options extends AbstractData {
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
-            fullScreenCondition = new FullScreenCondition(response);
             if (response.has("leftMenuItems")) {
                 leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
                 });
