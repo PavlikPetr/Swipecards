@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.framework.imageloader.IPhoto;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
@@ -93,6 +94,9 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
+            if (options.bonus.enabled) {
+                adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
+            }
             adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
             adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
             updateIntegrationPage(options);
@@ -300,13 +304,17 @@ public class MenuFragment extends Fragment {
         arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors, mCountersData.getVisitors(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby, mCountersData.getPeopleNearby(), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
         if (options.bonus.enabled) {
-            arrayList.add(new LeftMenuData(R.drawable.ic_bonus_left_menu, App.get().getOptions().bonus.buttonText, mCountersData.getBonus(), false, new LeftMenuSettingsData(FragmentIdData.BONUS)));
+            arrayList.add(getBonusItem());
         }
         arrayList.add(new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE)));
         if (App.get().getProfile().isEditor()) {
             arrayList.add(getEditorItem());
         }
         return arrayList;
+    }
+
+    private LeftMenuData getBonusItem() {
+        return new LeftMenuData(R.drawable.ic_bonus_left_menu, App.get().getOptions().bonus.buttonText, mCountersData.getBonus(), false, new LeftMenuSettingsData(FragmentIdData.BONUS));
     }
 
     private LeftMenuData getEditorItem() {
