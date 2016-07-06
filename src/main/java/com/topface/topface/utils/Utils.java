@@ -439,7 +439,7 @@ public class Utils {
     public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
         if (fm != null) {
             List<Fragment> bodyFragments = fm.getFragments();
-            if (!bodyFragments.isEmpty()) {
+            if (ListUtils.isNotEmpty(bodyFragments)) {
                 for (Fragment fragment : bodyFragments) {
                     if (fragment != null && !fragment.isDetached() && !fragment.isRemoving()) {
                         fragment.onActivityResult(requestCode, resultCode, data);

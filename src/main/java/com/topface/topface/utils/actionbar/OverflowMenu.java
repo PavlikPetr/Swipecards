@@ -33,7 +33,6 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -139,7 +138,7 @@ public class OverflowMenu {
         ArrayList<OverflowMenuItem> result = new ArrayList<>();
         if (!isBanned) {
             result.add(SEND_SYMPATHY_ACTION);
-            if (!App.from(mContext).getOptions().isHideAdmirations) {
+            if (!App.get().getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
             result.add(OPEN_CHAT_ACTION);
@@ -174,7 +173,7 @@ public class OverflowMenu {
             Boolean isBookmarked = isBookmarked();
             Boolean isInBlackList = isInBlackList();
             Boolean isSympathySent = isSympathySent();
-            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(App.from(mContext).getProfile().isEditor(), isBanned());
+            ArrayList<OverflowMenuItem> overflowMenuItemArray = getProfileOverflowMenu(App.get().getProfile().isEditor(), isBanned());
             for (int i = 0; i < overflowMenuItemArray.size(); i++) {
                 OverflowMenuItem item = overflowMenuItemArray.get(i);
                 Integer resourceId = null;
@@ -342,7 +341,7 @@ public class OverflowMenu {
                         Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT);
                         initOverfowMenu();
                     }
-                }, App.from(mContext).getOptions().blockUnconfirmed
+                }, App.get().getOptions().blockUnconfirmed
         );
         setSympathySentState(true, true);
     }
@@ -371,7 +370,7 @@ public class OverflowMenu {
                         setSympathySentState(false, true);
                         initOverfowMenu();
                     }
-                }, App.from(mContext).getOptions()
+                }, App.get().getOptions()
         );
         if (isSentAdmiration) {
             setSympathySentState(true, true);
