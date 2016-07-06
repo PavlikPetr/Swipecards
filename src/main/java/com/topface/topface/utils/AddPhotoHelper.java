@@ -5,13 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -50,6 +48,8 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.UUID;
@@ -564,7 +564,7 @@ public class AddPhotoHelper {
             Photo photo = (Photo) msg.obj;
             if (profile.photos != null && photo != null) {
                 // ставим фото на аватарку только если она едиснтвенная
-                if(profile.photos.size() == 0){
+                if (profile.photos.size() == 0) {
                     profile.photo = photo;
                 }
                 // добавляется фото в начало списка
@@ -613,7 +613,15 @@ public class AddPhotoHelper {
     private BitmapFactory.Options getPhotoSizeByUri(Uri uri) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(getPath(uri), options);
+        try {
+            Activity activity = getActivity();
+            if (activity != null) {
+                InputStream stream = activity.getApplicationContext().getContentResolver().openInputStream(uri);
+                BitmapFactory.decodeStream(stream, null, options);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return options;
     }
 
@@ -623,23 +631,5 @@ public class AddPhotoHelper {
                 currentPhotoSize.outHeight < minPhotoSize.height);
     }
 
-    public String getPath(Uri uri) {
-        String picturePath = null;
-        Cursor cursor = mContext.getContentResolver().query(uri,
-                new String[]{MediaStore.Images.Media.DATA}, null, null, null);
-        if (cursor != null) {
-            // получаем путь к изображению из галлереи
-            cursor.moveToFirst();
-            if (cursor.getColumnCount() > 0) {
-                picturePath = cursor.getString(0);
-            }
-            cursor.close();
-        }
-        if (picturePath == null) {
-            // путь к файлу, полученному с камеры
-            picturePath = uri.getEncodedPath();
-        }
-        return picturePath;
-    }
 }
 
