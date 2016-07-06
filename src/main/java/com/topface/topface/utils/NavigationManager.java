@@ -124,7 +124,6 @@ public class NavigationManager {
                 transaction.remove(newFragment);
                 Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
             }
-            Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
             transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commit();
             //Вызываем executePendingTransactions, если передан соответвующий флаг

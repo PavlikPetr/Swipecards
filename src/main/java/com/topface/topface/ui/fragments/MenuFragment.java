@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.framework.imageloader.IPhoto;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
@@ -135,14 +134,16 @@ public class MenuFragment extends Fragment {
     }
 
     private void setSelected(WrappedNavigationData data) {
+        setItemSelected(data);
+        mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.ITEM_SELECTED));
+    }
+
+    private void setItemSelected(WrappedNavigationData data) {
         if (mSelectedPos != EMPTY_POS) {
             getAdapter().updateSelected(mSelectedPos, false);
         }
         mSelectedPos = data.getData().getUniqueKey();
         getAdapter().updateSelected(mSelectedPos, true);
-        if (!data.getStatesStack().contains(WrappedNavigationData.SELECT_ONLY)) {
-            mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.ITEM_SELECTED));
-        }
     }
 
     private void updateIntegrationPage(Options options) {
@@ -219,13 +220,19 @@ public class MenuFragment extends Fragment {
                 .filter(new Func1<WrappedNavigationData, Boolean>() {
                     @Override
                     public Boolean call(WrappedNavigationData data) {
-                        return data != null && !data.getStatesStack().contains(WrappedNavigationData.ITEM_SELECTED);
+                        return data != null;
                     }
                 })
                 .subscribe(new Action1<WrappedNavigationData>() {
                     @Override
-                    public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
-                        setSelected(wrappedLeftMenuSettingsData);
+                    public void call(WrappedNavigationData data) {
+                        ArrayList<Integer> stack = data.getStatesStack();
+                        if (stack.contains(WrappedNavigationData.ITEM_SELECTED)
+                                || stack.contains(WrappedNavigationData.SELECT_ONLY)) {
+                            setItemSelected(data);
+                        } else {
+                            setSelected(data);
+                        }
                     }
                 }, mSubscriptionOnError));
         mSubscription.add(mDrawerLayoutState
