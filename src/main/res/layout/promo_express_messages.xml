@@ -9,7 +9,7 @@
         android:id="@+id/title_clickable"
         style="@style/ActionBarItemClick"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/action_bar_color"
         android:orientation="horizontal">
 
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="16dp"
-            android:src="@drawable/ic_home" />
+            android:src="@drawable/ic_home_notification" />
 
         <TextView
             android:id="@+id/title"

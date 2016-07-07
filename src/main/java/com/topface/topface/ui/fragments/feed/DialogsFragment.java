@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,18 +13,14 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AppOfTheDayLayoutBinding;
-import com.topface.topface.promo.dialogs.PromoDialog;
-import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
-import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -33,7 +28,6 @@ import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
 import com.topface.topface.utils.adapter_utils.IViewInjectRule;
@@ -45,16 +39,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
-
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.functions.Func1;
-
-import static com.topface.topface.utils.NavigationManager.CLOSE_LEFT_MENU_TIMEOUT;
 
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 public class DialogsFragment extends FeedFragment<FeedDialog> {
@@ -62,11 +48,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     public static final String PAGE_NAME = "Dialogs";
 
     @Inject
-    DrawerLayoutState mDrawerLayoutState;
-    @Inject
     NavigationState mNavigationState;
-    private Subscription mDrawerLayoutSubscription;
-    private boolean mIsNeedRefresh;
 
     public DialogsFragment() {
         super();
@@ -76,27 +58,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get().inject(this);
-        mDrawerLayoutSubscription = mDrawerLayoutState.getObservable()
-                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                .filter(new Func1<DrawerLayoutStateData, Boolean>() {
-                    @Override
-                    public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
-                        return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
-                    }
-                }).subscribe(new Action1<DrawerLayoutStateData>() {
-                    @Override
-                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
-                        showExpressMessagesPopupIfNeeded();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
-                            showExpressMessagesPopupIfNeeded();
-                        }
-                    }
-                });
     }
 
     @Override
@@ -104,51 +65,9 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         return false;
     }
 
-    private boolean isPromoExpressMessagesDialogAttached() {
-        return isAdded() && getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
-    }
-
-    private void showExpressMessagesPopupIfNeeded() {
-        boolean isPopupAvailable = isExpressPopupAvailable();
-        if (!isPromoExpressMessagesDialogAttached()) {
-            if (isPopupAvailable) {
-                int paddingTop = 0;
-                Fragment fragment = getParentFragment();
-                if (fragment != null && fragment instanceof TabbedDialogsFragment) {
-                    paddingTop = ((TabbedDialogsFragment) fragment).getTabLayoutHeight();
-                }
-//                PromoExpressMessages popup = new PromoExpressMessages().setExtraPaddingTop(paddingTop);
-                PromoExpressMessages popup = new PromoExpressMessages();
-                popup.setOnCloseListener(new PromoDialog.OnCloseListener() {
-                    @Override
-                    public void onClose() {
-                        mIsNeedRefresh = true;
-                    }
-                });
-                popup.show(getActivity().getSupportFragmentManager(), PromoExpressMessages.TAG);
-            }
-        } else if (!isPopupAvailable && isAdded()) {
-            PromoExpressMessages expressPopup = (PromoExpressMessages) getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
-            if (expressPopup != null) {
-                expressPopup.dismiss();
-                updateData(true, false);
-            }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        RxUtils.safeUnsubscribe(mDrawerLayoutSubscription);
-        super.onDestroy();
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        if (mIsNeedRefresh) {
-            updateData(true, false);
-            mIsNeedRefresh = false;
-        }
         if (getListAdapter() != null) {
             boolean isVip = App.get().getProfile().premium;
             for (FeedDialog feed : getListAdapter().getData()) {
@@ -158,9 +77,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     break;
                 }
             }
-        }
-        if (isPromoExpressMessagesDialogAttached()) {
-            showExpressMessagesPopupIfNeeded();
         }
     }
 
@@ -323,15 +239,5 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 }
             }
         }
-    }
-
-    @Override
-    protected boolean isNeedFirstShowListDelay() {
-        return isExpressPopupAvailable();
-    }
-
-    private boolean isExpressPopupAvailable() {
-        return false;
-//        return PromoExpressMessages.isPromoExpressMessagesAvailable();
     }
 }

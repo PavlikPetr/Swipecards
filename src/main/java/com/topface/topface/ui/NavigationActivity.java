@@ -298,12 +298,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private List<IStartAction> getActionsList() {
         List<IStartAction> startActions = new ArrayList<>();
         mPopupManager = new PopupManager(this);
-//        startActions.add(PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
-//            @Override
-//            public void onRedirect() {
-//                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
-//            }
-//        }));
         startActions.add(new ExpressMessageAction(this, AC_PRIORITY_HIGH));
         startActions.add(new ChosenStartAction().chooseFrom(
                 new TrialVipPopupAction(this, AC_PRIORITY_HIGH),

@@ -34,11 +34,11 @@ import static com.topface.topface.utils.FlurryManager.PRODUCT_BOUGHT;
 import static com.topface.topface.utils.FlurryManager.SHOW;
 
 
-public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener, IPromoPopup {
+public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener {
 
-    private OnCloseListener mListener;
     protected CountersData mCountersData;
     private CountersDataProvider mCountersDataProvider;
+    private OnPromoDialogEventsListener mOnPromoDialogEventsListener;
 
     public abstract Options.PromoPopupEntity getPremiumEntity();
 
@@ -137,6 +137,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             Debug.log("Promo: Close fragment after VIP buy");
+            if(mOnPromoDialogEventsListener!=null){
+                mOnPromoDialogEventsListener.onVipBought();
+            }
             closeFragment();
             EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
             PromoDialogStastics.promoDialogCloseAfterBuyVipSend(getMainTag());
@@ -160,6 +163,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buyVip:
+                if(mOnPromoDialogEventsListener!=null){
+                    mOnPromoDialogEventsListener.onBuyVipClick();
+                }
                 startActivityForResult(
                         PurchasesActivity.createVipBuyIntent(getMessage(), getTagForBuyingFragment()),
                         PurchasesActivity.INTENT_BUY_VIP
@@ -169,6 +175,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_BUY);
                 break;
             case R.id.deleteMessages:
+                if(mOnPromoDialogEventsListener!=null){
+                    mOnPromoDialogEventsListener.onDeleteMessageClick();
+                }
                 deleteMessages();
                 EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
                 PromoDialogStastics.promoDialogDismissSend(getMainTag());
@@ -194,8 +203,8 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     }
 
     private void closeFragment() {
-        if (mListener != null) {
-            mListener.onClose();
+        if(mOnPromoDialogEventsListener!=null){
+            mOnPromoDialogEventsListener.onClose();
         }
 
         //Отмечаем время закрытия попапа
@@ -217,11 +226,6 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         void onClose();
     }
 
-    @Override
-    public void setOnCloseListener(OnCloseListener listener) {
-        mListener = listener;
-    }
-
     /**
      * @see <a href="https://code.google.com/p/android/issues/detail?id=17423">Баг с retainInstance</a>
      */
@@ -234,4 +238,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         super.onDestroyView();
     }
 
+    public void setPromoPopupEventsListener(OnPromoDialogEventsListener listener) {
+        mOnPromoDialogEventsListener = listener;
+    }
 }

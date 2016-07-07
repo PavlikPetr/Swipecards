@@ -1,12 +1,18 @@
 package com.topface.topface.utils.controllers.startactions;
 
 import com.topface.topface.App;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.promo.PromoPopupManager;
-import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
+import com.topface.topface.promo.dialogs.SimplePromoDialogEventsListener;
 import com.topface.topface.utils.IActivityDelegate;
 
 import org.jetbrains.annotations.NotNull;
+
+import javax.inject.Inject;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
@@ -16,11 +22,14 @@ import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
  */
 
 public class ExpressMessageAction implements IStartAction {
+    @Inject
+    NavigationState mNavigationState;
     private int mPriority;
     private static OnNextActionListener mOnNextActionListener;
     private IActivityDelegate mIActivityDelegate;
 
     public ExpressMessageAction(@NotNull IActivityDelegate delegate, int priority) {
+        App.get().inject(this);
         mIActivityDelegate = delegate;
         mPriority = priority;
     }
@@ -33,12 +42,19 @@ public class ExpressMessageAction implements IStartAction {
     @Override
     public void callOnUi() {
         PromoExpressMessages popup = new PromoExpressMessages();
-        popup.setOnCloseListener(new PromoDialog.OnCloseListener() {
+        popup.setPromoPopupEventsListener(new SimplePromoDialogEventsListener() {
             @Override
-            public void onClose() {
+            public void onDeleteMessageClick() {
+                super.onDeleteMessageClick();
                 if (mOnNextActionListener != null) {
                     mOnNextActionListener.onNextAction();
                 }
+            }
+
+            @Override
+            public void onVipBought() {
+                super.onVipBought();
+                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
         popup.show(mIActivityDelegate.getSupportFragmentManager(), PromoExpressMessages.TAG);
@@ -63,5 +79,4 @@ public class ExpressMessageAction implements IStartAction {
     public void setStartActionCallback(OnNextActionListener startActionCallback) {
         mOnNextActionListener = startActionCallback;
     }
-
 }
