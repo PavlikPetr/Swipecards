@@ -361,6 +361,7 @@
         votre profil grâce à votre statut VIP !</string>
   <string name="buying_vip_status">Obtenez le statut VIP</string>
   <string name="edit_my_city">Ma ville</string>
+  <string name="my_location">Ma localisation</string>
   <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous recontacter.</string>
   <string name="settings_invalid_email">Email incorrect</string>
   <string name="chat_write_message">Rédiger un message</string>
