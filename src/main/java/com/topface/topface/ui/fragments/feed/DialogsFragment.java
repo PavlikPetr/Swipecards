@@ -312,11 +312,13 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             if (history != null && userId > 0) {
                 if (getListAdapter() instanceof DialogListAdapter) {
                     DialogListAdapter adapter = (DialogListAdapter) getListAdapter();
-                    FeedDialog dialog;
-                    for (int i = 0; i < adapter.getCount(); i++) {
-                        dialog = adapter.getItem(i);
-                        if (dialog.user != null && dialog.user.id == userId) {
-                            adapter.replacePreview(i, history);
+                    if (adapter != null) {
+                        FeedDialog dialog;
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            dialog = adapter.getItem(i);
+                            if (dialog != null && dialog.user != null && dialog.user.id == userId) {
+                                adapter.replacePreview(i, history);
+                            }
                         }
                     }
                 }
