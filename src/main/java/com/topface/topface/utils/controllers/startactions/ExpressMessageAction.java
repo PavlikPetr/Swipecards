@@ -45,7 +45,6 @@ public class ExpressMessageAction implements IStartAction {
         popup.setPromoPopupEventsListener(new SimplePromoDialogEventsListener() {
             @Override
             public void onDeleteMessageClick() {
-                super.onDeleteMessageClick();
                 if (mOnNextActionListener != null) {
                     mOnNextActionListener.onNextAction();
                 }
@@ -53,7 +52,6 @@ public class ExpressMessageAction implements IStartAction {
 
             @Override
             public void onVipBought() {
-                super.onVipBought();
                 mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
