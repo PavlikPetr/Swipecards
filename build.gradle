@@ -298,7 +298,6 @@ dependencies {
     // flurry analytics
     compile 'com.flurry.android:analytics:6.2.0'
     //Topface sub libs
-    compile project(':libs:IllustratedTextView')
     compile project(':libs:statistics-android')
     compile project(':libs:PullToRefresh')
     compile project(':libs:PhotoView')
@@ -350,15 +349,6 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.3.3']
     )
     ifreeCompile fileTree(dir: 'ifree/libs', include: '*.jar')
-}
-
-project(':libs:IllustratedTextView') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'AndroidManifest.xml'
-        java.srcDirs = ['src']
-        res.srcDirs = ['res']
-    }
 }
 
 project(':libs:PullToRefresh') {
