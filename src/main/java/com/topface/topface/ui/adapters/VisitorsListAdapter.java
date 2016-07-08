@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.data.Visitor;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
-import com.topface.topface.utils.ad.NativeAd;
 
 public class VisitorsListAdapter extends FeedAdapter<Visitor> {
 
@@ -55,16 +54,6 @@ public class VisitorsListAdapter extends FeedAdapter<Visitor> {
                 Visitor result = new Visitor();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
-            }
-        };
-    }
-
-    @Override
-    protected INativeAdItemCreator<Visitor> getNativeAdItemCreator() {
-        return new INativeAdItemCreator<Visitor>() {
-            @Override
-            public Visitor getAdItem(NativeAd nativeAd) {
-                return new Visitor(nativeAd);
             }
         };
     }

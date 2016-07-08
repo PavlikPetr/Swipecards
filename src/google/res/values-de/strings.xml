@@ -374,6 +374,7 @@
     </string>
     <string name="buying_vip_status">VIP Status kaufen</string>
     <string name="edit_my_city">Meine Stadt</string>
+    <string name="my_location">Mein Standort</string>
     <string name="settings_feedback_email">E-Mail für die Verbindung</string>
     <string name="settings_invalid_email">E-Mail ist unkorrekt</string>
     <string name="chat_write_message">Nachricht schreiben</string>
@@ -477,7 +478,6 @@
     <string name="choose_cool_photo">Wählen Sie Ihr bestes Foto und den passenden Status, der Ihre
         Laune beschreibt!
     </string>
-    <string name="email_confirmed">E-Mail ist bestädigt!</string>
     <string name="sympathy_sended">Sympathie ist gesendet</string>
     <string name="general_photo_deleted">Ihr Foto entspricht den Regeln nicht und es wurde
         entfernt
@@ -562,7 +562,8 @@
     <string name="incorrect_photo_format">Unkorrektes Format des Fotos. Versuchen Sie jpg oder png
         hochzuladen
     </string>
-    <string name="incorrect_photo_size">Dieses Foto ist zu klein (die minimale Größe beträgt
+    <string name="incorrect_photo_size">Foto hat ungültige Größe</string>
+    <string name="incorrect_photo_size_show_restrictions">Dieses Foto ist zu klein (die minimale Fotogröße beträgt
         — %1$dx%2$d Pixel).</string>
     <string name="input_contact_name">Geben Sie den Namen des Kontaktes ein</string>
     <string name="incorrect_locale">Wenn Sie möchten, dass wir Ihr Gutachten lesen könnten,
@@ -853,4 +854,5 @@
     <string name="offers_empty_text">Leider sind gerade keine Aufgaben für dich verfügbar, versuche es später wieder!</string>
     <string name="offers_rewarded_video_title">Gratis Coins</string>
     <string name="offers_rewarded_video_description">für das Anschauen eines Videos</string>
+    <string name="app_of_the_day_ad_badge">Werbung</string>
 </resources>

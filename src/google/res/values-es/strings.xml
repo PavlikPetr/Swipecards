@@ -385,6 +385,7 @@
     </string>
     <string name="buying_vip_status">Comprar estatus de VIP</string>
     <string name="edit_my_city">Mi ciudad</string>
+    <string name="my_location">Mi localización</string>
     <string name="settings_feedback_email">Correo electrónico de contacto</string>
     <string name="settings_invalid_email">Correo electrónico incorrecto</string>
     <string name="chat_write_message">Escribir mensaje</string>
@@ -495,7 +496,6 @@
     <string name="choose_cool_photo">¡Elige tu mejor fotografía y un estado que refleja tu estado de
         humor!
     </string>
-    <string name="email_confirmed">¡correo electrónico confirmado!</string>
     <string name="sympathy_sended">Simpatía enviada</string>
     <string name="general_photo_deleted">Tu fotografía no cumple con el reglamento y fue eliminada
     </string>
@@ -579,7 +579,8 @@
     <string name="incorrect_photo">Foto incorrecta. Intenta subir otra</string>
     <string name="incorrect_photo_format">Formato de foto incorrecto. Prueba subir jpg o png
     </string>
-    <string name="incorrect_photo_size">Esta fotografía es pequeña (el tamaño mínimo de las fotos es de
+    <string name="incorrect_photo_size">Tamaño de fotografía no permitido</string>
+    <string name="incorrect_photo_size_show_restrictions">Esta fotografía es pequeña (el tamaño mínimo de las fotos es de
         — %1$dx%2$d píxeles).</string>
     <string name="input_contact_name">Escribe el nombre de contacto</string>
     <string name="incorrect_locale">Si quieres que nosotros seamos capaces de leer tu comentario,
@@ -592,9 +593,8 @@
     <string name="complain_type_ero">Motivo erótico en la foto principal</string>
     <string name="complain_type_picture">Dibujo</string>
     <string name="complain_type_fake_user">Persona conocida</string>
-    <string name="complain_type_spam_msg">Oferta comercial, spam, propaganda, enlaces a las páginas,
-        teléfonos
-    </string>
+    <string name="complain_type_spam_msg">Oferta comercial, spam, anúncio, enlaces a las páginas,
+        teléfonos</string>
     <string name="complain_type_spam_profile">Campos \"estado\", \"sobre mi\", contienen oferta
         comercial
     </string>
@@ -916,4 +916,5 @@
     <string name="offers_empty_text">Desgraciadamente, no hay tareas disponibles para ti, ¡inténtalo más tarde!</string>
     <string name="offers_rewarded_video_title">Monedas gratis</string>
     <string name="offers_rewarded_video_description">Por la revisión de vídeos</string>
+    <string name="app_of_the_day_ad_badge">Anúncio</string>
 </resources>

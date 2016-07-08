@@ -42,7 +42,6 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedUser;
-import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.data.UnlockFunctionalityOption.UnlockScreenCondition;
 import com.topface.topface.requests.ApiResponse;
@@ -52,8 +51,6 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.requests.UnlockFunctionalityOptionsRequest;
-import com.topface.topface.requests.UnlockFunctionalityRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
@@ -72,14 +69,9 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
-import com.topface.topface.utils.ad.NativeAd;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.AdToAppHelper;
-import com.topface.topface.utils.ads.SimpleAdToAppListener;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -130,14 +122,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private Boolean isNeedFirstShowListDelay = null;
     private CountDownTimer mListShowDelayCountDownTimer;
     private boolean isDataFromCache;
-    private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (!App.from(context).getProfile().showAd) {
-                getListAdapter().removeAdItems();
-            }
-        }
-    };
     private boolean isDeletable = true;
     private boolean needUpdate = false;
     private BroadcastReceiver mBlacklistedReceiver = new BroadcastReceiver() {
@@ -374,19 +358,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             isCurrentCounterChanged = saved.getBoolean(FEED_COUNTER_CHANGED);
             currentCounter = saved.getInt(FEED_COUNTER);
             mIdForRemove = saved.getInt(BLACK_LIST_USER);
-            Profile profile = App.from(getActivity()).getProfile();
-            if (profile.showAd) {
-                mListAdapter.setHasFeedAd(saved.getBoolean(HAS_AD));
-                mListAdapter.setFeedAd(saved.<NativeAd>getParcelable(FEED_AD));
-            }
             Parcelable[] feeds = saved.getParcelableArray(FEEDS);
             FeedList<T> feedsList = new FeedList<>();
             if (feeds != null) {
                 for (Parcelable p : feeds) {
-                    T feed = (T) p;
-                    if (feed.isAd() && !profile.showAd) {
-                        continue;
-                    }
                     feedsList.add((T) p);
                 }
             }
@@ -396,6 +371,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 mBackgroundController.hide();
             }
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mBannersController = new BannersController(this, App.get().getOptions());
     }
 
     private void registerGcmReceiver() {
@@ -445,18 +426,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         setActionBarTitles(getTitle());
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initFloatBlock();
-    }
-
-    protected void initFloatBlock() {
-        if (!getListAdapter().isNeedFeedAd()) {
-            mBannersController = new BannersController(this, App.from(getActivity()).getOptions());
-        }
-    }
-
     abstract protected Type getFeedListDataType();
 
     abstract protected Class getFeedListItemClass();
@@ -485,7 +454,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         super.onCreate(savedInstanceState);
         registerGcmReceiver();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBlacklistedReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mProfileUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
     }
 
     protected void updateCounters(CountersData countersData) {
@@ -507,9 +475,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 mListView.getFirstVisiblePosition(),
                 mListView.getChildCount(),
                 adapter.getCount());
-        if (!adapter.isEmpty()) {
-            adapter.refreshAdItem();
-        }
     }
 
     @Override
@@ -522,13 +487,14 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mCountersDataProvider.unsubscribe();
+        if (mCountersDataProvider != null) {
+            mCountersDataProvider.unsubscribe();
+        }
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mProfileUpdateReceiver);
         if (getGcmUpdateAction() != null) {
             LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mGcmReceiver);
         }
@@ -541,8 +507,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             FeedList<T> data = mListAdapter.getData();
             outState.putParcelableArray(FEEDS, data.toArray(new Parcelable[data.size()]));
             outState.putInt(POSITION, mListView != null ? mListView.getFirstVisiblePosition() : 0);
-            outState.putBoolean(HAS_AD, mListAdapter.hasFeedAd());
-            outState.putParcelable(FEED_AD, mListAdapter.getFeedAd());
             outState.putInt(BLACK_LIST_USER, mIdForRemove);
             outState.putInt(FEED_COUNTER, currentCounter);
             outState.putBoolean(FEED_COUNTER_CHANGED, isCurrentCounterChanged);
@@ -1012,7 +976,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             showListViewWithSuccessResponse();
             mRetryView.setVisibility(View.GONE);
         }
-        if (getListAdapter().isEmpty()) {
+        FeedAdapter adapter = getListAdapter();
+        if (adapter != null && adapter.isEmpty()) {
             onEmptyFeed();
         } else {
             onFilledFeed();
@@ -1299,6 +1264,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         return true;
     }
 
+    //TODO в момент перепиливания фидов надо оставить метод инициализирующий кнопку разболокировки за выполнение задания
+    // start
     protected String getUnlockFunctionalityType() {
         return Utils.EMPTY;
     }
@@ -1309,65 +1276,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void setUnlockButtonView(final Button view) {
-        final String unlockType = getUnlockFunctionalityType();
-        if (view == null || unlockType.isEmpty()) {
-            return;
-        }
-        final AdToAppController controller = new AdToAppHelper(getActivity()).getController();
-        controller.isAdsAvailable(AdToAppController.AdsMasks.VIDEO, new AdToAppController.AdsAvailableListener() {
-            @Override
-            public void isAvailable(final boolean available) {
-                if (available) {
-                    new UnlockFunctionalityOptionsRequest(App.getContext()).callback(new DataApiHandler<UnlockFunctionalityOption>() {
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-
-                        }
-
-                        @Override
-                        protected void success(UnlockFunctionalityOption data, IApiResponse response) {
-                            UnlockScreenCondition unlockScreenCondition = getUnlockScreenCondition(data);
-                            if (unlockScreenCondition != null) {
-                                view.setText(Utils.getUnlockButtonText(unlockScreenCondition.getUnlockDuration()));
-                                view.setVisibility(unlockScreenCondition.isEnabled() ? View.VISIBLE : View.GONE);
-                            }
-                        }
-
-                        @Override
-                        protected UnlockFunctionalityOption parseResponse(ApiResponse response) {
-                            return UnlockFunctionalityOption.fillData(response);
-                        }
-                    }).exec();
-                }
-            }
-        });
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.addListener(new SimpleAdToAppListener() {
-                    @Override
-                    public void onClosed() {
-                    }
-
-                    @Override
-                    public void onVideoWatched() {
-                        super.onVideoWatched();
-                        new UnlockFunctionalityRequest(unlockType, App.getContext()).callback(new ApiHandler() {
-                            @Override
-                            public void success(IApiResponse response) {
-                                updateData(false, false);
-                            }
-
-                            @Override
-                            public void fail(int codeError, IApiResponse response) {
-
-                            }
-                        }).exec();
-                    }
-                }, getFeedListItemClass().getName());
-                controller.showAds(AdToAppController.AdsMasks.VIDEO);
-                view.setVisibility(View.GONE);
-            }
-        });
     }
+    // end
 }

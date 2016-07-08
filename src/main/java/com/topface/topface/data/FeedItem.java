@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.ad.NativeAd;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,8 +51,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
      */
     public FeedUser user;
 
-    private NativeAd mNativeAd;
-
     public FeedItem() {
         super(ItemType.NONE);
     }
@@ -63,11 +60,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         if (data != null) {
             fillData(data);
         }
-    }
-
-    public FeedItem(NativeAd nativeAd) {
-        this();
-        mNativeAd = nativeAd;
     }
 
     public FeedItem(Parcel in) {
@@ -83,7 +75,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         if (!usr.equals(NULL_USER)) {
             user = JsonUtils.fromJson(usr, FeedUser.class);
         }
-        mNativeAd = in.readParcelable(NativeAd.class.getClassLoader());
     }
 
     public FeedItem(ItemType type) {
@@ -118,10 +109,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         return DateUtils.getRelativeDate(date, true);
     }
 
-    public boolean isAd() {
-        return mNativeAd != null;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -146,7 +133,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         } else {
             dest.writeString(NULL_USER);
         }
-        dest.writeParcelable(mNativeAd, flags);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -175,7 +161,6 @@ abstract public class FeedItem extends LoaderData implements Parcelable {
         result = 31 * result + (unread ? 1 : 0);
         result = 31 * result + unreadCounter;
         result = 31 * result + (user != null ? user.hashCode() : 0);
-        result = 31 * result + (mNativeAd != null ? mNativeAd.hashCode() : 0);
         return result;
     }
 }

@@ -3,7 +3,10 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.BadParcelableException;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,6 +46,7 @@ import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
@@ -67,7 +71,6 @@ import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -87,16 +90,17 @@ import rx.subscriptions.CompositeSubscription;
 import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
 
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
-    public static final String INTENT_EXIT = "EXIT";
+    public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     private static final String FRAGMENT_SETTINGS = "fragment_settings";
+    private static final int EXIT_TIMEOUT = 3000;
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
     private View mContentFrame;
     private DrawerLayoutManager<HackyDrawerLayout> mDrawerLayout;
     private FullscreenController mFullscreenController;
-    private boolean isPopupVisible = false;
+    private boolean mIsPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
     @SuppressWarnings("deprecation")
@@ -159,8 +163,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
-        if (intent.getBooleanExtra(INTENT_EXIT, false)) {
-            finish();
+        try {
+            if (intent.getBooleanExtra(INTENT_EXIT, false)) {
+                finish();
+            }
+        } catch (BadParcelableException e) {
+            Debug.error(e);
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
@@ -280,6 +288,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Debug.log("PopupHive onCreate");
         if (savedInstanceState != null) {
             startPopupRush(true, true);
+        } else {
+            registerPopupSequence();
         }
 
     }
@@ -317,12 +327,18 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         return startActions;
     }
 
+    private void registerPopupSequence() {
+        if (!mPopupHive.containSequence(NavigationActivity.class)) {
+            mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class, false);
+        }
+    }
+
     private void startPopupRush(boolean isNeedResetOldSequence, boolean stateChanged) {
         if (!App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-            if (!mPopupHive.containSequence(NavigationActivity.class) || stateChanged) {
-                mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class, false);
+            if (stateChanged) {
+                registerPopupSequence();
             }
             mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
         }
@@ -334,7 +350,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initFullscreen() {
-        mFullscreenController = new FullscreenController(this, App.get().getOptions());
+        mFullscreenController = new FullscreenController(this);
     }
 
     private void initBonusCounterConfig() {
@@ -451,6 +467,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
+            if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
+                    mFullscreenController.canShowFullscreen() && !AuthToken.getInstance().isEmpty()) {
+                mFullscreenController.requestFullscreen();
+            }
         }
         //restart -> open NavigationActivity
         if (App.getLocaleConfig().fetchToSystemLocale()) {
@@ -584,27 +604,38 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     public void setPopupVisible(boolean visibility) {
-        isPopupVisible = visibility;
+        mIsPopupVisible = visibility;
     }
 
     @Override
     public void onBackPressed() {
-        if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
-            if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !isPopupVisible) {
-                mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
-            } else if (!mBackPressedOnce.get()) {
-                (new Timer()).schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        mBackPressedOnce.set(false);
+        FragmentManager fm = getSupportFragmentManager();
+        IOnBackPressed backPressedListener = null;
+        for (Fragment fragment : fm.getFragments()) {
+            if (fragment instanceof IOnBackPressed) {
+                backPressedListener = (IOnBackPressed) fragment;
+                break;
+            }
+        }
+        if (backPressedListener == null || !backPressedListener.onBackPressed()) {
+            if (getBackPressedListener() == null || !getBackPressedListener().onBackPressed()) {
+                if (mFullscreenController != null && mFullscreenController.isFullScreenBannerVisible() && !mIsPopupVisible) {
+                    mFullscreenController.hideFullscreenBanner((ViewGroup) findViewById(R.id.loBannerContainer));
+                } else {
+                    if (!mBackPressedOnce.get()) {
+                        (new Timer()).schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                mBackPressedOnce.set(false);
+                            }
+                        }, EXIT_TIMEOUT);
+                        mBackPressedOnce.set(true);
+                        Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
+                    } else {
+                        finish();
                     }
-                }, 3000);
-                mBackPressedOnce.set(true);
-                Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
-                isPopupVisible = false;
-            } else {
-                isPopupVisible = false;
-                finish();
+                    mIsPopupVisible = false;
+                }
             }
         }
     }
@@ -639,10 +670,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
             Debug.log("Current User ID:" + profile.uid);
         }
-        /*
-        Initialize Topface offerwall here to be able to start it quickly instead of PurchasesActivity
-         */
-        OfferwallsManager.initTfOfferwall(this, null);
         AdmobInterstitialUtils.preloadInterstitials(this, App.from(this).getOptions().interstitial);
     }
 

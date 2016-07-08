@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class PopularUserChatController extends BroadcastReceiver {
     public static final int NO_BLOCK = -1;
     public static final int FIRST_STAGE = 35;
     public static final int SECOND_STAGE = 36;
+    private static final String POPULAR_USER_DIALOG = "POPULAR_USER_DIALOG";
 
     private int mStage = NO_BLOCK;
 
@@ -201,13 +203,14 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean showBlockDialog() {
-        if (!isAccessAllowed() && mStage != NO_BLOCK) {
+        if (!isAccessAllowed() && mStage != NO_BLOCK && mChatFragment.isAdded()) {
             if (mPopularMessageBlocker == null) {
                 initBlockDialog();
             }
-            Fragment dialog = mChatFragment.getFragmentManager().findFragmentByTag("POPULAR_USER_DIALOG");
+            FragmentManager fragmentManager = mChatFragment.getActivity().getSupportFragmentManager();
+            Fragment dialog = fragmentManager.findFragmentByTag(POPULAR_USER_DIALOG);
             if (dialog == null || !dialog.isAdded()) {
-                mPopularMessageBlocker.show(mChatFragment.getFragmentManager(), "POPULAR_USER_DIALOG");
+                mPopularMessageBlocker.show(fragmentManager, POPULAR_USER_DIALOG);
             }
             return true;
         }

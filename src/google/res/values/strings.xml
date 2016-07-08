@@ -375,6 +375,7 @@
     </string>
     <string name="buying_vip_status">Get VIP-status</string>
     <string name="edit_my_city">My city</string>
+    <string name="my_location">My Location</string>
     <string name="settings_feedback_email">Enter your email to get a reply from us.</string>
     <string name="settings_invalid_email">Invalid email</string>
     <string name="chat_write_message">Write a message</string>
@@ -478,7 +479,6 @@
     <string name="reselect_city">Select a different city:</string>
     <string name="choose_cool_photo">Select your best photo and a status that reflects your mood!
     </string>
-    <string name="email_confirmed">The email is confirmed!</string>
     <string name="sympathy_sended">Like has been sent.</string>
     <string name="general_photo_deleted">Your photo was deleted because it violated one of our photo
         rules.
@@ -556,7 +556,8 @@
     <string name="incorrect_photo">Improper photo. Try to upload a different one.</string>
     <string name="incorrect_photo_format">Invalid image format. Try to upload a .jpg or .png file.
     </string>
-    <string name="incorrect_photo_size">This photo is too small (the minimum photo size is
+    <string name="incorrect_photo_size">Invalid photo size</string>
+    <string name="incorrect_photo_size_show_restrictions">This photo is too small (the minimum photo size is
         — %1$dx%2$d pixels).</string>
     <string name="input_contact_name">Enter contact name</string>
     <string name="incorrect_locale">If you would like us to read your review, please write it in
@@ -887,4 +888,5 @@
     <string name="offers_empty_text">Unfortunately there are no tasks available for you right now, check back soon!</string>
     <string name="offers_rewarded_video_title">Free Coins</string>
     <string name="offers_rewarded_video_description">for watching a video</string>
+    <string name="app_of_the_day_ad_badge">Ad</string>
 </resources>

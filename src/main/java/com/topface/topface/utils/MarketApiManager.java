@@ -1,9 +1,6 @@
 package com.topface.topface.utils;
 
-import com.topface.topface.App;
 import android.app.Activity;
-
-import com.topface.topface.BuildConfig;
 
 public class MarketApiManager {
     BaseMarketApiManager mServicesManager;

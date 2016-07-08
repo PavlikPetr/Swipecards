@@ -34,7 +34,7 @@ public class PopupHive {
 
     public void execPopupRush(Class clazz, boolean isStateChanged) {
         final PopupSequencedHolder holder = mSequenceHolderMap.get(clazz);
-        if (holder != null && (!holder.mIsExecuted || isStateChanged) && !mAlreadyShown) {
+        if (holder != null && (holder.mIsExecuted || isStateChanged) && !mAlreadyShown) {
             Debug.log("PopupHive start rush");
             mSequencedSubscription = holder.mActionObservable
                     .map(new Func1<IStartAction, IStartAction>() {
@@ -61,9 +61,15 @@ public class PopupHive {
                         public void call() {
                             Debug.log("PopupHive OK ");
                             mAlreadyShown = true;
+                            holder.mIsExecuted = false;
                         }
                     });
         }
+    }
+
+    public boolean isSequencedExecuted(Class clazz) {
+        PopupSequencedHolder popupSequencedHolder = mSequenceHolderMap.get(clazz);
+        return popupSequencedHolder != null && popupSequencedHolder.mIsExecuted;
     }
 
     public void releaseHive() {
@@ -93,7 +99,7 @@ public class PopupHive {
 
         private int mLastShownPopupPosition = 0;
         private List<IStartAction> mStartActionList;
-        private boolean mIsExecuted;
+        private boolean mIsExecuted = true;
         private OnNextActionListener mListener = new OnNextActionListener() {
             @Override
             public void onNextAction() {
@@ -146,7 +152,6 @@ public class PopupHive {
                 @Override
                 public void call(Subscriber<? super IStartAction> subscriber) {
                     mSubscriber = subscriber;
-                    mIsExecuted = true;
                     emmitAction();
                 }
             });

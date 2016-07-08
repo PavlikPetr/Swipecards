@@ -385,6 +385,7 @@
     </string>
     <string name="buying_vip_status">Obtenez le statut VIP</string>
     <string name="edit_my_city">Ma ville</string>
+    <string name="my_location">Ma localisation</string>
     <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous recontacter.</string>
     <string name="settings_invalid_email">Email incorrect</string>
     <string name="chat_write_message">Rédiger un message</string>
@@ -575,6 +576,7 @@
         fichier .jpg ou .png.
     </string>
     <string name="incorrect_photo_size">Format de la photo incorrect.</string>
+    <string name="incorrect_photo_size_show_restrictions">Cette photo est trop petite (la taille minimale de la photo est — %1$dx%2$d pixels).</string>
     <string name="input_contact_name">Saisissez le nom du contact</string>
     <string name="incorrect_locale">Si vous voulez que nous puissions lire votre avis, veuillez le
         rédiger en russe ou en anglais
@@ -855,7 +857,7 @@
     <string name="chat_auto_reply_title">Le texte du message est caché</string>
     <string name="chat_auto_reply_message">Pour ouvrir / répondre à ce message, devenez un VIP</string>
     <string name="chat_auto_reply_button">Devenir VIP</string>
-    <string name="photo_list_load_info">Partagez vos photos pour être vu par des millions de personnes !</string>
+    <string name="photo_list_load_info">Partagez vos photos et soyez vu par des millions de personnes</string>
     <string name="vk_profile_button_tf_group">Groupe Topface</string>
     <string name="vk_profile_button_join_tf_group">Rejoindre le groupe Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Rejoindre le groupe \"jeux VK\"</string>
@@ -867,7 +869,7 @@
     <string name="vk_friends_success_invite">L\'invitation a été envoyée</string>
     <string name="join_group_success">Vous avez rejoint le groupe</string>
     <string name="settings_auto_greeting_title">Auto-salutations</string>
-    <string name="settings_auto_greeting_subtitle">Autoriser Topface à lancer automatiquement une conversation avec un message de salutation à chaque fois que quelqu\'un vous envoie un J\'aime</string>
+    <string name="settings_auto_greeting_subtitle">Autoriser le système à débuter automatiquement une conversation avec un message d\'accueil lorsque vous recevez un J\'aime</string>
     <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
     <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Déverrouiller gratuitement à %s</string>
@@ -902,4 +904,19 @@
     <string name="like_liberty_title">J\'aime</string>
     <string name="like_liberty_description">Voir qui vous aime</string>
     <string name="refill_balance_view_title">Votre compte</string>
+    <string name="access_to_location_popup_title">La géolocalisation est indisponible</string>
+    <string name="access_to_location_popup_description">Malheureusement, la géolocalisation pour votre emplacement est indisponible. Pour continuer, vous devez autoriser l\'accès.</string>
+    <string name="access_to_location_popup_access_button">Autoriser l\'accès</string>
+    <string name="city_selector_set_your_city">Choisissez votre ville</string>
+    <string name="city_selector_detect_automatically">Réglage automatique</string>
+    <string name="city_selector_your_city">Votre ville</string>
+    <string name="photo_gallery_photo_deleted">La photo a été supprimée</string>
+    <string name="photofeed_add_photo_to_feed_title">Placez-vous en première position !</string>
+    <string name="photofeed_add_photo_to_feed_description">Téléchargez une photo avec un message de salutation et soyez vu par des milliers de personnes. Démarquez-vous et commencez à rencontrer dès maintenant !</string>
+    <string name="offers_screen_title">Bonus</string>
+    <string name="offers_loading_text">Chargement des tâches disponibles…</string>
+    <string name="offers_empty_text">Malheureusement, il n\'y a pas de tâches disponibles pour vous dès maintenant, revenez bientôt !</string>
+    <string name="offers_rewarded_video_title">Pièces gratuites</string>
+    <string name="offers_rewarded_video_description">pour regarder une vidéo</string>
+    <string name="app_of_the_day_ad_badge">Publicités</string>
 </resources>

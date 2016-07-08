@@ -46,7 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="6dp"
+                android:layout_marginLeft="@dimen/user_status_side_margin"
+                android:layout_marginRight="@dimen/user_status_side_margin"
                 android:ellipsize="end"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />

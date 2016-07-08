@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import com.topface.topface.App;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created by kirussell on 26/05/15.
  * Basic dialog fragment for common logic
@@ -21,6 +23,7 @@ public abstract class BaseDialog extends TrackedDialogFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        parseArgs(savedInstanceState == null ? getArguments() : savedInstanceState);
         if (getDialogStyleResId() != 0) {
             setStyle(STYLE_NO_FRAME, getDialogStyleResId());
         }
@@ -35,6 +38,9 @@ public abstract class BaseDialog extends TrackedDialogFragment {
             initViews(root);
         }
         return root;
+    }
+
+    protected void parseArgs(@Nullable Bundle bundle) {
     }
 
     protected abstract void initViews(View root);

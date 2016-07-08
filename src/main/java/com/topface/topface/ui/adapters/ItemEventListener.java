@@ -5,9 +5,6 @@ import android.view.View;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created by tiberal on 03.05.16.
- */
 public abstract class ItemEventListener<D> implements View.OnClickListener, View.OnLongClickListener {
     private boolean mIsLongClick;
     @Nullable
