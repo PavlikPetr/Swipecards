@@ -103,6 +103,7 @@ public class GCMUtils {
      * Extras key for additon gcm message label.
      */
     public static final String GCM_LABEL = "GCM_LABEL";
+    public static final String NOTIFICATION_LABEL = "photo_notification";
     private static AtomicBoolean mIsTokenSent = new AtomicBoolean();
 
     public GCMUtils(Context context) {
