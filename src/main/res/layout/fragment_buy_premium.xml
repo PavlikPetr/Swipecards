@@ -23,7 +23,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp">
 
-                <com.topface.IllustratedTextView.IllustratedTextView
+                <TextView
                     android:id="@+id/payReasonFragmentBuyPremium"
                     style="@style/PayReasonView" />
 
