@@ -269,7 +269,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
         }
         NotificationEditDialog.newInstance(App.getContext().getResources().getString(textId),
                 App.get().getProfile().notifications.get(notificationTypeId),
-                mEditingFinishedListener).show(getFragmentManager(), NotificationEditDialog.class.getName());
+                mEditingFinishedListener).show(getActivity().getSupportFragmentManager(), NotificationEditDialog.class.getName());
     }
 
     @SuppressWarnings("unused")
