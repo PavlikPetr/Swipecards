@@ -12,7 +12,7 @@ import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IUserOnlineListener;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;

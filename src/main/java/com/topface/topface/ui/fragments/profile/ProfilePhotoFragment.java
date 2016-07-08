@@ -39,6 +39,7 @@ import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;

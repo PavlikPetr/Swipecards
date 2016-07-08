@@ -1,8 +1,9 @@
-package com.topface.topface.ui.fragments.profile;
+package com.topface.topface.ui.fragments.profile.photoswitcher.view;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
+import com.topface.topface.databinding.AcPhotosBinding;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -45,6 +47,8 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
+import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -62,6 +66,11 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity {
+
+
+    private AcPhotosBinding mBinding;
+    private PhotoSwitcherViewModel mViewModel;
+
 
     public static final String ADD_NEW_GIFT = "add_new_gift";
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
@@ -199,6 +208,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.from(getApplicationContext()).inject(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.ac_photos);
         overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
@@ -421,7 +431,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 // at first drop image
                 // after set background
                 mGiftImage.setImageDrawable(null);
-                mGiftImage.setBackgroundResource(R.drawable.ic_gift);
+//                mGiftImage.setBackgroundResource(R.drawable.ic_gift);
             }
         }
     }

@@ -1,30 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout>
 
-    <!-- gallery -->
-    <ViewStub
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel" />
+
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout="@layout/ac_photos_image_switcher"
-        android:id="@+id/gallery_album_stub"
-        android:inflatedId="@+id/galleryAlbum" />
+        android:orientation="vertical">
 
-    <!-- header bar -->
-    <include layout="@layout/control_photo_album" />
+        <!-- gallery -->
+        <ViewStub
+            android:id="@+id/gallery_album_stub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inflatedId="@+id/galleryAlbum"
+            android:layout="@layout/ac_photos_image_switcher" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_main"
-        android:visibility="gone"
-        android:id="@+id/lockScreen" />
+        <!-- header bar -->
+        <include layout="@layout/control_photo_album" />
 
-    <com.topface.topface.ui.views.LockerView
-        android:id="@+id/llvProfileLoading"
-        style="@style/LoadingLocker"
-        android:visibility="gone" />
+        <RelativeLayout
+            android:id="@+id/lockScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_main"
+            android:visibility="gone" />
 
-</RelativeLayout>
+        <com.topface.topface.ui.views.LockerView
+            android:id="@+id/llvProfileLoading"
+            style="@style/LoadingLocker"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</layout>

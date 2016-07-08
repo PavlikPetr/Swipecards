@@ -210,7 +210,7 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".ui.TopfaceAuthActivity" />
         <activity
-            android:name=".ui.fragments.profile.PhotoSwitcherActivity"
+            android:name=".ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity"
             android:theme="@style/Topface.Theme.TransparentActionBarActivity" />
         <activity
             android:name=".ui.edit.EditContainerActivity"
