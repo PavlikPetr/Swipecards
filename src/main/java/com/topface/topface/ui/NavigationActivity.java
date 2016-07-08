@@ -457,13 +457,20 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
+    private void tryPostponedStartFragment() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(FRAGMENT_SETTINGS)) {
+            LeftMenuSettingsData data = intent.getExtras().getParcelable(FRAGMENT_SETTINGS);
+            if (data != null) {
+                showFragment(data);
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        LeftMenuSettingsData data = getIntent().getExtras().getParcelable(FRAGMENT_SETTINGS);
-        if (data != null) {
-            showFragment(data);
-        }
+        tryPostponedStartFragment();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
             if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
