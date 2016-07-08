@@ -186,10 +186,10 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             String lastPage = arg.getString(TabbedFeedFragment.EXTRA_OPEN_PAGE);
             if (!TextUtils.isEmpty(lastPage)) {
                 mBodyPager.setCurrentItem(BODY_PAGES_CLASS_NAMES.indexOf(lastPage));
-            } else {
+            } else if (mPageChangeListener != null) {
                 mPageChangeListener.onPageSelected(0);
             }
-        } else {
+        } else if (mPageChangeListener != null) {
             mPageChangeListener.onPageSelected(0);
         }
 
@@ -223,7 +223,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(CURRENT_BODY_PAGE, mBodyPager.getCurrentItem());
+        if (mBodyPager != null) {
+            outState.putInt(CURRENT_BODY_PAGE, mBodyPager.getCurrentItem());
+        }
     }
 
     protected Profile getProfile() {

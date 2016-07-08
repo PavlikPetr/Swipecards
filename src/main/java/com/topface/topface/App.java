@@ -66,7 +66,6 @@ import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
@@ -186,7 +185,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                     protected void success(Options data, IApiResponse response) {
                         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Options.OPTIONS_RECEIVED_ACTION));
                         mUserOptionsObtainedFromServer = true;
-                        NativeAdManager.init(data, getContext());
                     }
 
                     @Override

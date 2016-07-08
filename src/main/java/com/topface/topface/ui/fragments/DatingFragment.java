@@ -185,7 +185,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         if (null != mDelightBtn) {
                             mDelightBtn.setEnabled(false);
                         }
-                        mCurrentUser.rated = true;
+                        if (mCurrentUser != null) {
+                            mCurrentUser.rated = true;
+                        }
                         break;
                 }
             }
@@ -350,7 +352,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
         initMutualDrawables();
         // Rate Controller
-        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
+        mRateController = new RateController(this, SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
@@ -420,6 +422,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingSubscriptions.unsubscribe();
         }
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateActionsReceiver);
+        if (mRateController != null) {
+            mRateController.destroyController();
+        }
     }
 
     @Override

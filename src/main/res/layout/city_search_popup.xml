@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.viewModels.CitySearchPopupViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/city_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/action_bar_color"
+            app:contentInsetStart="0dp">
+
+            <include layout="@layout/actionbar_container_title_view" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/city_item_bg"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp">
+
+            <FrameLayout
+                android:id="@+id/current_city_item"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/city_item_height"
+                android:background="@color/bg_white"
+                android:elevation="3dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:id="@+id/u_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/city_selector_your_city"
+                    android:textColor="@color/dark_primary_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/current_city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginRight="18dp"
+                    android:text="@{viewModel.cityObservableField}"
+                    android:textColor="@color/dark_secondary_text"
+                    android:textSize="16sp" />
+
+            </FrameLayout>
+
+        </FrameLayout>
+
+        <EditText
+            android:id="@+id/enter_city"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/city_item_height"
+            android:background="@color/bg_white"
+            android:drawableLeft="@drawable/ic_search"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:hint="@string/city_selector_set_your_city"
+            android:imeOptions="actionDone"
+            android:lines="1"
+            android:maxLines="1"
+            android:paddingLeft="16dp"
+            android:singleLine="true"
+            android:text="@={viewModel.editTextObservable}" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/top_menu_disabled_text_color" />
+
+        <ProgressBar
+            android:id="@+id/requestProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="15dp"
+            android:visibility="@{viewModel.getProgressVisibility(viewModel.isRequestInProgress)}" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/city_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.getProgressVisibility(!viewModel.isRequestInProgress)}" />
+
+    </LinearLayout>
+</layout>

@@ -64,6 +64,9 @@ public class ProfileFormFragment extends AbstractFormFragment {
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override
         public void onEditingFinished(final FormItem data) {
+            if (mProfileFormListAdapter == null) {
+                return;
+            }
             for (final FormItem form : mProfileFormListAdapter.getFormItems()) {
                 if (form.type == data.type && form.titleId == data.titleId) {
                     if (form.dataId != data.dataId ||

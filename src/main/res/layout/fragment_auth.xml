@@ -38,7 +38,7 @@
                         android:id="@+id/tf_auth_back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="@{handler.upButtonClick}"
+                        android:onClick="@{handler::upButtonClick}"
                         android:padding="20dp"
                         android:src="@drawable/ic_arrow_back"
                         android:visibility="gone" />
@@ -63,21 +63,21 @@
                         <Button
                             android:id="@+id/btnAuthFB"
                             style="@style/AuthFb"
-                            android:onClick="@{handler.fbButtonClick}"
+                            android:onClick="@{handler::fbButtonClick}"
                             android:text="@string/auth_btn_fb" />
 
                         <Button
                             android:id="@+id/btnAuthVK"
                             style="@style/AuthVk"
                             android:layout_marginTop="@dimen/auth_buttons_padding"
-                            android:onClick="@{handler.vkButtonClick}"
+                            android:onClick="@{handler::vkButtonClick}"
                             android:text="@string/auth_btn_vk" />
 
                         <Button
                             android:id="@+id/btnAuthOk"
                             style="@style/AuthOk"
                             android:layout_marginTop="@dimen/auth_buttons_padding"
-                            android:onClick="@{handler.okButtonClick}"
+                            android:onClick="@{handler::okButtonClick}"
                             android:text="@string/auth_btn_ok" />
 
                         <Button
@@ -86,7 +86,7 @@
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="@{handler.mTFButtonPaddingTop}"
                             android:gravity="center"
-                            android:onClick="@{handler.tfButtonClick}"
+                            android:onClick="@{handler::tfButtonClick}"
                             android:text="@string/auth_btn_tf"
                             android:textColor="@color/auth_fragment_text_color" />
 
@@ -94,7 +94,7 @@
                             android:id="@+id/btnEntrance"
                             style="@style/AuthButtonBlue"
                             android:drawableLeft="@drawable/ic_enter"
-                            android:onClick="@{handler.entranceButtonClick}"
+                            android:onClick="@{handler::entranceButtonClick}"
                             android:text="@string/sign_in"
                             android:textColor="#FFFFFF"
                             android:visibility="gone" />
@@ -105,7 +105,7 @@
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="@dimen/auth_buttons_padding"
                             android:drawableLeft="@drawable/ic_add"
-                            android:onClick="@{handler.createAccountButtonClick}"
+                            android:onClick="@{handler::createAccountButtonClick}"
                             android:text="@string/create_account"
                             android:textColor="#4B4B4B"
                             android:visibility="gone" />
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:background="@null"
-                android:onClick="@{handler.otherSocButtonClick}"
+                android:onClick="@{handler::otherSocButtonClick}"
                 android:text="@{handler.getOtherServicesButtonText}"
                 android:textColor="@color/auth_fragment_text_color" />
         </LinearLayout>

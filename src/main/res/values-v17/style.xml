@@ -14,4 +14,20 @@
         <item name="android:paddingStart">@dimen/left_menu_header_pading_left</item>
         <item name="android:paddingEnd">@dimen/left_menu_header_pading_right</item>
     </style>
+
+    <style name="OfferwallItem" parent="OfferwallItemBase">
+        <item name="android:paddingStart">@dimen/offerwall_item_padding_left</item>
+        <item name="android:paddingEnd">@dimen/offerwall_item_padding_right</item>
+    </style>
+
+    <style name="OfferwallsText" parent="OfferwallsTextBase">
+        <item name="android:paddingStart">@dimen/offerwalls_text_padding_left</item>
+    </style>
+
+    <style name="OfferwallsButton" parent="OfferwallsButtonBase">
+        <item name="android:drawableEnd">@drawable/ic_pay</item>
+        <item name="android:paddingEnd">@dimen/offerwalls_button_padding_right</item>
+        <item name="android:layout_marginStart">@dimen/offerwalls_button_margin_left</item>
+        <item name="android:gravity">center_vertical|end</item>
+    </style>
 </resources>

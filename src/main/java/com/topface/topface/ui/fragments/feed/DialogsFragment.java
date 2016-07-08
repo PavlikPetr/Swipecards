@@ -1,8 +1,11 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
@@ -10,11 +13,13 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.History;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.databinding.AppOfTheDayLayoutBinding;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -28,6 +33,11 @@ import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
+import com.topface.topface.utils.adapter_utils.IViewInjectRule;
+import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -95,8 +105,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
     }
 
     private boolean isPromoExpressMessagesDialogAttached() {
-        Fragment promoFragment = getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
-        return promoFragment != null;
+        return isAdded() && getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG) != null;
     }
 
     private void showExpressMessagesPopupIfNeeded() {
@@ -117,8 +126,8 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                 });
                 popup.show(getActivity().getSupportFragmentManager(), PromoExpressMessages.TAG);
             }
-        } else if (!isPopupAvailable) {
-            PromoExpressMessages expressPopup = (PromoExpressMessages) getFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
+        } else if (!isPopupAvailable && isAdded()) {
+            PromoExpressMessages expressPopup = (PromoExpressMessages) getActivity().getSupportFragmentManager().findFragmentByTag(PromoExpressMessages.TAG);
             if (expressPopup != null) {
                 expressPopup.dismiss();
                 updateData(true, false);
@@ -128,9 +137,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
 
     @Override
     public void onDestroy() {
-        if (mDrawerLayoutSubscription != null && !mDrawerLayoutSubscription.isUnsubscribed()) {
-            mDrawerLayoutSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mDrawerLayoutSubscription);
         super.onDestroy();
     }
 
@@ -150,10 +157,41 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
                     break;
                 }
             }
-
         }
         if (isPromoExpressMessagesDialogAttached()) {
             showExpressMessagesPopupIfNeeded();
+        }
+    }
+
+    @Override
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FeedAdapter adapter = getListAdapter();
+        final Options.AppOfTheDay appOfTheDay = App.get().getOptions().appOfTheDay;
+        if (adapter != null && appOfTheDay != null) {
+            InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
+                @Override
+                public View construct() {
+                    AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
+                    binding.setClick(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Utils.goToUrl(getActivity(), appOfTheDay.targetUrl);
+                        }
+                    });
+                    binding.setAppOfTheDay(appOfTheDay);
+                    binding.executePendingBindings();
+                    return binding.getRoot();
+                }
+            });
+            bucket.addFilter(new IViewInjectRule() {
+                @Override
+                public boolean isNeedInject(int pos) {
+                    return pos == 0;
+                }
+            });
+            adapter.registerViewBucket(bucket);
         }
     }
 
@@ -274,11 +312,13 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
             if (history != null && userId > 0) {
                 if (getListAdapter() instanceof DialogListAdapter) {
                     DialogListAdapter adapter = (DialogListAdapter) getListAdapter();
-                    FeedDialog dialog;
-                    for (int i = 0; i < adapter.getCount(); i++) {
-                        dialog = adapter.getItem(i);
-                        if (dialog.user != null && dialog.user.id == userId) {
-                            adapter.replacePreview(i, history);
+                    if (adapter != null) {
+                        FeedDialog dialog;
+                        for (int i = 0; i < adapter.getCount(); i++) {
+                            dialog = adapter.getItem(i);
+                            if (dialog != null && dialog.user != null && dialog.user.id == userId) {
+                                adapter.replacePreview(i, history);
+                            }
                         }
                     }
                 }

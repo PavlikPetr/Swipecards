@@ -38,7 +38,7 @@ public abstract class OwnAvatarFragment extends AbstractProfileFragment {
     }
 
     private void updateOwnProfile() {
-        setProfile(App.from(getActivity()).getProfile());
+        setProfile(App.get().getProfile());
     }
 
     @Override

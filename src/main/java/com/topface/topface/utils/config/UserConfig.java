@@ -7,8 +7,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.config.AbstractConfig;
+import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.data.Options;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.Utils;
@@ -30,7 +32,7 @@ import java.util.Set;
  * Config for data related to User
  * Unique key for data based on AuthToken (social net user id),
  * so you need to call onAuthTokenReceived()
- * <p>
+ * <p/>
  * use generateKey(String name) to create keys to put(key) and get(key) data
  */
 public class UserConfig extends AbstractConfig {
@@ -86,11 +88,14 @@ public class UserConfig extends AbstractConfig {
     public static final String FULLSCREEN_IN_INTERVAL_LAST_SHOW = "fullscreen_in_interval_last_show";
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private static final String IS_USER_CITY_CHANGED = "is_user_city_changed";
+    private static final String FULLSCREEN_SETTINGS = "fullscreen_settings";
     private String mUnique;
+    private DailyConfigExtension mConfigExtension;
 
     public UserConfig(String uniqueKey, Context context) {
         super(context);
         mUnique = uniqueKey;
+        mConfigExtension = new DailyConfigExtension(this);
     }
 
     private void setUnique(String mUnique) {
@@ -197,6 +202,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, START_POSITION_OF_ACTIONS, 0);
         // флаг о том, что в профиле пользователя изменился город и еще не был сброшен список в dating
         addField(settingsMap, IS_USER_CITY_CHANGED, false);
+        //опции фулскрина
+        addField(settingsMap, FULLSCREEN_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
     }
 
     @Override
@@ -213,6 +220,15 @@ public class UserConfig extends AbstractConfig {
                 PROFILE_CONFIG_SETTINGS + Utils.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
+    }
+
+    public void setFullscreenInterval(long interval) {
+        mConfigExtension.setDailyConfigField(FULLSCREEN_SETTINGS, interval);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getFullscreenInterval() {
+        return mConfigExtension.getDailyConfigField(FULLSCREEN_SETTINGS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
     }
 
     public boolean getTestPaymentFlag() {
@@ -689,60 +705,6 @@ public class UserConfig extends AbstractConfig {
      */
     public boolean setOkUserData(OkUserData data) {
         return setField(getSettingsMap(), OK_USER_DATA, JsonUtils.toJson(data));
-    }
-
-    /**
-     * Last fullscreen ad show time in current interval
-     *
-     * @return last show time
-     */
-    public long getLastFullscreenTime() {
-        return getLongField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_LAST_SHOW);
-    }
-
-    /**
-     * Sets last fullscreen ad show time in current interval
-     *
-     * @param time show time
-     */
-    public void setLastFullscreenTime(long time) {
-        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_LAST_SHOW, time);
-    }
-
-    /**
-     * First fullscreen ad show time in current interval
-     *
-     * @return first show time
-     */
-    public long getFirstFullscreenTime() {
-        return getLongField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_FIRST_SHOW);
-    }
-
-    /**
-     * Sets first fullscreen ad show time in current interval
-     *
-     * @param time show time
-     */
-    public void setFirstFullscreenTime(long time) {
-        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_FIRST_SHOW, time);
-    }
-
-    /**
-     * Fullscreen ad shown count current interval
-     *
-     * @return shown count
-     */
-    public int getFullscreenShownCount() {
-        return getIntegerField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_SHOWN_COUNT);
-    }
-
-    /**
-     * Sets fullscreen ad shown count in current interval
-     *
-     * @param count shown count
-     */
-    public void setFullscreenShownCount(int count) {
-        setField(getSettingsMap(), FULLSCREEN_IN_INTERVAL_SHOWN_COUNT, count);
     }
 
     /**

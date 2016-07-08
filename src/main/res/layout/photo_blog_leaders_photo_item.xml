@@ -12,7 +12,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{clickListener.onClick}">
+        android:onClick="@{clickListener::onClick}">
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivLeadPhoto"
