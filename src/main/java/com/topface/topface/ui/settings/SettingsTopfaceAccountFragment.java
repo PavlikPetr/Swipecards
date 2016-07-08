@@ -357,23 +357,25 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     }
 
     private void showLogoutPopup(final String email) {
-        final LogoutDialog logoutDialog = LogoutDialog.newInstance(email);
-        logoutDialog.setDialogInterface(new IDialogListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                logout();
-            }
+        if (isAdded()) {
+            final LogoutDialog logoutDialog = LogoutDialog.newInstance(email);
+            logoutDialog.setDialogInterface(new IDialogListener() {
+                @Override
+                public void onPositiveButtonClick() {
+                    logout();
+                }
 
-            @Override
-            public void onNegativeButtonClick() {
-            }
+                @Override
+                public void onNegativeButtonClick() {
+                }
 
-            @Override
-            public void onDismissListener() {
-                setClickableAccountManagmentButtons(true);
-            }
-        });
-        logoutDialog.show(getFragmentManager(), LogoutDialog.class.getName());
+                @Override
+                public void onDismissListener() {
+                    setClickableAccountManagmentButtons(true);
+                }
+            });
+            logoutDialog.show(getActivity().getSupportFragmentManager(), LogoutDialog.class.getName());
+        }
     }
 
     private void showExitPopup() {
@@ -394,7 +396,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
                 setClickableAccountManagmentButtons(true);
             }
         });
-        exitDialog.show(getFragmentManager(), ExitDialog.class.getName());
+        exitDialog.show(getActivity().getSupportFragmentManager(), ExitDialog.class.getName());
     }
 
     private void setClickableAccountManagmentButtons(boolean b) {

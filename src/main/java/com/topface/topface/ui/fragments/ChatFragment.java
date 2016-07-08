@@ -1256,13 +1256,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private boolean isShowKeyboardInChat() {
-        Context context = getActivity().getApplicationContext();
-        DisplayMetrics displayMetrics = Device.getDisplayMetrics(context);
-        int height = getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
-                ? displayMetrics.heightPixels : displayMetrics.widthPixels;
-        float dpHeight = height / displayMetrics.density;
-        return dpHeight >= context.getResources().
-                getInteger(R.integer.min_screen_height_chat_fragment);
+        if (isAdded()) {
+            Context context = getActivity().getApplicationContext();
+            DisplayMetrics displayMetrics = Device.getDisplayMetrics(context);
+            int height = getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                    ? displayMetrics.heightPixels : displayMetrics.widthPixels;
+            float dpHeight = height / displayMetrics.density;
+            return dpHeight >= context.getResources().
+                    getInteger(R.integer.min_screen_height_chat_fragment);
+        }
+        return false;
     }
 
     private void setSavedMessage(String message) {
