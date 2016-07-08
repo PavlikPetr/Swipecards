@@ -27,4 +27,8 @@ public interface IActivityDelegate {
     FragmentManager getSupportFragmentManager();
 
     ContentResolver getContentResolver();
+
+    boolean isActivityRestoredState();
+
+    Intent getIntent();
 }

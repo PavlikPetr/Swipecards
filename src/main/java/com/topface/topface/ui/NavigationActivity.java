@@ -92,7 +92,7 @@ import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
-    private static final String FRAGMENT_SETTINGS = "fragment_settings";
+    public static final String FRAGMENT_SETTINGS = "fragment_settings";
     private static final int EXIT_TIMEOUT = 3000;
 
     private Intent mPendingNextIntent;
@@ -460,6 +460,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Override
     protected void onResume() {
         super.onResume();
+        LeftMenuSettingsData data = getIntent().getExtras().getParcelable(FRAGMENT_SETTINGS);
+        if (data != null) {
+            showFragment(data);
+        }
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
             if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&

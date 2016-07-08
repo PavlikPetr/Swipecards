@@ -36,6 +36,8 @@ import static com.topface.topface.utils.FlurryManager.SHOW;
 
 public abstract class PromoDialog extends AbstractDialogFragment implements View.OnClickListener {
 
+    public static final int INTENT_BUY_VIP = 11;
+
     protected CountersData mCountersData;
     private CountersDataProvider mCountersDataProvider;
     private OnPromoDialogEventsListener mOnPromoDialogEventsListener;
@@ -137,7 +139,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             Debug.log("Promo: Close fragment after VIP buy");
-            if(mOnPromoDialogEventsListener!=null){
+            if (mOnPromoDialogEventsListener != null) {
                 mOnPromoDialogEventsListener.onVipBought();
             }
             closeFragment();
@@ -163,7 +165,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.buyVip:
-                if(mOnPromoDialogEventsListener!=null){
+                if (mOnPromoDialogEventsListener != null) {
                     mOnPromoDialogEventsListener.onBuyVipClick();
                 }
                 startActivityForResult(
@@ -175,7 +177,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_BUY);
                 break;
             case R.id.deleteMessages:
-                if(mOnPromoDialogEventsListener!=null){
+                if (mOnPromoDialogEventsListener != null) {
                     mOnPromoDialogEventsListener.onDeleteMessageClick();
                 }
                 deleteMessages();
@@ -203,7 +205,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
     }
 
     private void closeFragment() {
-        if(mOnPromoDialogEventsListener!=null){
+        if (mOnPromoDialogEventsListener != null) {
             mOnPromoDialogEventsListener.onClose();
         }
 

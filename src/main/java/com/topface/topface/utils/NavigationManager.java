@@ -42,6 +42,8 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
+import static com.topface.topface.ui.NavigationActivity.FRAGMENT_SETTINGS;
+
 /**
  * Created by ppavlik on 12.05.16.
  * Navigation fragments switcher
@@ -78,7 +80,13 @@ public class NavigationManager {
         }).subscribe(new Action1<WrappedNavigationData>() {
             @Override
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
-                selectFragment(wrappedLeftMenuSettingsData, false);
+                if (mActivityDelegate != null) {
+                    if (mActivityDelegate.isActivityRestoredState()) {
+                        selectFragment(wrappedLeftMenuSettingsData, false);
+                    } else {
+                        mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, wrappedLeftMenuSettingsData.getData());
+                    }
+                }
             }
         }, new Action1<Throwable>() {
             @Override
@@ -233,6 +241,7 @@ public class NavigationManager {
 
     @SuppressLint("SwitchIntDef")
     private void selectFragment(WrappedNavigationData data, boolean executePending) {
+        mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
         switch (data.getData().getFragmentId()) {
             case FragmentIdData.BALLANCE:
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
@@ -257,6 +266,8 @@ public class NavigationManager {
                     });
                     break;
                 }
+            case FragmentIdData.UNDEFINED:
+                return;
             default:
                 switchFragment(data, executePending);
         }
