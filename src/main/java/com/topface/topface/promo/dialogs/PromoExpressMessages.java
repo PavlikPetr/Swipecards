@@ -9,17 +9,13 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.controllers.startactions.IStartAction;
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import static com.topface.topface.R.drawable.fake_girl1;
-import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
 public class PromoExpressMessages extends PromoDialog {
 
@@ -31,9 +27,7 @@ public class PromoExpressMessages extends PromoDialog {
 
     private int mCurrentPosition = Integer.MAX_VALUE;
 
-    private int mExtraPaddingTop = 0;
     private Random mRandom;
-    private static OnNextActionListener mOnNextActionListener;
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {
@@ -64,9 +58,16 @@ public class PromoExpressMessages extends PromoDialog {
 
     @Override
     protected void deleteMessages() {
-        if (mOnNextActionListener != null) {
-            mOnNextActionListener.onNextAction();
-        }
+    }
+
+    @Override
+    protected int getDialogStyleResId() {
+        return R.style.Theme_Topface_NoActionBar_DatingLockPopup;
+    }
+
+    @Override
+    public boolean isUnderActionBar() {
+        return false;
     }
 
     @Override
@@ -147,59 +148,5 @@ public class PromoExpressMessages extends PromoDialog {
             mRandom = new Random();
         }
         return mRandom;
-    }
-
-    @Override
-    protected int getPopupPaddingTop() {
-        return getActionBarHeight() + mExtraPaddingTop;
-    }
-
-    public PromoExpressMessages setExtraPaddingTop(int extraPaddingTopValue) {
-        mExtraPaddingTop = extraPaddingTopValue;
-        return this;
-    }
-
-    public interface PopupRedirectListener {
-        void onRedirect();
-    }
-
-    public static IStartAction createPromoPopupStartAction(final int priority, final PopupRedirectListener listener) {
-        return new IStartAction() {
-            @Override
-            public void callInBackground() {
-            }
-
-            @Override
-            public void callOnUi() {
-                if (listener != null) {
-                    listener.onRedirect();
-                }
-            }
-
-            @Override
-            public boolean isApplicable() {
-                return isPromoExpressMessagesAvailable();
-            }
-
-            @Override
-            public int getPriority() {
-                return priority;
-            }
-
-            @Override
-            public String getActionName() {
-                return "PromoPopup";
-            }
-
-            @Override
-            public void setStartActionCallback(OnNextActionListener startActionCallback) {
-                mOnNextActionListener = startActionCallback;
-            }
-        };
-    }
-
-    public static boolean isPromoExpressMessagesAvailable() {
-        return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
-
     }
 }
