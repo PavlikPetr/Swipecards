@@ -70,6 +70,7 @@ import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.config.FeedsCache;
@@ -131,11 +132,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE)
                             .equals(BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST) && isAdded()) {
                 int[] ids = intent.getIntArrayExtra(BlackListAndBookmarkHandler.FEED_IDS);
+                int id = intent.getIntExtra(BlackListAndBookmarkHandler.FEED_ID, 0);
                 boolean hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE);
                 boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
-                if (ids != null && hasValue) {
+                if ((ListUtils.isNotEmpty(ids) || id != 0) && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
-                        getListAdapter().removeByUserIds(ids);
+                        if(ListUtils.isNotEmpty(ids)) {
+                            getListAdapter().removeByUserIds(ids);
+                        }
+                        else if(id != 0) {
+                            getListAdapter().removeByUserId(id);
+                        }
                     } else {
                         needUpdate = true;
                     }
