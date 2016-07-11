@@ -1093,4 +1093,7 @@
 
     <string name="app_of_the_day_ad_badge">Реклама</string>
 
+    <string name="profile_ditance_to_her">До неё </string>
+    <string name="profile_ditance_to_him">До него </string>
+
 </resources>
