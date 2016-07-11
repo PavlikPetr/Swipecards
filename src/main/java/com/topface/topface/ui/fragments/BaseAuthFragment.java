@@ -214,7 +214,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
                 break;
             case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
-                OldVersionDialog.newInstance(true).show(getFragmentManager(), OldVersionDialog.class.getName());
+                if (isAdded()) {
+                    OldVersionDialog.newInstance(true).show(getActivity().getSupportFragmentManager(), OldVersionDialog.class.getName());
+                }
                 break;
             default:
                 showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);

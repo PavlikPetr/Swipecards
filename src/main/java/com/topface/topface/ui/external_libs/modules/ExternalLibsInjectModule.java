@@ -13,8 +13,6 @@ import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
-import com.topface.topface.utils.ads.AdToAppController;
-import com.topface.topface.utils.ads.AdToAppHelper;
 
 import javax.inject.Singleton;
 
@@ -28,7 +26,6 @@ import dagger.Provides;
 @Module(library = true,
         complete = false,
         injects = {
-                AdToAppHelper.class,
                 BaseAuthFragment.class,
                 OpenIabFragment.class,
                 CoinsBuyingFragment.class,
@@ -44,12 +41,6 @@ import dagger.Provides;
         }
 )
 public class ExternalLibsInjectModule {
-
-    @Provides
-    @Singleton
-    AdToAppController providesAdToAppController() {
-        return new AdToAppController();
-    }
 
     @Provides
     @Singleton

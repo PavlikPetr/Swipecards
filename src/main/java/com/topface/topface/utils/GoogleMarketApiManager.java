@@ -138,21 +138,25 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     public void onProblemResolve(Activity activity) {
         switch (mResultCode) {
             case ConnectionResult.SIGN_IN_REQUIRED:
-                Intent addAccountIntent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES,
-                            App.getContext().getResources().getStringArray(R.array.extra_account_types));
+                if (activity != null) {
+                    Intent addAccountIntent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT)
+                            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        addAccountIntent.putExtra(Settings.EXTRA_ACCOUNT_TYPES,
+                                App.getContext().getResources().getStringArray(R.array.extra_account_types));
+                    }
+                    activity.startActivityForResult(addAccountIntent, GOOGLE_AUTH_CODE);
                 }
-                activity.startActivityForResult(addAccountIntent, GOOGLE_AUTH_CODE);
                 break;
             default:
-                PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, activity, 0);
-                if (pendingIntent != null) {
-                    try {
-                        pendingIntent.send();
-                    } catch (PendingIntent.CanceledException e) {
-                        Debug.error("PendingIntent send: " + e);
+                if (activity != null) {
+                    PendingIntent pendingIntent = GooglePlayServicesUtil.getErrorPendingIntent(mResultCode, activity, 0);
+                    if (pendingIntent != null) {
+                        try {
+                            pendingIntent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                            Debug.error("PendingIntent send: " + e);
+                        }
                     }
                 }
                 break;

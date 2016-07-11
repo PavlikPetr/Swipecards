@@ -578,6 +578,7 @@
     <string name="incorrect_photo_format">Netinkamas foto formatas. Pamėginkite įkelti jpg arba
         png
     </string>
+    <string name="incorrect_photo_size">Neleistinas fotografijos dydis</string>
     <string name="input_contact_name">Įveskite kontakto vardą</string>
     <string name="incorrect_locale">Jei Jūs norite, kad mes galėtume perskaityti Jūsų atsiliepimą,
         rašykite jį rusų arba anglų kalba

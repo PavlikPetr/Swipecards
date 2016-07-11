@@ -381,6 +381,7 @@
     </string>
     <string name="buying_vip_status">Obter estatuto VIP</string>
     <string name="edit_my_city">A minha cidade</string>
+    <string name="my_location">A minha localização</string>
     <string name="settings_feedback_email">Introduz o teu e-mail para receberes uma resposta nossa.</string>
     <string name="settings_invalid_email">E-mail inválido</string>
     <string name="chat_write_message">Escreve uma mensagem</string>
@@ -487,7 +488,6 @@
     <string name="choose_cool_photo">Seleciona a tua melhor foto e um estatuto que reflita a tua
         disposição!
     </string>
-    <string name="email_confirmed">O e-mail foi confirmado!</string>
     <string name="sympathy_sended">Gosto enviado.</string>
     <string name="general_photo_deleted">A tua foto foi eliminada porque não cumpria uma das nossas
         regras para fotos
@@ -571,7 +571,8 @@
     <string name="incorrect_photo_format">Formato de imagem inválido. Tenta carregar um ficheiro
         .jpg ou .png.
     </string>
-    <string name="incorrect_photo_size">Esta foto é demasiado pequena (o tamanho mínimo para fotos é de
+    <string name="incorrect_photo_size">Tamanho de foto inválido</string>
+    <string name="incorrect_photo_size_show_restrictions">Esta foto é demasiado pequena (o tamanho mínimo para uma foto é de 
         — %1$dx%2$d pixeis).</string>
     <string name="input_contact_name">Introduza o nome do contacto</string>
     <string name="incorrect_locale">Se gostavas que ficássemos a saber a tua opinião, escreve-a em
@@ -910,4 +911,5 @@
     <string name="offers_empty_text">Infelizmente, não existem tarefas disponíveis de momento. Volta mais tarde!</string>
     <string name="offers_rewarded_video_title">Moedas Grátis</string>
     <string name="offers_rewarded_video_description">por ver um vídeo</string>
+    <string name="app_of_the_day_ad_badge">Publicidade</string>
 </resources>

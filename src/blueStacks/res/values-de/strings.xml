@@ -355,6 +355,7 @@
         Profil aus!</string>
   <string name="buying_vip_status">VIP Status kaufen</string>
   <string name="edit_my_city">Meine Stadt</string>
+  <string name="my_location">Mein Standort</string>
   <string name="settings_feedback_email">E-Mail für die Verbindung</string>
   <string name="settings_invalid_email">E-Mail ist unkorrekt</string>
   <string name="chat_write_message">Nachricht schreiben</string>
@@ -519,6 +520,8 @@
   <string name="incorrect_photo_format">Unkorrektes Format des Fotos. Versuchen Sie jpg oder png
         hochzuladen</string>
   <string name="incorrect_photo_size">Foto hat ungültige Größe</string>
+  <string name="incorrect_photo_size_show_restrictions">Dieses Foto ist zu klein (die minimale Fotogröße beträgt
+        — %1$dx%2$d Pixel).</string>
   <string name="input_contact_name">Geben Sie den Namen des Kontaktes ein</string>
   <string name="incorrect_locale">Wenn Sie möchten, dass wir Ihr Gutachten lesen könnten,
         schreiben Sie es auf Russisch oder Englisch</string>
@@ -730,7 +733,7 @@
   <string name="chat_auto_reply_title">Der Text der Nachricht ist verborgen</string>
   <string name="chat_auto_reply_message">Um diese Nachricht zu öffnen oder um auf sie zu antworten, musst du zum VIP werden.</string>
   <string name="chat_auto_reply_button">Werde zum VIP</string>
-  <string name="photo_list_load_info">Teile deine Fotos und werde von Millionen gesehen</string>
+  <string name="photo_list_load_info">Teile deine Fotos und werde von Millionen gesehen!</string>
   <string name="vk_profile_button_tf_group">Spark-Gruppe</string>
   <string name="vk_profile_button_join_tf_group">Der Spark-Gruppe beitreten</string>
   <string name="vk_profile_button_join_vkgames_group">Der Gruppe \&quot;VK Spiele\&quot; beitreten</string>
@@ -742,7 +745,7 @@
   <string name="vk_friends_success_invite">Die Einladung wurde verschickt</string>
   <string name="join_group_success">Du bist der Gruppe beigetreten</string>
   <string name="settings_auto_greeting_title">Automatische Grüße</string>
-  <string name="settings_auto_greeting_subtitle">Erlaube Spark, automatisch ein Gespräch zu starten, wenn dir jemand ein Like schickt</string>
+  <string name="settings_auto_greeting_subtitle">Spark erlauben, automatisch ein Gespräch mit einem Gruß zu beginnen wenn jemand dir ein Like schickt.</string>
   <string name="take_photo_text_1">Bitte lade ein Foto von dir hoch, um zu chatten.</string>
   <string name="take_photo_text_2">Nur du selbst solltest auf dem Foto abgebildet sein; alle Fotos werden von Moderatoren überprüft um sicherzustellen, dass den Regeln gefolgt wird.</string>
   <string name="unlock_by_viewed_ad_video_button_text">Gratis entsperren bei %s</string>
@@ -777,4 +780,19 @@
   <string name="like_liberty_title">Likes</string>
   <string name="like_liberty_description">Erfahre, wer dich mag</string>
   <string name="refill_balance_view_title">Auf Ihrem Konto</string>
+  <string name="access_to_location_popup_title">Geographische Positionierung ist nicht verfügbar</string>
+  <string name="access_to_location_popup_description">Leider ist für deinen Standort keine geographische Positionierung möglich. Um fortzufahren, musst du den Zugang genehmigen.</string>
+  <string name="access_to_location_popup_access_button">Zulassen</string>
+  <string name="city_selector_set_your_city">Wähle deine Stadt</string>
+  <string name="city_selector_detect_automatically">Automatisch angeben</string>
+  <string name="city_selector_your_city">Deine Stadt</string>
+  <string name="photo_gallery_photo_deleted">Das Foto wurde gelöscht</string>
+  <string name="photofeed_add_photo_to_feed_title">Erreiche den ersten Platz!</string>
+  <string name="photofeed_add_photo_to_feed_description">Lade ein Foto mit einem Gruß hoch, und tausende Leute werden dich sehen. Werde erkannt und lerne neue Leute kennen!</string>
+  <string name="offers_screen_title">Boni</string>
+  <string name="offers_loading_text">Aufgaben laden…</string>
+  <string name="offers_empty_text">Leider sind gerade keine Aufgaben für dich verfügbar, versuche es später wieder!</string>
+  <string name="offers_rewarded_video_title">Gratis Coins</string>
+  <string name="offers_rewarded_video_description">für das Anschauen eines Videos</string>
+  <string name="app_of_the_day_ad_badge">Werbung</string>
 </resources>

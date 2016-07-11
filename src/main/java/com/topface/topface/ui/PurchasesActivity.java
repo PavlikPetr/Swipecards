@@ -25,9 +25,12 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.requests.ProfileRequest;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.bonus.view.BonusActivity;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
-import com.topface.topface.ui.fragments.BonusFragment;
+import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
@@ -35,13 +38,16 @@ import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
 import com.topface.topface.utils.actionbar.ActionBarView;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javax.inject.Inject;
+
+import rx.Subscriber;
+import rx.Subscription;
+import rx.functions.Action1;
 
 import static com.topface.topface.ui.PaymentwallActivity.PW_CURRENCY;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRICE;
@@ -82,21 +88,16 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
 
     @Inject
     static TopfaceAppState mAppState;
+    @Inject
+    EventBus mEventBus;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
     private ForceOfferwallRedirect mBonusRedirect;
     private static TopfaceOfferwallRedirect mTopfaceOfferwallRedirect;
     private boolean mIsOfferwallsReady;
+    private Subscription mEventBusSubscriber;
 
-    private BroadcastReceiver mOfferwallOpenedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mTopfaceOfferwallRedirect != null) {
-                mTopfaceOfferwallRedirect.setCompletedByBroadcast(intent);
-            }
-        }
-    };
     private TrialVipPopup mTrialVipPopup;
 
     @Override
@@ -110,12 +111,23 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setCompletedByIntent(getIntent());
         }
-        LocalBroadcastManager.getInstance(this).registerReceiver(mOfferwallOpenedReceiver, new IntentFilter(BonusFragment.OFFERWALL_OPENED));
+        mEventBusSubscriber = mEventBus.getObservable(OffersModels.OfferOpened.class).subscribe(new Action1<OffersModels.OfferOpened>() {
+            @Override
+            public void call(OffersModels.OfferOpened offerOpened) {
+                if (mTopfaceOfferwallRedirect != null) {
+                    mTopfaceOfferwallRedirect.setCompletedByBroadcast();
+                }
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Debug.error(throwable);
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfferwallOpenedReceiver);
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setComplited(false);
         }
@@ -128,18 +140,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         Options options = App.from(this).getOptions();
         mBonusRedirect = options.forceOfferwallRedirect;
         mTopfaceOfferwallRedirect = options.topfaceOfferwallRedirect;
-        if (!TFOfferwallSDK.isInitialized()) {
-            OfferwallsManager.initTfOfferwall(this, new TFCredentials.OnInitializeListener() {
-                @Override
-                public void onInitialized() {
-                    mIsOfferwallsReady = true;
-                }
-
-                @Override
-                public void onError() {
-                }
-            });
-        }
     }
 
     @Override
@@ -286,9 +286,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
                     return true;
 
                 case TOPFACE_OFFERWALL_SCREEN:
-                    OfferwallPayload payload = new OfferwallPayload();
-                    payload.experimentGroup = mTopfaceOfferwallRedirect.getGroup();
-                    OfferwallsManager.startTfOfferwall(this, payload);
+                    finish();
+                    startActivity(BonusActivity.createIntent());
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;
             }

@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.utils.ListUtils;
+import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -85,20 +87,17 @@ public class TabLayoutCreator {
     }
 
     public void setTabTitle(int position) {
-        TabViewsContainer container;
-        String title;
-        int counter;
         for (int i = 0; i < mTabLayout.getTabCount(); i++) {
-            title = mPagesTitles.get(i);
-            counter = mPagesCounters == null ? 0 : mPagesCounters.get(i);
-            container = mTabViews.get(i);
+            String title = ListUtils.isEntry(i, mPagesTitles) ? mPagesTitles.get(i) : Utils.EMPTY;
+            int counter = ListUtils.isEntry(i, mPagesCounters) ? mPagesCounters.get(i) : 0;
+            TabViewsContainer container = ListUtils.isEntry(i, mTabViews) ? mTabViews.get(i) : new TabViewsContainer(mContext);
             container.titleView.setEnabled(i == position);
             container.titleView.setText(title);
             if (counter > 0) {
                 container.counterView.setEnabled(i == position);
                 container.counterView.setText(String.valueOf(counter));
             } else {
-                container.counterView.setText("");
+                container.counterView.setText(Utils.EMPTY);
             }
         }
     }

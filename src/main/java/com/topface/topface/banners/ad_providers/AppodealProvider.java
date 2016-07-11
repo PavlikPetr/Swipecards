@@ -42,7 +42,7 @@ public class AppodealProvider extends AbstractAdsProvider {
         Appodeal.setBannerCallbacks(new BannerCallbacks() {
 
             @Override
-            public void onBannerLoaded(int i) {
+            public void onBannerLoaded(int i, boolean b) {
                 bannerLoaded(page, callbacks, adView);
             }
 

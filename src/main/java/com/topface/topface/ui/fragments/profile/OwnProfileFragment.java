@@ -204,7 +204,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
+        return new OverflowMenu(this, barActions);
     }
 
     @Override

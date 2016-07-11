@@ -7,7 +7,6 @@ import android.telephony.TelephonyManager;
 
 /**
  * Created by kirussell on 24.04.2014.
- *
  */
 public class Connectivity {
 

@@ -9,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.nineoldandroids.view.ViewHelper;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedLike;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
-import com.topface.topface.utils.ad.NativeAd;
-import com.topface.topface.utils.ad.NativeAdManager;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
@@ -87,21 +84,5 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
                 return result;
             }
         };
-    }
-
-    @Override
-    protected INativeAdItemCreator<FeedLike> getNativeAdItemCreator() {
-        return new INativeAdItemCreator<FeedLike>() {
-            @Override
-            public FeedLike getAdItem(NativeAd nativeAd) {
-                return new FeedLike(nativeAd);
-            }
-        };
-    }
-
-    @Override
-    public boolean isNeedFeedAd() {
-        return App.from(getContext()).getProfile().showAd && NativeAdManager.hasAvailableAd()
-                && !App.from(getContext()).getOptions().interstitial.canShow();
     }
 }

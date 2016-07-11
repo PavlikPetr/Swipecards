@@ -1,61 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    <data>
 
-    <LinearLayout
-        android:orientation="vertical"
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel" />
+
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal|top"
-        android:layout_gravity="top">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvOfferwalls"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="24dp"
-            android:paddingBottom="15dp"
-            android:src="@drawable/ic_get_bonus"
-            android:scaleType="fitStart" />
+            android:layout_marginTop="@dimen/offerwalls_list_margin_top"
+            android:visibility="@{viewModel.offersVisibility}"
+            tools:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tvOfferMain"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:gravity="center_horizontal"
-            style="@style/ItemGrayText" />
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_white"
+            android:fillViewport="false"
+            android:visibility="@{viewModel.emptyViewVisibility}"
+            tools:visibility="visible">
 
-        <LinearLayout
-            android:id="@+id/loContainerMain"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp" />
-
-        <TextView
-            android:id="@+id/tvOfferExtra"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            style="@style/ItemGrayText" />
-
-        <LinearLayout
-            android:id="@+id/loContainerExtra"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp" />
-    </LinearLayout>
-</ScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="@dimen/offerwalls_empty_view_between_text_and_image"
+                android:drawableTop="@{viewModel.emptyViewIcon}"
+                android:gravity="center_horizontal"
+                android:paddingLeft="@dimen/offerwalls_empty_view_text_side_paddings"
+                android:paddingRight="@dimen/offerwalls_empty_view_text_side_paddings"
+                android:text="@{viewModel.emptyViewText}"
+                android:textColor="@color/offerwall_empty_view_text_color"
+                android:textSize="16sp"
+                android:visibility="@{viewModel.emptyViewVisibility}"
+                tools:drawableTop="@drawable/ill_sorrow"
+                tools:text="@string/offers_empty_text"
+                tools:visibility="visible" />
+        </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
+</layout>

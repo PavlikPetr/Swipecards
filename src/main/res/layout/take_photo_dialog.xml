@@ -61,7 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:onClick="@{handlers.onTakeClick}"
+                    android:onClick="@{handlers::onTakeClick}"
                     android:text="@string/profile_add_camera" />
 
                 <Button
@@ -69,7 +69,7 @@
                     style="@style/Widget.Topface.Button.Big.Blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{handlers.onChooseClick}"
+                    android:onClick="@{handlers::onChooseClick}"
                     android:text="@string/profile_add_album" />
 
                 <TextView
