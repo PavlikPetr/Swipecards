@@ -86,6 +86,11 @@ public class BindingsAdapters {
         BindingsUtils.loadLink(view, res, drawableRes);
     }
 
+    @BindingAdapter("enable")
+    public static void setEnable(View view, boolean state) {
+        view.setEnabled(state);
+    }
+
     @BindingAdapter("selected")
     public static void setSelected(View view, boolean isSelected) {
         view.setSelected(isSelected);

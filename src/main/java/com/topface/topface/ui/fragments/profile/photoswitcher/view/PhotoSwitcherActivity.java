@@ -153,7 +153,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private Photos mDeletedPhotos = new Photos();
     private ImageSwitcherLooped mImageSwitcher;
     private int mUid;
-    private String mUserGiftLink;
     private PhotosManager mPhotosManager = new PhotosManager();
     private TranslateAnimation mCurrentAnimation;
     private TranslateAnimation mAnimationHide = null;
@@ -219,8 +218,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             return;
         }
         // Control layout
-        mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
-        mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
+        mPhotoAlbumControl = mBinding.loPhotoAlbumControl;
+        mOwnPhotosControl = mBinding.loBottomPanel;
 
         Photo preloadPhoto = intent.getParcelableExtra(INTENT_PRELOAD_PHOTO);
         if (preloadPhoto != null) {
@@ -382,29 +381,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return position % realItemsAmount;
     }
 
-    private void showGiftImage(String link) {
-        mUserGiftLink = link;
-        showGiftImage();
-    }
-
-    private void showGiftImage() {
-        if (mGiftImage != null) {
-            if (mUserGiftLink != null) {
-                // show last added gift
-                // at first drop background
-                // after set image
-                mGiftImage.setBackgroundResource(0);
-                mGiftImage.setRemoteSrc(mUserGiftLink);
-            } else {
-                // show default image when user haven't any gifts yet
-                // at first drop image
-                // after set background
-                mGiftImage.setImageDrawable(null);
-//                mGiftImage.setBackgroundResource(R.drawable.ic_gift);
-            }
-        }
-    }
-
     private void initControls() {
         final Profile profile = App.from(this).getProfile();
         if (mUid == profile.uid) {
@@ -440,7 +416,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
             });
             if (mPhotoLinks.size() <= 1) {
-                mViewModel.setDeleteButtonVisibility(false);
+                mViewModel.setTrashVisibility(false);
             }
             mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
@@ -574,24 +550,19 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mUid == profile.uid && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
-                mViewModel.setDeleteButtonVisibility(true);
-                mViewModel.setDeleteButtonSelector(R.drawable.ico_restore_photo_selector);
+                mViewModel.setTrashEnable(true);
+                mViewModel.setTrashVisibility(true);
+                mViewModel.setTrashSrc(R.drawable.ico_restore_photo_selector);
+                mViewModel.setAvatarVisibility(false);
                 mViewModel.setButtonText(R.string.edit_restore);
-                mViewModel.setButtonDrawable(0);
             } else {
-                if (profile.photo != null && profile.photo.getId() == currentPhoto.getId()) {
-                    mViewModel.setDeleteButtonVisibility(false);
-                } else {
-                    mViewModel.setDeleteButtonVisibility(true);
-                    mViewModel.setDeleteButtonSelector(R.drawable.ico_delete_selector);
-                }
-                if (profile.photo != null && currentPhoto.getId() == profile.photo.getId()) {
-                    mViewModel.setButtonText(R.string.your_avatar);
-                    mViewModel.setButtonDrawable(R.drawable.ico_selected);
-                } else {
-                    mViewModel.setButtonText(R.string.on_avatar);
-                    mViewModel.setButtonDrawable(profile.sex == Profile.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector);
-                }
+                mViewModel.setAvatarVisibility(true);
+                mViewModel.setTrashVisibility(true);
+                mViewModel.setTrashSrc(R.drawable.album_delete_button_selector);
+                boolean isMainPhoto = profile.photo != null && currentPhoto.getId() == profile.photo.getId();
+                mViewModel.setAvatarEnable(!isMainPhoto);
+                mViewModel.setTrashEnable(!isMainPhoto);
+                mViewModel.setButtonText(isMainPhoto ? R.string.your_avatar : R.string.on_avatar);
             }
         }
     }
