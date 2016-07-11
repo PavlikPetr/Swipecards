@@ -131,11 +131,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                     intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE)
                             .equals(BlackListAndBookmarkHandler.ActionTypes.BLACK_LIST) && isAdded()) {
                 int[] ids = intent.getIntArrayExtra(BlackListAndBookmarkHandler.FEED_IDS);
+                int id = intent.getIntExtra(BlackListAndBookmarkHandler.FEED_ID, 0);
                 boolean hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE);
                 boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
-                if (ids != null && hasValue) {
+                if ((ids != null || id != 0) && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
-                        getListAdapter().removeByUserIds(ids);
+                        if(ids != null) {
+                            getListAdapter().removeByUserIds(ids);
+                        }
+                        else if(id != 0) {
+                            getListAdapter().removeByUserId(id);
+                        }
                     } else {
                         needUpdate = true;
                     }
@@ -464,10 +470,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+        Debug.debug("teresh", "Resume");
         removeBlackListUserFromFeed();
         FeedAdapter<T> adapter = getListAdapter();
         if (adapter.isNeedUpdate() || needUpdate) {
             updateData(false, true);
+            Debug.debug("teresh", "needUpdate");
         }
         // try update list if last visible item is loader,
         // and loading was probably interrupted
