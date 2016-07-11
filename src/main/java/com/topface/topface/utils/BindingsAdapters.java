@@ -4,7 +4,7 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.support.annotation.DrawableRes;
-import android.text.TextUtils;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
@@ -55,6 +55,16 @@ public class BindingsAdapters {
         BindingsUtils.replaceDrawable(view, bgResource, 1);
     }
 
+    @BindingAdapter("android:drawableLeft")
+    public static void setDrawableLeft(TextView view, @DrawableRes int bgResource) {
+        BindingsUtils.replaceDrawable(view, bgResource, 0);
+    }
+
+    @BindingAdapter("android:text")
+    public static void setText(TextView view, @StringRes int stringRes) {
+        view.setText(stringRes);
+    }
+
     @BindingAdapter("textColorSelector")
     public static void setTextColorSelector(View view, int colorSelector) {
         try {
@@ -68,11 +78,12 @@ public class BindingsAdapters {
 
     @BindingAdapter("remoteSrc")
     public static void setremoteSrc(ImageViewRemote view, String res) {
-        if (!TextUtils.isEmpty(res)) {
-            view.setRemoteSrc(res);
-        } else {
-            view.setImageDrawable(null);
-        }
+        BindingsUtils.loadLink(view, res, BindingsUtils.EMPTY_RESOURCE);
+    }
+
+    @BindingAdapter({"remoteSrc", "defaultSelector"})
+    public static void setremoteSrc(ImageViewRemote view, String res, @DrawableRes int drawableRes) {
+        BindingsUtils.loadLink(view, res, drawableRes);
     }
 
     @BindingAdapter("selected")

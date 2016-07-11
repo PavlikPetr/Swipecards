@@ -27,4 +27,8 @@ public interface IActivityDelegate {
     FragmentManager getSupportFragmentManager();
 
     ContentResolver getContentResolver();
+
+    Intent getIntent();
+
+    void finish();
 }

@@ -14,9 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
@@ -179,8 +177,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     };
     private int mCurrentPosition = 0;
-    private TextView mSetAvatarButton;
-    private ImageButton mDeleteButton;
     private UserProfileLoader mUserProfileLoader;
 
     public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
@@ -206,12 +202,16 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setHasContent(false);
         super.onCreate(savedInstanceState);
-        App.from(getApplicationContext()).inject(this);
         mBinding = DataBindingUtil.setContentView(this, R.layout.ac_photos);
+        App.from(getApplicationContext()).inject(this);
+        mViewModel = new PhotoSwitcherViewModel(mBinding, this);
+        mBinding.setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
+
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
         if (mUid == -1) {
             Debug.log(this, "Intent param is wrong");
@@ -230,7 +230,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 DefaultImageLoader.getInstance(this).preloadImage(s, null);
             }
         }
-        extractUserGifts(intent);
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
             int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
@@ -242,8 +241,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             initViews(position, photosCount);
         } else {
             mUserProfileLoader = new UserProfileLoader(
-                    (RelativeLayout) findViewById(R.id.lockScreen),
-                    findViewById(R.id.llvProfileLoading),
+                    mBinding.lockScreen,
+                    mBinding.llvProfileLoading,
                     mUserProfileReceiver,
                     mUid
             );
@@ -253,16 +252,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     @Override
     protected int getContentLayout() {
         return R.layout.ac_photos;
-    }
-
-    private void extractUserGifts(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            ArrayList<Gift> array = extras.getParcelableArrayList(INTENT_GIFT);
-            if (array != null && array.size() > 0) {
-                mUserGiftLink = array.get(0).link;
-            }
-        }
     }
 
     private void setPhotoAlbumControlVisibility(int state, boolean isAnimated) {
@@ -325,7 +314,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onLoadProfile() {
         super.onLoadProfile();
         initControls();
-        initGiftImage();
         refreshButtonsState();
     }
 
@@ -394,25 +382,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return position % realItemsAmount;
     }
 
-    private void initGiftImage() {
-        mGiftImage = (ImageViewRemote) mPhotoAlbumControl.findViewById(R.id.loGiftImage);
-        mGiftImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(PhotoSwitcherActivity.this, mUid),
-                        GiftsActivity.INTENT_REQUEST_GIFT
-                );
-            }
-        });
-        if (mUid == App.from(this).getProfile().uid) {
-            mGiftImage.setVisibility(View.GONE);
-        } else {
-            mGiftImage.setVisibility(View.VISIBLE);
-            showGiftImage();
-        }
-    }
-
     private void showGiftImage(String link) {
         mUserGiftLink = link;
         showGiftImage();
@@ -440,8 +409,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         final Profile profile = App.from(this).getProfile();
         if (mUid == profile.uid) {
             // - set avatar button
-            mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
-            mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
+            mViewModel.setOnAvatarButtonClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
@@ -457,8 +425,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
             });
             // - delete button
-            mDeleteButton = (ImageButton) mPhotoAlbumControl.findViewById(R.id.btnDelete);
-            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            mViewModel.setOnDeleteButtonClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
@@ -472,7 +439,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     }
                 }
             });
-            if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
+            if (mPhotoLinks.size() <= 1) {
+                mViewModel.setDeleteButtonVisibility(false);
+            }
             mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
             mOwnPhotosControlVisibility = View.GONE;
@@ -602,26 +571,26 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     private void refreshButtonsState() {
         Profile profile = App.from(this).getProfile();
-        if (mUid == profile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
+        if (mUid == profile.uid && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
-                mDeleteButton.setVisibility(View.VISIBLE);
-                mDeleteButton.setImageResource(R.drawable.ico_restore_photo_selector);
-                mSetAvatarButton.setText(R.string.edit_restore);
-                mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                mViewModel.setDeleteButtonVisibility(true);
+                mViewModel.setDeleteButtonSelector(R.drawable.ico_restore_photo_selector);
+                mViewModel.setButtonText(R.string.edit_restore);
+                mViewModel.setButtonDrawable(0);
             } else {
                 if (profile.photo != null && profile.photo.getId() == currentPhoto.getId()) {
-                    mDeleteButton.setVisibility(View.GONE);
+                    mViewModel.setDeleteButtonVisibility(false);
                 } else {
-                    mDeleteButton.setVisibility(View.VISIBLE);
-                    mDeleteButton.setImageResource(R.drawable.ico_delete_selector);
+                    mViewModel.setDeleteButtonVisibility(true);
+                    mViewModel.setDeleteButtonSelector(R.drawable.ico_delete_selector);
                 }
                 if (profile.photo != null && currentPhoto.getId() == profile.photo.getId()) {
-                    mSetAvatarButton.setText(R.string.your_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
+                    mViewModel.setButtonText(R.string.your_avatar);
+                    mViewModel.setButtonDrawable(R.drawable.ico_selected);
                 } else {
-                    mSetAvatarButton.setText(R.string.on_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(profile.sex == Profile.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
+                    mViewModel.setButtonText(R.string.on_avatar);
+                    mViewModel.setButtonDrawable(profile.sex == Profile.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector);
                 }
             }
         }
@@ -697,7 +666,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (extras != null) {
             SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
             if (sendGiftAnswer != null) {
-                showGiftImage(sendGiftAnswer.history.link);
+                mViewModel.showGift(sendGiftAnswer.history.link);
                 feedGift = new FeedGift();
                 feedGift.gift = new Gift(
                         Integer.parseInt(sendGiftAnswer.history.id),

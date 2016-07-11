@@ -10,6 +10,7 @@
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -23,7 +24,38 @@
             android:layout="@layout/ac_photos_image_switcher" />
 
         <!-- header bar -->
-        <include layout="@layout/control_photo_album" />
+        <RelativeLayout
+            android:id="@+id/loPhotoAlbumControl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.topface.topface.ui.views.ImageViewRemote
+                style="@style/AlbumGift"
+                android:onClick="@{viewModel::onGiftClick}"
+                android:visibility="@{viewModel.giftAvailable}"
+                app:defaultSelector="@{viewModel.GIFT_SELECTOR_RESOURCE}"
+                app:remoteSrc="@{viewModel.giftLink}" />
+
+            <RelativeLayout
+                android:id="@+id/loBottomPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/alpha_gray_panel">
+
+                <Button
+                    style="@style/ButtonWhiteText.SetAvatar"
+                    android:drawableLeft="@{viewModel.buttonDrawable}"
+                    android:onClick="@{viewModel::onAvatarButtonClick}"
+                    android:text="@{viewModel.buttonText}" />
+
+                <ImageButton
+                    style="@style/AlbumDeleteButton"
+                    android:onClick="@{viewModel::onDeleteButtonClick}"
+                    android:src="@{viewModel.deleteButtonSelector}"
+                    android:visibility="@{viewModel.deleteButtonVisibility}" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/lockScreen"

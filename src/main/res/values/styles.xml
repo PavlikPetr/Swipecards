@@ -204,6 +204,17 @@
         <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
     </style>
 
+    <style name="ButtonWhiteText.SetAvatar">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:drawablePadding">@dimen/album_avatar_button_drawable_padding</item>
+    </style>
+
     <style name="ButtonWhiteText.Mini">
         <item name="android:textSize">13sp</item>
     </style>
@@ -561,8 +572,29 @@
         <item name="android:layout_margin">0dp</item>
     </style>
 
-    <style name="AlbumGift" parent="Gift">
+    <style name="AlbumGiftBase" parent="Gift">
         <item name="postProcessor">rounded</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">@dimen/album_gift_margin_bottom</item>
+    </style>
+
+    <style name="AlbumGift" parent="AlbumGiftBase">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/album_gift_margin_right</item>
+    </style>
+
+    <style name="AlbumDeleteButtonBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:padding">@dimen/album_delete_button_padding</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="AlbumDeleteButton" parent="AlbumDeleteButtonBase">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/album_delete_button_margin_right</item>
     </style>
 
     <style name="ChatMessageLayout">
