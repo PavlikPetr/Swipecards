@@ -70,6 +70,7 @@ import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
 import com.topface.topface.utils.CountersManager;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.config.FeedsCache;
@@ -134,9 +135,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 int id = intent.getIntExtra(BlackListAndBookmarkHandler.FEED_ID, 0);
                 boolean hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE);
                 boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
-                if ((ids != null || id != 0) && hasValue) {
+                if ((ListUtils.isNotEmpty(ids) || id != 0) && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
-                        if(ids != null) {
+                        if(ListUtils.isNotEmpty(ids)) {
                             getListAdapter().removeByUserIds(ids);
                         }
                         else if(id != 0) {
@@ -470,12 +471,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        Debug.debug("teresh", "Resume");
         removeBlackListUserFromFeed();
         FeedAdapter<T> adapter = getListAdapter();
         if (adapter.isNeedUpdate() || needUpdate) {
             updateData(false, true);
-            Debug.debug("teresh", "needUpdate");
         }
         // try update list if last visible item is loader,
         // and loading was probably interrupted
