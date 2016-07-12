@@ -19,8 +19,6 @@ import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
 import com.topface.topface.utils.IActivityDelegate;
 
-import static com.topface.topface.ui.edit.FilterFragment.INTENT_DATING_FILTER;
-
 public class FilterFragment extends AbstractEditFragment {
 
     public static String TAG = "filter_fragment_tag";
