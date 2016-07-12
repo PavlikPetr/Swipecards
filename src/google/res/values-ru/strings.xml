@@ -1094,4 +1094,9 @@
 
     <string name="app_of_the_day_ad_badge">Реклама</string>
 
+    <string name="filter_select_sex_title">Я ищу</string>
+    <string name="filter_select_sex_male">Мужчину</string>
+    <string name="filter_select_sex_female">Женщину</string>
+    <string name="filter_screen_title">Кого вы ищете?</string>
+
 </resources>

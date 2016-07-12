@@ -35,8 +35,7 @@ public class EmptyActivity extends AppCompatActivity {
     }
 
     private void doSomething() {
-        CitySearchPopup popup1 = new CitySearchPopup();
-        popup1.show(getSupportFragmentManager(), CitySearchPopup.class.getName());
+        CitySearchPopup.getInstance().show(getSupportFragmentManager(), CitySearchPopup.class.getName());
     }
 
     @Override

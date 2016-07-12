@@ -124,8 +124,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 FormItem item = (FormItem) valueView.getTag();
 
                 if (item.type == FormItem.CITY) {
-                    CitySearchPopup popup = new CitySearchPopup();
-                    popup.show(getActivity().getSupportFragmentManager(), CitySearchPopup.TAG);
+                    CitySearchPopup.getInstance().show(getActivity().getSupportFragmentManager(), CitySearchPopup.TAG);
                 } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
                     if (mFragmentManager != null) {
                         EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).

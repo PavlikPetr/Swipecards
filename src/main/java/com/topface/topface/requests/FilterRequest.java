@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.utils.EasyTracker;
 
 import org.json.JSONException;
@@ -13,14 +14,21 @@ public class FilterRequest extends ApiRequest {
     private static final String SERVICE_NAME = "search.setFilter";
 
     protected DatingFilter filter;
+    protected FilterData filterData;
 
     public FilterRequest(DatingFilter filter, Context context) {
         super(context);
         this.filter = filter;
+        filterData = null;
     }
 
-    @Override
-    protected JSONObject getRequestData() throws JSONException {
+    public FilterRequest(FilterData filter, Context context) {
+        super(context);
+        this.filter = null;
+        filterData = filter;
+    }
+
+    private JSONObject getOldJsonData() throws JSONException {
         JSONObject data = new JSONObject()
                 .put("beautiful", filter.beautiful)
                 .put("sex", filter.sex)
@@ -47,6 +55,30 @@ public class FilterRequest extends ApiRequest {
         }
 
         return data;
+    }
+
+    private JSONObject getJsonData() throws JSONException {
+        JSONObject data = new JSONObject()
+                .put("beautiful", filterData.isPreetyOnly)
+                .put("sex", filterData.sex)
+                .put("city", filterData.city.id)
+                .put("ageStart", filterData.ageStart)
+                .put("ageEnd", filterData.ageEnd)
+                .put("xstatus", 0)
+                .put("marriage", 0)
+                .put("character", 0)
+                .put("alcohol", 0);
+        if (filterData.sex == Profile.GIRL) {
+            data.put("breast", 0);
+        }
+        data.put("finances", 0);
+
+        return data;
+    }
+
+    @Override
+    protected JSONObject getRequestData() throws JSONException {
+        return filter != null ? getOldJsonData() : getJsonData();
     }
 
     @Override

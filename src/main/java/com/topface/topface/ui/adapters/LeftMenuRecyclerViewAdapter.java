@@ -66,6 +66,8 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
                 if (count >= 0 && count != item.getBadgeCount()) {
                     item.setBadgeCount(count);
                     notifyItemChange(i);
+                    notifyItemRangeRemoved(0,1);
+                    notifyItemRemoved(0);
                 }
             }
         }

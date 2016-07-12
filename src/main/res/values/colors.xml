@@ -213,6 +213,9 @@
 
     <color name="web_view_background">#080808</color>
 
-    <color name="city_item_bg">#eceff1</color>
+    <color name="gray_bg">#eceff1</color>
+
+    <color name="filter_item_text_color">#DD333844</color>
+    <color name="filter_item_title_text_color">#0d333844</color>
 
 </resources>

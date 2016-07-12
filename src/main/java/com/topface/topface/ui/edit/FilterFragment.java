@@ -175,7 +175,6 @@ public class FilterFragment extends AbstractEditFragment implements OnClickListe
 
     private void initFilter() {
         try {
-            //Странный, достаточно редкий баг, но бывает что CacheProfile.dating == null
             DatingFilter dating = App.get().getProfile().dating;
             mFilter = (dating != null) ? dating.clone() : new DatingFilter();
             mInitFilter = mFilter.clone();
