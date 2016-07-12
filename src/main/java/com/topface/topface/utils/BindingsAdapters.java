@@ -62,7 +62,7 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:text")
     public static void setText(TextView view, @StringRes int stringRes) {
-        view.setText(stringRes);
+        view.setText(stringRes != 0 ? App.getContext().getString(stringRes) : "");
     }
 
     @BindingAdapter("textColorSelector")

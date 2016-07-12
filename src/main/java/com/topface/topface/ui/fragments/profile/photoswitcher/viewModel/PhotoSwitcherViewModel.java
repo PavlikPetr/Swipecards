@@ -28,14 +28,15 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
 
     @DrawableRes
     public final int GIFT_SELECTOR_RESOURCE = R.drawable.photoswitcher_send_gift_selector;
+    private final static int EMPTY_UID = -1;
 
     private IActivityDelegate mIActivityDelegate;
     private int mUid;
     private View.OnClickListener mOnAvatarButtonClick;
     private View.OnClickListener mOnDeleteButtonClick;
 
-    public final ObservableField<String> giftLink = new ObservableField<>(null);
-    public final ObservableInt albumText = new ObservableInt(R.string.on_avatar);
+    public final ObservableField<String> giftLink = new ObservableField<>();
+    public final ObservableInt albumText = new ObservableInt();
     public final ObservableBoolean avatarVisibility = new ObservableBoolean();
     public final ObservableBoolean avatarEnable = new ObservableBoolean();
     public final ObservableInt avatarSrc = new ObservableInt(R.drawable.album_profile_button_selector);
@@ -56,15 +57,18 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
     }
 
     private void parseUid(Intent intent) {
-        mUid = intent.getIntExtra(INTENT_USER_ID, -1);
-        if (mUid == -1) {
+        mUid = EMPTY_UID;
+        if (intent != null && intent.hasExtra(INTENT_USER_ID)) {
+            mUid = intent.getIntExtra(INTENT_USER_ID, EMPTY_UID);
+        }
+        if (mUid == EMPTY_UID) {
             Debug.log(this, "Intent param is wrong");
             mIActivityDelegate.finish();
         }
     }
 
     private String extractUserGifts(Intent intent) {
-        if (intent.hasExtra(INTENT_GIFT)) {
+        if (intent != null && intent.hasExtra(INTENT_GIFT)) {
             ArrayList<Gift> array = intent.getExtras().getParcelableArrayList(INTENT_GIFT);
             if (array != null && array.size() > 0) {
                 return array.get(0).link;
@@ -131,5 +135,13 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
 
     public void setTrashSrc(@DrawableRes int src) {
         trashSrc.set(src);
+    }
+
+    @Override
+    public void release() {
+        super.release();
+        mIActivityDelegate = null;
+        mOnAvatarButtonClick = null;
+        mOnDeleteButtonClick = null;
     }
 }

@@ -1094,4 +1094,7 @@
 
     <string name="app_of_the_day_ad_badge">Реклама</string>
 
+    <string name="album_photo_deleted">Фотография удалена</string>
+    <string name="album_main_photo">Главное фото профиля</string>
+
 </resources>
