@@ -67,6 +67,7 @@ import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -141,7 +142,8 @@ import dagger.Provides;
                 TopfaceAuthFragment.class,
                 UserProfileFragment.class,
                 CitySearchPopupViewModel.class,
-                BonusPresenter.class
+                BonusPresenter.class,
+                ExpressMessageAction.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

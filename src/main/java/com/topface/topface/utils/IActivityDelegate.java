@@ -28,6 +28,8 @@ public interface IActivityDelegate {
 
     ContentResolver getContentResolver();
 
+    boolean isActivityRestoredState();
+
     Intent getIntent();
 
     void finish();

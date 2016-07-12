@@ -1316,6 +1316,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setActionBarTitles(getString(R.string.general_dating));
         getTitleSetter().setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
+        mDatingCounter.setVisibility(View.GONE);
     }
 
     @Override
