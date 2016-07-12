@@ -151,7 +151,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(data.getSettings().getUniqueKey());
         if (pos != EMPTY_POS) {
             getData().remove(pos);
-            notifyItemRangeRemoved(pos, 1);
+            notifyItemRemoved(pos);
         }
     }
 
