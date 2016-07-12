@@ -49,7 +49,7 @@
     <color name="list_item_divider_normal">#E6E6E6</color>
     <color name="list_item_divider_new">#CFE9FC</color>
     <color name="list_item_divider_selected">#FFAEDCFC</color>
-    <color name="album_background">#000000</color>
+    <color name="album_background">#232c35</color>
     <color name="list_text_black">#000000</color>
     <color name="list_text_gray">#898989</color>
     <color name="list_time">#A9A9A9</color>

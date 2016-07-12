@@ -32,7 +32,7 @@
             <com.topface.topface.ui.views.ImageViewRemote
                 style="@style/AlbumGift"
                 android:onClick="@{viewModel::onGiftClick}"
-                android:visibility="@{viewModel.giftAvailable}"
+                android:visibility="@{!viewModel.ownerProfile}"
                 app:defaultSelector="@{viewModel.GIFT_SELECTOR_RESOURCE}"
                 app:remoteSrc="@{viewModel.giftLink}" />
 
@@ -41,19 +41,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/alpha_gray_panel">
-
-                <Button
-                    style="@style/ButtonWhiteText.SetAvatar"
-                    android:drawableLeft="@{viewModel.buttonDrawable}"
-                    android:onClick="@{viewModel::onAvatarButtonClick}"
-                    android:text="@{viewModel.buttonText}" />
+                android:layout_marginBottom="10dp">
 
                 <ImageButton
-                    style="@style/AlbumDeleteButton"
+                    style="@style/AlbumButton.Avatar"
+                    android:onClick="@{viewModel::onAvatarButtonClick}"
+                    android:src="@{viewModel.avatarSrc}"
+                    android:visibility="@{viewModel.avatarVisibility}"
+                    app:enable="@{viewModel.avatarEnable}" />
+
+                <ImageButton
+                    style="@style/AlbumButton.Trash"
                     android:onClick="@{viewModel::onDeleteButtonClick}"
-                    android:src="@{viewModel.deleteButtonSelector}"
-                    android:visibility="@{viewModel.deleteButtonVisibility}" />
+                    android:src="@{viewModel.trashSrc}"
+                    android:visibility="@{viewModel.trashVisibility}"
+                    app:enable="@{viewModel.trashEnable}" />
+
+                <TextView
+                    style="@style/ButtonWhiteText.SetAvatar"
+                    android:text="@{viewModel.albumText}" />
             </RelativeLayout>
         </RelativeLayout>
 

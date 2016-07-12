@@ -206,13 +206,12 @@
 
     <style name="ButtonWhiteText.SetAvatar">
         <item name="android:gravity">center</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_centerInParent">true</item>
-        <item name="android:drawablePadding">@dimen/album_avatar_button_drawable_padding</item>
     </style>
 
     <style name="ButtonWhiteText.Mini">
@@ -1459,5 +1458,22 @@
         <item name="android:paddingRight">@dimen/offerwalls_button_padding_right</item>
         <item name="android:layout_marginLeft">@dimen/offerwalls_button_margin_left</item>
         <item name="android:gravity">center_vertical|right</item>
+    </style>
+
+    <style name="AlbumButton">
+        <item name="android:layout_width">@dimen/album_buttons_size</item>
+        <item name="android:layout_height">@dimen/album_buttons_size</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="AlbumButton.Trash">
+        <item name="android:layout_marginRight">18dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="AlbumButton.Avatar">
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
     </style>
 </resources>

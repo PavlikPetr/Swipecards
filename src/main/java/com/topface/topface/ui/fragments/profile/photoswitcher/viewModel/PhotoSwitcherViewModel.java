@@ -35,11 +35,13 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
     private View.OnClickListener mOnDeleteButtonClick;
 
     public final ObservableField<String> giftLink = new ObservableField<>(null);
-    public final ObservableInt buttonText = new ObservableInt(R.string.on_avatar);
-    public final ObservableInt buttonDrawable = new ObservableInt();
-    public final ObservableBoolean deleteButtonVisibility = new ObservableBoolean();
-    public final ObservableInt deleteButtonSelector = new ObservableInt(R.drawable.ico_delete_selector);
-
+    public final ObservableInt albumText = new ObservableInt(R.string.on_avatar);
+    public final ObservableBoolean avatarVisibility = new ObservableBoolean();
+    public final ObservableBoolean avatarEnable = new ObservableBoolean();
+    public final ObservableInt avatarSrc = new ObservableInt(R.drawable.album_profile_button_selector);
+    public final ObservableBoolean trashVisibility = new ObservableBoolean();
+    public final ObservableBoolean trashEnable = new ObservableBoolean();
+    public final ObservableInt trashSrc = new ObservableInt(R.drawable.album_delete_button_selector);
 
     public PhotoSwitcherViewModel(@NotNull AcPhotosBinding binding, @NotNull IActivityDelegate delegate) {
         super(binding);
@@ -76,19 +78,7 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
     }
 
     public void setButtonText(@StringRes int stringRes) {
-        buttonText.set(stringRes);
-    }
-
-    public void setButtonDrawable(@DrawableRes int drawableRes) {
-        buttonDrawable.set(drawableRes);
-    }
-
-    public void setDeleteButtonVisibility(boolean state) {
-        deleteButtonVisibility.set(state);
-    }
-
-    public void setDeleteButtonSelector(@DrawableRes int selectorRes) {
-        deleteButtonSelector.set(selectorRes);
+        albumText.set(stringRes);
     }
 
     public final void onGiftClick(View view) {
@@ -119,7 +109,27 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
         mOnDeleteButtonClick = listener;
     }
 
-    public final boolean isGiftAvailable() {
-        return mUid != App.get().getProfile().uid;
+    public final boolean isOwnerProfile() {
+        return mUid == App.get().getProfile().uid;
+    }
+
+    public void setAvatarEnable(boolean state) {
+        avatarEnable.set(state);
+    }
+
+    public void setAvatarVisibility(boolean state) {
+        avatarVisibility.set(state);
+    }
+
+    public void setTrashEnable(boolean state) {
+        trashEnable.set(state);
+    }
+
+    public void setTrashVisibility(boolean state) {
+        trashVisibility.set(state);
+    }
+
+    public void setTrashSrc(@DrawableRes int src) {
+        trashSrc.set(src);
     }
 }
