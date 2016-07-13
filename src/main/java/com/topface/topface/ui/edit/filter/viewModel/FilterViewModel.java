@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.topface.topface.App;
 import com.topface.topface.data.City;
@@ -67,6 +68,14 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
     public final void onFemaleCheckBoxClick(View view) {
         isMaleSelected.set(false);
         isMaleSelected.notifyChange();
+    }
+
+    public final void onOnlineOnlyClick(View view) {
+        onlineOnly.set(((CheckBox)view).isChecked());
+    }
+
+    public final void onPreetyOnlyClick(View view) {
+        preetyOnly.set(((CheckBox)view).isChecked());
     }
 
     public final void onSelectCityClick(View view) {

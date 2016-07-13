@@ -72,7 +72,6 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.edit.FilterFragment;
 import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
@@ -102,6 +101,7 @@ import rx.subscriptions.CompositeSubscription;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+import static com.topface.topface.ui.edit.filter.view.FilterFragment.INTENT_DATING_FILTER;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -1223,7 +1223,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             lockControls();
             hideEmptySearchDialog();
             if (data != null && data.getExtras() != null) {
-                final FilterData filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
+                final FilterData filter = data.getParcelableExtra(INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
                 registerRequest(filterRequest);
                 filterRequest.callback(new FilterHandler()).exec();

@@ -1428,7 +1428,7 @@
     </style>
 
     <style name="FilterItemTextStyle">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/filter_item_text_size</item>
         <item name="android:textColor">@color/filter_item_text_color</item>
         <item name="android:textStyle">normal</item>
         <item name="android:gravity">center_vertical</item>
@@ -1449,8 +1449,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/filter_item_height</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:clickable">true</item>
         <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
         <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
+    </style>.
+
+    <style name="FilterDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/filter_divider_height</item>
+        <item name="android:background">@color/filter_divider_color</item>
     </style>
 </resources>

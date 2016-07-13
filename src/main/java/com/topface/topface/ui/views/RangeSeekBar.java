@@ -31,30 +31,30 @@ import java.math.BigDecimal;
  * @author Thomas Barrasso (tbarrasso@sevenplusandroid.org)
  */
 public class RangeSeekBar<T extends Number> extends ImageView {
+    private final static String MAX_TEXT_VALUE = "99+";
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Bitmap thumbImage = BitmapFactory.decodeResource(getResources(),
-            R.drawable.triangle_thumb);
-    private final Bitmap bg = BitmapFactory.decodeResource(getResources(), R.drawable.bg_age_selector);
-    private final Bitmap thumbPressedImage = BitmapFactory.decodeResource(getResources(), R.drawable.triangle_thumb);
+            R.drawable.handle);
+    private final Bitmap bg = BitmapFactory.decodeResource(getResources(), R.drawable.range_seek_bar);
+    private final Bitmap thumbPressedImage = BitmapFactory.decodeResource(getResources(), R.drawable.handle);
     private final float thumbWidth = thumbImage.getWidth();
     private final float thumbHalfWidth = 0.5f * thumbWidth;
-    private final float topPadding = 0.4f * (float) bg.getHeight();
-    private final float leftPadding = 0.04f * (float) bg.getWidth();
+    private float leftPadding = 0.5f * thumbWidth;
     private final NumberType numberType;
     private final double absoluteMinValuePrim, absoluteMaxValuePrim;
     private double normalizedMinValue = 0d;
     private double normalizedMaxValue = 1d;
+    private String mMinValueText = "0";
+    private String mMaxValueText = "100";
+    private float mMaxTextWidth = 0f;
+    private float mMaxTextHeight = 0f;
     private Thumb pressedThumb = null;
     private OnRangeSeekBarChangeListener<T> listener;
     private T minimalRange;
     private double normalizedMinimalRange = 0;
 
     private Bitmap bgBitmap;
-    /**
-     * Default color of a {@link RangeSeekBar}, #FF33B5E5. This is also known as "Ice Cream Sandwich" blue.
-     */
-    public static final int DEFAULT_COLOR = Color.argb(0xFF, 0x33, 0xB5, 0xE5);
-
     /**
      * An invalid pointer id.
      */
@@ -82,6 +82,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         absoluteMinValuePrim = absoluteMinValue.doubleValue();
         absoluteMaxValuePrim = absoluteMaxValue.doubleValue();
         numberType = NumberType.fromNumber(absoluteMinValue);
+        initTextStyleData();
+        leftPadding = leftPadding + mMaxTextWidth;
         setFocusable(true);
         setFocusableInTouchMode(true);
         mRect = new RectF();
@@ -98,6 +100,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
     private void init() {
         mScaledTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    }
+
+    private void initTextStyleData() {
+        mTextPaint.setColor(getContext().getResources().getColor(R.color.filter_item_text_color));
+        mTextPaint.setTextSize(getContext().getResources().getDimension(R.dimen.filter_item_text_size));
+        mMaxTextWidth = mTextPaint.measureText(MAX_TEXT_VALUE) + getContext().getResources().getDimension(R.dimen.filter_value_padding);
+        mMaxTextHeight = mTextPaint.getTextSize();
     }
 
     public void setMinimalRange(T minimalRange) {
@@ -317,10 +326,9 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = bg.getWidth();
         if (MeasureSpec.UNSPECIFIED != MeasureSpec.getMode(widthMeasureSpec)) {
-            width = Math.min(width, MeasureSpec.getSize(widthMeasureSpec));
-//            width = MeasureSpec.getSize(widthMeasureSpec);
+            width = MeasureSpec.getSize(widthMeasureSpec);
         }
-        int height = bg.getHeight() + (int) topPadding + thumbImage.getHeight();
+        int height = thumbImage.getHeight();
         if (MeasureSpec.UNSPECIFIED != MeasureSpec.getMode(heightMeasureSpec)) {
             height = Math.min(height, MeasureSpec.getSize(heightMeasureSpec));
         }
@@ -335,7 +343,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         super.onDraw(canvas);
 
         drawBackground(canvas);
-        mRect.set(leftPadding, topPadding, getWidth() - 2 * leftPadding, bg.getHeight() - topPadding);
+        int paddingTop = getHeight() / 2 - bg.getHeight() / 2;
+        mRect.set(leftPadding, paddingTop, getWidth() - 2 * leftPadding, bg.getHeight() + paddingTop);
 
         paint.setStyle(Style.FILL);
         paint.setColor(Color.GRAY);
@@ -345,9 +354,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         // draw seek bar active range line
         mRect.left = normalizedToScreen(normalizedMinValue);
         mRect.right = normalizedToScreen(normalizedMaxValue);
-
-        // orange color
-        paint.setColor(DEFAULT_COLOR);
+        paint.setColor(getContext().getResources().getColor(R.color.range_seek_bar_selected_range_color));
         canvas.drawRect(mRect, paint);
 
         // draw minimum thumb
@@ -355,6 +362,13 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
         // draw maximum thumb
         drawThumb(normalizedToScreen(normalizedMaxValue), Thumb.MAX.equals(pressedThumb), canvas);
+
+        String minValueText = String.valueOf(getSelectedMinValue());
+        String maxValueText = String.valueOf(getSelectedMaxValue());
+        // draw current minimal value
+        canvas.drawText(minValueText, 0, (getHeight() - mMaxTextHeight) / 2 + mMaxTextHeight, mTextPaint);
+        // draw current maximal value
+        canvas.drawText(maxValueText, getWidth() - mTextPaint.measureText(maxValueText), (getHeight() - mMaxTextHeight) / 2 + mMaxTextHeight, mTextPaint);
     }
 
     /**
@@ -388,14 +402,14 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param canvas      The canvas to draw upon.
      */
     private void drawThumb(float screenCoord, boolean pressed, Canvas canvas) {
-        canvas.drawBitmap(pressed ? thumbPressedImage : thumbImage, screenCoord - thumbHalfWidth, topPadding, paint);
+        canvas.drawBitmap(pressed ? thumbPressedImage : thumbImage, screenCoord - thumbHalfWidth, 0, paint);
     }
 
     private void drawBackground(Canvas canvas) {
         if (bgBitmap == null) {
-            bgBitmap = Bitmap.createScaledBitmap(bg, getWidth(), bg.getHeight(), false);
+            bgBitmap = Bitmap.createScaledBitmap(bg, getWidth() - (int) thumbWidth - (int) mMaxTextWidth * 2, bg.getHeight(), false);
         }
-        canvas.drawBitmap(bgBitmap, 0, 0, paint);
+        canvas.drawBitmap(bgBitmap, thumbWidth / 2 + mMaxTextWidth, getHeight() / 2 - bg.getHeight() / 2, paint);
     }
 
     /**

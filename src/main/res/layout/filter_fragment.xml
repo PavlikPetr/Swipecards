@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -59,7 +60,7 @@
             </LinearLayout>
 
             <TextView
-                style="@style/FilterItemTextStyle"
+                style="@style/FilterItemTextStyle.Title"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/filter_title_item_height"
                 android:paddingLeft="@dimen/filter_both_side_item_padding"
@@ -73,14 +74,16 @@
                 android:elevation="@dimen/elevation_value"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <LinearLayout
+                    android:id="@+id/rangeSeekBar"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/filter_item_height" />
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/filter_both_side_item_padding"
+                    android:paddingRight="@dimen/filter_both_side_item_padding"
+                    android:layout_height="@dimen/filter_item_height"
+                    android:orientation="vertical" />
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#000000" />
+                <FrameLayout style="@style/FilterDivider" />
 
                 <TextView
                     style="@style/FilterItemTextStyle"
@@ -96,7 +99,7 @@
             </LinearLayout>
 
             <TextView
-                style="@style/FilterItemTextStyle"
+                style="@style/FilterItemTextStyle.Title"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/filter_title_item_height"
                 android:paddingLeft="@dimen/filter_both_side_item_padding"
@@ -114,17 +117,16 @@
                     style="@style/FilterSwitch"
                     android:checked="@{viewModel.onlineOnly}"
                     android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel.onOnlineOnlyClick}"
                     android:text="@string/filter_only_online" />
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#000000" />
+                <FrameLayout style="@style/FilterDivider" />
 
                 <CheckBox
                     style="@style/FilterSwitch"
                     android:checked="@{viewModel.preetyOnly}"
                     android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel.onPreetyOnlyClick}"
                     android:text="@string/filter_only_beautiful" />
             </LinearLayout>
 

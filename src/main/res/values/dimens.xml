@@ -139,5 +139,8 @@
     <dimen name="filter_item_height">62dp</dimen>
     <dimen name="filter_title_item_height">56dp</dimen>
     <dimen name="filter_both_side_item_padding">16dp</dimen>
+    <dimen name="filter_divider_height">1dp</dimen>
+    <dimen name="filter_item_text_size">16sp</dimen>
+    <dimen name="filter_value_padding">8dp</dimen>
 
 </resources>

@@ -17,12 +17,14 @@ import com.topface.topface.databinding.FilterFragmentBinding;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
+import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.IActivityDelegate;
 
 public class FilterFragment extends AbstractEditFragment {
 
     public static String TAG = "filter_fragment_tag";
     public static final String INTENT_DATING_FILTER = "topface_dating_filter";
+    private static final String CURRENT_FILTER_VALUE = "current_filter_value";
     private static final String PAGE_NAME = "Filter";
 
     private FilterFragmentBinding mBinding;
@@ -41,6 +43,7 @@ public class FilterFragment extends AbstractEditFragment {
         initFilter();
         mViewModel = new FilterViewModel(mBinding, (IActivityDelegate) getActivity(), mFilter);
         mBinding.setViewModel(mViewModel);
+        mBinding.rangeSeekBar.addView(new RangeSeekBar<Integer>(0, 100, getActivity()));
         return mBinding.getRoot();
     }
 
@@ -55,15 +58,23 @@ public class FilterFragment extends AbstractEditFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mViewModel != null) {
+            mViewModel.release();
+        }
+    }
+
+    @Override
     protected boolean hasChanges() {
-        return (mFilter != null && mViewModel != null) && mFilter.equals(new FilterData(mViewModel));
+        return (mFilter != null && mViewModel != null) && !mFilter.equals(new FilterData(mViewModel));
     }
 
     @Override
     protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
             Intent intent = new Intent();
-            intent.putExtra(INTENT_DATING_FILTER, mFilter);
+            intent.putExtra(INTENT_DATING_FILTER, new FilterData(mViewModel));
             getActivity().setResult(Activity.RESULT_OK, intent);
         } else {
             getActivity().setResult(Activity.RESULT_CANCELED);
