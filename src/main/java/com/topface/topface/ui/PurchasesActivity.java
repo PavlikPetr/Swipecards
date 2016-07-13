@@ -1,10 +1,8 @@
 package com.topface.topface.ui;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -28,12 +26,12 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
-import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
+import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
@@ -45,7 +43,6 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -220,6 +217,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
                     data.getStringExtra(PW_TRANSACTION_ID), false, false);
             // для обновления счетчиков монет и лайков при покупке через paymentWall
             new ProfileRequest(this).exec();
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
         }
         //Это супер мега хак, смотри документацию processRequestCode
         if (!OpenIabFragment.processRequestCode(
