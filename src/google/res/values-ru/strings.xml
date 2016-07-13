@@ -1097,4 +1097,7 @@
     <string name="profile_ditance_to_her">До неё %s</string>
     <string name="profile_ditance_to_him">До него %s</string>
 
+    <string name="rate_popup_we_need_your_opinion">Нам очень важно ваше мнение</string>
+    <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Пожалуйста, оцените приложение. Это займет несколько секунд вашего времени.</string>
+
 </resources>
