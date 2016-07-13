@@ -43,7 +43,7 @@ public class FilterFragment extends AbstractEditFragment {
         initFilter();
         mViewModel = new FilterViewModel(mBinding, (IActivityDelegate) getActivity(), mFilter);
         mBinding.setViewModel(mViewModel);
-        mBinding.rangeSeekBar.addView(new RangeSeekBar<Integer>(0, 100, getActivity()));
+//        mBinding.rangeSeekBar.addView(new RangeSeekBar<Integer>(0, 100, getActivity()));
         return mBinding.getRoot();
     }
 

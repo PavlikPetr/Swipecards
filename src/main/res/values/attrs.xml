@@ -86,5 +86,13 @@
         <attr name="blueButtonStyle" format="reference" />
         <attr name="grayButtonStyle" format="reference" />
     </declare-styleable>
-
+    <declare-styleable name="RangeSeekBar">
+        <attr name="textSize" format="dimension" />
+        <attr name="minValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+        <attr name="maxValueTitle" format="string" />
+        <attr name="minValueTitle" format="string" />
+        <attr name="textPadding" format="dimension" />
+        <attr name="textColor" format="color"/>
+    </declare-styleable>
 </resources>
