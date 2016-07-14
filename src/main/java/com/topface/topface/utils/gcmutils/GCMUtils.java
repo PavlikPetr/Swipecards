@@ -192,6 +192,7 @@ public class GCMUtils {
             return false;
         } else if (getType(data) == GCM_TYPE_UPDATE_COUNTERS_BALANCE) {
             setCounters(data, context);
+            LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
             return false;
         }
         try {
