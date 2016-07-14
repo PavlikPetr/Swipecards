@@ -877,15 +877,6 @@
         <item name="android:indeterminateDrawable">@drawable/progress_small_holo</item>
     </style>
 
-    <style name="FilterSpinner" parent="@android:style/Widget.DropDownItem.Spinner">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginLeft">12dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:paddingLeft">6dp</item>
-        <item name="android:background">@drawable/input_field_selector</item>
-    </style>
-
     <style name="FilterCheckBox" parent="topfaceCheckbox">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -917,18 +908,6 @@
 
     <style name="SpinnerDropDownView.Selector">
         <item name="android:background">@drawable/spinner_selector</item>
-    </style>
-
-    <style name="CitySearchView" parent="SpinnerTextView">
-        <item name="android:layout_marginLeft">12dp</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:hint">@string/general_city</item>
-        <item name="android:textColorHint">#8A8A8A</item>
-        <item name="android:background">@drawable/input_field_selector</item>
-        <item name="android:lines">1</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:selectAllOnFocus">true</item>
-        <item name="android:singleLine">true</item>
     </style>
 
     <style name="AutoCompleteTextViewStyle" parent="@style/Widget.AppCompat.AutoCompleteTextView">
