@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.topface.topface.statistics.InvitesStatistics.PLC_VK_INVITES;
@@ -61,11 +61,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private boolean mIsGettingExtraFriends = false;
     private View mFooterView;
 
-    @Bind(R.id.vkFriendsList)
+    @BindView(R.id.vkFriendsList)
     ListView mListView;
-    @Bind(R.id.mainProgressBar)
+    @BindView(R.id.mainProgressBar)
     ProgressBar mProgress;
-    @Bind(R.id.noOneFriendLoaded)
+    @BindView(R.id.noOneFriendLoaded)
     TextView mNoFriendsTitle;
 
     @Override

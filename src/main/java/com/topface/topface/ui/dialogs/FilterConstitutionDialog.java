@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,9 @@ import com.topface.topface.ui.edit.FilterFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Диалог для выбора параметров роста/веса
@@ -33,10 +33,12 @@ public class FilterConstitutionDialog extends TrackedDialogFragment {
     private static final String CONFIG_MIN = "config_min";
     private static final String CONFIG_MAX = "config_max";
 
-    @Bind(R.id.pickerFirstLimit)
+    @BindView(R.id.pickerFirstLimit)
     NumberPicker mFirstPicker;
-    @Bind(R.id.pickerSecondLimit)
+    @BindView(R.id.pickerSecondLimit)
     NumberPicker mSecondPicker;
+
+    private Unbinder mUnbinder;
     private String mTitle;
     private ConstitutionLimits mConstitutionLimits;
     private OnConstitutionDialogListener mListener;
@@ -84,7 +86,7 @@ public class FilterConstitutionDialog extends TrackedDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.filter_date_picker_dialog_view, null);
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         Fragment fragment = getParentFragment();
         if (fragment != null && fragment instanceof FilterFragment) {
             mListener = ((FilterFragment) fragment).getConstitutionDialogListener();
@@ -160,7 +162,7 @@ public class FilterConstitutionDialog extends TrackedDialogFragment {
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
         mListener = null;
         super.onDestroyView();
     }
