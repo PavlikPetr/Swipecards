@@ -1437,4 +1437,14 @@
         <item name="android:layout_height">@dimen/filter_divider_height</item>
         <item name="android:background">@color/filter_divider_color</item>
     </style>
+
+    <style name="ItemView">
+        <item name="android:background">@drawable/white_item_shadow</item>
+    </style>
+
+    <style name="ItemView.Filter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/filter_item_height</item>
+    </style>
+
 </resources>

@@ -19,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import static android.databinding.tool.util.GenerationalClassUtil.ExtensionFilter.BR;
-
 public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
 
     public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data) {

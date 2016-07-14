@@ -25,10 +25,7 @@
             android:paddingTop="4dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/filter_item_height"
-                android:background="@color/bg_white"
-                android:elevation="@dimen/elevation_value"
+                style="@style/ItemView.Filter"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/filter_both_side_item_padding"
@@ -68,10 +65,8 @@
                 android:text="@string/filter_city_age_parameters" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                style="@style/ItemView.Filter"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_white"
-                android:elevation="@dimen/elevation_value"
                 android:orientation="vertical">
 
                 <com.topface.topface.ui.views.RangeSeekBar
@@ -115,10 +110,8 @@
                 android:text="@string/settings_block_additional" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                style="@style/ItemView.Filter"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_white"
-                android:elevation="@dimen/elevation_value"
                 android:orientation="vertical">
 
                 <CheckBox
