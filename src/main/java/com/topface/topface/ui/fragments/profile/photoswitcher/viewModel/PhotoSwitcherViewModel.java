@@ -18,6 +18,7 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.viewModels.BaseViewModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -67,7 +68,7 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
         }
     }
 
-    private String extractUserGifts(Intent intent) {
+    private String extractUserGifts(@Nullable Intent intent) {
         if (intent != null && intent.hasExtra(INTENT_GIFT)) {
             ArrayList<Gift> array = intent.getExtras().getParcelableArrayList(INTENT_GIFT);
             if (array != null && array.size() > 0) {

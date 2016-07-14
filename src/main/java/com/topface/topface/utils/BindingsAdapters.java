@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 
@@ -63,14 +62,14 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:text")
     public static void setText(TextView view, @StringRes int stringRes) {
-        view.setText(stringRes != 0 ? App.getContext().getString(stringRes) : "");
+        view.setText(stringRes != 0 ? view.getResources().getString(stringRes) : "");
     }
 
     @BindingAdapter("textColorSelector")
     public static void setTextColorSelector(View view, int colorSelector) {
         try {
-            XmlResourceParser xrp = App.getContext().getResources().getXml(colorSelector);
-            ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
+            XmlResourceParser xrp = view.getResources().getXml(colorSelector);
+            ColorStateList csl = ColorStateList.createFromXml(view.getResources(), xrp);
             ((TextView) view).setTextColor(csl);
         } catch (Exception e) {
             Debug.error(e.toString());

@@ -14,6 +14,8 @@ import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.views.RetryViewCreator;
 
+import org.jetbrains.annotations.NotNull;
+
 public class UserProfileLoader {
     private int mLastLoadedProfileId;
     private ApiResponse mLastResponse;
@@ -24,7 +26,7 @@ public class UserProfileLoader {
     private int mProfileId;
     private UserRequest mUserRequest;
 
-    public UserProfileLoader(RelativeLayout lockScreen, View loaderView, IUserProfileReceiver receiver, final int profileId) {
+    public UserProfileLoader(@NotNull RelativeLayout lockScreen, @NotNull View loaderView, IUserProfileReceiver receiver, final int profileId) {
         mLockScreen = lockScreen;
         mLoaderView = loaderView;
         mReceiver = receiver;
@@ -43,7 +45,9 @@ public class UserProfileLoader {
     }
 
     public void loadUserProfile(Context context) {
-        if (isLoaded(mProfileId)) return;
+        if (isLoaded(mProfileId)) {
+            return;
+        }
         mLockScreen.setVisibility(View.GONE);
         mLoaderView.setVisibility(View.VISIBLE);
         mUserRequest = new UserRequest(mProfileId, context);
@@ -127,5 +131,10 @@ public class UserProfileLoader {
         if (mUserRequest != null) {
             mUserRequest.cancelFromUi();
         }
+        mLoaderView = null;
+        mLastResponse = null;
+        mRetryView = null;
+        mLoaderView = null;
+        mReceiver = null;
     }
 }

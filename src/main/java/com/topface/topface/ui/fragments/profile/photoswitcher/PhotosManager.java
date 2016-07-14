@@ -4,6 +4,8 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
+import org.jetbrains.annotations.NotNull;
+
 import static com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity.DEFAULT_PRELOAD_ALBUM_RANGE;
 
 public class PhotosManager {
@@ -22,7 +24,7 @@ public class PhotosManager {
      * @param photos   array of photos
      * @param position _real_ index of current photo in this array
      */
-    public void check(final Photos photos, final int position) {
+    public void check(@NotNull final Photos photos, final int position) {
         int indexToLeft = calcRightIndex(photos, position - DEFAULT_PRELOAD_ALBUM_RANGE);
         if (photos.get(indexToLeft).isFake()) {
             if (mIUploadAlbumPhotos != null) {
@@ -44,7 +46,7 @@ public class PhotosManager {
      * @param index  some index to fit
      * @return correct index, fitted in array size
      */
-    private int calcRightIndex(final Photos photos, final int index) {
+    private int calcRightIndex(@NotNull final Photos photos, final int index) {
         if (index < 0) {
             int res = index;
             while (res < 0) {

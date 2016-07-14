@@ -204,7 +204,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         setHasContent(false);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getContentLayout());
-        App.from(getApplicationContext()).inject(this);
+        App.get().inject(this);
         mViewModel = new PhotoSwitcherViewModel(mBinding, this);
         mBinding.setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
@@ -257,8 +257,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 из-за фейков нечего будет подгружать. По этому дабы не писать кучу оверхеда для такой исключительной ситуации
                 "теряем" объекты загруженные в этой активити
                  */
-                if (mUid == App.from(PhotoSwitcherActivity.this).getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
-                    Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                if (mUid == App.get().getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
+                    Profile profile = App.get().getProfile();
                     profile.photos = mPhotoLinks;
                     appState.setData(profile);
                 }
@@ -428,7 +428,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void initControls() {
-        final Profile profile = App.from(this).getProfile();
+        final Profile profile = App.get().getProfile();
         if (mUid == profile.uid) {
             // - set avatar button
             mViewModel.setOnAvatarButtonClickListener(new View.OnClickListener() {
@@ -472,7 +472,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     public void deletePhotoRequest() {
-        final Profile profile = App.from(this).getProfile();
+        final Profile profile = App.get().getProfile();
         if (mDeletedPhotos.isEmpty()) return;
         final Photos photos = (Photos) profile.photos.clone();
         final int totalPhotos = profile.photosCount;
@@ -518,7 +518,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                Profile profile = App.get().getProfile();
                 profile.photo = currentPhoto;
                 appState.setData(profile);
                 CacheProfile.sendUpdateProfileBroadcast();
@@ -592,7 +592,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     private void refreshButtonsState() {
-        Profile profile = App.from(this).getProfile();
+        Profile profile = App.get().getProfile();
         if (mUid == profile.uid && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
