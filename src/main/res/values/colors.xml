@@ -214,6 +214,7 @@
     <color name="web_view_background">#080808</color>
 
     <color name="gray_bg">#eceff1</color>
+    <color name="album_gift_circle_color">#499aff</color>
 
     <color name="filter_item_text_color">#DD333844</color>
     <color name="filter_item_title_text_color">#89333844</color>

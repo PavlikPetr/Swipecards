@@ -149,6 +149,8 @@
     <dimen name="album_delete_button_padding">8dp</dimen>
     <dimen name="album_delete_button_margin_right">18dp</dimen>
     <dimen name="album_avatar_button_drawable_padding">4dp</dimen>
+    <dimen name="album_gift_size">86dp</dimen>
+    <dimen name="album_gift_circle_stroke_width">3dp</dimen>
 
     <dimen name="album_buttons_size">26dp</dimen>
 

@@ -1,6 +1,7 @@
 package com.topface.framework.imageloader;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -561,6 +562,7 @@ public class BitmapUtils {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
         int multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
+        Resources res = App.getContext().getResources();
         @SuppressWarnings("SuspiciousNameCombination")
         Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
@@ -568,11 +570,15 @@ public class BitmapUtils {
         final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
         Paint circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
-        circlePaint.setColor(App.getContext().getResources().getColor(R.color.bg_white));
+        circlePaint.setColor(res.getColor(R.color.bg_white));
         Paint canvasPaint = new Paint();
         canvasPaint.setAntiAlias(true);
         canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
         canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        Paint circle = new Paint();
+        circle.setStrokeWidth(res.getDimension(R.dimen.album_gift_circle_stroke_width));
+        circle.setColor(res.getColor(R.color.album_gift_circle_color));
+        canvas.drawCircle(0, 0, radiusMult, circle);
         canvas.drawBitmap(bitmap, src, dst, canvasPaint);
         return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
     }
