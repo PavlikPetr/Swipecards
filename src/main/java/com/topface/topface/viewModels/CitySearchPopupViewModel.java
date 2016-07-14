@@ -45,13 +45,14 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
     private ICityPopupCloseListener mCloseListener;
     public RxFieldObservable<String> editTextObservable = new RxFieldObservable<>();
     public ObservableBoolean isRequestInProgress = new ObservableBoolean();
-    public ObservableField<String> cityObservableField = new ObservableField<>(App.get().getProfile().city.name);
+    public ObservableField<String> cityObservableField = new ObservableField<>();
     private CompositeSubscription mViewModelSubscription = new CompositeSubscription();
 
-    public CitySearchPopupViewModel(@NotNull final CitySearchPopupBinding binding, @NotNull ICityPopupCloseListener closeListener) {
+    public CitySearchPopupViewModel(@NotNull final CitySearchPopupBinding binding, String cityName, @NotNull ICityPopupCloseListener closeListener) {
         super(binding);
         App.get().inject(this);
         mCloseListener = closeListener;
+        cityObservableField.set(cityName);
         mViewModelSubscription.add(editTextObservable.getFiledObservable()
                 .filter(new Func1<String, Boolean>() {
                     @Override
@@ -78,7 +79,7 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
         config.setUserCityChanged(true);
         config.saveConfig();
         mEventBus.setData(data);
-        if(mCloseListener != null){
+        if (mCloseListener != null) {
             mCloseListener.onClose();
         }
     }

@@ -520,7 +520,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             public void callOnUi() {
                 CitySearchPopup popup = (CitySearchPopup) getSupportFragmentManager().findFragmentByTag(CitySearchPopup.TAG);
                 if (popup == null) {
-                    popup = new CitySearchPopup();
+                    popup = CitySearchPopup.newInstance();
                 }
                 popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override

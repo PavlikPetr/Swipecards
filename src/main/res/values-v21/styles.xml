@@ -168,11 +168,12 @@
         <item name="android:listSelector">@drawable/dialog_items_selector_ripple</item>
     </style>
 
-    <style name="SpinnerDropDownView.Selector">
-        <item name="android:background">@drawable/filter_spinner_items_selector_ripple</item>
-    </style>
-
     <style name="FilterParamSelector">
         <item name="android:background">@drawable/white_list_underline</item>
+    </style>
+
+    <style name="ItemView">
+        <item name="android:background">@color/bg_white</item>
+        <item name="android:elevation">@dimen/elevation_value</item>
     </style>
 </resources>
