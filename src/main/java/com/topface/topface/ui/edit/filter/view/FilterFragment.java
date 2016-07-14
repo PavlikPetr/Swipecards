@@ -17,7 +17,6 @@ import com.topface.topface.databinding.FilterFragmentBinding;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
-import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.IActivityDelegate;
 
 public class FilterFragment extends AbstractEditFragment {
@@ -39,15 +38,16 @@ public class FilterFragment extends AbstractEditFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER_VALUE)) {
+            mFilter = savedInstanceState.getParcelable(CURRENT_FILTER_VALUE);
+        }
         mBinding = DataBindingUtil.inflate(inflater, R.layout.filter_fragment, container, false);
-        initFilter();
-        mViewModel = new FilterViewModel(mBinding, (IActivityDelegate) getActivity(), mFilter);
+        mViewModel = new FilterViewModel(mBinding, (IActivityDelegate) getActivity(), mFilter == null ? initFilter() : mFilter);
         mBinding.setViewModel(mViewModel);
-//        mBinding.rangeSeekBar.addView(new RangeSeekBar<Integer>(0, 100, getActivity()));
         return mBinding.getRoot();
     }
 
-    private void initFilter() {
+    private FilterData initFilter() {
         mFilter = new FilterData(new DatingFilter());
         try {
             DatingFilter dating = App.get().getProfile().dating;
@@ -55,6 +55,14 @@ public class FilterFragment extends AbstractEditFragment {
         } catch (CloneNotSupportedException e) {
             Debug.error(e);
         }
+        return mFilter;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(CURRENT_FILTER_VALUE, mViewModel != null ? new FilterData(mViewModel) : mFilter);
+
     }
 
     @Override
@@ -74,7 +82,9 @@ public class FilterFragment extends AbstractEditFragment {
     protected void saveChanges(final Handler handler) {
         if (hasChanges()) {
             Intent intent = new Intent();
-            intent.putExtra(INTENT_DATING_FILTER, new FilterData(mViewModel));
+            FilterData data = new FilterData(mViewModel);
+            intent.putExtra(INTENT_DATING_FILTER, data);
+            DatingFilter.setOnlyOnlineField(data.isOnlineOnly);
             getActivity().setResult(Activity.RESULT_OK, intent);
         } else {
             getActivity().setResult(Activity.RESULT_CANCELED);
@@ -90,12 +100,6 @@ public class FilterFragment extends AbstractEditFragment {
     @Override
     protected void unlockUi() {
         mViewModel.isEnabled.set(true);
-    }
-
-    @Override
-    protected void refreshSaveState() {
-        super.refreshSaveState();
-
     }
 
     @Override

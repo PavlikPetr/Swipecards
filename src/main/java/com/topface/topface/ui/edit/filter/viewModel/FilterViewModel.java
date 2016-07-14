@@ -6,9 +6,9 @@ import android.databinding.ObservableInt;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.City;
+import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.FilterFragmentBinding;
 import com.topface.topface.state.EventBus;
@@ -26,6 +26,11 @@ import javax.inject.Inject;
 import rx.Subscription;
 
 public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
+
+    public final static int MIN_AGE = DatingFilter.MIN_AGE;
+    public final static int MAX_AGE = DatingFilter.MAX_AGE;
+    public final static String MAX_AGE_TITLE = String.format(App.getCurrentLocale(), "%d+", MAX_AGE);
+    public final static String MIN_AGE_TITLE = String.valueOf(MIN_AGE);
 
     public final ObservableBoolean isMaleSelected = new ObservableBoolean(App.get().getProfile().sex == Profile.GIRL);
     public final ObservableField<City> city = new ObservableField<>(App.get().getProfile().city);
@@ -51,7 +56,11 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
                 FilterViewModel.this.city.set(city);
             }
         });
-        binding.rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+        initRangeSeekBar();
+    }
+
+    private void initRangeSeekBar() {
+        getBinding().rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Integer minValue, Integer maxValue, RangeSeekBar.Thumb thumbId) {
                 if (thumbId != null) {
@@ -67,11 +76,10 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
                     ageEnd.set(maxValue);
                     ageStart.set(minValue);
                 }
-                Debug.showChunkedLogError("FILTER_VIEW_MODEL", "minValue " + minValue + " maxValue " + maxValue);
             }
         });
-
     }
+
 
     private void setStartingValue(FilterData filter) {
         city.set(filter.city);
