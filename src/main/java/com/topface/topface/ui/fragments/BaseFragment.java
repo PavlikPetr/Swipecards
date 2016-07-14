@@ -99,8 +99,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    protected void bindView(Object target, View view) {
-        mUnbinder = ButterKnife.bind(target, view);
+    protected void bindView(View view) {
+        mUnbinder = ButterKnife.bind(this, view);
     }
 
     protected boolean isButterKnifeAvailable() {

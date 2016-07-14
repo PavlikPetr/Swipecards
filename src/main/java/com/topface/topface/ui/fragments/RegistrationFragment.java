@@ -181,7 +181,7 @@ public class RegistrationFragment extends BaseFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         setNeedTitles(true);
         View root = inflater.inflate(R.layout.topface_registration, null);
-        bindView(this, root);
+        bindView(root);
         initViews();
         if (savedInstanceState != null) {
             mEdEmail.setText(savedInstanceState.getString(EMAIL));

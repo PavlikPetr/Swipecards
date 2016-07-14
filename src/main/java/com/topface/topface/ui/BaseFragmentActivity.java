@@ -122,8 +122,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         initActionBar(getSupportActionBar());
     }
 
-    protected void bindView(Activity target) {
-        mUnbinder = ButterKnife.bind(target);
+    protected void bindView() {
+        mUnbinder = ButterKnife.bind(this);
     }
 
     @Override

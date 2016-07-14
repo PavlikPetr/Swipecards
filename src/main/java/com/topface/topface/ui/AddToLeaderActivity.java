@@ -108,7 +108,7 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        bindView(this);
+        bindView();
         App.get().inject(this);
         mSubscriptions.add(mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction));
         if (savedInstanceState != null) {

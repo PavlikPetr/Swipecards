@@ -29,7 +29,7 @@ public class ComplainsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View root = inflater.inflate(R.layout.complains_fragment, container, false);
-        bindView(this, root);
+        bindView(root);
         Bundle args = getArguments();
         int scroll = 0;
         if (savedInstanceState != null) {
