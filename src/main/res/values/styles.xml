@@ -883,6 +883,7 @@
         <item name="android:drawablePadding">8dp</item>
         <item name="android:textColor">@color/filter_item_text_color</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:drawableLeft">@drawable/filter_checkbox</item>
     </style>
 
@@ -1430,7 +1431,8 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
         <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
-    </style>.
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
     <style name="FilterDivider">
         <item name="android:layout_width">match_parent</item>
