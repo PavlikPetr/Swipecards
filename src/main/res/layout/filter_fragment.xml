@@ -47,14 +47,14 @@
                     android:layout_marginRight="20dp"
                     android:checked="@{viewModel.isMaleSelected}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{viewModel.onMaleCheckBoxClick}"
+                    android:onClick="@{viewModel::onMaleCheckBoxClick}"
                     android:text="@string/filter_select_sex_male" />
 
                 <CheckBox
                     style="@style/FilterCheckBox"
                     android:checked="@{!viewModel.isMaleSelected}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{viewModel.onFemaleCheckBoxClick}"
+                    android:onClick="@{viewModel::onFemaleCheckBoxClick}"
                     android:text="@string/filter_select_sex_female" />
 
             </LinearLayout>
@@ -75,11 +75,14 @@
                 android:orientation="vertical">
 
                 <com.topface.topface.ui.views.RangeSeekBar
+                    android:id="@+id/rangeSeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/filter_item_height"
                     android:layout_marginLeft="@dimen/filter_both_side_item_padding"
                     android:layout_marginRight="@dimen/filter_both_side_item_padding"
                     android:gravity="center_vertical"
+                    app:currentMaxValue="75"
+                    app:currentMinValue="35"
                     app:maxValue="99"
                     app:maxValueTitle="99+"
                     app:minValue="18"
@@ -87,14 +90,6 @@
                     app:textColor="@color/filter_item_text_color"
                     app:textPadding="@dimen/filter_value_padding"
                     app:textSize="@dimen/filter_item_text_size" />
-                <!--<LinearLayout-->
-                <!--android:id="@+id/rangeSeekBar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:paddingLeft="@dimen/filter_both_side_item_padding"-->
-                <!--android:paddingRight="@dimen/filter_both_side_item_padding"-->
-                <!--android:layout_height="@dimen/filter_item_height"-->
-                <!--android:orientation="vertical" />-->
 
                 <FrameLayout style="@style/FilterDivider" />
 
@@ -105,7 +100,7 @@
                     android:layout_weight="1"
                     android:drawableRight="@drawable/ic_next"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{viewModel.onSelectCityClick}"
+                    android:onClick="@{viewModel::onSelectCityClick}"
                     android:paddingLeft="@dimen/filter_both_side_item_padding"
                     android:paddingRight="@dimen/filter_both_side_item_padding"
                     android:text="@{viewModel.city.name}" />
@@ -130,7 +125,7 @@
                     style="@style/FilterSwitch"
                     android:checked="@{viewModel.onlineOnly}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{viewModel.onOnlineOnlyClick}"
+                    android:onClick="@{viewModel::onOnlineOnlyClick}"
                     android:text="@string/filter_only_online" />
 
                 <FrameLayout style="@style/FilterDivider" />
@@ -139,7 +134,7 @@
                     style="@style/FilterSwitch"
                     android:checked="@{viewModel.preetyOnly}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{viewModel.onPreetyOnlyClick}"
+                    android:onClick="@{viewModel::onPreetyOnlyClick}"
                     android:text="@string/filter_only_beautiful" />
             </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.databinding.ObservableInt;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
@@ -13,6 +14,7 @@ import com.topface.topface.databinding.FilterFragmentBinding;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.edit.filter.model.FilterData;
+import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.viewModels.BaseViewModel;
@@ -49,6 +51,26 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
                 FilterViewModel.this.city.set(city);
             }
         });
+        binding.rangeSeekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
+            @Override
+            public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Integer minValue, Integer maxValue, RangeSeekBar.Thumb thumbId) {
+                if (thumbId != null) {
+                    switch (thumbId) {
+                        case MAX:
+                            ageEnd.set(maxValue);
+                            break;
+                        case MIN:
+                            ageStart.set(minValue);
+                            break;
+                    }
+                } else {
+                    ageEnd.set(maxValue);
+                    ageStart.set(minValue);
+                }
+                Debug.showChunkedLogError("FILTER_VIEW_MODEL", "minValue " + minValue + " maxValue " + maxValue);
+            }
+        });
+
     }
 
     private void setStartingValue(FilterData filter) {
@@ -71,11 +93,11 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
     }
 
     public final void onOnlineOnlyClick(View view) {
-        onlineOnly.set(((CheckBox)view).isChecked());
+        onlineOnly.set(((CheckBox) view).isChecked());
     }
 
     public final void onPreetyOnlyClick(View view) {
-        preetyOnly.set(((CheckBox)view).isChecked());
+        preetyOnly.set(((CheckBox) view).isChecked());
     }
 
     public final void onSelectCityClick(View view) {

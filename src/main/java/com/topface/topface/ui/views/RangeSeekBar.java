@@ -3,7 +3,6 @@ package com.topface.topface.ui.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +16,6 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -65,7 +63,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private final float thumbHalfWidth = 0.5f * thumbWidth;
     private float leftPadding = 0.5f * thumbWidth;
     private final NumberType numberType;
-    private double absoluteMinValuePrim, absoluteMaxValuePrim;
+    private double absoluteMinValuePrim, absoluteMaxValuePrim, currentMinValue, currentMaxValue;
     private double normalizedMinValue = 0d;
     private double normalizedMaxValue = 1d;
     private float mMaxTextWidth = 0f;
@@ -132,6 +130,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         setMinValueTitle(a.getString(R.styleable.RangeSeekBar_minValueTitle));
         setTextPadding(a.getDimension(R.styleable.RangeSeekBar_textPadding, DEFAULT_TEXT_PADDING));
         setTextColor(a.getColorStateList(R.styleable.RangeSeekBar_textColor));
+        setCurrentMaxValue((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_currentMaxValue, DEFAULT_MAX_VALUE)));
+        setCurrentMinValue((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_currentMinValue, DEFAULT_MIN_VALUE)));
     }
 
     private void setTextSize(float value) {
@@ -162,12 +162,35 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         mTextColor = value != null ? value : DEFAULT_TEXT_COLOR;
     }
 
+    private void setCurrentMinValue(T value) {
+        currentMinValue = value.doubleValue();
+    }
+
+    private void setCurrentMaxValue(T value) {
+        currentMaxValue = value.doubleValue();
+    }
+
     private void checkMinMaxTitles() {
         if (TextUtils.isEmpty(mMinValueTitle)) {
             setMinValueTitle(String.valueOf(absoluteMinValuePrim));
         }
         if (TextUtils.isEmpty(mMaxValueTitle)) {
             setMaxValueTitle(String.valueOf(absoluteMaxValuePrim));
+        }
+        if (currentMinValue == DEFAULT_MIN_VALUE) {
+            currentMinValue = absoluteMinValuePrim;
+        }
+
+        if (currentMaxValue == DEFAULT_MAX_VALUE) {
+            currentMaxValue = absoluteMaxValuePrim;
+        }
+
+        if (currentMinValue > currentMaxValue || currentMinValue < absoluteMinValuePrim) {
+            currentMinValue = absoluteMinValuePrim;
+        }
+
+        if (currentMaxValue < currentMinValue || currentMaxValue > absoluteMaxValuePrim) {
+            currentMaxValue = absoluteMaxValuePrim;
         }
     }
 
@@ -425,6 +448,15 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     @Override
     protected synchronized void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
+        if (currentMinValue != 0) {
+            normalizedMinValue = (currentMinValue - absoluteMinValuePrim) / (absoluteMaxValuePrim - absoluteMinValuePrim);
+            currentMinValue = 0;
+        }
+
+        if (currentMaxValue != 0) {
+            normalizedMaxValue = (currentMaxValue - absoluteMinValuePrim) / (absoluteMaxValuePrim - absoluteMinValuePrim);
+            currentMaxValue = 0;
+        }
 
         drawBackground(canvas);
         int paddingTop = getHeight() / 2 - bg.getHeight() / 2;
