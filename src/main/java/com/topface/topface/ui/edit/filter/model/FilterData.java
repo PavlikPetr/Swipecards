@@ -16,7 +16,7 @@ public class FilterData implements Cloneable, Parcelable {
     public boolean isOnlineOnly;
     public int ageStart;
     public int ageEnd;
-    public boolean isPreetyOnly;
+    public boolean isPrettyOnly;
     public int sex;
 
     public FilterData(@NotNull DatingFilter filter) {
@@ -24,7 +24,7 @@ public class FilterData implements Cloneable, Parcelable {
         isOnlineOnly = DatingFilter.getOnlyOnlineField();
         ageStart = filter.ageStart;
         ageEnd = filter.ageEnd;
-        isPreetyOnly = filter.beautiful;
+        isPrettyOnly = filter.beautiful;
         sex = filter.sex;
     }
 
@@ -33,7 +33,7 @@ public class FilterData implements Cloneable, Parcelable {
         isOnlineOnly = model.onlineOnly.get();
         ageStart = model.ageStart.get();
         ageEnd = model.ageEnd.get();
-        isPreetyOnly = model.preetyOnly.get();
+        isPrettyOnly = model.prettyOnly.get();
         sex = model.isMaleSelected.get() ? Profile.BOY : Profile.GIRL;
     }
 
@@ -42,7 +42,7 @@ public class FilterData implements Cloneable, Parcelable {
         isOnlineOnly = in.readByte() != 0;
         ageStart = in.readInt();
         ageEnd = in.readInt();
-        isPreetyOnly = in.readByte() != 0;
+        isPrettyOnly = in.readByte() != 0;
         sex = in.readInt();
     }
 
@@ -69,7 +69,7 @@ public class FilterData implements Cloneable, Parcelable {
         if (isOnlineOnly != that.isOnlineOnly) return false;
         if (ageStart != that.ageStart) return false;
         if (ageEnd != that.ageEnd) return false;
-        if (isPreetyOnly != that.isPreetyOnly) return false;
+        if (isPrettyOnly != that.isPrettyOnly) return false;
         if (sex != that.sex) return false;
         return city != null ? city.equals(that.city) : that.city == null;
 
@@ -81,7 +81,7 @@ public class FilterData implements Cloneable, Parcelable {
         result = 31 * result + (isOnlineOnly ? 1 : 0);
         result = 31 * result + ageStart;
         result = 31 * result + ageEnd;
-        result = 31 * result + (isPreetyOnly ? 1 : 0);
+        result = 31 * result + (isPrettyOnly ? 1 : 0);
         result = 31 * result + sex;
         return result;
     }
@@ -97,7 +97,7 @@ public class FilterData implements Cloneable, Parcelable {
         dest.writeByte((byte) (isOnlineOnly ? 1 : 0));
         dest.writeInt(ageStart);
         dest.writeInt(ageEnd);
-        dest.writeByte((byte) (isPreetyOnly ? 1 : 0));
+        dest.writeByte((byte) (isPrettyOnly ? 1 : 0));
         dest.writeInt(sex);
     }
 }

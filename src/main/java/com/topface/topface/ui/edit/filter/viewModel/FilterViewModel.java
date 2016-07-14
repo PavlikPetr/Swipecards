@@ -34,7 +34,7 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
 
     public final ObservableBoolean isMaleSelected = new ObservableBoolean(App.get().getProfile().sex == Profile.GIRL);
     public final ObservableField<City> city = new ObservableField<>(App.get().getProfile().city);
-    public final ObservableBoolean preetyOnly = new ObservableBoolean();
+    public final ObservableBoolean prettyOnly = new ObservableBoolean();
     public final ObservableBoolean onlineOnly = new ObservableBoolean();
     public final ObservableBoolean isEnabled = new ObservableBoolean(true);
     public final ObservableInt ageStart = new ObservableInt();
@@ -84,7 +84,7 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
     private void setStartingValue(FilterData filter) {
         city.set(filter.city);
         isMaleSelected.set(filter.sex == Profile.BOY);
-        preetyOnly.set(filter.isPreetyOnly);
+        prettyOnly.set(filter.isPrettyOnly);
         onlineOnly.set(filter.isOnlineOnly);
         ageStart.set(filter.ageStart);
         ageEnd.set(filter.ageEnd);
@@ -105,12 +105,12 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
     }
 
     public final void onPreetyOnlyClick(View view) {
-        preetyOnly.set(((CheckBox) view).isChecked());
+        prettyOnly.set(((CheckBox) view).isChecked());
     }
 
     public final void onSelectCityClick(View view) {
         if (mIActivityDelegate != null) {
-            CitySearchPopup.getInstance(city.get().name).show(mIActivityDelegate.getSupportFragmentManager(), CitySearchPopup.TAG);
+            CitySearchPopup.newInstance().show(mIActivityDelegate.getSupportFragmentManager(), CitySearchPopup.TAG);
         }
     }
 

@@ -132,7 +132,7 @@
 
                 <CheckBox
                     style="@style/FilterSwitch"
-                    android:checked="@{viewModel.preetyOnly}"
+                    android:checked="@{viewModel.prettyOnly}"
                     android:enabled="@{viewModel.isEnabled}"
                     android:onClick="@{viewModel::onPreetyOnlyClick}"
                     android:text="@string/filter_only_beautiful" />

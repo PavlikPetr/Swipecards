@@ -71,7 +71,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private double mNormalizedMaxValue = 1d;
     private float mMaxTextWidth, mMaxTextHeight = 0f;
     private Thumb mPressedThumb = null;
-    private OnRangeSeekBarChangeListener<T> listener;
+    private OnRangeSeekBarChangeListener<T> mListener;
     private T mMinimalRange;
     private double mNormalizedMinimalRange = 0;
     private Bitmap mBgBitmap;
@@ -142,6 +142,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         setTextColor(a.getColorStateList(R.styleable.RangeSeekBar_textColor));
         setCurrentMaxValue((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_currentMaxValue, DEFAULT_MAX_VALUE)));
         setCurrentMinValue((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_currentMinValue, DEFAULT_MIN_VALUE)));
+        a.recycle();
     }
 
     private void setTextSize(float value) {
@@ -273,7 +274,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     }
 
     public void setMinimalRange(T minimalRange) {
-        this.mMinimalRange = minimalRange;
+        mMinimalRange = minimalRange;
         setNormalizedMinimalRange();
     }
 
@@ -333,7 +334,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
      * @param listener The listener to notify about changed selected values.
      */
     public void setOnRangeSeekBarChangeListener(OnRangeSeekBarChangeListener<T> listener) {
-        this.listener = listener;
+        mListener = listener;
     }
 
     /**
@@ -388,8 +389,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
                         }
                     }
 
-                    if (listener != null) {
-                        listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue(), mPressedThumb);
+                    if (mListener != null) {
+                        mListener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue(), mPressedThumb);
                     }
                 }
                 break;
@@ -408,8 +409,8 @@ public class RangeSeekBar<T extends Number> extends ImageView {
 
                 mPressedThumb = null;
                 invalidate();
-                if (listener != null) {
-                    listener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue(), mPressedThumb);
+                if (mListener != null) {
+                    mListener.onRangeSeekBarValuesChanged(this, getSelectedMinValue(), getSelectedMaxValue(), mPressedThumb);
                 }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN: {

@@ -37,7 +37,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
     private CitySearchPopupBinding mBinding;
     private String mCityNameOnStart;
 
-    public static CitySearchPopup getInstance(String cityNameOnStart) {
+    public static CitySearchPopup newInstance(String cityNameOnStart) {
         CitySearchPopup popup = new CitySearchPopup();
         Bundle bundle = new Bundle();
         bundle.putString(CITY_ON_START, cityNameOnStart);
@@ -45,13 +45,12 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
         return popup;
     }
 
-    public static CitySearchPopup getInstance() {
-        return getInstance(App.get().getProfile().city.name);
+    public static CitySearchPopup newInstance() {
+        return newInstance(App.get().getProfile().city.name);
     }
 
     @Override
     protected void parseArgs(@Nullable Bundle bundle) {
-        mCityNameOnStart = Utils.EMPTY;
         if (bundle != null && bundle.containsKey(CITY_ON_START)) {
             mCityNameOnStart = bundle.getString(CITY_ON_START, Utils.EMPTY);
         }

@@ -103,18 +103,6 @@ public class FilterFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected void prepareRequestSend() {
-        super.prepareRequestSend();
-
-    }
-
-    @Override
-    protected void finishRequestSend() {
-        super.finishRequestSend();
-
-    }
-
-    @Override
     protected String getTitle() {
         return getString(R.string.filter_screen_title);
     }
