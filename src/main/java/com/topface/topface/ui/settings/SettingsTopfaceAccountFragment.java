@@ -37,7 +37,7 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
@@ -55,21 +55,21 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
     private int mChangeButtonAction = ACTION_CHANGE_PASSWORD;
     private boolean mChangeEmail = false;
 
-    @Bind(R.id.llvLogoutLoading)
+    @BindView(R.id.llvLogoutLoading)
     View mLockerView;
-    @Bind(R.id.edText)
+    @BindView(R.id.edText)
     EditText mEditText;
-    @Bind(R.id.tvText)
+    @BindView(R.id.tvText)
     TextView mText;
-    @Bind(R.id.btnChange)
+    @BindView(R.id.btnChange)
     Button mBtnChange;
-    @Bind(R.id.btnChangeEmail)
+    @BindView(R.id.btnChangeEmail)
     Button mBtnChangeEmail;
-    @Bind(R.id.btnLogout)
+    @BindView(R.id.btnLogout)
     Button mBtnLogout;
-    @Bind(R.id.btnCodeWasSend)
+    @BindView(R.id.btnCodeWasSend)
     Button mBtnCodeWasSend;
-    @Bind(R.id.txtCodeWasSend)
+    @BindView(R.id.txtCodeWasSend)
     TextView mTxtCodeWasSend;
 
     @SuppressWarnings("unused")

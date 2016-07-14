@@ -34,7 +34,7 @@ import com.topface.topface.utils.social.STAuthMails;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
@@ -44,21 +44,21 @@ import butterknife.OnEditorAction;
  */
 public class TopfaceAuthFragment extends BaseAuthFragment {
 
-    @Bind(R.id.btnEntrance)
+    @BindView(R.id.btnEntrance)
     Button mTFButton;
-    @Bind(R.id.etMail)
+    @BindView(R.id.etMail)
     AutoCompleteTextView mLogin;
-    @Bind(R.id.edPassword)
+    @BindView(R.id.edPassword)
     EditText mPassword;
-    @Bind(R.id.ivShowPassword)
+    @BindView(R.id.ivShowPassword)
     ImageButton mShowPassword;
-    @Bind(R.id.redAlert)
+    @BindView(R.id.redAlert)
     RelativeLayout mWrongPasswordAlertView;
-    @Bind(R.id.redAlertTextView)
+    @BindView(R.id.redAlertTextView)
     TextView mWrongDataTextView;
-    @Bind(R.id.redAlertButton)
+    @BindView(R.id.redAlertButton)
     TextView mCreateAccountButton;
-    @Bind(R.id.btnRecoverPassword)
+    @BindView(R.id.btnRecoverPassword)
     Button mBtnRecoverPassword;
     private String mEmailForRestorePassword;
     private String mEmailForNewReg;

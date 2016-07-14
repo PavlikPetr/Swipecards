@@ -130,9 +130,18 @@
     <dimen name="offerwalls_empty_view_between_text_and_image">60dp</dimen>
     <dimen name="offerwalls_empty_view_text_side_paddings">20dp</dimen>
 
+    <dimen name="elevation_value">3dp</dimen>
+
     <dimen name="city_item_height">64dp</dimen>
 
     <dimen name="user_status_side_margin">6dp</dimen>
+
+    <dimen name="filter_item_height">62dp</dimen>
+    <dimen name="filter_title_item_height">56dp</dimen>
+    <dimen name="filter_both_side_item_padding">16dp</dimen>
+    <dimen name="filter_divider_height">1dp</dimen>
+    <dimen name="filter_item_text_size">16sp</dimen>
+    <dimen name="filter_value_padding">8dp</dimen>
 
     <!--PhotoSwitcher-->
     <dimen name="album_gift_margin_right">14dp</dimen>

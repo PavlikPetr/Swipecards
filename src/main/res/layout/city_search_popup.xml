@@ -35,7 +35,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/city_item_bg"
+            android:background="@color/gray_bg"
             android:paddingBottom="4dp"
             android:paddingTop="4dp">
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/city_item_height"
                 android:background="@color/bg_white"
-                android:elevation="3dp"
+                android:elevation="@dimen/elevation_value"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp">
 

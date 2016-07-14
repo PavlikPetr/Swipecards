@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.edit.filter.view.FilterFragment;
 
 public class EditContainerActivity extends BaseFragmentActivity {
 

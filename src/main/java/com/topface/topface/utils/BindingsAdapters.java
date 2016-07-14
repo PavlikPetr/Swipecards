@@ -15,6 +15,7 @@ import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.RangeSeekBar;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -99,5 +100,35 @@ public class BindingsAdapters {
     @BindingAdapter("setPhoto")
     public static void setPhoto(ImageViewRemote view, IPhoto photo) {
         view.setPhoto((photo));
+    }
+
+    @BindingAdapter("currentMinValue")
+    public static void setRangeSeekBarCurrentMinimalValue(RangeSeekBar view, int value) {
+        view.setCurrentMinimalValue(value);
+    }
+
+    @BindingAdapter("currentMaxValue")
+    public static void setRangeSeekBarCurrentMaximalValue(RangeSeekBar view, int value) {
+        view.setCurrentMaximalValue(value);
+    }
+
+    @BindingAdapter("maxValue")
+    public static void setRangeSeekBarMaxValue(RangeSeekBar view, int value) {
+        view.setMaximalValue(value);
+    }
+
+    @BindingAdapter("minValue")
+    public static void setRangeSeekBarMinValue(RangeSeekBar view, int value) {
+        view.setMinimalValue(value);
+    }
+
+    @BindingAdapter("maxValueTitle")
+    public static void setRangeSeekBarMaxValueTitle(RangeSeekBar view, String value) {
+        view.setMaximalValueTitle(value);
+    }
+
+    @BindingAdapter("minValueTitle")
+    public static void setRangeSeekBarMinValueTitle(RangeSeekBar view, String value) {
+        view.setMinimalValueTitle(value);
     }
 }

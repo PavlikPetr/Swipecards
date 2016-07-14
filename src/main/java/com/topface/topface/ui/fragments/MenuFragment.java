@@ -96,6 +96,9 @@ public class MenuFragment extends Fragment {
             if (options.bonus.enabled) {
                 adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
             }
+            else {
+                adapter.removeItem(getBonusItem());
+            }
             adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
             adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
             updateIntegrationPage(options);
