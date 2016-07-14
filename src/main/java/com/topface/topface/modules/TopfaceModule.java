@@ -31,6 +31,7 @@ import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
@@ -143,7 +144,8 @@ import dagger.Provides;
                 UserProfileFragment.class,
                 CitySearchPopupViewModel.class,
                 BonusPresenter.class,
-                ExpressMessageAction.class
+                ExpressMessageAction.class,
+                FilterViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

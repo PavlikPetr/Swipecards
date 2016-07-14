@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.edit.filter.viewModel.FilterViewModel" />
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/gray_bg"
+        android:fadingEdge="none"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp">
+
+            <LinearLayout
+                style="@style/ItemView.Filter"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/filter_both_side_item_padding"
+                android:paddingRight="@dimen/filter_both_side_item_padding">
+
+                <TextView
+                    style="@style/FilterItemTextStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:enabled="@{viewModel.isEnabled}"
+                    android:text="@string/filter_select_sex_title" />
+
+                <CheckBox
+                    style="@style/FilterCheckBox"
+                    android:layout_marginRight="20dp"
+                    android:checked="@{viewModel.isMaleSelected}"
+                    android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel::onMaleCheckBoxClick}"
+                    android:text="@string/filter_select_sex_male" />
+
+                <CheckBox
+                    style="@style/FilterCheckBox"
+                    android:checked="@{!viewModel.isMaleSelected}"
+                    android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel::onFemaleCheckBoxClick}"
+                    android:text="@string/filter_select_sex_female" />
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/FilterItemTextStyle.Title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/filter_title_item_height"
+                android:paddingLeft="@dimen/filter_both_side_item_padding"
+                android:paddingRight="@dimen/filter_both_side_item_padding"
+                android:text="@string/filter_city_age_parameters" />
+
+            <LinearLayout
+                style="@style/ItemView.Filter"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.topface.topface.ui.views.RangeSeekBar
+                    android:id="@+id/rangeSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/filter_item_height"
+                    android:layout_marginLeft="@dimen/filter_both_side_item_padding"
+                    android:layout_marginRight="@dimen/filter_both_side_item_padding"
+                    android:gravity="center_vertical"
+                    app:currentMaxValue="@{viewModel.ageEnd}"
+                    app:currentMinValue="@{viewModel.ageStart}"
+                    app:maxValue="@{viewModel.MAX_AGE}"
+                    app:maxValueTitle="@{viewModel.MAX_AGE_TITLE}"
+                    app:minValue="@{viewModel.MIN_AGE}"
+                    app:minValueTitle="@{viewModel.MIN_AGE_TITLE}"
+                    app:textColor="@color/filter_item_text_color"
+                    app:textPadding="@dimen/filter_value_padding"
+                    app:textSize="@dimen/filter_item_text_size" />
+
+                <FrameLayout style="@style/FilterDivider" />
+
+                <TextView
+                    style="@style/FilterItemTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/filter_item_height"
+                    android:layout_weight="1"
+                    android:drawableRight="@drawable/ic_next"
+                    android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel::onSelectCityClick}"
+                    android:paddingLeft="@dimen/filter_both_side_item_padding"
+                    android:paddingRight="@dimen/filter_both_side_item_padding"
+                    android:text="@{viewModel.city.name}" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/FilterItemTextStyle.Title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/filter_title_item_height"
+                android:paddingLeft="@dimen/filter_both_side_item_padding"
+                android:paddingRight="@dimen/filter_both_side_item_padding"
+                android:text="@string/settings_block_additional" />
+
+            <LinearLayout
+                style="@style/ItemView.Filter"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    style="@style/FilterSwitch"
+                    android:checked="@{viewModel.onlineOnly}"
+                    android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel::onOnlineOnlyClick}"
+                    android:text="@string/filter_only_online" />
+
+                <FrameLayout style="@style/FilterDivider" />
+
+                <CheckBox
+                    style="@style/FilterSwitch"
+                    android:checked="@{viewModel.prettyOnly}"
+                    android:enabled="@{viewModel.isEnabled}"
+                    android:onClick="@{viewModel::onPreetyOnlyClick}"
+                    android:text="@string/filter_only_beautiful" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>
