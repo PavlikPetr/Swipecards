@@ -1,7 +1,6 @@
 package com.topface.framework.imageloader;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +15,7 @@ import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.DrawableRes;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -562,25 +562,23 @@ public class BitmapUtils {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
         int multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-        Resources res = App.getContext().getResources();
         @SuppressWarnings("SuspiciousNameCombination")
-        Bitmap output = Bitmap.createBitmap(multWidth, multWidth, Bitmap.Config.ARGB_8888);
+        Bitmap output = scaleResource(R.drawable.album_present_mask, bitmapWidth, bitmapHeight).copy(Bitmap.Config.ARGB_8888, true);
         Canvas canvas = new Canvas(output);
-        final Rect src = new Rect(0, 0, bitmapWidth, bitmapHeight);
         final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
-        Paint circlePaint = new Paint();
-        circlePaint.setAntiAlias(true);
-        circlePaint.setColor(res.getColor(R.color.bg_white));
-        Paint canvasPaint = new Paint();
-        canvasPaint.setAntiAlias(true);
-        canvas.drawCircle(multWidth / 2, multWidth / 2, multWidth / 2, circlePaint);
+        final Rect rect = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        Paint canvasPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-        Paint circle = new Paint();
-        circle.setStrokeWidth(res.getDimension(R.dimen.album_gift_circle_stroke_width));
-        circle.setColor(res.getColor(R.color.album_gift_circle_color));
-        canvas.drawCircle(0, 0, radiusMult, circle);
-        canvas.drawBitmap(bitmap, src, dst, canvasPaint);
-        return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
+        canvas.drawBitmap(Bitmap.createScaledBitmap(bitmap, (int) (bitmapWidth / radiusMult), (int) (bitmapHeight / radiusMult), true), rect, dst, canvasPaint);
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        canvas.drawBitmap(scaleResource(R.drawable.album_present_mask, bitmapWidth, bitmapHeight), rect, rect, canvasPaint);
+        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+        canvas.drawBitmap(scaleResource(R.drawable.bg_for_present, bitmapWidth, bitmapHeight), rect, rect, canvasPaint);
+        return Bitmap.createScaledBitmap(output, bitmapWidth, bitmapHeight, true);
+    }
+
+    private static Bitmap scaleResource(@DrawableRes int id, int dstWidth, int dstHeight) {
+        return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(App.getContext().getResources(), id), dstWidth, dstHeight, true);
     }
 
     public static Bitmap getRoundAvatarBitmap(Bitmap bitmap) {
