@@ -889,4 +889,10 @@
     <string name="offers_rewarded_video_title">Free Coins</string>
     <string name="offers_rewarded_video_description">for watching a video</string>
     <string name="app_of_the_day_ad_badge">Ad</string>
+    <string name="filter_select_sex_title">I\'m seeking</string>
+    <string name="filter_select_sex_male">a man</string>
+    <string name="filter_select_sex_female">a woman</string>
+    <string name="filter_screen_title">Who are you seeking?</string>
+    <string name="album_photo_deleted">Photo deleted</string>
+    <string name="album_main_photo">Main profile photo</string>
 </resources>

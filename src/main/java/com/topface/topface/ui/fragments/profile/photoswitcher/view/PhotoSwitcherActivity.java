@@ -1,21 +1,18 @@
-package com.topface.topface.ui.fragments.profile;
+package com.topface.topface.ui.fragments.profile.photoswitcher.view;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
@@ -31,13 +28,13 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
+import com.topface.topface.databinding.AcPhotosBinding;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
-import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
@@ -45,15 +42,18 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
+import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos;
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
+import com.topface.topface.ui.fragments.profile.photoswitcher.PhotosManager;
+import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
+import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
-import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
-import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.json.JSONException;
 
@@ -78,6 +78,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
 
+    private static final String PHOTO_COUNTER_TEMPLATE = "%d/%d";
+
     private static final String PAGE_NAME = "photoswitcher";
     private static final int ANIMATION_TIME = 200;
     @Inject
@@ -88,7 +90,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             int realPosition = calcRealPosition(position, mPhotoLinks.size());
             setCounter(realPosition);
             refreshButtonsState();
-
             mPhotosManager.check(((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData(),
                     realPosition);
         }
@@ -105,14 +106,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (mPhotoAlbumControl != null) {
-                setPhotoAlbumControlVisibility(mPhotoAlbumControl.getVisibility() == View.GONE ||
-                        mPhotoAlbumControl.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.GONE, true);
-            }
+            setPhotoAlbumControlVisibility(mPhotoAlbumControl != null
+                    && mPhotoAlbumControl.getVisibility() != View.VISIBLE
+                    ? View.VISIBLE
+                    : View.GONE, true);
         }
     };
     private ViewGroup mOwnPhotosControl;
-    private ImageViewRemote mGiftImage;
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
@@ -146,8 +146,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private Photos mDeletedPhotos = new Photos();
     private ImageSwitcherLooped mImageSwitcher;
     private int mUid;
-    private String mUserGiftLink;
-    private PhotosManager mPhotosManager = new PhotosManager();
+    private PhotosManager mPhotosManager = new PhotosManager(new IUploadAlbumPhotos() {
+        @Override
+        public void sendRequest(int position) {
+            sendAlbumRequest(position);
+        }
+    });
     private TranslateAnimation mCurrentAnimation;
     private TranslateAnimation mAnimationHide = null;
     private TranslateAnimation mAnimationShow = null;
@@ -170,9 +174,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     };
     private int mCurrentPosition = 0;
-    private TextView mSetAvatarButton;
-    private ImageButton mDeleteButton;
     private UserProfileLoader mUserProfileLoader;
+    private AcPhotosBinding mBinding;
+    private PhotoSwitcherViewModel mViewModel;
 
     public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
         return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
@@ -197,20 +201,19 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setHasContent(false);
         super.onCreate(savedInstanceState);
-        App.from(getApplicationContext()).inject(this);
+        mBinding = DataBindingUtil.setContentView(this, getContentLayout());
+        App.get().inject(this);
+        mViewModel = new PhotoSwitcherViewModel(mBinding, this);
+        mBinding.setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
-        if (mUid == -1) {
-            Debug.log(this, "Intent param is wrong");
-            finish();
-            return;
-        }
         // Control layout
-        mPhotoAlbumControl = (ViewGroup) findViewById(R.id.loPhotoAlbumControl);
-        mOwnPhotosControl = (ViewGroup) mPhotoAlbumControl.findViewById(R.id.loBottomPanel);
+        mPhotoAlbumControl = mBinding.loPhotoAlbumControl;
+        mOwnPhotosControl = mBinding.loBottomPanel;
 
         Photo preloadPhoto = intent.getParcelableExtra(INTENT_PRELOAD_PHOTO);
         if (preloadPhoto != null) {
@@ -220,7 +223,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 DefaultImageLoader.getInstance(this).preloadImage(s, null);
             }
         }
-        extractUserGifts(intent);
         if (intent.getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             int photosCount = intent.getIntExtra(INTENT_PHOTOS_COUNT, 0);
             int position = intent.getIntExtra(INTENT_ALBUM_POS, 0);
@@ -232,11 +234,59 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             initViews(position, photosCount);
         } else {
             mUserProfileLoader = new UserProfileLoader(
-                    (RelativeLayout) findViewById(R.id.lockScreen),
-                    findViewById(R.id.llvProfileLoading),
+                    mBinding.lockScreen,
+                    mBinding.llvProfileLoading,
                     mUserProfileReceiver,
                     mUid
             );
+        }
+    }
+
+    private void sendAlbumRequest(int position) {
+        AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_PREVIEW);
+        request.callback(new DataApiHandler<AlbumPhotos>() {
+
+            @Override
+            protected void success(AlbumPhotos newPhotos, IApiResponse response) {
+                for (Photo photo : newPhotos) {
+                    mPhotoLinks.set(photo.getPosition(), photo);
+                }
+                /*
+                Записываем в кэш только в том случае если фоточки не имеют фейков, в противном случае
+                в провили будут пустые итем на месте фоточек, и перестанет работать автодагрузка так как фактически
+                из-за фейков нечего будет подгружать. По этому дабы не писать кучу оверхеда для такой исключительной ситуации
+                "теряем" объекты загруженные в этой активити
+                 */
+                if (mUid == App.get().getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
+                    Profile profile = App.get().getProfile();
+                    profile.photos = mPhotoLinks;
+                    appState.setData(profile);
+                }
+
+                if (mImageSwitcher != null) {
+                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            protected AlbumPhotos parseResponse(ApiResponse response) {
+                return new AlbumPhotos(response);
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+            }
+        }).exec();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mViewModel != null) {
+            mViewModel.release();
+        }
+        if (mUserProfileLoader != null) {
+            mUserProfileLoader.release();
         }
     }
 
@@ -245,21 +295,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return R.layout.ac_photos;
     }
 
-    private void extractUserGifts(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            ArrayList<Gift> array = extras.getParcelableArrayList(INTENT_GIFT);
-            if (array != null && array.size() > 0) {
-                mUserGiftLink = array.get(0).link;
-            }
-        }
-    }
-
     private void setPhotoAlbumControlVisibility(int state, boolean isAnimated) {
-        if (state == View.GONE || state == View.INVISIBLE) {
+        ActionBar actionbar = getSupportActionBar();
+        if (state != View.VISIBLE) {
             mPhotoAlbumControlVisibility = View.GONE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            getSupportActionBar().hide();
+            if (actionbar != null) {
+                actionbar.hide();
+            }
             if (isAnimated) {
                 animateHidePhotoAlbumControlAction();
             } else {
@@ -268,7 +311,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         } else {
             mPhotoAlbumControlVisibility = View.VISIBLE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            getSupportActionBar().show();
+            if (actionbar != null) {
+                actionbar.show();
+            }
             if (isAnimated) {
                 animateShowPhotoAlbumControlAction();
             } else {
@@ -290,8 +335,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // stub is needed, because sometimes(while gallery is waiting for user profile load)
         // ViewPager becomes visible without data
         // and its post init hangs app
-        ViewStub stub = (ViewStub) findViewById(R.id.gallery_album_stub);
-        stub.inflate();
+        mBinding.galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageSwitcherLooped) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
@@ -315,7 +359,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     protected void onLoadProfile() {
         super.onLoadProfile();
         initControls();
-        initGiftImage();
         refreshButtonsState();
     }
 
@@ -384,54 +427,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return position % realItemsAmount;
     }
 
-    private void initGiftImage() {
-        mGiftImage = (ImageViewRemote) mPhotoAlbumControl.findViewById(R.id.loGiftImage);
-        mGiftImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(PhotoSwitcherActivity.this, mUid),
-                        GiftsActivity.INTENT_REQUEST_GIFT
-                );
-            }
-        });
-        if (mUid == App.from(this).getProfile().uid) {
-            mGiftImage.setVisibility(View.GONE);
-        } else {
-            mGiftImage.setVisibility(View.VISIBLE);
-            showGiftImage();
-        }
-    }
-
-    private void showGiftImage(String link) {
-        mUserGiftLink = link;
-        showGiftImage();
-    }
-
-    private void showGiftImage() {
-        if (mGiftImage != null) {
-            if (mUserGiftLink != null) {
-                // show last added gift
-                // at first drop background
-                // after set image
-                mGiftImage.setBackgroundResource(0);
-                mGiftImage.setRemoteSrc(mUserGiftLink);
-            } else {
-                // show default image when user haven't any gifts yet
-                // at first drop image
-                // after set background
-                mGiftImage.setImageDrawable(null);
-                mGiftImage.setBackgroundResource(R.drawable.ic_gift);
-            }
-        }
-    }
-
     private void initControls() {
-        final Profile profile = App.from(this).getProfile();
+        final Profile profile = App.get().getProfile();
         if (mUid == profile.uid) {
             // - set avatar button
-            mSetAvatarButton = (TextView) mPhotoAlbumControl.findViewById(R.id.btnSetAvatar);
-            mSetAvatarButton.setOnClickListener(new View.OnClickListener() {
+            mViewModel.setOnAvatarButtonClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
@@ -447,8 +447,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 }
             });
             // - delete button
-            mDeleteButton = (ImageButton) mPhotoAlbumControl.findViewById(R.id.btnDelete);
-            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            mViewModel.setOnDeleteButtonClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
@@ -462,16 +461,18 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                     }
                 }
             });
-            if (mPhotoLinks.size() <= 1) mDeleteButton.setVisibility(View.GONE);
+            if (mPhotoLinks.size() <= 1) {
+                mViewModel.setTrashVisibility(false);
+            }
             mOwnPhotosControlVisibility = View.VISIBLE;
         } else {
             mOwnPhotosControlVisibility = View.GONE;
-            mPhotoAlbumControl.findViewById(R.id.loBottomPanel).setVisibility(mOwnPhotosControlVisibility);
+            mOwnPhotosControl.setVisibility(mOwnPhotosControlVisibility);
         }
     }
 
     public void deletePhotoRequest() {
-        final Profile profile = App.from(this).getProfile();
+        final Profile profile = App.get().getProfile();
         if (mDeletedPhotos.isEmpty()) return;
         final Photos photos = (Photos) profile.photos.clone();
         final int totalPhotos = profile.photosCount;
@@ -517,7 +518,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
+                Profile profile = App.get().getProfile();
                 profile.photo = currentPhoto;
                 appState.setData(profile);
                 CacheProfile.sendUpdateProfileBroadcast();
@@ -586,33 +587,32 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mPhotoLinks != null) {
             int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            actionBarView.setArrowUpView((mCurrentPosition + 1) + "/" + photosLinksSize);
+            actionBarView.setArrowUpView(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE, mCurrentPosition + 1, photosLinksSize));
         }
     }
 
     private void refreshButtonsState() {
-        Profile profile = App.from(this).getProfile();
-        if (mUid == profile.uid && mSetAvatarButton != null && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
+        Profile profile = App.get().getProfile();
+        if (mUid == profile.uid && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
-                mDeleteButton.setVisibility(View.VISIBLE);
-                mDeleteButton.setImageResource(R.drawable.ico_restore_photo_selector);
-                mSetAvatarButton.setText(R.string.edit_restore);
-                mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                mViewModel.setTrashEnable(true);
+                mViewModel.setTrashVisibility(true);
+                mViewModel.setTrashSrc(R.drawable.ico_restore_photo_selector);
+                mViewModel.setAvatarVisibility(false);
+                mViewModel.setButtonText(R.string.album_photo_deleted);
+                //TODO узнать у ios об использовании строк, см. ниже
+//                mViewModel.setButtonText(R.string.edit_restore);
             } else {
-                if (profile.photo != null && profile.photo.getId() == currentPhoto.getId()) {
-                    mDeleteButton.setVisibility(View.GONE);
-                } else {
-                    mDeleteButton.setVisibility(View.VISIBLE);
-                    mDeleteButton.setImageResource(R.drawable.ico_delete_selector);
-                }
-                if (profile.photo != null && currentPhoto.getId() == profile.photo.getId()) {
-                    mSetAvatarButton.setText(R.string.your_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ico_selected, 0, 0, 0);
-                } else {
-                    mSetAvatarButton.setText(R.string.on_avatar);
-                    mSetAvatarButton.setCompoundDrawablesWithIntrinsicBounds(profile.sex == Profile.BOY ? R.drawable.ico_avatar_man_selector : R.drawable.ico_avatar_woman_selector, 0, 0, 0);
-                }
+                mViewModel.setAvatarVisibility(true);
+                mViewModel.setTrashVisibility(true);
+                mViewModel.setTrashSrc(R.drawable.album_delete_button_selector);
+                boolean isMainPhoto = profile.photo != null && currentPhoto.getId() == profile.photo.getId();
+                mViewModel.setAvatarEnable(!isMainPhoto);
+                mViewModel.setTrashEnable(!isMainPhoto);
+                mViewModel.setButtonText(isMainPhoto ? R.string.album_main_photo : 0);
+                //TODO узнать у ios об использовании строк, см. ниже
+//                mViewModel.setButtonText(isMainPhoto ? R.string.your_avatar : R.string.on_avatar);
             }
         }
     }
@@ -626,43 +626,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         return false;
     }
 
-    private void sendAlbumRequest(int position) {
-        AlbumRequest request = new AlbumRequest(this, mUid, position, AlbumRequest.MODE_ALBUM, AlbumLoadController.FOR_PREVIEW);
-        request.callback(new DataApiHandler<AlbumPhotos>() {
-
-            @Override
-            protected void success(AlbumPhotos newPhotos, IApiResponse response) {
-                for (Photo photo : newPhotos) {
-                    mPhotoLinks.set(photo.getPosition(), photo);
-                }
-                /*
-                Записываем в кэш только в том случае если фоточки не имеют фейков, в противном случае
-                в провили будут пустые итем на месте фоточек, и перестанет работать автодагрузка так как фактически
-                из-за фейков нечего будет подгружать. По этому дабы не писать кучу оверхеда для такой исключительной ситуации
-                "теряем" объекты загруженные в этой активити
-                 */
-                if (mUid == App.from(PhotoSwitcherActivity.this).getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
-                    Profile profile = App.from(PhotoSwitcherActivity.this).getProfile();
-                    profile.photos = mPhotoLinks;
-                    appState.setData(profile);
-                }
-
-                if (mImageSwitcher != null) {
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            protected AlbumPhotos parseResponse(ApiResponse response) {
-                return new AlbumPhotos(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-            }
-        }).exec();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -671,6 +634,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     FeedGift feedGift = getFeedGiftFromIntent(data);
                     if (feedGift != null) {
+                        if (mViewModel != null) {
+                            mViewModel.showGift(feedGift.gift.link);
+                        }
                         Intent intent = new Intent(ADD_NEW_GIFT);
                         intent.putExtra(INTENT_GIFT, feedGift);
                         LocalBroadcastManager.getInstance(this)
@@ -687,7 +653,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (extras != null) {
             SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
             if (sendGiftAnswer != null) {
-                showGiftImage(sendGiftAnswer.history.link);
                 feedGift = new FeedGift();
                 feedGift.gift = new Gift(
                         Integer.parseInt(sendGiftAnswer.history.id),
@@ -754,170 +719,5 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         animation.setDuration(ANIMATION_TIME);
         animation.setAnimationListener(mAnimationListener);
         mPhotoAlbumControl.startAnimation(animation);
-    }
-
-
-    public interface IUserProfileReceiver {
-        void onReceiveUserProfile(User user);
-    }
-
-    private class PhotosManager {
-        private int mLimit;
-
-        public PhotosManager() {
-            LoadController loadController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
-            mLimit = loadController.getItemsLimitByConnectionType();
-        }
-
-        /**
-         * sends request for photo data load, if need
-         *
-         * @param photos   array of photos
-         * @param position _real_ index of current photo in this array
-         */
-        public void check(final Photos photos, final int position) {
-            int indexToLeft = calcRightIndex(photos, position - DEFAULT_PRELOAD_ALBUM_RANGE);
-            if (photos.get(indexToLeft).isFake()) {
-                sendAlbumRequest(calcRightIndex(photos, position - mLimit));
-            }
-            int indexToRight = calcRightIndex(photos, position + DEFAULT_PRELOAD_ALBUM_RANGE);
-            if (photos.get(indexToRight).isFake()) {
-                sendAlbumRequest(calcRightIndex(photos, position));
-            }
-        }
-
-        /**
-         * converts some index (negative for example) to fit in array size
-         *
-         * @param photos source array
-         * @param index  some index to fit
-         * @return correct index, fitted in array size
-         */
-        private int calcRightIndex(final Photos photos, final int index) {
-            if (index < 0) {
-                int res = index;
-                while (res < 0) {
-                    res += photos.size();
-                }
-                return res;
-            } else if (index >= photos.size()) {
-                int res = index;
-                while (res >= photos.size()) {
-                    res -= 1;
-                }
-                return res;
-            }
-            return index;
-        }
-    }
-
-    private class UserProfileLoader {
-        private int mLastLoadedProfileId;
-        private ApiResponse mLastResponse;
-        private RelativeLayout mLockScreen;
-        private RetryViewCreator mRetryView;
-        private View mLoaderView;
-        private IUserProfileReceiver mReceiver = null;
-        private int mProfileId;
-
-        public UserProfileLoader(RelativeLayout lockScreen, View loaderView, IUserProfileReceiver receiver, final int profileId) {
-            mLockScreen = lockScreen;
-            mLoaderView = loaderView;
-            mReceiver = receiver;
-            mProfileId = profileId;
-            mRetryView = new RetryViewCreator.Builder(PhotoSwitcherActivity.this, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loadUserProfile(PhotoSwitcherActivity.this);
-                }
-            }).build();
-            mLockScreen.addView(mRetryView.getView());
-        }
-
-        private boolean isLoaded(int profileId) {
-            return profileId == mLastLoadedProfileId;
-        }
-
-        public void loadUserProfile(Context context) {
-            if (isLoaded(mProfileId)) return;
-            mLockScreen.setVisibility(View.GONE);
-            mLoaderView.setVisibility(View.VISIBLE);
-            UserRequest userRequest = new UserRequest(mProfileId, context);
-            registerRequest(userRequest);
-            userRequest.callback(new DataApiHandler<User>() {
-
-                @Override
-                protected void success(User user, IApiResponse response) {
-                    mLastLoadedProfileId = mProfileId;
-                    if (user != null) {
-                        mLastResponse = (ApiResponse) response;
-                    }
-                    if (user == null) {
-                        showRetryBtn();
-                    } else if (user.banned) {
-                        showForBanned();
-                    } else if (user.deleted) {
-                        showForDeleted();
-                    } else {
-                        mLoaderView.setVisibility(View.INVISIBLE);
-                        setProfile(user);
-                    }
-                }
-
-                @Override
-                protected User parseResponse(ApiResponse response) {
-                    return new User(mProfileId, response, getContext());
-                }
-
-                @Override
-                public void fail(final int codeError, IApiResponse response) {
-                    if (response.isCodeEqual(ErrorCodes.INCORRECT_VALUE, ErrorCodes.USER_NOT_FOUND)) {
-                        showForNotExisting();
-                    } else {
-                        showRetryBtn();
-                    }
-                }
-            }).exec();
-
-        }
-
-        public ApiResponse getLastResponse() {
-            return mLastResponse;
-        }
-
-        private void setProfile(User user) {
-            if (mReceiver != null) {
-                mReceiver.onReceiveUserProfile(user);
-            }
-        }
-
-        private void showLockWithText(String text, boolean onlyMessage) {
-            if (mRetryView != null) {
-                mLoaderView.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.VISIBLE);
-                mRetryView.setText(text);
-                mRetryView.showRetryButton(!onlyMessage);
-            }
-        }
-
-        private void showLockWithText(String text) {
-            showLockWithText(text, true);
-        }
-
-        private void showForBanned() {
-            showLockWithText(getString(R.string.user_baned));
-        }
-
-        private void showRetryBtn() {
-            showLockWithText(getString(R.string.general_profile_error), false);
-        }
-
-        private void showForDeleted() {
-            showLockWithText(getString(R.string.user_is_deleted));
-        }
-
-        private void showForNotExisting() {
-            showLockWithText(getString(R.string.user_does_not_exist), true);
-        }
     }
 }

@@ -8,7 +8,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.topface.topface.App;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 
 /**
  * Fragment with own photo updating photo data on adding/removing photos

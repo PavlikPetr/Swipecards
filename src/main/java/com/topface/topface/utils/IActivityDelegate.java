@@ -31,4 +31,6 @@ public interface IActivityDelegate {
     boolean isActivityRestoredState();
 
     Intent getIntent();
+
+    void finish();
 }

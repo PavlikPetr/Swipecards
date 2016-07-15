@@ -917,4 +917,10 @@
     <string name="offers_rewarded_video_title">Monedas gratis</string>
     <string name="offers_rewarded_video_description">Por la revisión de vídeos</string>
     <string name="app_of_the_day_ad_badge">Anúncio</string>
+    <string name="filter_select_sex_title">Busco</string>
+    <string name="filter_select_sex_male">un hombre</string>
+    <string name="filter_select_sex_female">una mujer</string>
+    <string name="filter_screen_title">¿A quién buscas?</string>
+    <string name="album_photo_deleted">Foto borrada</string>
+    <string name="album_main_photo">Foto principal de perfil</string>
 </resources>

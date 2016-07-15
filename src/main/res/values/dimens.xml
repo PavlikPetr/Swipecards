@@ -143,4 +143,15 @@
     <dimen name="filter_item_text_size">16sp</dimen>
     <dimen name="filter_value_padding">8dp</dimen>
 
+    <!--PhotoSwitcher-->
+    <dimen name="album_gift_margin_right">14dp</dimen>
+    <dimen name="album_gift_margin_bottom">14dp</dimen>
+    <dimen name="album_delete_button_padding">8dp</dimen>
+    <dimen name="album_delete_button_margin_right">18dp</dimen>
+    <dimen name="album_avatar_button_drawable_padding">4dp</dimen>
+    <dimen name="album_gift_size">86dp</dimen>
+    <dimen name="album_gift_circle_stroke_width">3dp</dimen>
+
+    <dimen name="album_buttons_size">26dp</dimen>
+
 </resources>

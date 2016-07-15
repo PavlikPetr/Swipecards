@@ -204,6 +204,16 @@
         <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
     </style>
 
+    <style name="ButtonWhiteText.SetAvatar">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
     <style name="ButtonWhiteText.Mini">
         <item name="android:textSize">13sp</item>
     </style>
@@ -561,8 +571,29 @@
         <item name="android:layout_margin">0dp</item>
     </style>
 
-    <style name="AlbumGift" parent="Gift">
+    <style name="AlbumGiftBase" parent="Gift">
         <item name="postProcessor">rounded</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">@dimen/album_gift_margin_bottom</item>
+    </style>
+
+    <style name="AlbumGift" parent="AlbumGiftBase">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/album_gift_margin_right</item>
+    </style>
+
+    <style name="AlbumDeleteButtonBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:padding">@dimen/album_delete_button_padding</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="AlbumDeleteButton" parent="AlbumDeleteButtonBase">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">@dimen/album_delete_button_margin_right</item>
     </style>
 
     <style name="ChatMessageLayout">
@@ -883,6 +914,7 @@
         <item name="android:drawablePadding">8dp</item>
         <item name="android:textColor">@color/filter_item_text_color</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:drawableLeft">@drawable/filter_checkbox</item>
     </style>
 
@@ -1430,7 +1462,8 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
         <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
-    </style>.
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 
     <style name="FilterDivider">
         <item name="android:layout_width">match_parent</item>
@@ -1447,4 +1480,20 @@
         <item name="android:layout_height">@dimen/filter_item_height</item>
     </style>
 
+
+    <style name="AlbumButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:padding">18dp</item>
+    </style>
+
+    <style name="AlbumButton.Trash">
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="AlbumButton.Avatar">
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
 </resources>
