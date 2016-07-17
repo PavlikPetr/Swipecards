@@ -26,6 +26,8 @@ import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 /**
@@ -49,6 +51,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
     private static final int INVALID_POINTER_ID = 255;
     private static final int ACTION_POINTER_INDEX_MASK = 0x0000ff00;
     private static final int ACTION_POINTER_INDEX_SHIFT = 8;
+    private static final int DEFAULT_RANGE = 0;
 
     private float mTextSize = DEFAULT_TEXT_SIZE;
     private String mMaxValueTitle = EMPTY_STRING;
@@ -142,6 +145,7 @@ public class RangeSeekBar<T extends Number> extends ImageView {
         setTextColor(a.getColorStateList(R.styleable.RangeSeekBar_textColor));
         setCurrentMaxValue((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_currentMaxValue, DEFAULT_MAX_VALUE)));
         setCurrentMinValue((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_currentMinValue, DEFAULT_MIN_VALUE)));
+        setMinimalRange((T) Integer.valueOf(a.getInteger(R.styleable.RangeSeekBar_range, DEFAULT_RANGE)));
         a.recycle();
     }
 
