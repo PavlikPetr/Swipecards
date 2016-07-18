@@ -96,5 +96,6 @@
         <attr name="textColor" format="color" />
         <attr name="currentMinValue" format="integer" />
         <attr name="currentMaxValue" format="integer" />
+        <attr name="range" format="integer" />
     </declare-styleable>
 </resources>
