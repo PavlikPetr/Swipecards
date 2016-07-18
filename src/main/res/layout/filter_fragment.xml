@@ -84,7 +84,7 @@
                     app:minValueTitle="@{viewModel.MIN_AGE_TITLE}"
                     app:textColor="@color/filter_item_text_color"
                     app:textPadding="@dimen/filter_value_padding"
-                    app:range="4"
+                    app:range="5"
                     app:textSize="@dimen/filter_item_text_size" />
 
                 <FrameLayout style="@style/FilterDivider" />
