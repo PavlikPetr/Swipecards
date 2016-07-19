@@ -639,26 +639,23 @@ public class AuthFragment extends BaseAuthFragment {
             paint.setStyle(Paint.Style.FILL);
             paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
             Bitmap result = null;
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             int widthBitmaps = 0;
             int margin = Utils.getPxFromDp(5);
 
             for (Integer resId : resIdList) {
-                    bitmap = BitmapFactory.decodeResource(res, resId);
-                    if (result == null) {
-                        result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeResIdList) + paint.measureText(text) + (margin * sizeResIdList)),
-                                Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + Utils.getPxFromDp(8) , bitmap.getConfig());
-                        canvas.setBitmap(result);
-                        margin = 0;
-                    }
-                    else {
-                        margin = Utils.getPxFromDp(5);
-                    }
-                    canvas.drawBitmap(bitmap, widthBitmaps + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
-                    widthBitmaps = widthBitmaps + bitmap.getWidth();
-            }
-
-            if (bitmap != null) {
+                bitmap = BitmapFactory.decodeResource(res, resId);
+                if (result == null) {
+                    result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeResIdList) + paint.measureText(text) + (margin * sizeResIdList)),
+                            Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + Utils.getPxFromDp(8) , bitmap.getConfig());
+                    canvas.setBitmap(result);
+                    margin = 0;
+                }
+                else {
+                    margin = Utils.getPxFromDp(5);
+                }
+                canvas.drawBitmap(bitmap, widthBitmaps + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
+                widthBitmaps = widthBitmaps + bitmap.getWidth();
                 bitmap.recycle();
             }
 
