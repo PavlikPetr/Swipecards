@@ -11,19 +11,14 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.FilterFragmentBinding;
-import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
+import com.topface.topface.ui.dialogs.IOnCitySelected;
 import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.IActivityDelegate;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.viewModels.BaseViewModel;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
-
-import rx.Subscription;
 
 public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
 
@@ -40,22 +35,12 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
     public final ObservableInt ageStart = new ObservableInt();
     public final ObservableInt ageEnd = new ObservableInt();
 
-    @Inject
-    EventBus mEventBus;
     private IActivityDelegate mIActivityDelegate;
-    private Subscription mSubscription;
 
     public FilterViewModel(FilterFragmentBinding binding, @NotNull IActivityDelegate delegate, @NotNull FilterData filter) {
         super(binding);
-        App.get().inject(this);
         mIActivityDelegate = delegate;
         setStartingValue(filter);
-        mSubscription = mEventBus.getObservable(City.class).subscribe(new RxUtils.ShortSubscription<City>() {
-            @Override
-            public void onNext(City city) {
-                FilterViewModel.this.city.set(city);
-            }
-        });
         initRangeSeekBar();
     }
 
@@ -110,14 +95,20 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
 
     public final void onSelectCityClick(View view) {
         if (mIActivityDelegate != null) {
-            CitySearchPopup.newInstance().show(mIActivityDelegate.getSupportFragmentManager(), CitySearchPopup.TAG);
+            CitySearchPopup popup = CitySearchPopup.newInstance();
+            popup.setOnCitySelected(new IOnCitySelected() {
+                @Override
+                public void onSelected(City city) {
+                    FilterViewModel.this.city.set(city);
+                }
+            });
+            popup.show(mIActivityDelegate.getSupportFragmentManager(), CitySearchPopup.TAG);
         }
     }
 
     @Override
     public void release() {
         super.release();
-        RxUtils.safeUnsubscribe(mSubscription);
         mIActivityDelegate = null;
     }
 }

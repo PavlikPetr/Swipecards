@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Попап выбора города
  * Created by tiberal on 28.06.16.
  */
-public class CitySearchPopup extends AbstractDialogFragment implements ICityPopupCloseListener {
+public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySelected {
 
     public static final String CITY_LIST_DATA = "city_list_data";
     public static final String INPUT_DATA = "input_data";
@@ -36,6 +36,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
     private CityAdapter mAdapter;
     private CitySearchPopupBinding mBinding;
     private String mCityNameOnStart;
+    private IOnCitySelected mOnCitySelected;
 
     public static CitySearchPopup newInstance(String cityNameOnStart) {
         CitySearchPopup popup = new CitySearchPopup();
@@ -122,9 +123,15 @@ public class CitySearchPopup extends AbstractDialogFragment implements ICityPopu
         mModel.release();
     }
 
-    @Override
-    public void onClose() {
-        getDialog().cancel();
+    public void setOnCitySelected(IOnCitySelected listener) {
+        mOnCitySelected = listener;
     }
 
+    @Override
+    public void onSelected(City city) {
+        if(mOnCitySelected!=null){
+            mOnCitySelected.onSelected(city);
+        }
+        getDialog().cancel();
+    }
 }

@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.topface.framework.JsonUtils;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
@@ -24,27 +23,21 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.state.EventBus;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.OwnGiftsActivity;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.EditFormItemsEditDialog;
 import com.topface.topface.ui.dialogs.EditTextFormDialog;
+import com.topface.topface.ui.dialogs.IOnCitySelected;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
@@ -53,9 +46,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     public static final String PAGE_NAME = "profile.form";
 
-    @Inject
-    EventBus mEventBus;
-    private Subscription mCitySubscription;
     private FragmentManager mFragmentManager;
 
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
@@ -124,7 +114,21 @@ public class ProfileFormFragment extends AbstractFormFragment {
                 FormItem item = (FormItem) valueView.getTag();
 
                 if (item.type == FormItem.CITY) {
-                    CitySearchPopup.newInstance().show(getActivity().getSupportFragmentManager(), CitySearchPopup.TAG);
+                    CitySearchPopup popup = CitySearchPopup.newInstance();
+                    popup.setOnCitySelected(new IOnCitySelected() {
+                        @Override
+                        public void onSelected(City city) {
+                            City profileCity = App.get().getProfile().city;
+                            if (city != null && profileCity != null && !profileCity.equals(city)) {
+                                UserConfig config = App.getUserConfig();
+                                config.setUserCityChanged(true);
+                                config.saveConfig();
+                                mFormEditedListener.onEditingFinished(
+                                        new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
+                            }
+                        }
+                    });
+                    popup.show(getActivity().getSupportFragmentManager(), CitySearchPopup.TAG);
                 } else if (item.dataId == FormItem.NO_RESOURCE_ID && item.type != FormItem.SEX) {
                     if (mFragmentManager != null) {
                         EditTextFormDialog.newInstance(item.getTitle(), item, mFormEditedListener).
@@ -153,27 +157,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         mFragmentManager = getActivity().getSupportFragmentManager();
-        mCitySubscription = mEventBus.getObservable(City.class).subscribe(new Action1<City>() {
-            @Override
-            public void call(City city) {
-                City profileCity = App.get().getProfile().city;
-                if (city != null && profileCity != null && !profileCity.equals(city)) {
-                    UserConfig config = App.getUserConfig();
-                    config.setUserCityChanged(true);
-                    config.saveConfig();
-                    mFormEditedListener.onEditingFinished(
-                            new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
-                }
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Debug.error("City change observable failed", throwable);
-            }
-        });
     }
 
     @Override
@@ -200,7 +185,6 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtils.safeUnsubscribe(mCitySubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 
