@@ -3,7 +3,6 @@ package com.topface.topface.ui.dialogs;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+import static com.topface.topface.viewModels.CitySearchPopupViewModel.CITY_ON_START;
+import static com.topface.topface.viewModels.CitySearchPopupViewModel.DEFAULT_CITIES;
+
 /**
  * Попап выбора города
  * Created by tiberal on 28.06.16.
@@ -30,32 +32,25 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
     public static final String CITY_LIST_DATA = "city_list_data";
     public static final String INPUT_DATA = "input_data";
     public static final String TAG = "city_search_popup";
-    private static final String CITY_ON_START = "city_on_start";
 
     private CitySearchPopupViewModel mModel;
     private CityAdapter mAdapter;
     private CitySearchPopupBinding mBinding;
-    private String mCityNameOnStart;
     private IOnCitySelected mOnCitySelected;
 
-    public static CitySearchPopup newInstance(String cityNameOnStart) {
+    public static CitySearchPopup newInstance(@Nullable String cityNameOnStart, @Nullable ArrayList<City> defaultCities) {
         CitySearchPopup popup = new CitySearchPopup();
         Bundle bundle = new Bundle();
-        bundle.putString(CITY_ON_START, cityNameOnStart);
+        bundle.putString(CITY_ON_START, cityNameOnStart != null ? cityNameOnStart : App.get().getProfile().city.name);
+        if (ListUtils.isNotEmpty(defaultCities)) {
+            bundle.putParcelableArrayList(DEFAULT_CITIES, defaultCities);
+        }
         popup.setArguments(bundle);
         return popup;
     }
 
     public static CitySearchPopup newInstance() {
-        return newInstance(App.get().getProfile().city.name);
-    }
-
-    @Override
-    protected void parseArgs(@Nullable Bundle bundle) {
-        if (bundle != null && bundle.containsKey(CITY_ON_START)) {
-            mCityNameOnStart = bundle.getString(CITY_ON_START, Utils.EMPTY);
-        }
-        mCityNameOnStart = TextUtils.isEmpty(mCityNameOnStart) ? App.get().getProfile().city.name : mCityNameOnStart;
+        return newInstance(null, null);
     }
 
     @Override
@@ -65,7 +60,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
         mBinding = DataBindingUtil.bind(root);
         mBinding.cityList.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mBinding.cityList.setAdapter(mAdapter);
-        mModel = new CitySearchPopupViewModel(mBinding, mCityNameOnStart, this);
+        mModel = new CitySearchPopupViewModel(mBinding, getArguments(), this);
         mAdapter.setOnItemClickListener(mModel);
         mBinding.setViewModel(mModel);
         ((TextView) root.findViewById(R.id.title)).setText(R.string.my_location);
@@ -129,7 +124,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
 
     @Override
     public void onSelected(City city) {
-        if(mOnCitySelected!=null){
+        if (mOnCitySelected != null) {
             mOnCitySelected.onSelected(city);
         }
         getDialog().cancel();
