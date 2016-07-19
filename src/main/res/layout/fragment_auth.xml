@@ -113,15 +113,15 @@
                 </RelativeLayout>
             </ScrollView>
 
-            <Button
+            <ImageView
                 android:id="@+id/btnOtherServices"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/other_login_bottom_margin"
                 android:layout_gravity="center_horizontal"
                 android:background="@null"
                 android:onClick="@{handler::otherSocButtonClick}"
-                android:text="@{handler.getOtherServicesButtonText}"
-                android:textColor="@color/auth_fragment_text_color" />
+                android:src="@{handler.getOtherServices}" />
         </LinearLayout>
 
         <ProgressBar

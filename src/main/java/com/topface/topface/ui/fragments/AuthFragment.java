@@ -10,8 +10,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableFloat;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -611,6 +615,46 @@ public class AuthFragment extends BaseAuthFragment {
                     return getServiceIcon(source);
                 }
             }, null);
+        }
+
+        public BitmapDrawable getOtherServices() {
+            String text = mContext.getString(R.string.other_auth);
+            int sizeKeys = AuthServiceButtons.getOtherButtonsList().keySet().size();
+            Canvas canvas = new Canvas();
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(mContext.getResources().getColor(R.color.auth_fragment_text_color));
+            paint.setTextSize(mContext.getResources().getDimension(R.dimen.login_other_service_text_size));
+            paint.setStyle(Paint.Style.FILL);
+            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+            float widthText = paint.measureText(text);
+            Bitmap result = null;
+            int x = 0;
+            int margin = 10;
+
+            for (SocServicesAuthButtons keys : AuthServiceButtons.getOtherButtonsList().keySet()) {
+                if (!keys.isMainScreenLoginEnable() && keys.isEnabled()) {
+                    Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), keys.getSmallButtonsIconRes());
+                    if (result == null) {
+                        result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeKeys) + widthText + (margin * sizeKeys)),
+                                Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + 8 , bitmap.getConfig());
+                        canvas.setBitmap(result);
+                        margin = 0;
+                    }
+                    else {
+                        margin = 10;
+                    }
+                    canvas.drawBitmap(bitmap, x + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
+                    x = x + bitmap.getWidth();
+                }
+            }
+
+            canvas.drawText(
+                    text,
+                    x + (margin * sizeKeys),
+                    ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)),
+                    paint);
+
+            return new BitmapDrawable(mContext.getResources(), result);
         }
 
         private BitmapDrawable getServiceIcon(String name) {
