@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
@@ -19,6 +20,8 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.viewModels.BaseViewModel;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 
 public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
 
@@ -95,7 +98,7 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
 
     public final void onSelectCityClick(View view) {
         if (mIActivityDelegate != null) {
-            CitySearchPopup popup = CitySearchPopup.newInstance();
+            CitySearchPopup popup = CitySearchPopup.newInstance(null, getDefaultCities());
             popup.setOnCitySelected(new IOnCitySelected() {
                 @Override
                 public void onSelected(City city) {
@@ -104,6 +107,14 @@ public class FilterViewModel extends BaseViewModel<FilterFragmentBinding> {
             });
             popup.show(mIActivityDelegate.getSupportFragmentManager(), CitySearchPopup.TAG);
         }
+    }
+
+    @NotNull
+    private ArrayList<City> getDefaultCities() {
+        ArrayList<City> defaultCities = new ArrayList<>();
+        String defCityName = App.getContext().getResources().getString(R.string.filter_cities_all);
+        defaultCities.add(City.createCity(City.ALL_CITIES, defCityName, defCityName));
+        return defaultCities;
     }
 
     @Override
