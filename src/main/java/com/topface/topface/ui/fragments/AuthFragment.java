@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableFloat;
 import android.graphics.Bitmap;
@@ -59,6 +60,8 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -618,43 +621,54 @@ public class AuthFragment extends BaseAuthFragment {
         }
 
         public BitmapDrawable getOtherServices() {
+            Resources res = mContext.getResources();
             String text = mContext.getString(R.string.other_auth);
-            int sizeKeys = AuthServiceButtons.getOtherButtonsList().keySet().size();
-            Canvas canvas = new Canvas();
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            paint.setColor(mContext.getResources().getColor(R.color.auth_fragment_text_color));
-            paint.setTextSize(mContext.getResources().getDimension(R.dimen.login_other_service_text_size));
-            paint.setStyle(Paint.Style.FILL);
-            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-            float widthText = paint.measureText(text);
-            Bitmap result = null;
-            int x = 0;
-            int margin = 10;
+            ArrayList<Integer> resIdList = new ArrayList<>();
 
             for (SocServicesAuthButtons keys : AuthServiceButtons.getOtherButtonsList().keySet()) {
                 if (!keys.isMainScreenLoginEnable() && keys.isEnabled()) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), keys.getSmallButtonsIconRes());
+                    resIdList.add(keys.getSmallButtonsIconRes());
+                }
+            }
+
+            int sizeResIdList = resIdList.size();
+            Canvas canvas = new Canvas();
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(res.getColor(R.color.auth_fragment_text_color));
+            paint.setTextSize(res.getDimension(R.dimen.login_other_service_text_size));
+            paint.setStyle(Paint.Style.FILL);
+            paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+            Bitmap result = null;
+            Bitmap bitmap = null;
+            int widthBitmaps = 0;
+            int margin = Utils.getPxFromDp(5);
+
+            for (Integer resId : resIdList) {
+                    bitmap = BitmapFactory.decodeResource(res, resId);
                     if (result == null) {
-                        result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeKeys) + widthText + (margin * sizeKeys)),
-                                Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + 8 , bitmap.getConfig());
+                        result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeResIdList) + paint.measureText(text) + (margin * sizeResIdList)),
+                                Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + Utils.getPxFromDp(8) , bitmap.getConfig());
                         canvas.setBitmap(result);
                         margin = 0;
                     }
                     else {
-                        margin = 10;
+                        margin = Utils.getPxFromDp(5);
                     }
-                    canvas.drawBitmap(bitmap, x + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
-                    x = x + bitmap.getWidth();
-                }
+                    canvas.drawBitmap(bitmap, widthBitmaps + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
+                    widthBitmaps = widthBitmaps + bitmap.getWidth();
+            }
+
+            if (bitmap != null) {
+                bitmap.recycle();
             }
 
             canvas.drawText(
                     text,
-                    x + (margin * sizeKeys),
+                    widthBitmaps + (margin * sizeResIdList),
                     ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)),
                     paint);
 
-            return new BitmapDrawable(mContext.getResources(), result);
+            return new BitmapDrawable(res, result);
         }
 
         private BitmapDrawable getServiceIcon(String name) {
