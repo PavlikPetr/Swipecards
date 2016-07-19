@@ -510,6 +510,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
                                 @Override
                                 public void fail(int codeError, IApiResponse response) {
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
                                 }
                             }).exec();
                         }
