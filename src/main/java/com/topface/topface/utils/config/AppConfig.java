@@ -61,6 +61,7 @@ public class AppConfig extends AbstractConfig {
     private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
     private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
     private static final String IS_HARDWARE_ACCELERATED = "is_hardware_accelerated";
+    private static final String IS_REFERRER_TRACK_SENT = "is_referrer_track_sent";
 
     public AppConfig(Context context) {
         super(context);
@@ -457,5 +458,19 @@ public class AppConfig extends AbstractConfig {
      */
     public void setHardwareAcceleratedState(boolean isSent) {
         setField(getSettingsMap(), IS_HARDWARE_ACCELERATED, isSent);
+    }
+
+    /**
+     * @return true if topfac referrer track was sent to server
+     */
+    public boolean isReferrerTrackDataSent() {
+        return getBooleanField(getSettingsMap(), IS_REFERRER_TRACK_SENT);
+    }
+
+    /**
+     * Set state of sending topface referrer track
+     */
+    public void setReferrerTrackDataSent(boolean isSent) {
+        setField(getSettingsMap(), IS_REFERRER_TRACK_SENT, isSent);
     }
 }
