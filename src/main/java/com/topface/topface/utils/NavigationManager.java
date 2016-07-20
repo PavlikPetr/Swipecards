@@ -61,7 +61,6 @@ public class NavigationManager {
     private ISimpleCallback iNeedCloseMenuCallback;
     private Subscription mDrawerLayoutStateSubscription;
     private IActivityDelegate mActivityDelegate;
-    private FragmentManager mFragmentManager;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
     private Subscription mNavigationStateSubscription;
@@ -82,7 +81,7 @@ public class NavigationManager {
             public void call(WrappedNavigationData wrappedLeftMenuSettingsData) {
                 if (mActivityDelegate != null) {
                     if (mActivityDelegate.isActivityRestoredState()) {
-                        selectFragment(wrappedLeftMenuSettingsData, false);
+                        selectFragment(wrappedLeftMenuSettingsData);
                     } else {
                         mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, wrappedLeftMenuSettingsData.getData());
                     }
@@ -96,24 +95,24 @@ public class NavigationManager {
         });
     }
 
-    public void init(@NotNull FragmentManager fragmentManager) {
-        mFragmentManager = fragmentManager;
-        selectFragment(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY), false);
+    public void init() {
+        selectFragment(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
     }
 
     private String getTag(LeftMenuSettingsData settings) {
         return "fragment_switch_controller_" + settings.getUniqueKey();
     }
 
-    private void switchFragment(final WrappedNavigationData data, boolean executePending) {
-        if (data == null || data.getData() == null || mFragmentManager == null) {
+    private void switchFragment(final WrappedNavigationData data) {
+        if (data == null || data.getData() == null || mActivityDelegate == null) {
             return;
         }
         LeftMenuSettingsData leftMenuSettingsData = data.getData();
-        BaseFragment oldFragment = (BaseFragment) mFragmentManager.findFragmentById(R.id.fragment_content);
+        FragmentManager fm = mActivityDelegate.getSupportFragmentManager();
+        BaseFragment oldFragment = (BaseFragment) fm.findFragmentById(R.id.fragment_content);
         String fragmentTag = getTag(leftMenuSettingsData);
         Debug.log("NavigationManager: Try switch to fragment with tag " + fragmentTag + " (old fragment " + getTag(mFragmentSettings) + ")");
-        BaseFragment newFragment = (BaseFragment) mFragmentManager.findFragmentByTag(fragmentTag);
+        BaseFragment newFragment = (BaseFragment) fm.findFragmentByTag(fragmentTag);
 
         //Если не нашли в FragmentManager уже существующего инстанса, то создаем новый
         if (newFragment == null) {
@@ -123,7 +122,7 @@ public class NavigationManager {
 
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != leftMenuSettingsData.getUniqueKey()) {
             final String fragmnetName = newFragment.getClass().getName();
-            FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            FragmentTransaction transaction = fm.beginTransaction();
             //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
             if (App.getAppConfig().isHardwareAccelerated()) {
                 transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -134,12 +133,7 @@ public class NavigationManager {
             }
             transaction.replace(R.id.fragment_content, newFragment, fragmentTag);
             transaction.commit();
-            //Вызываем executePendingTransactions, если передан соответвующий флаг
-            //и сохраняем результат
-            String transactionResult = executePending ?
-                    Boolean.toString(mFragmentManager.executePendingTransactions()) :
-                    "no executePending";
-            Debug.log("NavigationManager: commit " + transactionResult);
+            Debug.log("NavigationManager: commit " + fm.executePendingTransactions());
             mFragmentSettings = leftMenuSettingsData;
             /**
              * подписываемся на жизненный цикл загруженного фрагмента
@@ -236,11 +230,11 @@ public class NavigationManager {
     }
 
     public void selectFragment(LeftMenuSettingsData fragmentSettings) {
-        selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY), false);
+        selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
     }
 
     @SuppressLint("SwitchIntDef")
-    private void selectFragment(WrappedNavigationData data, boolean executePending) {
+    private void selectFragment(WrappedNavigationData data) {
         mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
         switch (data.getData().getFragmentId()) {
             case FragmentIdData.BALLANCE:
@@ -269,7 +263,7 @@ public class NavigationManager {
             case FragmentIdData.UNDEFINED:
                 return;
             default:
-                switchFragment(data, executePending);
+                switchFragment(data);
         }
     }
 
@@ -334,7 +328,6 @@ public class NavigationManager {
         if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
             mDrawerLayoutStateSubscription.unsubscribe();
         }
-        mFragmentManager = null;
         iNeedCloseMenuCallback = null;
     }
 }
