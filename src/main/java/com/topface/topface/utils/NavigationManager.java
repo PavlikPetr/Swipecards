@@ -259,6 +259,8 @@ public class NavigationManager {
                         }
                     });
                     break;
+                }else{
+                    switchFragment(data);
                 }
             case FragmentIdData.UNDEFINED:
                 return;
