@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
@@ -128,10 +129,10 @@ public class AuthToken {
 
 
     private boolean isToken() {
-        boolean hasSocialToken = (mTokenInfo.mTokenKey != null && mTokenInfo.mTokenKey.length() > 0);
-        boolean hasTopfaceToken = (mTokenInfo.mLogin != null && mTokenInfo.mLogin.length() > 0
-                && mTokenInfo.mPassword != null && mTokenInfo.mPassword.length() > 0
-                && mTokenInfo.mUserSocialId != null && mTokenInfo.mUserSocialId.length() > 0);
+        boolean hasSocialToken = !TextUtils.isEmpty(mTokenInfo.mTokenKey);
+        boolean hasTopfaceToken = !TextUtils.isEmpty(mTokenInfo.mLogin) &&
+                !TextUtils.isEmpty(mTokenInfo.mPassword) &&
+                !TextUtils.isEmpty(mTokenInfo.mUserSocialId);
         return mTokenInfo.mSnType.equals(SN_TOPFACE) ? hasTopfaceToken : hasSocialToken;
     }
 
