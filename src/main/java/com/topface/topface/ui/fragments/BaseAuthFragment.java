@@ -125,6 +125,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
     protected void auth(final AuthToken token) {
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
+        App.getConfig().onAuthTokenReceived();
         showProgress();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
         authRequest.callback(new ApiHandler() {
@@ -132,7 +133,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
             public void success(IApiResponse response) {
                 AuthToken.getInstance().writeTokenInPreferences();
                 AuthorizationManager.saveAuthInfo(response);
-                App.getConfig().onAuthTokenReceived();
                 loadAllProfileData();
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
