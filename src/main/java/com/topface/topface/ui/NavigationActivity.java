@@ -376,7 +376,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initDrawerLayout() {
-        getNavigationManager().init(getSupportFragmentManager());
+        getNavigationManager().init();
         initLeftMenu();
         mDrawerLayout = new DrawerLayoutManager<>((HackyDrawerLayout) findViewById(R.id.loNavigationDrawer));
         mDrawerLayout.initLeftMneuDrawerLayout();

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -153,10 +152,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
     private DatingInstantMessageController mDatingInstantMessageController;
-    private Drawable singleMutual;
-    private Drawable singleDelight;
-    private Drawable doubleMutual;
-    private Drawable doubleDelight;
     private boolean mCanSendAlbumReq = true;
     private SearchUser mCurrentUser;
     private int mCurrentStatusBarColor;
@@ -351,7 +346,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mIsHide = savedInstanceState != null && savedInstanceState.getBoolean(FULLSCREEN_STATE);
         mPreloadManager = new PreloadManager<>();
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
-        initMutualDrawables();
         // Rate Controller
         mRateController = new RateController(this, SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
@@ -500,17 +494,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
             mAnimationHelper.addView(mDatingResources);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initMutualDrawables() {
-        if (isAdded()) {
-            singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
-            singleDelight = getResources().getDrawable(R.drawable.dating_admiration_selector);
-
-            doubleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
-            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_admiration_selector);
         }
     }
 
@@ -1012,13 +995,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setLikeButtonDrawables(SearchUser currUser) {
         // buttons drawables
-        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.isMutualPossible ? doubleMutual
-                : singleMutual, null, null);
+        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(0, currUser.isMutualPossible ? R.drawable.dating_mutual_selector
+                : R.drawable.dating_like_selector, 0, 0);
         mMutualBtn.setText(currUser.isMutualPossible ? App.getContext().getString(R.string.general_mutual)
                 : App.getContext().getString(R.string.general_sympathy));
         if (null != mDelightBtn) {
-            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                    currUser.isMutualPossible ? doubleDelight : singleDelight, null, null);
+            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                    currUser.isMutualPossible ? R.drawable.dating_dbl_admiration_selector : R.drawable.dating_admiration_selector, 0, 0);
         }
     }
 
