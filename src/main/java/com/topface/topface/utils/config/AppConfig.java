@@ -120,7 +120,7 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, IS_HARDWARE_ACCELERATED, false);
         // флаг о том была ли отправка данных referrer track
         addField(settingsMap, IS_REFERRER_TRACK_SENT, false);
-        // данные referrer trackА
+        // данные referrer track
         addField(settingsMap, REFERRER_TRACK, DEFAULT_REFERRER_TRACK);
     }
 
