@@ -429,6 +429,16 @@
             </intent-filter>
         </receiver>
 
+        <!--Topface install referrer receiver-->
+        <receiver
+            android:name=".receivers.InstallReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <!--AdWords-->
         <receiver
             android:name="com.google.ads.conversiontracking.InstallReceiver"
