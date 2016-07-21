@@ -98,6 +98,13 @@ public class MenuFragment extends Fragment {
             } else {
                 adapter.removeItem(getBonusItem());
             }
+
+            if (options.showRefillBalanceInSideMenu) {
+                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.BONUS);
+            }
+            else {
+                adapter.removeItem(getBalansItem());
+            }
             adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
             adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
             updateIntegrationPage(options);
@@ -312,14 +319,23 @@ public class MenuFragment extends Fragment {
         arrayList.add(new LeftMenuData(R.drawable.ic_chat_left_menu, R.string.settings_messages, mCountersData.getDialogs(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors, mCountersData.getVisitors(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby, mCountersData.getPeopleNearby(), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
+
+        if (options.showRefillBalanceInSideMenu) {
+            arrayList.add(getBalansItem());
+        }
+
         if (options.bonus.enabled) {
             arrayList.add(getBonusItem());
         }
-        arrayList.add(new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE)));
+
         if (App.get().getProfile().isEditor()) {
             arrayList.add(getEditorItem());
         }
         return arrayList;
+    }
+
+    private LeftMenuData getBalansItem() {
+        return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE));
     }
 
     private LeftMenuData getBonusItem() {

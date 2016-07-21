@@ -170,6 +170,7 @@ public class Options extends AbstractData {
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
 
+    public boolean showRefillBalanceInSideMenu = false;
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
@@ -377,6 +378,9 @@ public class Options extends AbstractData {
             if (appOfTheDayJsonObject != null) {
                 appOfTheDay = JsonUtils.optFromJson(appOfTheDayJsonObject.toString(), AppOfTheDay.class, new AppOfTheDay());
             }
+
+            showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
+
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
