@@ -10,7 +10,6 @@ import android.widget.Button;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
 
 public class EmptyActivity extends AppCompatActivity {
     @Override
@@ -35,8 +34,6 @@ public class EmptyActivity extends AppCompatActivity {
     }
 
     private void doSomething() {
-        CitySearchPopup popup1 = new CitySearchPopup();
-        popup1.show(getSupportFragmentManager(), CitySearchPopup.class.getName());
     }
 
     @Override

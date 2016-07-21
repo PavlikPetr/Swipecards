@@ -28,7 +28,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -51,15 +51,15 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
     private String mPasswordConfirmation;
     private String mOldPassword;
 
-    @Bind(R.id.llvLogoutLoading)
+    @BindView(R.id.llvLogoutLoading)
     View mLockerView;
-    @Bind(R.id.edMainField)
+    @BindView(R.id.edMainField)
     EditText mEdMainField;
-    @Bind(R.id.edConfirmationField)
+    @BindView(R.id.edConfirmationField)
     EditText mEdConfirmationField;
-    @Bind(R.id.edOldPassword)
+    @BindView(R.id.edOldPassword)
     EditText mEdOldPassword;
-    @Bind(R.id.btnSave)
+    @BindView(R.id.btnSave)
     Button mBtnSave;
 
     @SuppressWarnings("unused")

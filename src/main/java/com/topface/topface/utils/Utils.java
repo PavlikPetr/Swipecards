@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -22,7 +23,9 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.InflateException;
@@ -389,6 +392,11 @@ public class Utils {
             editText.requestFocus();
             keyboard.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
         }
+    }
+
+    public static float convert(int unit, float size) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        return TypedValue.applyDimension(unit, size, metrics);
     }
 
     @SuppressWarnings("UnusedDeclaration")

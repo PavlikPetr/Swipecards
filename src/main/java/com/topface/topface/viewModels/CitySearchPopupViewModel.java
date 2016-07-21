@@ -2,6 +2,8 @@ package com.topface.topface.viewModels;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.topface.framework.JsonUtils;
@@ -12,20 +14,18 @@ import com.topface.topface.requests.CitiesRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.data_models.Cities;
 import com.topface.topface.requests.handlers.ApiHandler;
-import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.adapters.CityAdapter;
 import com.topface.topface.ui.adapters.ItemEventListener;
-import com.topface.topface.ui.dialogs.ICityPopupCloseListener;
+import com.topface.topface.ui.dialogs.IOnCitySelected;
 import com.topface.topface.utils.RxFieldObservable;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.UserConfig;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -38,20 +38,25 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBinding> implements ItemEventListener.OnRecyclerViewItemClickListener<City> {
 
-    @Inject
-    EventBus mEventBus;
+    public static final String DEFAULT_CITIES = "default_cities";
+    public static final String CITY_ON_START = "city_on_start";
+
     private static final int INPUT_DELAY = 300;
     private CitiesRequest citiesRequest;
-    private ICityPopupCloseListener mCloseListener;
+    private IOnCitySelected mSelectedListener;
     public RxFieldObservable<String> editTextObservable = new RxFieldObservable<>();
     public ObservableBoolean isRequestInProgress = new ObservableBoolean();
-    public ObservableField<String> cityObservableField = new ObservableField<>(App.get().getProfile().city.name);
+    public ObservableField<String> cityObservableField = new ObservableField<>();
     private CompositeSubscription mViewModelSubscription = new CompositeSubscription();
+    private ArrayList<City> defaultCities = new ArrayList<>();
 
-    public CitySearchPopupViewModel(@NotNull final CitySearchPopupBinding binding, @NotNull ICityPopupCloseListener closeListener) {
-        super(binding);
-        App.get().inject(this);
-        mCloseListener = closeListener;
+    public CitySearchPopupViewModel(@NotNull final CitySearchPopupBinding binding, @Nullable Bundle bundle, @NotNull IOnCitySelected listener) {
+        super(binding, bundle);
+        if (bundle != null && bundle.containsKey(DEFAULT_CITIES)) {
+            defaultCities = bundle.getParcelableArrayList(DEFAULT_CITIES);
+        }
+        mSelectedListener = listener;
+        cityObservableField.set(bundle != null && bundle.containsKey(CITY_ON_START) ? bundle.getString(CITY_ON_START, Utils.EMPTY) : Utils.EMPTY);
         mViewModelSubscription.add(editTextObservable.getFiledObservable()
                 .filter(new Func1<String, Boolean>() {
                     @Override
@@ -74,12 +79,8 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
     @Override
     public void itemClick(View view, int itemPosition, City data) {
         cityObservableField.set(data.name);
-        UserConfig config = App.getUserConfig();
-        config.setUserCityChanged(true);
-        config.saveConfig();
-        mEventBus.setData(data);
-        if(mCloseListener != null){
-            mCloseListener.onClose();
+        if (mSelectedListener != null) {
+            mSelectedListener.onSelected(data);
         }
     }
 
@@ -92,6 +93,9 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
                 Cities cities = JsonUtils.fromJson(response.toString(), Cities.class);
                 CityAdapter cityAdapter = ((CityAdapter) getBinding().cityList.getAdapter());
                 cityAdapter.clearData();
+                if (TextUtils.isEmpty(prefix)) {
+                    cityAdapter.addData(defaultCities);
+                }
                 cityAdapter.addData(cities.cities, prefix);
             }
 
@@ -123,6 +127,6 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
         super.release();
         cancelRequestIfNeed();
         RxUtils.safeUnsubscribe(mViewModelSubscription);
-        mCloseListener = null;
+        mSelectedListener = null;
     }
 }
