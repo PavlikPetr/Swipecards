@@ -104,7 +104,7 @@ public class NavigationManager {
     }
 
     private void switchFragment(final WrappedNavigationData data) {
-        if (data == null || data.getData() == null || mActivityDelegate == null) {
+        if (data == null || data.getData() == null || mActivityDelegate == null || !mActivityDelegate.isActivityRestoredState()) {
             return;
         }
         LeftMenuSettingsData leftMenuSettingsData = data.getData();
@@ -235,7 +235,9 @@ public class NavigationManager {
 
     @SuppressLint("SwitchIntDef")
     private void selectFragment(WrappedNavigationData data) {
-        mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
+        if (mActivityDelegate != null) {
+            mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
+        }
         switch (data.getData().getFragmentId()) {
             case FragmentIdData.BALLANCE:
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
@@ -259,7 +261,7 @@ public class NavigationManager {
                         }
                     });
                     break;
-                }else{
+                } else {
                     switchFragment(data);
                 }
             case FragmentIdData.UNDEFINED:

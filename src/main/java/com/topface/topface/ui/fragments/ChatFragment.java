@@ -141,8 +141,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         @Override
         public void onReceive(Context context, Intent intent) {
             String id = intent.getStringExtra(GCMUtils.USER_ID_EXTRA);
+            int userId;
+            try {
+                userId = Integer.parseInt(id);
+            }catch (NumberFormatException e){
+                userId = -1;
+            }
             final int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
-            if (!TextUtils.isEmpty(id) && Integer.parseInt(id) == mUserId) {
+            if (!TextUtils.isEmpty(id) && userId == mUserId) {
                 update(true, ChatUpdateType.UPDATE_COUNTERS);
                 startTimer();
                 GCMUtils.cancelNotification(App.getContext(), type);
