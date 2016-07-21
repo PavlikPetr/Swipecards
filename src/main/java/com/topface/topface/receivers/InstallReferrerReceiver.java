@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.topface.topface.App;
 import com.topface.topface.data.InstallReferrerData;
@@ -21,7 +20,6 @@ public class InstallReferrerReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("InstallReferrerReceiver", "catch intent " + intent);
         String referrer = null;
         Bundle extras = intent.getExtras();
         if (extras != null) {
