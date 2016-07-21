@@ -93,10 +93,9 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
-            if (options.bonus.enabled) {
+            if (options.offerwallsSettings.isEnable()) {
                 adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
-            }
-            else {
+            } else {
                 adapter.removeItem(getBonusItem());
             }
             adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
