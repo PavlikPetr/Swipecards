@@ -93,18 +93,20 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
+
+            if (options.showRefillBalanceInSideMenu) {
+                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.GEO);
+            }
+            else {
+                adapter.removeItem(getBalansItem());
+            }
+
             if (options.offerwallsSettings.isEnable()) {
                 adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
             } else {
                 adapter.removeItem(getBonusItem());
             }
 
-            if (options.showRefillBalanceInSideMenu) {
-                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.BONUS);
-            }
-            else {
-                adapter.removeItem(getBalansItem());
-            }
             adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
             adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
             updateIntegrationPage(options);
