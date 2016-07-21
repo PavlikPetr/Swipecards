@@ -8,6 +8,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
@@ -16,6 +17,7 @@ import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ConnectionManager;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +64,9 @@ public class AppConfig extends AbstractConfig {
     private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
     private static final String IS_HARDWARE_ACCELERATED = "is_hardware_accelerated";
     private static final String IS_REFERRER_TRACK_SENT = "is_referrer_track_sent";
+    private static final String REFERRER_TRACK = "referrer_track";
+
+    private static final String DEFAULT_REFERRER_TRACK = "";
 
     public AppConfig(Context context) {
         super(context);
@@ -113,6 +118,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
         // current device, current session hardwareaccelerated state
         addField(settingsMap, IS_HARDWARE_ACCELERATED, false);
+        // флаг о том была ли отправка данных referrer track
+        addField(settingsMap, IS_REFERRER_TRACK_SENT, false);
+        // данные referrer trackА
+        addField(settingsMap, REFERRER_TRACK, DEFAULT_REFERRER_TRACK);
     }
 
     protected SharedPreferences getPreferences() {
@@ -472,5 +481,26 @@ public class AppConfig extends AbstractConfig {
      */
     public void setReferrerTrackDataSent(boolean isSent) {
         setField(getSettingsMap(), IS_REFERRER_TRACK_SENT, isSent);
+    }
+
+    /**
+     * Save last catched user referrer track
+     *
+     * @param track user referrer track
+     * @return state of operation
+     */
+    @SuppressWarnings("ConstantConditions")
+    public boolean setReferrerTrackData(@NotNull InstallReferrerData track) {
+        return setField(getSettingsMap(), REFERRER_TRACK, track != null ? track.getInstallReferrerTrackData() : DEFAULT_REFERRER_TRACK);
+    }
+
+    /**
+     * Return last saved user referrer track
+     *
+     * @return user referrer track
+     */
+    @Nullable
+    public InstallReferrerData getReferrerTrackData() {
+        return new InstallReferrerData(getStringField(getSettingsMap(), REFERRER_TRACK));
     }
 }
