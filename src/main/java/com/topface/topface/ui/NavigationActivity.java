@@ -31,17 +31,16 @@ import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.promo.PromoPopupManager;
-import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.state.DrawerLayoutState;
-import com.topface.topface.state.EventBus;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
+import com.topface.topface.ui.dialogs.IOnCitySelected;
 import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
@@ -65,6 +64,7 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.ChosenStartAction;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
+import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
@@ -92,7 +92,7 @@ import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
-    private static final String FRAGMENT_SETTINGS = "fragment_settings";
+    public static final String FRAGMENT_SETTINGS = "fragment_settings";
     private static final int EXIT_TIMEOUT = 3000;
 
     private Intent mPendingNextIntent;
@@ -113,8 +113,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     NavigationState mNavigationState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
-    @Inject
-    EventBus mEventBus;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private PopupManager mPopupManager;
@@ -221,32 +219,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
-        mSubscription.add(mEventBus.getObservable(City.class).subscribe(new Action1<City>() {
-            @Override
-            public void call(final City city) {
-                if (city != null) {
-                    SettingsRequest request = new SettingsRequest(App.getContext());
-                    request.cityid = city.id;
-                    request.callback(new ApiHandler() {
-                        @Override
-                        public void success(IApiResponse response) {
-                            Profile profile = App.get().getProfile();
-                            profile.city = city;
-                            mAppState.setData(profile);
-                        }
-
-                        @Override
-                        public void fail(int codeError, IApiResponse response) {
-                        }
-                    }).exec();
-                }
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Debug.error("City change observable failed", throwable);
-            }
-        }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
             finish();
@@ -298,12 +270,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     private List<IStartAction> getActionsList() {
         List<IStartAction> startActions = new ArrayList<>();
         mPopupManager = new PopupManager(this);
-        startActions.add(PromoExpressMessages.createPromoPopupStartAction(AC_PRIORITY_HIGH, new PromoExpressMessages.PopupRedirectListener() {
-            @Override
-            public void onRedirect() {
-                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS));
-            }
-        }));
+        startActions.add(new ExpressMessageAction(this, AC_PRIORITY_HIGH));
         startActions.add(new ChosenStartAction().chooseFrom(
                 new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
                 new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
@@ -409,7 +376,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     private void initDrawerLayout() {
-        getNavigationManager().init(getSupportFragmentManager());
+        getNavigationManager().init();
         initLeftMenu();
         mDrawerLayout = new DrawerLayoutManager<>((HackyDrawerLayout) findViewById(R.id.loNavigationDrawer));
         mDrawerLayout.initLeftMneuDrawerLayout();
@@ -462,9 +429,20 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
+    private void tryPostponedStartFragment() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(FRAGMENT_SETTINGS)) {
+            LeftMenuSettingsData data = intent.getExtras().getParcelable(FRAGMENT_SETTINGS);
+            if (data != null) {
+                showFragment(data);
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        tryPostponedStartFragment();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
             if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
@@ -514,8 +492,30 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             public void callOnUi() {
                 CitySearchPopup popup = (CitySearchPopup) getSupportFragmentManager().findFragmentByTag(CitySearchPopup.TAG);
                 if (popup == null) {
-                    popup = new CitySearchPopup();
+                    popup = CitySearchPopup.newInstance();
                 }
+                popup.setOnCitySelected(new IOnCitySelected() {
+                    @Override
+                    public void onSelected(final City city) {
+                        if (city != null) {
+                            SettingsRequest request = new SettingsRequest(App.getContext());
+                            request.cityid = city.id;
+                            request.callback(new ApiHandler() {
+                                @Override
+                                public void success(IApiResponse response) {
+                                    Profile profile = App.get().getProfile();
+                                    profile.city = city;
+                                    mAppState.setData(profile);
+                                }
+
+                                @Override
+                                public void fail(int codeError, IApiResponse response) {
+                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
+                                }
+                            }).exec();
+                        }
+                    }
+                });
                 popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {

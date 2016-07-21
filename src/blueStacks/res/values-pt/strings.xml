@@ -824,4 +824,8 @@
   <string name="offers_rewarded_video_title">Moedas Grátis</string>
   <string name="offers_rewarded_video_description">por ver um vídeo</string>
   <string name="app_of_the_day_ad_badge">Publicidade</string>
+  <string name="filter_select_sex_title">Estou à procura de</string>
+  <string name="filter_select_sex_male">um homem</string>
+  <string name="filter_select_sex_female">uma mulher</string>
+  <string name="filter_screen_title">Estás à procura de quem?</string>
 </resources>

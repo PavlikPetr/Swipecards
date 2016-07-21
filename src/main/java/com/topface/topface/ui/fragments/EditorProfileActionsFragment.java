@@ -26,7 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -70,11 +70,11 @@ public class EditorProfileActionsFragment extends BaseFragment {
         }
     }
 
-    @Bind(R.id.editor_profile_scroll)
+    @BindView(R.id.editor_profile_scroll)
     ScrollView mScroll;
-    @Bind(R.id.editor_ban_locker)
+    @BindView(R.id.editor_ban_locker)
     View mLocker;
-    @Bind(R.id.editor_ban_profile_full_info)
+    @BindView(R.id.editor_ban_profile_full_info)
     View mFullInfo;
 
     @SuppressWarnings("unused")

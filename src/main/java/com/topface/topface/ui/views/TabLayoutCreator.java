@@ -14,7 +14,7 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -57,9 +57,9 @@ public class TabLayoutCreator {
     // TODO: 25.05.16 Убираешь батернайф? Сделай это приватом!
     public static class TabViewsContainer {
 
-        @Bind(R.id.tab_title)
+        @BindView(R.id.tab_title)
         public TextView titleView;
-        @Bind(R.id.tab_counter)
+        @BindView(R.id.tab_counter)
         public TextView counterView;
         public View tabView;
 

@@ -26,6 +26,7 @@ import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.UserRecyclerViewAdapter;
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import org.json.JSONException;
