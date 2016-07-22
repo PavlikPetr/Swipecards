@@ -20,11 +20,8 @@ public class InstallReferrerReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String referrer = null;
         Bundle extras = intent.getExtras();
-        if (extras != null) {
-            referrer = extras.getString(REFERER);
-        }
+        String referrer = extras != null ? extras.getString(REFERER) : null;
         if (!TextUtils.isEmpty(referrer)) {
             AppConfig appConfig = App.getAppConfig();
             appConfig.setReferrerTrackData(new InstallReferrerData(referrer));

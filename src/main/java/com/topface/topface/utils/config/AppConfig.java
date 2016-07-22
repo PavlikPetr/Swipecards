@@ -470,7 +470,7 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * @return true if topfac referrer track was sent to server
+     * @return true if topface referrer track was sent to server
      */
     public boolean isReferrerTrackDataSent() {
         return getBooleanField(getSettingsMap(), IS_REFERRER_TRACK_SENT);

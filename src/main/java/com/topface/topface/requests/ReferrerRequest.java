@@ -18,12 +18,12 @@ public class ReferrerRequest extends ApiRequest {
     private AdjustAttributeData mAttribution;
     private InstallReferrerData mReferrerTrack;
 
-    public ReferrerRequest(Context context, @NotNull AdjustAttributeData attribution) {
+    public ReferrerRequest(@NotNull Context context, @NotNull AdjustAttributeData attribution) {
         super(context);
         mAttribution = attribution;
     }
 
-    public ReferrerRequest(Context context, @NotNull InstallReferrerData referrerTrack) {
+    public ReferrerRequest(@NotNull Context context, @NotNull InstallReferrerData referrerTrack) {
         super(context);
         mReferrerTrack = referrerTrack;
     }
