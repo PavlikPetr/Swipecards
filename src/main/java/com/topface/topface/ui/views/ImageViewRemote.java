@@ -1,7 +1,9 @@
 package com.topface.topface.ui.views;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
@@ -20,6 +22,9 @@ import com.topface.topface.utils.imageloader.MaskClipProcessor;
 
 
 public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSizeGetter {
+
+    public static final ColorStateList DEFAULT_BORDER_COLOR = ColorStateList.valueOf(Color.parseColor("#00000000"));
+
     protected static final int POST_PROCESSOR_NONE = 0;
     private static final int POST_PROCESSOR_ROUNDED = 1;
     private static final int POST_PROCESSOR_ROUND_CORNERS = 2;
@@ -34,6 +39,8 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
     private static final int BLUR_RADIUS_DEFAULT = 10;
 
     private int mBlurRadius;
+    private float mRoundedImageBorderWidth;
+    private ColorStateList mRoundedImageBorderColor = DEFAULT_BORDER_COLOR;
 
     public ImageViewRemote(Context context) {
         super(context);
@@ -54,6 +61,10 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
         mBlurRadius = values.getInt(R.styleable.ImageViewRemote_blurRadius, BLUR_RADIUS_DEFAULT);
 
         borderResId = values.getResourceId(R.styleable.ImageViewRemote_border, 0);
+
+        mRoundedImageBorderWidth = values.getDimension(R.styleable.ImageViewRemote_roundedImgBorderWidth, 0);
+
+        setRoundedImageBorderColor(values.getColorStateList(R.styleable.ImageViewRemote_roundedImgBorderColor));
 
         float cornerRadius = values.getDimension(
                 R.styleable.ImageViewRemote_cornersRadius,
@@ -86,12 +97,16 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
         values.recycle();
     }
 
+    private void setRoundedImageBorderColor(ColorStateList color) {
+        mRoundedImageBorderColor = color != null ? color : DEFAULT_BORDER_COLOR;
+    }
+
     @Override
     protected BitmapProcessor createProcessor(int processorId, float cornerRadius, int maskId) {
         if (!isInEditMode()) {
             switch (processorId) {
                 case POST_PROCESSOR_ROUNDED:
-                    return new RoundProcessor();
+                    return new RoundProcessor(mRoundedImageBorderWidth, mRoundedImageBorderColor);
                 case POST_PROCESSOR_ROUND_CORNERS:
                     return new RoundCornersProcessor(cornerRadius);
                 case POST_PROCESSOR_MASK:

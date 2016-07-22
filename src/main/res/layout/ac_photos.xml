@@ -36,7 +36,9 @@
                 android:onClick="@{viewModel::onGiftClick}"
                 android:visibility="@{!viewModel.ownerProfile}"
                 app:defaultSelector="@{viewModel.GIFT_SELECTOR_RESOURCE}"
-                app:remoteSrc="@{viewModel.giftLink}" />
+                app:remoteSrc="@{viewModel.giftLink}"
+                app:roundedImgBorderColor="@color/rounded_image_blue_border"
+                app:roundedImgBorderWidth="@dimen/album_gift_border_size" />
 
             <RelativeLayout
                 android:id="@+id/loBottomPanel"

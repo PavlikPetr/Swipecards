@@ -41,6 +41,8 @@
             <flag name="inscribedAvatar" value="8" />
             <flag name="blur" value="9" />
         </attr>
+        <attr name="roundedImgBorderColor" format="color" />
+        <attr name="roundedImgBorderWidth" format="dimension" />
     </declare-styleable>
 
     <declare-styleable name="ServicesTextView">

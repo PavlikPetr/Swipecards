@@ -222,4 +222,6 @@
 
     <color name="range_seek_bar_selected_range_color">#499aff</color>
 
+    <color name="rounded_image_blue_border">#499aff</color>
+
 </resources>

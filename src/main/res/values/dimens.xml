@@ -156,4 +156,7 @@
 
     <dimen name="album_buttons_size">26dp</dimen>
 
+    <!--Rounded images border size-->
+    <dimen name="album_gift_border_size">2dp</dimen>
+
 </resources>
