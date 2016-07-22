@@ -153,7 +153,10 @@
     <dimen name="album_avatar_button_drawable_padding">4dp</dimen>
     <dimen name="album_gift_size">86dp</dimen>
     <dimen name="album_gift_circle_stroke_width">3dp</dimen>
-
     <dimen name="album_buttons_size">26dp</dimen>
+
+    <!--PhotoBlog-->
+    <dimen name="margin_item_photoblog">16dp</dimen>
+    <dimen name="margin_button_photoblog">8dp</dimen>
 
 </resources>

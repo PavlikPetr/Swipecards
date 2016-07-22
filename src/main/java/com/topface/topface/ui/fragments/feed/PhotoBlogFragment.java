@@ -1,10 +1,15 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -16,10 +21,12 @@ import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
@@ -27,10 +34,17 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
+import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.utils.AddPhotoHelper;
+import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
+import com.topface.topface.utils.adapter_utils.IViewInjectRule;
+import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -41,9 +55,25 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     private static final int UPDATE_DELAY = 20;
 
     private RateController mRateController;
-    private MenuItem mBarActions;
     private CountDownTimer mTimerUpdate;
     private PhotoBlogListAdapter mAdapter;
+    private AddPhotoHelper mAddPhotoHelper;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            AddPhotoHelper.handlePhotoMessage(msg);
+        }
+    };
+
+    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(getListAdapter() != null) {
+                getListAdapter().notifyDataSetChanged();
+            }
+        }
+    };
 
     @Override
     protected Type getFeedListDataType() {
@@ -59,6 +89,60 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     protected Class getFeedListItemClass() {
         return FeedPhotoBlog.class;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FeedAdapter adapter = getListAdapter();
+        if (adapter != null) {
+            InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
+                @Override
+                public View construct() {
+                    View headerView = LayoutInflater.from(App.getContext()).inflate(R.layout.header_photoblog, null, false);
+                    headerView.findViewById(R.id.wantButton).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startAddToLeaderActivity();
+                        }
+                    });
+
+                    Profile profile = App.get().getProfile();
+                    ImageViewRemote imageViewRemote = (ImageViewRemote) headerView.findViewById(R.id.ivBarAvatar);
+                    if(profile.photo != null) {
+                        imageViewRemote.setRemoteSrc(profile.photo.getDefaultLink());
+                    }
+                    else {
+                        imageViewRemote.setResourceSrc(profile.sex == Profile.BOY ?
+                                R.drawable.upload_photo_male : R.drawable.upload_photo_female);
+                    }
+
+                    return headerView;
+                }
+            });
+            bucket.addFilter(new IViewInjectRule() {
+                @Override
+                public boolean isNeedInject(int pos) {
+                    return pos == 0;
+                }
+            });
+            adapter.registerViewBucket(bucket);
+        }
+    }
+
+    private void startAddToLeaderActivity() {
+            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
+                takePhoto();
+            }
+            else {
+                startActivityForResult(new Intent(getActivity(), AddToLeaderActivity.class), AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID);
+            }
     }
 
     @Override
@@ -89,8 +173,13 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRateController != null) {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
+        if (mRateController != null) {
             mRateController.destroyController();
+        }
+
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.releaseHelper();
         }
     }
 
@@ -170,6 +259,14 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         }
     }
 
+    private void takePhoto() {
+        if (mAddPhotoHelper == null) {
+            mAddPhotoHelper = new AddPhotoHelper(PhotoBlogFragment.this, null);
+            mAddPhotoHelper.setOnResultHandler(mHandler);
+        }
+        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+    }
+
     private boolean isNotYourOwnId(int id) {
         return App.from(getActivity()).getProfile().uid != id;
     }
@@ -208,31 +305,6 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     @Override
-    protected Integer getOptionsMenuRes() {
-        return R.menu.action_add_leader;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add_new_leader_photo:
-                startActivityForResult(new Intent(getActivity(), AddToLeaderActivity.class), AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        MenuItem barActionsItem = menu.findItem(R.id.action_add_new_leader_photo);
-        if (barActionsItem != null && mBarActions != null) {
-            barActionsItem.setChecked(mBarActions.isChecked());
-        }
-        mBarActions = barActionsItem;
-    }
-
-    @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_photoblog;
     }
@@ -257,6 +329,9 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID) {
             updatePhotoblogList();
+        }
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
         }
     }
 

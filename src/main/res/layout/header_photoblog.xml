@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_item_photoblog">
+
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/ivBarAvatar"
+        style="@style/PhotoBlogAvatar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/margin_item_photoblog">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ListName"
+            android:text="@string/photofeed_add_photo_to_feed_title"/>
+
+        <Button
+            android:id="@+id/wantButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/leaders_go_date"
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/margin_button_photoblog"/>
+
+    </LinearLayout>
+</LinearLayout>

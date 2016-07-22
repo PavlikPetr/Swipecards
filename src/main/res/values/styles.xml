@@ -519,6 +519,13 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
+    <style name="PhotoBlogAvatar">
+        <item name="preProcessor">inscribedAvatar</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
     <style name="ChatAvatar" parent="NavigationBarAvatar">
         <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/avatar_chat_mask</item>
