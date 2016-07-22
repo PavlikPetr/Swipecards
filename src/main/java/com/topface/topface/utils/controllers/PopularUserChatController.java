@@ -7,13 +7,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.data.Photo;
@@ -123,7 +121,8 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean isAccessAllowed() {
-        return App.from(mChatFragment.getActivity()).getProfile().premium || TextUtils.isEmpty(mBlockText) || mOff;
+//        return App.from(mChatFragment.getActivity()).getProfile().premium || TextUtils.isEmpty(mBlockText) || mOff;
+        return false;
     }
 
     public boolean checkChatBlock(History message) {
@@ -131,7 +130,8 @@ public class PopularUserChatController extends BroadcastReceiver {
     }
 
     public boolean checkMessageBlock(History message) {
-        return message.type == SECOND_STAGE;
+//        return message.type == SECOND_STAGE;
+        return true;
     }
 
     public int block(History message) {
