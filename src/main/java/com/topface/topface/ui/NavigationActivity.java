@@ -320,11 +320,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         mFullscreenController = new FullscreenController(this);
     }
 
-    private void initBonusCounterConfig() {
-        long lastTime = App.getUserConfig().getBonusCounterLastShowTime();
-        CacheProfile.needShowBonusCounter = lastTime < App.from(this).getOptions().bonus.timestamp;
-    }
-
     private NavigationManager getNavigationManager() {
         if (mNavigationManager == null) {
             mNavigationManager = initNavigationManager(null);
@@ -471,7 +466,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
         }
         startPopupRush(false, false);
-        initBonusCounterConfig();
     }
 
     /**

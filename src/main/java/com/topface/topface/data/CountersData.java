@@ -12,7 +12,6 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
  */
 public class CountersData implements Parcelable {
 
-    private int mBonus = 0;
     @SerializedName(value = "likes", alternate = "unread_likes")
     private int mLikes = 0;
     @SerializedName(value = "mutual", alternate = "unread_symphaties")
@@ -49,12 +48,8 @@ public class CountersData implements Parcelable {
         setFans(in.readInt());
         setAdmirations(in.readInt());
         setPeopleNearby(in.readInt());
-        setBonus(in.readInt());
     }
 
-    public void setBonus(int bonus) {
-        mBonus = bonus;
-    }
 
     public void setLikes(int likes) {
         mLikes = likes;
@@ -82,10 +77,6 @@ public class CountersData implements Parcelable {
 
     public void setVisitors(int visitors) {
         mVisitors = visitors;
-    }
-
-    public int getBonus() {
-        return mBonus;
     }
 
     public int getLikes() {
@@ -142,7 +133,6 @@ public class CountersData implements Parcelable {
         dest.writeInt(getFans());
         dest.writeInt(getAdmirations());
         dest.writeInt(getPeopleNearby());
-        dest.writeInt(getBonus());
     }
 
     public int getCounterByFragmentId(@FragmentIdData.FragmentId int id) {
@@ -155,8 +145,6 @@ public class CountersData implements Parcelable {
                 return getLikes() + getMutual() + getAdmirations();
             case FragmentIdData.GEO:
                 return getPeopleNearby();
-            case FragmentIdData.BONUS:
-                return getBonus();
         }
         return -1;
     }
