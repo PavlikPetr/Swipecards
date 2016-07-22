@@ -2,10 +2,8 @@ package com.topface.topface.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +18,15 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Profile;
-import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.ui.views.FeedItemViewConstructor.TypeAndFlag;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ad.NativeAd;
-import com.topface.topface.utils.ad.NativeAdManager;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import static com.topface.topface.receivers.ConnectionChangeReceiver.ConnectionType.CONNECTION_WIFI;
@@ -46,33 +40,18 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected static final int T_NEW_VIP = 3;
     protected static final int T_VIP = 4;
     protected static final int T_NEW = 5;
-    protected static final int T_NATIVE_AD = 6;
     protected static final int T_COUNT = 7;
 
     private long mLastUpdate = 0;
     public static final int LIMIT = 40;
     private static final long CACHE_TIMEOUT = 1000 * 5 * 60; //5 минут
     private OnAvatarClickListener<T> mOnAvatarClickListener;
-    private NativeAd mFeedAd;
-    private boolean mHasFeedAd;
-    private View mFeedAdView;
 
     private MultiselectionController<T> mSelectionController;
-
-    public interface INativeAdItemCreator<T> {
-        T getAdItem(NativeAd nativeAd);
-    }
 
     public FeedAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         super(context, data, updateCallback);
         mSelectionController = new MultiselectionController<>(this);
-        initFeedAd();
-    }
-
-    private void initFeedAd() {
-        if (isNeedFeedAd()) {
-            mFeedAdView = getAdView();
-        }
     }
 
     public FeedList<T> getDataForCache() {
@@ -86,7 +65,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         int iter = 0;
         while (addedCount < count && iter < data.size()) {
             T currentItem = data.get(iter);
-            if (!currentItem.isAd() && !currentItem.isLoader()
+            if (!currentItem.isLoader()
                     && !currentItem.isRetrier() && currentItem.user != null) {
                 result.add(currentItem);
                 addedCount++;
@@ -95,8 +74,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
         return result;
     }
-
-    protected abstract INativeAdItemCreator<T> getNativeAdItemCreator();
 
     public int getLimit() {
         return LIMIT;
@@ -143,9 +120,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         int superType = super.getItemViewType(position);
         T item = getItem(position);
         if (superType == T_OTHER && item != null) {
-            if (item.isAd()) {
-                return T_NATIVE_AD;
-            } else if (item.unread && item.user.premium) {
+            if (item.unread && item.user.premium) {
                 return T_NEW_VIP;
             } else if (item.unread && !item.user.premium) {
                 return T_NEW;
@@ -177,23 +152,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
     }
 
-    protected View getAdView() {
-        return mInflater.inflate(getAdItemLayout(), null, false);
-    }
-
-    @Override
-    protected View getViewByType(int type, int position, View view, ViewGroup viewGroup) {
-        if (type == T_NATIVE_AD) {
-            if (mFeedAdView == null) {
-                mFeedAdView = getAdView();
-            }
-            mFeedAd.show(mFeedAdView);
-            return mFeedAdView;
-        } else {
-            return super.getViewByType(type, position, view, viewGroup);
-        }
-    }
-
     @Override
     protected View getContentView(int position, View convertView, ViewGroup viewGroup) {
         FeedViewHolder holder = null;
@@ -202,7 +160,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         }
         final int type = getItemViewType(position);
         int flag = 0;
-        // for native ad type return ad view
         final T item = getItem(position);
         //Если нам попался лоадер или пустой convertView, т.е. у него нет тега с данными, то заново пересоздаем этот элемент
         if (holder == null) {
@@ -329,9 +286,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         removeLoaderItem();
         FeedList<T> currentData = getData();
         currentData.clear();
-        mHasFeedAd = false;
         currentData.addAll(data.items);
-        addItemForAd();
         addLoaderItem(data.more);
         notifyDataSetChanged();
         setLastUpdate();
@@ -340,52 +295,8 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void setData(FeedList<T> data) {
         mData = data;
-        addItemForAd();
         notifyDataSetChanged();
         setLastUpdate();
-    }
-
-    private void addItemForAd() {
-        FeedList<T> data = getData();
-        if (!data.isEmpty() && (mFeedAd != null || isNeedFeedAd()) && !mHasFeedAd) {
-            if (mFeedAd == null) {
-                mFeedAd = NativeAdManager.getNativeAd();
-            }
-            if (mFeedAd != null) {
-                int adPosition = mFeedAd.getPosition();
-                data.add(adPosition < data.size() ? adPosition : data.size() - 1,
-                        getNativeAdItemCreator().getAdItem(mFeedAd));
-                mHasFeedAd = true;
-                Intent intent = new Intent(TabbedFeedFragment.HAS_FEED_AD);
-                LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(intent);
-            }
-        }
-    }
-
-    public void removeAdItems() {
-        removeAdItems(true);
-    }
-
-    private void removeAdItems(boolean notify) {
-        mHasFeedAd = false;
-        mFeedAd = null;
-        boolean removed = false;
-        for (Iterator<T> it = getData().iterator(); it.hasNext(); ) {
-            T item = it.next();
-            if (item.isAd()) {
-                it.remove();
-                removed = true;
-            }
-        }
-        if (notify && removed) {
-            notifyDataSetChanged();
-        }
-    }
-
-    public void refreshAdItem() {
-        removeAdItems(false);
-        addItemForAd();
-        notifyDataSetChanged();
     }
 
     protected void setLastUpdate() {
@@ -421,9 +332,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void makeAllItemsRead() {
         for (T item : getData()) {
-            if (!item.isAd()) {
                 item.unread = false;
-            }
         }
     }
 
@@ -488,7 +397,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             int dataSize = data.size();
 
             FeedItem last = data.getLast();
-            int feedIndex = last.isLoader() || last.isRetrier() || last.isAd() ?
+            int feedIndex = last.isLoader() || last.isRetrier() ?
                     dataSize - 2 :
                     dataSize - 1;
             if (data.hasItem(feedIndex)) {
@@ -504,9 +413,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         if (!isEmpty()) {
             FeedList<T> data = getData();
             item = data.getFirst();
-            if (item.isAd() && data.size() >= 2) {
-                item = data.get(1);
-            }
         }
         return item;
     }
@@ -522,10 +428,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         holder.background = convertView.getBackground();
 
         return holder;
-    }
-
-    protected int getAdItemLayout() {
-        return R.layout.item_feed_ad;
     }
 
     public boolean isNeedUpdate() {
@@ -619,25 +521,5 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public boolean isMultiSelectionMode() {
         return mSelectionController.isMultiSelectionMode();
-    }
-
-    public boolean hasFeedAd() {
-        return mHasFeedAd;
-    }
-
-    public void setHasFeedAd(boolean hasFeedAd) {
-        mHasFeedAd = hasFeedAd;
-    }
-
-    public NativeAd getFeedAd() {
-        return mFeedAd;
-    }
-
-    public void setFeedAd(NativeAd feedAd) {
-        mFeedAd = feedAd;
-    }
-
-    public boolean isNeedFeedAd() {
-        return false;
     }
 }

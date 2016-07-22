@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.topface.framework.JsonUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ad.NativeAd;
 
 import org.json.JSONObject;
 
@@ -32,10 +31,6 @@ public class BlackListItem extends FeedItem implements Parcelable {
 
     protected BlackListItem(Parcel in) {
         super(in);
-    }
-
-    public BlackListItem(NativeAd nativeAd) {
-        super(nativeAd);
     }
 
     public void fillData(JSONObject item) {

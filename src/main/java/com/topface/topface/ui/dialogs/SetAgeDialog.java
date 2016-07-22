@@ -43,21 +43,23 @@ public class SetAgeDialog extends AbstractDialogFragment implements View.OnClick
     @Override
     public void onClick(View v) {
         closeDialog();
-        FragmentManager fm = getFragmentManager();
-        final FormItem item = ProfileFormListAdapter.getAgeItem(App.from(getActivity()).getProfile());
-        BaseEditDialog.EditingFinishedListener<FormItem> formEditedListener = new BaseEditDialog.EditingFinishedListener<FormItem>() {
-            @Override
-            public void onEditingFinished(final FormItem data) {
-                item.copy(data);
-                final SettingsRequest request = new SettingsRequest(getActivity());
-                request.age = Integer.valueOf(data.value);
-                ApiRequest updateAgeProfileRequest = new ParallelApiRequest(getActivity())
-                        .addRequest(request)
-                        .addRequest(new ProfileRequest(App.getContext()));
-                updateAgeProfileRequest.exec();
-            }
-        };
-        EditTextFormDialog.newInstance(item.getTitle(), item, formEditedListener).show(fm, EditTextFormDialog.class.getName());
+        if (isAdded()) {
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            final FormItem item = ProfileFormListAdapter.getAgeItem(App.from(getActivity()).getProfile());
+            BaseEditDialog.EditingFinishedListener<FormItem> formEditedListener = new BaseEditDialog.EditingFinishedListener<FormItem>() {
+                @Override
+                public void onEditingFinished(final FormItem data) {
+                    item.copy(data);
+                    final SettingsRequest request = new SettingsRequest(getActivity());
+                    request.age = Integer.valueOf(data.value);
+                    ApiRequest updateAgeProfileRequest = new ParallelApiRequest(getActivity())
+                            .addRequest(request)
+                            .addRequest(new ProfileRequest(App.getContext()));
+                    updateAgeProfileRequest.exec();
+                }
+            };
+            EditTextFormDialog.newInstance(item.getTitle(), item, formEditedListener).show(fm, EditTextFormDialog.class.getName());
+        }
     }
 
     private void closeDialog() {

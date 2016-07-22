@@ -124,9 +124,12 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     }
 
     public void addItemAfterFragment(LeftMenuData data, int... fragmentId) {
-        ArrayList<LeftMenuData> items = new ArrayList<>();
-        items.add(data);
-        addItemsAfterFragment(items, fragmentId);
+        int pos = getDataPositionByFragmentId(data.getSettings().getUniqueKey());
+        if (pos == EMPTY_POS) {
+            ArrayList<LeftMenuData> items = new ArrayList<>();
+            items.add(data);
+            addItemsAfterFragment(items, fragmentId);
+        }
     }
 
     public void addItemsAfterFragment(ArrayList<LeftMenuData> data, int... fragmentId) {
@@ -141,6 +144,14 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
             addItemsAfterPosition(data, pos);
         } else {
             addItems(data);
+        }
+    }
+
+    public void removeItem(LeftMenuData data) {
+        int pos = getDataPositionByFragmentId(data.getSettings().getUniqueKey());
+        if (pos != EMPTY_POS) {
+            getData().remove(pos);
+            notifyItemRemoved(pos);
         }
     }
 

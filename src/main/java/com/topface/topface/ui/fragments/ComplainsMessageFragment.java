@@ -18,7 +18,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.utils.Utils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ComplainsMessageFragment extends BaseFragment {
@@ -33,9 +33,9 @@ public class ComplainsMessageFragment extends BaseFragment {
     private String feedId;
     private MenuItem mSendMenuItem;
 
-    @Bind(R.id.complainLocker)
+    @BindView(R.id.complainLocker)
     View mComplainLocker;
-    @Bind(R.id.etDescription)
+    @BindView(R.id.etDescription)
     EditText mDescription;
 
     @Override

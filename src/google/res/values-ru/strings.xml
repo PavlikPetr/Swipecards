@@ -479,6 +479,7 @@
     <string name="buying_vip_status">Купить VIP-статус</string>
 
     <string name="edit_my_city">Мой город</string>
+    <string name="my_location">Местоположение</string>
     <string name="settings_feedback_email">E-mail для связи</string>
     <string name="settings_invalid_email">Некорректный e-mail.</string>
     <string name="chat_write_message">Написать сообщение</string>
@@ -1090,5 +1091,21 @@
     <string name="offers_empty_text">К сожалению, доступных заданий для вас нет, попробуйте позже!</string>
     <string name="offers_rewarded_video_title">Бесплатные монеты</string>
     <string name="offers_rewarded_video_description">За просмотр видео</string>
+
+    <string name="app_of_the_day_ad_badge">Реклама</string>
+
+    <string name="filter_select_sex_title">Я ищу</string>
+    <string name="filter_select_sex_male">Мужчину</string>
+    <string name="filter_select_sex_female">Женщину</string>
+    <string name="filter_screen_title">Кого вы ищете?</string>
+
+    <string name="album_photo_deleted">Фотография удалена</string>
+    <string name="album_main_photo">Главное фото профиля</string>
+
+    <string name="profile_ditance_to_her">До неё %s</string>
+    <string name="profile_ditance_to_him">До него %s</string>
+
+    <string name="rate_popup_we_need_your_opinion">Нам очень важно ваше мнение</string>
+    <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Пожалуйста, оцените приложение. Это займет несколько секунд вашего времени.</string>
 
 </resources>

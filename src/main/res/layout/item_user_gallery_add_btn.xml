@@ -12,7 +12,7 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{clickListener.onClick}">
+        android:onClick="@{clickListener::onClick}">
 
         <ImageView
             android:id="@+id/ivPhoto"

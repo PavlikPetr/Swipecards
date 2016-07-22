@@ -29,7 +29,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
+import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -50,10 +50,9 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.ui.fragments.profile.PhotoSwitcherActivity;
-import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -67,6 +66,7 @@ import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -134,12 +134,12 @@ import dagger.Provides;
                 AuthFragment.class,
                 ChatActivity.class,
                 AddPhotoHelper.class,
-                CitySearchPopup.class,
-                ProfileFormFragment.class,
                 FbAuthorizer.class,
                 BaseAuthFragment.class,
                 TopfaceAuthFragment.class,
-                UserProfileFragment.class
+                UserProfileFragment.class,
+                BonusPresenter.class,
+                ExpressMessageAction.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

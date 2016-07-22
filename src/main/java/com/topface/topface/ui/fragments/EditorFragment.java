@@ -40,7 +40,6 @@ import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -58,7 +57,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     public static final String API_SCRUFFY_STAGE_TF = "wss://api-%s.stage.tf/scruffy/";
     private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private Spinner mApiUrl;
-    private Spinner mOfferwallTypeChoose;
     private AppConfig mAppConfig;
     private Spinner mDebugModeSpinner;
     private Spinner mEditorModeSpinner;
@@ -123,7 +121,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         initProfileId(root);
         initEditorMode(root);
         initUserInfo(root);
-        initOfferwall(root);
         initConnections(root);
         //После инита всех элементов заполняем их значениями по умолчанию
         setConfigValues();
@@ -170,29 +167,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
-    }
-
-    private void initOfferwall(View root) {
-        mOfferwallTypeChoose = (Spinner) root.findViewById(R.id.spOfferwall);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_spinner_item,
-                OfferwallsManager.OFFERWALLS
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mOfferwallTypeChoose.setAdapter(adapter);
-        mOfferwallTypeChoose.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mConfigInited) {
-                    App.from(getActivity()).getOptions().offerwall = OfferwallsManager.OFFERWALLS[position];
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }
@@ -478,19 +452,10 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         mDebugModeSpinner.setSelection(mAppConfig.getDebugMode());
         switcherTestNetwork.setChecked(mAppConfig.getTestNetwork());
         switcher.setChecked(App.from(getActivity()).getProfile().canInvite);
-        mOfferwallTypeChoose.setSelection(getOfferwallIndexInArray(App.from(getActivity()).getOptions().offerwall));
     }
 
     @Override
     protected String getTitle() {
         return getString(R.string.editor_menu_admin);
-    }
-
-    private int getOfferwallIndexInArray(String offerwall) {
-        for (int i = 0; i < OfferwallsManager.OFFERWALLS.length; i++) {
-            if (offerwall.equals(OfferwallsManager.OFFERWALLS[i]))
-                return i;
-        }
-        return -1;
     }
 }

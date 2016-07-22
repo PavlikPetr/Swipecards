@@ -20,12 +20,12 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.bonus.view.BonusActivity;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Device;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 /**
  * Created by kirussell on 12/01/15.
@@ -192,14 +192,7 @@ class TopfaceBannerProvider extends AbstractAdsProvider {
                     intent = Utils.getIntentToOpenUrl(mBanner.parameter);
                     break;
                 case Banner.ACTION_OFFERWALL:
-                    switch (mBanner.parameter) {
-                        case OfferwallsManager.SPONSORPAY:
-                            OfferwallsManager.startSponsorpay(mPage.getActivity());
-                            break;
-                        default:
-                            OfferwallsManager.startOfferwall(mPage.getActivity(), mOptions);
-                            break;
-                    }
+                    intent = BonusActivity.createIntent();
                     break;
             }
             sendStat(mBanner, CLICK);

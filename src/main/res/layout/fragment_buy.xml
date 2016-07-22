@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.topface.IllustratedTextView.IllustratedTextView
+            <TextView
                 android:id="@+id/payReasonFragmentBuy"
                 style="@style/PayReasonView" />
 

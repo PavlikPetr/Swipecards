@@ -26,7 +26,6 @@ import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
-import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
@@ -36,8 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 
 /**
  * base class for feeds with tabs
@@ -51,7 +49,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
-    @Bind(R.id.feedTabs)
+    @BindView(R.id.feedTabs)
     TabLayout mTabLayout;
     private CountersDataProvider mCountersDataProvider;
     private TabbedFeedPageAdapter mBodyPagerAdapter;
@@ -118,7 +116,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_tabbed_feed, null);
-        ButterKnife.bind(this, root);
+        bindView(root);
         initPages(root);
         mCountersDataProvider = new CountersDataProvider(new CountersDataProvider.ICountersUpdater() {
             @Override
@@ -181,22 +179,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                boolean needNativeAd = false;
-                if (mBodyPagerAdapter != null) {
-                    for (int i = 0; i < mBodyPagerAdapter.getCount(); i++) {
-                        Fragment feed = mBodyPagerAdapter.getItem(i);
-                        if (feed instanceof FeedFragment) {
-                            FeedAdapter adapter = ((FeedFragment) feed).getListAdapter();
-                            if (adapter != null && adapter.isNeedFeedAd()) {
-                                needNativeAd = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (!needNativeAd) {
-                    mBannersController = new BannersController(TabbedFeedFragment.this, App.get().getOptions());
-                }
+                mBannersController = new BannersController(TabbedFeedFragment.this, App.get().getOptions());
             }
         });
     }
@@ -216,7 +199,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
         mCountersDataProvider.unsubscribe();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
     }
@@ -244,7 +226,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(LAST_OPENED_PAGE, mPager.getCurrentItem());
+        outState.putInt(LAST_OPENED_PAGE, mPager != null ? mPager.getCurrentItem() : 0);
     }
 
     /**
@@ -281,11 +263,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        for (Fragment fr : getChildFragmentManager().getFragments()) {
-            if (fr != null) {
-                fr.onActivityResult(requestCode, resultCode, data);
-            }
-        }
+        Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
     }
 
     @Override

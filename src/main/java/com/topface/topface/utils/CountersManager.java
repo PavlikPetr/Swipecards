@@ -66,20 +66,28 @@ public class CountersManager {
     }
 
     public void setEntitiesCounters(JSONObject unread) {
+        setEntitiesCounters(unread.toString());
+    }
+
+    public void setEntitiesCounters(String unread) {
         if (unread == null) {
             return;
         }
-        CountersData countersData = JsonUtils.fromJson(unread.toString(), CountersData.class);
-        if (countersData != null && !Utils.isEmptyJson(unread) && !mAppState.isEqualData(CountersData.class, countersData)) {
+        CountersData countersData = JsonUtils.fromJson(unread, CountersData.class);
+        if (countersData != null && !Utils.isEmptyJsonString(unread) && !mAppState.isEqualData(CountersData.class, countersData)) {
             mAppState.setData(countersData);
         }
     }
 
     public void setBalanceCounters(JSONObject balanceJson) {
+        setBalanceCounters(balanceJson.toString());
+    }
+
+    public void setBalanceCounters(String balanceJson) {
         if (balanceJson == null) {
             return;
         }
-        BalanceData balanceData = JsonUtils.fromJson(balanceJson.toString(), BalanceData.class);
+        BalanceData balanceData = JsonUtils.fromJson(balanceJson, BalanceData.class);
         if (mCachedBalanceData != null && balanceData.premium != mCachedBalanceData.premium) {
             App.sendProfileAndOptionsRequests();
             Intent intent = new Intent(UPDATE_VIP_STATUS);

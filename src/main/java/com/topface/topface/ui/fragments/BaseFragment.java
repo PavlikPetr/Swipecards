@@ -24,6 +24,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.AppConfig;
@@ -35,9 +36,10 @@ import java.lang.reflect.Field;
 import java.util.LinkedList;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
-public abstract class BaseFragment extends TrackedFragment implements IRequestClient {
+public abstract class BaseFragment extends TrackedFragment implements IRequestClient, IOnBackPressed, IFragmentDelegate {
 
     private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
@@ -46,6 +48,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     private BroadcastReceiver mProfileLoadReceiver;
     protected ActionBarTitleSetterDelegate mTitleSetter;
     private boolean mNeedTitles = true;
+    private Unbinder mUnbinder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,9 +95,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onDestroyView() {
         super.onDestroyView();
         mTitleSetter = null;
-        if (isButterKnifeAvailable()) {
-            ButterKnife.unbind(this);
+        if (isButterKnifeAvailable() && mUnbinder != null) {
+            mUnbinder.unbind();
         }
+    }
+
+    protected void bindView(View view) {
+        mUnbinder = ButterKnife.bind(this, view);
     }
 
     protected boolean isButterKnifeAvailable() {
@@ -325,5 +332,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected void setNeedTitles(boolean needTitles) {
         mNeedTitles = needTitles;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 }

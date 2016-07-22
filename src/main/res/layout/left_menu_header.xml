@@ -13,7 +13,7 @@
     <FrameLayout
         android:layout_width="@dimen/left_menu_width"
         android:layout_height="@dimen/left_menu_header_height"
-        android:onClick="@{viewModel.onClick}">
+        android:onClick="@{viewModel::onClick}">
 
         <com.topface.topface.ui.views.ImageViewRemote
             style="@style/LeftMenuHeaderBackground"
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="35dp"
                     android:ellipsize="end"
-                    android:lines="1"
+                    android:singleLine="true"
                     android:text="@{viewModel.userName}" />
 
                 <TextView

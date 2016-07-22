@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -22,7 +23,9 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.InflateException;
@@ -196,7 +199,11 @@ public class Utils {
     }
 
     public static boolean isEmptyJson(JSONObject object) {
-        return object.toString().equals(EMPTY_JSON);
+        return isEmptyJsonString(object.toString());
+    }
+
+    public static boolean isEmptyJsonString(String object) {
+        return object.equals(EMPTY_JSON);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -387,6 +394,11 @@ public class Utils {
         }
     }
 
+    public static float convert(int unit, float size) {
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        return TypedValue.applyDimension(unit, size, metrics);
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public static int getPxFromDp(int pixels) {
         return (int) (mDensity * pixels);
@@ -435,7 +447,7 @@ public class Utils {
     public static void activityResultToNestedFragments(FragmentManager fm, int requestCode, int resultCode, Intent data) {
         if (fm != null) {
             List<Fragment> bodyFragments = fm.getFragments();
-            if (bodyFragments != null) {
+            if (ListUtils.isNotEmpty(bodyFragments)) {
                 for (Fragment fragment : bodyFragments) {
                     if (fragment != null && !fragment.isDetached() && !fragment.isRemoving()) {
                         fragment.onActivityResult(requestCode, resultCode, data);

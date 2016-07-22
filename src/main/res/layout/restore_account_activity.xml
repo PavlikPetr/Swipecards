@@ -26,14 +26,14 @@
         <Button
             android:id="@+id/restore_account"
             style="@style/BigStretchedBlueButtonRestore"
-            android:onClick="@{handlers.onRestoreClick}"
+            android:onClick="@{handlers::onRestoreClick}"
             android:text="@string/restore"/>
 
         <Button
             android:id="@+id/cancel_restore"
             style="@style/BigStretchedGrayButtonRestore"
             android:layout_marginTop="@dimen/restore_buttons_padding"
-            android:onClick="@{handlers.onCancelClick}"
+            android:onClick="@{handlers::onCancelClick}"
             android:text="@string/general_cancel" />
     </LinearLayout>
 </layout>

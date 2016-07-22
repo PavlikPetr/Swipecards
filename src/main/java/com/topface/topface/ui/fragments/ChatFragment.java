@@ -207,7 +207,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         @Override
         public void keyboardOpened() {
             mKeyboardWasShown = true;
-            if (getSupportActionBar().isShowing()
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null
+                    && getSupportActionBar().isShowing()
                     && getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                 setActionbarVisibility(false);
             }
@@ -216,14 +218,17 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         @Override
         public void keyboardClosed() {
             mKeyboardWasShown = false;
-            if (!getSupportActionBar().isShowing()) {
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null && !actionBar.isShowing()) {
                 setActionbarVisibility(true);
             }
         }
 
         @Override
         public void keyboardChangeState() {
-            if (getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+            ActionBar actionBar = getSupportActionBar();
+            if (isAdded() && actionBar != null
+                    && getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
                     && !getSupportActionBar().isShowing()) {
                 setActionbarVisibility(true);
             }
@@ -351,6 +356,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void setActionbarVisibility(boolean visible) {
         ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
         actionBar.setShowHideAnimationEnabled(false);
         if (visible) {
             actionBar.show();
@@ -360,7 +368,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private int getScreenOrientation() {
-        return getActivity().getResources().getConfiguration().orientation;
+        return App.get().getResources().getConfiguration().orientation;
     }
 
     @Override
@@ -514,8 +522,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                                         EasyTracker.sendEvent("Chat", "CopyItemText", "", 1L);
                                         break;
                                     case EditButtonsAdapter.ITEM_COMPLAINT:
-                                        startActivity(ComplainsActivity.createIntent(mUserId, mAdapter.getItem(pos).id));
-                                        EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
+                                        History item = mAdapter.getItem(pos);
+                                        if (item != null) {
+                                            startActivity(ComplainsActivity.createIntent(mUserId, item.id));
+                                            EasyTracker.sendEvent("Chat", "ComplainItemText", "", 1L);
+                                        }
                                         break;
                                 }
                             }
@@ -872,7 +883,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu((IActivityDelegate) getActivity(), barActions);
+        return new OverflowMenu(this, barActions);
     }
 
     private void release() {
@@ -924,7 +935,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     private void showKeyboardOnLargeScreen() {
         if (isShowKeyboardInChat()) {
-            Utils.showSoftKeyboard(getActivity(), mEditBox);
+            Utils.showSoftKeyboard(getActivity().getApplicationContext(), mEditBox);
         }
     }
 
@@ -1245,12 +1256,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private boolean isShowKeyboardInChat() {
-        DisplayMetrics displayMetrics = Device.getDisplayMetrics(App.getContext());
-        int height = getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
-                ? displayMetrics.heightPixels : displayMetrics.widthPixels;
-        float dpHeight = height / displayMetrics.density;
-        return dpHeight >= getActivity().getResources().
-                getInteger(R.integer.min_screen_height_chat_fragment);
+        if (isAdded()) {
+            Context context = getActivity().getApplicationContext();
+            DisplayMetrics displayMetrics = Device.getDisplayMetrics(context);
+            int height = getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT
+                    ? displayMetrics.heightPixels : displayMetrics.widthPixels;
+            float dpHeight = height / displayMetrics.density;
+            return dpHeight >= context.getResources().
+                    getInteger(R.integer.min_screen_height_chat_fragment);
+        }
+        return false;
     }
 
     private void setSavedMessage(String message) {

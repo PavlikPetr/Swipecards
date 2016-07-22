@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.bonus.viewModel.OfferwallItemViewModel" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <LinearLayout
+        style="@style/OfferwallItem"
+        android:background="@drawable/main_item_selector"
+        android:onClick="@{clickListener::onClick}">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_width="@dimen/offerwalls_image_width"
+            android:layout_height="@dimen/offerwalls_image_heighr"
+            app:remoteSrc="@{viewModel.iconUrl}" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/OfferwallsText"
+                android:text="@{viewModel.title}"
+                tools:text="Dream Vacation" />
+
+            <TextView
+                style="@style/OfferwallsText"
+                android:text="@{viewModel.description}"
+                android:textColor="@color/offerwalls_description_text_color"
+                android:textSize="14sp"
+                tools:text="Download and START" />
+
+        </LinearLayout>
+
+        <Button
+            style="@style/OfferwallsButton"
+            android:clickable="false"
+            android:text="@{viewModel.buttonText}"
+            tools:text="+1000" />
+    </LinearLayout>
+</layout>

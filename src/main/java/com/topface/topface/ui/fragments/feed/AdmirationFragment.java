@@ -7,6 +7,7 @@ import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UnlockFunctionalityOption;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -109,7 +110,8 @@ public class AdmirationFragment extends LikesFragment {
                 }
                 setUnlockButtonView(getUnlockButtonView(SECOND_CHILD));
                 int admirations = mCountersData.getAdmirations();
-                int curCounter = admirations != 0 ? admirations : App.get().getOptions().premiumAdmirations.getCount();
+                Options.PromoPopupEntity premiumAdmirations = App.get().getOptions().premiumAdmirations;
+                int curCounter = admirations != 0 ? admirations : premiumAdmirations != null ? premiumAdmirations.getCount() : 0;
                 if (curCounter != 0) {
                     ((TextView) inflated.findViewById(R.id.tvTitle)).setText(Utils.getQuantityString(R.plurals.popup_vip_admirations, curCounter, curCounter));
                 }

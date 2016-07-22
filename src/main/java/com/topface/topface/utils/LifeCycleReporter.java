@@ -22,5 +22,5 @@ public class LifeCycleReporter<T extends ViewLifreCycleData> {
 
     public void emitLifeCycle(T data) {
         mLifeCycleState.setData(data);
-    } 
+    }
 }

@@ -1,8 +1,5 @@
 package com.topface.topface.utils;
 
-import android.content.Context;
-import android.content.Intent;
-
 import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
@@ -19,6 +16,8 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.cache.SearchCacheManager;
 
+import org.jetbrains.annotations.NotNull;
+
 import static com.topface.topface.requests.SendLikeRequest.FROM_FEED;
 import static com.topface.topface.utils.FlurryManager.SEND_ADMIRATION;
 
@@ -26,25 +25,24 @@ public class RateController {
 
     @SendLikeRequest.Place
     private final int mPlace;
-    private Context mContext;
+    private IFragmentDelegate mFragmentDelegate;
     private OnRateControllerListener mOnRateControllerUiListener;
 
-    public RateController(final Context context, @SendLikeRequest.Place int place) {
-        mContext = context.getApplicationContext();
+    public RateController(@NotNull IFragmentDelegate iFragmentDelegate, @SendLikeRequest.Place int place) {
+        mFragmentDelegate = iFragmentDelegate;
         mPlace = place;
     }
 
     public void onLike(final int userId, final int mutualId
             , final OnRateRequestListener requestListener, boolean blockUnconfirmed) {
-        sendRate(new SendLikeRequest(mContext, userId, mutualId, mPlace, blockUnconfirmed), requestListener);
+        sendRate(new SendLikeRequest(mFragmentDelegate.getActivity(), userId, mutualId, mPlace, blockUnconfirmed), requestListener);
     }
 
     public boolean onAdmiration(BalanceData balanceData, final int userId, final int mutualId
             , final OnRateRequestListener requestListener, Options options) {
         if (balanceData.money < options.priceAdmiration) {
-            mContext.startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
-                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            mFragmentDelegate.getActivity().startActivity(PurchasesActivity.createBuyingIntent("RateAdmiration"
+                    , PurchasesFragment.TYPE_ADMIRATION, options.priceAdmiration, options.topfaceOfferwallRedirect));
             if (mOnRateControllerUiListener != null) {
                 mOnRateControllerUiListener.failRate();
             }
@@ -53,7 +51,7 @@ public class RateController {
             }
             return false;
         }
-        sendRate(new SendAdmirationRequest(mContext, userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
+        sendRate(new SendAdmirationRequest(mFragmentDelegate.getActivity(), userId, mutualId, mPlace, options.blockUnconfirmed), requestListener);
         return true;
     }
 
@@ -119,6 +117,11 @@ public class RateController {
 
     public void setOnRateControllerUiListener(OnRateControllerListener onRateControllerUiListener) {
         mOnRateControllerUiListener = onRateControllerUiListener;
+    }
+
+    public void destroyController() {
+        mOnRateControllerUiListener = null;
+        mFragmentDelegate = null;
     }
 
     /**

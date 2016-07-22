@@ -8,7 +8,6 @@ import android.webkit.WebView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.FullscreenSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
@@ -52,8 +51,18 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
         View bodyView = createBodyView();
         if (bodyView != null) {
             binding.content.addView(bodyView);
+        } else {
+            getDialog().cancel();
         }
         binding.setClick(this);
+    }
+
+    @Override
+    public void onViewStateRestored(@android.support.annotation.Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            mFullscreenSettings = savedInstanceState.getParcelable(FULLSCREEN_OPTIONS);
+        }
     }
 
     @Nullable
@@ -71,7 +80,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                         public void onClick(View v) {
                             clickImgBannerSettings(mFullscreenSettings);
                             AdStatistics.sendFullscreenClicked(OwnFullscreenPopup.IMPROVED_BANNER_TOPFACE);
-
+                            OwnFullscreenPopup.this.cancel();
                         }
                     });
                     return view;
@@ -97,7 +106,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                 }
                 break;
             case FullscreenSettings.URL:
-                Utils.getIntentToOpenUrl(settings.banner.action);
+                Utils.goToUrl(getActivity(), settings.banner.parameter);
                 break;
             case FullscreenSettings.METHOD:
                 //прост
@@ -106,6 +115,12 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                 //прост
                 break;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(FULLSCREEN_OPTIONS, mFullscreenSettings);
     }
 
     @Override
@@ -120,6 +135,10 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        cancel();
+    }
+
+    private void cancel() {
         getDialog().cancel();
     }
 }

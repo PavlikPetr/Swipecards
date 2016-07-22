@@ -2,13 +2,10 @@ package com.topface.topface.data.experiments;
 
 import android.content.Intent;
 import android.os.Parcel;
-import android.text.TextUtils;
 
 import com.topface.offerwall.publisher.TFOfferwallActivity;
 import com.topface.topface.App;
-import com.topface.topface.ui.fragments.BonusFragment;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import org.json.JSONObject;
 
@@ -103,12 +100,10 @@ public class TopfaceOfferwallRedirect extends BaseExperiment {
 
     /**
      * Check completness by broadcast from BonusFragment when topface offerwall is opened.
-     *
-     * @param intent broadcast from BonusFragment
      */
-    public void setCompletedByBroadcast(Intent intent) {
-        mIsCompleted = TextUtils.equals(
-                intent.getStringExtra(BonusFragment.OFFERWALL_NAME), OfferwallsManager.TFOFFERWALL);
+    public void setCompletedByBroadcast() {
+        // TF оферволы удалил, поэтому всегда false
+        mIsCompleted = false;
     }
 
     public boolean isCompleted() {

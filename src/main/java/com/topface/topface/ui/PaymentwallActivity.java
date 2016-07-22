@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -132,7 +131,7 @@ public class PaymentwallActivity extends BaseFragmentActivity {
 
     @Override
     protected int getContentLayout() {
-        return R.layout.ac_web_auth;
+        return R.layout.web_view_fragment;
     }
 
     private void onFatalError() {

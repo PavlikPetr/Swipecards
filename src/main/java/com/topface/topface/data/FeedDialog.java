@@ -3,8 +3,6 @@ package com.topface.topface.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.topface.topface.utils.ad.NativeAd;
-
 import org.json.JSONObject;
 
 public class FeedDialog extends FeedLike implements Parcelable {
@@ -70,10 +68,6 @@ public class FeedDialog extends FeedLike implements Parcelable {
         text = in.readString();
         gift = in.readInt();
         link = in.readString();
-    }
-
-    public FeedDialog(NativeAd nativeAd) {
-        super(nativeAd);
     }
 
     @Override

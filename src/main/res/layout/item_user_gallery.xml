@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:background="@color/album_grid_item_bg"
         android:foreground="@drawable/feed_avatar_overlay_selector"
-        android:onClick="@{clickListener.onClick}"
+        android:onClick="@{clickListener::onClick}"
         app:onLongItemClick="@{longClickListener}">
 
         <com.topface.topface.ui.views.ImageViewRemote

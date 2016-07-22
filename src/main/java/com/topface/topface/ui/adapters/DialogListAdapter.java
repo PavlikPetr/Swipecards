@@ -12,7 +12,6 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.ui.views.FeedItemViewConstructor;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ad.NativeAd;
 
 import java.util.Collections;
 
@@ -33,7 +32,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         FeedDialog dialog = getItem(position);
-        if (holder != null) {
+        if (holder != null && dialog!=null) {
             holder.time.setText(dialog.createdRelative);
             int itemType = getItemViewType(position);
             FeedItemViewConstructor.setCounter(holder.unreadCounter,
@@ -191,16 +190,6 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                 FeedDialog result = new FeedDialog();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
-            }
-        };
-    }
-
-    @Override
-    protected INativeAdItemCreator<FeedDialog> getNativeAdItemCreator() {
-        return new INativeAdItemCreator<FeedDialog>() {
-            @Override
-            public FeedDialog getAdItem(NativeAd nativeAd) {
-                return new FeedDialog(nativeAd);
             }
         };
     }

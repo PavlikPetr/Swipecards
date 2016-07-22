@@ -4,7 +4,6 @@ package com.topface.topface.data;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -22,10 +21,10 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -133,8 +132,6 @@ public class Options extends AbstractData {
     public int priceLeader = 8;
     public int minLeadersPercent = 25; //Не уверен в этом, возможно стоит использовать другое дефолтное значение
 
-    public String offerwall = OfferwallsManager.SPONSORPAY;
-
     public int premium_period;
     public int contacts_count = Integer.MAX_VALUE;
     public long popup_timeout;
@@ -167,11 +164,11 @@ public class Options extends AbstractData {
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
      */
     public ExperimentTags experimentTags;
-
-    public Bonus bonus = new Bonus();
+    public AppOfTheDay appOfTheDay;
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
 
+    public boolean showRefillBalanceInSideMenu = false;
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
@@ -183,10 +180,6 @@ public class Options extends AbstractData {
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
     @Inject
     transient TopfaceAppState mAppState;
-    /**
-     * (FullScreenCondition) all settings for show fullScrenn ads
-     */
-    public FullScreenCondition fullScreenCondition = new FullScreenCondition();
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
@@ -197,6 +190,11 @@ public class Options extends AbstractData {
      * массив пунктов левого меню от интеграторов
      */
     public ArrayList<LeftMenuIntegrationItems> leftMenuItems = new ArrayList<>();
+
+    /**
+     * настройки для оферволов на экране Бонус
+     */
+    public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -235,7 +233,6 @@ public class Options extends AbstractData {
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             updateUrl = response.optString("updateUrl", App.getContext().getString(R.string.app_update_url));
             aboutApp = new AboutApp(aboutAppJson.optString("title"), aboutAppJson.optString("url"));
-            offerwall = response.optString("offerwall");
             maxVersion = response.optString("maxVersion");
             blockUnconfirmed = response.optBoolean("blockUnconfirmed");
             blockChatNotMutual = response.optBoolean("blockChatNotMutual");
@@ -316,17 +313,6 @@ public class Options extends AbstractData {
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             scruffy = response.optBoolean("scruffy", false);
             App.isScruffyEnabled = scruffy;
-            JSONObject bonusObject = response.optJSONObject("bonus");
-            if (bonusObject != null) {
-                bonus.enabled = bonusObject.optBoolean("enabled");
-                bonus.counter = bonusObject.optInt("counter");
-                bonus.timestamp = bonusObject.optLong("counterTimestamp");
-                bonus.integrationUrl = bonusObject.optString("integrationUrl");
-                bonus.buttonText = bonusObject.optString("title", bonus.buttonText);
-                String iconUrl = bonusObject.optString("iconUrl", bonus.buttonPicture);
-                // проверяем валидность ссылки на картинку. Если ссылка не валидна, то подставим дефолт
-                bonus.buttonPicture = URLUtil.isValidUrl(iconUrl) ? iconUrl : bonus.buttonPicture;
-            }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
             if (jsonOfferwalls != null) {
@@ -367,11 +353,21 @@ public class Options extends AbstractData {
             feedNativeAd.parseFeedAdJSON(response.optJSONObject("feedNativeAd"));
             interstitial = JsonUtils.optFromJson(response.optString("interstitial"),
                     InterstitialInFeeds.class, interstitial);
-            fullScreenCondition = new FullScreenCondition(response);
             if (response.has("leftMenuItems")) {
                 leftMenuItems = JsonUtils.fromJson(response.getJSONArray("leftMenuItems").toString(), new TypeToken<ArrayList<LeftMenuIntegrationItems>>() {
                 });
             }
+            JSONObject offerwallsSettingsJsonObject = response.optJSONObject("offerwallsSettings");
+            if (offerwallsSettingsJsonObject != null) {
+                offerwallsSettings = JsonUtils.fromJson(offerwallsSettingsJsonObject.toString(), OfferwallsSettings.class);
+            }
+            JSONObject appOfTheDayJsonObject = response.optJSONObject("appOfTheDay");
+            if (appOfTheDayJsonObject != null) {
+                appOfTheDay = JsonUtils.optFromJson(appOfTheDayJsonObject.toString(), AppOfTheDay.class, new AppOfTheDay());
+            }
+
+            showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
+
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
@@ -628,15 +624,6 @@ public class Options extends AbstractData {
         public int price = 0;
     }
 
-    public static class Bonus {
-        public boolean enabled;
-        public int counter;
-        public long timestamp;
-        public String integrationUrl;
-        public String buttonText = App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
-        public String buttonPicture = Utils.getLocalResUrl(R.drawable.ic_bonus_left_menu);// по умолчанию кнопка отображается с картинкой ic_bonus_left_menu
-    }
-
     public static class TabsList {
         @SerializedName("tabs")
         public ArrayList<PurchasesTabData> list;
@@ -794,4 +781,53 @@ public class Options extends AbstractData {
             this.external = external;
         }
     }
+
+    public static class AppOfTheDay {
+
+        /**
+         * Информация об элементе "Приложение дня" или null, если для этого пользователя нет подходящего элемента ~ #49836
+         */
+
+        public String title;
+        /**
+         * {String} title - Название
+         */
+        public String description;
+        /**
+         * {String} description - Описание
+         */
+        public String iconUrl;
+        /**
+         * {String} iconUrl - URL-адрес иконки
+         */
+        public String targetUrl;
+
+        /**
+         * {String} targetUrl - URL-адрес страницы для перехода
+         */
+
+        @SuppressWarnings("SimplifiableIfStatement")
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof AppOfTheDay)) return false;
+            AppOfTheDay that = (AppOfTheDay) o;
+            if (title != null ? !title.equals(that.title) : that.title != null) return false;
+            if (description != null ? !description.equals(that.description) : that.description != null)
+                return false;
+            if (iconUrl != null ? !iconUrl.equals(that.iconUrl) : that.iconUrl != null)
+                return false;
+            return targetUrl != null ? targetUrl.equals(that.targetUrl) : that.targetUrl == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = title != null ? title.hashCode() : 0;
+            result = 31 * result + (description != null ? description.hashCode() : 0);
+            result = 31 * result + (iconUrl != null ? iconUrl.hashCode() : 0);
+            result = 31 * result + (targetUrl != null ? targetUrl.hashCode() : 0);
+            return result;
+        }
+    }
+
 }

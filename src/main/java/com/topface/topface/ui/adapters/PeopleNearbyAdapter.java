@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
-import com.topface.topface.utils.ad.NativeAd;
 
 public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
     public PeopleNearbyAdapter(Context context, Updater updateCallback) {
@@ -47,16 +46,6 @@ public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
                 FeedGeo result = new FeedGeo();
                 result.setLoaderTypeFlags(IListLoader.ItemType.RETRY);
                 return result;
-            }
-        };
-    }
-
-    @Override
-    protected INativeAdItemCreator<FeedGeo> getNativeAdItemCreator() {
-        return new INativeAdItemCreator<FeedGeo>() {
-            @Override
-            public FeedGeo getAdItem(NativeAd nativeAd) {
-                return new FeedGeo(nativeAd);
             }
         };
     }

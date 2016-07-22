@@ -49,7 +49,7 @@ public class ExternalLinkExecuter {
         listener.onNothingToShow();
     }
 
-    public boolean isChangePwdLink(String path){
+    public boolean isChangePwdLink(String path) {
         return path.contains(CHANGE_PWD_PART);
     }
 
@@ -75,9 +75,9 @@ public class ExternalLinkExecuter {
             Matcher matcher = codePattern.matcher(splittedPath[1]);
             if (matcher.find()) {
                 String code = matcher.group();
-                if(changePwdLink){
+                if (changePwdLink) {
                     listener.onRestorePassword(code);
-                }else{
+                } else {
                     listener.onConfirmLink(code);
                 }
                 return true;

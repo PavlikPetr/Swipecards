@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -55,8 +56,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import butterknife.BindView;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -101,15 +101,15 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
     private boolean mIsKeyBoardShown;
     private CompositeSubscription mSubscriptions = new CompositeSubscription();
 
-    @Bind(R.id.user_photos_grid)
+    @BindView(R.id.user_photos_grid)
     RecyclerView mRecyclerView;
-    @Bind(R.id.llvLeaderSending)
+    @BindView(R.id.llvLeaderSending)
     LockerView mLoadingLocker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
+        bindView();
         App.get().inject(this);
         mSubscriptions.add(mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction));
         if (savedInstanceState != null) {
@@ -202,7 +202,6 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.releaseHelper();
         }
-        ButterKnife.unbind(this);
     }
 
     @Override
@@ -277,10 +276,20 @@ public class AddToLeaderActivity extends BaseFragmentActivity implements View.On
         super.onPause();
     }
 
+    private int getCountFakeItems() {
+        int count = 0;
+        for(int i = 0; i < getAdapter().getItemCount(); i++) {
+            if(getAdapter().getAdapterData().get(i).isFake()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void pressedAddToLeader(int position) {
         final Options.LeaderButton buttonData = App.from(this).getOptions().buyLeaderButtons.get(position);
         int selectedPhotoId = getAdapter().getSelectedPhotoId();
-        if (getAdapter().getItemCount() > 0) {
+        if (getAdapter().getItemCount() > getCountFakeItems()) {
             if (mCoins < buttonData.price) {
                 showPurchasesFragment(buttonData.price);
             } else if (selectedPhotoId > LeadersRecyclerViewAdapter.EMPTY_SELECTED_ID) {

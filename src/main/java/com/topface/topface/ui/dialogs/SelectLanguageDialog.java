@@ -49,12 +49,14 @@ public class SelectLanguageDialog extends TrackedDialogFragment {
                 })
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialogLocales, int whichButton) {
-                        final int selectedPosition = ((AlertDialog) dialogLocales).getListView().getCheckedItemPosition();
-                        if (selectedLocaleIndexFinal == selectedPosition) {
-                            dialogLocales.dismiss();
-                            return;
+                        if (isAdded()) {
+                            final int selectedPosition = ((AlertDialog) dialogLocales).getListView().getCheckedItemPosition();
+                            if (selectedLocaleIndexFinal == selectedPosition) {
+                                dialogLocales.dismiss();
+                                return;
+                            }
+                            ConfirmChangesDialog.newInstance(locales[selectedPosition]).show(getActivity().getSupportFragmentManager(), ConfirmChangesDialog.class.getName());
                         }
-                        ConfirmChangesDialog.newInstance(locales[selectedPosition]).show(getFragmentManager(), ConfirmChangesDialog.class.getName());
                     }
                 }).create();
     }

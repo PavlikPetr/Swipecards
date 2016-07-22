@@ -31,6 +31,7 @@ import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -125,7 +126,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
 
     protected void auth(final AuthToken token) {
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
-        App.getConfig().onAuthTokenReceived();
         showProgress();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
         authRequest.callback(new ApiHandler() {
@@ -133,10 +133,13 @@ public abstract class BaseAuthFragment extends BaseFragment {
             public void success(IApiResponse response) {
                 AuthToken.getInstance().writeTokenInPreferences();
                 AuthorizationManager.saveAuthInfo(response);
+                App.getConfig().onAuthTokenReceived();
                 loadAllProfileData();
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
-                App.sendReferreRequest(App.getAppConfig().getAdjustAttributeData());
+                AppConfig appConfig = App.getAppConfig();
+                App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
+                App.sendReferrerTrack(appConfig.getReferrerTrackData());
                 mAdjustManager.sendRegistrationEvent(token.getSocialNet());
                 //Отправляем статистику в AppsFlyer
                 try {
@@ -214,7 +217,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 showRetryView(getString(R.string.general_maintenance), strBuilder.toString(), request);
                 break;
             case ErrorCodes.CODE_OLD_APPLICATION_VERSION:
-                OldVersionDialog.newInstance(true).show(getFragmentManager(), OldVersionDialog.class.getName());
+                if (isAdded()) {
+                    OldVersionDialog.newInstance(true).show(getActivity().getSupportFragmentManager(), OldVersionDialog.class.getName());
+                }
                 break;
             default:
                 showRetryView(getString(R.string.general_data_error), strBuilder.toString(), request);

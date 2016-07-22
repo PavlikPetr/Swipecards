@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.topface.topface.App;
-import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
+import com.topface.topface.ui.bonus.view.BonusActivity;
 import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;
-import com.topface.topface.utils.offerwalls.OfferwallsManager;
 import com.topface.topface.utils.social.AuthToken;
 
 public class ExternalLinkActivity extends BaseFragmentActivity {
@@ -53,7 +51,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
 
         @Override
         public void onOfferWall() {
-            OfferwallsManager.startOfferwall(ExternalLinkActivity.this, App.from(ExternalLinkActivity.this).getOptions());
+            startActivity(BonusActivity.createIntent());
             getIntent().setData(null);
             finish();
         }
@@ -65,7 +63,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
             startActivity(new Intent(ExternalLinkActivity.this, NavigationActivity.class));
         }
     };
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setHasContent(false);

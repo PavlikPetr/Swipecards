@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.topface.IllustratedTextView.IllustratedTextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 
@@ -183,7 +182,7 @@ public class RetryViewCreator {
 
     private static final class InnerButton {
 
-        private IllustratedTextView mButtonView;
+        private TextView mButtonView;
         private Type mType = Type.GRAY;
         private String mText;
         private View.OnClickListener mListener;
@@ -231,17 +230,16 @@ public class RetryViewCreator {
             if (mButtonView != null) mButtonView.performClick();
         }
 
-        private IllustratedTextView generateGrayButton(ViewGroup parent) {
-            IllustratedTextView btn = (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn, parent, false);
-            btn.ICON_ALIGN = TfImageSpan.ALIGN_BASELINE;
+        private TextView generateGrayButton(ViewGroup parent) {
+            TextView btn = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn, parent, false);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(btn.getLayoutParams());
             lp.bottomMargin = (int) App.getContext().getResources().getDimension(R.dimen.retry_view_button_margin_bottom);
             btn.setLayoutParams(lp);
             return btn;
         }
 
-        private IllustratedTextView generateBlueButton(ViewGroup parent) {
-            return (IllustratedTextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn_blue, parent, false);
+        private TextView generateBlueButton(ViewGroup parent) {
+            return (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.retry_btn_blue, parent, false);
         }
 
         public enum Type {GRAY, BLUE}

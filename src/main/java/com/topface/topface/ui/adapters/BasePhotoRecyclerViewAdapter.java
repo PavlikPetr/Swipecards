@@ -19,6 +19,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.databinding.ItemUserGalleryAddBtnBinding;
+import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 
@@ -126,17 +127,23 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
+            @FuckingVoodooMagic(description = "try/catch отлавливает краш в StaggeredGridLayoutManager в findOneVisibleChild " +
+                    "в случае если mPrimaryOrientation null")
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                int[] first = layoutManager.findFirstVisibleItemPositions(null);
-                int[] last = layoutManager.findLastVisibleItemPositions(null);
-                mFirstVisibleItemPos = first[0];
-                mLastVisibleItemPos = last[last.length - 1];
-                int visibleItemCount = last[last.length - 1] - first[0];
-                if (visibleItemCount != 0 && first[0] + visibleItemCount >= getPhotos().size() - 1 - mLoadController.getItemsOffsetByConnectionType() && mNeedLoadNewItems) {
-                    if (mUpdater != null && !getAdapterData().isEmpty()) {
-                        mNeedLoadNewItems = false;
-                        mUpdater.onUpdate();
+                try {
+                    int[] first = layoutManager.findFirstVisibleItemPositions(null);
+                    int[] last = layoutManager.findLastVisibleItemPositions(null);
+                    mFirstVisibleItemPos = first[0];
+                    mLastVisibleItemPos = last[last.length - 1];
+                    int visibleItemCount = last[last.length - 1] - first[0];
+                    if (visibleItemCount != 0 && first[0] + visibleItemCount >= getPhotos().size() - 1 - mLoadController.getItemsOffsetByConnectionType() && mNeedLoadNewItems) {
+                        if (mUpdater != null && !getAdapterData().isEmpty()) {
+                            mNeedLoadNewItems = false;
+                            mUpdater.onUpdate();
+                        }
                     }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
             }
         });

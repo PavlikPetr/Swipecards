@@ -29,6 +29,7 @@
     <color name="bg_light_blue">#EAF8FF</color>
     <color name="blue_60_percent">#99AEE5FD</color>
     <color name="black_60_percent">#99000000</color>
+    <color name="black_80_percent">#bb000000</color>
     <color name="text_color_gray">#333333</color>
     <color name="text_color_gray_transparent">#88333333</color>
 
@@ -48,7 +49,7 @@
     <color name="list_item_divider_normal">#E6E6E6</color>
     <color name="list_item_divider_new">#CFE9FC</color>
     <color name="list_item_divider_selected">#FFAEDCFC</color>
-    <color name="album_background">#000000</color>
+    <color name="album_background">#232c35</color>
     <color name="list_text_black">#000000</color>
     <color name="list_text_gray">#898989</color>
     <color name="list_time">#A9A9A9</color>
@@ -187,4 +188,38 @@
     <color name="left_menu_bage_text">@color/bg_white</color>
     <color name="left_menu_bage_background">#499AFF</color>
     <color name="left_mneu_users_city_color">#80ffffff</color>
+
+    <!--Offerwalls-->
+    <color name="offerwalls_title_text_color">#232C35</color>
+    <color name="offerwalls_description_text_color">#607D8B</color>
+    <color name="offerwall_empty_view_text_color">#232C35</color>
+
+    <color name="our_ad_feed_banner">#607a86</color>
+
+    <!-- Google text colors -->
+    <!-- Dark colors for usage on light backgrounds -->
+    <color name="dark_primary_text">#DE000000</color>
+    <color name="dark_secondary_text">#8A000000</color>
+    <color name="dark_hint_text">#61000000</color>
+    <color name="dark_divider">#1F000000</color>
+    <!-- White colors, for usage on light backgrounds -->
+    <color name="white_primary_text">#FFFFFF</color>
+    <color name="white_secondary_text">#B3FFFFFF</color>
+    <color name="white_hint_text">#80FFFFFF</color>
+    <color name="white_disabled_button">#4DFFFFFF</color>
+    <color name="white_divider">#1FFFFFFF</color>
+
+    <color name="city_pressed">#eceff1</color>
+
+    <color name="web_view_background">#080808</color>
+
+    <color name="gray_bg">#eceff1</color>
+    <color name="album_gift_circle_color">#499aff</color>
+
+    <color name="filter_item_text_color">#DD333844</color>
+    <color name="filter_item_title_text_color">#89333844</color>
+    <color name="filter_divider_color">#e3e3e4</color>
+
+    <color name="range_seek_bar_selected_range_color">#499aff</color>
+
 </resources>

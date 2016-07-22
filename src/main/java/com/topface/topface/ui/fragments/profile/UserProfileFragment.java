@@ -44,8 +44,8 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -124,7 +124,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             intent.putExtra(ChatFragment.INTENT_ITEM_ID, mItemId);
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
-        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_PROFILE);
+        mRateController = new RateController(this, SendLikeRequest.FROM_PROFILE);
         mLoaderView = root.findViewById(R.id.viewPagerLoader);
         mOutsideView = root.findViewById(R.id.outsideView);
         mOutsideView.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +163,14 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mRateController != null) {
+            mRateController.destroyController();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getUserProfile(mProfileId);
@@ -181,7 +189,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu((IActivityDelegate) getActivity(), barActions, mRateController, mSavedResponse);
+        return new OverflowMenu(this, barActions, mRateController, mSavedResponse);
     }
 
     @Override

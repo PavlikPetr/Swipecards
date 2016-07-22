@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -72,7 +71,7 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.edit.EditContainerActivity;
-import com.topface.topface.ui.edit.FilterFragment;
+import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -101,6 +100,7 @@ import rx.subscriptions.CompositeSubscription;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
 import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE;
+import static com.topface.topface.ui.edit.filter.view.FilterFragment.INTENT_DATING_FILTER;
 
 public class DatingFragment extends BaseFragment implements View.OnClickListener, ILocker,
         RateController.OnRateControllerListener {
@@ -152,10 +152,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     };
     private DatingInstantMessageController mDatingInstantMessageController;
-    private Drawable singleMutual;
-    private Drawable singleDelight;
-    private Drawable doubleMutual;
-    private Drawable doubleDelight;
     private boolean mCanSendAlbumReq = true;
     private SearchUser mCurrentUser;
     private int mCurrentStatusBarColor;
@@ -185,7 +181,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
                         if (null != mDelightBtn) {
                             mDelightBtn.setEnabled(false);
                         }
-                        mCurrentUser.rated = true;
+                        if (mCurrentUser != null) {
+                            mCurrentUser.rated = true;
+                        }
                         break;
                 }
             }
@@ -348,9 +346,8 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         mIsHide = savedInstanceState != null && savedInstanceState.getBoolean(FULLSCREEN_STATE);
         mPreloadManager = new PreloadManager<>();
         mController = new AlbumLoadController(AlbumLoadController.FOR_PREVIEW);
-        initMutualDrawables();
         // Rate Controller
-        mRateController = new RateController(getActivity(), SendLikeRequest.FROM_SEARCH);
+        mRateController = new RateController(this, SendLikeRequest.FROM_SEARCH);
         mRateController.setOnRateControllerUiListener(this);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(mUpdateActionsReceiver, new IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
     }
@@ -420,6 +417,9 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingSubscriptions.unsubscribe();
         }
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mUpdateActionsReceiver);
+        if (mRateController != null) {
+            mRateController.destroyController();
+        }
     }
 
     @Override
@@ -494,17 +494,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mDatingLovePrice = (TextView) root.findViewById(R.id.tvDatingLovePrice);
 
             mAnimationHelper.addView(mDatingResources);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void initMutualDrawables() {
-        if (isAdded()) {
-            singleMutual = getResources().getDrawable(R.drawable.dating_like_selector);
-            singleDelight = getResources().getDrawable(R.drawable.dating_admiration_selector);
-
-            doubleMutual = getResources().getDrawable(R.drawable.dating_mutual_selector);
-            doubleDelight = getResources().getDrawable(R.drawable.dating_dbl_admiration_selector);
         }
     }
 
@@ -1006,13 +995,13 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     private void setLikeButtonDrawables(SearchUser currUser) {
         // buttons drawables
-        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(null, currUser.isMutualPossible ? doubleMutual
-                : singleMutual, null, null);
+        mMutualBtn.setCompoundDrawablesWithIntrinsicBounds(0, currUser.isMutualPossible ? R.drawable.dating_mutual_selector
+                : R.drawable.dating_like_selector, 0, 0);
         mMutualBtn.setText(currUser.isMutualPossible ? App.getContext().getString(R.string.general_mutual)
                 : App.getContext().getString(R.string.general_sympathy));
         if (null != mDelightBtn) {
-            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                    currUser.isMutualPossible ? doubleDelight : singleDelight, null, null);
+            mDelightBtn.setCompoundDrawablesWithIntrinsicBounds(0,
+                    currUser.isMutualPossible ? R.drawable.dating_dbl_admiration_selector : R.drawable.dating_admiration_selector, 0, 0);
         }
     }
 
@@ -1217,7 +1206,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             lockControls();
             hideEmptySearchDialog();
             if (data != null && data.getExtras() != null) {
-                final DatingFilter filter = data.getExtras().getParcelable(FilterFragment.INTENT_DATING_FILTER);
+                final FilterData filter = data.getParcelableExtra(INTENT_DATING_FILTER);
                 FilterRequest filterRequest = new FilterRequest(filter, getActivity());
                 registerRequest(filterRequest);
                 filterRequest.callback(new FilterHandler()).exec();
@@ -1311,6 +1300,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         setActionBarTitles(getString(R.string.general_dating));
         getTitleSetter().setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
+        mDatingCounter.setVisibility(View.GONE);
     }
 
     @Override

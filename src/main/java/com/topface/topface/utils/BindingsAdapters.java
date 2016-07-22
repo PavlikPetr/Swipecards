@@ -4,16 +4,17 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.support.annotation.DrawableRes;
-import android.text.TextUtils;
+import android.support.annotation.StringRes;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.RangeSeekBar;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -21,14 +22,14 @@ import com.topface.topface.ui.views.ImageViewRemote;
  */
 public class BindingsAdapters {
 
-    @BindingAdapter("bind:animate")
+    @BindingAdapter("animate")
     public static void animateDisplaying(ImageViewRemote imageView, int duration) {
         AlphaAnimation animation = new AlphaAnimation(0, 1);
         animation.setDuration(duration);
         imageView.setViewDisplayAnimate(animation);
     }
 
-    @BindingAdapter("bind:onLongItemClick")
+    @BindingAdapter("onLongItemClick")
     public static void onLongItemClick(View view, View.OnLongClickListener longClickListener) {
         view.setOnLongClickListener(longClickListener);
     }
@@ -44,33 +45,89 @@ public class BindingsAdapters {
         view.setBackgroundResource(bgResource);
     }
 
-    @BindingAdapter("app:textColorSelector")
+    @BindingAdapter("android:src")
+    public static void setImageResource(ImageView view, @DrawableRes int bgResource) {
+        view.setImageResource(bgResource);
+    }
+
+    @BindingAdapter("android:drawableTop")
+    public static void setDrawableTop(TextView view, @DrawableRes int bgResource) {
+        BindingsUtils.replaceDrawable(view, bgResource, 1);
+    }
+
+    @BindingAdapter("android:drawableLeft")
+    public static void setDrawableLeft(TextView view, @DrawableRes int bgResource) {
+        BindingsUtils.replaceDrawable(view, bgResource, 0);
+    }
+
+    @BindingAdapter("android:text")
+    public static void setText(TextView view, @StringRes int stringRes) {
+        view.setText(stringRes != 0 ? view.getResources().getString(stringRes) : "");
+    }
+
+    @BindingAdapter("textColorSelector")
     public static void setTextColorSelector(View view, int colorSelector) {
         try {
-            XmlResourceParser xrp = App.getContext().getResources().getXml(colorSelector);
-            ColorStateList csl = ColorStateList.createFromXml(App.getContext().getResources(), xrp);
+            XmlResourceParser xrp = view.getResources().getXml(colorSelector);
+            ColorStateList csl = ColorStateList.createFromXml(view.getResources(), xrp);
             ((TextView) view).setTextColor(csl);
         } catch (Exception e) {
             Debug.error(e.toString());
         }
     }
 
-    @BindingAdapter("app:remoteSrc")
+    @BindingAdapter("remoteSrc")
     public static void setremoteSrc(ImageViewRemote view, String res) {
-        if (!TextUtils.isEmpty(res)) {
-            view.setRemoteSrc(res);
-        } else {
-            view.setImageDrawable(null);
-        }
+        BindingsUtils.loadLink(view, res, BindingsUtils.EMPTY_RESOURCE);
     }
 
-    @BindingAdapter("app:selected")
+    @BindingAdapter({"remoteSrc", "defaultSelector"})
+    public static void setremoteSrc(ImageViewRemote view, String res, @DrawableRes int drawableRes) {
+        BindingsUtils.loadLink(view, res, drawableRes);
+    }
+
+    @BindingAdapter("enable")
+    public static void setEnable(View view, boolean state) {
+        view.setEnabled(state);
+    }
+
+    @BindingAdapter("selected")
     public static void setSelected(View view, boolean isSelected) {
         view.setSelected(isSelected);
     }
 
-    @BindingAdapter("app:setPhoto")
+    @BindingAdapter("setPhoto")
     public static void setPhoto(ImageViewRemote view, IPhoto photo) {
         view.setPhoto((photo));
+    }
+
+    @BindingAdapter("currentMinValue")
+    public static void setRangeSeekBarCurrentMinimalValue(RangeSeekBar view, int value) {
+        view.setCurrentMinimalValue(value);
+    }
+
+    @BindingAdapter("currentMaxValue")
+    public static void setRangeSeekBarCurrentMaximalValue(RangeSeekBar view, int value) {
+        view.setCurrentMaximalValue(value);
+    }
+
+    @BindingAdapter("maxValue")
+    public static void setRangeSeekBarMaxValue(RangeSeekBar view, int value) {
+        view.setMaximalValue(value);
+    }
+
+    @BindingAdapter("minValue")
+    public static void setRangeSeekBarMinValue(RangeSeekBar view, int value) {
+        view.setMinimalValue(value);
+    }
+
+    @BindingAdapter("maxValueTitle")
+    public static void setRangeSeekBarMaxValueTitle(RangeSeekBar view, String value) {
+        view.setMaximalValueTitle(value);
+    }
+
+    @BindingAdapter("minValueTitle")
+    public static void setRangeSeekBarMinValueTitle(RangeSeekBar view, String value) {
+        view.setMinimalValueTitle(value);
     }
 }
