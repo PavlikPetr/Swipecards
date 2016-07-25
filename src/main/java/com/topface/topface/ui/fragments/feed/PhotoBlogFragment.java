@@ -1,14 +1,12 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -22,10 +20,12 @@ import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.FeedPhotoBlog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Profile;
+import com.topface.topface.databinding.HeaderPhotoBlogBinding;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
@@ -35,43 +35,45 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
-import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.RateController;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
 import com.topface.topface.utils.adapter_utils.IViewInjectRule;
 import com.topface.topface.utils.adapter_utils.InjectViewBucket;
+import com.topface.topface.viewModels.HeaderWantTopViewModel;
 
 import java.lang.reflect.Type;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
 
     private static final String PAGE_NAME = "PhotoFeed";
     private static final int UPDATE_DELAY = 20;
 
+    @Inject
+    TopfaceAppState mAppState;
+    private CompositeSubscription mSubscription = new CompositeSubscription();
+
     private RateController mRateController;
     private CountDownTimer mTimerUpdate;
     private PhotoBlogListAdapter mAdapter;
     private AddPhotoHelper mAddPhotoHelper;
 
+    private HeaderWantTopViewModel viewModel;
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             AddPhotoHelper.handlePhotoMessage(msg);
-        }
-    };
-
-    private BroadcastReceiver mUpdateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(getListAdapter() != null) {
-                getListAdapter().notifyDataSetChanged();
-            }
         }
     };
 
@@ -94,7 +96,16 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
+        App.from(getActivity()).inject(this);
+        mSubscription.add(mAppState.getObservable(Profile.class)
+                .subscribe(new Action1<Profile>() {
+                    @Override
+                    public void call(Profile profile) {
+                        if(viewModel != null) {
+                            viewModel.setUrlAvatar(profile);
+                        }
+                    }
+                }));
     }
 
     @Override
@@ -105,25 +116,19 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
             InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
                 @Override
                 public View construct() {
-                    View headerView = LayoutInflater.from(App.getContext()).inflate(R.layout.header_photoblog, null, false);
-                    headerView.findViewById(R.id.wantButton).setOnClickListener(new View.OnClickListener() {
+                    HeaderPhotoBlogBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
+                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.header_photo_blog, null, true);
+                    binding.setClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             startAddToLeaderActivity();
                         }
                     });
 
-                    Profile profile = App.get().getProfile();
-                    ImageViewRemote imageViewRemote = (ImageViewRemote) headerView.findViewById(R.id.ivBarAvatar);
-                    if(profile.photo != null) {
-                        imageViewRemote.setRemoteSrc(profile.photo.getDefaultLink());
-                    }
-                    else {
-                        imageViewRemote.setResourceSrc(profile.sex == Profile.BOY ?
-                                R.drawable.upload_photo_male : R.drawable.upload_photo_female);
-                    }
-
-                    return headerView;
+                    viewModel = new HeaderWantTopViewModel();
+                    binding.setViewModel(viewModel);
+                    binding.executePendingBindings();
+                    return binding.getRoot();
                 }
             });
             bucket.addFilter(new IViewInjectRule() {
@@ -173,7 +178,9 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
+        RxUtils.safeUnsubscribe(mSubscription);
+        mAdapter = null;
+
         if (mRateController != null) {
             mRateController.destroyController();
         }
@@ -264,7 +271,9 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
             mAddPhotoHelper = new AddPhotoHelper(PhotoBlogFragment.this, null);
             mAddPhotoHelper.setOnResultHandler(mHandler);
         }
-        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+        if(getActivity() != null) {
+            TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+        }
     }
 
     private boolean isNotYourOwnId(int id) {
