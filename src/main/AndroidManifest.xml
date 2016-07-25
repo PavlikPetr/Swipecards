@@ -569,10 +569,6 @@
             android:configChanges="orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name="com.chartboost.sdk.CBImpressionActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -693,14 +689,6 @@
                 android:name="metrica:api:level"
                 android:value="44" />
         </service>
-        <receiver
-            android:name="com.yandex.metrica.MetricaEventHandler"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
         <!--suppress AndroidDomInspection -->
         <activity
             android:name="com.yandex.mobile.ads.AdActivity"

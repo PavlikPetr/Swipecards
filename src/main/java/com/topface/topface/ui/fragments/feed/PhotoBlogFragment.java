@@ -89,7 +89,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRateController != null) {
+        if (mRateController != null) {
             mRateController.destroyController();
         }
     }

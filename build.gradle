@@ -56,9 +56,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
-        //продолжэение костыля. с новой версией заменить на нормальную зависимость
-        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+       // classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.google.gms:google-services:3.0.0'
     }
 }
@@ -82,10 +80,11 @@ allprojects {
     }
 }
 
-//apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
+//apply plugin: 'android-apt'
 apply plugin: 'kotlin-android'
+//apply plugin: 'com.neenbedankt.android-apt'
+
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -299,7 +298,7 @@ dependencies {
     compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt 'com.android.databinding:compiler:1.0-rc5'
+    kapt 'com.android.databinding:compiler:2.1.0'
     //Android Support libs
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'
@@ -355,7 +354,8 @@ dependencies {
     }
     //View Bind
     compile 'com.jakewharton:butterknife:8.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    provided 'com.jakewharton:butterknife-compiler:8.2.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.2.1'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
