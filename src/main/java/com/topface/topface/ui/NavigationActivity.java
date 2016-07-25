@@ -25,7 +25,6 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.TempClass;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
@@ -148,8 +147,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
     }
 
-    private TempClass mTempClass;
-
     @Override
     protected void setActionBarView() {
         actionBarView.setLeftMenuView();
@@ -157,8 +154,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        mTempClass = new TempClass("oloolo", 1);
-        Debug.log(mTempClass.toString());
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
