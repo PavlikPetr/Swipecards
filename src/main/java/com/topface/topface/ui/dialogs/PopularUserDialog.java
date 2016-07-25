@@ -2,23 +2,23 @@ package com.topface.topface.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.TextView;
 
 import com.topface.topface.R;
+import com.topface.topface.databinding.PopularUserDialogBinding;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.viewModels.PopularUserDialogViewModel;
+
+import static com.topface.topface.viewModels.PopularUserDialogViewModel.BLOCK_TEXT_ARG;
+import static com.topface.topface.viewModels.PopularUserDialogViewModel.DIALOG_TITLE_ARG;
 
 public class PopularUserDialog extends AbstractDialogFragment {
 
-    private static final String DIALOG_TITLE_ARG = "DIALOG_TITLE_ARG";
-    private static final String BLOCK_TEXT_ARG = "BLOCK_TEXT_ARG";
     private static final String IS_OPENED = "IS_OPENED";
 
-    private String mDialogTitle;
-    private String mBlockText;
     private boolean isOpened;
 
     public static PopularUserDialog newInstance(String dialogTitle, String blockText) {
@@ -34,11 +34,6 @@ public class PopularUserDialog extends AbstractDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null) {
-            mDialogTitle = args.getString(DIALOG_TITLE_ARG);
-            mBlockText = args.getString(BLOCK_TEXT_ARG);
-        }
         if (savedInstanceState != null) {
             isOpened = savedInstanceState.getBoolean(IS_OPENED, false);
         }
@@ -55,22 +50,17 @@ public class PopularUserDialog extends AbstractDialogFragment {
 
     @Override
     protected void initViews(View root) {
-        TextView title = (TextView) root.findViewById(R.id.popular_user_title);
-        TextView message = (TextView) root.findViewById(R.id.popular_user_message);
-
-        title.setText(mDialogTitle);
-        message.setText(mBlockText);
-
-        root.findViewById(R.id.unlock_message_sent).setOnClickListener(new View.OnClickListener() {
+        PopularUserDialogBinding mBinding = DataBindingUtil.bind(root);
+        PopularUserDialogViewModel mViewModel = new PopularUserDialogViewModel(mBinding, getArguments(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isOpened = false;
-                EasyTracker.sendEvent(getTrackName(), "BuyVipStatus", "", 1L);
                 Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserBlockDialog");
                 startActivity(intent);
                 getDialog().dismiss();
             }
         });
+        mBinding.setViewModel(mViewModel);
     }
 
     @Override

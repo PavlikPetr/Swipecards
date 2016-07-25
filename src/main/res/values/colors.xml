@@ -50,7 +50,7 @@
     <color name="list_item_divider_new">#CFE9FC</color>
     <color name="list_item_divider_selected">#FFAEDCFC</color>
     <color name="album_background">#232c35</color>
-    <color name="list_text_black">#000000</color>
+    <color name="list_text_black">@color/black</color>
     <color name="list_text_gray">#898989</color>
     <color name="list_time">#A9A9A9</color>
     <color name="list_unread_counter_background">#35AADC</color>
@@ -223,5 +223,7 @@
     <color name="range_seek_bar_selected_range_color">#499aff</color>
 
     <color name="rounded_image_blue_border">#499aff</color>
+    <color name="black">#000000</color>
+
 
 </resources>
