@@ -96,7 +96,7 @@ public class NavigationManager {
     }
 
     public void init() {
-        selectFragment(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
+        selectFragment(mFragmentSettings);
     }
 
     private String getTag(LeftMenuSettingsData settings) {
@@ -230,7 +230,13 @@ public class NavigationManager {
     }
 
     public void selectFragment(LeftMenuSettingsData fragmentSettings) {
-        selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
+        if (mActivityDelegate != null) {
+            if (mActivityDelegate.isActivityRestoredState()) {
+                selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
+            } else {
+                mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, fragmentSettings);
+            }
+        }
     }
 
     @SuppressLint("SwitchIntDef")
