@@ -349,6 +349,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             onUserLoaded(mUser);
         }
         if (!AuthToken.getInstance().isEmpty()) {
+            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_GIFT);
             GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
         }
         return mRootLayout;
