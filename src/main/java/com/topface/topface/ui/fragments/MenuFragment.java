@@ -41,7 +41,6 @@ import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -93,13 +92,20 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
+
+            if (options.showRefillBalanceInSideMenu) {
+                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.GEO);
+            }
+            else {
+                adapter.removeItem(getBalansItem());
+            }
+
             if (options.offerwallsSettings.isEnable()) {
                 adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
             } else {
                 adapter.removeItem(getBonusItem());
             }
-            adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
-            adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
+
             updateIntegrationPage(options);
         }
 
@@ -182,13 +188,6 @@ public class MenuFragment extends Fragment {
         mAdapter = initAdapter();
         mAdapter.updateSelected(mSelectedPos, false);
         mSubscription.add(mAppState.getObservable(CountersData.class)
-                .map(new Func1<CountersData, CountersData>() {
-                    @Override
-                    public CountersData call(CountersData countersData) {
-                        countersData.setBonus(CacheProfile.needShowBonusCounter ? App.from(getActivity()).getOptions().bonus.counter : 0);
-                        return countersData;
-                    }
-                })
                 .filter(new Func1<CountersData, Boolean>() {
                     @Override
                     public Boolean call(CountersData countersData) {
@@ -312,18 +311,27 @@ public class MenuFragment extends Fragment {
         arrayList.add(new LeftMenuData(R.drawable.ic_chat_left_menu, R.string.settings_messages, mCountersData.getDialogs(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors, mCountersData.getVisitors(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby, mCountersData.getPeopleNearby(), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
-        if (options.bonus.enabled) {
+
+        if (options.showRefillBalanceInSideMenu) {
+            arrayList.add(getBalansItem());
+        }
+
+        if (options.offerwallsSettings.isEnable()) {
             arrayList.add(getBonusItem());
         }
-        arrayList.add(new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE)));
+
         if (App.get().getProfile().isEditor()) {
             arrayList.add(getEditorItem());
         }
         return arrayList;
     }
 
+    private LeftMenuData getBalansItem() {
+        return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE));
+    }
+
     private LeftMenuData getBonusItem() {
-        return new LeftMenuData(R.drawable.ic_bonus_left_menu, App.get().getOptions().bonus.buttonText, mCountersData.getBonus(), false, new LeftMenuSettingsData(FragmentIdData.BONUS));
+        return new LeftMenuData(R.drawable.ic_bonus_left_menu,  App.getContext().getString(R.string.general_bonus), 0, false, new LeftMenuSettingsData(FragmentIdData.BONUS));
     }
 
     private LeftMenuData getEditorItem() {

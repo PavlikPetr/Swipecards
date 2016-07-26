@@ -175,6 +175,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
             holder = getEmptyHolder(convertView, item);
         }
+
         if (item != null) {
             // установка аватарки пользователя
             // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной

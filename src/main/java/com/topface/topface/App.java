@@ -31,6 +31,7 @@ import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
+import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
@@ -199,7 +200,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 });
     }
 
-    public static void sendReferreRequest(final AdjustAttributeData attribution) {
+    public static void sendAdjustAttributeData(final AdjustAttributeData attribution) {
         Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
         final AppConfig config = getAppConfig();
         if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
@@ -216,6 +217,28 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     Debug.log("Adjust:: fail while send AdjustAttributeData");
+                }
+            }).exec();
+        }
+    }
+
+    public static void sendReferrerTrack(final InstallReferrerData referrerTrack) {
+        Debug.log("ReferrerTrack:: check settings before send referrerTrack to server");
+        final AppConfig config = getAppConfig();
+        if (!AuthToken.getInstance().isEmpty() && !InstallReferrerData.isEmpty(referrerTrack) && !config.isReferrerTrackDataSent()) {
+            new AdWords().trackInstall();
+            Debug.log("ReferrerTrack:: send referrerTrack " + referrerTrack.getInstallReferrerTrackData());
+            new ReferrerRequest(App.getContext(), referrerTrack).callback(new ApiHandler() {
+                @Override
+                public void success(IApiResponse response) {
+                    Debug.log("ReferrerTrack:: referrerTrack sent success");
+                    config.setReferrerTrackDataSent(true);
+                    config.saveConfig();
+                }
+
+                @Override
+                public void fail(int codeError, IApiResponse response) {
+                    Debug.log("ReferrerTrack:: fail while send referrerTrack");
                 }
             }).exec();
         }
@@ -467,7 +490,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 onCreateAsync(handler);
             }
         };
-        App.sendReferreRequest(getAppConfig().getAdjustAttributeData());
+        AppConfig appConfig = App.getAppConfig();
+        App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
+        App.sendReferrerTrack(appConfig.getReferrerTrackData());
     }
 
 
