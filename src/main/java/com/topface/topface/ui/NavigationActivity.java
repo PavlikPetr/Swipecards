@@ -181,7 +181,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
             @Override
             public void call(AdjustAttributeData adjustAttributionData) {
-                App.sendReferreRequest(adjustAttributionData);
+                App.sendAdjustAttributeData(adjustAttributionData);
             }
         }));
         mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
@@ -318,11 +318,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     private void initFullscreen() {
         mFullscreenController = new FullscreenController(this);
-    }
-
-    private void initBonusCounterConfig() {
-        long lastTime = App.getUserConfig().getBonusCounterLastShowTime();
-        CacheProfile.needShowBonusCounter = lastTime < App.from(this).getOptions().bonus.timestamp;
     }
 
     private NavigationManager getNavigationManager() {
@@ -471,7 +466,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
         }
         startPopupRush(false, false);
-        initBonusCounterConfig();
     }
 
     /**
