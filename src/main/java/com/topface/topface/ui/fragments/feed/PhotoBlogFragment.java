@@ -44,7 +44,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
 import com.topface.topface.utils.adapter_utils.IViewInjectRule;
 import com.topface.topface.utils.adapter_utils.InjectViewBucket;
-import com.topface.topface.viewModels.HeaderWantTopViewModel;
+import com.topface.topface.viewModels.HeaderPhotoBlogViewModel;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -68,7 +68,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     private PhotoBlogListAdapter mAdapter;
     private AddPhotoHelper mAddPhotoHelper;
 
-    private HeaderWantTopViewModel viewModel;
+    private HeaderPhotoBlogViewModel mViewModel;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -101,8 +101,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                 .subscribe(new Action1<Profile>() {
                     @Override
                     public void call(Profile profile) {
-                        if(viewModel != null) {
-                            viewModel.setUrlAvatar(profile);
+                        if (mViewModel != null) {
+                            mViewModel.setUrlAvatar(profile);
                         }
                     }
                 }));
@@ -125,8 +125,8 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                         }
                     });
 
-                    viewModel = new HeaderWantTopViewModel();
-                    binding.setViewModel(viewModel);
+                    mViewModel = new HeaderPhotoBlogViewModel();
+                    binding.setViewModel(mViewModel);
                     binding.executePendingBindings();
                     return binding.getRoot();
                 }
@@ -142,12 +142,11 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     }
 
     private void startAddToLeaderActivity() {
-            if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
-                takePhoto();
-            }
-            else {
-                startActivityForResult(new Intent(getActivity(), AddToLeaderActivity.class), AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID);
-            }
+        if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
+            takePhoto();
+        } else {
+            startActivityForResult(new Intent(getActivity(), AddToLeaderActivity.class), AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID);
+        }
     }
 
     @Override
@@ -271,7 +270,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
             mAddPhotoHelper = new AddPhotoHelper(PhotoBlogFragment.this, null);
             mAddPhotoHelper.setOnResultHandler(mHandler);
         }
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
         }
     }

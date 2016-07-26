@@ -834,6 +834,13 @@
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
     </style>
 
+    <style name="BlueButtonAllCaps" parent="Widget.Topface.Button.Big.Blue">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+        <item name="android:textAllCaps" tools:targetApi="ice_cream_sandwich">true</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
     <style name="Widget.Topface.Button.Big.InviteVkFriends">
         <item name="android:background">@drawable/btn_blue_invite_vk_friends_selector</item>
         <item name="android:textColor">@drawable/btn_blue_invite_vk_friends_text_color_selector
