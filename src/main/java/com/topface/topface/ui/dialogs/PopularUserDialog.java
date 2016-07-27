@@ -93,4 +93,8 @@ public class PopularUserDialog extends AbstractDialogFragment {
     public boolean isOpened() {
         return isOpened;
     }
+
+    public void release(){
+
+    }
 }

@@ -619,7 +619,15 @@ public class BitmapUtils {
         return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
     }
 
-    public static Bitmap getInscribedCircleBitmap(Bitmap bitmap, int width, int height) {
+    public static Bitmap getInscribedCircleBitmap(Bitmap bitmap, int width, int height, float borderWidth, @Nullable ColorStateList borderColor) {
+        if (borderWidth == 0 || borderColor == DEFAULT_BORDER_COLOR) {
+            return getInscribedCircleBitmap(bitmap, width, height);
+        } else {
+            return getRoundBitmap(getInscribedCircleBitmap(bitmap, width, height), 1f, borderWidth, borderColor);
+        }
+    }
+
+    private static Bitmap getInscribedCircleBitmap(Bitmap bitmap, int width, int height) {
         int bWidth = bitmap.getWidth();
         int bHeight = bitmap.getHeight();
         float viewRation = (float) width / (float) height;

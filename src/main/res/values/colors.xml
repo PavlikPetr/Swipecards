@@ -223,7 +223,15 @@
     <color name="range_seek_bar_selected_range_color">#499aff</color>
 
     <color name="rounded_image_blue_border">#499aff</color>
+    <color name="rounded_image_pink_border">#ff69d0</color>
     <color name="black">#000000</color>
+    <color name="photo_feed_header_bg_color">#eceff1</color>.
+
+    <!--Mutual sympathy stub-->
+    <color name="mutual_sympathy_stub_title">#232C35</color>
+    <color name="mutual_sympathy_stub_msg">#232C35</color>
+    <color name="mutual_sympathy_stub_date">#aa000000</color>
+    <color name="mutual_sympathy_stub_aditional_info">#61000000</color>
 
 
 </resources>

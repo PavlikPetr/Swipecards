@@ -1107,5 +1107,8 @@
 
     <string name="rate_popup_we_need_your_opinion">Нам очень важно ваше мнение</string>
     <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Пожалуйста, оцените приложение. Это займет несколько секунд вашего времени.</string>
+    <string name="mutual_sympathy_in_chat">Симпатия взаимна!</string>
+    <string name="start_chat_with_gift">Подарок будет хорошим началом!</string>
+    <string name="mutual_sympathy">Взаимная симпатия</string>
 
 </resources>

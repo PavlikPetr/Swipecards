@@ -36,21 +36,13 @@
             p2r:ptrOverScroll="false"
             p2r:ptrShowIndicator="false" />
 
-        <RelativeLayout
+        <ViewStub
             android:id="@+id/llvLockScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/loChatFooterSend"
-            android:visibility="gone">
-
-            <ViewStub
-                android:id="@+id/famousBlockerStub"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:inflatedId="@+id/famousBlocker"
-                android:layout="@layout/layout_popular_user_blocker" />
-        </RelativeLayout>
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
         <include
             android:id="@id/loChatFooterSend"

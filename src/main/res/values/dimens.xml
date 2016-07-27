@@ -161,5 +161,14 @@
 
     <!--Rounded images border size-->
     <dimen name="album_gift_border_size">2dp</dimen>
+    <dimen name="mutual_sympathy_border_size">1dp</dimen>
+
+    <!--Mutual sympathy stub-->
+    <dimen name="mutual_sympathy_stub_title">30sp</dimen>
+    <dimen name="mutual_sympathy_stub_msg">17sp</dimen>
+    <dimen name="mutual_sympathy_stub_date">16sp</dimen>
+    <dimen name="mutual_sympathy_stub_aditional_info">14sp</dimen>
+    <dimen name="mutual_sympathy_stub_avatar_size">198dp</dimen>
+    <dimen name="mutual_sympathy_icon_size">40dp</dimen>
 
 </resources>

@@ -120,7 +120,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
                 case POST_PROCESSOR_ROUND_AVATAR:
                     return new RoundAvatarProcessor();
                 case POST_PROCESSOR_INSCRIBED_AVATAR_IN_CIRCLE:
-                    return new InscribedCircleAvatarProcessor(this);
+                    return new InscribedCircleAvatarProcessor(this, mRoundedImageBorderWidth, mRoundedImageBorderColor);
                 case POST_PROCESSOR_BLUR:
                     return new BlurProcessor(mBlurRadius);
                 default:

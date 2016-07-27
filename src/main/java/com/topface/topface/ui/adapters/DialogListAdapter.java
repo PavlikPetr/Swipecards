@@ -32,7 +32,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         convertView = super.getContentView(position, convertView, viewGroup);
         FeedViewHolder holder = (FeedViewHolder) convertView.getTag();
         FeedDialog dialog = getItem(position);
-        if (holder != null && dialog!=null) {
+        if (holder != null && dialog != null) {
             holder.time.setText(dialog.createdRelative);
             int itemType = getItemViewType(position);
             FeedItemViewConstructor.setCounter(holder.unreadCounter,
@@ -79,12 +79,8 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
                     }
                     break;
                 case FeedDialog.SYMPHATHY:
-                    if (dialog.target == FeedDialog.INPUT_FRIEND_MESSAGE) {
-                        text = getContext().getString(R.string.chat_mutual_in);
-                    } else {
-                        text = getContext().getString(R.string.chat_mutual_out);
-                        image = R.drawable.ico_outbox;
-                    }
+                    text = getContext().getString(R.string.mutual_sympathy);
+                    image = R.drawable.ic_mutuality_msg_list;
                     break;
                 case FeedDialog.GIFT:
                     image = R.drawable.ico_gift;
