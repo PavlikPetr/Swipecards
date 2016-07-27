@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.topface.topface.utils.ActivityLifeCycleReporter;
+import com.topface.topface.utils.IActivityDelegate;
 
 /**
  * Created by ppavlik on 04.04.16.
  * Observe activity lifecycle
  */
-public class TrackedLifeCycleActivity extends AppCompatActivity {
+public class TrackedLifeCycleActivity extends AppCompatActivity implements IActivityDelegate {
 
     private ActivityLifeCycleReporter mLifeCycleReporter = new ActivityLifeCycleReporter(getClass().getName());
 
@@ -59,5 +60,10 @@ public class TrackedLifeCycleActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         mLifeCycleReporter.onRestart();
+    }
+
+    @Override
+    public boolean isActivityRestoredState() {
+        return false;
     }
 }

@@ -15,7 +15,7 @@ public class LeadersRecyclerViewAdapter extends BasePhotoRecyclerViewAdapter<Pho
 
     public static final int EMPTY_SELECTED_ID = -1;
     private int mSelectedPhotoId = 1;
-    private int mSelectedPhotoPos = 1;
+    private int mSelectedPhotoPos = -1;
 
     public LeadersRecyclerViewAdapter(Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
@@ -68,5 +68,17 @@ public class LeadersRecyclerViewAdapter extends BasePhotoRecyclerViewAdapter<Pho
     public void setSelectedPhotoId(int id) {
         mSelectedPhotoId = id;
         notifyDataSetChanged();
+    }
+
+    public int getSelectedPhotoPos() {
+        return mSelectedPhotoPos;
+    }
+
+    public void setSelectedPhotoPos(int selectedPhotoPos) {
+        mSelectedPhotoPos = selectedPhotoPos;
+        FrameLayout view = (FrameLayout) mLayoutManager.findViewByPosition(mSelectedPhotoPos);
+        if (view != null) {
+            view.setForeground(App.getContext().getResources().getDrawable(R.drawable.leader_photo_selection));
+        }
     }
 }

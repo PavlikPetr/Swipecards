@@ -35,12 +35,16 @@ public class ActionBarView implements View.OnClickListener {
     }
 
     private void prepareView() {
+        prepareView(this);
+    }
+
+    private void prepareView(View.OnClickListener onClickListener) {
         mActionBar.setCustomView(R.layout.actionbar_container_title_view);
         mActionBarView = mActionBar.getCustomView();
         mTitle = (TextView) mActionBarView.findViewById(R.id.title);
         mSubtitle = (TextView) mActionBarView.findViewById(R.id.subtitle);
         mIcon = (ImageView) mActionBarView.findViewById(R.id.up_icon);
-        mActionBarView.findViewById(R.id.title_clickable).setOnClickListener(this);
+        mActionBarView.findViewById(R.id.title_clickable).setOnClickListener(onClickListener);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             TypedValue tempVal = new TypedValue();
             App.getContext().getResources().getValue(R.dimen.actionbar_elevation, tempVal, true);
@@ -62,6 +66,15 @@ public class ActionBarView implements View.OnClickListener {
 
     public void setArrowUpView(String title) {
         prepareView();
+        setupViews(title);
+    }
+
+    public void setArrowUpView(String title, View.OnClickListener onClickListener) {
+        prepareView(onClickListener);
+        setupViews(title);
+    }
+
+    private void setupViews(String title){
         mIcon.setImageResource(R.drawable.ic_arrow_up);
         mTitle.setText(title);
     }

@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -48,7 +47,7 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -129,7 +128,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mUnbinder != null) {
+        if (mUnbinder != null) {
             mUnbinder.unbind();
         }
     }

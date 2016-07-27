@@ -20,7 +20,7 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.ui.AddToLeaderActivity;
+import com.topface.topface.ui.AddToPhotoBlogActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
 import com.topface.topface.ui.UserProfileActivity;
@@ -36,6 +36,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
+
+    public final static int ADD_TO_PHOTO_BLOG_ACTIVITY_ID = 1;
 
     private static final String PAGE_NAME = "PhotoFeed";
     private static final int UPDATE_DELAY = 20;
@@ -216,7 +218,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add_new_leader_photo:
-                startActivityForResult(new Intent(getActivity(), AddToLeaderActivity.class), AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID);
+                startActivityForResult(new Intent(getActivity(), AddToPhotoBlogActivity.class), ADD_TO_PHOTO_BLOG_ACTIVITY_ID);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -255,7 +257,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID) {
+        if (requestCode == ADD_TO_PHOTO_BLOG_ACTIVITY_ID) {
             updatePhotoblogList();
         }
     }

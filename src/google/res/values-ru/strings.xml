@@ -1108,4 +1108,8 @@
     <string name="rate_popup_we_need_your_opinion">Нам очень важно ваше мнение</string>
     <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Пожалуйста, оцените приложение. Это займет несколько секунд вашего времени.</string>
 
+    <string name="add_photo_feed_header_description"> Разместите фото с приветствием и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
+    <string name="publish_photo">Разместить фото</string>
+
+
 </resources>
