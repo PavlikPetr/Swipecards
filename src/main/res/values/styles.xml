@@ -519,6 +519,13 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
+    <style name="PhotoBlogAvatar">
+        <item name="preProcessor">inscribedAvatar</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
     <style name="ChatAvatar" parent="NavigationBarAvatar">
         <item name="preProcessor">mask</item>
         <item name="clipMask">@drawable/avatar_chat_mask</item>
@@ -825,6 +832,13 @@
     <style name="Widget.Topface.Button.Big.Blue">
         <item name="android:background">@drawable/btn_blue_selector</item>
         <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+    </style>
+
+    <style name="BlueButtonAllCaps" parent="Widget.Topface.Button.Big.Blue">
+        <item name="android:background">@drawable/btn_blue_selector</item>
+        <item name="android:textColor">@drawable/btn_blue_text_color_selector</item>
+        <item name="android:textAllCaps" tools:targetApi="ice_cream_sandwich">true</item>
+        <item name="textAllCaps">true</item>
     </style>
 
     <style name="Widget.Topface.Button.Big.InviteVkFriends">
