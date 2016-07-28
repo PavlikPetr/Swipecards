@@ -15,7 +15,6 @@ import static com.topface.topface.viewModels.PopularUserDialogViewModel.DIALOG_T
 
 public class PopularUserDialog extends AbstractDialogFragment {
 
-    private PopularUserDialogBinding mBinding;
     private PopularUserDialogViewModel mViewModel;
 
     public static PopularUserDialog newInstance(String dialogTitle, String blockText) {
@@ -29,8 +28,8 @@ public class PopularUserDialog extends AbstractDialogFragment {
 
     @Override
     protected void initViews(View root) {
-        mBinding = DataBindingUtil.bind(root);
-        mViewModel = new PopularUserDialogViewModel(mBinding, getArguments(), new View.OnClickListener() {
+        PopularUserDialogBinding binding = DataBindingUtil.bind(root);
+        mViewModel = new PopularUserDialogViewModel(binding, getArguments(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserBlockDialog");
@@ -38,7 +37,7 @@ public class PopularUserDialog extends AbstractDialogFragment {
                 getDialog().dismiss();
             }
         });
-        mBinding.setViewModel(mViewModel);
+        binding.setViewModel(mViewModel);
     }
 
     @Override
@@ -61,6 +60,5 @@ public class PopularUserDialog extends AbstractDialogFragment {
             mViewModel.release();
             mViewModel = null;
         }
-        mBinding = null;
     }
 }
