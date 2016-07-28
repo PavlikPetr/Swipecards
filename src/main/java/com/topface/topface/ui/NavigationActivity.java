@@ -435,8 +435,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onResumeFragments() {
+        super.onResumeFragments();
         tryPostponedStartFragment();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();

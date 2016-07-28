@@ -96,7 +96,7 @@ public class NavigationManager {
     }
 
     public void init() {
-        selectFragment(new WrappedNavigationData(mFragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
+        selectFragment(mFragmentSettings);
     }
 
     private String getTag(LeftMenuSettingsData settings) {
@@ -104,7 +104,7 @@ public class NavigationManager {
     }
 
     private void switchFragment(final WrappedNavigationData data) {
-        if (data == null || data.getData() == null || mActivityDelegate == null) {
+        if (data == null || data.getData() == null || mActivityDelegate == null || !mActivityDelegate.isActivityRestoredState()) {
             return;
         }
         LeftMenuSettingsData leftMenuSettingsData = data.getData();
@@ -230,12 +230,20 @@ public class NavigationManager {
     }
 
     public void selectFragment(LeftMenuSettingsData fragmentSettings) {
-        selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
+        if (mActivityDelegate != null) {
+            if (mActivityDelegate.isActivityRestoredState()) {
+                selectFragment(new WrappedNavigationData(fragmentSettings, WrappedNavigationData.SWITCH_EXTERNALLY));
+            } else {
+                mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, fragmentSettings);
+            }
+        }
     }
 
     @SuppressLint("SwitchIntDef")
     private void selectFragment(WrappedNavigationData data) {
-        mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
+        if (mActivityDelegate != null) {
+            mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
+        }
         switch (data.getData().getFragmentId()) {
             case FragmentIdData.BALLANCE:
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
@@ -259,7 +267,7 @@ public class NavigationManager {
                         }
                     });
                     break;
-                }else{
+                } else {
                     switchFragment(data);
                 }
             case FragmentIdData.UNDEFINED:
