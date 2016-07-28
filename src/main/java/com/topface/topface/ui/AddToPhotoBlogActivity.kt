@@ -5,6 +5,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.ActionBar
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
@@ -127,10 +128,8 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
     }
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
-        val manager = StaggeredGridLayoutManager(resources.getInteger(R.integer.add_to_leader_column_count)
-                , StaggeredGridLayoutManager.VERTICAL)
         with(recyclerView) {
-            layoutManager = manager
+            layoutManager = GridLayoutManager(this@AddToPhotoBlogActivity, resources.getInteger(R.integer.add_to_leader_column_count))
             adapter = mAdapter
             post {
                 mAdapter.selectedPhotoPos = mSelectedPos
