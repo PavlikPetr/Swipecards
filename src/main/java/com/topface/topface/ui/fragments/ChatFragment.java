@@ -348,9 +348,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mUser != null && !mUser.isEmpty()) {
             onUserLoaded(mUser);
         }
-        if (!AuthToken.getInstance().isEmpty()) {
-            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
-        }
+
         return mRootLayout;
     }
 
@@ -969,6 +967,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         IntentFilter filter = new IntentFilter(GCMUtils.GCM_NOTIFICATION);
         LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(mNewMessageReceiver, filter);
         startTimer();
+
+        if (!AuthToken.getInstance().isEmpty()) {
+            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+        }
     }
 
     @Override
