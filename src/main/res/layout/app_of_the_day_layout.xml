@@ -11,8 +11,6 @@
         <variable
             name="click"
             type="android.view.View.OnClickListener" />
-
-        <import type="com.topface.topface.utils.Utils" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

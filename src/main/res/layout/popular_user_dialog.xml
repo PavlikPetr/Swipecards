@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="18dp"
-    android:paddingTop="24dp">
+    <data>
 
-    <TextView
-        android:id="@+id/popular_user_title"
-        style="@style/ItemTitleTextBlack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center" />
+        <variable
+            name="viewModel"
+            type="com.topface.topface.viewModels.PopularUserDialogViewModel" />
 
-    <TextView
-        android:id="@+id/popular_user_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/popular_user_title"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp"
-        android:textSize="13sp"
-        android:textColor="#000000" />
+        <variable
+            name="click"
+            type="android.view.View.OnClickListener" />
+    </data>
 
-    <Button
-        android:id="@+id/unlock_message_sent"
-        style="@style/Widget.Topface.Button.Big.Blue"
-        android:layout_width="wrap_content"
-        android:layout_height="43dp"
-        android:layout_below="@id/popular_user_message"
-        android:layout_centerHorizontal="true"
-        android:singleLine="true"
-        android:text="@string/buying_vip_status" />
 
-</RelativeLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="18dp"
+        android:paddingTop="24dp">
+
+        <TextView
+            android:id="@+id/popular_user_title"
+            style="@style/ItemTitleTextBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="@{viewModel.title}" />
+
+        <TextView
+            android:id="@+id/popular_user_message"
+            style="@style/PopularUserDialogMessage"
+            android:layout_below="@id/popular_user_title"
+            android:text="@{viewModel.message}" />
+
+        <Button
+            android:id="@+id/unlock_message_sent"
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_width="wrap_content"
+            android:layout_height="43dp"
+            android:layout_below="@id/popular_user_message"
+            android:layout_centerHorizontal="true"
+            android:onClick="@{click}"
+            android:singleLine="true"
+            android:text="@string/buying_vip_status" />
+
+    </RelativeLayout>
+</layout>

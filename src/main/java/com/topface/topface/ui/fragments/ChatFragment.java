@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
@@ -28,6 +27,7 @@ import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -35,7 +35,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +80,6 @@ import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
-import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
@@ -92,7 +90,7 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
-import com.topface.topface.utils.controllers.PopularUserChatController;
+import com.topface.topface.utils.controllers.chatStubs.ChatStabsController;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
@@ -106,6 +104,10 @@ import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
+import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.LOCK_CHAT;
+import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.MUTUAL_SYMPATHY;
+import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.SHOW_RETRY;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -144,7 +146,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             int userId;
             try {
                 userId = Integer.parseInt(id);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 userId = -1;
             }
             final int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
@@ -173,8 +175,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
-    private RelativeLayout mLockScreen;
-    private PopularUserChatController mPopularUserLockController;
+    private ViewStub mLockScreen;
+    private ChatStabsController mStubsController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
     private String mUserNameAndAge;
@@ -200,6 +202,16 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         @Override
         public void afterTextChanged(Editable editable) {
 
+        }
+    };
+    private BroadcastReceiver mVipBought = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
+                if (mStubsController != null && mStubsController.isChatLocked()) {
+                    mStubsController.unlock();
+                }
+            }
         }
     };
     private ImageButton mSendButton;
@@ -241,6 +253,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         }
     };
 
+    private View.OnClickListener mRetryViewOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            update(false, ChatUpdateType.RETRY);
+            setLockScreenVisibility(false);
+            mBackgroundController.startAnimation();
+        }
+    };
+
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
         INITIAL("initial"), RESUME_UPDATE("resume update"), TIMER("timer"),
@@ -260,6 +281,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipBought, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         DateUtils.syncTime();
         setRetainInstance(true);
@@ -338,15 +360,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
         //LockScreen
-        initLockScreen(mRootLayout);
-        if (savedInstanceState != null) {
-            Parcelable popularLockState = savedInstanceState.getParcelable(POPULAR_LOCK_STATE);
-            if (popularLockState != null) {
-                mPopularUserLockController.setState((PopularUserChatController.SavedState) popularLockState);
-            }
-        }
+        initLockScreen(mRootLayout, savedInstanceState);
         updateSendMessageAbility(false);
-        checkPopularUserLock();
         //init data
         restoreData(savedInstanceState);
         // History ListView & ListAdapter
@@ -406,10 +421,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (mAdapter.getDataCopy().isEmpty()) {
                     if (mHistoryFeedList != null) {
                         for (History message : mHistoryFeedList) {
-                            int blockStage = mPopularUserLockController.block(message);
                             // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
                             // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
-                            if (blockStage == PopularUserChatController.FIRST_STAGE && message.unread) {
+                            if ((message.type == LOCK_CHAT || message.type == MUTUAL_SYMPATHY) && message.unread) {
                                 loadedItemsCount++;
                             }
                         }
@@ -458,15 +472,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void setLockScreenVisibility(boolean isVisible) {
-        if (mLockScreen != null) {
+        if (mStubsController != null) {
             if (isVisible) {
-                if (mLockScreen.getVisibility() != View.VISIBLE) {
-                    mLockScreen.setVisibility(View.VISIBLE);
-                }
+                mStubsController.showRetryView(mRetryViewOnClick);
             } else {
-                if (mLockScreen.getVisibility() != View.GONE) {
-                    mLockScreen.setVisibility(View.GONE);
-                }
+                mStubsController.dismissRetryView();
             }
         }
         updateSendMessageAbility();
@@ -543,36 +553,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         });
     }
 
-    private void initLockScreen(View root) {
-        mLockScreen = (RelativeLayout) root.findViewById(R.id.llvLockScreen);
-        RetryViewCreator retryView = new RetryViewCreator.Builder(getActivity(), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                update(false, ChatUpdateType.RETRY);
-                setLockScreenVisibility(false);
-                mBackgroundController.startAnimation();
-            }
-        }).messageFontColor(R.color.text_color_gray).noShadow().build();
-        mLockScreen.addView(retryView.getView());
-
-        if (mPopularUserLockController != null) {
-            mPopularUserLockController.setLockScreen(mLockScreen);
-        } else {
-            mPopularUserLockController = new PopularUserChatController(this, mLockScreen);
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
-                    mPopularUserLockController, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
-        }
-    }
-
-    private boolean checkPopularUserLock() {
-        if (mPopularUserLockController.isChatLocked()) {
-            mPopularUserLockController.blockChat();
-            return true;
-        }
-        if (mPopularUserLockController.isDialogOpened()) {
-            mPopularUserLockController.showBlockDialog();
-        }
-        return false;
+    private void initLockScreen(View root, Bundle savedInstanceState) {
+        mStubsController = new ChatStabsController((ViewStub) root.findViewById(R.id.llvLockScreen), this);
+        mStubsController.onRestoreInstanceState(savedInstanceState);
+        mStubsController.setPhoto(mPhoto);
     }
 
     private void updateSendMessageAbility() {
@@ -584,7 +568,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mSendButton.setEnabled(
                     !mEditBox.getText().toString().isEmpty() &&
                             (mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1
-                                    || ((mLockScreen == null || mLockScreen.getVisibility() == View.GONE)
+                                    || ((mStubsController == null || mStubsController.getCurrentLockType() != SHOW_RETRY)
                                     && (isButtonAvailable == null || isButtonAvailable))));
         }
     }
@@ -621,13 +605,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 Debug.error(e);
             }
         }
-        outState.putParcelable(POPULAR_LOCK_STATE, mPopularUserLockController.getSavedState()
-        );
-    }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
+        if (mStubsController != null) {
+            mStubsController.onSaveInstanceState(outState);
+        }
     }
 
     /**
@@ -664,8 +644,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         release();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mPopularUserLockController);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mVipBought);
         Debug.log(this, "-onDestroy");
+        if (mStubsController != null) {
+            mStubsController.release();
+        }
         super.onDestroy();
     }
 
@@ -684,7 +667,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         final boolean isPopularLockOn;
         isPopularLockOn = mAdapter != null &&
                 !mAdapter.isEmpty() &&
-                (mPopularUserLockController.isChatLocked() || mPopularUserLockController.isResponseLocked()) &&
+                (mStubsController == null || mStubsController.isChatLocked() || mStubsController.isResponseLocked()) &&
                 pullToRefresh;
 
         HistoryRequest historyRequest = new HistoryRequest(App.getContext(), mUserId, new HistoryRequest.IRequestExecuted() {
@@ -715,11 +698,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             protected void success(HistoryListData data, IApiResponse response) {
                 mHistoryFeedList = data.items;
                 if (!data.items.isEmpty() && !isPopularLockOn) {
-                    for (History message : data.items) {
-                        mPopularUserLockController.setTexts(message.dialogTitle, message.blockText);
-                        mPopularUserLockController.setPhoto(mPhoto);
-                        int blockStage = mPopularUserLockController.block(message);
-                        if (blockStage == PopularUserChatController.FIRST_STAGE) {
+                    if (mStubsController != null) {
+                        int blockStage = mStubsController.getLockType(data);
+                        mStubsController.block();
+                        if (blockStage == LOCK_CHAT) {
                             mIsUpdating = false;
                             mWasFailed = false;
                             mUser = data.user;
@@ -730,11 +712,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                             }
                             takePhotoIfNeed();
                             return;
-                        } else if (blockStage == PopularUserChatController.SECOND_STAGE) {
-                            break;
                         }
                     }
-                    mPopularUserLockController.unlockChat();
                 }
                 if (mItemId != null) {
                     sendReadDialogsBroadcast(new Intent(MAKE_ITEM_READ).putExtra(INTENT_ITEM_ID, mItemId));
@@ -813,6 +792,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void onNewMessageAdded(History history) {
+        if (mStubsController != null) {
+            mStubsController.checkMessage(history);
+        }
         Intent intent = new Intent();
         intent.putExtra(ChatActivity.LAST_MESSAGE, history);
         intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
@@ -912,7 +894,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
                 break;
             case R.id.send_gift_button:
-                if (mPopularUserLockController.showBlockDialog()) {
+                if (mStubsController != null && !mStubsController.isGiftSendAvailable()) {
                     Debug.log("Gift can't be sent because user is too popular.");
                     break;
                 }
@@ -967,7 +949,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mAdapter == null || mAdapter.getCount() == 0 || mUser == null) {
             update(false, ChatUpdateType.INITIAL);
         } else {
-            if (!mPopularUserLockController.isChatLocked()) {
+            if (mStubsController == null || !mStubsController.isChatLocked()) {
                 update(true, ChatUpdateType.RESUME_UPDATE);
                 mAdapter.notifyDataSetChanged();
             }
@@ -1002,6 +984,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         if (sendGiftAnswer != null) {
                             sendGiftAnswer.history.target = FeedDialog.OUTPUT_USER_MESSAGE;
                             addSentMessage(sendGiftAnswer.history, null);
+                            if (mStubsController != null) {
+                                mStubsController.giftSent();
+                            }
                             onNewMessageAdded(sendGiftAnswer.history);
                         }
                         LocalBroadcastManager.getInstance(getActivity())
@@ -1043,7 +1028,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private boolean sendMessage() {
-        if (mPopularUserLockController.showBlockDialog()) {
+        if (mStubsController != null && !mStubsController.isMessageSendAvailable()) {
             Debug.log("Message not sent because user is too popular.");
             return false;
         }
