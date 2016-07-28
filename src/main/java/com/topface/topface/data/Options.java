@@ -4,7 +4,6 @@ package com.topface.topface.data;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
-import android.webkit.URLUtil;
 
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -320,10 +319,6 @@ public class Options extends AbstractData {
                 bonus.counter = bonusObject.optInt("counter");
                 bonus.timestamp = bonusObject.optLong("counterTimestamp");
                 bonus.integrationUrl = bonusObject.optString("integrationUrl");
-                bonus.buttonText = bonusObject.optString("title", bonus.buttonText);
-                String iconUrl = bonusObject.optString("iconUrl", bonus.buttonPicture);
-                // проверяем валидность ссылки на картинку. Если ссылка не валидна, то подставим дефолт
-                bonus.buttonPicture = URLUtil.isValidUrl(iconUrl) ? iconUrl : bonus.buttonPicture;
             }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");

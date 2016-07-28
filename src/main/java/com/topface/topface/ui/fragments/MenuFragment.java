@@ -98,8 +98,6 @@ public class MenuFragment extends Fragment {
             } else {
                 adapter.removeItem(getBonusItem());
             }
-            adapter.updateTitle(FragmentIdData.BONUS, options.bonus.buttonText);
-            adapter.updateIcon(FragmentIdData.BONUS, options.bonus.buttonPicture);
             updateIntegrationPage(options);
         }
 
