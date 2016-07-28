@@ -107,7 +107,7 @@ import rx.functions.Action1;
 
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.LOCK_CHAT;
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.MUTUAL_SYMPATHY;
-import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.NO_BLOCK;
+import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.SHOW_RETRY;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -146,7 +146,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             int userId;
             try {
                 userId = Integer.parseInt(id);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 userId = -1;
             }
             final int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
@@ -568,7 +568,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mSendButton.setEnabled(
                     !mEditBox.getText().toString().isEmpty() &&
                             (mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1
-                                    || ((mStubsController == null || mStubsController.getCurrentLockType() == NO_BLOCK)
+                                    || ((mStubsController == null || mStubsController.getCurrentLockType() != SHOW_RETRY)
                                     && (isButtonAvailable == null || isButtonAvailable))));
         }
     }
