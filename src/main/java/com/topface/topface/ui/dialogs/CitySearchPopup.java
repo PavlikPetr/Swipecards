@@ -42,12 +42,9 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
     public static CitySearchPopup newInstance(@Nullable String cityNameOnStart, @Nullable ArrayList<City> defaultCities) {
         CitySearchPopup popup = new CitySearchPopup();
         Bundle bundle = new Bundle();
-        String userCityName = Utils.EMPTY;
         Profile profile = App.get().getProfile();
-        if(profile.city!=null){
-            userCityName = profile.city.getName();
-        }
-        bundle.putString(CITY_ON_START, cityNameOnStart != null ? cityNameOnStart : userCityName);
+        bundle.putString(CITY_ON_START, cityNameOnStart != null ? cityNameOnStart
+                : profile.city != null ? profile.city.getName() : Utils.EMPTY);
         if (ListUtils.isNotEmpty(defaultCities)) {
             bundle.putParcelableArrayList(DEFAULT_CITIES, defaultCities);
         }
