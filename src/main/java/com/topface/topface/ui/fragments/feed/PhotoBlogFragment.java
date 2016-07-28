@@ -25,9 +25,10 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
+import com.topface.topface.ui.AddToPhotoBlogActivity;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
-import com.topface.topface.ui.AddToLeaderActivity;
+import com.topface.topface.ui.AddToPhotoBlogActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
 import com.topface.topface.ui.UserProfileActivity;
@@ -55,6 +56,8 @@ import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
+
+    public final static int ADD_TO_PHOTO_BLOG_ACTIVITY_ID = 1;
 
     private static final String PAGE_NAME = "PhotoFeed";
     private static final int UPDATE_DELAY = 20;
@@ -145,7 +148,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
             takePhoto();
         } else {
-            startActivityForResult(new Intent(getActivity(), AddToLeaderActivity.class), AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID);
+            startActivityForResult(new Intent(getActivity(), AddToPhotoBlogActivity.class), ADD_TO_PHOTO_BLOG_ACTIVITY_ID);
         }
     }
 
@@ -335,7 +338,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AddToLeaderActivity.ADD_TO_LEADER_ACTIVITY_ID) {
+        if (requestCode == ADD_TO_PHOTO_BLOG_ACTIVITY_ID) {
             updatePhotoblogList();
         }
         if (mAddPhotoHelper != null) {

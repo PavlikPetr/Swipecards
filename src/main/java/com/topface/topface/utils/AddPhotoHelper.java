@@ -164,6 +164,7 @@ public class AddPhotoHelper {
         if (!mPhotoActionSubscription.isUnsubscribed()) {
             mPhotoActionSubscription.unsubscribe();
         }
+        mHandler.removeCallbacksAndMessages(null);
         mHandler = null;
     }
 

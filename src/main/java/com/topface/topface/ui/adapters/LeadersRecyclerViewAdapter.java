@@ -13,9 +13,10 @@ import com.topface.topface.databinding.PhotoBlogLeadersPhotoItemBinding;
 
 public class LeadersRecyclerViewAdapter extends BasePhotoRecyclerViewAdapter<PhotoBlogLeadersPhotoItemBinding> {
 
-    public static final int EMPTY_SELECTED_ID = -1;
-    private int mSelectedPhotoId = 1;
-    private int mSelectedPhotoPos = 1;
+    public static final int EMPTY_SELECTED_POS = -1;
+    public static final int DEFAULT_ID = 1;
+    private int mSelectedPhotoId = DEFAULT_ID;
+    private int mSelectedPhotoPos = EMPTY_SELECTED_POS;
 
     public LeadersRecyclerViewAdapter(Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         super(photoLinks, totalPhotos, callback);
@@ -68,5 +69,17 @@ public class LeadersRecyclerViewAdapter extends BasePhotoRecyclerViewAdapter<Pho
     public void setSelectedPhotoId(int id) {
         mSelectedPhotoId = id;
         notifyDataSetChanged();
+    }
+
+    public int getSelectedPhotoPos() {
+        return mSelectedPhotoPos;
+    }
+
+    public void setSelectedPhotoPos(int selectedPhotoPos) {
+        mSelectedPhotoPos = selectedPhotoPos;
+        FrameLayout view = (FrameLayout) mLayoutManager.findViewByPosition(mSelectedPhotoPos);
+        if (view != null) {
+            view.setForeground(App.getContext().getResources().getDrawable(R.drawable.leader_photo_selection));
+        }
     }
 }
