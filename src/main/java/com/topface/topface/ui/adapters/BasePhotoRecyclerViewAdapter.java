@@ -6,6 +6,7 @@ import android.databinding.ViewDataBinding;
 import android.graphics.Rect;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     private int mFirstVisibleItemPos = 0;
     private int mLastVisibleItemPos = 0;
     private int mTotalPhotos;
-    protected StaggeredGridLayoutManager mLayoutManager;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     public BasePhotoRecyclerViewAdapter(Photos photoLinks, int totalPhotos, LoadingListAdapter.Updater callback) {
         mPhotoLinks = new Photos();
@@ -131,12 +132,24 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
     }
 
     @Override
+    @FuckingVoodooMagic(description = "написать свой LayoutManager который хорошо может хедеры и футеры")
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         recyclerView.addItemDecoration(getItemDecoration());
         super.onAttachedToRecyclerView(recyclerView);
         mRecyclerView = recyclerView;
-        mLayoutManager = ((StaggeredGridLayoutManager) mRecyclerView.getLayoutManager());
-        mColumnCount = mLayoutManager.getSpanCount();
+        mLayoutManager = mRecyclerView.getLayoutManager();
+        if (mLayoutManager instanceof GridLayoutManager) {
+            ((GridLayoutManager) mLayoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    return position == 0 ? mColumnCount : 1;
+                }
+            });
+            mColumnCount = ((GridLayoutManager) mLayoutManager).getSpanCount();
+        }
+        if (mLayoutManager instanceof StaggeredGridLayoutManager) {
+            mColumnCount = ((StaggeredGridLayoutManager) mLayoutManager).getSpanCount();
+        }
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -144,22 +157,38 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                     "в случае если mPrimaryOrientation null")
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 try {
-                    int[] first = mLayoutManager.findFirstVisibleItemPositions(null);
-                    int[] last = mLayoutManager.findLastVisibleItemPositions(null);
-                    mFirstVisibleItemPos = first[0];
-                    mLastVisibleItemPos = last[last.length - 1];
-                    int visibleItemCount = last[last.length - 1] - first[0];
-                    if (visibleItemCount != 0 && first[0] + visibleItemCount >= getPhotos().size() - 1 - mLoadController.getItemsOffsetByConnectionType() && mNeedLoadNewItems) {
-                        if (mUpdater != null && !getAdapterData().isEmpty()) {
-                            mNeedLoadNewItems = false;
-                            mUpdater.onUpdate();
-                        }
+                    if (mLayoutManager instanceof GridLayoutManager) {
+                        handleGridLayoutManager((GridLayoutManager) mLayoutManager);
                     }
+                    if (mLayoutManager instanceof StaggeredGridLayoutManager) {
+                        handleStaggeredGridLayoutManager((StaggeredGridLayoutManager) mLayoutManager);
+                    }
+                    callUpdate(mLastVisibleItemPos - mFirstVisibleItemPos);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    private void callUpdate(int visibleItemCount) {
+        if (visibleItemCount != 0 && mFirstVisibleItemPos + visibleItemCount >= getPhotos().size() - 1 - mLoadController.getItemsOffsetByConnectionType() && mNeedLoadNewItems) {
+            if (mUpdater != null && !getAdapterData().isEmpty()) {
+                mNeedLoadNewItems = false;
+                mUpdater.onUpdate();
+            }
+        }
+    }
+
+    private void handleGridLayoutManager(GridLayoutManager manager) {
+        mFirstVisibleItemPos = manager.findFirstCompletelyVisibleItemPosition();
+        mLastVisibleItemPos = manager.findLastVisibleItemPosition();
+    }
+
+    private void handleStaggeredGridLayoutManager(StaggeredGridLayoutManager manager) {
+        int[] last = manager.findLastVisibleItemPositions(null);
+        mFirstVisibleItemPos = manager.findFirstVisibleItemPositions(null)[0];
+        mLastVisibleItemPos = last[last.length - 1];
     }
 
     @Override
