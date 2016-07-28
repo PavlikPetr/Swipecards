@@ -1,5 +1,6 @@
 package com.topface.topface.utils.controllers.chatStubs;
 
+import android.support.annotation.LayoutRes;
 import android.view.ViewStub;
 
 import com.topface.topface.R;
@@ -27,11 +28,13 @@ public class MutualSympathyStub extends BaseChatStub<MutualSympathyStubBinding, 
     }
 
     @Override
+    @LayoutRes
     int getViewLayout() {
         return R.layout.mutual_sympathy_stub;
     }
 
     @Override
+    @NotNull
     MutualSympathyStubViewModel createViewModel(MutualSympathyStubBinding binding) {
         return new MutualSympathyStubViewModel(binding, mHistory, mPhoto);
     }

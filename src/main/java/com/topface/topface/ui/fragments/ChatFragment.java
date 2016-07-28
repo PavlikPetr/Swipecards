@@ -107,6 +107,7 @@ import rx.functions.Action1;
 
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.LOCK_CHAT;
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.MUTUAL_SYMPATHY;
+import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.NO_BLOCK;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
 
@@ -546,8 +547,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void initLockScreen(View root, Bundle savedInstanceState) {
-        mLockScreen = (ViewStub) root.findViewById(R.id.llvLockScreen);
-        mStubsController = new ChatStabsController(mLockScreen, this);
+        mStubsController = new ChatStabsController((ViewStub) root.findViewById(R.id.llvLockScreen), this);
         mStubsController.onRestoreInstanceState(savedInstanceState);
         mStubsController.setPhoto(mPhoto);
     }
@@ -561,7 +561,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mSendButton.setEnabled(
                     !mEditBox.getText().toString().isEmpty() &&
                             (mUserType == FeedDialog.MESSAGE_POPULAR_STAGE_1
-                                    || ((mLockScreen == null || mLockScreen.getVisibility() == View.GONE)
+                                    || ((mStubsController == null || mStubsController.getCurrentLockType() == NO_BLOCK)
                                     && (isButtonAvailable == null || isButtonAvailable))));
         }
     }
@@ -691,9 +691,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             protected void success(HistoryListData data, IApiResponse response) {
                 mHistoryFeedList = data.items;
                 if (!data.items.isEmpty() && !isPopularLockOn) {
-                    int blockStage = ChatStabsController.NO_BLOCK;
                     if (mStubsController != null) {
-                        blockStage = mStubsController.getLockType(data);
+                        int blockStage = mStubsController.getLockType(data);
                         mStubsController.block();
                         if (blockStage == LOCK_CHAT) {
                             mIsUpdating = false;
@@ -786,6 +785,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void onNewMessageAdded(History history) {
+        if (mStubsController != null) {
+            mStubsController.checkMessage(history);
+        }
         Intent intent = new Intent();
         intent.putExtra(ChatActivity.LAST_MESSAGE, history);
         intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);

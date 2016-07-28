@@ -100,7 +100,7 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
         }
         //Если иконка или текст пустые, то ставим данные по умолчанию
         image = (image == 0 && dialog.target == FeedDialog.OUTPUT_USER_MESSAGE) ?
-                R.drawable.ico_outbox : 0;
+                R.drawable.ico_outbox : image;
         text = (text == null) ? dialog.text : text;
 
         view.setCompoundDrawablesWithIntrinsicBounds(image, 0, 0, 0);

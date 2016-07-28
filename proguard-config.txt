@@ -52,6 +52,7 @@
 # Adman
 -keep class java.util.concurrent.** { *; }
 -dontwarn java.util.concurrent.**
+-dontnote java.util.concurrent.**
 
  # Jackson
 -dontwarn com.fasterxml.jackson.databind.ext.**
@@ -219,6 +220,7 @@
  # Legacy
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
+-dontnote org.apache.http.**
 -dontwarn android.net.http.**
 
  # Google Play Services library
@@ -267,6 +269,7 @@
  # support-v7-recyclerview
 -keep class android.support.v7.widget.RecyclerView { *; }
 -keep class android.support.v7.widget.LinearLayoutManager { *; }
+-dontnote android.support.v7.**
 
  #adjust
 -keep class com.adjust.sdk.plugin.MacAddressUtil {
@@ -299,3 +302,10 @@
 -dontwarn android.databinding.**
 -dontwarn com.tapsense.android.**
 -dontwarn com.personagraph.**
+
+#kotlin
+-assumenosideeffects class kotlin.jvm.internal.Intrinsics {
+    static void checkParameterIsNotNull(java.lang.Object, java.lang.String);
+}
+-dontwarn kotlin.**
+-dontwarn org.w3c.dom.events.*

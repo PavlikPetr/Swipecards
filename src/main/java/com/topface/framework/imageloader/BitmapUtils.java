@@ -566,7 +566,7 @@ public class BitmapUtils {
     public static Bitmap getRoundBitmap(Bitmap bitmap, float radiusMult, float borderWidth, @Nullable ColorStateList borderColor) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-        int whiteColor = Color.parseColor("#ffffff");
+        int whiteColor = Color.WHITE;
         borderColor = borderColor != null ? borderColor : DEFAULT_BORDER_COLOR;
 
         Bitmap mask = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);

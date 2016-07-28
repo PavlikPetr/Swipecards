@@ -3,6 +3,7 @@ package com.topface.topface.utils.controllers.chatStubs;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.support.annotation.LayoutRes;
 import android.view.ViewStub;
 
 import com.android.databinding.library.baseAdapters.BR;
@@ -49,7 +50,9 @@ public abstract class BaseChatStub<T extends ViewDataBinding, D extends BaseView
         mViewStub = null;
     }
 
+    @LayoutRes
     abstract int getViewLayout();
 
+    @NotNull
     abstract D createViewModel(T binding);
 }

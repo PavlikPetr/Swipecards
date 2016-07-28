@@ -1,7 +1,6 @@
 package com.topface.topface.utils.controllers.chatStubs;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -55,6 +54,32 @@ public class ChatStabsController {
         mIFragmentDelegate = delegate;
     }
 
+    public int getCurrentLockType() {
+        return mLockType;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public void checkMessage(@NotNull History history) {
+        if (history != null) {
+            switch (mLockType) {
+                case MUTUAL_SYMPATHY:
+                    if (history.type == MUTUAL_SYMPATHY) {
+                        mMessage = history;
+                    } else {
+                        mLockType = NO_BLOCK;
+                    }
+                    break;
+                case LOCK_CHAT:
+                case LOCK_MESSAGE_SEND:
+                    if (history.type == mLockType) {
+                        mMessage = history;
+                    }
+                    break;
+            }
+        }
+
+    }
+
     private boolean isAccessAllowed() {
         return App.get().getProfile().premium;
     }
@@ -75,7 +100,7 @@ public class ChatStabsController {
                         isSympathy = false;
                         break;
                     case MUTUAL_SYMPATHY:
-
+                        // просто ничего не делаем, пропускаем
                         break;
                     default:
                         isSympathy = false;
@@ -101,7 +126,6 @@ public class ChatStabsController {
                 case MUTUAL_SYMPATHY:
                     showMutualSympathyStub();
                     break;
-
                 case LOCK_CHAT:
                     showPopularUserLock();
                     break;
@@ -132,8 +156,8 @@ public class ChatStabsController {
                 @Override
                 public void onClick(View v) {
                     if (mIFragmentDelegate != null) {
-                        Intent intent = PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock");
-                        mIFragmentDelegate.getActivity().startActivity(intent);
+                        mIFragmentDelegate.getActivity()
+                                .startActivity(PurchasesActivity.createVipBuyIntent(null, "PopularUserChatBlock"));
                     }
                 }
             });
@@ -227,10 +251,6 @@ public class ChatStabsController {
             case MUTUAL_SYMPATHY:
                 unlock();
                 break;
-            case NO_BLOCK:
-                break;
-            case SHOW_RETRY:
-                break;
         }
         return true;
     }
@@ -241,12 +261,6 @@ public class ChatStabsController {
             case LOCK_MESSAGE_SEND:
                 showPopularUserDialog();
                 return false;
-            case MUTUAL_SYMPATHY:
-                break;
-            case NO_BLOCK:
-                break;
-            case SHOW_RETRY:
-                break;
         }
         return true;
     }

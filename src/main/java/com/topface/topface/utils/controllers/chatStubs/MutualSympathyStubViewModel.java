@@ -33,18 +33,18 @@ public class MutualSympathyStubViewModel extends BaseViewModel<MutualSympathyStu
     }
 
     public final float calculatePaddingBottom() {
-        Resources res = App.get().getResources();
-        float radius = res.getDimension(R.dimen.mutual_sympathy_stub_avatar_size) / 2;
-        float iconSize = res.getDimension(R.dimen.mutual_sympathy_icon_size);
-        double pointX = radius + radius * Math.sin(Math.toRadians(ANGLE));
-        return (float) (radius * 2 - pointX - iconSize / 2);
+        return getPadding(Math.sin(Math.toRadians(ANGLE)));
     }
 
     public final float calculatePaddingRight() {
+        return getPadding(Math.cos(Math.toRadians(ANGLE)));
+    }
+
+    private float getPadding(double val) {
         Resources res = App.get().getResources();
         float radius = res.getDimension(R.dimen.mutual_sympathy_stub_avatar_size) / 2;
         float iconSize = res.getDimension(R.dimen.mutual_sympathy_icon_size);
-        double pointY = radius + radius * Math.cos(Math.toRadians(ANGLE));
-        return (float) (radius * 2 - pointY - iconSize / 2);
+        double pointX = radius + radius * val;
+        return (float) (radius * 2 - pointX - iconSize / 2);
     }
 }

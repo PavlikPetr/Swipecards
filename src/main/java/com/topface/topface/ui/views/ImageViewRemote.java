@@ -23,7 +23,7 @@ import com.topface.topface.utils.imageloader.MaskClipProcessor;
 
 public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSizeGetter {
 
-    public static final ColorStateList DEFAULT_BORDER_COLOR = ColorStateList.valueOf(Color.parseColor("#00000000"));
+    public static final ColorStateList DEFAULT_BORDER_COLOR = ColorStateList.valueOf(Color.TRANSPARENT);
 
     protected static final int POST_PROCESSOR_NONE = 0;
     private static final int POST_PROCESSOR_ROUNDED = 1;

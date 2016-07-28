@@ -1,5 +1,6 @@
 package com.topface.topface.utils.controllers.chatStubs;
 
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.view.ViewStub;
 
@@ -32,11 +33,13 @@ public class PopularUserStub extends BaseChatStub<PopularUserBlockerBinding, Pop
     }
 
     @Override
+    @LayoutRes
     int getViewLayout() {
         return R.layout.popular_user_blocker;
     }
 
     @Override
+    @NotNull
     PopularUserStubViewModel createViewModel(PopularUserBlockerBinding binding) {
         return new PopularUserStubViewModel(binding, mHistory, mPhoto);
     }
