@@ -54,9 +54,10 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
                 .setFooter(createFooterView(), false)
                 .setHeader(createHeaderView(), false)) as LeadersRecyclerViewAdapter
     }
-    private var mSelectedPos: Int = 1
+    private var mSelectedPos: Int = DEFAULT_SELECTED_POS
 
     private companion object {
+        val DEFAULT_SELECTED_POS = 1
         val SELECTED_POSITION = "selected_position"
         val SELECTED_PHOTO_ID = "selected_photo_id"
         val ALREADY_SHOWN = "already_shown"
@@ -79,11 +80,9 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
     }
 
     override fun showPhotoHelper(isNeedShow: Boolean) {
-        if (isNeedShow) {
-            if (!App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager, TakePhotoPopup.TAG)
-                mIsPhotoDialogShown = true
-            }
+        if (isNeedShow && !App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) {
+            TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager, TakePhotoPopup.TAG)
+            mIsPhotoDialogShown = true
         }
     }
 
@@ -111,7 +110,6 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         }
         initActionBar(supportActionBar)
         //https://youtrack.jetbrains.com/issue/KT-12402
-        mScreenBinding.handlers = mScreenViewModel
         initRecyclerView(mScreenBinding.userPhotosGrid)
     }
 
@@ -153,9 +151,9 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
 
 
     fun onRestoreState(savedInstanceState: Bundle) {
-        mAdapter.selectedPhotoId = savedInstanceState.getInt(SELECTED_PHOTO_ID, 0)
+        mAdapter.selectedPhotoId = savedInstanceState.getInt(SELECTED_PHOTO_ID, LeadersRecyclerViewAdapter.DEFAULT_ID)
         mScreenBinding.userPhotosGrid.post {
-            mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, 1)
+            mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, DEFAULT_SELECTED_POS)
         }
         mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN)
         mHeaderViewModel.inputText.set(savedInstanceState.getString(GREETING_TEXT, Utils.EMPTY))

@@ -1,8 +1,10 @@
 package com.topface.topface.viewModels
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.databinding.ObservableField
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -23,7 +25,6 @@ import com.topface.topface.utils.FlurryManager.GET_LEAD
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.extensions.getFakePhotosCount
-import org.jetbrains.anko.layoutInflater
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -61,7 +62,8 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
         buttonsLayout.removeAllViews()
         val buttons = App.get().options.buyLeaderButtons
         buttons.indices.forEach {
-            context.layoutInflater.inflate(R.layout.add_leader_button, buttonsLayout)
+            (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+                    .inflate(R.layout.add_leader_button, buttonsLayout)
             val buttonCurrent = buttonsLayout.getChildAt(buttonsLayout.childCount - 1) as Button
             buttonCurrent.text = buttons[it].title
             buttonCurrent.tag = it
@@ -90,9 +92,9 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
         if (mAdapterInteractor?.getItemCount() ?: 0 > mAdapterInteractor?.getAdapterData()?.getFakePhotosCount() ?: 0) {
             if (mBalance.money < buttonData.price) {
                 mPurchasesVisualisator?.showPurchasesFragment(buttonData.price)
-            } else if (selectedPhotoId > LeadersRecyclerViewAdapter.EMPTY_SELECTED_ID) {
+            } else if (selectedPhotoId > LeadersRecyclerViewAdapter.EMPTY_SELECTED_POS) {
                 mLockerVisualisator?.showLocker()
-                AddPhotoFeedRequest(selectedPhotoId, context, buttonData.photoCount, binding.messageInput.text.toString()
+                AddPhotoFeedRequest(selectedPhotoId, context, buttonData.photoCount, inputText.get()
                         , buttonData.price.toLong()).callback(object : ApiHandler() {
 
                     override fun success(response: IApiResponse) {

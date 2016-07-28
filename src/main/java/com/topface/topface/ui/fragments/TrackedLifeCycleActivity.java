@@ -13,6 +13,7 @@ import com.topface.topface.utils.IActivityDelegate;
 public class TrackedLifeCycleActivity extends AppCompatActivity implements IActivityDelegate {
 
     private ActivityLifeCycleReporter mLifeCycleReporter = new ActivityLifeCycleReporter(getClass().getName());
+    private boolean mIsActivityRestoredState = false;
 
     @Override
     protected void onDestroy() {
@@ -42,6 +43,7 @@ public class TrackedLifeCycleActivity extends AppCompatActivity implements IActi
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mLifeCycleReporter.onSaveInstanceState();
+        mIsActivityRestoredState = false;
     }
 
     @Override
@@ -63,7 +65,13 @@ public class TrackedLifeCycleActivity extends AppCompatActivity implements IActi
     }
 
     @Override
-    public boolean isActivityRestoredState() {
-        return false;
+    protected void onResumeFragments() {
+        super.onResumeFragments();
+        mIsActivityRestoredState = true;
     }
+
+    public boolean isActivityRestoredState() {
+        return mIsActivityRestoredState;
+    }
+
 }
