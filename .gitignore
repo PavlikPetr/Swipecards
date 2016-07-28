@@ -16,3 +16,4 @@ project.properties
 *.swp
 *~
 /infer-out
+/build-topface

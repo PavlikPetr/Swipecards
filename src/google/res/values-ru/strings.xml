@@ -1111,4 +1111,8 @@
     <string name="start_chat_with_gift">Подарок будет хорошим началом!</string>
     <string name="mutual_sympathy">Взаимная симпатия</string>
 
+    <string name="add_photo_feed_header_description"> Разместите фото с приветствием и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
+    <string name="publish_photo">Разместить фото</string>
+
+
 </resources>

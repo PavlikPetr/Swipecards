@@ -186,13 +186,15 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
             android:theme="@style/FullyTranslucent" />
+
         <activity
-            android:name=".ui.AddToLeaderActivity"
+            android:name=".ui.AddToPhotoBlogActivity"
             android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
+
         <activity
             android:name=".ui.InviteVkFriendsActivity"
             android:parentActivityName=".ui.NavigationActivity">
