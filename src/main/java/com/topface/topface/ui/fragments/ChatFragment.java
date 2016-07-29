@@ -175,7 +175,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
-    private ViewStub mLockScreen;
     private ChatStabsController mStubsController;
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private String mUserCity;
@@ -556,7 +555,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private void initLockScreen(View root, Bundle savedInstanceState) {
         mStubsController = new ChatStabsController((ViewStub) root.findViewById(R.id.llvLockScreen), this);
         mStubsController.onRestoreInstanceState(savedInstanceState);
-        mStubsController.setPhoto(mPhoto);
+        String avatar = mPhoto != null && !TextUtils.isEmpty(mPhoto.getDefaultLink()) ? mPhoto.getDefaultLink() : Utils.EMPTY;
+        mStubsController.setPhoto(mIsBanned || TextUtils.isEmpty(avatar) ? Utils.getLocalResUrl(mSex == Profile.BOY ?
+                R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar) : avatar);
     }
 
     private void updateSendMessageAbility() {

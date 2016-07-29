@@ -5,7 +5,6 @@ import android.view.ViewStub;
 
 import com.topface.topface.R;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Photo;
 import com.topface.topface.databinding.MutualSympathyStubBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,12 +17,12 @@ import org.jetbrains.annotations.NotNull;
 public class MutualSympathyStub extends BaseChatStub<MutualSympathyStubBinding, MutualSympathyStubViewModel> {
 
     private History mHistory;
-    private Photo mPhoto;
+    private String mPhotoUrl;
 
-    public MutualSympathyStub(@NotNull ViewStub stub, @NotNull History msg, @NotNull Photo photo) {
+    public MutualSympathyStub(@NotNull ViewStub stub, @NotNull History msg, @NotNull String photoUrl) {
         super(stub);
         mHistory = msg;
-        mPhoto = photo;
+        mPhotoUrl = photoUrl;
         initViews();
     }
 
@@ -36,13 +35,13 @@ public class MutualSympathyStub extends BaseChatStub<MutualSympathyStubBinding, 
     @Override
     @NotNull
     MutualSympathyStubViewModel createViewModel(MutualSympathyStubBinding binding) {
-        return new MutualSympathyStubViewModel(binding, mHistory, mPhoto);
+        return new MutualSympathyStubViewModel(binding, mHistory, mPhotoUrl);
     }
 
-    public boolean updateData(@NotNull History msg, @NotNull Photo photo) {
+    public boolean updateData(@NotNull History msg, @NotNull String photoUrl) {
         MutualSympathyStubViewModel model = getViewModel();
         if (model != null) {
-            model.setData(msg, photo);
+            model.setData(msg, photoUrl);
             return true;
         }
         return false;

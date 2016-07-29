@@ -8,7 +8,7 @@ import android.support.v4.app.HackyFragmentStatePagerAdapter;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.PurchasesTabData;
-import com.topface.topface.ui.fragments.BonusFragment;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.MarketBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
@@ -18,15 +18,15 @@ import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
 
     private final boolean mIsVip;
     private Bundle mArguments;
-    private LinkedList<PurchasesTabData> mTabs;
+    private ArrayList<PurchasesTabData> mTabs;
 
-    public PurchasesFragmentsAdapter(FragmentManager fm, Bundle arguments, LinkedList<PurchasesTabData> tabs) {
+    public PurchasesFragmentsAdapter(FragmentManager fm, Bundle arguments, ArrayList<PurchasesTabData> tabs) {
         super(fm);
         mArguments = arguments;
         mIsVip = arguments.getBoolean(PurchasesFragment.IS_VIP_PRODUCTS);
