@@ -922,4 +922,9 @@
     <string name="profile_ditance_to_him">Até ele %s</string>
     <string name="rate_popup_we_need_your_opinion">O teu feedback é muito importante para nós</string>
     <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Por favor, classifica a nossa aplicação. Isto apenas leva uns segundos.</string>
+    <string name="mutual_sympathy_in_chat">O sentimento é mútuo!</string>
+    <string name="start_chat_with_gift">Um presente é uma boa introdução!</string>
+    <string name="mutual_sympathy">Gosto Mútuo</string>
+    <string name="add_photo_feed_header_description">Adiciona uma foto com um cumprimento e milhares de pessoas irão ver-te. Começa a dar nas vistas e começa a conhecer pessoas agora!</string>
+    <string name="publish_photo">Publicar foto</string>
 </resources>
