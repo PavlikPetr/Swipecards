@@ -801,4 +801,8 @@
   <string name="filter_screen_title">Wen suchst du?</string>
   <string name="album_photo_deleted">Das Foto wurde gelöscht</string>
   <string name="album_main_photo">Hauptprofilbild</string>
+  <string name="profile_ditance_to_her">Zu ihr %s</string>
+  <string name="profile_ditance_to_him">Zu ihm %s</string>
+  <string name="rate_popup_we_need_your_opinion">Dein Feedback ist uns sehr wichtig</string>
+  <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Bitte bewerte unsere App. Es dauert nur wenige Sekunden.</string>
 </resources>

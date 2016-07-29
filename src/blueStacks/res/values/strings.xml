@@ -817,4 +817,8 @@
   <string name="filter_screen_title">Who are you seeking?</string>
   <string name="album_photo_deleted">Photo deleted</string>
   <string name="album_main_photo">Main profile photo</string>
+  <string name="profile_ditance_to_her">To her %s</string>
+  <string name="profile_ditance_to_him">To him %s</string>
+  <string name="rate_popup_we_need_your_opinion">Your feedback is very important to us</string>
+  <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Please rate our app. It will only take a few seconds.</string>
 </resources>

@@ -918,4 +918,8 @@
     <string name="filter_screen_title">Estás à procura de quem?</string>
     <string name="album_photo_deleted">Foto apagada</string>
     <string name="album_main_photo">Foto de perfil principal</string>
+    <string name="profile_ditance_to_her">Até ela %s</string>
+    <string name="profile_ditance_to_him">Até ele %s</string>
+    <string name="rate_popup_we_need_your_opinion">O teu feedback é muito importante para nós</string>
+    <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Por favor, classifica a nossa aplicação. Isto apenas leva uns segundos.</string>
 </resources>
