@@ -924,4 +924,9 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="profile_ditance_to_him">da lui %s</string>
     <string name="rate_popup_we_need_your_opinion">Il vostro feedback è molto importante per noi</string>
     <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Dai un voto alla nostra app. Ti basteranno pochi secondi.</string>
+    <string name="mutual_sympathy_in_chat">Il sentimento è reciproco!</string>
+    <string name="start_chat_with_gift">Un regalo è una buon biglietto da visita!</string>
+    <string name="mutual_sympathy">Mi piace reciproco</string>
+    <string name="add_photo_feed_header_description">Pubblica una foto con un saluto e migliaia di persone potranno vederla. Fatti notare e inizia ad incontrare subito nuove persone!</string>
+    <string name="publish_photo">Pubblica foto</string>
 </resources>
