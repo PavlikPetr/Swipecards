@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Photo;
 import com.topface.topface.databinding.MutualSympathyStubBinding;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.viewModels.BaseViewModel;
@@ -16,15 +15,15 @@ public class MutualSympathyStubViewModel extends BaseViewModel<MutualSympathyStu
 
     private static final double ANGLE = 40;
 
-    public MutualSympathyStubViewModel(@NotNull MutualSympathyStubBinding binding, @NotNull History msg, @NotNull Photo photo) {
+    public MutualSympathyStubViewModel(@NotNull MutualSympathyStubBinding binding, @NotNull History msg, @NotNull String photoUrl) {
         super(binding);
-        setData(msg, photo);
+        setData(msg, photoUrl);
     }
 
     @SuppressWarnings("ConstantConditions")
-    public void setData(@NotNull History msg, @NotNull Photo photo) {
+    public void setData(@NotNull History msg, @NotNull String photoUrl) {
         MutualSympathyStubBinding binding = getBinding();
-        binding.mutualSympathyAvatar.setPhoto(photo);
+        binding.mutualSympathyAvatar.setRemoteSrc(photoUrl);
         if (msg != null) {
             binding.mutualSympathyMsg.setText(msg.blockText);
             binding.mutualSympathyDate.setText(msg.createdFormatted);

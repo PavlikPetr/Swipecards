@@ -6,7 +6,6 @@ import android.view.ViewStub;
 
 import com.topface.topface.R;
 import com.topface.topface.data.History;
-import com.topface.topface.data.Photo;
 import com.topface.topface.databinding.PopularUserBlockerBinding;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +18,12 @@ import org.jetbrains.annotations.NotNull;
 public class PopularUserStub extends BaseChatStub<PopularUserBlockerBinding, PopularUserStubViewModel> {
 
     private History mHistory;
-    private Photo mPhoto;
+    private String mPhotoUrl;
 
-    public PopularUserStub(@NotNull ViewStub stub, @NotNull History msg, @NotNull Photo photo, @NotNull View.OnClickListener onClick) {
+    public PopularUserStub(@NotNull ViewStub stub, @NotNull History msg, @NotNull String photoUrl, @NotNull View.OnClickListener onClick) {
         super(stub);
         mHistory = msg;
-        mPhoto = photo;
+        mPhotoUrl = photoUrl;
         initViews();
         PopularUserBlockerBinding binding = getBinding();
         if (binding != null) {
@@ -41,13 +40,13 @@ public class PopularUserStub extends BaseChatStub<PopularUserBlockerBinding, Pop
     @Override
     @NotNull
     PopularUserStubViewModel createViewModel(PopularUserBlockerBinding binding) {
-        return new PopularUserStubViewModel(binding, mHistory, mPhoto);
+        return new PopularUserStubViewModel(binding, mHistory, mPhotoUrl);
     }
 
-    public boolean updateData(@NotNull History msg, @NotNull Photo photo) {
+    public boolean updateData(@NotNull History msg, @NotNull String photoUrl) {
         PopularUserStubViewModel model = getViewModel();
         if (model != null) {
-            model.setData(msg, photo);
+            model.setData(msg, photoUrl);
             return true;
         }
         return false;

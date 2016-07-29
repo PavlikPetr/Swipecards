@@ -13,7 +13,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
-import com.topface.topface.data.Photo;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.dialogs.PopularUserDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
@@ -45,7 +44,7 @@ public class ChatStabsController {
     private ViewStub mViewStub;
     private IFragmentDelegate mIFragmentDelegate;
     private History mMessage;
-    private Photo mPhoto;
+    private String mPhotoUrl;
     private PopularUserDialog mPopularMessageBlocker;
     private View mRetryView;
 
@@ -77,7 +76,6 @@ public class ChatStabsController {
                     break;
             }
         }
-
     }
 
     private boolean isAccessAllowed() {
@@ -116,8 +114,8 @@ public class ChatStabsController {
         return mLockType;
     }
 
-    public void setPhoto(Photo photo) {
-        mPhoto = photo;
+    public void setPhoto(String photoUrl) {
+        mPhotoUrl = photoUrl;
     }
 
     public void block() {
@@ -152,7 +150,7 @@ public class ChatStabsController {
 
     private void showPopularUserLock() {
         if (mPopularUserStub == null) {
-            mPopularUserStub = new PopularUserStub(mViewStub, mMessage, mPhoto, new View.OnClickListener() {
+            mPopularUserStub = new PopularUserStub(mViewStub, mMessage, mPhotoUrl, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mIFragmentDelegate != null) {
@@ -162,16 +160,16 @@ public class ChatStabsController {
                 }
             });
         } else {
-            mPopularUserStub.updateData(mMessage, mPhoto);
+            mPopularUserStub.updateData(mMessage, mPhotoUrl);
         }
         setViewStubVisibility(true);
     }
 
     private void showMutualSympathyStub() {
         if (mMutualSympathyStub == null) {
-            mMutualSympathyStub = new MutualSympathyStub(mViewStub, mMessage, mPhoto);
+            mMutualSympathyStub = new MutualSympathyStub(mViewStub, mMessage, mPhotoUrl);
         } else {
-            mMutualSympathyStub.updateData(mMessage, mPhoto);
+            mMutualSympathyStub.updateData(mMessage, mPhotoUrl);
         }
         setViewStubVisibility(true);
     }
@@ -290,7 +288,7 @@ public class ChatStabsController {
     public void onSaveInstanceState(@NotNull Bundle outState) {
         if (outState != null) {
             outState.putInt(LOCK_TYPE, mLockType);
-            outState.putParcelable(PHOTO, mPhoto);
+            outState.putString(PHOTO, mPhotoUrl);
             outState.putParcelable(HISTORY, mMessage);
         }
     }
@@ -298,9 +296,9 @@ public class ChatStabsController {
     @SuppressWarnings("ConstantConditions")
     public void onRestoreInstanceState(@NotNull Bundle outState) {
         if (outState != null) {
-            mPhoto = outState.getParcelable(PHOTO);
+            mPhotoUrl = outState.getString(PHOTO);
             mMessage = outState.getParcelable(HISTORY);
-            mLockType = mPhoto != null && mMessage != null ? outState.getInt(LOCK_TYPE) : NO_BLOCK;
+            mLockType = mPhotoUrl != null && mMessage != null ? outState.getInt(LOCK_TYPE) : NO_BLOCK;
             block();
         }
     }
