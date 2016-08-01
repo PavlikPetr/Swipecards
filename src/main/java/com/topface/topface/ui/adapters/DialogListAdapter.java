@@ -191,11 +191,13 @@ public class DialogListAdapter extends FeedAdapter<FeedDialog> {
     }
 
     public void replacePreview(int position, FeedDialog dialog) {
-        FeedDialog item = getData().get(position);
-        item.type = dialog.type;
-        item.text = dialog.text;
-        item.target = dialog.target;
-        item.createdRelative = DateUtils.getRelativeDate(dialog.created, true);
-        notifyDataSetChanged();
+        FeedDialog item = getItem(position);
+        if (item != null) {
+            item.type = dialog.type;
+            item.text = dialog.text;
+            item.target = dialog.target;
+            item.createdRelative = DateUtils.getRelativeDate(dialog.created, true);
+            notifyDataSetChanged();
+        }
     }
 }
