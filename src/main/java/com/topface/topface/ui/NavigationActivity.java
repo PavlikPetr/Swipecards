@@ -289,7 +289,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         startActions.add(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
         startActions.add(new PromoPopupManager(this).createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL));
         startActions.add(new InvitePopupAction(this, AC_PRIORITY_HIGH));
-        startActions.add(mPopupManager.createRatePopupStartAction(PopupHive.AC_PRIORITY_NORMAL, App.get().getOptions().ratePopupTimeout, App.get().getOptions().ratePopupEnabled));
+        startActions.add(mPopupManager.createRatePopupStartAction(PopupHive.AC_PRIORITY_NORMAL));
         startActions.add(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH));
         return startActions;
     }
