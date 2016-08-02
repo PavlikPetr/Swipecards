@@ -134,4 +134,8 @@ public class ViewInjectManager {
     public void removeAllBuckets() {
         mViewBuckets.clear();
     }
+
+    public int getViewBucketsCount() {
+        return mViewBuckets.size();
+    }
 }
