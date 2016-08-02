@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.adapter_utils.IInjectViewBucketRegistrator;
 import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.adapter_utils.ViewInjectManager;
-import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +66,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public int getCount() {
-        return mData != null ? mData.size() : 0;
+        return (mData != null ? mData.size() : 0) + injectManager.getViewBucketsCount();
     }
 
     protected abstract LoadController initLoadController();
