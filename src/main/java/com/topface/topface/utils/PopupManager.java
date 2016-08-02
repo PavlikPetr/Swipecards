@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.data.Options;
 import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.ui.dialogs.AbstractDialogFragment;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
@@ -104,7 +105,7 @@ public class PopupManager {
         return false;
     }
 
-    public IStartAction createRatePopupStartAction(final int priority, final long ratePopupTimeout, final boolean ratePopupEnabled) {
+    public IStartAction createRatePopupStartAction(final int priority) {
         return new IStartAction() {
             @Override
             public void callInBackground() {
@@ -117,8 +118,9 @@ public class PopupManager {
 
             @Override
             public boolean isApplicable() {
-                return App.isOnline() && RateAppDialog.isApplicable(ratePopupTimeout, ratePopupEnabled) &&
-                        !isOldVersion(App.get().getOptions().maxVersion);
+                Options options = App.get().getOptions();
+                return App.isOnline() && RateAppDialog.isApplicable(options.ratePopupTimeout, options.ratePopupEnabled) &&
+                        !isOldVersion(options.maxVersion);
             }
 
             @Override
