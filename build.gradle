@@ -45,7 +45,7 @@ def getTimestamp() {
 
 buildscript {
     ext.retrofit_version = '2.1.0'
-    ext.google_play_services_version = '9.2.1'
+    ext.google_play_services_version = '9.4.0'
     ext.kotlin_version = '1.0.2-1'
     ext.anko_version = '0.9'
     repositories {
