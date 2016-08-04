@@ -12,19 +12,19 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
  */
 public class CountersData implements Parcelable {
 
-    @SerializedName(value = "likes", alternate = "unread_likes")
+    @SerializedName(value = "likes")
     private int mLikes = 0;
-    @SerializedName(value = "mutual", alternate = "unread_symphaties")
+    @SerializedName(value = "mutual")
     private int mMutual = 0;
-    @SerializedName(value = "dialogs", alternate = "unread_messages")
+    @SerializedName(value = "dialogs")
     private int mDialogs = 0;
-    @SerializedName(value = "visitors", alternate = "unread_visitors")
+    @SerializedName(value = "visitors")
     private int mVisitors = 0;
-    @SerializedName(value = "fans", alternate = "unread_fans")
+    @SerializedName(value = "fans")
     private int mFans = 0;
-    @SerializedName(value = "admirations", alternate = "unread_admirations")
+    @SerializedName(value = "admirations")
     private int mAdmirations = 0;
-    @SerializedName(value = "peopleNearby", alternate = "unread_people_nearby")
+    @SerializedName(value = "peopleNearby")
     private int mPeopleNearby = 0;
 
     public CountersData(CountersData countersData) {
