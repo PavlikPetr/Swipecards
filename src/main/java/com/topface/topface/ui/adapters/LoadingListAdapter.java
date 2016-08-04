@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
 import com.topface.topface.utils.ListUtils;
@@ -52,7 +53,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     public LoadingListAdapter(Context context, FeedList<T> data, Updater updateCallback) {
         mContext = context.getApplicationContext();
         injectManager = new ViewInjectManager(mContext);
-        mInflater = LayoutInflater.from(mContext);
+        mInflater = (LayoutInflater) App.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLoadController = initLoadController();
         mData = new FeedList<>();
         if (data != null) {
