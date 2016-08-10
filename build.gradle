@@ -72,6 +72,7 @@ allprojects {
         maven {
             url "https://dl.bintray.com/supersonic/android-sdk"
         }
+        maven { url "https://jitpack.io" }
         jcenter()
         flatDir {
             dirs 'libs'
@@ -323,7 +324,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     compile project(':libs:PullToRefresh')
-    compile project(':libs:PhotoView')
+
     compile(project(':libs:tf-offerwall:sdk')) {
         exclude group: 'com.android.support'
         exclude group: 'com.google.android.gms'
@@ -345,13 +346,17 @@ dependencies {
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.7'
     //OpenIAB
-    compile ('org.onepf:openiab:0.9.8.4') {
+    compile('org.onepf:openiab:0.9.8.4') {
         exclude group: 'com.intellij'
     }
     //View Bind
     compile 'com.jakewharton:butterknife:8.2.1'
     provided 'com.jakewharton:butterknife-compiler:8.2.1'
     kapt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    compile('com.github.chrisbanes:PhotoView:1.3.0') {
+        exclude group: 'com.android.support'
+    }
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
@@ -401,15 +406,6 @@ dependencies {
 }
 
 project(':libs:PullToRefresh') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'library/AndroidManifest.xml'
-        java.srcDirs = ['library/src']
-        res.srcDirs = ['library/res']
-    }
-}
-
-project(':libs:PhotoView') {
     apply plugin: 'com.android.library'
     android.sourceSets.main {
         manifest.srcFile 'library/AndroidManifest.xml'
