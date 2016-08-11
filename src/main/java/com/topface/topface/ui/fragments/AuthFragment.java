@@ -61,6 +61,8 @@ import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -620,6 +622,7 @@ public class AuthFragment extends BaseAuthFragment {
             }, null);
         }
 
+        @Nullable
         public BitmapDrawable getOtherServices() {
             Resources res = mContext.getResources();
             String text = mContext.getString(R.string.other_auth);
@@ -642,30 +645,31 @@ public class AuthFragment extends BaseAuthFragment {
             Bitmap bitmap;
             int widthBitmaps = 0;
             int margin = Utils.getPxFromDp(5);
+            if (!resIdList.isEmpty()) {
+                for (Integer resId : resIdList) {
+                    bitmap = BitmapFactory.decodeResource(res, resId);
+                    if (result == null) {
+                        result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeResIdList) + paint.measureText(text) + (margin * sizeResIdList)),
+                                Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + Utils.getPxFromDp(8), bitmap.getConfig());
+                        canvas.setBitmap(result);
+                        margin = 0;
+                    } else {
+                        margin = Utils.getPxFromDp(5);
+                    }
+                    canvas.drawBitmap(bitmap, widthBitmaps + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
+                    widthBitmaps = widthBitmaps + bitmap.getWidth();
+                    bitmap.recycle();
+                }
+                canvas.drawText(
+                        text,
+                        widthBitmaps + (margin * sizeResIdList),
+                        ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)),
+                        paint);
 
-            for (Integer resId : resIdList) {
-                bitmap = BitmapFactory.decodeResource(res, resId);
-                if (result == null) {
-                    result = Bitmap.createBitmap((int) Math.ceil((bitmap.getWidth() * sizeResIdList) + paint.measureText(text) + (margin * sizeResIdList)),
-                            Math.max((int) Math.ceil(paint.getTextSize()), bitmap.getHeight()) + Utils.getPxFromDp(8) , bitmap.getConfig());
-                    canvas.setBitmap(result);
-                    margin = 0;
-                }
-                else {
-                    margin = Utils.getPxFromDp(5);
-                }
-                canvas.drawBitmap(bitmap, widthBitmaps + margin, (canvas.getHeight() - bitmap.getHeight()) / 2, null);
-                widthBitmaps = widthBitmaps + bitmap.getWidth();
-                bitmap.recycle();
+                return new BitmapDrawable(res, result);
+            } else {
+                return null;
             }
-
-            canvas.drawText(
-                    text,
-                    widthBitmaps + (margin * sizeResIdList),
-                    ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)),
-                    paint);
-
-            return new BitmapDrawable(res, result);
         }
 
         private BitmapDrawable getServiceIcon(String name) {
