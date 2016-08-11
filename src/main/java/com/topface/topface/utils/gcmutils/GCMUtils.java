@@ -34,7 +34,6 @@ import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
 import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
@@ -42,7 +41,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashSet;
@@ -71,7 +69,7 @@ public class GCMUtils {
     public static final int GCM_TYPE_GIFT = 7;
     public static final int GCM_TYPE_DIALOGS = 8;
     public static final int GCM_TYPE_PEOPLE_NEARBY = 9;
-    public static final int GCM_TYPE_UPDATE_COUNTERS_BALANCE = 10;
+    public static final int GCM_TYPE_HAS_FEED_AD = 10;
     public static final int GCM_TYPE_FAN_UPDATE_PROFILE = 11;
     public static final int GCM_TYPE_FAN_ADD_PHOTO = 12;
     public static final int GCM_TYPE_FAN_ONLINE = 13;
@@ -190,8 +188,7 @@ public class GCMUtils {
         } else if (data == null) {
             Debug.log("GCM: intent is null");
             return false;
-        } else if (getType(data) == GCM_TYPE_UPDATE_COUNTERS_BALANCE) {
-            setCounters(data, context);
+        } else if (getType(data) == GCM_TYPE_HAS_FEED_AD) {
             LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
             return false;
         }
@@ -234,7 +231,6 @@ public class GCMUtils {
         final String text = data.getString("text");
         if (text != null) {
             loadNotificationSettings(context);
-            setCounters(data, context);
             int type = getType(data);
             final User user = getUser(data);
             String title = getTitle(context, data.getString("title"));
@@ -300,31 +296,6 @@ public class GCMUtils {
         } catch (NumberFormatException exc) {
             Debug.error(exc);
             return GCM_TYPE_UNKNOWN;
-        }
-    }
-
-    private static void setCounters(Bundle data, Context context) {
-        final CountersManager counterManager = CountersManager.getInstance(context);
-        counterManager.setLastRequestMethod(CountersManager.CHANGED_BY_GCM);
-        try {
-            String countersStr = data.getString("counters");
-            if (countersStr != null) {
-                JSONObject countersJson = new JSONObject(countersStr);
-                // on Api version 8 unread counter will have the same keys as common requests
-                counterManager.setEntitiesCounters(countersJson);
-            }
-            String balanceStr = data.getString("balance");
-            if (balanceStr != null) {
-                final JSONObject balanceJson = new JSONObject(balanceStr);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        counterManager.setBalanceCounters(balanceJson);
-                    }
-                });
-            }
-        } catch (JSONException e) {
-            Debug.error(e);
         }
     }
 
