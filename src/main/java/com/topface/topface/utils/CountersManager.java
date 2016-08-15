@@ -80,7 +80,9 @@ public class CountersManager {
     }
 
     public void setBalanceCounters(JSONObject balanceJson) {
-        setBalanceCounters(balanceJson.toString());
+        if (balanceJson != null) {
+            setBalanceCounters(balanceJson.toString());
+        }
     }
 
     public void setBalanceCounters(String balanceJson) {

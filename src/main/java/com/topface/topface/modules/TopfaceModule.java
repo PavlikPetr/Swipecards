@@ -24,7 +24,6 @@ import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.AddToLeaderActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
@@ -73,6 +72,8 @@ import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
+import com.topface.topface.viewModels.AddToPhotoBlogHeaderViewModel;
+import com.topface.topface.viewModels.AddToPhotoBlogViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,7 +97,6 @@ import dagger.Provides;
                 PurchasesActivity.class,
                 PhotoSwitcherActivity.class,
                 PurchasesFragment.class,
-                AddToLeaderActivity.class,
                 LikesFragment.class,
                 MenuFragment.class,
                 AdmirationFragment.class,
@@ -139,7 +139,9 @@ import dagger.Provides;
                 TopfaceAuthFragment.class,
                 UserProfileFragment.class,
                 BonusPresenter.class,
-                ExpressMessageAction.class
+                ExpressMessageAction.class,
+                AddToPhotoBlogViewModel.class,
+                AddToPhotoBlogHeaderViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

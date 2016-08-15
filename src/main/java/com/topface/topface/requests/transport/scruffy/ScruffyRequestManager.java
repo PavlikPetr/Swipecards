@@ -213,6 +213,9 @@ public class ScruffyRequestManager {
     private void sendPendingRequestWithKey(String key) {
         if (key != null) {
             final ScruffyRequestHolder request = mPendingRequests.get(key);
+            if (request == null) {
+                return;
+            }
             IApiRequest apiRequest = request.getRequest();
             if (apiRequest == null) {
                 mPendingRequests.remove(key);

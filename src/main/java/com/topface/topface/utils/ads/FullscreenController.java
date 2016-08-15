@@ -86,6 +86,7 @@ public class FullscreenController {
             isFullScreenBannerVisible = false;
             AdStatistics.sendFullscreenClosed(mCurrentBannerType);
             onFullScreenAdClosed();
+            continuePopupSequence();
         }
 
         @Override
@@ -157,6 +158,7 @@ public class FullscreenController {
             }
         });
         popup.show(((FragmentActivity) mActivity).getSupportFragmentManager(), OwnFullscreenPopup.TAG);
+        mFullScreenBannerListener.onLoaded();
     }
 
     private void handleFullscreenSettings(FullscreenSettings settings) {
@@ -172,6 +174,8 @@ public class FullscreenController {
                 Debug.log("FullscreenController : showOwnFullscreen ");
                 showOwnFullscreen(settings);
             }
+        } else {
+            continuePopupSequence();
         }
     }
 
@@ -196,28 +200,24 @@ public class FullscreenController {
             public void success(IApiResponse response) {
                 handleFullscreenSettings(JsonUtils.fromJson(response.toString(), FullscreenSettings.class));
                 Debug.log("FullscreenController : FullscreenSettingsRequest success ");
-                if (mFullScreenBannerListener != null) {
-                    mFullScreenBannerListener.onLoaded();
-                }
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
                 Debug.log("FullscreenController : FullscreenSettingsRequest error " + codeError + " response " + response);
             }
-
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                if (!isFullScreenBannerVisible && mOnNextActionListener != null) {
-                    mOnNextActionListener.onNextAction();
-                }
-            }
         });
         if (mActivity instanceof IRequestClient) {
             ((IRequestClient) mActivity).registerRequest(request);
         }
         request.exec();
+    }
+
+    private void continuePopupSequence() {
+        if (!isFullScreenBannerVisible && mOnNextActionListener != null) {
+            Debug.log("FullscreenController : FullscreenSettingsRequest continue popup sequence");
+            mOnNextActionListener.onNextAction();
+        }
     }
 
     private boolean mIsRedirected;
@@ -424,7 +424,7 @@ public class FullscreenController {
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
-                if (!isFullScreenBannerVisible) {
+                if (!isFullScreenBannerVisible && mOnNextActionListener != null) {
                     mOnNextActionListener.onNextAction();
                 }
             }

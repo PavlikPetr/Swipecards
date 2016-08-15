@@ -1,5 +1,6 @@
 package com.topface.framework.imageloader.processor;
 
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
@@ -10,9 +11,13 @@ import com.topface.framework.imageloader.BitmapUtils;
  */
 public class InscribedCircleAvatarProcessor implements BitmapProcessor {
     private IViewSizeGetter mSizeGetter;
+    private float mBorderWidth;
+    private ColorStateList mBorderColor;
 
-    public InscribedCircleAvatarProcessor(IViewSizeGetter sizeGetter) {
+    public InscribedCircleAvatarProcessor(IViewSizeGetter sizeGetter, float borderWidth, ColorStateList borderColor) {
         mSizeGetter = sizeGetter;
+        mBorderWidth = borderWidth;
+        mBorderColor = borderColor;
     }
 
     @Override
@@ -20,7 +25,7 @@ public class InscribedCircleAvatarProcessor implements BitmapProcessor {
         if (bitmap != null) {
             int viewHeight = mSizeGetter.getHeight();
             int viewWidth = mSizeGetter.getWidth();
-            bitmap = BitmapUtils.getInscribedCircleBitmap(bitmap, viewWidth <= 0 ? bitmap.getWidth() : viewWidth, viewHeight <= 0 ? bitmap.getHeight() : viewHeight);
+            bitmap = BitmapUtils.getInscribedCircleBitmap(bitmap, viewWidth <= 0 ? bitmap.getWidth() : viewWidth, viewHeight <= 0 ? bitmap.getHeight() : viewHeight, mBorderWidth, mBorderColor);
         }
         return bitmap;
     }

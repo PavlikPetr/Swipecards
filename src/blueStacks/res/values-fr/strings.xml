@@ -834,4 +834,12 @@
   <string name="filter_screen_title">Qui recherchez-vous ?</string>
   <string name="album_photo_deleted">Photo supprimée</string>
   <string name="album_main_photo">Photo de profil principale</string>
+  <string name="profile_ditance_to_her">d\'elle %s</string>
+  <string name="profile_ditance_to_him">de lui %s</string>
+  <string name="rate_popup_we_need_your_opinion">Vos commentaires sont très importants pour nous</string>
+  <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Merci d\'évaluer notre application. Cela ne vous prendra que quelques secondes.</string>
+  <string name="mutual_sympathy_in_chat">Le sentiment est réciproque !</string>
+  <string name="start_chat_with_gift">Un cadeau est une bonne intro !</string>
+  <string name="mutual_sympathy">Attraction mutuelle</string>
+  <string name="publish_photo">Publier la photo</string>
 </resources>

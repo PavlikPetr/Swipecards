@@ -33,4 +33,6 @@ public interface IActivityDelegate {
     Intent getIntent();
 
     void finish();
+
+    void setResult(int resultCode, Intent data);
 }

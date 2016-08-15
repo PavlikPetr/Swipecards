@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.framework.imageloader.IPhoto;
@@ -38,6 +39,18 @@ public class BindingsAdapters {
     public static void setMarginTop(View view, float padding) {
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
         lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
+    }
+
+    @BindingAdapter("android:layout_marginRight")
+    public static void setMarginRight(View view, float padding) {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        lp.setMargins(lp.leftMargin, lp.topMargin, (int) padding, lp.bottomMargin);
+    }
+
+    @BindingAdapter("android:layout_marginBottom")
+    public static void setMarginBottom(View view, float padding) {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
+        lp.setMargins(lp.leftMargin, lp.topMargin, lp.rightMargin, (int) padding);
     }
 
     @BindingAdapter("android:background")

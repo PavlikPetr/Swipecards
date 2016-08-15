@@ -101,11 +101,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    public int getCount() {
-        return mData.size();
-    }
-
-    @Override
     public long getItemId(int i) {
         return i;
     }
@@ -175,6 +170,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
             convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
             holder = getEmptyHolder(convertView, item);
         }
+
         if (item != null) {
             // установка аватарки пользователя
             // какую аватарку использовать по умолчанию для забаненных и во время загрузки нормальной
@@ -332,7 +328,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public void makeAllItemsRead() {
         for (T item : getData()) {
-                item.unread = false;
+            item.unread = false;
         }
     }
 
@@ -392,7 +388,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public T getLastFeedItem() {
         T item = null;
-        if (!isEmpty()) {
+        if (!getData().isEmpty()) {
             FeedList<T> data = getData();
             int dataSize = data.size();
 

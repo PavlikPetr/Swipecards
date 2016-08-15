@@ -51,6 +51,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwi
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
@@ -594,6 +595,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     private void refreshButtonsState() {
         Profile profile = App.get().getProfile();
         if (mUid == profile.uid && mPhotoLinks != null && mPhotoLinks.size() > mCurrentPosition) {
+            if (!ListUtils.isEntry(mCurrentPosition, mPhotoLinks)) {
+                return;
+            }
             final Photo currentPhoto = mPhotoLinks.get(mCurrentPosition);
             if (mDeletedPhotos.contains(currentPhoto)) {
                 mViewModel.setTrashEnable(true);
