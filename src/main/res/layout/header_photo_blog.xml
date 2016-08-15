@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.viewModels.HeaderPhotoBlogViewModel" />
+
+        <variable
+            name="click"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/photo_feed_header_bg_color"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_item_photoblog">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            style="@style/PhotoBlogAvatar"
+            app:remoteSrc="@{viewModel.urlAvatar}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_item_photoblog"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/ListName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photofeed_add_photo_to_feed_title" />
+
+            <Button
+                style="@style/BlueButtonAllCaps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_button_photoblog"
+                android:onClick="@{click}"
+                android:text="@string/leaders_go_date" />
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

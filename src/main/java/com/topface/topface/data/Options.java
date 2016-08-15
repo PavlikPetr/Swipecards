@@ -165,10 +165,10 @@ public class Options extends AbstractData {
      */
     public ExperimentTags experimentTags;
     public AppOfTheDay appOfTheDay;
-    public Bonus bonus = new Bonus();
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
 
+    public boolean showRefillBalanceInSideMenu = false;
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
@@ -313,13 +313,6 @@ public class Options extends AbstractData {
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             scruffy = response.optBoolean("scruffy", false);
             App.isScruffyEnabled = scruffy;
-            JSONObject bonusObject = response.optJSONObject("bonus");
-            if (bonusObject != null) {
-                bonus.enabled = bonusObject.optBoolean("enabled");
-                bonus.counter = bonusObject.optInt("counter");
-                bonus.timestamp = bonusObject.optLong("counterTimestamp");
-                bonus.integrationUrl = bonusObject.optString("integrationUrl");
-            }
             // offerwalls for
             JSONObject jsonOfferwalls = response.optJSONObject("offerwalls");
             if (jsonOfferwalls != null) {
@@ -372,6 +365,9 @@ public class Options extends AbstractData {
             if (appOfTheDayJsonObject != null) {
                 appOfTheDay = JsonUtils.optFromJson(appOfTheDayJsonObject.toString(), AppOfTheDay.class, new AppOfTheDay());
             }
+
+            showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
+
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
@@ -626,15 +622,6 @@ public class Options extends AbstractData {
         public String textPremium;
         public String buttonTextPremium;
         public int price = 0;
-    }
-
-    public static class Bonus {
-        public boolean enabled;
-        public int counter;
-        public long timestamp;
-        public String integrationUrl;
-        public String buttonText = App.getContext().getString(R.string.general_bonus);// по умолчанию кнопка имеет название "Бонус"
-        public String buttonPicture = Utils.getLocalResUrl(R.drawable.ic_bonus_left_menu);// по умолчанию кнопка отображается с картинкой ic_bonus_left_menu
     }
 
     public static class TabsList {

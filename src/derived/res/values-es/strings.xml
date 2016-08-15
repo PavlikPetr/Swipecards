@@ -923,4 +923,13 @@
     <string name="filter_screen_title">¿A quién buscas?</string>
     <string name="album_photo_deleted">Foto borrada</string>
     <string name="album_main_photo">Foto principal de perfil</string>
+    <string name="profile_ditance_to_her">Hasta ella %s</string>
+    <string name="profile_ditance_to_him">Hasta él %s</string>
+    <string name="rate_popup_we_need_your_opinion">Tu crítica es muy importante para nosotros</string>
+    <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Puntúa nuestra app, por favor. Solo tardarás unos segundos.</string>
+    <string name="mutual_sympathy_in_chat">¡El sentimiento es mutuo!</string>
+    <string name="start_chat_with_gift">¡Un regalo es un buen inicio!</string>
+    <string name="mutual_sympathy">Simpatía mutua</string>
+    <string name="add_photo_feed_header_description">Publica una foto con un saludo y miles de personas te verán. ¡Date a conocer y empieza a conocer gente ahora!</string>
+    <string name="publish_photo">Publicar foto</string>
 </resources>

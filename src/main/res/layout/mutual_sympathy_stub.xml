@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.utils.controllers.chatStubs.MutualSympathyStubViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_holo"
+        android:orientation="vertical">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fadingEdge="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/MutualSympathyStubTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/mutual_sympathy_stub_avatar_size"
+                    android:layout_height="@dimen/mutual_sympathy_stub_avatar_size"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.topface.topface.ui.views.ImageViewRemote
+                        android:id="@+id/mutualSympathyAvatar"
+                        android:layout_width="@dimen/mutual_sympathy_stub_avatar_size"
+                        android:layout_height="@dimen/mutual_sympathy_stub_avatar_size"
+                        app:postProcessor="inscribedAvatar"
+                        app:roundedImgBorderColor="@color/rounded_image_pink_border"
+                        app:roundedImgBorderWidth="@dimen/mutual_sympathy_border_size" />
+
+                    <com.topface.topface.ui.views.ImageViewRemote
+                        android:id="@+id/mutualSympathyIc"
+                        android:layout_width="@dimen/mutual_sympathy_icon_size"
+                        android:layout_height="@dimen/mutual_sympathy_icon_size"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@{viewModel.calculatePaddingBottom}"
+                        android:layout_marginRight="@{viewModel.calculatePaddingRight()}"
+                        app:postProcessor="rounded"
+                        app:roundedImgBorderColor="@color/rounded_image_pink_border"
+                        app:roundedImgBorderWidth="@dimen/mutual_sympathy_border_size" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/mutualSympathyMsg"
+                    style="@style/MutualSympathyStubMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Test message" />
+
+                <TextView
+                    android:id="@+id/mutualSympathyDate"
+                    style="@style/MutualSympathyStubDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Test date" />
+
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <TextView
+            style="@style/MutualSympathyStubAditionalInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</layout>

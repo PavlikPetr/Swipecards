@@ -1,10 +1,12 @@
 package com.topface.framework.imageloader;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -15,17 +17,20 @@ import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.DrawableRes;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
+
+import static com.topface.topface.ui.views.ImageViewRemote.DEFAULT_BORDER_COLOR;
 
 public class BitmapUtils {
 
@@ -558,27 +563,40 @@ public class BitmapUtils {
         return output;
     }
 
-    public static Bitmap getRoundBitmap(Bitmap bitmap, float radiusMult) {
+    public static Bitmap getRoundBitmap(Bitmap bitmap, float radiusMult, float borderWidth, @Nullable ColorStateList borderColor) {
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
-        int multWidth = (int) (((bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight) * radiusMult);
-        @SuppressWarnings("SuspiciousNameCombination")
-        Bitmap output = scaleResource(R.drawable.album_present_mask, bitmapWidth, bitmapHeight).copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(output);
-        final Rect dst = new Rect((multWidth - bitmapWidth) / 2, (multWidth - bitmapHeight) / 2, (multWidth + bitmapWidth) / 2, (multWidth - bitmapHeight) / 2 + bitmapHeight);
-        final Rect rect = new Rect(0, 0, bitmapWidth, bitmapHeight);
-        Paint canvasPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-        canvas.drawBitmap(Bitmap.createScaledBitmap(bitmap, (int) (bitmapWidth / radiusMult), (int) (bitmapHeight / radiusMult), true), rect, dst, canvasPaint);
-        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-        canvas.drawBitmap(scaleResource(R.drawable.album_present_mask, bitmapWidth, bitmapHeight), rect, rect, canvasPaint);
-        canvasPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
-        canvas.drawBitmap(scaleResource(R.drawable.bg_for_present, bitmapWidth, bitmapHeight), rect, rect, canvasPaint);
-        return Bitmap.createScaledBitmap(output, bitmapWidth, bitmapHeight, true);
-    }
+        int whiteColor = Color.WHITE;
+        borderColor = borderColor != null ? borderColor : DEFAULT_BORDER_COLOR;
 
-    private static Bitmap scaleResource(@DrawableRes int id, int dstWidth, int dstHeight) {
-        return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(App.getContext().getResources(), id), dstWidth, dstHeight, true);
+        Bitmap mask = Bitmap.createBitmap(bitmapWidth, bitmapHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvasMask = new Canvas(mask);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(whiteColor);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        canvasMask.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        canvasMask.drawCircle(bitmapWidth / 2, bitmapHeight / 2, bitmapWidth / 2 - borderWidth, paint);
+
+        Bitmap output = mask.copy(Bitmap.Config.ARGB_8888, true);
+
+        Canvas canvas = new Canvas(output);
+        int borderSize = (int) borderWidth;
+        paint.reset();
+        paint.setAntiAlias(true);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        int scaledImageHeight = (int) ((bitmapHeight - borderSize) / radiusMult);
+        int scaledImageWidth = (int) ((bitmapWidth - borderSize) / radiusMult);
+        int scaledImagePaddingHorizontal = (bitmapWidth - scaledImageWidth) / 2;
+        int scaledImagePaddingVertical = (bitmapHeight - scaledImageWidth) / 2;
+        canvas.drawBitmap(Bitmap.createScaledBitmap(bitmap, scaledImageWidth, scaledImageHeight, true), scaledImagePaddingHorizontal, scaledImagePaddingVertical, paint);
+        paint.reset();
+        paint.setAntiAlias(true);
+        paint.setColor(borderColor.getDefaultColor());
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(borderWidth);
+        canvas.drawCircle(bitmapWidth / 2, bitmapHeight / 2, bitmapWidth / 2 - borderWidth / 2, paint);
+        return output;
     }
 
     public static Bitmap getRoundAvatarBitmap(Bitmap bitmap) {
@@ -601,7 +619,15 @@ public class BitmapUtils {
         return Bitmap.createScaledBitmap(output, bitmap.getWidth(), bitmap.getWidth(), true);
     }
 
-    public static Bitmap getInscribedCircleBitmap(Bitmap bitmap, int width, int height) {
+    public static Bitmap getInscribedCircleBitmap(Bitmap bitmap, int width, int height, float borderWidth, @Nullable ColorStateList borderColor) {
+        if (borderWidth == 0 || borderColor == DEFAULT_BORDER_COLOR) {
+            return getInscribedCircleBitmap(bitmap, width, height);
+        } else {
+            return getRoundBitmap(getInscribedCircleBitmap(bitmap, width, height), 1f, borderWidth, borderColor);
+        }
+    }
+
+    private static Bitmap getInscribedCircleBitmap(Bitmap bitmap, int width, int height) {
         int bWidth = bitmap.getWidth();
         int bHeight = bitmap.getHeight();
         float viewRation = (float) width / (float) height;

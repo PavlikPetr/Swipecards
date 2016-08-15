@@ -45,17 +45,17 @@ def getTimestamp() {
 
 buildscript {
     ext.retrofit_version = '2.1.0'
-    ext.google_play_services_version = '9.2.1'
+    ext.google_play_services_version = '9.4.0'
+    ext.kotlin_version = '1.0.2-1'
+    ext.anko_version = '0.9'
     repositories {
         jcenter()
         //костыль. как тольок будет выложена новыя версия плагина это можно убрать
         maven { url 'https://jitpack.io' }
     }
     dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
-        //продолжэение костыля. с новой версией заменить на нормальную зависимость
-        classpath 'com.github.JakeWharton:sdk-manager-plugin:220bf7a88a7072df3ed16dc8466fb144f2817070'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.google.gms:google-services:3.0.0'
     }
 }
@@ -72,6 +72,7 @@ allprojects {
         maven {
             url "https://dl.bintray.com/supersonic/android-sdk"
         }
+        maven { url "https://jitpack.io" }
         jcenter()
         flatDir {
             dirs 'libs'
@@ -79,9 +80,9 @@ allprojects {
     }
 }
 
-//apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
+apply plugin: 'kotlin-android'
+
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -289,6 +290,12 @@ android {
 }
 
 dependencies {
+    //Kotlin
+    //compile "org.jetbrains.anko:anko-sdk15:$anko_version"
+    //compile "org.jetbrains.anko:anko-support-v4:$anko_version"
+    //compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    kapt 'com.android.databinding:compiler:2.1.0'
     //Android Support libs
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'
@@ -317,7 +324,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     compile project(':libs:PullToRefresh')
-    compile project(':libs:PhotoView')
+
     compile(project(':libs:tf-offerwall:sdk')) {
         exclude group: 'com.android.support'
         exclude group: 'com.google.android.gms'
@@ -339,10 +346,17 @@ dependencies {
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.7'
     //OpenIAB
-    compile 'org.onepf:openiab:0.9.8.4'
+    compile('org.onepf:openiab:0.9.8.4') {
+        exclude group: 'com.intellij'
+    }
     //View Bind
     compile 'com.jakewharton:butterknife:8.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    provided 'com.jakewharton:butterknife-compiler:8.2.1'
+    kapt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    compile('com.github.chrisbanes:PhotoView:1.3.0') {
+        exclude group: 'com.android.support'
+    }
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
@@ -350,6 +364,7 @@ dependencies {
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    kapt 'com.squareup.dagger:dagger-compiler:1.2.2'
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.1') {
         exclude group: 'com.android.support'
@@ -399,15 +414,6 @@ project(':libs:PullToRefresh') {
     }
 }
 
-project(':libs:PhotoView') {
-    apply plugin: 'com.android.library'
-    android.sourceSets.main {
-        manifest.srcFile 'library/AndroidManifest.xml'
-        java.srcDirs = ['library/src']
-        res.srcDirs = ['library/res']
-    }
-}
-
 //Social networks
 project(':libs:odnoklassniki') {
     apply plugin: 'com.android.library'
@@ -448,3 +454,7 @@ task runScript(type: Exec) {
     commandLine 'groovy', projectDir.toString().concat('/src/main/groovy/MoveStrings.groovy'), listFlavours, listBuildTypes
 }
 defaultTasks 'runScript'
+
+kapt {
+    generateStubs = true
+}

@@ -344,7 +344,7 @@ public class UserNotification {
     private Bitmap getLargeIconBitmap() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // скругляем аватарку для отображения на lollipop и старше
-            return BitmapUtils.getRoundBitmap(BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext)), 1f);
+            return BitmapUtils.getRoundBitmap(BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext)), 1f, 0, null);
         } else {
             // все остальные будут отображать квадратную аватарку
             return BitmapUtils.clipAndScaleBitmap(mImage, getIconSize(mContext), getIconSize(mContext));

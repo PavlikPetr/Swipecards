@@ -134,7 +134,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
     public void onDestroy() {
         super.onDestroy();
         mBalanceSubscription.unsubscribe();
-        if(mRateController != null) {
+        if (mRateController != null) {
             mRateController.destroyController();
         }
     }
@@ -411,7 +411,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         new BackgroundThread() {
             @Override
             public void execute() {
-                SharedPreferences prefs = getActivity()
+                SharedPreferences prefs = App.getContext()
                         .getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
                 final long showsCount = prefs.getLong(PREFERENCES_PAID_LIKES_COUNT, 1L);
                 if (showsCount > 1L) {

@@ -264,7 +264,7 @@
   <string name="settings_vibration">Vibration alert</string>
   <string name="settings_notifications_header">Notifications</string>
   <string name="settings_likes">Likes</string>
-  <string name="settings_mutual">They like me</string>
+  <string name="settings_mutual">Mutual Likes</string>
   <string name="settings_messages">Messages</string>
   <string name="settings_guests">Guests</string>
   <string name="settings_help">Help</string>
@@ -817,4 +817,13 @@
   <string name="filter_screen_title">Who are you seeking?</string>
   <string name="album_photo_deleted">Photo deleted</string>
   <string name="album_main_photo">Main profile photo</string>
+  <string name="profile_ditance_to_her">To her %s</string>
+  <string name="profile_ditance_to_him">To him %s</string>
+  <string name="rate_popup_we_need_your_opinion">Your feedback is very important to us</string>
+  <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Please rate our app. It will only take a few seconds.</string>
+  <string name="mutual_sympathy_in_chat">The feeling is mutual!</string>
+  <string name="start_chat_with_gift">A gift is a good intro!</string>
+  <string name="mutual_sympathy">Mutual Like</string>
+  <string name="add_photo_feed_header_description">Publish a photo with a greeting and thousands of people will see you. Get noticed and start meeting people now!</string>
+  <string name="publish_photo">Publish photo</string>
 </resources>

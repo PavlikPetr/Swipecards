@@ -1,6 +1,5 @@
 package com.topface.topface.ui;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,10 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Locale;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IActivityDelegate {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -58,7 +54,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mIndeterminateSupported = false;
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private boolean mNeedAnimate = true;
-    private boolean mIsActivityRestoredState = false;
     private BroadcastReceiver mProfileLoadReceiver;
     private Toolbar mToolbar;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
@@ -88,7 +83,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
     private boolean mHasContent = true;
-    private Unbinder mUnbinder;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -122,18 +116,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         initActionBar(getSupportActionBar());
     }
 
-    protected void bindView() {
-        mUnbinder = ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mUnbinder != null) {
-            mUnbinder.unbind();
-        }
-    }
-
     public void setToolBarVisibility(boolean isVisible) {
         if (mToolbar != null) {
             mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
@@ -154,7 +136,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }
-        mIsActivityRestoredState = false;
     }
 
     @Override
@@ -322,12 +303,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
-        mIsActivityRestoredState = true;
         checkProfileLoad();
-    }
-
-    public boolean isActivityRestoredState() {
-        return mIsActivityRestoredState;
     }
 
     public boolean startAuth() {

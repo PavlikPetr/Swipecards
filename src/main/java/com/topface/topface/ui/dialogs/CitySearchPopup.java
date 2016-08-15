@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
+import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.CitySearchPopupBinding;
 import com.topface.topface.ui.adapters.CityAdapter;
 import com.topface.topface.utils.ListUtils;
@@ -41,7 +42,9 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
     public static CitySearchPopup newInstance(@Nullable String cityNameOnStart, @Nullable ArrayList<City> defaultCities) {
         CitySearchPopup popup = new CitySearchPopup();
         Bundle bundle = new Bundle();
-        bundle.putString(CITY_ON_START, cityNameOnStart != null ? cityNameOnStart : App.get().getProfile().city.name);
+        Profile profile = App.get().getProfile();
+        bundle.putString(CITY_ON_START, cityNameOnStart != null ? cityNameOnStart
+                : profile.city != null ? profile.city.getName() : Utils.EMPTY);
         if (ListUtils.isNotEmpty(defaultCities)) {
             bundle.putParcelableArrayList(DEFAULT_CITIES, defaultCities);
         }
