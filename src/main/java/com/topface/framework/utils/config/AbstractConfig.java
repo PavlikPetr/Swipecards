@@ -8,6 +8,8 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BuildConfig;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,30 +36,33 @@ public abstract class AbstractConfig {
      */
     protected void initData() {
         if (canInitData()) {
-            SharedPreferences preferences = getPreferences();
-            for (SettingsField field : getSettingsMap(true).values()) {
-                switch (field.getType()) {
-                    case String:
-                        field.value = preferences.getString(field.key, (String) field.value);
-                        break;
-                    case Integer:
-                        field.value = preferences.getInt(field.key, (Integer) field.value);
-                        break;
-                    case Boolean:
-                        field.value = preferences.getBoolean(field.key, (Boolean) field.value);
-                        break;
-                    case Long:
-                        field.value = preferences.getLong(field.key, (Long) field.value);
-                        break;
-                    case Double:
-                        String value;
-                        if (field.value instanceof Double) {
-                            value = Double.toString((Double) field.value);
-                        } else {
-                            value = (String) field.value;
-                        }
-                        field.value = Double.parseDouble(preferences.getString(field.key, value));
-                        break;
+            SharedPreferences preff = getPreferences();
+            if (preff != null) {
+                SharedPreferences preferences = getPreferences();
+                for (SettingsField field : getSettingsMap(true).values()) {
+                    switch (field.getType()) {
+                        case String:
+                            field.value = preferences.getString(field.key, (String) field.value);
+                            break;
+                        case Integer:
+                            field.value = preferences.getInt(field.key, (Integer) field.value);
+                            break;
+                        case Boolean:
+                            field.value = preferences.getBoolean(field.key, (Boolean) field.value);
+                            break;
+                        case Long:
+                            field.value = preferences.getLong(field.key, (Long) field.value);
+                            break;
+                        case Double:
+                            String value;
+                            if (field.value instanceof Double) {
+                                value = Double.toString((Double) field.value);
+                            } else {
+                                value = (String) field.value;
+                            }
+                            field.value = Double.parseDouble(preferences.getString(field.key, value));
+                            break;
+                    }
                 }
             }
         }
@@ -175,6 +180,7 @@ public abstract class AbstractConfig {
         Debug.log("Reset AppConfig: " + toString());
     }
 
+    @Nullable
     protected abstract SharedPreferences getPreferences();
 
     /**
@@ -192,29 +198,32 @@ public abstract class AbstractConfig {
 
     @SuppressLint("CommitPrefEdits")
     public void commitConfig() {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        saveConfigAdditional(editor);
-        for (SettingsField field : getSettingsMap().values()) {
-            switch (field.getType()) {
-                case String:
-                    editor.putString(field.key, (String) field.value);
-                    break;
-                case Integer:
-                    editor.putInt(field.key, (Integer) field.value);
-                    break;
-                case Boolean:
-                    editor.putBoolean(field.key, (Boolean) field.value);
-                    break;
-                case Long:
-                    editor.putLong(field.key, (Long) field.value);
-                    break;
-                case Double:
-                    editor.putString(field.key, Double.toString((Double) field.value));
-                    break;
+        SharedPreferences preff = getPreferences();
+        if (preff != null) {
+            SharedPreferences.Editor editor = preff.edit();
+            saveConfigAdditional(editor);
+            for (SettingsField field : getSettingsMap().values()) {
+                switch (field.getType()) {
+                    case String:
+                        editor.putString(field.key, (String) field.value);
+                        break;
+                    case Integer:
+                        editor.putInt(field.key, (Integer) field.value);
+                        break;
+                    case Boolean:
+                        editor.putBoolean(field.key, (Boolean) field.value);
+                        break;
+                    case Long:
+                        editor.putLong(field.key, (Long) field.value);
+                        break;
+                    case Double:
+                        editor.putString(field.key, Double.toString((Double) field.value));
+                        break;
+                }
             }
+            editor.commit();
+            Debug.log(this.getClass().getName() + toString());
         }
-        editor.commit();
-        Debug.log(this.getClass().getName() + toString());
     }
 
     /**

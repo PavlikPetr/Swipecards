@@ -104,6 +104,11 @@ public class FullscreenSettings implements Parcelable {
          * {String} parameter - строка значения параметра действия (ОПЦИОНАЛЬНО)
          */
 
+        public String adAppId;
+        /**
+         * {String} adAppId - идентификатор приложения SDK (ОПЦИОНАЛЬНО, только для типов баннеров SDK)
+         */
+
         public static final Parcelable.Creator<Banner> CREATOR = new Creator<Banner>() {
             @Override
             public Banner createFromParcel(Parcel in) {
@@ -122,6 +127,7 @@ public class FullscreenSettings implements Parcelable {
             url = parcel.readString();
             action = parcel.readString();
             parameter = parcel.readString();
+            adAppId = parcel.readString();
         }
 
         public Banner() {
@@ -139,6 +145,7 @@ public class FullscreenSettings implements Parcelable {
             dest.writeString(url);
             dest.writeString(action);
             dest.writeString(parameter);
+            dest.writeString(adAppId);
         }
 
         @SuppressWarnings("SimplifiableIfStatement")
@@ -151,7 +158,9 @@ public class FullscreenSettings implements Parcelable {
             if (url != null ? !url.equals(banner.url) : banner.url != null) return false;
             if (action != null ? !action.equals(banner.action) : banner.action != null)
                 return false;
-            return parameter != null ? parameter.equals(banner.parameter) : banner.parameter == null;
+            if (parameter != null ? !parameter.equals(banner.parameter) : banner.parameter != null)
+                return false;
+            return adAppId != null ? adAppId.equals(banner.adAppId) : banner.adAppId == null;
 
         }
 
@@ -162,6 +171,7 @@ public class FullscreenSettings implements Parcelable {
             result = 31 * result + (url != null ? url.hashCode() : 0);
             result = 31 * result + (action != null ? action.hashCode() : 0);
             result = 31 * result + (parameter != null ? parameter.hashCode() : 0);
+            result = 31 * result + (adAppId != null ? adAppId.hashCode() : 0);
             return result;
         }
     }

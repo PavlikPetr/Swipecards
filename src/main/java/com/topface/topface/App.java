@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
 import com.topface.billing.StoresManager;
+import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -29,8 +30,10 @@ import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
+import com.topface.topface.data.FullscreenSettings;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -40,6 +43,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
+import com.topface.topface.requests.BannerSettingsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
@@ -73,6 +77,7 @@ import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
 import com.topface.topface.utils.gcmutils.RegistrationService;
@@ -96,6 +101,8 @@ import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 
+import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
+
 @ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends ApplicationBase implements IStateDataUpdater {
 
@@ -111,6 +118,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     static RunningStateManager mStateManager;
     @Inject
     AdjustManager mAdjustManager;
+    @Inject
+    WeakStorage mWeakStorage;
     private ObjectGraph mGraph;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -393,6 +402,31 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
     }
 
+    public void sendBannerSettingsRequest(Context context) {
+        UserConfig config = App.getUserConfig();
+        long amount = config.getBannerInterval().getConfigFieldInfo().getAmount();
+        Debug.log("BANNER_SETTINGS : BannerSettingsRequest exec amount " + amount);
+        ApiRequest request = new BannerSettingsRequest(context, amount);
+        request.callback(new ApiHandler() {
+            @Override
+            public void success(IApiResponse response) {
+                FullscreenSettings settings = JsonUtils.fromJson(response.toString(), FullscreenSettings.class);
+                Debug.log("BANNER_SETTINGS : Catched new banner settings");
+                if (settings != null && settings.banner != null && FullscreenSettings.SDK.equals(settings.banner.type) && APPODEAL_NEW.equals(settings.banner.name)) {
+                    App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
+                    mWeakStorage.setAppodealBannerSegmentName(settings.banner.adAppId);
+                    AppodealProvider.setCustomSegment();
+                }
+            }
+
+            @Override
+            public void fail(int codeError, IApiResponse response) {
+                Debug.error("BANNER_SETTINGS : BannerSettingsRequest return error " + codeError + "\n" + response);
+            }
+        });
+        request.exec();
+    }
+
     @Override
     public void onCreate() {
         /**
@@ -424,6 +458,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
                 FlurryManager.getInstance().sendAppInForegroundEvent();
+                sendBannerSettingsRequest(getContext());
             }
 
             @Override
