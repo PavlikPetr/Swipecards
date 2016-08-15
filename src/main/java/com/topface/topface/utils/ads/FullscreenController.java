@@ -127,8 +127,7 @@ public class FullscreenController {
 
         @Override
         public boolean isApplicable() {
-            return true;
-//            return canShowFullscreen();
+            return canShowFullscreen();
         }
 
         @Override
