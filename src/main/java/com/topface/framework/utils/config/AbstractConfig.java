@@ -54,12 +54,7 @@ public abstract class AbstractConfig {
                             field.value = preferences.getLong(field.key, (Long) field.value);
                             break;
                         case Double:
-                            String value;
-                            if (field.value instanceof Double) {
-                                value = Double.toString((Double) field.value);
-                            } else {
-                                value = (String) field.value;
-                            }
+                            String value = field.value instanceof Double ? Double.toString((Double) field.value) : (String) field.value;
                             field.value = Double.parseDouble(preferences.getString(field.key, value));
                             break;
                     }
