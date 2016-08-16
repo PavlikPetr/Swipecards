@@ -805,4 +805,9 @@
   <string name="profile_ditance_to_him">Zu ihm %s</string>
   <string name="rate_popup_we_need_your_opinion">Dein Feedback ist uns sehr wichtig</string>
   <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Bitte bewerte unsere App. Es dauert nur wenige Sekunden.</string>
+  <string name="mutual_sympathy_in_chat">Das Gefühl beruht auf Gegenseitigkeit!</string>
+  <string name="start_chat_with_gift">Ein Geschenk ist ein guter Anfang!</string>
+  <string name="mutual_sympathy">Beidseitiges Like</string>
+  <string name="add_photo_feed_header_description">Veröffentliche ein Foto mit einem Gruß und tausende Leute werden dich sehen. Werde bemerkt und fange jetzt damit an, Leute kennenzulernen!</string>
+  <string name="publish_photo">Foto veröffentlichen</string>
 </resources>
