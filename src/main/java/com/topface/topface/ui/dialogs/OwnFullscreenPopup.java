@@ -8,7 +8,7 @@ import android.webkit.WebView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.FullscreenSettings;
+import com.topface.topface.data.AdsSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
@@ -27,12 +27,12 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     public static final String IMPROVED_BANNER_TOPFACE = "own_improved_custom_topface_banner";
     public static final String TAG = "OwnFullscreenPopup";
     @Nullable
-    private FullscreenSettings mFullscreenSettings;
+    private AdsSettings mAdsSettings;
     public static final String SCREEN_TYPE = "OwnFullscreenPopup";
 
-    public static OwnFullscreenPopup newInstance(FullscreenSettings fullscreenSettings) {
+    public static OwnFullscreenPopup newInstance(AdsSettings adsSettings) {
         Bundle args = new Bundle();
-        args.putParcelable(FULLSCREEN_OPTIONS, fullscreenSettings);
+        args.putParcelable(FULLSCREEN_OPTIONS, adsSettings);
         OwnFullscreenPopup fragment = new OwnFullscreenPopup();
         fragment.setArguments(args);
         return fragment;
@@ -41,7 +41,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     @Override
     protected void parseArgs(@Nullable Bundle bundle) {
         if (bundle != null) {
-            mFullscreenSettings = bundle.getParcelable(FULLSCREEN_OPTIONS);
+            mAdsSettings = bundle.getParcelable(FULLSCREEN_OPTIONS);
         }
     }
 
@@ -61,57 +61,57 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     public void onViewStateRestored(@android.support.annotation.Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            mFullscreenSettings = savedInstanceState.getParcelable(FULLSCREEN_OPTIONS);
+            mAdsSettings = savedInstanceState.getParcelable(FULLSCREEN_OPTIONS);
         }
     }
 
     @Nullable
     private View createBodyView() {
-        if (mFullscreenSettings != null && !mFullscreenSettings.isEmpty()) {
-            switch (mFullscreenSettings.banner.type) {
-                case FullscreenSettings.IMG:
+        if (mAdsSettings != null && !mAdsSettings.isEmpty()) {
+            switch (mAdsSettings.banner.type) {
+                case AdsSettings.IMG:
                     View view = new ImageViewRemote(getContext().getApplicationContext());
                     view.setLayoutParams(new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
-                    ((ImageViewRemote) view).setRemoteSrc(Utils.prepareUrl(mFullscreenSettings.banner.url));
+                    ((ImageViewRemote) view).setRemoteSrc(Utils.prepareUrl(mAdsSettings.banner.url));
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            clickImgBannerSettings(mFullscreenSettings);
+                            clickImgBannerSettings(mAdsSettings);
                             AdStatistics.sendFullscreenClicked(OwnFullscreenPopup.IMPROVED_BANNER_TOPFACE);
                             OwnFullscreenPopup.this.cancel();
                         }
                     });
                     return view;
-                case FullscreenSettings.WEB:
+                case AdsSettings.WEB:
                     WebView webView = new WebView(getContext().getApplicationContext());
-                    webView.loadUrl(Utils.prepareUrl(mFullscreenSettings.banner.url));
+                    webView.loadUrl(Utils.prepareUrl(mAdsSettings.banner.url));
                     return webView;
             }
         }
         return null;
     }
 
-    private void clickImgBannerSettings(FullscreenSettings settings) {
+    private void clickImgBannerSettings(AdsSettings settings) {
         switch (settings.banner.action) {
-            case FullscreenSettings.PAGE:
+            case AdsSettings.PAGE:
                 switch (settings.banner.parameter) {
-                    case FullscreenSettings.PURCHASE:
+                    case AdsSettings.PURCHASE:
                         startActivity(PurchasesActivity.createBuyingIntent(SCREEN_TYPE, App.get().getOptions().topfaceOfferwallRedirect));
                         break;
-                    case FullscreenSettings.VIP:
+                    case AdsSettings.VIP:
                         startActivity(PurchasesActivity.createVipBuyIntent(null, SCREEN_TYPE));
                         break;
                 }
                 break;
-            case FullscreenSettings.URL:
+            case AdsSettings.URL:
                 Utils.goToUrl(getActivity(), settings.banner.parameter);
                 break;
-            case FullscreenSettings.METHOD:
+            case AdsSettings.METHOD:
                 //прост
                 break;
-            case FullscreenSettings.OFFERWALL:
+            case AdsSettings.OFFERWALL:
                 //прост
                 break;
         }
@@ -120,7 +120,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(FULLSCREEN_OPTIONS, mFullscreenSettings);
+        outState.putParcelable(FULLSCREEN_OPTIONS, mAdsSettings);
     }
 
     @Override

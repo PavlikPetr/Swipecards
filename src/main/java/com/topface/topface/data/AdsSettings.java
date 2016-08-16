@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Модель наспроек фулскринов
  * Created by tiberal on 17.06.16.
  */
-public class FullscreenSettings implements Parcelable {
+public class AdsSettings implements Parcelable {
 
     public static final String SDK = "SDK";
     public static final String IMG = "IMG";
@@ -29,13 +29,13 @@ public class FullscreenSettings implements Parcelable {
      */
     public long nextRequestNoEarlierThen;
 
-    public FullscreenSettings(Parcel parcel) {
+    public AdsSettings(Parcel parcel) {
         banner = parcel.readParcelable(((Object) this).getClass().getClassLoader());
         nextRequestNoEarlierThen = parcel.readLong();
     }
 
     @SuppressWarnings("unused")
-    public FullscreenSettings() {
+    public AdsSettings() {
     }
 
     public boolean isEmpty() {
@@ -53,23 +53,23 @@ public class FullscreenSettings implements Parcelable {
         dest.writeLong(nextRequestNoEarlierThen);
     }
 
-    public static final Parcelable.Creator<FullscreenSettings> CREATOR = new Creator<FullscreenSettings>() {
+    public static final Parcelable.Creator<AdsSettings> CREATOR = new Creator<AdsSettings>() {
         @Override
-        public FullscreenSettings createFromParcel(Parcel in) {
-            return new FullscreenSettings(in);
+        public AdsSettings createFromParcel(Parcel in) {
+            return new AdsSettings(in);
         }
 
         @Override
-        public FullscreenSettings[] newArray(int size) {
-            return new FullscreenSettings[size];
+        public AdsSettings[] newArray(int size) {
+            return new AdsSettings[size];
         }
     };
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof FullscreenSettings)) return false;
-        FullscreenSettings that = (FullscreenSettings) o;
+        if (!(o instanceof AdsSettings)) return false;
+        AdsSettings that = (AdsSettings) o;
         if (nextRequestNoEarlierThen != that.nextRequestNoEarlierThen) return false;
         return banner != null ? banner.equals(that.banner) : that.banner == null;
     }

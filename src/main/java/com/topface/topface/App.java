@@ -33,7 +33,7 @@ import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
-import com.topface.topface.data.FullscreenSettings;
+import com.topface.topface.data.AdsSettings;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
@@ -410,9 +410,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                FullscreenSettings settings = JsonUtils.fromJson(response.toString(), FullscreenSettings.class);
+                AdsSettings settings = JsonUtils.fromJson(response.toString(), AdsSettings.class);
                 Debug.log("BANNER_SETTINGS : Catched new banner settings");
-                if (settings != null && settings.banner != null && FullscreenSettings.SDK.equals(settings.banner.type) && APPODEAL_NEW.equals(settings.banner.name)) {
+                if (settings != null && settings.banner != null && AdsSettings.SDK.equals(settings.banner.type) && APPODEAL_NEW.equals(settings.banner.name)) {
                     App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
                     mWeakStorage.setAppodealBannerSegmentName(settings.banner.adAppId);
                     AppodealProvider.setCustomSegment();
