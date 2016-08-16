@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
@@ -62,9 +63,11 @@ import com.topface.topface.utils.LifeCycleReporter;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -141,11 +144,13 @@ import dagger.Provides;
                 BonusPresenter.class,
                 ExpressMessageAction.class,
                 AddToPhotoBlogViewModel.class,
-                AddToPhotoBlogHeaderViewModel.class
+                AddToPhotoBlogHeaderViewModel.class,
+                FullscreenController.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
-                App.class
+                App.class,
+                AppodealProvider.class
         }
 )
 public class TopfaceModule {
@@ -291,5 +296,11 @@ public class TopfaceModule {
                 return null;
             }
         });
+    }
+
+    @Provides
+    @Singleton
+    WeakStorage providesWeakStorage() {
+        return new WeakStorage();
     }
 }
