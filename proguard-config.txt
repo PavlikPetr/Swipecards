@@ -8,11 +8,13 @@
 -keepclassmembers class rx.subscriptions.SerialSubscription {
     rx.subscriptions.SerialSubscription.State state;
 }
+-dontnote rx.subscriptions.SerialSubscription.**
 
  #AsyncAndroid
 -keepclassmembers class com.koushikdutta.async.AsyncServer {
     com.koushikdutta.async.AsyncServer.Scheduler INSTANCE;
 }
+-dontnote com.koushikdutta.async.**
 
  # Flurry
 -keep class com.flurry.** { *; }
@@ -52,6 +54,7 @@
 # Adman
 -keep class java.util.concurrent.** { *; }
 -dontwarn java.util.concurrent.**
+-dontnote java.util.concurrent.**
 
  # Jackson
 -dontwarn com.fasterxml.jackson.databind.ext.**
@@ -67,6 +70,8 @@
 -keepattributes *Annotation*
  # Keep all the ACRA classes
 -keep class org.acra.** { *; }
+-dontnote org.acra.**
+-dontwarn org.acra.**
 
  # Topface
 -keep class com.topface.topface.data.** { *; }
@@ -76,6 +81,7 @@
 
  # RxAndroid
 -dontwarn rx.internal.util.unsafe.**
+-dontnote rx.internal.**
 
  # ButterKnife
 -keep class butterknife.** { *; }
@@ -125,6 +131,8 @@
 -keep class com.appodeal.** { *; }
 -keep class org.nexage.** { *; }
 -keepattributes EnclosingMethod, InnerClasses, Signature, JavascriptInterface
+-dontnote com.appodeal.**
+-dontwarn com.appodeal.**
 
 # Amazon
 -keep class com.amazon.** { *; }
@@ -155,6 +163,8 @@
 -keepattributes SourceFile,LineNumberTable
 -keep class com.unity3d.ads.** { *; }
 -keep class com.applifier.** { *; }
+-dontwarn com.unity3d.**
+-dontnote com.unity3d.**
 
 # Yandex
 -keep class com.yandex.metrica.** { *; }
@@ -202,6 +212,7 @@
 # MyTarget
 -keep class com.my.target.** { *; }
 -dontwarn com.my.target.**
+-dontnote com.my.target.**
 -keep class ru.mail.android.mytarget.** { *; }
 -dontwarn ru.mail.android.mytarget.**
 
@@ -216,11 +227,13 @@
 -keep class com.google.android.gms.common.GooglePlayServicesUtil {*;}
 -keep class com.google.android.gms.ads.identifier.** { *; }
 -dontwarn com.google.android.gms.**
+-dontnote com.google.android.gms.**
 
 # Legacy
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.**
+-dontnote org.apache.http.**
 
 # Google Play Services library
 -keep class * extends java.util.ListResourceBundle {
@@ -264,10 +277,14 @@
 -keep class android.support.v4.util.LruCache { *; }
 -keep class android.support.v4.view.PagerAdapter { *; }
 -keep class android.support.v4.view.ViewPager { *; }
+-dontnote android.support.v4.**
+-dontwarn android.support.v4.**
 
 # support-v7-recyclerview
 -keep class android.support.v7.widget.RecyclerView { *; }
 -keep class android.support.v7.widget.LinearLayoutManager { *; }
+-dontnote android.support.v7.**
+-dontwarn android.support.v7.**
 
  #adjust
 -keep class com.adjust.sdk.plugin.MacAddressUtil {
@@ -300,3 +317,10 @@
 -dontwarn android.databinding.**
 -dontwarn com.tapsense.android.**
 -dontwarn com.personagraph.**
+-dontnote com.personagraph.**
+-dontnote com.inmobi.**
+-dontwarn com.inmobi.**
+-dontwarn okhttp3.internal.**
+-dontnote okhttp3.internal.**
+-dontwarn retrofit2.Platform
+-dontnote retrofit2.Platform
