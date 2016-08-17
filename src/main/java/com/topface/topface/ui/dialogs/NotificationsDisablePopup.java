@@ -44,13 +44,17 @@ public class NotificationsDisablePopup implements IStartAction {
             @Override
             public void onPositiveButtonClick() {
                 getMarketApiManager().onProblemResolve(mActivity);
-                notificationDisableDialog.dismiss();
+                if(notificationDisableDialog!=null) {
+                    notificationDisableDialog.dismiss();
+                }
                 mActivity = null;
             }
 
             @Override
             public void onNegativeButtonClick() {
-                notificationDisableDialog.getDialog().cancel();
+                if(notificationDisableDialog!=null) {
+                    notificationDisableDialog.getDialog().cancel();
+                }
                 mActivity = null;
             }
 
