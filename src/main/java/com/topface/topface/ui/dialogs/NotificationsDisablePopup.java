@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.IDialogListener;
@@ -45,9 +44,6 @@ public class NotificationsDisablePopup implements IStartAction {
         if (mActivity != null) {
             notificationDisableDialog = (NotificationDisableDialog) mActivity.getSupportFragmentManager()
                     .findFragmentByTag(NotificationDisableDialog.class.getName());
-            Debug.debug("tereshMActivity", "NotNull");
-        } else {
-            Debug.debug("tereshMActivity", "null");
         }
 
         if (notificationDisableDialog == null) {
