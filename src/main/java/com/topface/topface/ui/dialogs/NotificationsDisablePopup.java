@@ -12,17 +12,22 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.utils.MarketApiManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 
+import java.lang.ref.WeakReference;
+
 public class NotificationsDisablePopup implements IStartAction {
-    private FragmentActivity mActivity;
+    private WeakReference<FragmentActivity> mActivity;
     private int mPriority;
     private OnNextActionListener mOnNextActionListener;
 
+    private NotificationDisableDialog mNotificationDisableDialog;
+
     public NotificationsDisablePopup(FragmentActivity activity, int priority) {
         mPriority = priority;
-        mActivity = activity;
+        mActivity = new WeakReference(activity);
     }
 
     private MarketApiManager mMarketApiManager;
@@ -39,30 +44,38 @@ public class NotificationsDisablePopup implements IStartAction {
 
     @Override
     public void callOnUi() {
-        final NotificationDisableDialog notificationDisableDialog = getPopup();
-        notificationDisableDialog.setDialogInterface(new IDialogListener() {
-            @Override
-            public void onPositiveButtonClick() {
-                getMarketApiManager().onProblemResolve(mActivity);
-                notificationDisableDialog.dismiss();
-                mActivity = null;
-            }
+        if (mActivity != null && mActivity.get() != null) {
+            mNotificationDisableDialog = (NotificationDisableDialog) mActivity.get().getSupportFragmentManager()
+                    .findFragmentByTag(NotificationDisableDialog.class.getName());
+        }
 
-            @Override
-            public void onNegativeButtonClick() {
-                notificationDisableDialog.getDialog().cancel();
-                mActivity = null;
-            }
-
-            @Override
-            public void onDismissListener() {
-                if (mOnNextActionListener != null) {
-                    mOnNextActionListener.onNextAction();
+        if (mNotificationDisableDialog == null) {
+            mNotificationDisableDialog = getPopup();
+            mNotificationDisableDialog.setDialogInterface(new IDialogListener() {
+                @Override
+                public void onPositiveButtonClick() {
+                    getMarketApiManager().onProblemResolve(mActivity.get());
+                    mNotificationDisableDialog.dismiss();
+                    mActivity.clear();
                 }
+
+                @Override
+                public void onNegativeButtonClick() {
+                    mNotificationDisableDialog.getDialog().cancel();
+                    mActivity.clear();
+                }
+
+                @Override
+                public void onDismissListener() {
+                    if (mOnNextActionListener != null) {
+                        mOnNextActionListener.onNextAction();
+                    }
+                }
+            });
+
+            if (mActivity != null && mActivity.get() != null) {
+                mNotificationDisableDialog.show(mActivity.get().getSupportFragmentManager(), NotificationDisableDialog.class.getName());
             }
-        });
-        if (mActivity != null) {
-            notificationDisableDialog.show(mActivity.getSupportFragmentManager(), NotificationDisableDialog.class.getName());
         }
     }
 
@@ -130,8 +143,11 @@ public class NotificationsDisablePopup implements IStartAction {
                 buttonTextId = bundle.getInt(MARKET_BUTTON_TEXT_ID);
                 isButtonVisible = bundle.getBoolean(IS_MARKET_BUTTON_VISIBLE);
             }
+
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.google_service_general_title).setMessage(titleId)
+            builder.setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(R.string.google_service_general_title)
+                    .setMessage(titleId <= 0 ? Utils.EMPTY : getContext().getString(titleId))
                     .setCancelable(true)
                     .setNegativeButton(getActivity().getResources().getString(R.string.general_cancel),
                             new DialogInterface.OnClickListener() {
@@ -142,7 +158,7 @@ public class NotificationsDisablePopup implements IStartAction {
                                 }
                             });
             if (isButtonVisible) {
-                builder.setPositiveButton(buttonTextId, new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(buttonTextId <= 0 ? Utils.EMPTY : getContext().getString(buttonTextId), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (mIDialogListener != null) {
                             mIDialogListener.onPositiveButtonClick();
