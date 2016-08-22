@@ -8,3 +8,5 @@ include ':libs:PullToRefresh'
 include ':libs:odnoklassniki'
 //Topface Offerwall
 include ':libs:tf-offerwall:sdk'
+//Scruffy
+include ':libs:scruffy-android'
