@@ -290,8 +290,8 @@ android {
 }
 
 dependencies {
-    compile project(':unity-ads-1.5.8')
-    compile project(':cheetah-mobile-3.4.7')
+    compile project(':libs:unity-ads-1.5.8')
+    compile project(':libs:cheetah-mobile-3.4.7')
     //Kotlin
     //compile "org.jetbrains.anko:anko-sdk15:$anko_version"
     //compile "org.jetbrains.anko:anko-support-v4:$anko_version"
