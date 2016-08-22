@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
-import com.topface.topface.data.FeedLike;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -131,8 +130,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
             notifyItemRangeInserted(startUpdatePosition, data.size() - 1);
         } else {
             mAdapterData.addAll(position, data);
-            notifyDataSetChanged();
-            //notifyItemRangeInserted(0, data.size() - 1);
+            notifyItemRangeInserted(0, data.size() - 1);
         }
     }
 

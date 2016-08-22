@@ -7,18 +7,22 @@ import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.ReadLikeRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_base.FeedFragmentViewModel
+import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.ads.AdmobInterstitialUtils
 import com.topface.topface.utils.config.FeedsCache
+import com.topface.topface.utils.gcmutils.GCMUtils
 
 /**
  * VM для фрагмента лайков
  * Created by tiberal on 08.08.16.
  */
 class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, mApi: FeedApi) :
-        FeedFragmentViewModel<FeedLike>(binding, navigator, mApi) {
+        BaseFeedFragmentViewModel<FeedLike>(binding, navigator, mApi) {
+
+    override val gcmType: Array<Int>
+        get() = arrayOf(GCMUtils.GCM_TYPE_LIKE)
 
     override val isNeedReadItems: Boolean
         get() = true

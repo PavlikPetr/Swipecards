@@ -34,7 +34,7 @@
             <include
                 android:id="@+id/avatar"
                 layout="@layout/feed_item_round_avatar"
-                bind:photo="@{likeItemViewModel.photo}" />
+                bind:avatarHolder="@{likeItemViewModel.avatarHolder}" />
 
         </FrameLayout>
 
@@ -48,7 +48,7 @@
 
 
             <include
-                layout="@layout/item_feed_part_name"
+                layout="@layout/feed_item_user_name_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 bind:nameAndAge="@{likeItemViewModel.nameAndAge}" />

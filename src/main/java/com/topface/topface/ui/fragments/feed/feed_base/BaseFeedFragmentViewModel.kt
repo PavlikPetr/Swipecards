@@ -1,21 +1,29 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.widget.SwipeRefreshLayout
+import android.text.TextUtils
 import android.view.View
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedListData
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.handlers.ErrorCodes
+import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.debug.FuckingVoodooMagic
+import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscriber
@@ -41,6 +49,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     abstract val isForPremium: Boolean
     abstract val itemClass: Class<T>
     abstract val service: FeedRequest.FeedService
+    abstract val gcmType: Array<Int>
     open val isNeedReadItems: Boolean = false
     private val mCache by lazy {
         FeedCacheManager<T>(context, feedsType)
@@ -49,6 +58,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     private var mUpdaterSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
     private var mBlackListSubscription: Subscription? = null
+
+    private var isDataFromCache: Boolean = false
 
     companion object {
         val FROM = "from"
@@ -60,12 +71,16 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         val UNREAD_STATE = "unread_state"
     }
 
+    private lateinit var mReadItemReceiver: BroadcastReceiver
+    private lateinit var mGcmReceiver: BroadcastReceiver
+
     init {
-        /*mCache.restoreFromCache(itemClass)?.let {
+        mCache.restoreFromCache(itemClass)?.let {
             if (mAdapter.data.isEmpty()) {
                 mAdapter.addData(it)
+                isDataFromCache = true
             }
-        }*/
+        }
         mUpdaterSubscription = mAdapter.updaterObservable.distinct {
             it?.let {
                 it.getString(TO, Utils.EMPTY)
@@ -81,8 +96,54 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
-    private fun createAndRegisterBroadcasts(){
+    private fun createAndRegisterBroadcasts() {
+        mGcmReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                for (type in gcmType) {
+                    GCMUtils.cancelNotification(context, type)
+                }
+                onRefresh()
+            }
+        }
+        mReadItemReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val itemId = intent.getStringExtra(ChatFragment.INTENT_ITEM_ID)
+                val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, 0)
+                if (userId == 0) {
+                    if (!TextUtils.isEmpty(itemId)) {
+                        makeItemReadWithFeedId(itemId)
+                    }
+                } else {
+                    makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0))
+                }
+            }
+        }
+        val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
+        filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
+        LocalBroadcastManager.getInstance(context).registerReceiver(mReadItemReceiver, filter)
+    }
 
+    protected fun makeItemReadWithFeedId(id: String) {
+        mAdapter.data.forEach {
+            if (TextUtils.equals(it.id, id) && it.unread) {
+                it.unread = false
+            }
+            mAdapter.notifyDataSetChanged()
+        }
+    }
+
+    protected fun makeItemReadUserId(uid: Int, readMessages: Int) {
+        for (item in mAdapter.data) {
+            if (item.user != null && item.user.id == uid && item.unread) {
+                val unread = item.unreadCounter - readMessages
+                if (unread > 0) {
+                    item.unreadCounter = unread
+                } else {
+                    item.unread = false
+                }
+                mAdapter.notifyItemChanged(mAdapter.data.indexOf(item))
+            }
+        }
     }
 
     fun update(updateBundle: Bundle = Bundle()) {
@@ -103,6 +164,12 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
                     override fun onNext(data: FeedListData<T>?) {
                         data?.let {
+                            if (isDataFromCache) {
+                                mAdapter.data.clear()
+                                mAdapter.notifyDataSetChanged()
+                                isDataFromCache = false
+                                //проскролить наверх
+                            }
                             handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
                             if (mAdapter.data.isEmpty() && data.items.isEmpty()) {
                                 stubView?.onEmptyFeed()
@@ -241,7 +308,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-
     override fun release() {
         super.release()
         RxUtils.safeUnsubscribe(mUpdaterSubscription)
@@ -249,7 +315,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         RxUtils.safeUnsubscribe(mDeleteSubscription)
         RxUtils.safeUnsubscribe(mBlackListSubscription)
         if (!mAdapter.data.isEmpty()) {
-            //   mCache.saveToCache(mAdapter.data)
+            mCache.saveToCache(mAdapter.data)
         }
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
     }
 }

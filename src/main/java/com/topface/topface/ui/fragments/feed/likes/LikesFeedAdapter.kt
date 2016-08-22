@@ -16,7 +16,9 @@ class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi:
     override fun bindData(binding: FeedItemHeartBinding?, position: Int) {
         super.bindData(binding, position)
         binding?.let {
-            it.likeItemViewModel = LikesItemViewModel(it, data[position], mNavigator, mApi, { isActionModeEnabled })
+            val item = data[position]
+            it.likeItemViewModel = LikesItemViewModel(it, item, mNavigator, mApi, { isActionModeEnabled })
+            binding.heart.isActivated = if (item.mutualed) true else false
         }
     }
 

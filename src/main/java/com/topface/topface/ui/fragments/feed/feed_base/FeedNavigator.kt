@@ -12,7 +12,7 @@ import com.topface.topface.utils.Utils
  * Класс для управления переходами между эркраними в фидах
  * Created by tiberal on 12.08.16.
  */
-//todo раздавать через даггер 2, снглтон на фрагмент
+//todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
 
     override fun showPurchaseCoins() = mActivityDelegate.startActivity(PurchasesActivity

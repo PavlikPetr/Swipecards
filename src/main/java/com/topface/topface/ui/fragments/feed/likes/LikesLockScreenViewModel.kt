@@ -35,6 +35,7 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
     @Inject lateinit var mState: TopfaceAppState
     lateinit private var mBalanceData: BalanceData
     lateinit private var mBalanceSubscription: Subscription
+    lateinit private var mLikesAccessSubscription: Subscription
 
     init {
         //выпилить со вторым даггером
@@ -119,6 +120,7 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
 
     override fun release() {
         RxUtils.safeUnsubscribe(mBalanceSubscription)
+        RxUtils.safeUnsubscribe(mLikesAccessSubscription)
     }
 
 }

@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,16 +56,16 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         FeedNavigator(activity as IActivityDelegate)
     }
 
-    abstract val mViewModel: FeedFragmentViewModel<T>
-    abstract val mLockerController: FeedLockerController<V, *>
+    abstract val mViewModel: BaseFeedFragmentViewModel<T>
+    abstract val mLockerControllerBase: BaseFeedLockerController<V, *>
     abstract val mAdapter: BaseFeedAdapter<T>
-    abstract fun createLockerFactory(): FeedLockerController.ILockScreenVMFactory<V>
+    abstract fun createLockerFactory(): BaseFeedLockerController.ILockScreenVMFactory<V>
     abstract fun getEmptyFeedLayout(): Int
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         initScreenView(mBinding)
-        mBinding.viewModel = mViewModel as FeedFragmentViewModel<FeedItem>
+        mBinding.viewModel = mViewModel as BaseFeedFragmentViewModel<FeedItem>
         setupLocker()
         return mBinding.root
     }
@@ -76,6 +77,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     protected fun initScreenView(binding: FragmentFeedBaseBinding) {
         with(binding.feedList) {
+            itemAnimator = null
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
@@ -85,9 +87,9 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     }
 
     protected fun setupLocker() {
-        mViewModel.stubView = mLockerController
-        mLockerController.lockScreenFactory = createLockerFactory()
-        mLockerController.setLockerLayout(getEmptyFeedLayout())
+        mViewModel.stubView = mLockerControllerBase
+        mLockerControllerBase.lockScreenFactory = createLockerFactory()
+        mLockerControllerBase.setLockerLayout(getEmptyFeedLayout())
     }
 
     override fun onDeleteFeedItems() {
@@ -103,7 +105,11 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     override fun onActionModeFinish() {
         mMultiselectionController.stopMultiSelection()
-        mAdapter.notifyDataSetChanged()
+        mMultiselectionController.mSelectedItemsPositions.filter {
+            it < mAdapter.data.size
+        }.map {
+            mAdapter.notifyItemChanged(it)
+        }
         mAdapter.isNeedHighLight = null
     }
 
@@ -114,17 +120,17 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
             if (activity is AppCompatActivity) {
                 (activity as AppCompatActivity).startSupportActionMode(mActionModeController)
                 mMultiselectionController.startMultiSelection()
-                mMultiselectionController.handleSelected(data, view)
+                mMultiselectionController.handleSelected(data, view, itemPosition)
                 mAdapter.isNeedHighLight = { data -> mMultiselectionController.mSelected.contains(data) }
-                mAdapter.notifyDataSetChanged()
+                mAdapter.notifyItemChanged(itemPosition)
             }
         }
     }
 
     override fun itemClick(view: View?, itemPosition: Int, data: T?) {
         if (mActionModeController.isActionModeEnabled() && data != null && view != null) {
-            mMultiselectionController.handleSelected(data, view)
-            mAdapter.notifyDataSetChanged()
+            mMultiselectionController.handleSelected(data, view, itemPosition)
+            mAdapter.notifyItemChanged(itemPosition)
         } else {
             mViewModel.itemClick(view, itemPosition, data)
         }

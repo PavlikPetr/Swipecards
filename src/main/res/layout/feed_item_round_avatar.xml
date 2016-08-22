@@ -4,19 +4,20 @@
     <data>
 
         <variable
-            name="photo"
-            type="com.topface.topface.data.Photo" />
+            name="avatarHolder"
+            type="com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:foreground="@drawable/feed_avatar_overlay_selector">
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/avatar"
-            android:layout_margin="16dp"
             style="@style/RoundListAvatar"
-            app:setPhoto="@{photo}" />
+            app:setPhoto="@{avatarHolder.photo}"
+            app:stubResId="@{avatarHolder.stubResource}" />
     </FrameLayout>
 </layout>

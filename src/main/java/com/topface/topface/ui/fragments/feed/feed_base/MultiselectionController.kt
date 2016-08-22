@@ -7,6 +7,7 @@ import com.topface.topface.R
 class MultiselectionController<T>(val mSelectionListener: IMultiSelectionListener) {
 
     val mSelected = mutableListOf<T>()
+    val mSelectedItemsPositions = mutableListOf<Int>()
     private var mSelectionLimit = 0
 
     private companion object {
@@ -20,12 +21,14 @@ class MultiselectionController<T>(val mSelectionListener: IMultiSelectionListene
         mSelectionLimit = selectionLimit
     }
 
-    fun handleSelected(item: T, view: View) {
+    fun handleSelected(item: T, view: View, itemPosition:Int) {
         if (!isOverlimit()) {
             if (mSelected.contains(item)) {
+                mSelectedItemsPositions.remove(itemPosition)
                 view.isSelected = false
                 removeSelection(item)
             } else {
+                mSelectedItemsPositions.add(itemPosition)
                 view.isSelected = true
                 addSelection(item)
             }

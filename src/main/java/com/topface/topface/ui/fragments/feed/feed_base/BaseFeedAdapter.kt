@@ -16,6 +16,10 @@ import com.topface.topface.utils.Utils
  */
 abstract class BaseFeedAdapter<T : FeedItem> : BaseRecyclerViewAdapter<FeedItemHeartBinding, T>() {
 
+    init {
+        setHasStableIds(true)
+    }
+
     var isNeedHighLight: ((T) -> Boolean)? = null
         set(value) {
             if (value != null) {
@@ -41,6 +45,10 @@ abstract class BaseFeedAdapter<T : FeedItem> : BaseRecyclerViewAdapter<FeedItemH
                 binding.root.isSelected = false
             }
         }
+    }
+
+    override fun getItemId(position: Int): Long {
+        return data[position].id.toLong()
     }
 
     override fun bindData(binding: FeedItemHeartBinding?, position: Int) {

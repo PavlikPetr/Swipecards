@@ -4,13 +4,13 @@
 
     <data>
 
-        <import type="com.topface.topface.ui.fragments.feed.feed_base.FeedFragmentViewModel" />
+        <import type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel" />
 
         <import type="com.topface.topface.data.FeedItem" />
 
         <variable
             name="viewModel"
-            type="FeedFragmentViewModel&lt;FeedItem>" />
+            type="BaseFeedFragmentViewModel&lt;FeedItem>" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

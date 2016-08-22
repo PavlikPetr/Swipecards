@@ -2,11 +2,15 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.IntDef;
 
 import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public class FeedUser extends AbstractData implements SerializableToJson, Parcelable {
     /**
@@ -163,6 +167,16 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
             };
 
     public static class State {
+
+        public static final byte UNKNOWN = 0;
+        public static final byte MOBILE = 1;
+        public static final byte DESKTOP = 2;
+
+        @Retention(RetentionPolicy.SOURCE)
+        @IntDef({UNKNOWN, MOBILE, DESKTOP})
+        public @interface DeviseType {
+        }
+
         /**
          * {Boolean} online - признак присутствия пользователя онлайн
          */
@@ -171,9 +185,10 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
 
         /**
          * {Number} deviceType - тип последнего использованного устройства: 1 --- Телефон/Мобильное приложение,
-         *  2 --- Компьютер/Веб-версия, 0 --- неизвестное устройство.
+         * 2 --- Компьютер/Веб-версия, 0 --- неизвестное устройство.
          */
 
+        @DeviseType
         public byte deviceType;
 
     }

@@ -94,6 +94,7 @@ public class ImageViewRemote extends ImageViewRemoteTemplate implements IViewSiz
         }
         maxHeight = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxHeight, 0);
         maxWidth = values.getDimensionPixelSize(R.styleable.ImageViewRemote_android_maxWidth, 0);
+        setStubResId(values.getResourceId(R.styleable.ImageViewRemote_stubResId, 0));
         values.recycle();
     }
 
