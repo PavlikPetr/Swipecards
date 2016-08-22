@@ -49,6 +49,8 @@ import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
+import com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
@@ -87,7 +89,7 @@ import dagger.Provides;
  * Created by ppetr on 16/06/15.
  * module injecting AppState
  */
-@Module(includes = ExternalLibsInjectModule.class,
+@Module(includes = {ExternalLibsInjectModule.class, FeedModule.class},
         injects = {
                 PeopleNearbyFragment.class,
                 GeoLocationManager.class,
@@ -141,7 +143,8 @@ import dagger.Provides;
                 BonusPresenter.class,
                 ExpressMessageAction.class,
                 AddToPhotoBlogViewModel.class,
-                AddToPhotoBlogHeaderViewModel.class
+                AddToPhotoBlogHeaderViewModel.class,
+                LikesLockScreenViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

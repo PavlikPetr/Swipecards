@@ -412,8 +412,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public T getFirstItem() {
         T item = null;
         if (!isEmpty()) {
-            FeedList<T> data = getData();
-            item = data.getFirst();
+            item = getData().getFirst();
         }
         return item;
     }

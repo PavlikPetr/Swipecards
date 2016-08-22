@@ -10,6 +10,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.ui.fragments.feed.feed_base.*;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
@@ -29,7 +30,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.getLikes());
+        addBodyPage(com.topface.topface.ui.fragments.feed.likes.LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.getLikes());
         addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.getMutual());
         if (!App.from(getActivity()).getOptions().isHideAdmirations) {
             addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.getAdmirations());

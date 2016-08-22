@@ -22,7 +22,7 @@ public class CityAdapter extends BaseRecyclerViewAdapter<CityItemBinding, City> 
 
     @Nullable
     @Override
-    protected Bundle getUpdaterEmmitObject() {
+    protected Bundle getUpdaterEmitObject() {
         return null;
     }
 

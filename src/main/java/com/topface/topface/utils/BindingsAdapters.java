@@ -5,12 +5,14 @@ import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
@@ -22,6 +24,21 @@ import com.topface.topface.ui.views.RangeSeekBar;
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("bind:showChild")
+    public static void showChild(ViewFlipper flipper, int childPosition) {
+        flipper.setDisplayedChild(childPosition);
+    }
+
+    @BindingAdapter("bind:OnSwipeRefreshListener")
+    public static void OnSwipeRefreshListener(SwipeRefreshLayout refreshLayout, SwipeRefreshLayout.OnRefreshListener refreshListener) {
+        refreshLayout.setOnRefreshListener(refreshListener);
+    }
+
+    @BindingAdapter("bind:setRefresh")
+    public static void setRefresh(SwipeRefreshLayout refreshLayout, boolean isRefresh) {
+        refreshLayout.setRefreshing(isRefresh);
+    }
 
     @BindingAdapter("animate")
     public static void animateDisplaying(ImageViewRemote imageView, int duration) {
@@ -65,12 +82,17 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:drawableTop")
     public static void setDrawableTop(TextView view, @DrawableRes int bgResource) {
-        BindingsUtils.replaceDrawable(view, bgResource, 1);
+        BindingsUtils.replaceDrawable(view, bgResource, BindingsUtils.TOP);
     }
 
     @BindingAdapter("android:drawableLeft")
     public static void setDrawableLeft(TextView view, @DrawableRes int bgResource) {
-        BindingsUtils.replaceDrawable(view, bgResource, 0);
+        BindingsUtils.replaceDrawable(view, bgResource, BindingsUtils.LEFT);
+    }
+
+    @BindingAdapter("android:drawableRight")
+    public static void setDrawableRight(TextView view, @DrawableRes int bgResource) {
+        BindingsUtils.replaceDrawable(view, bgResource, BindingsUtils.RIGHT);
     }
 
     @BindingAdapter("android:text")

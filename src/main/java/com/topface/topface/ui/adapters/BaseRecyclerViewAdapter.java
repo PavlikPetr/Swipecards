@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
-import com.topface.topface.data.City;
+import com.topface.topface.data.FeedLike;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +90,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
                             int lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                             int visibleItemCount = lastVisibleItem - firstVisibleItem;
                             if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= mAdapterData.size() - 1) {
-                                mUpdateSubscriber.onNext(getUpdaterEmmitObject());
+                                mUpdateSubscriber.onNext(getUpdaterEmitObject());
                             }
                         } else {
                             mUpdateSubscriber.onNext(new Bundle());
@@ -124,10 +124,20 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         return mAdapterData.size();
     }
 
+    public void addData(ArrayList<D> data, int position) {
+        if (position == EMPTY_POS) {
+            int startUpdatePosition = mAdapterData.size() == 0 ? 0 : mAdapterData.size();
+            mAdapterData.addAll(data);
+            notifyItemRangeInserted(startUpdatePosition, data.size() - 1);
+        } else {
+            mAdapterData.addAll(position, data);
+            notifyDataSetChanged();
+            //notifyItemRangeInserted(0, data.size() - 1);
+        }
+    }
+
     public void addData(ArrayList<D> data) {
-        mAdapterData.addAll(data);
-        // TODO: 04.05.16 обновлять только вставленное
-        notifyDataSetChanged();
+        addData(data, EMPTY_POS);
     }
 
     public void clearData() {
@@ -164,7 +174,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     }
 
     @Nullable
-    protected abstract Bundle getUpdaterEmmitObject();
+    protected abstract Bundle getUpdaterEmitObject();
 
     @LayoutRes
     protected abstract int getItemLayout();

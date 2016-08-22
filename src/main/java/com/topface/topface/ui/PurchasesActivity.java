@@ -35,6 +35,7 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.ActionBarView;
 
 import java.util.ArrayList;
@@ -128,6 +129,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setComplited(false);
         }
+        RxUtils.safeUnsubscribe(mEventBusSubscriber);
         super.onDestroy();
     }
 

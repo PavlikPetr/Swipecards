@@ -647,6 +647,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
     }
 
+    public IStateDataUpdater getDataUpdater() {
+        return this;
+    }
+
     @Override
     public void onOptionsUpdate(@NonNull Options options) {
         mOptions = options;

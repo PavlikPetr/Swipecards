@@ -29,7 +29,8 @@ public class FeedsCache extends AbstractConfig {
         DATA_MUTUALS_FEEDS("data_mutuals_feeds"),
         DATA_ADMIRATION_FEEDS("data_admiration_feeds"),
         DATA_VISITORS_FEEDS("data_visitors_feeds"),
-        DATA_FANS_FEEDS("data_fans_feeds");
+        DATA_FANS_FEEDS("data_fans_feeds"),
+        DATA_BLACK_LIST_FEEDS("data_black_list_feeds");
 
         private String mText;
 

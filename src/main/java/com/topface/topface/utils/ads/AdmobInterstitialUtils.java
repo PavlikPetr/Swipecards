@@ -1,6 +1,7 @@
 package com.topface.topface.utils.ads;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -29,7 +30,7 @@ public class AdmobInterstitialUtils {
     private static final AtomicInteger mPreloadingInterstitialsCount = new AtomicInteger(0);
     private static final List<InterstitialAd> loadedInterstitials = Collections.synchronizedList(new ArrayList<InterstitialAd>(PRELOAD_COUNT));
 
-    public static void preloadInterstitials(final Activity activity, final Options.InterstitialInFeeds interstitialInFeed) {
+    public static void preloadInterstitials(final Context context, final Options.InterstitialInFeeds interstitialInFeed) {
         if (needPreload()) {
             if (interstitialInFeed.canShow()) {
                 AdListener listener = new SimpleAdListener() {
@@ -38,12 +39,12 @@ public class AdmobInterstitialUtils {
                         loadedInterstitials.add(interstitial);
                         mPreloadingInterstitialsCount.decrementAndGet();
                         if (needPreload()) {
-                            preloadInterstitials(activity, interstitialInFeed);
+                            preloadInterstitials(context, interstitialInFeed);
                         }
                     }
                 };
                 mPreloadingInterstitialsCount.incrementAndGet();
-                requestFeedInterstitial(activity, interstitialInFeed.adGroup, listener);
+                requestFeedInterstitial(context, interstitialInFeed.adGroup, listener);
             }
         }
     }
@@ -59,28 +60,28 @@ public class AdmobInterstitialUtils {
         loadedInterstitials.clear();
     }
 
-    private static void requestFeedInterstitial(Activity activity, String adGroup, AdListener listener) {
+    private static void requestFeedInterstitial(Context context, String adGroup, AdListener listener) {
         switch (adGroup) {
             case Options.InterstitialInFeeds.FEED:
-                requestAdmobFullscreen(activity, ADMOB_INTERSTITIAL_FEED, listener, false);
+                requestAdmobFullscreen(context, ADMOB_INTERSTITIAL_FEED, listener, false);
                 break;
             case Options.InterstitialInFeeds.FEED_NEWBIE:
-                requestAdmobFullscreen(activity, ADMOB_INTERSTITIAL_FEED_NEWBIE, listener, false);
+                requestAdmobFullscreen(context, ADMOB_INTERSTITIAL_FEED_NEWBIE, listener, false);
                 break;
             default:
                 Debug.log("No adGroup provided for feed interstitial");
         }
     }
 
-    public static InterstitialAd requestAdmobFullscreen(Activity activity, String id, final AdListener listener,
+    public static InterstitialAd requestAdmobFullscreen(Context context, String id, final AdListener listener,
                                                         final boolean showOnAdLoaded) {
         // Создание межстраничного объявления.
-        final InterstitialAd interstitial = new InterstitialAd(activity);
+        final InterstitialAd interstitial = new InterstitialAd(context);
         interstitial.setAdUnitId(id);
         // Создание запроса объявления.
         AdRequest.Builder adRequestBuilder = new AdRequest.Builder();
         adRequestBuilder.setGender(
-                App.from(activity).getProfile().sex == Profile.BOY ?
+                App.get().getProfile().sex == Profile.BOY ?
                         AdRequest.GENDER_MALE :
                         AdRequest.GENDER_FEMALE
         );
@@ -138,9 +139,9 @@ public class AdmobInterstitialUtils {
         return requestAdmobFullscreen(activity, id, listener, true);
     }
 
-    public static void requestPreloadedInterstitial(Activity activity, Options.InterstitialInFeeds interstitialInFeed) {
+    public static void requestPreloadedInterstitial(Context context, Options.InterstitialInFeeds interstitialInFeed) {
         if (loadedInterstitials.isEmpty()) {
-            preloadInterstitials(activity, interstitialInFeed);
+            preloadInterstitials(context, interstitialInFeed);
         } else {
             InterstitialAd interstitial = loadedInterstitials.remove(0);
             interstitial.show();

@@ -431,6 +431,13 @@
         <item name="preProcessor">mask</item>
     </style>
 
+    <style name="RoundListAvatar">
+        <item name="preProcessor">roundAvatar</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">@dimen/round_list_avatar_size</item>
+        <item name="android:layout_height">@dimen/round_list_avatar_size</item>
+    </style>
+
     <style name="ListAvatar">
         <item name="preProcessor">roundCorners</item>
         <item name="cornersRadius">@dimen/list_avatar_corners_radius</item>

@@ -176,6 +176,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @BindView(R.id.stubForEmptyFeed)
     ViewStub mEmptyScreenStub;
 
+
     public void saveToCache() {
         FeedList<T> data = getListAdapter().getDataForCache();
         if (data != null && !data.isEmpty()) {
@@ -990,6 +991,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             onFilledFeed();
         }
     }
+
+
 
     protected void onFilledFeed() {
         ViewStub stub = getEmptyFeedViewStub();

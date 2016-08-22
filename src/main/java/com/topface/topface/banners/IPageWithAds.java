@@ -4,6 +4,8 @@ package com.topface.topface.banners;
 import android.support.v4.app.FragmentActivity;
 import android.view.ViewGroup;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Created by kirussell on 11/01/15.
  * Interface for object instance (usually fragment) that can contain ad's banner
@@ -33,6 +35,7 @@ public interface IPageWithAds {
      *
      * @return container
      */
+
     ViewGroup getContainerForAd();
 
     /**

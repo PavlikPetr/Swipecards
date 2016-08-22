@@ -278,6 +278,21 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         }
     }
 
+    private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper) {
+        final Options.BlockSympathy blockSympathyOptions = App.from(getActivity()).getOptions().blockSympathy;
+        // send stat to google analytics
+        sendBlockSympathyStatistics(blockSympathyOptions);
+        // set paid likes view
+        viewFlipper.setDisplayedChild(THIRD_CHILD);
+        View currentView = viewFlipper.getChildAt(THIRD_CHILD);
+        initAvatarImagesToEmptyView(currentView, blockSympathyOptions.showPhotos);
+        if (currentView != null) {
+            ((TextView) currentView.findViewById(R.id.blocked_likes_text)).setText(blockSympathyOptions.text);
+            initBuyCoinsButton(inflated, blockSympathyOptions, currentView);
+            initBuyVipButton(currentView, blockSympathyOptions);
+        }
+    }
+
     private void initEmptyScreenOnLikesNeedVip(ViewFlipper viewFlipper) {
         viewFlipper.setDisplayedChild(SECOND_CHILD);
         View currentView = viewFlipper.getChildAt(SECOND_CHILD);
@@ -305,21 +320,6 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                     startActivity(PurchasesActivity.createBuyingIntent("EmptyLikes", App.from(getActivity()).getOptions().topfaceOfferwallRedirect));
                 }
             });
-        }
-    }
-
-    private void initEmptyScreenOnBlockedLikes(final View inflated, ViewFlipper viewFlipper) {
-        final Options.BlockSympathy blockSympathyOptions = App.from(getActivity()).getOptions().blockSympathy;
-        // send stat to google analytics
-        sendBlockSympathyStatistics(blockSympathyOptions);
-        // set paid likes view
-        viewFlipper.setDisplayedChild(THIRD_CHILD);
-        View currentView = viewFlipper.getChildAt(THIRD_CHILD);
-        initAvatarImagesToEmptyView(currentView, blockSympathyOptions.showPhotos);
-        if (currentView != null) {
-            ((TextView) currentView.findViewById(R.id.blocked_likes_text)).setText(blockSympathyOptions.text);
-            initBuyCoinsButton(inflated, blockSympathyOptions, currentView);
-            initBuyVipButton(currentView, blockSympathyOptions);
         }
     }
 
@@ -364,7 +364,7 @@ public class LikesFragment extends FeedFragment<FeedLike> {
                         @Override
                         public void success(IApiResponse response) {
                             super.success(response);
-                            FlurryManager.getInstance().sendSpendCoinsEvent(blockSympathyOptions.price, LIKES_UNLOCK);
+                            FlurryManager.getInstance().sendSpendCoinsEvent(blockSympathyOptions.price, FlurryManager.LIKES_UNLOCK);
                             inflated.setVisibility(View.GONE);
                             updateData(false, true);
                         }
@@ -442,13 +442,13 @@ public class LikesFragment extends FeedFragment<FeedLike> {
         Profile profile = App.from(getActivity()).getProfile();
         // if profile still not cached - show girls by default
         if (profile.dating != null && profile.dating.sex == Profile.GIRL) {
-            ivOne.setResourceSrc(R.drawable.likes_male_one);
-            ivTwo.setResourceSrc(R.drawable.likes_male_two);
-            ivThree.setResourceSrc(R.drawable.likes_male_three);
-        } else {
             ivOne.setResourceSrc(R.drawable.likes_female_one);
             ivTwo.setResourceSrc(R.drawable.likes_female_two);
             ivThree.setResourceSrc(R.drawable.likes_female_three);
+        } else {
+            ivOne.setResourceSrc(R.drawable.likes_male_one);
+            ivTwo.setResourceSrc(R.drawable.likes_male_two);
+            ivThree.setResourceSrc(R.drawable.likes_male_three);
         }
         int visibility = visible ? View.VISIBLE : View.GONE;
         ivOne.setVisibility(visibility);
