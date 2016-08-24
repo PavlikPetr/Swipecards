@@ -109,7 +109,7 @@ public class EditorProfileActionsFragment extends BaseFragment {
             } catch (JSONException e) {
                 Debug.error(e);
             }
-            mUser = new User(mUserId, jsonResponse, getActivity());
+            mUser = new User(mUserId, jsonResponse);
         }
         initViews(root);
 

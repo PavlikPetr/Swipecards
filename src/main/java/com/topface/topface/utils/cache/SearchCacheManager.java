@@ -55,4 +55,28 @@ public class SearchCacheManager extends UsersListCacheManager {
     protected String getSignatureFromCache() {
         return mPreferences.getString(getSearchSignatureCacheKey(CACHE_KEY), null);
     }
+
+    public static void markUserAsRatedInCache(int userId) {
+        SearchCacheManager mCache = new SearchCacheManager();
+        @SuppressWarnings("unchecked") UsersList<SearchUser> searchUsers = mCache.getCache();
+        int currentPosition = mCache.getPosition();
+
+        if (searchUsers != null) {
+            boolean cacheUpdated = false;
+            for (SearchUser user : searchUsers) {
+                if (user.id == userId) {
+                    if (searchUsers.indexOf(user) > currentPosition) {
+                        searchUsers.remove(user);
+                    } else {
+                        user.rated = true;
+                    }
+                    cacheUpdated = true;
+                    break;
+                }
+            }
+            if (cacheUpdated) {
+                mCache.setCache(searchUsers);
+            }
+        }
+    }
 }

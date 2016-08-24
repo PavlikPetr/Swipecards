@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="likeItemViewModel"
+            type="com.topface.topface.ui.fragments.feed.likes.LikesItemViewModel" />
+
+        <variable
+            name="longClickListener"
+            type="android.view.View.OnLongClickListener" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener::onClick}"
+        android:orientation="horizontal"
+        app:onLongItemClick="@{longClickListener}">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> likeItemViewModel.onAvatarClick()}">
+
+            <include
+                android:id="@+id/avatar_frame"
+                layout="@layout/feed_item_round_avatar"
+                bind:avatarHolder="@{likeItemViewModel.avatarHolder}" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="1dp">
+
+
+            <include
+                layout="@layout/feed_item_user_name_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:nameAndAge="@{likeItemViewModel.nameAndAge}" />
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/ListMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{likeItemViewModel.city}" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/heart"
+            style="@style/FeedHeart.Selector"
+            app:isActivated="@{likeItemViewModel.isMutualed}"
+            android:onClick="@{() -> likeItemViewModel.onHeartClick()}" />
+    </LinearLayout>
+</layout>

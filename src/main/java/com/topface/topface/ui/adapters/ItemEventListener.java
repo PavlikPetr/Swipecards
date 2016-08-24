@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class ItemEventListener<D> implements View.OnClickListener, View.OnLongClickListener {
-    private boolean mIsLongClick;
     @Nullable
     private OnRecyclerViewItemClickListener<D> mRecyclerViewItemClickListener;
     @Nullable
@@ -14,17 +13,14 @@ public abstract class ItemEventListener<D> implements View.OnClickListener, View
 
     @Override
     public void onClick(View v) {
-        if (mRecyclerViewItemClickListener != null && !mIsLongClick) {
+        if (mRecyclerViewItemClickListener != null) {
             int pos = getPosition(v);
             mRecyclerViewItemClickListener.itemClick(v, pos, getDataItem(pos));
-        } else {
-            mIsLongClick = false;
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
-        mIsLongClick = true;
         if (mRecyclerViewItemLongClickListener != null) {
             int pos = getPosition(v);
             mRecyclerViewItemLongClickListener.itemLongClick(v, pos, getDataItem(pos));
@@ -75,7 +71,7 @@ public abstract class ItemEventListener<D> implements View.OnClickListener, View
      * <p/>
      * <variable
      * name="longClickListener"
-     * type="android.view.View.OnClickListener" />
+     * type="android.view.View.OnLongClickListener" />
      * <p/>
      * Затем, чтобы прийти к успеху, в нужной вьюхе прописать
      * app:onLongItemClick="@{longClickListener}"

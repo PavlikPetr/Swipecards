@@ -361,6 +361,7 @@ dependencies {
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxkotlin:0.60.0'
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'

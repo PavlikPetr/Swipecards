@@ -1,118 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadingEdge="none"
-    android:fillViewport="true">
 
-    <ViewFlipper
-        android:id="@+id/vfEmptyViews"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true">
+        android:fadingEdge="none"
+        android:fillViewport="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
-            <ImageView
-                style="@style/LandscapePortraitImagesVisibility"
+            <ProgressBar
+                android:id="@+id/backgroung_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_sympathy_back" />
+                android:layout_gravity="center"
+                android:visibility="@{lockViewModel.likesAccessProgressVisibility}" />
 
-            <TextView
-                android:id="@+id/tvText"
-                style="@style/ListItemEmptyText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="@string/likes_can_help_you" />
+            <ViewFlipper
+                android:id="@+id/vfEmptyViews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:visibility="@{lockViewModel.flipperVisibility}"
+                app:showChild="@{lockViewModel.currentChildPod}">
 
-            <Button
-                android:id="@+id/btnStartRate"
-                style="@style/BigStretchedBlueButton"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:text="@string/buy_resources" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-        </LinearLayout>
+                    <ImageView
+                        style="@style/LandscapePortraitImagesVisibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_sympathy_back" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingTop="24dp">
+                    <TextView
+                        android:id="@+id/tvText"
+                        style="@style/ListItemEmptyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:text="@string/likes_can_help_you" />
 
-            <TextView
-                android:id="@+id/tvTitle"
-                style="@style/ListItemEmptyText.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
+                    <Button
+                        android:id="@+id/btn_buy_coins"
+                        style="@style/BigStretchedBlueButton"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:onClick="@{() -> lockViewModel.onBuyCoins()}"
+                        android:text="@string/buy_resources" />
 
-            <LinearLayout
-                style="@style/LandscapePortraitImagesVisibility"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                </LinearLayout>
 
-                <com.topface.topface.ui.views.ImageViewRemote
-                    android:id="@+id/ivOne"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/likes_male_one" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="24dp">
 
-                <com.topface.topface.ui.views.ImageViewRemote
-                    android:id="@+id/ivTwo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/likes_male_two" />
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        style="@style/ListItemEmptyText.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center" />
 
-                <com.topface.topface.ui.views.ImageViewRemote
-                    android:id="@+id/ivThree"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/likes_male_three" />
+                    <LinearLayout
+                        style="@style/LandscapePortraitImagesVisibility"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        android:visibility="@{lockViewModel.muzzleVisibility}">
 
-            </LinearLayout>
+                        <com.topface.topface.ui.views.ImageViewRemote
+                            android:id="@+id/ivOne"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@{lockViewModel.firstMuzzle}" />
 
-            <TextView
-                android:id="@+id/tvTextOne"
-                style="@style/ListItemEmptyText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:maxWidth="300dp"
-                android:text="@string/likes_buy_vip" />
+                        <com.topface.topface.ui.views.ImageViewRemote
+                            android:id="@+id/ivTwo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@{lockViewModel.secondMuzzle}" />
 
-            <Button
-                android:id="@+id/btnBuyVip"
-                style="@style/Widget.Topface.Button.Big.Blue"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/buying_vip_status" />
+                        <com.topface.topface.ui.views.ImageViewRemote
+                            android:id="@+id/ivThree"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:src="@{lockViewModel.thirdMuzzle}" />
 
-            <Button
-                style="@style/UnlockButtonStyle"
-                android:layout_width="240dp"
-                android:tag="btnUnlock" />
+                    </LinearLayout>
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvTextOne"
+                        style="@style/ListItemEmptyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:maxWidth="300dp"
+                        android:text="@{lockViewModel.message}" />
 
-        <include layout="@layout/layout_paid_likes_for_vip" />
+                    <Button
+                        android:id="@+id/btn_unlock_by_coins"
+                        style="@style/Widget.Topface.Button.Big.Blue"
+                        android:layout_width="240dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:onClick="@{() -> lockViewModel.onBuyVipClick()}"
+                        android:text="@{lockViewModel.buttonMessage}" />
 
-    </ViewFlipper>
-</android.support.v4.widget.NestedScrollView>
+                    <Button
+                        style="@style/UnlockButtonStyle"
+                        android:layout_width="240dp"
+                        android:tag="btnUnlock" />
+
+                </LinearLayout>
+
+                <include layout="@layout/layout_paid_likes_for_vip" />
+
+            </ViewFlipper>
+
+        </FrameLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

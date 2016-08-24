@@ -73,7 +73,7 @@ public class UserProfileLoader {
 
             @Override
             protected User parseResponse(ApiResponse response) {
-                return new User(mProfileId, response, getContext());
+                return new User(mProfileId, response);
             }
 
             @Override

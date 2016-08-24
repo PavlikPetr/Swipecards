@@ -20,21 +20,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/likes_male_one" />
+            android:src="@drawable/likes_female_one" />
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivTwo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/likes_male_two" />
+            android:src="@drawable/likes_female_two" />
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/ivThree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/likes_male_three" />
+            android:src="@drawable/likes_female_three" />
 
     </LinearLayout>
 

@@ -2,11 +2,15 @@ package com.topface.topface.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.IntDef;
 
 import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public class FeedUser extends AbstractData implements SerializableToJson, Parcelable {
     /**
@@ -52,6 +56,8 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
     public boolean bookmarked;
 
     public boolean inBlacklist;
+
+    public State state;
 
     // соответствующий пользователю элемент списка, может быть null
     // optional(for example for closings fragments)
@@ -107,6 +113,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         json.put("inBlacklist", inBlacklist);
         json.put("photos", photos != null ? photos.toJson() : Utils.EMPTY);
         json.put("feedItemId", feedItemId);
+        json.put("status", status);
         return json;
     }
 
@@ -117,11 +124,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof FeedUser) {
-            return ((FeedUser) o).id == id;
-        } else {
-            return super.equals(o);
-        }
+        return o instanceof FeedUser ? ((FeedUser) o).id == id : super.equals(o);
     }
 
     public boolean isEmpty() {
@@ -162,5 +165,32 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
                     return new FeedUser[size];
                 }
             };
+
+    public static class State {
+
+        public static final byte UNKNOWN = 0;
+        public static final byte MOBILE = 1;
+        public static final byte DESKTOP = 2;
+
+        @Retention(RetentionPolicy.SOURCE)
+        @IntDef({UNKNOWN, MOBILE, DESKTOP})
+        public @interface DeviceType {
+        }
+
+        /**
+         * {Boolean} online - признак присутствия пользователя онлайн
+         */
+
+        public boolean online;
+
+        /**
+         * {Number} deviceType - тип последнего использованного устройства: 1 --- Телефон/Мобильное приложение,
+         * 2 --- Компьютер/Веб-версия, 0 --- неизвестное устройство.
+         */
+
+        @DeviceType
+        public byte deviceType;
+
+    }
 
 }

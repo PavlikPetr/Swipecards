@@ -118,11 +118,11 @@ public class AdmirationFragment extends LikesFragment {
                 inflated.findViewById(R.id.btnBuyVip).setOnClickListener(buttonClick);
                 Profile profile = App.get().getProfile();
                 ((ImageViewRemote) inflated.findViewById(R.id.ivOne))
-                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_one : R.drawable.likes_female_one);
+                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_female_one : R.drawable.likes_male_one);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivTwo))
-                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_two : R.drawable.likes_female_two);
+                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_female_two : R.drawable.likes_male_two);
                 ((ImageViewRemote) inflated.findViewById(R.id.ivThree))
-                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_male_three : R.drawable.likes_female_three);
+                        .setResourceSrc(profile.dating.sex == Profile.GIRL ? R.drawable.likes_female_three : R.drawable.likes_male_three);
                 break;
         }
     }

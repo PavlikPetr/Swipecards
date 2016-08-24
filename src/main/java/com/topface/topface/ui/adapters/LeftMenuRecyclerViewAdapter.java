@@ -27,7 +27,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     }
 
     @Override
-    protected Bundle getUpdaterEmmitObject() {
+    protected Bundle getUpdaterEmitObject() {
         return null;
     }
 
