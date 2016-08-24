@@ -104,7 +104,7 @@ public class OkAuthorizer extends Authorizer {
                 Debug.error("Odnoklassniki auth error");
                 sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
             }
-        }, "okauth://ok125879808", OkAuthType.ANY, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS);
+        }, "okauth://ok125879808", OkAuthType.ANY, OkScope.SET_STATUS, OkScope.PHOTO_CONTENT, OkScope.VALUABLE_ACCESS, OkScope.LONG_ACCESS_TOKEN);
     }
 
     @Override

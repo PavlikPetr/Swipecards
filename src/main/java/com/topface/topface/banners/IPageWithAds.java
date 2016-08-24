@@ -33,6 +33,7 @@ public interface IPageWithAds {
      *
      * @return container
      */
+
     ViewGroup getContainerForAd();
 
     /**

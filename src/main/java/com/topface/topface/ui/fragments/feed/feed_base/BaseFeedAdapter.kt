@@ -1,0 +1,73 @@
+package com.topface.topface.ui.fragments.feed.feed_base
+
+import android.databinding.ViewDataBinding
+import android.os.Bundle
+import com.topface.topface.R
+import com.topface.topface.data.FeedItem
+import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
+import com.topface.topface.ui.fragments.feed.feed_utils.getLastItem
+import com.topface.topface.ui.fragments.feed.feed_utils.hasItem
+import com.topface.topface.utils.Utils
+
+/**
+ * Базовый адаптер для всех фидов
+ * Created by tiberal on 01.08.16.
+ * @param V - feed item binding
+ * @param T - feed item data item
+ */
+abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecyclerViewAdapter<V, T>() {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    var isNeedHighLight: ((T) -> Boolean)? = null
+        set(value) {
+            isActionModeEnabled = value != null
+            field = value
+        }
+    protected var isActionModeEnabled: Boolean = false
+
+    private fun handleHighlight(binding: V, position: Int) {
+        binding.root.isSelected = false
+        if (data[position].unread) {
+            binding.root.setBackgroundResource(R.drawable.new_feed_list_item_selector)
+        } else {
+            binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
+        }
+        binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(data[position]) ?: false
+    }
+
+    override fun getItemId(position: Int) = data[position].id.toLong()
+
+    override fun bindData(binding: V?, position: Int) {
+        if (binding != null) {
+            handleHighlight(binding, position)
+        }
+    }
+
+    override fun getUpdaterEmitObject(): Bundle {
+        val last = data.getLastItem()
+        val bundle = Bundle()
+        bundle.putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
+        return bundle
+    }
+
+    fun removeItem(position: Int): Boolean {
+        var result = false
+        if (data.hasItem(position)) {
+            result = true
+            data.removeAt(position)
+            notifyItemRemoved(position)
+        }
+        return result
+    }
+
+    fun removeItems(items: List<T>): Boolean {
+        val result = data.removeAll(items)
+        notifyDataSetChanged()
+        return result
+    }
+
+}

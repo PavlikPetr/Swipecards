@@ -5,10 +5,11 @@ import com.topface.topface.data.CountersData;
 
 import javax.inject.Inject;
 
+import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
 
-public class CountersDataProvider implements Action1<CountersData> {
+public class CountersDataProvider extends Subscriber<CountersData> {
 
     private Subscription mSubscription;
     private ICountersUpdater mUpdater;
@@ -29,14 +30,20 @@ public class CountersDataProvider implements Action1<CountersData> {
     }
 
     @Override
-    public void call(CountersData countersData) {
+    public void onCompleted() {
+        unsubscribe();
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        e.printStackTrace();
+    }
+
+    @Override
+    public void onNext(CountersData countersData) {
         if (mUpdater != null) {
             mUpdater.onUpdateCounters(countersData);
         }
-    }
-
-    public void unsubscribe() {
-        mSubscription.unsubscribe();
     }
 
     public interface ICountersUpdater {

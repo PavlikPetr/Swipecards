@@ -59,7 +59,7 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
     @Override
     protected FeedViewHolder getEmptyHolder(View convertView, FeedLike item) {
         FeedViewHolder holder = super.getEmptyHolder(convertView, item);
-        holder.heart = (ImageView) convertView.findViewById(R.id.ifp_heart);
+        holder.heart = (ImageView) convertView.findViewById(R.id.heart);
         return holder;
     }
 

@@ -431,6 +431,13 @@
         <item name="preProcessor">mask</item>
     </style>
 
+    <style name="RoundListAvatar">
+        <item name="preProcessor">roundAvatar</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_width">@dimen/round_list_avatar_size</item>
+        <item name="android:layout_height">@dimen/round_list_avatar_size</item>
+    </style>
+
     <style name="ListAvatar">
         <item name="preProcessor">roundCorners</item>
         <item name="cornersRadius">@dimen/list_avatar_corners_radius</item>
@@ -486,6 +493,14 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/list_text_gray</item>
+    </style>
+
+    <style name="FeedItemNameAge">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/list_text_black</item>
     </style>
 
     <style name="ListName">

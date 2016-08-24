@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="nameAndAge"
+            type="com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!--создаем отступ справа, чтобы там поместился возраст и признак статуса -->
+        <TextView
+            android:id="@+id/ifp_name"
+            style="@style/FeedItemNameAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="45dp"
+            android:drawablePadding="6dp"
+            android:drawableRight="@{nameAndAge.iconRes}"
+            android:text="@{nameAndAge.name}" />
+
+        <!--Сдвигаем вью на размер отступа во вью имени-->
+        <TextView
+            android:id="@+id/ifp_age"
+            style="@style/FeedItemNameAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-45dp"
+            android:text="@{nameAndAge.age}"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</layout>

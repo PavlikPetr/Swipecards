@@ -4,8 +4,6 @@ import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Rate;
-import com.topface.topface.data.search.SearchUser;
-import com.topface.topface.data.search.UsersList;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
@@ -73,27 +71,7 @@ public class RateController {
                 /* Update dating search cache for situations when it's fragment is destroyed
                    and it will be restored from cache
                  */
-                SearchCacheManager mCache = new SearchCacheManager();
-                @SuppressWarnings("unchecked") UsersList<SearchUser> searchUsers = mCache.getCache();
-                int currentPosition = mCache.getPosition();
-
-                if (searchUsers != null) {
-                    boolean cacheUpdated = false;
-                    for (SearchUser user : searchUsers) {
-                        if (user.id == sendLike.getUserid()) {
-                            if (searchUsers.indexOf(user) > currentPosition) {
-                                searchUsers.remove(user);
-                            } else {
-                                user.rated = true;
-                            }
-                            cacheUpdated = true;
-                            break;
-                        }
-                    }
-                    if (cacheUpdated) {
-                        mCache.setCache(searchUsers);
-                    }
-                }
+                SearchCacheManager.markUserAsRatedInCache(sendLike.getUserid());
             }
 
             @Override

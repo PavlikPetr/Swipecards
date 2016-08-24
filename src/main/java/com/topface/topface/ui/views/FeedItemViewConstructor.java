@@ -90,9 +90,13 @@ public class FeedItemViewConstructor {
      *
      * @param context     контекст
      * @param typeAndFlag тип нужной разметки и флаги настроек
+     * @param isLikeListAdapter  пришли из лайков -> делаем новый дизайн
      * @return вновь созднанный и настроенный View
      */
-    public static View construct(Context context, TypeAndFlag typeAndFlag) {
+    public static View construct(Context context, TypeAndFlag typeAndFlag, boolean isLikeListAdapter) {
+        if(isLikeListAdapter){
+            return constructAdmirationHeartItem(context, typeAndFlag);
+        }
         LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View resultView = li.inflate(typeAndFlag.type.getLayoutId(), null, true);
 
@@ -115,6 +119,31 @@ public class FeedItemViewConstructor {
 
         return resultView;
     }
+
+    public static View constructAdmirationHeartItem(Context context, TypeAndFlag typeAndFlag) {
+        LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View resultView = li.inflate(R.layout.feed_item_heart, null, true);
+
+        // when item is new
+        if ((typeAndFlag.flag & Flag.NEW) > 0) {
+            resultView.setBackgroundResource(R.drawable.item_new_list_selector);
+            TextView tv = (TextView) resultView.findViewById(R.id.text);
+            tv.setTextColor(context.getResources().getColor(R.color.list_text_black));
+        } else {
+            resultView.setBackgroundResource(R.drawable.item_list_selector);
+        }
+
+        // for banned user
+        setBanned((TextView) resultView.findViewById(R.id.ifp_name), typeAndFlag.flag);
+
+        //for vip
+        /* stub for future usage, when vip difference will be designed, remove this comment line
+        if ((typeAndFlag.flag & Flag.VIP) > 0) {
+        }/**/
+
+        return resultView;
+    }
+
 
     /**
      * обновление текста существующего элемента для состояния забанен/не забанен

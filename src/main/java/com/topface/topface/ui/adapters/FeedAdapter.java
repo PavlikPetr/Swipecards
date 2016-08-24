@@ -167,7 +167,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 typeAndFlag.flag |= FeedItemViewConstructor.Flag.VIP;
             }
             flag = typeAndFlag.flag;
-            convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag);
+            convertView = FeedItemViewConstructor.construct(mContext, typeAndFlag, isLikesListAdapter());
             holder = getEmptyHolder(convertView, item);
         }
 
@@ -234,6 +234,10 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
                 }
             });
         }
+    }
+
+    private boolean isLikesListAdapter() {
+        return this instanceof LikesListAdapter;
     }
 
     @SuppressWarnings("deprecation")
@@ -407,8 +411,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     public T getFirstItem() {
         T item = null;
         if (!isEmpty()) {
-            FeedList<T> data = getData();
-            item = data.getFirst();
+            item = getData().getFirst();
         }
         return item;
     }
@@ -416,11 +419,11 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     protected FeedViewHolder getEmptyHolder(View convertView, final T item) {
         FeedViewHolder holder = new FeedViewHolder();
 
-        holder.avatar = (FrameLayout) convertView.findViewById(R.id.ifp_avatar);
-        holder.avatarImage = (ImageViewRemote) convertView.findViewById(R.id.ifp_avatar_image);
+        holder.avatar = (FrameLayout) convertView.findViewById(!isLikesListAdapter() ? R.id.ifp_avatar : R.id.avatar_frame);
+        holder.avatarImage = (ImageViewRemote) convertView.findViewById(!isLikesListAdapter() ? R.id.ifp_avatar_image : R.id.avatar);
         holder.name = (TextView) convertView.findViewById(R.id.ifp_name);
         holder.age = (TextView) convertView.findViewById(R.id.ifp_age);
-        holder.text = (TextView) convertView.findViewById(R.id.ifp_text);
+        holder.text = (TextView) convertView.findViewById(!isLikesListAdapter() ? R.id.ifp_text : R.id.text);
         holder.background = convertView.getBackground();
 
         return holder;

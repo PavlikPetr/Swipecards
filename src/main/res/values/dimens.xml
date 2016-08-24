@@ -30,6 +30,8 @@
     <!-- avatar width and height in feeds -->
     <dimen name="list_avatar_size">70dp</dimen>
 
+    <dimen name="round_list_avatar_size">40dp</dimen>
+
     <dimen name="edit_text_min_height">30dp</dimen>
 
     <dimen name="add_to_leader_spacing_value">2dp</dimen>

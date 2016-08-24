@@ -1,7 +1,5 @@
 package com.topface.topface.data;
 
-import android.content.Context;
-
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.ApiResponse;
@@ -22,23 +20,19 @@ public class User extends Profile {
     public boolean bookmarked;
     public boolean isSympathySent;
     public UserSocialInfo socialInfo;   // info about social network
-    private Context mContext;
 
-    public User(int userId, ApiResponse response, Context context) {
+    public User(int userId, ApiResponse response) {
         super(response);
         uid = userId;
-        mContext = context;
     }
 
-    public User(int userId, JSONObject response, Context context) {
+    public User(int userId, JSONObject response) {
         super(response);
         uid = userId;
-        mContext = context;
     }
 
-    public User(Context context) {
+    public User() {
         super();
-        mContext = context;
     }
 
     @Override

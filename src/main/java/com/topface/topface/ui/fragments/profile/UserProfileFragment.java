@@ -260,7 +260,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
                 @Override
                 protected User parseResponse(ApiResponse response) {
-                    return new User(profileId, response, getContext());
+                    return new User(profileId, response);
                 }
 
                 @Override
@@ -324,7 +324,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             registerRequest(userAndGiftsRequest);
             userAndGiftsRequest.exec();
         } else {
-            onSuccess(new User(mProfileId, mSavedResponse, getActivity()), mSavedResponse);
+            onSuccess(new User(mProfileId, mSavedResponse), mSavedResponse);
         }
     }
 

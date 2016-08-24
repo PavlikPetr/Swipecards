@@ -2,6 +2,7 @@ package com.topface.framework.imageloader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
+import com.topface.framework.imageloader.processor.RoundAvatarProcessor;
 import com.topface.framework.utils.Debug;
 
 import java.util.Timer;
@@ -209,7 +211,12 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
                 result = setRemoteSrc(photo.getDefaultLink(), handler);
             }
         } else {
-            setImageBitmap(null);
+            if (photo == null && mStubResId != 0 && mPreProcessor instanceof RoundAvatarProcessor) {
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), mStubResId);
+                setImageBitmap(BitmapUtils.getRoundAvatarBitmap(bitmap));
+            } else {
+                setImageBitmap(null);
+            }
         }
         return result;
     }

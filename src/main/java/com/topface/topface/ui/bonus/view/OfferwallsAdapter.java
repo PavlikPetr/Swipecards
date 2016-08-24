@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBinding, IOfferwallBaseModel> {
     @Override
-    protected Bundle getUpdaterEmmitObject() {
+    protected Bundle getUpdaterEmitObject() {
         return null;
     }
 
