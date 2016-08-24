@@ -174,7 +174,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
 
         @Retention(RetentionPolicy.SOURCE)
         @IntDef({UNKNOWN, MOBILE, DESKTOP})
-        public @interface DeviseType {
+        public @interface DeviceType {
         }
 
         /**
@@ -188,7 +188,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
          * 2 --- Компьютер/Веб-версия, 0 --- неизвестное устройство.
          */
 
-        @DeviseType
+        @DeviceType
         public byte deviceType;
 
     }

@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.data.FeedItem
 import com.topface.topface.utils.Utils
 import javax.inject.Inject
 
@@ -18,8 +17,8 @@ import javax.inject.Inject
  * Меню открывающееся при лонг тапу по фиду
  * Created by tiberal on 01.08.16.
  */
-class ActionModeController<T : FeedItem>(private val mMenuInflater: MenuInflater,
-                                         private val mActionModeEventsListener: OnActionModeEventsListener<T>) : ActionMode.Callback {
+class ActionModeController(private val mMenuInflater: MenuInflater,
+                           private val mActionModeEventsListener: OnActionModeEventsListener) : ActionMode.Callback {
 
     @Inject lateinit internal var context: Context
     private var mActionMode: ActionMode? = null
@@ -82,7 +81,7 @@ class ActionModeController<T : FeedItem>(private val mMenuInflater: MenuInflater
 
     fun isActionModeEnabled() = mActionMode != null
 
-    interface OnActionModeEventsListener<in T> {
+    interface OnActionModeEventsListener {
         fun onDeleteFeedItems()
         fun onAddToBlackList()
         fun onSetToolbarVisibility(visibility: Boolean)

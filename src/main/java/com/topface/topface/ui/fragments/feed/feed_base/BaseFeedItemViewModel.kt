@@ -37,26 +37,26 @@ open class BaseFeedItemViewModel<T : ViewDataBinding>(binding: T, val item: Feed
         }
     }
 
-    fun getStubResourсe() = if (item.user.sex == Profile.BOY)
+    private fun getStubResourсe() = if (item.user.sex == Profile.BOY)
         R.drawable.feed_banned_male_avatar
     else
         R.drawable.feed_banned_female_avatar
 
 
-    fun onAvatarClick() {
-        if (mIsActionModeEnabled.invoke()) {
-            getClickListenerForMultiselectHandle()?.forEach {
-                it.onClick(binding.root)
+    fun onAvatarClick() =
+            if (mIsActionModeEnabled.invoke()) {
+                getClickListenerForMultiselectHandle()?.forEach {
+                    it.onClick(binding.root)
+                }
+                onAvatarClickActionModeEnabled()
+            } else {
+                mNavigator.showProfile(item)
+                onAvatarClickActionModeDisabled()
             }
-            onAvatarClickActionModeEnabled()
-        } else {
-            mNavigator.showProfile(item)
-            onAvatarClickActionModeDisabled()
-        }
-    }
+
 
     /**
-     * Получить клик листенеры вьюх, которые при включенно экшен моду
+     * Получить клик листенеры вьюх, которые при включенном экшен моде должны выделять итем при клике на нее
      */
     open fun getClickListenerForMultiselectHandle(): Array<View.OnClickListener>? = null
 

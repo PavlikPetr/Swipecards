@@ -30,7 +30,8 @@ import rx.Subscription
  * Created by tiberal on 15.08.16.
  */
 class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigator: IFeedNavigator,
-                         private val mApi: FeedApi, isActionModeEnabled: () -> Boolean) :
+                         private val mApi: FeedApi, private val mHandleDuplicates: (Boolean, Int) -> Unit,
+                         isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedItemHeartBinding>(binding, item, navigator, isActionModeEnabled) {
 
     var city: String = Utils.EMPTY
@@ -42,10 +43,12 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
         }
     }
 
+    fun isMutualed() = item.mutualed
+
     fun onHeartClick() {
-        binding.heart.isActivated = true
         val userId = item.getUserId()
-        mSendLikeSubscription = mApi.callSendLike(item.getUserId(), App.get().options.blockUnconfirmed).subscribe(object : Subscriber<Rate>() {
+        mHandleDuplicates(true, userId)
+        mSendLikeSubscription = mApi.callSendLike(userId, App.get().options.blockUnconfirmed).subscribe(object : Subscriber<Rate>() {
             override fun onError(e: Throwable?) {
                 Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT)
             }
@@ -63,26 +66,24 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
         })
     }
 
-    private fun sendReadLikeRequest(userId: Int) {
-        ReadLikeRequest(context, userId)
-                .callback(object : ApiHandler() {
-                    override fun success(response: IApiResponse?) {
-                        Debug.log("Likes Feed Item ReadLikeRequest OK")
-                        val intent = Intent(ChatFragment.MAKE_ITEM_READ)
-                        intent.putExtra(ChatFragment.INTENT_ITEM_ID, item.id)
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
-                    }
+    private fun sendReadLikeRequest(userId: Int) = ReadLikeRequest(context, userId)
+            .callback(object : ApiHandler() {
+                override fun success(response: IApiResponse?) {
+                    Debug.log("Likes Feed Item ReadLikeRequest OK")
+                    val intent = Intent(ChatFragment.MAKE_ITEM_READ)
+                    intent.putExtra(ChatFragment.INTENT_USER_ID, item.getUserId())
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+                }
 
-                    override fun fail(codeError: Int, response: IApiResponse?) {
-                        binding.heart.isActivated = false
-                        Utils.showErrorMessage()
-                    }
-                })
-                .exec()
-    }
+                override fun fail(codeError: Int, response: IApiResponse?) {
+                    mHandleDuplicates(false, userId)
+                    Utils.showErrorMessage()
+                }
+            })
+            .exec()
+
 
     override fun getClickListenerForMultiselectHandle() = arrayOf<View.OnClickListener>(binding.clickListener)
-
 
     override fun onAvatarClickActionModeDisabled() {
         ReadLikeRequest(context, item.getUserId()).exec()

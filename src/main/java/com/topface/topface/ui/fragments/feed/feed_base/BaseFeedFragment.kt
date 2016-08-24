@@ -4,7 +4,6 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +25,12 @@ import com.topface.topface.utils.extensions.inflateBinding
 /**
  * Новый, и усосвершенствованный FeedFragment
  * Created by tiberal on 01.08.16.
+ * @param T - feed item type
+ * @parem V - empty screen binding class
  */
 abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         BaseFragment(), MultiselectionController.IMultiSelectionListener,
-        ActionModeController.OnActionModeEventsListener<T>,
+        ActionModeController.OnActionModeEventsListener,
         ItemEventListener.OnRecyclerViewItemLongClickListener<T>,
         ItemEventListener.OnRecyclerViewItemClickListener<T>,
         IFeedUnlocked, IPageWithAds {
@@ -58,7 +59,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     abstract val mViewModel: BaseFeedFragmentViewModel<T>
     abstract val mLockerControllerBase: BaseFeedLockerController<V, *>
-    abstract val mAdapter: BaseFeedAdapter<T>
+    abstract val mAdapter: BaseFeedAdapter<*, T>
     abstract fun createLockerFactory(): BaseFeedLockerController.ILockScreenVMFactory<V>
     abstract fun getEmptyFeedLayout(): Int
 
@@ -92,13 +93,9 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mLockerControllerBase.setLockerLayout(getEmptyFeedLayout())
     }
 
-    override fun onDeleteFeedItems() {
-        mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
-    }
+    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
 
-    override fun onAddToBlackList() {
-        mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
-    }
+    override fun onAddToBlackList() = mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
 
     override fun onSetToolbarVisibility(visibility: Boolean) {
     }
@@ -115,30 +112,25 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     override fun onSelected(size: Int) = mActionModeController.setTitle(size)
 
-    override fun itemLongClick(view: View?, itemPosition: Int, data: T?) {
-        if (!mActionModeController.isActionModeEnabled() && data != null && view != null) {
-            if (activity is AppCompatActivity) {
+    override fun itemLongClick(view: View?, itemPosition: Int, data: T?) =
+            if (!mActionModeController.isActionModeEnabled() && data != null && view != null && activity is AppCompatActivity) {
                 (activity as AppCompatActivity).startSupportActionMode(mActionModeController)
                 mMultiselectionController.startMultiSelection()
                 mMultiselectionController.handleSelected(data, view, itemPosition)
                 mAdapter.isNeedHighLight = { data -> mMultiselectionController.mSelected.contains(data) }
                 mAdapter.notifyItemChanged(itemPosition)
+            } else Unit
+
+
+    override fun itemClick(view: View?, itemPosition: Int, data: T?) =
+            if (mActionModeController.isActionModeEnabled() && data != null && view != null) {
+                mMultiselectionController.handleSelected(data, view, itemPosition)
+                mAdapter.notifyItemChanged(itemPosition)
+            } else {
+                mViewModel.itemClick(view, itemPosition, data)
             }
-        }
-    }
 
-    override fun itemClick(view: View?, itemPosition: Int, data: T?) {
-        if (mActionModeController.isActionModeEnabled() && data != null && view != null) {
-            mMultiselectionController.handleSelected(data, view, itemPosition)
-            mAdapter.notifyItemChanged(itemPosition)
-        } else {
-            mViewModel.itemClick(view, itemPosition, data)
-        }
-    }
-
-    override fun onFeedUnlocked() {
-        mViewModel.update()
-    }
+    override fun onFeedUnlocked() = mViewModel.update()
 
     override fun onDestroy() {
         super.onDestroy()
@@ -150,6 +142,6 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
 
-    override fun getContainerForAd(): ViewGroup? = view?.findViewById(R.id.banner_container_for_feeds) as ViewGroup
+    override fun getContainerForAd() = view?.findViewById(R.id.banner_container_for_feeds) as ViewGroup
 
 }

@@ -1,9 +1,9 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
+import android.databinding.ViewDataBinding
 import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
-import com.topface.topface.databinding.FeedItemHeartBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getLastItem
@@ -13,8 +13,10 @@ import com.topface.topface.utils.Utils
 /**
  * Базовый адаптер для всех фидов
  * Created by tiberal on 01.08.16.
+ * @param V - feed item binding
+ * @param T - feed item data item
  */
-abstract class BaseFeedAdapter<T : FeedItem> : BaseRecyclerViewAdapter<FeedItemHeartBinding, T>() {
+abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecyclerViewAdapter<V, T>() {
 
     init {
         setHasStableIds(true)
@@ -22,36 +24,28 @@ abstract class BaseFeedAdapter<T : FeedItem> : BaseRecyclerViewAdapter<FeedItemH
 
     var isNeedHighLight: ((T) -> Boolean)? = null
         set(value) {
-            if (value != null) {
-                isActionModeEnabled = true
-            } else {
-                isActionModeEnabled = false
-            }
+            isActionModeEnabled = if (value != null) true else false
             field = value
         }
     protected var isActionModeEnabled: Boolean = false
 
-    private fun handleHighlight(binding: FeedItemHeartBinding, position: Int) {
+    private fun handleHighlight(binding: V, position: Int) {
         binding.root.isSelected = false
         if (data[position].unread) {
             binding.root.setBackgroundResource(R.drawable.new_feed_list_item_selector)
         } else {
             binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
         }
-        if (isActionModeEnabled) {
-            if (isNeedHighLight?.invoke(data[position]) ?: false) {
-                binding.root.isSelected = true
-            } else {
-                binding.root.isSelected = false
-            }
+        binding.root.isSelected = if (isActionModeEnabled && isNeedHighLight?.invoke(data[position]) ?: false) {
+            true
+        } else {
+            false
         }
     }
 
-    override fun getItemId(position: Int): Long {
-        return data[position].id.toLong()
-    }
+    override fun getItemId(position: Int) = data[position].id.toLong()
 
-    override fun bindData(binding: FeedItemHeartBinding?, position: Int) {
+    override fun bindData(binding: V?, position: Int) {
         if (binding != null) {
             handleHighlight(binding, position)
         }
@@ -69,7 +63,7 @@ abstract class BaseFeedAdapter<T : FeedItem> : BaseRecyclerViewAdapter<FeedItemH
         if (data.hasItem(position)) {
             result = true
             data.removeAt(position)
-            notifyDataSetChanged()
+            notifyItemRemoved(position)
         }
         return result
     }

@@ -17,9 +17,8 @@ class DeleteFeedRequestFactory(private val mContext: Context) : IRequestFactory 
     }
 
     override fun construct(arg: Bundle?) = arg?.let {
-        val feedsType: FeedsCache.FEEDS_TYPE = it.getSerializable(FEED_TYPE) as FeedsCache.FEEDS_TYPE
         val id = it.getStringArrayList(USER_ID_FOR_DELETE)
-        when (feedsType) {
+        when (it.getSerializable(FEED_TYPE) as FeedsCache.FEEDS_TYPE) {
             FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS -> DeleteAdmirationsRequest(id, mContext)
             FeedsCache.FEEDS_TYPE.DATA_BLACK_LIST_FEEDS -> DeleteBlackListRequest(id, mContext)
             FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS -> DeleteBookmarksRequest(id, mContext)

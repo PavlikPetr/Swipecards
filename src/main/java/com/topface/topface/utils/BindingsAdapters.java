@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +25,11 @@ import com.topface.topface.ui.views.RangeSeekBar;
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("bind:isActivated")
+    public static void isActivated(View view, boolean isActivated) {
+        view.setActivated(isActivated);
+    }
 
     @BindingAdapter("bind:showChild")
     public static void showChild(ViewFlipper flipper, int childPosition) {

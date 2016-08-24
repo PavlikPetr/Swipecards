@@ -18,11 +18,14 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * VM для фрагмента лайков
  * Created by tiberal on 08.08.16.
  */
-class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, mApi: FeedApi) :
-        BaseFeedFragmentViewModel<FeedLike>(binding, navigator, mApi) {
+class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
+        BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
 
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_LIKE)
+
+    override val gcmTypeUpdateAction: String?
+        get() = GCMUtils.GCM_LIKE_UPDATE
 
     override val isNeedReadItems: Boolean
         get() = true

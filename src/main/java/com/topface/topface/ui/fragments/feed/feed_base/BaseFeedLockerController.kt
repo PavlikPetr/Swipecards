@@ -11,6 +11,9 @@ import com.topface.topface.viewModels.BaseViewModel
 /**
  * Контроллер для управлления заглушками
  * Created by tiberal on 10.08.16.
+ * @param T empty screen binding
+ * @param VM empty screen VM
+ * @property mStub - view stub proxy from binding class
  */
 abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<T>>(private val mStub: ViewStubProxy) : ViewStub.OnInflateListener, IFeedLockerView {
 
@@ -18,7 +21,7 @@ abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<
     var lockScreenFactory: ILockScreenVMFactory<T>? = null
     var mVariableId: Int = BR.lockViewModel
 
-    abstract fun initLickedFeedStub(errorCode: Int)
+    abstract fun initLockedFeedStub(errorCode: Int)
 
     abstract fun initEmptyFeedStub()
 
@@ -31,7 +34,6 @@ abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<
         mStub.viewStub.visibility = View.GONE
     }
 
-
     override fun onEmptyFeed() {
         mStub.viewStub.visibility = View.VISIBLE
         initEmptyFeedStub()
@@ -39,7 +41,7 @@ abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<
 
     override fun onLockedFeed(errorCode: Int) {
         mStub.viewStub.visibility = View.VISIBLE
-        initLickedFeedStub(errorCode)
+        initLockedFeedStub(errorCode)
     }
 
     override fun onInflate(stub: ViewStub?, inflated: View?) {

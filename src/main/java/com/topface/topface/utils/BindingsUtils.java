@@ -16,14 +16,14 @@ public class BindingsUtils {
     public static final int EMPTY_RESOURCE = 0;
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({LEFT, TOP, RIGHT, BUTTOM})
+    @IntDef({LEFT, TOP, RIGHT, BOTTOM})
     public @interface DrawableSide {
     }
 
     public static final int LEFT = 0;
     public static final int TOP = 1;
     public static final int RIGHT = 2;
-    public static final int BUTTOM = 3;
+    public static final int BOTTOM = 3;
 
 
     public static TextView replaceDrawable(TextView view, @DrawableRes int bgResource, @DrawableSide int replacedPos) {
@@ -34,7 +34,7 @@ public class BindingsUtils {
             editedDrawables[i] = i < drawablesLength ? drawables[i] : null;
         }
         editedDrawables[replacedPos] = bgResource != 0 ? view.getResources().getDrawable(bgResource) : null;
-        view.setCompoundDrawablesWithIntrinsicBounds(editedDrawables[LEFT], editedDrawables[TOP], editedDrawables[RIGHT], editedDrawables[BUTTOM]);
+        view.setCompoundDrawablesWithIntrinsicBounds(editedDrawables[LEFT], editedDrawables[TOP], editedDrawables[RIGHT], editedDrawables[BOTTOM]);
         return view;
     }
 

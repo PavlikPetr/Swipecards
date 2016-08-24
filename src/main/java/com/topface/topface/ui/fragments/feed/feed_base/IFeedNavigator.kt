@@ -12,6 +12,6 @@ interface IFeedNavigator {
     fun showPurchaseVip()
     fun <T : FeedItem> showProfile(item: T?)
     fun <T : FeedItem> showChat(item: T?)
-    fun showRate()
+    fun showDating()
 
 }

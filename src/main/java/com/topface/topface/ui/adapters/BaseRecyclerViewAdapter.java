@@ -130,8 +130,12 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
             notifyItemRangeInserted(startUpdatePosition, data.size() - 1);
         } else {
             mAdapterData.addAll(position, data);
-            notifyItemRangeInserted(0, data.size() - 1);
+            notifyItemRangeInserted(position, data.size() - 1);
         }
+    }
+
+    public void addFirst(ArrayList<D> data) {
+        addData(data, 0);
     }
 
     public void addData(ArrayList<D> data) {

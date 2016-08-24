@@ -11,12 +11,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
  */
 class LikesLockController(stub: ViewStubProxy) : BaseFeedLockerController<LayoutEmptyLikesBinding, LikesLockScreenViewModel>(stub) {
 
-    override fun initLickedFeedStub(errorCode: Int) {
+    override fun initLockedFeedStub(errorCode: Int) {
         when (errorCode) {
-            ErrorCodes.BLOCKED_SYMPATHIES -> {
-                mStubModel?.currentChildPod?.set(1)
-            }
-            ErrorCodes.PREMIUM_ACCESS_ONLY -> {
+            ErrorCodes.BLOCKED_SYMPATHIES, ErrorCodes.PREMIUM_ACCESS_ONLY -> {
                 mStubModel?.currentChildPod?.set(1)
             }
         }

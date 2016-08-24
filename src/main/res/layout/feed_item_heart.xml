@@ -32,7 +32,7 @@
             android:onClick="@{() -> likeItemViewModel.onAvatarClick()}">
 
             <include
-                android:id="@+id/avatar"
+                android:id="@+id/avatar_frame"
                 layout="@layout/feed_item_round_avatar"
                 bind:avatarHolder="@{likeItemViewModel.avatarHolder}" />
 
@@ -66,6 +66,7 @@
         <ImageView
             android:id="@+id/heart"
             style="@style/FeedHeart.Selector"
+            app:isActivated="@{likeItemViewModel.isMutualed}"
             android:onClick="@{() -> likeItemViewModel.onHeartClick()}" />
     </LinearLayout>
 </layout>

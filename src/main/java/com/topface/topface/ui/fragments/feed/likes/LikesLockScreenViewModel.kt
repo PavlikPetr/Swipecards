@@ -31,7 +31,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
                                private val mNavigator: IFeedNavigator, private val dataUpdater: IStateDataUpdater,
                                private val mIFeedUnlocked: IFeedUnlocked) : BaseViewModel<LayoutEmptyLikesBinding>(binding) {
 
-
     @Inject lateinit var mState: TopfaceAppState
     lateinit private var mBalanceData: BalanceData
     lateinit private var mBalanceSubscription: Subscription

@@ -32,6 +32,7 @@ import rx.Subscription
 /**
  * Базовая VM для всех фидов
  * Created by tiberal on 01.08.16.
+ * @param T - feed item type
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
@@ -43,18 +44,19 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     var stubView: IFeedLockerView? = null
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
     private val mAdapter by lazy {
-        binding.feedList.adapter as BaseFeedAdapter<T>
+        binding.feedList.adapter as BaseFeedAdapter<*, T>
     }
     abstract val feedsType: FeedsCache.FEEDS_TYPE
-    abstract val isForPremium: Boolean
     abstract val itemClass: Class<T>
     abstract val service: FeedRequest.FeedService
     abstract val gcmType: Array<Int>
+    open val gcmTypeUpdateAction: String? = null
+    open val isForPremium: Boolean = false
     open val isNeedReadItems: Boolean = false
     private val mCache by lazy {
         FeedCacheManager<T>(context, feedsType)
     }
-    private var mCallUpdateSbscription: Subscription? = null
+    private var mCallUpdateSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
     private var mBlackListSubscription: Subscription? = null
@@ -121,38 +123,39 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
         LocalBroadcastManager.getInstance(context).registerReceiver(mReadItemReceiver, filter)
-    }
-
-    protected fun makeItemReadWithFeedId(id: String) {
-        mAdapter.data.forEach {
-            if (TextUtils.equals(it.id, id) && it.unread) {
-                it.unread = false
-            }
-            mAdapter.notifyDataSetChanged()
+        gcmTypeUpdateAction?.let {
+            LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
         }
     }
 
-    protected fun makeItemReadUserId(uid: Int, readMessages: Int) {
-        for (item in mAdapter.data) {
-            if (item.user != null && item.user.id == uid && item.unread) {
-                val unread = item.unreadCounter - readMessages
-                if (unread > 0) {
-                    item.unreadCounter = unread
-                } else {
-                    item.unread = false
+    protected fun makeItemReadWithFeedId(id: String) = mAdapter.data.forEach {
+        if (TextUtils.equals(it.id, id) && it.unread) {
+            it.unread = false
+        }
+        mAdapter.notifyDataSetChanged()
+    }
+
+
+    protected fun makeItemReadUserId(uid: Int, readMessages: Int) =
+            mAdapter.data.forEachIndexed { position, dataItem ->
+                if (dataItem.user != null && dataItem.user.id == uid && dataItem.unread) {
+                    val unread = dataItem.unreadCounter - readMessages
+                    if (unread > 0) {
+                        dataItem.unreadCounter = unread
+                    } else {
+                        dataItem.unread = false
+                    }
+                    mAdapter.notifyItemChanged(position)
                 }
-                mAdapter.notifyItemChanged(mAdapter.data.indexOf(item))
             }
-        }
-    }
 
     fun update(updateBundle: Bundle = Bundle()) {
         isFeedProgressBarVisible.set(View.VISIBLE)
-        mCallUpdateSbscription = mApi.callUpdate(isForPremium, itemClass,
+        mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass,
                 constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(TO, Utils.EMPTY))).
                 subscribe(object : Observer<FeedListData<T>> {
                     override fun onCompleted() {
-                        RxUtils.safeUnsubscribe(mCallUpdateSbscription)
+                        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
                         isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
@@ -168,7 +171,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                                 mAdapter.data.clear()
                                 mAdapter.notifyDataSetChanged()
                                 isDataFromCache = false
-                                //проскролить наверх
                             }
                             handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
                             if (mAdapter.data.isEmpty() && data.items.isEmpty()) {
@@ -220,7 +222,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
             it.id
         } ?: Utils.EMPTY
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
-        mCallUpdateSbscription = mApi.callUpdate(isForPremium, itemClass, requestBundle)
+        mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
                         isRefreshing.set(false)
@@ -237,7 +239,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                             if (!data.items.isEmpty()) {
                                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
                                 removeOldDuplicates(data)
-                                mAdapter.addData(data.items, 0)
+                                mAdapter.addFirst(data.items)
+                                binding.feedList.layoutManager.scrollToPosition(0)
                             }
                         }
                     }
@@ -259,9 +262,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     @FuckingVoodooMagic(description = "нужен для removeOldDuplicates")
-    protected fun considerDuplicates(first: T, second: T): Boolean {
-        return if (first.id == null) second.id == null else first.id == second.id
-    }
+    protected fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
 
     private fun constructFeedRequestArgs(isPullToRef: Boolean = true, from: String? = Utils.EMPTY,
                                          to: String? = Utils.EMPTY) =
@@ -311,12 +312,13 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     override fun release() {
         super.release()
         RxUtils.safeUnsubscribe(mUpdaterSubscription)
-        RxUtils.safeUnsubscribe(mCallUpdateSbscription)
+        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
         RxUtils.safeUnsubscribe(mDeleteSubscription)
         RxUtils.safeUnsubscribe(mBlackListSubscription)
         if (!mAdapter.data.isEmpty()) {
             mCache.saveToCache(mAdapter.data)
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
     }
 }

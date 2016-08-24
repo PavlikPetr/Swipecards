@@ -10,7 +10,6 @@ import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.requests.handlers.SimpleApiHandler
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
 import rx.Observable
@@ -27,11 +26,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             val request = BuyLikesAccessRequest(mContext)
             mRequestClient.registerRequest(request)
             request.callback(object : SimpleApiHandler() {
-                override fun success(response: IApiResponse) {
-                    super.success(response)
-                    it.onNext(response)
-                }
-
+                override fun success(response: IApiResponse) = it.onNext(response)
                 override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
                 override fun always(response: IApiResponse) {
                     super.always(response)
