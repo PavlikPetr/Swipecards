@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel" />
+
+        <variable
+            name="city"
+            type="com.topface.topface.data.City" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> model.onAvatarClick()}">
+
+            <include
+                android:id="@+id/avatar"
+                layout="@layout/feed_item_round_avatar"
+                bind:avatarHolder="@{model.avatarHolder}" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="1dp">
+
+
+            <include
+                layout="@layout/feed_item_user_name_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                bind:nameAndAge="@{model.nameAndAge}" />
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/ListMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{city.name}" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
