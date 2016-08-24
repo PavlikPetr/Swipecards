@@ -15,8 +15,8 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
-        updatePageCounter(LikesFragment.class.getName(), countersData.getLikes());
-        updatePageCounter(MutualFragment.class.getName(), countersData.getMutual());
+        updatePageCounter(com.topface.topface.ui.fragments.feed.likes.LikesFragment.class.getName(), countersData.getLikes());
+        updatePageCounter(com.topface.topface.ui.fragments.feed.mutual.MutualFragment.class.getName(), countersData.getMutual());
         if (!App.from(getActivity()).getOptions().isHideAdmirations) {
             updatePageCounter(AdmirationFragment.class.getName(), countersData.getAdmirations());
         }

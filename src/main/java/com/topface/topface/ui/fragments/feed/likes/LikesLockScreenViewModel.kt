@@ -72,11 +72,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
 
     fun onBuyVipClick() {
         if (mBalanceData.money >= mBlockSympathy.price) {
-
-            /*EasyTracker.sendEvent(
-                    getTrackName(), "VipPaidSympathies." + mBlockSympathy.group,
-                    "Buying", 1L)*/
-
             likesAccessProgressVisibility.set(View.VISIBLE)
             flipperVisibility.set(View.INVISIBLE)
             mApi.callLikesAccessRequest().subscribe(object : Subscriber<IApiResponse>() {

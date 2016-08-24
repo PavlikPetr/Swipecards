@@ -6,6 +6,8 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedLike
 import com.topface.topface.databinding.LayoutEmptyLikesBinding
+import com.topface.topface.statistics.FlurryOpenEvent
+import com.topface.topface.ui.fragments.feed.LikesFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.viewModels.BaseViewModel
@@ -14,6 +16,7 @@ import com.topface.topface.viewModels.BaseViewModel
  * Фрагмент симпатий
  * Created by tiberal on 01.08.16.
  */
+@FlurryOpenEvent(name = LikesFragment.PAGE_NAME)
 class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
 
     override fun createLockerFactory(): BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> =
@@ -35,5 +38,7 @@ class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
     }
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_likes
+
+    override fun getTitle(): String? = getString(R.string.general_sympathies)
 
 }

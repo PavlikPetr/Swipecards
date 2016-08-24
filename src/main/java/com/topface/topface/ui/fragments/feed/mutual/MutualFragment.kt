@@ -5,6 +5,7 @@ import android.databinding.ViewStubProxy
 import com.topface.topface.R
 import com.topface.topface.data.FeedMutual
 import com.topface.topface.databinding.LayoutEmptyMutualBinding
+import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.viewModels.BaseViewModel
@@ -13,7 +14,12 @@ import com.topface.topface.viewModels.BaseViewModel
  * Фрагмент взаимных симпатий
  * Created by tiberal on 01.08.16.
  */
+@FlurryOpenEvent(name = MutualFragment.PAGE_NAME)
 class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() {
+
+    companion object {
+        const val PAGE_NAME = "Mutual"
+    }
 
     override val mViewModel by lazy {
         MutualFragmentViewModel(mBinding, mNavigator, mApi)
@@ -33,4 +39,7 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
             }
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_mutual
+
+    override fun getTitle(): String? = getString(R.string.general_sympathies)
+
 }

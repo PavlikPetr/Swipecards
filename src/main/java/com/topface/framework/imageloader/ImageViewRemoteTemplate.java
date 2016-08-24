@@ -211,7 +211,7 @@ public abstract class ImageViewRemoteTemplate extends ImageView {
                 result = setRemoteSrc(photo.getDefaultLink(), handler);
             }
         } else {
-            if (photo == null && mStubResId != 0 && mPostProcessor instanceof RoundAvatarProcessor) {
+            if (photo == null && mStubResId != 0 && mPreProcessor instanceof RoundAvatarProcessor) {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), mStubResId);
                 setImageBitmap(BitmapUtils.getRoundAvatarBitmap(bitmap));
             } else {

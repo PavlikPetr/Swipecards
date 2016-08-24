@@ -45,7 +45,6 @@ import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
-import com.topface.topface.ui.fragments.feed.MutualFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
@@ -132,7 +131,6 @@ import dagger.Provides;
                 DrawerLayoutManager.class,
                 DialogsFragment.class,
                 BookmarksFragment.class,
-                MutualFragment.class,
                 VisitorsFragment.class,
                 FansFragment.class,
                 AuthFragment.class,
