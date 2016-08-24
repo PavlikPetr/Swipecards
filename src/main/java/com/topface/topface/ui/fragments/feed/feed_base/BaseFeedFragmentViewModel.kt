@@ -128,11 +128,11 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-    protected fun makeItemReadWithFeedId(id: String) = mAdapter.data.forEach {
-        if (TextUtils.equals(it.id, id) && it.unread) {
-            it.unread = false
+    protected fun makeItemReadWithFeedId(id: String) = mAdapter.data.forEachIndexed { position, dataItem ->
+        if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
+            dataItem.unread = false
         }
-        mAdapter.notifyDataSetChanged()
+        mAdapter.notifyItemChanged(position)
     }
 
 

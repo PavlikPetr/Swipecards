@@ -101,11 +101,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
     }
 
     @Override
-    public int getCount() {
-        return mData.size();
-    }
-
-    @Override
     public long getItemId(int i) {
         return i;
     }
@@ -397,7 +392,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
     public T getLastFeedItem() {
         T item = null;
-        if (!isEmpty()) {
+        if (!getData().isEmpty()) {
             FeedList<T> data = getData();
             int dataSize = data.size();
 

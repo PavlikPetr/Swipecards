@@ -24,7 +24,7 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecycler
 
     var isNeedHighLight: ((T) -> Boolean)? = null
         set(value) {
-            isActionModeEnabled = if (value != null) true else false
+            isActionModeEnabled = value != null
             field = value
         }
     protected var isActionModeEnabled: Boolean = false
@@ -36,11 +36,7 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecycler
         } else {
             binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
         }
-        binding.root.isSelected = if (isActionModeEnabled && isNeedHighLight?.invoke(data[position]) ?: false) {
-            true
-        } else {
-            false
-        }
+        binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(data[position]) ?: false
     }
 
     override fun getItemId(position: Int) = data[position].id.toLong()

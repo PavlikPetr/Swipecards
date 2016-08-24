@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -18,10 +19,11 @@ public class NotificationClosedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(intent != null) {
-            NotificationStatistics.sendDeleted(intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
+            int type = intent.getIntExtra(GCMUtils.GCM_TYPE, -1);
+            NotificationStatistics.sendDeleted(type, intent.getStringExtra(GCMUtils.GCM_LABEL));
+            Debug.log("Notification deleted" + type + " " +
                     intent.getStringExtra(GCMUtils.GCM_LABEL));
-            Debug.log("Notification deleted" + intent.getIntExtra(GCMUtils.GCM_TYPE, -1) + " " +
-                    intent.getStringExtra(GCMUtils.GCM_LABEL));
+            GCMUtils.cancelNotification(App.getContext(), type);
         }
     }
 }

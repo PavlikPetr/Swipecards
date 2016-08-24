@@ -105,7 +105,6 @@ public class MenuFragment extends Fragment {
             } else {
                 adapter.removeItem(getBonusItem());
             }
-
             updateIntegrationPage(options);
         }
 
