@@ -46,7 +46,7 @@ def getTimestamp() {
 buildscript {
     ext.retrofit_version = '2.1.0'
     ext.google_play_services_version = '9.4.0'
-    ext.kotlin_version = '1.0.2-1'
+    ext.kotlin_version = '1.0.3'
     ext.anko_version = '0.9'
     repositories {
         jcenter()
@@ -290,12 +290,14 @@ android {
 }
 
 dependencies {
+    compile project(':libs:unity-ads-1.5.8')
+    compile project(':libs:cheetah-mobile-3.4.7')
     //Kotlin
     //compile "org.jetbrains.anko:anko-sdk15:$anko_version"
     //compile "org.jetbrains.anko:anko-support-v4:$anko_version"
     //compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt 'com.android.databinding:compiler:2.1.0'
+    kapt 'com.android.databinding:compiler:2.1.3'
     //Android Support libs
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'

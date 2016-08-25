@@ -118,7 +118,7 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
                 Toast.makeText(App.getContext(), R.string.leaders_need_photo, Toast.LENGTH_SHORT).show()
             }
         } else {
-            mPhotoHelperVisualisator?.showPhotoHelper(true)
+            mPhotoHelperVisualisator?.showPhotoHelper()
         }
     }
 
@@ -141,13 +141,16 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
     }
 
     interface IPhotoHelperVisualisator {
-        fun showPhotoHelper(isNeedShow: Boolean)
+        fun showPhotoHelper()
     }
 
     interface IAdapterInteractor {
         fun getSelectedPhotoId(): Int
         fun getItemCount(): Int
         fun getAdapterData(): Photos
+    }
+
+    fun tryInit(): Unit {
     }
 
 }

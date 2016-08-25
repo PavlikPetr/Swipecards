@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import com.topface.framework.utils.Debug
@@ -38,13 +37,14 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         , AddToPhotoBlogHeaderViewModel.IPurchasesFragmentVisualisator
         , AddToPhotoBlogHeaderViewModel.IPhotoHelperVisualisator, AddToPhotoBlogHeaderViewModel.IAdapterInteractor {
 
-    private var mIsPhotoDialogShown: Boolean = false
     lateinit private var mHeaderViewModel: AddToPhotoBlogHeaderViewModel
     lateinit private var mHeaderBinding: AddToPhotoBlogHeaderLayoutBinding
-    private val mScreenBinding by lazy {
-        DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
-    }
-    private val mScreenViewModel by lazy { AddToPhotoBlogViewModel(mScreenBinding, AddPhotoHelper(this)) }
+    lateinit private var mScreenViewModel: AddToPhotoBlogViewModel
+    lateinit private var mScreenBinding: AddToPhotoBlogLayoutBinding
+    //    private val mScreenBinding by lazy {
+//        DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
+//    }
+//    private val mScreenViewModel by lazy { AddToPhotoBlogViewModel(mScreenBinding, AddPhotoHelper(this)) }
     private val mAdapter by lazy {
         val profile = App.get().profile
         (LeadersRecyclerViewAdapter(
@@ -61,7 +61,6 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         val DEFAULT_SELECTED_POS = 1
         val SELECTED_POSITION = "selected_position"
         val SELECTED_PHOTO_ID = "selected_photo_id"
-        val ALREADY_SHOWN = "already_shown"
         val PAGE_NAME = "adtoleader"
         val GREETING_TEXT = "greeting_text"
     }
@@ -76,15 +75,8 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
                 PurchasesFragment.TYPE_LEADERS, price, App.get().options.topfaceOfferwallRedirect))
     }
 
-    private fun showPhotoHelper() {
-        showPhotoHelper(!mIsPhotoDialogShown)
-    }
-
-    override fun showPhotoHelper(isNeedShow: Boolean) {
-        if (isNeedShow && !App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) {
-            TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager, TakePhotoPopup.TAG)
-            mIsPhotoDialogShown = true
-        }
+    override fun showPhotoHelper() {
+        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager, TakePhotoPopup.TAG)
     }
 
     override fun getSelectedPhotoId() = mAdapter.selectedPhotoId
@@ -110,6 +102,7 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
             onRestoreState(it)
         }
         initActionBar(supportActionBar)
+        mScreenBinding = DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
         //https://youtrack.jetbrains.com/issue/KT-12402
         initRecyclerView(mScreenBinding.userPhotosGrid)
     }
@@ -135,6 +128,7 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
                 mAdapter.selectedPhotoPos = mSelectedPos
             }
         }
+        mScreenViewModel = AddToPhotoBlogViewModel(mScreenBinding, AddPhotoHelper(this))
     }
 
 
@@ -143,7 +137,6 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         with(outState) {
             putInt(SELECTED_PHOTO_ID, mAdapter.selectedPhotoId)
             putInt(SELECTED_POSITION, mAdapter.selectedPhotoPos)
-            putBoolean(ALREADY_SHOWN, mIsPhotoDialogShown)
             putString(GREETING_TEXT, mHeaderViewModel.inputText.get() ?: Utils.EMPTY)
         }
     }
@@ -154,7 +147,6 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         mScreenBinding.userPhotosGrid.post {
             mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, DEFAULT_SELECTED_POS)
         }
-        mIsPhotoDialogShown = savedInstanceState.getBoolean(ALREADY_SHOWN)
         mHeaderViewModel.inputText.set(savedInstanceState.getString(GREETING_TEXT, Utils.EMPTY))
     }
 
@@ -165,18 +157,17 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
 
     override fun onPause() {
         super.onPause()
-        mIsPhotoDialogShown = true
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         mScreenViewModel.release()
         mHeaderViewModel.release()
     }
 
     override fun onResume() {
         super.onResume()
-        showPhotoHelper()
+        if (App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) showPhotoHelper()
     }
 
 }
