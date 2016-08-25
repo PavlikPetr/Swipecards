@@ -662,7 +662,13 @@ public class BitmapUtils {
 
     public static Bitmap getBluredBitmap(Bitmap bitmap, int radius) {
         int crop = 15;
-        bitmap = fastBlur(Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / crop, bitmap.getHeight() / crop, false), radius);
+        if (bitmap != null) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            if (width > 0 && height > 0) {
+                bitmap = fastBlur(Bitmap.createScaledBitmap(bitmap, width / crop, height / crop, false), radius);
+            }
+        }
         return bitmap;
     }
 

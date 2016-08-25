@@ -123,8 +123,10 @@ public class ProfileFormFragment extends AbstractFormFragment {
                                 UserConfig config = App.getUserConfig();
                                 config.setUserCityChanged(true);
                                 config.saveConfig();
-                                mFormEditedListener.onEditingFinished(
-                                        new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
+                                if (mFormEditedListener != null) {
+                                    mFormEditedListener.onEditingFinished(
+                                            new FormItem(R.string.general_city, JsonUtils.toJson(city), FormItem.CITY));
+                                }
                             }
                         }
                     });
