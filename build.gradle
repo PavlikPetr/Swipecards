@@ -302,8 +302,13 @@ dependencies {
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'
     }
-    compile rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION
-    compile rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION
+    compile (rootProject.ANDROID_BUILD_SUPPORT_APPCOMPAT_VERSION){
+        exclude module: 'support-v4'
+    }
+    compile (rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION){
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-v4'
+    }
     //Google play services
     compile "com.google.android.gms:play-services-gcm:$google_play_services_version"
     compile "com.google.android.gms:play-services-ads:$google_play_services_version"
@@ -363,7 +368,10 @@ dependencies {
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxkotlin:0.60.0'
+    compile ('io.reactivex:rxkotlin:0.60.0'){
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'rxjava'
+    }
     //Dagger
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
