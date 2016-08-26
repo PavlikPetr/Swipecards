@@ -76,7 +76,9 @@ public class TrialVipPopupAction implements IStartAction {
                 }
             }
         });
-        popup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+        if (popup != null) {
+            popup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+        }
         UserConfig userConfig = App.getUserConfig();
         userConfig.setTrialLastTime(System.currentTimeMillis());
         userConfig.saveConfig();
