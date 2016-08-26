@@ -479,7 +479,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                         userConfig.saveConfig();
                     }
                     onPurchased(purchase);
-                    if (isNeedSendPurchasesStatistics()) {
+                    if (isNeedSendPurchasesStatistics(context)) {
                         //Статистика AppsFlyer
                         if (verify.revenue > 0) {
                             mAdjustManager.sendPurchaseEvent(verify.revenue);
@@ -531,8 +531,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         }
     }
 
-    private boolean isNeedSendPurchasesStatistics() {
-        return !App.from(getActivity()).getProfile().isEditor() && !BuildConfig.DEBUG;
+    private boolean isNeedSendPurchasesStatistics(Context context) {
+        return !App.from(context).getProfile().isEditor() && !BuildConfig.DEBUG;
     }
 
     private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {
