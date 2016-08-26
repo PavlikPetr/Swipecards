@@ -46,7 +46,6 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && isAdded) {
-            Debug.log("setUserVisibleHint $javaClass + $isVisibleToUser")
             mViewModel.loadTopFeeds()
         }
     }

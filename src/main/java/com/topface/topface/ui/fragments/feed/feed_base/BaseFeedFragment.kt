@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
-import android.databinding.ObservableInt
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -8,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
