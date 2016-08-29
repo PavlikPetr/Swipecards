@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -97,6 +98,10 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
             public void onFinish() {
                 textView.setText("0:00");
                 ConnectionManager.getInstance().onBanActivityFinish();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.finish();
+                }
             }
         };
     }
