@@ -96,7 +96,6 @@ public class BanFragment extends BaseFragment implements View.OnClickListener {
             }
 
             public void onFinish() {
-                textView.setText("0:00");
                 ConnectionManager.getInstance().onBanActivityFinish();
                 Activity activity = getActivity();
                 if (activity != null) {
