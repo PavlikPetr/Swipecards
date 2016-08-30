@@ -81,6 +81,12 @@ class ActionModeController(private val mMenuInflater: MenuInflater,
 
     fun isActionModeEnabled() = mActionMode != null
 
+    fun finishIfEnabled() {
+        if (isActionModeEnabled()) {
+            finish()
+        }
+    }
+
     interface OnActionModeEventsListener {
         fun onDeleteFeedItems()
         fun onAddToBlackList()
