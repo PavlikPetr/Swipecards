@@ -120,7 +120,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         list.filter {
             !it.isLoaderOrRetrier
         }.forEach {
-            ids.add(it.id.toInt())
+            ids.add(it.user.id.toInt())
         }
         return ids
     }
