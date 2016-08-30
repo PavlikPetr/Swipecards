@@ -132,11 +132,16 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     override fun onFeedUnlocked() = mViewModel.update()
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (!isVisibleToUser && isAdded) {
+            mActionModeController.finishIfEnabled()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        if (mActionModeController.isActionModeEnabled()) {
-            mActionModeController.finish()
-        }
+        mActionModeController.finishIfEnabled()
         mViewModel.release()
     }
 
