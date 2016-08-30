@@ -37,13 +37,20 @@ import rx.Subscription
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
 
-    val isRefreshing = ObservableBoolean()
+    var isRefreshing = object : ObservableBoolean() {
+        override fun set(value: Boolean) {
+            super.set(value)
+            if (!value) {
+                onRefreshed()
+            }
+        }
+    }
     val isLockViewVisible = ObservableInt(View.INVISIBLE)
     val isFeedProgressBarVisible = ObservableInt(View.INVISIBLE)
     val isListVisible = ObservableInt(View.VISIBLE)
     var stubView: IFeedLockerView? = null
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
-    private val mAdapter by lazy {
+    protected val mAdapter by lazy {
         binding.feedList.adapter as BaseFeedAdapter<*, T>
     }
     abstract val feedsType: FeedsCache.FEEDS_TYPE
@@ -104,7 +111,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 for (type in gcmType) {
                     GCMUtils.cancelNotification(context, type)
                 }
-                onRefresh()
+                loadTopFeeds()
             }
         }
         mReadItemReceiver = object : BroadcastReceiver() {
@@ -218,6 +225,13 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     override fun onRefresh() {
         isRefreshing.set(true)
+        loadTopFeeds()
+    }
+
+    open fun onRefreshed() {
+    }
+
+    fun loadTopFeeds() {
         val from = mAdapter.data.getFirst()?.let {
             it.id
         } ?: Utils.EMPTY
@@ -225,7 +239,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
-                        isRefreshing.set(false)
+                        if (isRefreshing.get()) {
+                            isRefreshing.set(false)
+                        }
                     }
 
                     override fun onError(e: Throwable?) {
