@@ -265,8 +265,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                     @Override
                     protected void success(Profile data, IApiResponse response) {
                         if (data.photosCount == 0) {
-                            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
-                            App.getConfig().getUserConfig().saveConfig();
+                            UserConfig userConfig = getConfig().getUserConfig();
+                            userConfig.setUserAvatarAvailable(false);
+                            userConfig.saveConfig();
                         }
                         if (Utils.checkPlayServices(App.getContext())) {
                             Debug.log("GCM_registration_token start service ");
@@ -702,7 +703,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         mProfile = profile;
         // ловим ситуацию когда модер удалил фото
         if (profile.photosCount == 0) {
-            App.getConfig().getUserConfig().setUserAvatarAvailable(false);
+            UserConfig userConfig = getConfig().getUserConfig();
+            userConfig.setUserAvatarAvailable(false);
+            userConfig.saveConfig();
         }
     }
 
