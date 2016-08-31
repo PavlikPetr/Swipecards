@@ -89,7 +89,7 @@ public class UserConfig extends AbstractConfig {
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private static final String IS_USER_CITY_CHANGED = "is_user_city_changed";
     private static final String FULLSCREEN_SETTINGS = "fullscreen_settings";
-    private static final String LOCALE_CHANGE = "localeChange";
+    private static final String LOCALE_CHANGE = "locale_change";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
