@@ -54,7 +54,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.ISimpleCallback;
-import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
@@ -445,12 +444,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 mFullscreenController.requestFullscreen();
             }
         }
-        //restart -> open NavigationActivity
-        if (App.getLocaleConfig().fetchToSystemLocale()) {
-            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
-            return;
-        }
-        LocaleConfig.localeChangeInitiated = false;
         App.checkProfileUpdate();
     }
 

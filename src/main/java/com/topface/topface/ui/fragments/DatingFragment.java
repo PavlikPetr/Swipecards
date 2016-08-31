@@ -328,6 +328,16 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         return true;
     }
 
+    private boolean isLocaleChanged() {
+        UserConfig config = App.getUserConfig();
+        if (config.isLocaleChanged()) {
+            config.setLocaleChange(false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mKeyboardWasShown = savedInstanceState != null && savedInstanceState.getBoolean(IS_SOFT_KEYBOARD_SHOW);
@@ -337,7 +347,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         if (mUserSearchList == null) {
             mUserSearchList = new CachableSearchList<>(SearchUser.class);
         }
-        if (!isValidUserCache()) {
+        if (!isValidUserCache() || isLocaleChanged()) {
             mUserSearchList.clear();
         }
         if (savedInstanceState != null) {
