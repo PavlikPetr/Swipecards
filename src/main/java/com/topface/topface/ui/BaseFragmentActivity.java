@@ -304,6 +304,12 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
          */
         super.onResumeFragments();
         checkProfileLoad();
+        //restart -> open NavigationActivity
+        if (App.getLocaleConfig().fetchToSystemLocale()) {
+            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
+            return;
+        }
+        LocaleConfig.localeChangeInitiated = false;
     }
 
     public boolean startAuth() {
