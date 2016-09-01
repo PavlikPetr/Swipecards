@@ -599,7 +599,11 @@ public class BitmapUtils {
         return output;
     }
 
+    @Nullable
     public static Bitmap getRoundAvatarBitmap(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
         final int bitmapWidth = bitmap.getWidth();
         final int bitmapHeight = bitmap.getHeight();
         int multWidth = (bitmapWidth > bitmapHeight) ? bitmapWidth : bitmapHeight;
