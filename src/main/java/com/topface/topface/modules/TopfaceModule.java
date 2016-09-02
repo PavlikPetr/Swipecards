@@ -22,13 +22,13 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
-import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
+import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -71,6 +71,7 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.popups.start_actions.ChooseCityPopupAction;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.topface.topface.utils.social.FbAuthorizer;
 import com.topface.topface.utils.social.OkAuthorizer;
@@ -146,7 +147,9 @@ import dagger.Provides;
                 AddToPhotoBlogHeaderViewModel.class,
                 LikesLockScreenViewModel.class,
                 FeedNavigator.class,
-                MutualLockScreenViewModel.class
+                MutualLockScreenViewModel.class,
+                DatingLockPopup.class,
+                ChooseCityPopupAction.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -243,12 +246,6 @@ public class TopfaceModule {
             }
 
         });
-    }
-
-    @Provides
-    @Singleton
-    PopupHive providesPopupLair() {
-        return new PopupHive();
     }
 
     @Provides

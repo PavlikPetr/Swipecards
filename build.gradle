@@ -291,9 +291,9 @@ android {
 
 dependencies {
     //Kotlin
-    //compile "org.jetbrains.anko:anko-sdk15:$anko_version"
-    //compile "org.jetbrains.anko:anko-support-v4:$anko_version"
-    //compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    compile "org.jetbrains.anko:anko-sdk15:$anko_version"
+    compile "org.jetbrains.anko:anko-support-v4:$anko_version"
+    compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     kapt 'com.android.databinding:compiler:2.1.0'
     //Android Support libs

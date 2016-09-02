@@ -65,10 +65,6 @@ public class DummyAction implements IStartAction {
         return null;
     }
 
-    @Override public void setStartActionCallback(OnNextActionListener startActionCallback) {
-
-    }
-
     public boolean isCalled() {
         return mResult == mOnUiResult;
     }

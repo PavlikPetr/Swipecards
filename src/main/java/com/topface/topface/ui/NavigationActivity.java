@@ -1,7 +1,6 @@
 package com.topface.topface.ui;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.BadParcelableException;
 import android.os.Bundle;
@@ -26,24 +25,16 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
-import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
-import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.state.DrawerLayoutState;
-import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.dialogs.AbstractDialogFragment;
-import com.topface.topface.ui.dialogs.CitySearchPopup;
-import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.ui.dialogs.IOnCitySelected;
-import com.topface.topface.ui.dialogs.NotificationsDisablePopup;
+import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
@@ -56,27 +47,28 @@ import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.NavigationManager;
-import com.topface.topface.utils.PopupManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.ChosenStartAction;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
-import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
+import com.topface.topface.utils.popups.PopupManager;
+import com.topface.topface.utils.popups.PopupSequence;
+import com.topface.topface.utils.popups.start_actions.ChooseCityPopupAction;
+import com.topface.topface.utils.popups.start_actions.OldVersionStartAction;
+import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
+import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
+import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -87,13 +79,13 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.topface.topface.state.PopupHive.AC_PRIORITY_HIGH;
-
 public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
     private static final int EXIT_TIMEOUT = 3000;
+
+    public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
     private Intent mPendingNextIntent;
     private boolean mIsActionBarHidden;
@@ -108,16 +100,14 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Inject
     TopfaceAppState mAppState;
     @Inject
-    PopupHive mPopupHive;
-    @Inject
     NavigationState mNavigationState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
-    private PopupManager mPopupManager;
     private CompositeSubscription mSubscription = new CompositeSubscription();
     private NavigationManager mNavigationManager;
+    private static boolean hasNewOptionsOrProfile = false;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -258,56 +248,36 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             }
         }));
         Debug.log("PopupHive onCreate");
-        if (savedInstanceState != null) {
-            startPopupRush(true, true);
-        } else {
-            registerPopupSequence();
-        }
+        PopupManager.INSTANCE.init(this);
+    }
+
+    private void initPopups() {
+        Debug.log("PopupMANAGER init");
+        PopupManager popupManager = PopupManager.INSTANCE;
+        popupManager.registerSequence(NAVIGATION_ACTIVITY_POPUPS_TAG, createPopupSequence());
+        popupManager.runSequence(NAVIGATION_ACTIVITY_POPUPS_TAG);
 
     }
 
-    @NotNull
-    private List<IStartAction> getActionsList() {
-        List<IStartAction> startActions = new ArrayList<>();
-        mPopupManager = new PopupManager(this);
-        startActions.add(new ExpressMessageAction(this, AC_PRIORITY_HIGH));
-        startActions.add(new ChosenStartAction().chooseFrom(
-                new TrialVipPopupAction(this, AC_PRIORITY_HIGH),
-                new DatingLockPopupAction(getSupportFragmentManager(), AC_PRIORITY_HIGH,
-                        new DatingLockPopup.DatingLockPopupRedirectListener() {
-                            @Override
-                            public void onRedirect() {
-                                showFragment(new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES));
-                            }
-                        })
-        ));
-        if (mFullscreenController != null) {
-            startActions.add(mFullscreenController.createFullscreenStartAction(PopupHive.AC_PRIORITY_NORMAL, this));
-        }
-        startActions.add(new ChosenStartAction().chooseFrom(selectPhotoStartAction(AC_PRIORITY_HIGH),
-                chooseCityStartAction(AC_PRIORITY_HIGH)));
-        startActions.add(new NotificationsDisablePopup(NavigationActivity.this, AC_PRIORITY_HIGH));
-        startActions.add(new PromoPopupManager(this).createPromoPopupStartAction(PopupHive.AC_PRIORITY_NORMAL));
-        startActions.add(new InvitePopupAction(this, AC_PRIORITY_HIGH));
-        startActions.add(mPopupManager.createRatePopupStartAction(PopupHive.AC_PRIORITY_NORMAL));
-        startActions.add(mPopupManager.createOldVersionPopupStartAction(AC_PRIORITY_HIGH));
-        return startActions;
+    public PopupSequence createPopupSequence() {
+        return new PopupSequence()
+                .addAction(ExpressMessageAction.class)
+                .addChosenAction(TrialVipPopupAction.class, DatingLockPopupAction.class)
+                .addAction(FullscreenController.class)
+                .addChosenAction(SelectPhotoStartAction.class, ChooseCityPopupAction.class)
+                .addAction(NotificationsDisableStartAction.class)
+                .addAction(PromoPopupStartAction.class)
+                .addAction(InvitePopupAction.class)
+                .addAction(RatePopupStartAction.class)
+                .addAction(OldVersionStartAction.class);
     }
 
-    private void registerPopupSequence() {
-        if (!mPopupHive.containSequence(NavigationActivity.class)) {
-            mPopupHive.registerPopupSequence(getActionsList(), NavigationActivity.class, false);
-        }
-    }
-
-    private void startPopupRush(boolean isNeedResetOldSequence, boolean stateChanged) {
-        if (!App.get().getProfile().isFromCache
+    private void startPopupRush() {
+        Debug.log("PopupMANAGER start rusgh");
+        if (hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
-            if (stateChanged) {
-                registerPopupSequence();
-            }
-            mPopupHive.execPopupRush(NavigationActivity.class, isNeedResetOldSequence);
+            initPopups();
         }
     }
 
@@ -320,7 +290,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         mFullscreenController = new FullscreenController(this);
     }
 
-    private NavigationManager getNavigationManager() {
+    @Nullable
+    public FullscreenController getFullscreenController() {
+        return mFullscreenController;
+    }
+
+    public NavigationManager getNavigationManager() {
         if (mNavigationManager == null) {
             mNavigationManager = initNavigationManager(null);
         }
@@ -440,7 +415,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         tryPostponedStartFragment();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
-            if (!mPopupHive.isSequencedExecuted(NavigationActivity.class) &&
+            if (PopupManager.INSTANCE.isSequenceComplete(NAVIGATION_ACTIVITY_POPUPS_TAG) &&
                     mFullscreenController.canShowFullscreen() && !AuthToken.getInstance().isEmpty()) {
                 mFullscreenController.requestFullscreen();
             }
@@ -456,145 +431,20 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onOptionsUpdated() {
-        startPopupRush(false, false);
+        Debug.log("PopupMANAGER opt");
+        hasNewOptionsOrProfile = true;
+        startPopupRush();
     }
 
     @Override
     protected void onProfileUpdated() {
         super.onProfileUpdated();
+        Debug.log("PopupMANAGER prof");
+        hasNewOptionsOrProfile = true;
         if (App.get().getProfile().age < App.getAppOptions().getUserAgeMin()) {
             SetAgeDialog.newInstance().show(getSupportFragmentManager(), SetAgeDialog.TAG);
         }
-        startPopupRush(false, false);
-    }
-
-    /**
-     * Select city if profile is empty
-     *
-     * @return start action object to register
-     */
-    private IStartAction chooseCityStartAction(final int priority) {
-        return new IStartAction() {
-
-            private OnNextActionListener mChooseCityNextActionListener;
-
-            @Override
-            public void callInBackground() {
-            }
-
-            @Override
-            public void callOnUi() {
-                CitySearchPopup popup = (CitySearchPopup) getSupportFragmentManager().findFragmentByTag(CitySearchPopup.TAG);
-                if (popup == null) {
-                    popup = CitySearchPopup.newInstance();
-                }
-                popup.setOnCitySelected(new IOnCitySelected() {
-                    @Override
-                    public void onSelected(final City city) {
-                        if (city != null) {
-                            SettingsRequest request = new SettingsRequest(App.getContext());
-                            request.cityid = city.id;
-                            request.callback(new ApiHandler() {
-                                @Override
-                                public void success(IApiResponse response) {
-                                    Profile profile = App.get().getProfile();
-                                    profile.city = city;
-                                    mAppState.setData(profile);
-                                }
-
-                                @Override
-                                public void fail(int codeError, IApiResponse response) {
-                                    Toast.makeText(App.getContext(), R.string.general_server_error, Toast.LENGTH_SHORT).show();
-                                }
-                            }).exec();
-                        }
-                    }
-                });
-                popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        mChooseCityNextActionListener.onNextAction();
-                    }
-                });
-                popup.show(getSupportFragmentManager(), CitySearchPopup.TAG);
-            }
-
-            @Override
-            public boolean isApplicable() {
-                Profile profile = App.get().getProfile();
-                return profile.city == null || profile.city.isEmpty();
-            }
-
-            @Override
-            public int getPriority() {
-                return priority;
-            }
-
-            @Override
-            public String getActionName() {
-                return "SelectCity";
-            }
-
-            @Override
-            public void setStartActionCallback(OnNextActionListener startActionCallback) {
-                mChooseCityNextActionListener = startActionCallback;
-            }
-        };
-    }
-
-    /**
-     * Take photo if profile is empty
-     *
-     * @return start action object to register
-     */
-    private IStartAction selectPhotoStartAction(final int priority) {
-        return new IStartAction() {
-
-            private OnNextActionListener mSelectPhotoNextActionListener;
-
-            @Override
-            public void callInBackground() {
-            }
-
-            @Override
-            public void callOnUi() {
-                if (!isPhotoAsked) {
-                    isPhotoAsked = true;
-                    TakePhotoPopup popup = (TakePhotoPopup) getSupportFragmentManager().findFragmentByTag(TakePhotoPopup.TAG);
-                    if (popup == null) {
-                        popup = TakePhotoPopup.newInstance("");
-                    }
-                    popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            mSelectPhotoNextActionListener.onNextAction();
-                        }
-                    });
-                    popup.show(getSupportFragmentManager(), TakePhotoPopup.TAG);
-                }
-            }
-
-            @Override
-            public boolean isApplicable() {
-                return !AuthToken.getInstance().isEmpty() && (App.get().getProfile().photo == null)
-                        && !App.getConfig().getUserConfig().isUserAvatarAvailable();
-            }
-
-            @Override
-            public int getPriority() {
-                return priority;
-            }
-
-            @Override
-            public String getActionName() {
-                return "TakePhoto";
-            }
-
-            @Override
-            public void setStartActionCallback(OnNextActionListener startActionCallback) {
-                mSelectPhotoNextActionListener = startActionCallback;
-            }
-        };
+        startPopupRush();
     }
 
     public void setPopupVisible(boolean visibility) {
@@ -675,13 +525,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (mNavigationManager != null) {
             mNavigationManager.onDestroy();
         }
-        mPopupHive.releaseHive();
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             mSubscription.unsubscribe();
         }
-        if (mPopupManager != null) {
-            mPopupManager.onDestroy();
-        }
+        PopupManager.INSTANCE.release();
         super.onDestroy();
         AdmobInterstitialUtils.releaseInterstitials();
     }
@@ -693,10 +540,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AbstractDialogFragment currentPopup = mPopupManager != null ? mPopupManager.getCurrentDialog() : null;
-        if (currentPopup != null) {
-            currentPopup.onActivityResult(requestCode, resultCode, data);
-        }
         //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
         boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
                 getSupportFragmentManager(),

@@ -15,19 +15,21 @@ import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
+import com.topface.topface.utils.popups.PopupManager;
 
 import java.lang.ref.WeakReference;
 
-public class NotificationsDisablePopup implements IStartAction {
+public class NotificationsDisableStartAction implements IStartAction {
+    private String mFrom;
     private WeakReference<FragmentActivity> mActivity;
     private int mPriority;
-    private OnNextActionListener mOnNextActionListener;
 
     private NotificationDisableDialog mNotificationDisableDialog;
 
-    public NotificationsDisablePopup(FragmentActivity activity, int priority) {
+    public NotificationsDisableStartAction(FragmentActivity activity, int priority, String from) {
         mPriority = priority;
         mActivity = new WeakReference(activity);
+        mFrom = from;
     }
 
     private MarketApiManager mMarketApiManager;
@@ -67,9 +69,7 @@ public class NotificationsDisablePopup implements IStartAction {
 
                 @Override
                 public void onDismissListener() {
-                    if (mOnNextActionListener != null) {
-                        mOnNextActionListener.onNextAction();
-                    }
+                    PopupManager.INSTANCE.informManager(mFrom);
                 }
             });
 
@@ -98,12 +98,7 @@ public class NotificationsDisablePopup implements IStartAction {
 
     @Override
     public String getActionName() {
-        return "NotificationsDisablePopup";
-    }
-
-    @Override
-    public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        mOnNextActionListener = startActionCallback;
+        return getClass().getSimpleName();
     }
 
     private MarketApiManager getMarketApiManager() {

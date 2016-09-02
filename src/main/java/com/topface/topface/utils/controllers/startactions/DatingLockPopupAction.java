@@ -5,22 +5,22 @@ import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
+import com.topface.topface.utils.popups.PopupManager;
 
 public class DatingLockPopupAction extends DailyPopupAction {
 
     private int mPriority;
-    private DatingLockPopup.DatingLockPopupRedirectListener mDatingLockPopupRedirect;
     private FragmentManager mFragmentManager;
-    private OnNextActionListener mStartActionCallback;
+    private String mFrom;
 
 
-    public DatingLockPopupAction(FragmentManager fragmentManager, int priority
-            , DatingLockPopup.DatingLockPopupRedirectListener listener) {
+    public DatingLockPopupAction(FragmentManager fragmentManager, int priority, String from) {
         super(App.getContext());
         mFragmentManager = fragmentManager;
-        mDatingLockPopupRedirect = listener;
         mPriority = priority;
+        mFrom = from;
     }
 
     @Override
@@ -38,18 +38,7 @@ public class DatingLockPopupAction extends DailyPopupAction {
         datingLockPopup.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                if (mStartActionCallback != null) {
-                    mStartActionCallback.onNextAction();
-                }
-            }
-        });
-        datingLockPopup.setDatingLockPopupRedirectListener(new DatingLockPopup.DatingLockPopupRedirectListener() {
-            @Override
-            public void onRedirect() {
-                datingLockPopup.setOnDismissListener(null);
-                if (mDatingLockPopupRedirect != null) {
-                    mDatingLockPopupRedirect.onRedirect();
-                }
+                PopupManager.INSTANCE.informManager(mFrom);
             }
         });
         datingLockPopup.show(mFragmentManager, DatingLockPopup.TAG);
@@ -73,8 +62,4 @@ public class DatingLockPopupAction extends DailyPopupAction {
         return getClass().getSimpleName();
     }
 
-    @Override
-    public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        mStartActionCallback = startActionCallback;
-    }
 }
