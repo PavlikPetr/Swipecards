@@ -41,6 +41,7 @@ import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
+import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -164,7 +165,7 @@ public class AddPhotoHelper {
         if (!mPhotoActionSubscription.isUnsubscribed()) {
             mPhotoActionSubscription.unsubscribe();
         }
-        if(mHandler!=null) {
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
             mHandler = null;
         }
@@ -356,8 +357,9 @@ public class AddPhotoHelper {
         // если начинаем грузить аватарку, то выставляем флаг, чтобы resumeFragment не вызвал показ попапа
         Profile profile = App.from(mContext).getProfile();
         if (profile.photos != null && profile.photos.size() == 0) {
-            App.getConfig().getUserConfig().setUserAvatarAvailable(true);
-            App.getConfig().getUserConfig().saveConfig();
+            UserConfig userConfig = App.getConfig().getUserConfig();
+            userConfig.setUserAvatarAvailable(true);
+            userConfig.saveConfig();
         }
         Utils.showToastNotification(R.string.photo_is_uploading, Toast.LENGTH_SHORT);
         showProgressDialog();
@@ -582,8 +584,9 @@ public class AddPhotoHelper {
         } else if (msg.what == AddPhotoHelper.ADD_PHOTO_RESULT_ERROR) {
             // если загрузка аватраки не завершилась успехом, то сбрасываем флаг
             if (profile.photos != null && profile.photos.size() == 0) {
-                App.getConfig().getUserConfig().setUserAvatarAvailable(false);
-                App.getConfig().getUserConfig().saveConfig();
+                UserConfig userConfig = App.getConfig().getUserConfig();
+                userConfig.setUserAvatarAvailable(false);
+                userConfig.saveConfig();
             }
             Toast.makeText(App.getContext(), R.string.photo_add_error, Toast.LENGTH_SHORT).show();
         }

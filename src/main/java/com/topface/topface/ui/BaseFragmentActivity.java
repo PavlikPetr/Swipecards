@@ -264,9 +264,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onResume() {
         super.onResume();
-        if (AuthToken.getInstance().isEmpty()) {
-            startAuth();
-        }
         if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
             App.mOpenIabHelperManager.freeHelper();
             App.mOpenIabHelperManager.init(App.getContext());
@@ -303,7 +300,16 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         http://stackoverflow.com/questions/16265733/failure-delivering-result-onactivityforresult
          */
         super.onResumeFragments();
+        if (AuthToken.getInstance().isEmpty()) {
+            startAuth();
+        }
         checkProfileLoad();
+        //restart -> open NavigationActivity
+        if (App.getLocaleConfig().fetchToSystemLocale()) {
+            LocaleConfig.changeLocale(this, App.getLocaleConfig().getApplicationLocale());
+            return;
+        }
+        LocaleConfig.localeChangeInitiated = false;
     }
 
     public boolean startAuth() {

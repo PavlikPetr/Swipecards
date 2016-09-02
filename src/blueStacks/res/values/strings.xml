@@ -8,9 +8,9 @@
   <string name="general_disallow">Forbid</string>
   <string name="general_allow">Allow</string>
   <string name="notification_denied_popup_title">Allow Notifications so you can find out about new
-        messages, likes, and other news.</string>
+        messages, likes, and other news</string>
   <string name="notification_popup_title">Allow us to send you Notifications so you will instantly
-        find out about new Likes, Adorations and Messages.</string>
+        find out about new Likes, Adorations and Messages</string>
   <string name="email_successfully_changed">Your email was successfully changed.</string>
   <string name="auth_vk_name">VK</string>
   <string name="dating_switch_button">More…</string>
@@ -826,4 +826,7 @@
   <string name="mutual_sympathy">Mutual Like</string>
   <string name="add_photo_feed_header_description">Publish a photo with a greeting and thousands of people will see you. Get noticed and start meeting people now!</string>
   <string name="publish_photo">Publish photo</string>
+  <string name="dont_miss_a_beat">Don\'t miss a beat!</string>
+  <string name="push_alert_dating_title">Want to get a notification when %s sends a mutual reply?</string>
+  <string name="push_alert_chat_title">Want to get a notification when %s replies?</string>
 </resources>

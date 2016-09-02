@@ -8,11 +8,14 @@
 -keepclassmembers class rx.subscriptions.SerialSubscription {
     rx.subscriptions.SerialSubscription.State state;
 }
+-dontnote rx.subscriptions.SerialSubscription.**
+-dontwarn rx.subscriptions.SerialSubscription.**
 
  #AsyncAndroid
 -keepclassmembers class com.koushikdutta.async.AsyncServer {
     com.koushikdutta.async.AsyncServer.Scheduler INSTANCE;
 }
+-dontnote com.koushikdutta.async.**
 
  # Flurry
 -keep class com.flurry.** { *; }
@@ -52,6 +55,7 @@
 # Adman
 -keep class java.util.concurrent.** { *; }
 -dontwarn java.util.concurrent.**
+-dontnote java.util.concurrent.**
 
  # Jackson
 -dontwarn com.fasterxml.jackson.databind.ext.**
@@ -67,6 +71,8 @@
 -keepattributes *Annotation*
  # Keep all the ACRA classes
 -keep class org.acra.** { *; }
+-dontnote org.acra.**
+-dontwarn org.acra.**
 
  # Topface
 -keep class com.topface.topface.data.** { *; }
@@ -76,6 +82,7 @@
 
  # RxAndroid
 -dontwarn rx.internal.util.unsafe.**
+-dontnote rx.internal.**
 
  # ButterKnife
 -keep class butterknife.** { *; }
@@ -121,13 +128,18 @@
 -keep class com.ifree.monetize.core.HandlerType
 -dontwarn com.ifree.monetize.core.HandlerType
 
- # Appodeal
+# Appodeal
 -keep class com.appodeal.** { *; }
 -keep class org.nexage.** { *; }
 -keepattributes EnclosingMethod, InnerClasses, Signature, JavascriptInterface
+-dontnote com.appodeal.**
 -dontwarn com.appodeal.**
 
- # Mopub
+# Amazon
+-keep class com.amazon.** { *; }
+-dontwarn com.amazon.**
+
+# Mopub
 -keep public class com.mopub.**
 -keepclassmembers class com.mopub.** { public *; }
 -keep class * extends com.mopub.mobileads.CustomEventBanner {}
@@ -136,125 +148,130 @@
 -keep class * extends com.mopub.mobileads.CustomEventRewardedVideo {}
 -dontwarn com.mopub.volley.toolbox.**
 
- # Applovin
+# Applovin
 -keep class com.applovin.** { *; }
 -dontwarn com.applovin.**
 
- # Facebook
+# Facebook
 -dontwarn com.facebook.ads.**
 
- # Chartboost
+# Chartboost
 -keep class com.chartboost.** { *; }
 -dontwarn com.chartboost.**
 
- # Unity Ads
+# Unity Ads
 -keepattributes JavascriptInterface
 -keepattributes SourceFile,LineNumberTable
 -keep class com.unity3d.ads.** { *; }
 -keep class com.applifier.** { *; }
 -dontwarn com.unity3d.**
+-dontnote com.unity3d.**
 
- # Yandex
+# Yandex
 -keep class com.yandex.metrica.** { *; }
 -dontwarn com.yandex.metrica.**
 -keep class com.yandex.mobile.ads.** { *; }
 -dontwarn com.yandex.mobile.ads.**
 -keepattributes *Annotation*
 
- # Inmobi
--keepattributes SourceFile,LineNumberTable,InnerClasses
--keep class com.inmobi.** { *; }
--dontwarn com.inmobi.**
-
- # StartApp
+# StartApp
 -keep class com.startapp.** { *;}
 -dontwarn com.startapp.**
 -keepattributes Exceptions, InnerClasses, Signature, Deprecated, SourceFile, LineNumberTable, *Annotation*, EnclosingMethod
 
- # Flurry
+# Flurry
 -keep class com.flurry.** { *; }
 -dontwarn com.flurry.**
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keepclasseswithmembers class * {
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-  }
+  public <init>(android.content.Context, android.util.AttributeSet, int);
+}
 
- # Avocarrot
+# Avocarrot
 -keep class com.avocarrot.** { *; }
 -keepclassmembers class com.avocarrot.** { *; }
 -dontwarn com.avocarrot.**
 -keep public class * extends android.view.View {
-    public <init>(android.content.Context);
-    public <init>(android.content.Context, android.util.AttributeSet);
-    public <init>(android.content.Context, android.util.AttributeSet, int);
-    public void set*(...);
-  }
+  public <init>(android.content.Context);
+  public <init>(android.content.Context, android.util.AttributeSet);
+  public <init>(android.content.Context, android.util.AttributeSet, int);
+  public void set*(...);
+}
 
- # Adcolony
+# Adcolony
 -dontnote com.immersion.**
 -dontwarn android.webkit.**
 -dontwarn com.jirbo.adcolony.**
 
- # Vungle
+# Vungle
 -keep class com.vungle.** { public *; }
 -keep class javax.inject.*
 -keepattributes *Annotation*, Signature
 -keep class dagger.*
 -dontwarn com.vungle.**
 
- # MyTarget
+# MyTarget
 -keep class com.my.target.** { *; }
 -dontwarn com.my.target.**
+-dontnote com.my.target.**
 -keep class ru.mail.android.mytarget.** { *; }
 -dontwarn ru.mail.android.mytarget.**
 
- # Admob
+#Cheetah Mobile
+-dontwarn com.cmcm.adsdk.**
+-keep class com.cmcm.adsdk.** { *;}
+-dontwarn com.cmcm.utils.**
+-dontnote com.cmcm.utils.**
+
+# Admob
 -keep class com.google.android.gms.ads.** { *; }
 
- # Google
+# Google
 -keep class com.google.android.gms.common.GooglePlayServicesUtil {*;}
 -keep class com.google.android.gms.ads.identifier.** { *; }
 -dontwarn com.google.android.gms.**
+-dontnote com.google.android.gms.**
 
- # Legacy
+# Legacy
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 -dontwarn android.net.http.**
+-dontnote org.apache.http.**
 
- # Google Play Services library
+# Google Play Services library
 -keep class * extends java.util.ListResourceBundle {
-      protected Object[][] getContents();
-  }
+    protected Object[][] getContents();
+}
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
-    public static final *** NULL;
-  }
+  public static final *** NULL;
+}
 -keepnames class * implements android.os.Parcelable
 -keepclassmembers class * implements android.os.Parcelable {
-    public static final *** CREATOR;
-  }
+  public static final *** CREATOR;
+}
 -keep @interface android.support.annotation.Keep
 -keep @android.support.annotation.Keep class *
 -keepclasseswithmembers class * {
-   @android.support.annotation.Keep <fields>;
-  }
+  @android.support.annotation.Keep <fields>;
+}
 -keepclasseswithmembers class * {
-    @android.support.annotation.Keep <methods>;
-  }
+  @android.support.annotation.Keep <methods>;
+}
 -keep @interface com.google.android.gms.common.annotation.KeepName
 -keepnames @com.google.android.gms.common.annotation.KeepName class *
 -keepclassmembernames class * {
-    @com.google.android.gms.common.annotation.KeepName *;
-  }
+  @com.google.android.gms.common.annotation.KeepName *;
+}
 -keep @interface com.google.android.gms.common.util.DynamiteApi
 -keep public @com.google.android.gms.common.util.DynamiteApi class * {
-    public <fields>;
-    public <methods>;
-  }
- # Google Play Services library 9.0.0 only
+  public <fields>;
+  public <methods>;
+}
+# Google Play Services library 9.0.0 only
 -dontwarn android.security.NetworkSecurityPolicy
 -keep public @com.google.android.gms.common.util.DynamiteApi class * { *; }
 
- # support-v4
+# support-v4
 -keep class android.support.v4.app.Fragment { *; }
 -keep class android.support.v4.app.FragmentActivity { *; }
 -keep class android.support.v4.app.FragmentManager { *; }
@@ -263,10 +280,14 @@
 -keep class android.support.v4.util.LruCache { *; }
 -keep class android.support.v4.view.PagerAdapter { *; }
 -keep class android.support.v4.view.ViewPager { *; }
+-dontnote android.support.v4.**
+-dontwarn android.support.v4.**
 
- # support-v7-recyclerview
+# support-v7-recyclerview
 -keep class android.support.v7.widget.RecyclerView { *; }
 -keep class android.support.v7.widget.LinearLayoutManager { *; }
+-dontnote android.support.v7.**
+-dontwarn android.support.v7.**
 
  #adjust
 -keep class com.adjust.sdk.plugin.MacAddressUtil {
@@ -287,9 +308,16 @@
   }
 
  #retrofit
--dontwarn retrofit2.**
--keep class retrofit2.** { *; }
--keepattributes Signature
+ # Platform calls Class.forName on types which do not exist on Android to determine platform.
+ -dontnote retrofit2.Platform
+ # Platform used when running on RoboVM on iOS. Will not be used at runtime.
+ -dontnote retrofit2.Platform$IOS$MainThreadExecutor
+ # Platform used when running on Java 8 VMs. Will not be used at runtime.
+ -dontwarn retrofit2.Platform$Java8
+ # Retain generic type information for use by reflection by converters and adapters.
+ -keepattributes Signature
+ # Retain declared checked exceptions for use by a Proxy instance.
+ -keepattributes Exceptions
 
 -keepattributes Exceptions
 -dontwarn com.squareup.okhttp.**
@@ -299,3 +327,10 @@
 -dontwarn android.databinding.**
 -dontwarn com.tapsense.android.**
 -dontwarn com.personagraph.**
+-dontnote com.personagraph.**
+-dontnote com.inmobi.**
+-dontwarn com.inmobi.**
+-dontwarn okhttp3.internal.**
+-dontnote okhttp3.internal.**
+-dontwarn retrofit2.Platform
+-dontnote retrofit2.Platform

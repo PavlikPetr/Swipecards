@@ -1,8 +1,10 @@
 package com.topface.topface.utils.controllers.startactions;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.BaseFragmentActivity;
@@ -23,7 +25,8 @@ public class TrialVipPopupAction implements IStartAction {
     private String mFrom;
     private int mPriority;
     private WeakReference<BaseFragmentActivity> mActivity;
-    private TrialVipPopup mTrialVipPopup;
+    private OnNextActionListener mOnNextActionListener;
+    private boolean mIsNeedNext = true;
 
     public TrialVipPopupAction(BaseFragmentActivity activity, int priority, String from) {
         mActivity = new WeakReference<>(activity);
@@ -40,14 +43,34 @@ public class TrialVipPopupAction implements IStartAction {
         if (mActivity == null || mActivity.get() == null) {
             return;
         }
-        mTrialVipPopup = (TrialVipPopup) mActivity.get().getSupportFragmentManager().findFragmentByTag(TrialVipPopup.TAG);
-        if (mTrialVipPopup == null) {
-            mTrialVipPopup = TrialVipPopup.newInstance(false);
-        }
-        mTrialVipPopup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
+
+        final TrialVipPopup popup = TrialVipPopup.newInstance(true);
+        popup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
             @Override
             public void onSubscribeClick() {
-                showSubscriptionPopup();
+                Fragment f = popup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
+                final Fragment fragment = f == null ?
+                        TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
+                fragment.setRetainInstance(true);
+                if (fragment instanceof ITransparentMarketFragmentRunner) {
+                    ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
+                        @Override
+                        public void onPurchaseSuccess() {
+                            popup.dismiss();
+                        }
+
+                        @Override
+                        public void onPopupClosed() {
+                        }
+                    });
+                    FragmentTransaction transaction = popup.getActivity().getSupportFragmentManager().beginTransaction();
+                    if (!fragment.isAdded()) {
+                        transaction.add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                    } else {
+                        transaction.remove(fragment)
+                                .add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                    }
+                }
             }
 
             @Override
@@ -55,7 +78,9 @@ public class TrialVipPopupAction implements IStartAction {
                 PopupManager.INSTANCE.informManager(mFrom);
             }
         });
-        mTrialVipPopup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+        if (popup != null) {
+            popup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
+        }
         UserConfig userConfig = App.getUserConfig();
         userConfig.setTrialLastTime(System.currentTimeMillis());
         userConfig.saveConfig();

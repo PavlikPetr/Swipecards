@@ -217,7 +217,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         convertView.setTag(holder);
         if (mSelectionController.isSelected(position)) {
-            convertView.setBackgroundResource(R.drawable.list_item_bg_selected);
+            convertView.setBackgroundResource(isLikesListAdapter() ? R.drawable.feed_list_item_selected : R.drawable.list_item_bg_selected);
         } else {
             setBackground(convertView, holder);
         }
@@ -421,8 +421,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
         holder.avatar = (FrameLayout) convertView.findViewById(!isLikesListAdapter() ? R.id.ifp_avatar : R.id.avatar_frame);
         holder.avatarImage = (ImageViewRemote) convertView.findViewById(!isLikesListAdapter() ? R.id.ifp_avatar_image : R.id.avatar);
-        holder.name = (TextView) convertView.findViewById(R.id.ifp_name);
-        holder.age = (TextView) convertView.findViewById(R.id.ifp_age);
+        holder.name = (TextView) convertView.findViewById(R.id.ifp_name);holder.age = (TextView) convertView.findViewById(R.id.ifp_age);
         holder.text = (TextView) convertView.findViewById(!isLikesListAdapter() ? R.id.ifp_text : R.id.text);
         holder.background = convertView.getBackground();
 
