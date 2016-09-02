@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Модель наспроек фулскринов
  * Created by tiberal on 17.06.16.
  */
-public class FullscreenSettings implements Parcelable {
+public class AdsSettings implements Parcelable {
 
     public static final String SDK = "SDK";
     public static final String IMG = "IMG";
@@ -29,13 +29,13 @@ public class FullscreenSettings implements Parcelable {
      */
     public long nextRequestNoEarlierThen;
 
-    public FullscreenSettings(Parcel parcel) {
+    public AdsSettings(Parcel parcel) {
         banner = parcel.readParcelable(((Object) this).getClass().getClassLoader());
         nextRequestNoEarlierThen = parcel.readLong();
     }
 
     @SuppressWarnings("unused")
-    public FullscreenSettings() {
+    public AdsSettings() {
     }
 
     public boolean isEmpty() {
@@ -53,23 +53,23 @@ public class FullscreenSettings implements Parcelable {
         dest.writeLong(nextRequestNoEarlierThen);
     }
 
-    public static final Parcelable.Creator<FullscreenSettings> CREATOR = new Creator<FullscreenSettings>() {
+    public static final Parcelable.Creator<AdsSettings> CREATOR = new Creator<AdsSettings>() {
         @Override
-        public FullscreenSettings createFromParcel(Parcel in) {
-            return new FullscreenSettings(in);
+        public AdsSettings createFromParcel(Parcel in) {
+            return new AdsSettings(in);
         }
 
         @Override
-        public FullscreenSettings[] newArray(int size) {
-            return new FullscreenSettings[size];
+        public AdsSettings[] newArray(int size) {
+            return new AdsSettings[size];
         }
     };
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof FullscreenSettings)) return false;
-        FullscreenSettings that = (FullscreenSettings) o;
+        if (!(o instanceof AdsSettings)) return false;
+        AdsSettings that = (AdsSettings) o;
         if (nextRequestNoEarlierThen != that.nextRequestNoEarlierThen) return false;
         return banner != null ? banner.equals(that.banner) : that.banner == null;
     }
@@ -104,6 +104,11 @@ public class FullscreenSettings implements Parcelable {
          * {String} parameter - строка значения параметра действия (ОПЦИОНАЛЬНО)
          */
 
+        public String adAppId;
+        /**
+         * {String} adAppId - идентификатор приложения SDK (ОПЦИОНАЛЬНО, только для типов баннеров SDK)
+         */
+
         public static final Parcelable.Creator<Banner> CREATOR = new Creator<Banner>() {
             @Override
             public Banner createFromParcel(Parcel in) {
@@ -122,6 +127,7 @@ public class FullscreenSettings implements Parcelable {
             url = parcel.readString();
             action = parcel.readString();
             parameter = parcel.readString();
+            adAppId = parcel.readString();
         }
 
         public Banner() {
@@ -139,6 +145,7 @@ public class FullscreenSettings implements Parcelable {
             dest.writeString(url);
             dest.writeString(action);
             dest.writeString(parameter);
+            dest.writeString(adAppId);
         }
 
         @SuppressWarnings("SimplifiableIfStatement")
@@ -151,7 +158,9 @@ public class FullscreenSettings implements Parcelable {
             if (url != null ? !url.equals(banner.url) : banner.url != null) return false;
             if (action != null ? !action.equals(banner.action) : banner.action != null)
                 return false;
-            return parameter != null ? parameter.equals(banner.parameter) : banner.parameter == null;
+            if (parameter != null ? !parameter.equals(banner.parameter) : banner.parameter != null)
+                return false;
+            return adAppId != null ? adAppId.equals(banner.adAppId) : banner.adAppId == null;
 
         }
 
@@ -162,6 +171,7 @@ public class FullscreenSettings implements Parcelable {
             result = 31 * result + (url != null ? url.hashCode() : 0);
             result = 31 * result + (action != null ? action.hashCode() : 0);
             result = 31 * result + (parameter != null ? parameter.hashCode() : 0);
+            result = 31 * result + (adAppId != null ? adAppId.hashCode() : 0);
             return result;
         }
     }

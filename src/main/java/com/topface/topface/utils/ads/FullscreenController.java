@@ -23,7 +23,7 @@ import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.Banner;
-import com.topface.topface.data.FullscreenSettings;
+import com.topface.topface.data.AdsSettings;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.BannerRequest;
@@ -39,9 +39,12 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.http.IRequestClient;
+
+import javax.inject.Inject;
 
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
@@ -52,8 +55,11 @@ import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER
 /**
  */
 public class FullscreenController {
-    private static final String TAG = "FullscreenController";
 
+    @Inject
+    WeakStorage mWeakStorage;
+
+    private static final String TAG = "FullscreenController";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
     private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
     private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
@@ -147,7 +153,7 @@ public class FullscreenController {
         return interval == 0 || System.currentTimeMillis() - configField.getConfigFieldInfo().getLastWriteTime() >= interval * 1000;
     }
 
-    private void showOwnFullscreen(FullscreenSettings settings) {
+    private void showOwnFullscreen(AdsSettings settings) {
         OwnFullscreenPopup popup = OwnFullscreenPopup.newInstance(settings);
         popup.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -161,13 +167,13 @@ public class FullscreenController {
         mFullScreenBannerListener.onLoaded();
     }
 
-    private void handleFullscreenSettings(FullscreenSettings settings) {
+    private void handleFullscreenSettings(AdsSettings settings) {
         if (settings.nextRequestNoEarlierThen != 0) {
             App.getUserConfig().setFullscreenInterval(settings.nextRequestNoEarlierThen);
         }
         if (!settings.isEmpty()) {
             mIsFullscreenSkipped = false;
-            if (settings.banner.type.equals(FullscreenSettings.SDK)) {
+            if (settings.banner.type.equals(AdsSettings.SDK)) {
                 Debug.log("FullscreenController : FullscreenSettingsRequest AD " + settings.banner.name);
                 FullscreenController.this.requestFullscreenByServerSettings(settings);
             } else {
@@ -179,26 +185,29 @@ public class FullscreenController {
         }
     }
 
-    private void requestFullscreenByServerSettings(FullscreenSettings settings) {
+    private void requestFullscreenByServerSettings(AdsSettings settings) {
         switch (settings.banner.name) {
             case ADMOB_NEW:
                 requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
                 break;
             case APPODEAL_NEW:
+                Debug.log("BANNER_SETTINGS : new segment " + settings.banner.adAppId);
+                mWeakStorage.setAppodealFullscreenSegmentName(settings.banner.adAppId);
+                AppodealProvider.setCustomSegment();
                 requestAppodealFullscreen();
         }
     }
 
     public void requestFullscreen() {
         mCurrentBannerType = OwnFullscreenPopup.IMPROVED_BANNER_TOPFACE;
-        final UserConfig config = App.getUserConfig();
+        UserConfig config = App.getUserConfig();
         long amount = config.getFullscreenInterval().getConfigFieldInfo().getAmount();
         Debug.log("FullscreenController : FullscreenSettingsRequest exec  amount " + amount);
         ApiRequest request = new FullscreenSettingsRequest(mActivity.getApplicationContext(), amount);
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                handleFullscreenSettings(JsonUtils.fromJson(response.toString(), FullscreenSettings.class));
+                handleFullscreenSettings(JsonUtils.fromJson(response.toString(), AdsSettings.class));
                 Debug.log("FullscreenController : FullscreenSettingsRequest success ");
             }
 
@@ -225,6 +234,7 @@ public class FullscreenController {
     private Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
     public FullscreenController(Activity activity) {
+        App.get().inject(this);
         mActivity = activity;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             mActivityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {

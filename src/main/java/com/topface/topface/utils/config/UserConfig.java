@@ -89,6 +89,8 @@ public class UserConfig extends AbstractConfig {
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private static final String IS_USER_CITY_CHANGED = "is_user_city_changed";
     private static final String FULLSCREEN_SETTINGS = "fullscreen_settings";
+    private static final String BANNER_SETTINGS = "banner_settings";
+    private static final String LOCALE_CHANGE = "locale_change";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -204,6 +206,10 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, IS_USER_CITY_CHANGED, false);
         //опции фулскрина
         addField(settingsMap, FULLSCREEN_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //опции бфннера
+        addField(settingsMap, BANNER_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //флаг смены локализации
+        addField(settingsMap, LOCALE_CHANGE, false);
     }
 
     @Override
@@ -231,12 +237,39 @@ public class UserConfig extends AbstractConfig {
         }.getType());
     }
 
+    public void setBannerInterval(long interval) {
+        mConfigExtension.setDailyConfigField(BANNER_SETTINGS, interval);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getBannerInterval() {
+        return mConfigExtension.getDailyConfigField(BANNER_SETTINGS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
+    }
+
     public boolean getTestPaymentFlag() {
         return getBooleanField(getSettingsMap(), TEST_PAYMENT_ENABLED);
     }
 
     public boolean setTestPaymentFlag(boolean testPaymentMark) {
         return setField(getSettingsMap(), TEST_PAYMENT_ENABLED, testPaymentMark);
+    }
+
+    /**
+     * Return locale chaned flag
+     *
+     * @return true if locale was changed
+     */
+    public Boolean isLocaleChanged() {
+        return getBooleanField(getSettingsMap(), LOCALE_CHANGE);
+    }
+
+    /**
+     * Set change locale
+     *
+     * @param value change locale
+     */
+    public void setLocaleChange(Boolean value) {
+        setField(getSettingsMap(), LOCALE_CHANGE, value);
     }
 
     /**

@@ -532,7 +532,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     }
 
     private boolean isNeedSendPurchasesStatistics() {
-        return !App.from(getActivity()).getProfile().isEditor() && !BuildConfig.DEBUG;
+        return !App.get().getProfile().isEditor() && !BuildConfig.DEBUG;
     }
 
     private boolean consumeTestPurchase(Purchase purchase, PurchaseRequest validateRequest) {

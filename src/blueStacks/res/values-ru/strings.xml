@@ -889,4 +889,7 @@
   <string name="mutual_sympathy">Взаимная симпатия</string>
   <string name="add_photo_feed_header_description">Разместите фото с приветствием, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
   <string name="publish_photo">Разместить фото</string>
+  <string name="dont_miss_a_beat">Не пропустите важное!</string>
+  <string name="push_alert_dating_title">Хотите получить уведомление, когда %s ответит взаимностью?</string>
+  <string name="push_alert_chat_title">Хотите получить уведомление, когда %s ответит?</string>
 </resources>
