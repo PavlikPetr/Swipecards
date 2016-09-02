@@ -1,11 +1,12 @@
 package com.topface.topface.promo.dialogs
 
+
 interface OnPromoDialogEventsListener {
-    fun onClose()
+    fun onClose(){}
 
-    fun onDeleteMessageClick()
+    fun onDeleteMessageClick(){}
 
-    fun onVipBought()
+    fun onVipBought(){}
 
-    fun onBuyVipClick()
+    fun onBuyVipClick(){}
 }

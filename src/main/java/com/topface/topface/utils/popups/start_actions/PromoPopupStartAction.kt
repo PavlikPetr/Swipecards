@@ -6,17 +6,18 @@ import com.topface.topface.App
 import com.topface.topface.data.Options
 import com.topface.topface.data.Options.PromoPopupEntity.AIR_ADMIRATIONS
 import com.topface.topface.data.Options.PromoPopupEntity.AIR_VISITORS
+import com.topface.topface.promo.dialogs.OnPromoDialogEventsListener
 import com.topface.topface.promo.dialogs.PromoDialog
 import com.topface.topface.promo.dialogs.PromoKey71Dialog
 import com.topface.topface.promo.dialogs.PromoKey81Dialog
 import com.topface.topface.utils.controllers.startactions.IStartAction
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener
+import com.topface.topface.utils.popups.PopupManager
 
 /**
  * Стартуем промо
  * Created by tiberal on 31.08.16.
  */
-class PromoPopupStartAction(private val mActivity: FragmentActivity, private val priority: Int, val from: String) : IStartAction {
+class PromoPopupStartAction(private val mActivity: FragmentActivity, private val priority: Int, private val mFrom: String) : IStartAction {
 
 
     companion object {
@@ -61,7 +62,7 @@ class PromoPopupStartAction(private val mActivity: FragmentActivity, private val
         var promo: PromoDialog? = null
         val fragmentManager = mActivity.supportFragmentManager
         Debug.log("Promo: try showPromoPopup #$type")
-        if (checkIsNeedShow(App.from(mActivity).options.getPremiumEntityByType(type))) {
+        if (checkIsNeedShow(App.get().options.getPremiumEntityByType(type))) {
             Debug.log("Promo: need show popup #$type")
             promo = fragmentManager.findFragmentByTag(PROMO_POPUP_TAG) as PromoDialog?
             //Проверяем, показывается ли в данный момент попап
@@ -104,7 +105,13 @@ class PromoPopupStartAction(private val mActivity: FragmentActivity, private val
         return if (fragment != null && fragment.premiumEntity == null) {
             null
         } else {
-            fragment
+            fragment?.apply {
+                setPromoPopupEventsListener(object : OnPromoDialogEventsListener {
+                    override fun onDeleteMessageClick() {
+                        PopupManager.informManager(mFrom)
+                    }
+                })
+            }
         }
     }
 }
