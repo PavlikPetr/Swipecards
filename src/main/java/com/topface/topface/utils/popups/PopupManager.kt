@@ -51,7 +51,7 @@ object PopupManager {
         if (mSequences.containsKey(name)) {
             mSequences[name]?.let {
                 if (it.hasMoarActions()) {
-                    runAction(getApplicableAction(it, name), name)
+                    runAction(getApplicableAction(it, name))
                 } else {
                     it.isSequenceComplete = true
                 }
@@ -59,7 +59,7 @@ object PopupManager {
         }
     }
 
-    private fun runAction(action: IStartAction?, name: String) {
+    private fun runAction(action: IStartAction?) {
         action?.let {
             Debug.log("PopupMANAGER Action ${action.actionName} runned")
             doAsync(executorService = Executors.newCachedThreadPool()) {
@@ -95,7 +95,7 @@ object PopupManager {
             if (sequence != null && !sequence.isExecuted) {
                 Debug.log("PopupMANAGER GOOOOOO!!!")
                 sequence.isExecuted = true
-                runAction(getApplicableAction(sequence, name), name)
+                runAction(getApplicableAction(sequence, name))
             }
         }
     }
