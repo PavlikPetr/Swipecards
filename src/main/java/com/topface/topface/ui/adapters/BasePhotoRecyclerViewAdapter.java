@@ -20,6 +20,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.databinding.ItemUserGalleryAddBtnBinding;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
@@ -417,7 +418,10 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                             return;
                         }
                         int pos = mRecyclerView.getLayoutManager().getPosition(v);
-                        mRecyclerViewItemClickListener.itemClick(v, pos, getAdapterData().get(pos));
+                        Photos photos = getAdapterData();
+                        if (ListUtils.isEntry(pos, photos)) {
+                            mRecyclerViewItemClickListener.itemClick(v, pos, photos.get(pos));
+                        }
                     }
                 });
                 mBinding.setVariable(BR.longClickListener, new View.OnLongClickListener() {
@@ -429,7 +433,10 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
                             return true;
                         }
                         int pos = mRecyclerView.getLayoutManager().getPosition(v);
-                        mRecyclerViewItemLongClickListener.itemLongClick(v, pos, getAdapterData().get(pos));
+                        Photos photos = getAdapterData();
+                        if (ListUtils.isEntry(pos, photos)) {
+                            mRecyclerViewItemLongClickListener.itemLongClick(v, pos, photos.get(pos));
+                        }
                         return false;
                     }
                 });

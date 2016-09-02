@@ -3,6 +3,7 @@ package com.topface.topface.banners.ad_providers;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
@@ -15,11 +16,17 @@ import com.topface.topface.banners.AppodealUserSettingsRules;
 import com.topface.topface.banners.IPageWithAds;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormItem;
+import com.topface.topface.utils.config.WeakStorage;
+
+import javax.inject.Inject;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
     private static final String YANDEX_NETWORK = "yandex";
+
+    @Inject
+    static WeakStorage mWeakStorage;
 
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
@@ -143,5 +150,17 @@ public class AppodealProvider extends AbstractAdsProvider {
             }
         }
         return false;
+    }
+
+    public static void setCustomSegment() {
+        String fullscreenSegment = mWeakStorage.getAppodealFullscreenSegmentName();
+        if (TextUtils.isEmpty(fullscreenSegment)) {
+            String bannerSegment = mWeakStorage.getAppodealBannerSegmentName();
+            Debug.log("BANNER_SETTINGS : set segment " + bannerSegment);
+            Appodeal.setCustomSegment(bannerSegment, 0);
+        } else {
+            Debug.log("BANNER_SETTINGS : set segment " + fullscreenSegment);
+            Appodeal.setCustomSegment(fullscreenSegment, 0);
+        }
     }
 }

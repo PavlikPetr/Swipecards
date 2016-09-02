@@ -30,6 +30,8 @@ public class RegistrationService extends IntentService {
                     .getToken(GCM_SENDER_ID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null));
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (SecurityException e) {
+            Debug.log("Can't register in GCM. No com.google.android.c2dm.permission.RECEIVE permission.");
         }
     }
 }

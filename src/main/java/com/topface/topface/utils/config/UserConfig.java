@@ -89,6 +89,7 @@ public class UserConfig extends AbstractConfig {
     public static final String START_POSITION_OF_ACTIONS = "start_position_of_actions";
     private static final String IS_USER_CITY_CHANGED = "is_user_city_changed";
     private static final String FULLSCREEN_SETTINGS = "fullscreen_settings";
+    private static final String BANNER_SETTINGS = "banner_settings";
     private static final String LOCALE_CHANGE = "locale_change";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
@@ -205,6 +206,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, IS_USER_CITY_CHANGED, false);
         //опции фулскрина
         addField(settingsMap, FULLSCREEN_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //опции бфннера
+        addField(settingsMap, BANNER_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
         //флаг смены локализации
         addField(settingsMap, LOCALE_CHANGE, false);
     }
@@ -231,6 +234,15 @@ public class UserConfig extends AbstractConfig {
 
     public <T> DailyConfigExtension.DailyConfigField<T> getFullscreenInterval() {
         return mConfigExtension.getDailyConfigField(FULLSCREEN_SETTINGS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
+    }
+
+    public void setBannerInterval(long interval) {
+        mConfigExtension.setDailyConfigField(BANNER_SETTINGS, interval);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getBannerInterval() {
+        return mConfigExtension.getDailyConfigField(BANNER_SETTINGS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
         }.getType());
     }
 

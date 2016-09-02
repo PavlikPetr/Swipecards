@@ -126,11 +126,11 @@ public class FeedItemViewConstructor {
 
         // when item is new
         if ((typeAndFlag.flag & Flag.NEW) > 0) {
-            resultView.setBackgroundResource(R.drawable.item_new_list_selector);
+            resultView.setBackgroundResource(R.drawable.new_feed_list_item_selector);
             TextView tv = (TextView) resultView.findViewById(R.id.text);
             tv.setTextColor(context.getResources().getColor(R.color.list_text_black));
         } else {
-            resultView.setBackgroundResource(R.drawable.item_list_selector);
+            resultView.setBackgroundResource(R.drawable.feed_list_item_selector);
         }
 
         // for banned user

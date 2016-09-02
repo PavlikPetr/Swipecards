@@ -31,4 +31,15 @@ class MutualFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeed
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_MUTUALS_FEEDS
 
+    override fun onRefreshed() {
+        mAdapter?.let {
+            it.data.forEachIndexed { position, feedMutual ->
+                if (feedMutual.unread) {
+                    feedMutual.unread = false
+                    it.notifyItemChanged(position)
+                }
+            }
+        }
+    }
+
 }

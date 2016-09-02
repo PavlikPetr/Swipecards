@@ -844,4 +844,7 @@
     <string name="mutual_sympathy">Karşılıklı Beğenme</string>
     <string name="add_photo_feed_header_description">Binlerce insanın göreceği fotoğrafınızı yayınlayın. Farkınızı belli edin ve hemen yeni insanlarla tanışın!</string>
     <string name="publish_photo">Fotoğrafı Yayınla</string>
+    <string name="dont_miss_a_beat">Her şeyden haberdar ol!</string>
+    <string name="push_alert_dating_title">%s karşılık verdiğinde bildirim almak ister misin?</string>
+    <string name="push_alert_chat_title">%s yanıt verdiğinde bildirim almak ister misin?</string>
 </resources>
