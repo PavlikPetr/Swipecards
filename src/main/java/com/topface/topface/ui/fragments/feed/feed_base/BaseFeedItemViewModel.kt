@@ -23,13 +23,16 @@ open class BaseFeedItemViewModel<T : ViewDataBinding>(binding: T, val item: Feed
     init {
         item.user?.let {
             avatarHolder = AvatarHolder(it.photo, getStubResourсe())
-            nameAndAge = AgeAndNameData(it.nameAndAge, null, getOnlineRes())
+            nameAndAge = AgeAndNameData(it.nameAndAge, null, getOnlineRes(it))
         }
     }
 
-    private fun getOnlineRes(): Int {
-        val isOnline = !(item.user.deleted || item.user.banned) && item.user.state.online
-        return when (item.user.state.deviceType) {
+    private fun getOnlineRes(user: FeedUser): Int {
+        if (user.state == null) {
+            return 0
+        }
+        val isOnline = !(user.deleted || user.banned) && user.state.online
+        return when (user.state.deviceType) {
             FeedUser.State.UNKNOWN -> 0
             FeedUser.State.MOBILE -> if (isOnline) R.drawable.ic_mobile_on else R.drawable.ic_mobile_off
             FeedUser.State.DESKTOP -> if (isOnline) R.drawable.ic_desktop_on else R.drawable.ic_desktop_off
