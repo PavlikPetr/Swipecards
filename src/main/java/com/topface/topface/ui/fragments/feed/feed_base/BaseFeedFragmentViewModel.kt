@@ -85,13 +85,15 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     init {
         mCache.restoreFromCache(itemClass)?.let {
-            if (mAdapter != null && mAdapter!!.data.isEmpty()) {
-                mAdapter!!.addData(it)
-                isDataFromCache = true
+            mAdapter?.let { adapter ->
+                if (adapter.data.isEmpty()) {
+                    adapter.addData(it)
+                    isDataFromCache = true
+                }
             }
         }
-        mUpdaterSubscription = mAdapter?.let {
-            it.updaterObservable.distinct {
+        mUpdaterSubscription = mAdapter?.let { adapter ->
+            adapter.updaterObservable.distinct {
                 it?.let {
                     it.getString(TO, Utils.EMPTY)
                 }
@@ -137,19 +139,19 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-    protected fun makeItemReadWithFeedId(id: String) = mAdapter?.let {
-        it.data.forEachIndexed { position, dataItem ->
+    protected fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
+        adapter.data.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
                 dataItem.unread = false
             }
-            mAdapter!!.notifyItemChanged(position)
+            adapter.notifyItemChanged(position)
         }
     }
 
 
     protected fun makeItemReadUserId(uid: Int, readMessages: Int) =
-            mAdapter?.let {
-                it.data.forEachIndexed { position, dataItem ->
+            mAdapter?.let { adapter ->
+                adapter.data.forEachIndexed { position, dataItem ->
                     if (dataItem.user != null && dataItem.user.id == uid && dataItem.unread) {
                         val unread = dataItem.unreadCounter - readMessages
                         if (unread > 0) {
@@ -157,7 +159,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         } else {
                             dataItem.unread = false
                         }
-                        mAdapter!!.notifyItemChanged(position)
+                        adapter.notifyItemChanged(position)
                     }
                 }
             }
@@ -181,17 +183,20 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     override fun onNext(data: FeedListData<T>?) {
                         data?.let {
                             if (isDataFromCache) {
-                                mAdapter?.let { it.data.clear() }
-                                mAdapter?.notifyDataSetChanged()
+                                mAdapter?.let { adapter ->
+                                    adapter.data.clear()
+                                    adapter.notifyDataSetChanged()
+                                }
                                 isDataFromCache = false
                             }
                             handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
-                            if (mAdapter != null && mAdapter!!.data.isEmpty() && data.items.isEmpty()) {
+                            val adapter = mAdapter;
+                            if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
                                 stubView?.onEmptyFeed()
                             } else {
                                 isListVisible.set(View.VISIBLE)
                             }
-                            mAdapter?.addData(data.items)
+                            adapter?.addData(data.items)
                         }
                     }
                 })
@@ -271,8 +276,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     @FuckingVoodooMagic(description = "Если нет новых фидов сервер присылает итем от которого проходила выборка(первый)")
     protected fun removeOldDuplicates(data: FeedListData<T>) {
-        mAdapter?.let {
-            val feedsIterator = it.data.iterator()
+        mAdapter?.let { adapter ->
+            val feedsIterator = adapter.data.iterator()
             while (feedsIterator.hasNext()) {
                 val feed = feedsIterator.next()
                 for (newFeed in data.items) {
@@ -301,7 +306,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
             }
 
 
-    private fun hasData() = mAdapter != null && !mAdapter!!.data.isEmpty()
+    private fun hasData(): Boolean {
+        val adapter = mAdapter
+        return adapter != null && !adapter.data.isEmpty()
+    }
 
     fun onDeleteFeedItems(items: MutableList<T>) {
         val tempItems = items.toList()
@@ -325,9 +333,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
 
         override fun onNext(t: Boolean?) {
-            mAdapter?.let {
-                it.removeItems(items)
-                if (it.data.isEmpty()) {
+            mAdapter?.let { adapter ->
+                adapter.removeItems(items)
+                if (adapter.data.isEmpty()) {
                     isListVisible.set(View.INVISIBLE)
                     stubView?.onEmptyFeed()
                 }
@@ -341,8 +349,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         RxUtils.safeUnsubscribe(mCallUpdateSubscription)
         RxUtils.safeUnsubscribe(mDeleteSubscription)
         RxUtils.safeUnsubscribe(mBlackListSubscription)
-        if (mAdapter != null && !mAdapter!!.data.isEmpty()) {
-            mCache.saveToCache(mAdapter!!.data)
+        mAdapter?.let { adapter ->
+            if (!adapter.data.isEmpty()) {
+                mCache.saveToCache(adapter.data)
+            }
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
