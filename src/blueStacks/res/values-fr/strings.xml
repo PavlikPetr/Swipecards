@@ -843,4 +843,7 @@
   <string name="mutual_sympathy">Attraction mutuelle</string>
   <string name="add_photo_feed_header_description">Téléchargez une photo avec un message de salutation et soyez vu par des milliers de personnes. Démarquez-vous et commencez à rencontrer dès maintenant !</string>
   <string name="publish_photo">Publier la photo</string>
+  <string name="dont_miss_a_beat">Tenez-vous au courant !</string>
+  <string name="push_alert_dating_title">Vous voulez en être avisé lorsque %s enverra une réponse mutuelle ?</string>
+  <string name="push_alert_chat_title">Vous voulez en être avisé lorsque %s vous répondra?</string>
 </resources>

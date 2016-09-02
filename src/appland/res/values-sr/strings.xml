@@ -939,4 +939,7 @@
     <string name="mutual_sympathy">Узајамно свиђање</string>
     <string name="add_photo_feed_header_description">Поставите фотографију са поздравом и хиљаде људи че Вас видети. Будите примећени и почните да упознајете људе одмах!</string>
     <string name="publish_photo">Објавити фотографију</string>
+    <string name="dont_miss_a_beat">Не пропустите важно!</string>
+    <string name="push_alert_dating_title">Желите да добијете обавештење када %s узврати поруку?</string>
+    <string name="push_alert_chat_title">Желите да добијете обавештење када %s одговори?</string>
 </resources>

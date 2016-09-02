@@ -810,4 +810,7 @@
   <string name="mutual_sympathy">Beidseitiges Like</string>
   <string name="add_photo_feed_header_description">Veröffentliche ein Foto mit einem Gruß und tausende Leute werden dich sehen. Werde bemerkt und fange jetzt damit an, Leute kennenzulernen!</string>
   <string name="publish_photo">Foto veröffentlichen</string>
+  <string name="dont_miss_a_beat">Bleib aktuell!</string>
+  <string name="push_alert_dating_title">Willst du eine Benachrichtigung erhalten, wenn %s eine gleichgesinnte Antwort schickt?</string>
+  <string name="push_alert_chat_title">Willst du eine Benachrichtigung erhalten, wenn %s antwortet?</string>
 </resources>
