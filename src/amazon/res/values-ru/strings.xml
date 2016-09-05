@@ -1118,5 +1118,10 @@
     
     <string name="push_alert_dating_title">Хотите получить уведомление, когда %s ответит взаимностью?</string>
     <string name="push_alert_chat_title">Хотите получить уведомление, когда %s ответит?</string>
+    
+    <string name="photo_feed_no_conversations">У вас пока нет сообщений</string>
+    <string name="photo_feed_start_dating">Начните знакомиться, чтобы найти новых людей</string>
+    <string name="mutual_write_them_first">Напишите им первым</string>
+    <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
 
 </resources>
