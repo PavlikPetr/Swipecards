@@ -330,16 +330,6 @@ dependencies {
         exclude group: 'com.google.code.gson'
         exclude group: 'com.android.support'
     }
-    //Scuffy android submodule
-    compile(project(':libs:scruffy-android')) {
-        exclude group: 'com.google.code.gson'
-        exclude group: 'com.android.support'
-        exclude group: 'junit'
-        exclude group: 'org.jetbrains.kotlin'
-        exclude group: 'io.reactivex'
-        exclude group: 'com.koushikdutta.async'
-        exclude group: 'org.mockito'
-    }
     compile project(':libs:PullToRefresh')
 
     compile(project(':libs:tf-offerwall:sdk')) {
