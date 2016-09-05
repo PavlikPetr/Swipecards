@@ -13,7 +13,7 @@
     <string name="general_disallow">Запретить</string>
     <string name="general_allow">Разрешить</string>
     <string name="notification_denied_popup_title">Разрешите уведомления, чтобы узнавать о входящих
-        сообщениях, симпатиях и других новостях.
+        сообщениях, симпатиях и других новостях
     </string>
     <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно
         могли узнать о новой симпатии, восхищении или непрочитанном сообщении
