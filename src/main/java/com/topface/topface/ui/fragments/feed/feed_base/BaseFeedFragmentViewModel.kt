@@ -60,6 +60,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     open val gcmTypeUpdateAction: String? = null
     open val isForPremium: Boolean = false
     open val isNeedReadItems: Boolean = false
+    open val isNeedCacheItems: Boolean = true
     private val mCache by lazy {
         FeedCacheManager<T>(context, feedsType)
     }
@@ -84,11 +85,13 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     private lateinit var mGcmReceiver: BroadcastReceiver
 
     init {
-        mCache.restoreFromCache(itemClass)?.let {
-            mAdapter?.let { adapter ->
-                if (adapter.data.isEmpty()) {
-                    adapter.addData(it)
-                    isDataFromCache = true
+        if (isNeedCacheItems) {
+            mCache.restoreFromCache(itemClass)?.let {
+                mAdapter?.let { adapter ->
+                    if (adapter.data.isEmpty()) {
+                        adapter.addData(it)
+                        isDataFromCache = true
+                    }
                 }
             }
         }
@@ -190,7 +193,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                                 isDataFromCache = false
                             }
                             handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
-                            val adapter = mAdapter;
+                            val adapter = mAdapter
                             if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
                                 stubView?.onEmptyFeed()
                             } else {
@@ -349,9 +352,11 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         RxUtils.safeUnsubscribe(mCallUpdateSubscription)
         RxUtils.safeUnsubscribe(mDeleteSubscription)
         RxUtils.safeUnsubscribe(mBlackListSubscription)
-        mAdapter?.let { adapter ->
-            if (!adapter.data.isEmpty()) {
-                mCache.saveToCache(adapter.data)
+        if (isNeedCacheItems) {
+            mAdapter?.let { adapter ->
+                if (!adapter.data.isEmpty()) {
+                    mCache.saveToCache(adapter.data)
+                }
             }
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)

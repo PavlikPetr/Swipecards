@@ -1,7 +1,6 @@
 package com.topface.topface.ui.adapters;
 
 
-import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.ViewGroup;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -28,9 +26,9 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
     public static final int EMPTY_POS = -1;
 
-    private static final int TYPE_HEADER = 1;
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 2;
+    protected static final int TYPE_HEADER = -3;
+    protected static final int TYPE_ITEM = -2;
+    protected static final int TYPE_FOOTER = -4;
 
     @IntDef({TYPE_HEADER, TYPE_ITEM, TYPE_FOOTER})
     public @interface ItemType {
@@ -106,21 +104,20 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         return mRecyclerView.getLayoutManager().getPosition(v);
     }
 
-    @SuppressLint("SwitchIntDef")
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new ItemViewHolder(inflater.inflate(getItemLayout(), parent, false), mItemEventListener);
+        return new ItemViewHolder(DataBindingUtil.inflate(inflater, getItemLayout(), parent, false), mItemEventListener);
     }
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        bindData(getItemBinding(holder), position);
+        bindData((T) holder.binding, position);
     }
 
     @Override
     public int getItemCount() {
-        return mAdapterData.size();
+        return mAdapterData.size() - 1;
     }
 
     public void addData(ArrayList<D> data, int position) {
@@ -151,12 +148,12 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         return mAdapterData;
     }
 
-    public Observable<Bundle> getUpdaterObservable() {
-        return updateObservable;
+    public D getDataItem(int position) {
+        return mAdapterData.get(position);
     }
 
-    protected T getItemBinding(BaseRecyclerViewAdapter.ItemViewHolder holder) {
-        return getItemBindingClass().cast(holder.getBinding());
+    public Observable<Bundle> getUpdaterObservable() {
+        return updateObservable;
     }
 
     public void setOnItemClickListener(ItemEventListener.OnRecyclerViewItemClickListener<D> itemClick) {
@@ -189,23 +186,26 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     protected void bindFooter(ViewDataBinding binding, int position) {
     }
 
-    @NotNull
-    protected abstract Class<T> getItemBindingClass();
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    public static class ItemViewHolder<T extends ViewDataBinding> extends RecyclerView.ViewHolder {
-        private T mBinding;
-
-        @Nullable
-        public T getBinding() {
-            return mBinding;
-        }
+        public ViewDataBinding binding;
 
         public ItemViewHolder(View view, ItemEventListener listener) {
             super(view);
-            mBinding = DataBindingUtil.bind(view);
+            binding = DataBindingUtil.bind(view);
+            bindClickListeners(listener);
+        }
+
+        public ItemViewHolder(ViewDataBinding binding, ItemEventListener<?> mItemEventListener) {
+            super(binding.getRoot());
+            this.binding = binding;
+            bindClickListeners(mItemEventListener);
+        }
+
+        private void bindClickListeners(ItemEventListener listener) {
             if (listener != null) {
-                mBinding.setVariable(BR.clickListener, listener);
-                mBinding.setVariable(BR.longClickListener, listener);
+                binding.setVariable(BR.clickListener, listener);
+                binding.setVariable(BR.longClickListener, listener);
             }
         }
     }

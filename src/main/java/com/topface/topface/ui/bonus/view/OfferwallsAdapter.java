@@ -37,9 +37,4 @@ public class OfferwallsAdapter extends BaseRecyclerViewAdapter<OfferwallItemBind
 
     }
 
-    @NotNull
-    @Override
-    protected Class<OfferwallItemBinding> getItemBindingClass() {
-        return OfferwallItemBinding.class;
-    }
 }

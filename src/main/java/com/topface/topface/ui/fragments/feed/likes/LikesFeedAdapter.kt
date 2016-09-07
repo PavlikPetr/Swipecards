@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.likes
 import com.topface.topface.R
 import com.topface.topface.data.FeedLike
 import com.topface.topface.databinding.FeedItemHeartBinding
+import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
@@ -17,30 +18,29 @@ class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi:
     override fun bindData(binding: FeedItemHeartBinding?, position: Int) {
         super.bindData(binding, position)
         binding?.let {
-            val item = data[position]
-            it.likeItemViewModel = LikesItemViewModel(it, item, mNavigator, mApi, handleDuplicates) { isActionModeEnabled }
+            val item = getDataItem(position)
+            it.model = LikesItemViewModel(it, item, mNavigator, mApi, handleDuplicates) { isActionModeEnabled }
         }
     }
 
-    override fun onViewRecycled(holder: ItemViewHolder<*>?) {
+    override fun onViewRecycled(holder: BaseRecyclerViewAdapter.ItemViewHolder?) {
         holder?.binding?.let {
             if (it is FeedItemHeartBinding) {
-                it.likeItemViewModel.release()
+                it.model.release()
             }
         }
     }
 
     val handleDuplicates = { isOk: Boolean, userId: Int ->
-        data.forEachIndexed { position, feedLike ->
-            if (feedLike.getUserId().equals(userId)) {
-                feedLike.mutualed = isOk
+        data.forEachIndexed { position, feedItem ->
+            if (feedItem.getUserId().equals(userId)) {
+                feedItem.mutualed = isOk
                 notifyItemChanged(position)
             }
         }
     }
 
-    override fun getItemLayout(): Int = R.layout.feed_item_heart
+    override fun getItemLayout() = R.layout.feed_item_heart
 
-    override fun getItemBindingClass(): Class<FeedItemHeartBinding> = FeedItemHeartBinding::class.java
 
 }

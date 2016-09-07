@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
@@ -28,7 +29,6 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.ui.AddToPhotoBlogActivity;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
-import com.topface.topface.ui.AddToPhotoBlogActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.OwnProfileActivity;
 import com.topface.topface.ui.UserProfileActivity;
@@ -45,7 +45,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
 import com.topface.topface.utils.adapter_utils.IViewInjectRule;
 import com.topface.topface.utils.adapter_utils.InjectViewBucket;
-import com.topface.topface.viewModels.HeaderPhotoBlogViewModel;
+import com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -118,17 +118,17 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
         if (adapter != null) {
             InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
                 @Override
-                public View construct() {
+                public View construct(ViewGroup group) {
                     HeaderPhotoBlogBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
                             .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.header_photo_blog, null, true);
-                    binding.setClick(new View.OnClickListener() {
+                    /*binding.setClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             startAddToLeaderActivity();
                         }
                     });
 
-                    mViewModel = new HeaderPhotoBlogViewModel();
+                    mViewModel = new HeaderPhotoBlogViewModel();*/
                     binding.setViewModel(mViewModel);
                     binding.executePendingBindings();
                     return binding.getRoot();

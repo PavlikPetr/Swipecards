@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.databinding.ViewDataBinding" />
-
-        <import type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel" />
-
-        <import type="com.topface.topface.data.FeedItem" />
-
         <variable
             name="model"
-            type="BaseFeedItemViewModel&lt;ViewDataBinding, FeedItem&gt;" />
-
-        <variable
-            name="city"
-            type="com.topface.topface.data.City" />
-
-        <variable
-            name="longClickListener"
-            type="android.view.View.OnLongClickListener" />
+            type="com.topface.topface.ui.fragments.feed.photoblog.PhotoblogItemViewModel" />
 
         <variable
             name="clickListener"
@@ -32,10 +17,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
         android:onClick="@{clickListener::onClick}"
-        android:orientation="horizontal"
-        app:onLongItemClick="@{longClickListener}">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -43,7 +26,7 @@
             android:onClick="@{() -> model.onAvatarClick()}">
 
             <include
-                android:id="@+id/avatar"
+                android:id="@+id/avatar_frame"
                 layout="@layout/feed_item_round_avatar"
                 bind:avatarHolder="@{model.avatarHolder}" />
 
@@ -69,11 +52,9 @@
                 style="@style/ListMessageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@{city.name}" />
+                android:layout_marginTop="8dp"
+                android:text="@{model.text}" />
 
         </LinearLayout>
-
     </LinearLayout>
-
 </layout>

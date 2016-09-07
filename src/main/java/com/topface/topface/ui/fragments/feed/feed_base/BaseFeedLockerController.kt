@@ -13,7 +13,7 @@ import com.topface.topface.viewModels.BaseViewModel
  * Created by tiberal on 10.08.16.
  * @param T empty screen binding
  * @param VM empty screen VM
- * @property mStub - view stub proxy from binding class
+ * @property mStub - view stub proxy from binding class (from base feed fragment layout)
  */
 abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<T>>(private val mStub: ViewStubProxy) : ViewStub.OnInflateListener, IFeedLockerView {
 

@@ -80,6 +80,7 @@ import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 import com.topface.topface.viewModels.AddToPhotoBlogHeaderViewModel;
 import com.topface.topface.viewModels.AddToPhotoBlogViewModel;
+import com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,7 +151,8 @@ import dagger.Provides;
                 LikesLockScreenViewModel.class,
                 FeedNavigator.class,
                 MutualLockScreenViewModel.class,
-                FullscreenController.class
+                FullscreenController.class,
+                HeaderPhotoBlogViewModel.class
 
         },
         staticInjections = {
