@@ -1121,7 +1121,8 @@
 
     <string name="photo_feed_no_conversations">У вас пока нет сообщений</string>
     <string name="photo_feed_start_dating">Начните знакомиться, чтобы найти новых людей</string>
-    <string name="mutual_write_them_first">Напишите им первым</string>
+    <string name="mutual_write_them_first">Напишите им</string>
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
+    <string name="mutual_module_title»>ВЗАИМНО</string>
 
 </resources>
