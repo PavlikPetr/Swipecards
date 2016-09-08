@@ -20,7 +20,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.state.AuthState;
-import com.topface.topface.state.PopupHive;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
@@ -30,6 +29,7 @@ import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.notifications.UserNotificationManager;
+import com.topface.topface.utils.popups.PopupManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,8 +53,6 @@ public class AuthorizationManager {
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
     @Inject
     TopfaceAppState mAppState;
-    @Inject
-    PopupHive mHive;
     @Inject
     AuthState mAuthState;
 
@@ -154,7 +152,7 @@ public class AuthorizationManager {
         CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
         NavigationActivity.isPhotoAsked = false;
-        mHive.clear();
+        PopupManager.INSTANCE.clear();
         SharedPreferences preferences = App.getContext().getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().apply();

@@ -7,24 +7,27 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.statistics.DatingLockPopupStatistics;
 import com.topface.topface.utils.config.UserConfig;
+
+import javax.inject.Inject;
 
 
 public class DatingLockPopup extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "DatingLockPopup";
-
-    private DatingLockPopupRedirectListener mDatingLockPopupRedirectListener;
+    @Inject
+    NavigationState mNavigationState;
     private boolean mIsRedirectedToSympathies;
-
-    public void setDatingLockPopupRedirectListener(DatingLockPopupRedirectListener listener) {
-        this.mDatingLockPopupRedirectListener = listener;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.get().inject(this);
         mIsRedirectedToSympathies = false;
         DatingLockPopupStatistics.sendDatingPopupShow();
     }
@@ -63,8 +66,10 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
         switch (v.getId()) {
             case R.id.redirect_into_sympathy:
                 saveRedirectTime();
-                if (mDatingLockPopupRedirectListener != null) {
-                    mDatingLockPopupRedirectListener.onRedirect();
+                if (isAdded()) {
+                    mNavigationState
+                            .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES),
+                                    WrappedNavigationData.SELECT_EXTERNALY));
                 }
                 mIsRedirectedToSympathies = true;
                 dismiss();
@@ -91,7 +96,4 @@ public class DatingLockPopup extends AbstractDialogFragment implements View.OnCl
         }
     }
 
-    public interface DatingLockPopupRedirectListener {
-        void onRedirect();
-    }
 }

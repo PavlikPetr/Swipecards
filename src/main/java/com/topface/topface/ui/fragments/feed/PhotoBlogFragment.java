@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -35,6 +36,7 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
+import com.topface.topface.ui.debug.EmptyActivity;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AddPhotoHelper;

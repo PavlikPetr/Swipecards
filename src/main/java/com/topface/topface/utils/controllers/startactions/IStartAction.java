@@ -33,6 +33,4 @@ public interface IStartAction {
     int getPriority();
 
     String getActionName();
-
-    void setStartActionCallback(OnNextActionListener startActionCallback);
 }

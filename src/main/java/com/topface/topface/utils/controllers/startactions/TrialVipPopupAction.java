@@ -14,20 +14,21 @@ import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.popups.PopupManager;
 
 import java.lang.ref.WeakReference;
 
 
 public class TrialVipPopupAction implements IStartAction {
 
+    private String mFrom;
     private int mPriority;
     private WeakReference<BaseFragmentActivity> mActivity;
-    private OnNextActionListener mOnNextActionListener;
-    private boolean mIsNeedNext = true;
 
-    public TrialVipPopupAction(BaseFragmentActivity activity, int priority) {
+    public TrialVipPopupAction(BaseFragmentActivity activity, int priority, String from) {
         mActivity = new WeakReference<>(activity);
         mPriority = priority;
+        mFrom = from;
     }
 
     @Override
@@ -71,14 +72,10 @@ public class TrialVipPopupAction implements IStartAction {
 
             @Override
             public void onFragmentFinish() {
-                if (mOnNextActionListener != null && mIsNeedNext) {
-                    mOnNextActionListener.onNextAction();
-                }
+                PopupManager.INSTANCE.informManager(mFrom);
             }
         });
-        if (popup != null) {
-            popup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
-        }
+        popup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
         UserConfig userConfig = App.getUserConfig();
         userConfig.setTrialLastTime(System.currentTimeMillis());
         userConfig.saveConfig();
@@ -108,8 +105,4 @@ public class TrialVipPopupAction implements IStartAction {
         return getClass().getSimpleName();
     }
 
-    @Override
-    public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        mOnNextActionListener = startActionCallback;
-    }
 }
