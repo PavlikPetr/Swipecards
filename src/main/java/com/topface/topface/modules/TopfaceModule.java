@@ -47,12 +47,12 @@ import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.VisitorsFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.mutual.MutualLockScreenViewModel;
+import com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
@@ -80,7 +80,6 @@ import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 import com.topface.topface.viewModels.AddToPhotoBlogHeaderViewModel;
 import com.topface.topface.viewModels.AddToPhotoBlogViewModel;
-import com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -109,7 +108,6 @@ import dagger.Provides;
                 AdmirationFragment.class,
                 NavigationActivity.class,
                 PeopleNearbyFragment.class,
-                PhotoBlogFragment.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
                 PaymentwallActivity.class,
