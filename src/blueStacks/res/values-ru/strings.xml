@@ -8,7 +8,7 @@
   <string name="general_disallow">Запретить</string>
   <string name="general_allow">Разрешить</string>
   <string name="notification_denied_popup_title">Разрешите уведомления, чтобы узнавать о входящих
-        сообщениях, симпатиях и других новостях.</string>
+        сообщениях, симпатиях и других новостях</string>
   <string name="notification_popup_title">Разрешите присылать вам уведомления, чтобы вы мгновенно
         могли узнать о новой симпатии, восхищении или непрочитанном сообщении</string>
   <string name="email_successfully_changed">Ваш e-mail успешно изменен</string>
@@ -892,4 +892,9 @@
   <string name="dont_miss_a_beat">Не пропустите важное!</string>
   <string name="push_alert_dating_title">Хотите получить уведомление, когда %s ответит взаимностью?</string>
   <string name="push_alert_chat_title">Хотите получить уведомление, когда %s ответит?</string>
+  <string name="photo_feed_no_conversations">У вас пока нет сообщений</string>
+  <string name="photo_feed_start_dating">Начните знакомиться, чтобы найти новых людей</string>
+  <string name="mutual_write_them_first">Напишите им</string>
+  <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
+  <string name="mutual_module_title">ВЗАИМНО</string>
 </resources>

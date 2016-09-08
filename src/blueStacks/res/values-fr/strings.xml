@@ -846,4 +846,9 @@
   <string name="dont_miss_a_beat">Tenez-vous au courant !</string>
   <string name="push_alert_dating_title">Vous voulez en être avisé lorsque %s enverra une réponse mutuelle ?</string>
   <string name="push_alert_chat_title">Vous voulez en être avisé lorsque %s vous répondra?</string>
+  <string name="photo_feed_no_conversations">Pour le moment, vous n\'avez aucun message</string>
+  <string name="photo_feed_start_dating">Commencez à aller à des rendez-vous pour trouver de nouvelles personnes</string>
+  <string name="mutual_write_them_first">Écrivez-leur</string>
+  <string name="mutual_no_mutuals">Vous n\'avez pour le moment aucun J\'aime mutuel</string>
+  <string name="mutual_module_title">MUTUEL</string>
 </resources>

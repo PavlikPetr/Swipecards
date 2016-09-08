@@ -942,4 +942,9 @@
     <string name="dont_miss_a_beat">Не пропустите важно!</string>
     <string name="push_alert_dating_title">Желите да добијете обавештење када %s узврати поруку?</string>
     <string name="push_alert_chat_title">Желите да добијете обавештење када %s одговори?</string>
+    <string name="photo_feed_no_conversations">Још увек немате порука</string>
+    <string name="photo_feed_start_dating">Почните са упознавањем како бисте стекли нове пријатеље</string>
+    <string name="mutual_write_them_first">Пишите им</string>
+    <string name="mutual_no_mutuals">Још увек немате узајамна свиђања</string>
+    <string name="mutual_module_title">УЗАЈАМНО</string>
 </resources>
