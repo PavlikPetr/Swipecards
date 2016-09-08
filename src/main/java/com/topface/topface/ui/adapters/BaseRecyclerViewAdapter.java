@@ -117,7 +117,7 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
     @Override
     public int getItemCount() {
-        return mAdapterData.size() - 1;
+        return mAdapterData.size();
     }
 
     public void addData(ArrayList<D> data, int position) {

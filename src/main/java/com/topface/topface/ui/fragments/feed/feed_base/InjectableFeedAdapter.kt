@@ -1,7 +1,7 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.App
 import com.topface.topface.data.FeedItem
@@ -19,20 +19,12 @@ abstract class InjectableFeedAdapter<T : ViewDataBinding, D : FeedItem> : BaseRe
         ViewInjectManager(App.getContext())
     }
 
-    private var rec: RecyclerView? = null
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
-        super.onAttachedToRecyclerView(recyclerView)
-        rec = recyclerView
-    }
-
     override fun getItemId(position: Int) =
-            if (mInjectManager.isFakePosition(position)) {
+            if (mInjectManager.isFakePosition(position) || position >= super.getItemCount() - 1) {
                 position.toLong()
             } else {
-                getDataItem(position).id?.toLong() ?: mInjectManager.getTruePosition(position).toLong()
+                getDataItem(mInjectManager.getTruePosition(position)).id?.toLong() ?: mInjectManager.getTruePosition(position).toLong()
             }
-
 
     override fun getItemCount() = super.getItemCount() + mInjectManager.viewBucketsCount
 
@@ -54,8 +46,12 @@ abstract class InjectableFeedAdapter<T : ViewDataBinding, D : FeedItem> : BaseRe
      * в таком случае создаем холдер именно для фейка
      */
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder {
-        if (viewType != TYPE_ITEM && !data.isEmpty()) {
+        if (viewType != TYPE_ITEM) {
             val view = mInjectManager.getView(viewType, parent)
+            if (data.isEmpty()) {
+                //прячем вьюху, чтоб ее небыбыло видно, если список пустой
+                view?.visibility = View.GONE
+            }
             if (view?.tag is ViewDataBinding) {
                 return ItemViewHolder(view?.tag as ViewDataBinding, null)
             } else {
@@ -68,6 +64,11 @@ abstract class InjectableFeedAdapter<T : ViewDataBinding, D : FeedItem> : BaseRe
     override fun onBindViewHolder(holder: ItemViewHolder?, position: Int) {
         if (!mInjectManager.isFakePosition(position)) {
             super.onBindViewHolder(holder, mInjectManager.getTruePosition(position))
+        } else {
+            if (!data.isEmpty()) {
+                holder?.itemView?.visibility = View.VISIBLE
+            }
+
         }
     }
 
@@ -82,5 +83,4 @@ abstract class InjectableFeedAdapter<T : ViewDataBinding, D : FeedItem> : BaseRe
     fun removeAllBuckets() {
         mInjectManager.removeAllBuckets()
     }
-
 }
