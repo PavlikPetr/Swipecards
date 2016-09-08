@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -26,7 +25,6 @@ import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteLikesRequest;
 import com.topface.topface.requests.FeedRequest;
 import com.topface.topface.requests.SendLikeRequest;
-import com.topface.topface.ui.AddToPhotoBlogActivity;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.AddToPhotoBlogActivity;
@@ -36,7 +34,6 @@ import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PhotoBlogListAdapter;
-import com.topface.topface.ui.debug.EmptyActivity;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.AddPhotoHelper;

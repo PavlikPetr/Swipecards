@@ -25,9 +25,14 @@
 -keep class com.android.vending.billing.**
 -keep class com.google.android.maps.** { *; }
 -dontwarn com.google.android.maps.**
+-dontwarn com.android.vending.**
+-dontwarn com.google.vending.**
+-dontnote com.android.vending.**
+-dontnote com.google.vending.**
 
  # AMAZON
 -dontwarn com.amazon.**
+-dontnote com.amazon.**
 -keep class com.amazon.** { *; }
 -keepattributes *Annotation*
 -dontoptimize
@@ -125,6 +130,7 @@
  #Ifree
 -keep class com.ifree.monetize.core.** { *; }
 -dontwarn com.ifree.monetize.core.**
+-dontnote com.ifree.monetize.core.**
 -keep class com.ifree.monetize.core.HandlerType
 -dontwarn com.ifree.monetize.core.HandlerType
 
@@ -154,6 +160,7 @@
 
 # Facebook
 -dontwarn com.facebook.ads.**
+-dontnote com.facebook.ads.**
 
 # Chartboost
 -keep class com.chartboost.** { *; }
@@ -182,6 +189,7 @@
 # Flurry
 -keep class com.flurry.** { *; }
 -dontwarn com.flurry.**
+-dontnote com.flurry.**
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keepclasseswithmembers class * {
   public <init>(android.content.Context, android.util.AttributeSet, int);
@@ -209,6 +217,7 @@
 -keepattributes *Annotation*, Signature
 -keep class dagger.*
 -dontwarn com.vungle.**
+-dontnote com.vungle.**
 
 # MyTarget
 -keep class com.my.target.** { *; }
@@ -220,8 +229,8 @@
 #Cheetah Mobile
 -dontwarn com.cmcm.adsdk.**
 -keep class com.cmcm.adsdk.** { *;}
--dontwarn com.cmcm.utils.**
--dontnote com.cmcm.utils.**
+-dontwarn com.cmcm.**
+-dontnote com.cmcm.**
 
 # Admob
 -keep class com.google.android.gms.ads.** { *; }
@@ -334,3 +343,19 @@
 -dontnote okhttp3.internal.**
 -dontwarn retrofit2.Platform
 -dontnote retrofit2.Platform
+
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class com.google.gson.examples.android.model.** { *; }
+-dontwarn com.google.gson.**
+-dontnote com.google.gson.**
