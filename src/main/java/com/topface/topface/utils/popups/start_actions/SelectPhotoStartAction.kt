@@ -14,7 +14,7 @@ import com.topface.topface.utils.social.AuthToken
  * Акшн для запуска попапа фоточки
  * Created by tiberal on 31.08.16.
  */
-class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, private val priority: Int, val mFrom: String) : IStartAction {
+class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, private val mPriority: Int, val mFrom: String) : IStartAction {
 
 
     override fun callInBackground() {
@@ -37,7 +37,7 @@ class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, priv
     override fun isApplicable() = !AuthToken.getInstance().isEmpty && App.get().profile.photo == null
     && !App.getConfig().userConfig.isUserAvatarAvailable
 
-    override fun getPriority() = priority
+    override fun getPriority() = mPriority
 
     override fun getActionName(): String? = this.javaClass.simpleName
 

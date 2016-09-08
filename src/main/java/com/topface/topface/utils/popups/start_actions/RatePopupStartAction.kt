@@ -11,7 +11,7 @@ import com.topface.topface.utils.popups.PopupManager
  * Стартуем попап оценки
  * Created by tiberal on 31.08.16.
  */
-class RatePopupStartAction(private val mActivity: FragmentActivity, private val priority: Int, val from: String) : IStartAction {
+class RatePopupStartAction(private val mActivity: FragmentActivity, private val mPriority: Int, private val mFrom: String) : IStartAction {
 
     override fun callInBackground() {
     }
@@ -25,7 +25,7 @@ class RatePopupStartAction(private val mActivity: FragmentActivity, private val 
                 !AppUtils.isOldVersion(options.maxVersion)
     }
 
-    override fun getPriority() = priority
+    override fun getPriority() = mPriority
 
     override fun getActionName(): String? = this.javaClass.simpleName
 
@@ -33,7 +33,7 @@ class RatePopupStartAction(private val mActivity: FragmentActivity, private val 
         val rateAppDialog = RateAppDialog()
         rateAppDialog.show(mActivity.supportFragmentManager, RateAppDialog.TAG)
         rateAppDialog.setOnCancelListener {
-            PopupManager.informManager(from)
+            PopupManager.informManager(mFrom)
         }
     }
 }

@@ -126,8 +126,7 @@ public class PhotoBlogFragment extends FeedFragment<FeedPhotoBlog> {
                     binding.setClick(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startActivity(new Intent(PhotoBlogFragment.this.getActivity(),EmptyActivity.class));
-                           // startAddToLeaderActivity();
+                            startAddToLeaderActivity();
                         }
                     });
 

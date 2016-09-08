@@ -20,7 +20,7 @@ import javax.inject.Inject
  * Выбор города
  * Created by tiberal on 31.08.16.
  */
-class ChooseCityPopupAction(private val mFragmentManager: FragmentManager, private val priority: Int, private val mFrom: String) : IStartAction {
+class ChooseCityPopupAction(private val mFragmentManager: FragmentManager, private val mPriority: Int, private val mFrom: String) : IStartAction {
 
     @Inject
     lateinit var mAppState: TopfaceAppState
@@ -65,7 +65,7 @@ class ChooseCityPopupAction(private val mFragmentManager: FragmentManager, priva
         return profile.city == null || profile.city.isEmpty
     }
 
-    override fun getPriority() = priority
+    override fun getPriority() = mPriority
 
     override fun getActionName(): String? = this.javaClass.simpleName
 

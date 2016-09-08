@@ -17,14 +17,12 @@ import com.topface.topface.utils.popups.PopupManager
  * Стартуем промо
  * Created by tiberal on 31.08.16.
  */
-class PromoPopupStartAction(private val mActivity: FragmentActivity, private val priority: Int, private val mFrom: String) : IStartAction {
+class PromoPopupStartAction(private val mActivity: FragmentActivity, private val mPriority: Int, private val mFrom: String) : IStartAction {
 
 
     companion object {
         val PROMO_POPUP_TAG = "promo_popup"
-        fun checkIsNeedShow(entity: Options.PromoPopupEntity?): Boolean {
-            return entity != null && entity.isNeedShow
-        }
+        fun checkIsNeedShow(entity: Options.PromoPopupEntity?) = entity != null && entity.isNeedShow
     }
 
     override fun callInBackground() {
@@ -41,7 +39,7 @@ class PromoPopupStartAction(private val mActivity: FragmentActivity, private val
                 checkIsNeedShow(options.getPremiumEntityByType(AIR_ADMIRATIONS));
     }
 
-    override fun getPriority() = priority
+    override fun getPriority() = mPriority
 
     override fun getActionName(): String? = this.javaClass.simpleName
 
@@ -50,10 +48,9 @@ class PromoPopupStartAction(private val mActivity: FragmentActivity, private val
         val options = App.get().options
         if (showPromoPopup(AIR_VISITORS) && options.premiumVisitors != null) {
             return true
-        } else if (!options.isHideAdmirations) {
-            if (showPromoPopup(AIR_ADMIRATIONS) && options.premiumAdmirations != null) {
-                return true
-            }
+        } else if (!options.isHideAdmirations && showPromoPopup(AIR_ADMIRATIONS)
+                && options.premiumAdmirations != null) {
+            return true
         }
         return false
     }

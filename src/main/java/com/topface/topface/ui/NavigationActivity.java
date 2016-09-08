@@ -246,13 +246,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
-        Debug.log("PopupHive onCreate");
-        PopupManager.INSTANCE.init(this);
     }
 
     private void initPopups() {
         Debug.log("PopupMANAGER init");
         PopupManager popupManager = PopupManager.INSTANCE;
+        popupManager.init(this);
         popupManager.registerSequence(NAVIGATION_ACTIVITY_POPUPS_TAG, createPopupSequence());
         popupManager.runSequence(NAVIGATION_ACTIVITY_POPUPS_TAG);
 

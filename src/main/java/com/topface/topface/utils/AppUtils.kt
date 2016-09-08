@@ -14,7 +14,7 @@ object AppUtils {
         val template = "\\."
         try {
             val curVersion = BuildConfig.VERSION_NAME
-            if (!TextUtils.isEmpty(version) && !TextUtils.isEmpty(curVersion) && version.contains(template)) {
+            if (!TextUtils.isEmpty(version) && !TextUtils.isEmpty(curVersion)) {
                 val splittedVersion = TextUtils.split(version, template)
                 val splittedCurVersion = TextUtils.split(curVersion, template)
                 for (i in splittedVersion.indices) {
