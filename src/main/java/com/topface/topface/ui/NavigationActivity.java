@@ -259,6 +259,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     public PopupSequence createPopupSequence() {
         return new PopupSequence()
+                .addAction(OldVersionStartAction.class)
                 .addAction(ExpressMessageAction.class)
                 .addChosenAction(TrialVipPopupAction.class, DatingLockPopupAction.class)
                 .addAction(FullscreenController.class)
@@ -266,8 +267,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 .addAction(NotificationsDisableStartAction.class)
                 .addAction(PromoPopupStartAction.class)
                 .addAction(InvitePopupAction.class)
-                .addAction(RatePopupStartAction.class)
-                .addAction(OldVersionStartAction.class);
+                .addAction(RatePopupStartAction.class);
     }
 
     private void startPopupRush() {
