@@ -33,6 +33,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.statistics.TopfaceAdStatistics;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.OwnFullscreenPopup;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
@@ -43,6 +44,7 @@ import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.http.IRequestClient;
+import com.topface.topface.utils.popups.PopupManager;
 
 import javax.inject.Inject;
 
@@ -68,9 +70,9 @@ public class FullscreenController {
     public static final String APPODEAL_NEW = "APPODEAL";
 
     private static boolean isFullScreenBannerVisible = false;
+    private String mFrom;
     private Activity mActivity;
     private String mCurrentBannerType;
-    private OnNextActionListener mOnNextActionListener;
 
     private boolean mIsControllerResumed = false;
     private boolean mIsFullscreenSkipped = true;
@@ -105,9 +107,10 @@ public class FullscreenController {
         private PageInfo startPageInfo;
         private int priority;
 
-        public FullscreenStartAction(int priority, Activity activity) {
+        public FullscreenStartAction(int priority, Activity activity, String from) {
             this.priority = priority;
             mActivity = activity;
+            mFrom = from;
             if (!CacheProfile.isEmpty()) {
                 startPageInfo = App.get().getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
             }
@@ -137,12 +140,7 @@ public class FullscreenController {
 
         @Override
         public String getActionName() {
-            return "Fullscreen";
-        }
-
-        @Override
-        public void setStartActionCallback(OnNextActionListener startActionCallback) {
-            mOnNextActionListener = startActionCallback;
+            return getClass().getSimpleName();
         }
     }
 
@@ -223,9 +221,9 @@ public class FullscreenController {
     }
 
     private void continuePopupSequence() {
-        if (!isFullScreenBannerVisible && mOnNextActionListener != null) {
+        if (!isFullScreenBannerVisible) {
             Debug.log("FullscreenController : FullscreenSettingsRequest continue popup sequence");
-            mOnNextActionListener.onNextAction();
+            PopupManager.INSTANCE.informManager(mFrom);
         }
     }
 
@@ -434,8 +432,8 @@ public class FullscreenController {
             @Override
             public void always(IApiResponse response) {
                 super.always(response);
-                if (!isFullScreenBannerVisible && mOnNextActionListener != null) {
-                    mOnNextActionListener.onNextAction();
+                if (!isFullScreenBannerVisible ) {
+                    PopupManager.INSTANCE.informManager(mFrom);
                 }
             }
         }).exec();
@@ -503,12 +501,11 @@ public class FullscreenController {
             mActivityLifecycleCallbacks = null;
         }
         mActivity = null;
-        mOnNextActionListener = null;
         mFullScreenBannerListener = null;
     }
 
-    public IStartAction createFullscreenStartAction(final int priority, Activity activity) {
-        return new FullscreenStartAction(priority, activity);
+    public IStartAction createFullscreenStartAction(final int priority, Activity activity, String from) {
+        return new FullscreenStartAction(priority, activity, from);
     }
 
     @SuppressWarnings("unused")
@@ -520,8 +517,8 @@ public class FullscreenController {
     }
 
     private void onNextAction() {
-        if (mOnNextActionListener != null && !mIsFullscreenSkipped) {
-            mOnNextActionListener.onNextAction();
+        if (!mIsFullscreenSkipped) {
+            PopupManager.INSTANCE.informManager(mFrom);
             mIsFullscreenSkipped = true;
         }
     }

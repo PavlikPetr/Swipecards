@@ -4,7 +4,6 @@ package com.topface.topface.ui.adapters;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,14 +24,6 @@ import rx.Subscriber;
 public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ItemViewHolder> implements IAdapterDataInteractor<D> {
 
     public static final int EMPTY_POS = -1;
-
-    protected static final int TYPE_HEADER = -3;
-    protected static final int TYPE_ITEM = -2;
-    protected static final int TYPE_FOOTER = -4;
-
-    @IntDef({TYPE_HEADER, TYPE_ITEM, TYPE_FOOTER})
-    public @interface ItemType {
-    }
 
     private ArrayList<D> mAdapterData = new ArrayList<>();
     private Observable<Bundle> updateObservable;
@@ -121,13 +112,22 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     }
 
     public void addData(ArrayList<D> data, int position) {
+        boolean notifyAll = mAdapterData.isEmpty();
         if (position == EMPTY_POS) {
             int startUpdatePosition = mAdapterData.size() == 0 ? 0 : mAdapterData.size();
             mAdapterData.addAll(data);
-            notifyItemRangeInserted(startUpdatePosition, data.size() - 1);
+            notifyAdapterData(startUpdatePosition, data.size() - 1, notifyAll);
         } else {
             mAdapterData.addAll(position, data);
-            notifyItemRangeInserted(position, data.size() - 1);
+            notifyAdapterData(position, data.size() - 1, notifyAll);
+        }
+    }
+
+    private void notifyAdapterData(int positionStart, int itemCount, boolean notifyAll) {
+        if (notifyAll) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRangeInserted(positionStart, itemCount);
         }
     }
 
@@ -179,12 +179,6 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
     protected abstract int getItemLayout();
 
     protected abstract void bindData(T binding, int position);
-
-    protected void bindHeader(ViewDataBinding binding, int position) {
-    }
-
-    protected void bindFooter(ViewDataBinding binding, int position) {
-    }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 

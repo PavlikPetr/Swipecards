@@ -842,4 +842,9 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="dont_miss_a_beat">Rimani aggiornato</string>
   <string name="push_alert_dating_title">Vuoi ricevere una notifica quando %s ti invia una risposta reciproca?</string>
   <string name="push_alert_chat_title">Vuoi ricevere una notifica quando %s risponde?</string>
+  <string name="photo_feed_no_conversations">In questo momento non hai messaggi</string>
+  <string name="photo_feed_start_dating">Inizia a fissare appuntamenti per trovare nuove persone</string>
+  <string name="mutual_write_them_first">Scrivi a loro</string>
+  <string name="mutual_no_mutuals">In questo momento non hai Like reciproci</string>
+  <string name="mutual_module_title">RECIPROCAMENTE</string>
 </resources>

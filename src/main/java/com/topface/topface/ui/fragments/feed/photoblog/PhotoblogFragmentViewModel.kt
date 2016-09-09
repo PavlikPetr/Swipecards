@@ -35,21 +35,10 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
         get() = false
 
     override fun itemClick(view: View?, itemPosition: Int, data: FeedPhotoBlog?) =
-            if (App.get().profile.uid != data?.user?.id) {
+            if (App.get().profile.uid == data?.user?.id) {
                 mNavigator.showOwnProfile()
             } else {
                 super.itemClick(view, itemPosition, data)
             }
 
-    /**
-     * т.к. при обновлении мы удаляем все итемы из списка и сетим новые, то в таком раскладе
-     * notifyItemRangeInserted не работает, по этому обновляем весь лист тут. Если нужно будет добавлять
-     * тоолько новые нужно будет изменить правило сравнения в considerDuplicates
-     */
-    @FuckingVoodooMagic
-    override fun onRefreshed() {
-        binding?.feedList?.adapter?.let {
-            it.notifyDataSetChanged()
-        }
-    }
 }

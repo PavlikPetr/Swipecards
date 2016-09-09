@@ -94,6 +94,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     }
                 }
             }
+        } else {
+            isListVisible.set(View.INVISIBLE)
         }
         mUpdaterSubscription = mAdapter?.let { adapter ->
             adapter.updaterObservable.distinct {

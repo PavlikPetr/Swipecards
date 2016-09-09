@@ -842,4 +842,9 @@
   <string name="dont_miss_a_beat">Não fiques de fora!</string>
   <string name="push_alert_dating_title">Queres receber uma notificação quando %s responder positivamente?</string>
   <string name="push_alert_chat_title">Queres receber uma notificação quando %s responder?</string>
+  <string name="photo_feed_no_conversations">De momento não tens mensagens</string>
+  <string name="photo_feed_start_dating">Começa a ter encontros para conheceres novas pessoas</string>
+  <string name="mutual_write_them_first">Escreve-lhes uma mensagem</string>
+  <string name="mutual_no_mutuals">De momento não têm Gostos mútuos</string>
+  <string name="mutual_module_title">MÚTUO</string>
 </resources>

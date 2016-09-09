@@ -7,23 +7,26 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.topface.topface.App;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.popups.PopupManager;
 
 import java.util.ArrayList;
 
 
 public class InvitePopupAction implements IStartAction {
 
+    private String mFrom;
     private IActivityDelegate mDelegateActivity;
     private int mPriority;
-    private OnNextActionListener mOnNextActionListener;
 
-    public InvitePopupAction(IActivityDelegate iActivityDelegate, int priority) {
+    public InvitePopupAction(IActivityDelegate iActivityDelegate, int priority, String from) {
         mDelegateActivity = iActivityDelegate;
         mPriority = priority;
+        mFrom = from;
     }
 
     @Override
@@ -58,11 +61,6 @@ public class InvitePopupAction implements IStartAction {
         return getClass().getSimpleName();
     }
 
-    @Override
-    public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        mOnNextActionListener = startActionCallback;
-    }
-
     private int getContactsCount() {
         Cursor cursor = mDelegateActivity != null ? mDelegateActivity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null) : null;
         int contacts_count = 0;
@@ -83,9 +81,7 @@ public class InvitePopupAction implements IStartAction {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         mDelegateActivity = null;
-                        if (mOnNextActionListener != null) {
-                            mOnNextActionListener.onNextAction();
-                        }
+                        PopupManager.INSTANCE.informManager(mFrom);
                     }
                 });
                 if (mDelegateActivity != null) {

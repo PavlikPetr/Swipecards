@@ -873,4 +873,9 @@
     <string name="dont_miss_a_beat">Bleib aktuell!</string>
     <string name="push_alert_dating_title">Willst du eine Benachrichtigung erhalten, wenn %s eine gleichgesinnte Antwort schickt?</string>
     <string name="push_alert_chat_title">Willst du eine Benachrichtigung erhalten, wenn %s antwortet?</string>
+    <string name="photo_feed_no_conversations">Momenten hast du keine Nachrichten</string>
+    <string name="photo_feed_start_dating">Fange mit dem Dating an, um neue Leute kennenzulernen</string>
+    <string name="mutual_write_them_first">Schreibe die erste Nachricht</string>
+    <string name="mutual_no_mutuals">Momentan hast du keine beidseitige Likes</string>
+    <string name="mutual_module_title">BEIDSEITIG</string>
 </resources>

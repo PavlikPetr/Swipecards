@@ -22,6 +22,11 @@ public class ChosenStartAction implements IStartAction {
         return this;
     }
 
+    public ChosenStartAction addAction(IStartAction action) {
+        mActions.add(action);
+        return this;
+    }
+
     private IStartAction chooseAction() {
         int maxPriority = -1;
         IStartAction maxAction = null;
@@ -82,12 +87,5 @@ public class ChosenStartAction implements IStartAction {
             builder.append(action.getActionName()).append(",");
         }
         return builder.toString();
-    }
-
-    @Override
-    public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        for (IStartAction action : mActions) {
-            action.setStartActionCallback(startActionCallback);
-        }
     }
 }

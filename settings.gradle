@@ -8,5 +8,3 @@ include ':libs:PullToRefresh', ':libs:unity-ads-1.5.8', ':libs:cheetah-mobile-3.
 include ':libs:odnoklassniki'
 //Topface Offerwall
 include ':libs:tf-offerwall:sdk'
-//Scruffy
-include ':libs:scruffy-android'

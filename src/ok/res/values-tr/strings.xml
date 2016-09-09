@@ -847,4 +847,9 @@
     <string name="dont_miss_a_beat">Her şeyden haberdar ol!</string>
     <string name="push_alert_dating_title">%s karşılık verdiğinde bildirim almak ister misin?</string>
     <string name="push_alert_chat_title">%s yanıt verdiğinde bildirim almak ister misin?</string>
+    <string name="photo_feed_no_conversations">Şu anda mesajın yok</string>
+    <string name="photo_feed_start_dating">Yeni insanlarla buluş</string>
+    <string name="mutual_write_them_first">Onlara mesaj yaz</string>
+    <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
+    <string name="mutual_module_title">ORTAK</string>
 </resources>

@@ -148,7 +148,7 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
         }
     }
 
-    protected abstract void bindHeader(ViewDataBinding binding, int position);
+    protected void bindHeader(ViewDataBinding binding, int position){}
 
-    protected abstract void bindFooter(ViewDataBinding binding, int position);
+    protected void bindFooter(ViewDataBinding binding, int position){}
 }

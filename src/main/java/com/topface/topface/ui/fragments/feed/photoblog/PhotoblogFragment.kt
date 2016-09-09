@@ -1,25 +1,20 @@
 package com.topface.topface.ui.fragments.feed.photoblog
 
-import android.content.Context
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.view.LayoutInflater
 import android.view.View
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedPhotoBlog
-import com.topface.topface.databinding.HeaderPhotoBlogBinding
+import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.LayoutEmptyPhotoblogBinding
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.RxUtils
-import com.topface.topface.utils.adapter_utils.InjectViewBucket
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -34,7 +29,6 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     companion object {
         val ADD_TO_PHOTO_BLOG_ACTIVITY_ID = 1
         private val UPDATE_DELAY = 20L
-
     }
 
     private val mHeaderViewModel by  lazy {
@@ -49,15 +43,7 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     }
     override val mAdapter by lazy {
         val adapter = PhotoblogAdapter(mNavigator)
-        val bucket = InjectViewBucket() {
-            val binding = DataBindingUtil.inflate<HeaderPhotoBlogBinding>(App.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater,
-                    R.layout.header_photo_blog, it, true)
-            binding.viewModel = mHeaderViewModel
-            binding.executePendingBindings()
-            binding.root
-        }
-        bucket.addFilter { pos -> pos == 0 }
-        adapter.registerViewBucket(bucket)
+        adapter.setHeader(FixedViewInfo(R.layout.header_photo_blog, mHeaderViewModel))
         adapter
     }
     private val mPhotoHelper by lazy {
@@ -73,7 +59,7 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     init {
         mRefreshIntervalSubscription = Observable.interval(UPDATE_DELAY, UPDATE_DELAY, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(object : RxUtils.ShortSubscription<Long>() {
-            override fun onNext(type: Long?) = mViewModel.onRefresh()
+            override fun onNext(type: Long?) = mViewModel.loadTopFeeds()
         })
     }
 
@@ -92,7 +78,7 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_TO_PHOTO_BLOG_ACTIVITY_ID) {
-            mViewModel.onRefresh()
+            mViewModel.loadTopFeeds()
         }
         mPhotoHelper.processActivityResult(requestCode, resultCode, data)
     }

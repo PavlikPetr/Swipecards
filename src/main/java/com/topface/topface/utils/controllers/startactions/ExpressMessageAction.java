@@ -1,14 +1,16 @@
 package com.topface.topface.utils.controllers.startactions;
 
+import android.support.v4.app.FragmentManager;
+
 import com.topface.topface.App;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
-import com.topface.topface.promo.PromoPopupManager;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.promo.dialogs.SimplePromoDialogEventsListener;
-import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.popups.PopupManager;
+import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,13 +27,14 @@ public class ExpressMessageAction implements IStartAction {
     @Inject
     NavigationState mNavigationState;
     private int mPriority;
-    private static OnNextActionListener mOnNextActionListener;
-    private IActivityDelegate mIActivityDelegate;
+    private FragmentManager mFragmentManager;
+    private String mFrom;
 
-    public ExpressMessageAction(@NotNull IActivityDelegate delegate, int priority) {
+    public ExpressMessageAction(@NotNull FragmentManager fragmentManager, int priority, String from) {
         App.get().inject(this);
-        mIActivityDelegate = delegate;
+        mFragmentManager = fragmentManager;
         mPriority = priority;
+        mFrom = from;
     }
 
     @Override
@@ -45,9 +48,7 @@ public class ExpressMessageAction implements IStartAction {
         popup.setPromoPopupEventsListener(new SimplePromoDialogEventsListener() {
             @Override
             public void onDeleteMessageClick() {
-                if (mOnNextActionListener != null) {
-                    mOnNextActionListener.onNextAction();
-                }
+                PopupManager.INSTANCE.informManager(mFrom);
             }
 
             @Override
@@ -55,12 +56,13 @@ public class ExpressMessageAction implements IStartAction {
                 mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
-        popup.show(mIActivityDelegate.getSupportFragmentManager(), PromoExpressMessages.TAG);
+        popup.show(mFragmentManager, PromoExpressMessages.TAG);
     }
 
     @Override
     public boolean isApplicable() {
-        return !App.get().getProfile().premium && PromoPopupManager.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
+        return !App.get().getProfile().premium
+                && PromoPopupStartAction.Companion.checkIsNeedShow(App.get().getOptions().getPremiumEntityByType(AIR_MESSAGES));
     }
 
     @Override
@@ -70,11 +72,7 @@ public class ExpressMessageAction implements IStartAction {
 
     @Override
     public String getActionName() {
-        return "PromoPopup";
+        return getClass().getSimpleName();
     }
 
-    @Override
-    public void setStartActionCallback(OnNextActionListener startActionCallback) {
-        mOnNextActionListener = startActionCallback;
-    }
 }

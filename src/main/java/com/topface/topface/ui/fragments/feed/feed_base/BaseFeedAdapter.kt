@@ -4,6 +4,8 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
+import com.topface.topface.ui.adapters.BaseHeaderFooterRecyclerViewAdapter
+import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getLastItem
 import com.topface.topface.ui.fragments.feed.feed_utils.hasItem
@@ -15,7 +17,7 @@ import com.topface.topface.utils.Utils
  * @param V - feed item binding
  * @param T - feed item data item
  */
-abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : InjectableFeedAdapter<V, T>() {
+abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFooterRecyclerViewAdapter<V, T>() {
 
     init {
         setHasStableIds(true)
@@ -66,5 +68,7 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : InjectableFe
         notifyDataSetChanged()
         return result
     }
+
+
 
 }
