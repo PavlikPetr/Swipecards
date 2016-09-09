@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.feed_base
 import android.databinding.ViewDataBinding
 import android.view.View
 import com.topface.topface.R
+import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedLike
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Profile
@@ -14,11 +15,12 @@ import com.topface.topface.viewModels.BaseViewModel
  * Базовая моделька для итема фидов. Может аватарку, имя и онлайн. Может Уйти в профиль
  * Created by tiberal on 19.08.16.
  */
-open class BaseFeedItemViewModel<T : ViewDataBinding>(binding: T, val item: FeedLike, private val mNavigator: IFeedNavigator,
-                                                      private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
+open class BaseFeedItemViewModel<T : ViewDataBinding, out D: FeedItem>(binding: T, val item: D, private val mNavigator: IFeedNavigator,
+                                                                       private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
 
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
+    open val text: String? = null
 
     init {
         item.user?.let {
@@ -56,7 +58,6 @@ open class BaseFeedItemViewModel<T : ViewDataBinding>(binding: T, val item: Feed
                 mNavigator.showProfile(item)
                 onAvatarClickActionModeDisabled()
             }
-
 
     /**
      * Получить клик листенеры вьюх, которые при включенном экшен моде должны выделять итем при клике на нее

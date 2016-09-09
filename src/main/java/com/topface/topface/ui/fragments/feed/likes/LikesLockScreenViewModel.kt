@@ -7,6 +7,7 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.BalanceData
+import com.topface.topface.data.Options
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.LayoutEmptyLikesBinding
 import com.topface.topface.requests.IApiResponse
@@ -33,8 +34,12 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
 
     @Inject lateinit var mState: TopfaceAppState
     lateinit private var mBalanceData: BalanceData
-    lateinit private var mBalanceSubscription: Subscription
+    private var mBalanceSubscription: Subscription
+    private var mOptionsSubscription: Subscription
     lateinit private var mLikesAccessSubscription: Subscription
+    val message = ObservableField<String>()
+    val buttonMessage = ObservableField<String>()
+    private var mBlockSympathy = dataUpdater.options.blockSympathy
 
     init {
         //выпилить со вторым даггером
@@ -42,21 +47,14 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
         mBalanceSubscription = mState.getObservable(BalanceData::class.java).subscribe {
             mBalanceData = it
         }
+        mOptionsSubscription = mState.getObservable(Options::class.java).subscribe {
+            mBlockSympathy = it.blockSympathy.apply {
+                message.set(it.blockSympathy.text ?: context.getString(R.string.likes_buy_vip))
+                buttonMessage.set(it.blockSympathy.buttonText ?: context.getString(R.string.buying_vip_status))
+            }
+        }
     }
 
-    private val mBlockSympathy by lazy {
-        dataUpdater.options.blockSympathy
-    }
-    val message = ObservableField<String>(if (mBlockSympathy.text != null) {
-        dataUpdater.options.blockSympathy.text
-    } else {
-        context.getString(R.string.likes_buy_vip)
-    })
-    val buttonMessage = ObservableField<String>(if (mBlockSympathy.buttonText != null) {
-        mBlockSympathy.buttonText
-    } else {
-        context.getString(R.string.buying_vip_status)
-    })
     /*
       0 - buy likes, 1 -  buy VIP, 3 do something or by vip
      */

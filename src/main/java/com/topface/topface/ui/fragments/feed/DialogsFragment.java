@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -88,7 +89,7 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         if (adapter != null && appOfTheDay != null) {
             InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
                 @Override
-                public View construct() {
+                public View construct(ViewGroup parent) {
                     AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
                             .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
                     binding.setClick(new View.OnClickListener() {

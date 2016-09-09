@@ -47,12 +47,6 @@ public class CityAdapter extends BaseRecyclerViewAdapter<CityItemBinding, City> 
         return spanString;
     }
 
-    @NotNull
-    @Override
-    protected Class<CityItemBinding> getItemBindingClass() {
-        return CityItemBinding.class;
-    }
-
     public void addData(ArrayList<City> cities, String prefix) {
         super.addData(cities);
         mCitySearchPrefix = prefix;

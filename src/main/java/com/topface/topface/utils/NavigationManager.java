@@ -25,10 +25,10 @@ import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.PhotoBlogFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
+import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -214,7 +214,7 @@ public class NavigationManager {
                 }
                 break;
             case FragmentIdData.PHOTO_BLOG:
-                fragment = new PhotoBlogFragment();
+                fragment = new PhotoblogFragment();
                 break;
             case FragmentIdData.TABBED_LIKES:
                 fragment = new TabbedLikesFragment();

@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
+import com.topface.topface.ui.adapters.BaseHeaderFooterRecyclerViewAdapter
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getLastItem
@@ -16,7 +17,7 @@ import com.topface.topface.utils.Utils
  * @param V - feed item binding
  * @param T - feed item data item
  */
-abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecyclerViewAdapter<V, T>() {
+abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFooterRecyclerViewAdapter<V, T>() {
 
     init {
         setHasStableIds(true)
@@ -31,15 +32,13 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecycler
 
     private fun handleHighlight(binding: V, position: Int) {
         binding.root.isSelected = false
-        if (data[position].unread) {
+        if (getDataItem(position).unread) {
             binding.root.setBackgroundResource(R.drawable.new_feed_list_item_selector)
         } else {
             binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
         }
-        binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(data[position]) ?: false
+        binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(getDataItem(position)) ?: false
     }
-
-    override fun getItemId(position: Int) = data[position].id.toLong()
 
     override fun bindData(binding: V?, position: Int) {
         if (binding != null) {
@@ -69,5 +68,7 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseRecycler
         notifyDataSetChanged()
         return result
     }
+
+
 
 }

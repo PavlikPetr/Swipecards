@@ -31,7 +31,6 @@ public class FixedViewInfo<DataType> {
 
     @Override
     public int hashCode() {
-        int res = mResId;
         return mResId * 31 + (mData != null ? mData.hashCode() : 0);
     }
 

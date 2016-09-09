@@ -5,11 +5,8 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.viewModels.HeaderPhotoBlogViewModel" />
+            type="com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel" />
 
-        <variable
-            name="click"
-            type="android.view.View.OnClickListener" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_button_photoblog"
-                android:onClick="@{click}"
+                android:onClick="@{() -> viewModel.showAddToLeader()}"
                 android:text="@string/leaders_go_date" />
 
         </LinearLayout>

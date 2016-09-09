@@ -7,7 +7,7 @@
     <data>
 
         <variable
-            name="likeItemViewModel"
+            name="model"
             type="com.topface.topface.ui.fragments.feed.likes.LikesItemViewModel" />
 
         <variable
@@ -29,12 +29,12 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> likeItemViewModel.onAvatarClick()}">
+            android:onClick="@{() -> model.onAvatarClick()}">
 
             <include
                 android:id="@+id/avatar_frame"
                 layout="@layout/feed_item_round_avatar"
-                bind:avatarHolder="@{likeItemViewModel.avatarHolder}" />
+                bind:avatarHolder="@{model.avatarHolder}" />
 
         </FrameLayout>
 
@@ -51,22 +51,22 @@
                 layout="@layout/feed_item_user_name_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                bind:nameAndAge="@{likeItemViewModel.nameAndAge}" />
+                bind:nameAndAge="@{model.nameAndAge}" />
 
             <TextView
                 android:id="@+id/text"
                 style="@style/ListMessageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="@{likeItemViewModel.city}" />
+                android:layout_marginTop="8dp"
+                android:text="@{model.text}" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/heart"
             style="@style/FeedHeart.Selector"
-            app:isActivated="@{likeItemViewModel.isMutualed}"
-            android:onClick="@{() -> likeItemViewModel.onHeartClick()}" />
+            app:isActivated="@{model.isMutualed}"
+            android:onClick="@{() -> model.onHeartClick()}" />
     </LinearLayout>
 </layout>

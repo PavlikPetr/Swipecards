@@ -13,13 +13,11 @@ class MutualFeedAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapte
     override fun bindData(binding: FeedItemCityAgeNameBinding?, position: Int) {
         super.bindData(binding, position)
         binding?.let {
-            val item = data[position]
+            val item = getDataItem(position)
             it.model = BaseFeedItemViewModel(it, item, mNavigator, { isActionModeEnabled })
             it.city = item.user.city
         }
     }
-
-    override fun getItemBindingClass(): Class<FeedItemCityAgeNameBinding> = FeedItemCityAgeNameBinding::class.java
 
     override fun getItemLayout() = R.layout.feed_item_city_age_name
 }

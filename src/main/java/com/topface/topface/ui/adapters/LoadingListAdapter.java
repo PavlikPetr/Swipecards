@@ -89,7 +89,7 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        View injectView = injectManager.getView(position);
+        View injectView = injectManager.getView(position, viewGroup);
         int type = getItemViewType(position);
         return injectView != null ? injectView : getViewByType(type, position, view, viewGroup);
     }

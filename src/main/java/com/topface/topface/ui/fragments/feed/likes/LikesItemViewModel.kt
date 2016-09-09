@@ -13,6 +13,7 @@ import com.topface.topface.databinding.FeedItemHeartBinding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.ReadLikeRequest
 import com.topface.topface.requests.handlers.ApiHandler
+import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel
@@ -32,16 +33,11 @@ import rx.Subscription
 class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigator: IFeedNavigator,
                          private val mApi: FeedApi, private val mHandleDuplicates: (Boolean, Int) -> Unit,
                          isActionModeEnabled: () -> Boolean) :
-        BaseFeedItemViewModel<FeedItemHeartBinding>(binding, item, navigator, isActionModeEnabled) {
+        BaseFeedItemViewModel<FeedItemHeartBinding, FeedLike>(binding, item, navigator, isActionModeEnabled) {
 
-    var city: String = Utils.EMPTY
     private var mSendLikeSubscription: Subscription? = null
-
-    init {
-        item.user?.let {
-            city = it.city.name
-        }
-    }
+    override val text: String?
+        get() = item.user?.city?.name
 
     fun isMutualed() = item.mutualed
 
@@ -50,11 +46,20 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
         mHandleDuplicates(true, userId)
         mSendLikeSubscription = mApi.callSendLike(userId, App.get().options.blockUnconfirmed).subscribe(object : Subscriber<Rate>() {
             override fun onError(e: Throwable?) {
-                Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT)
+                if (e != null) {
+                    e.message?.let {
+                        if (it.equals(ErrorCodes.UNCONFIRMED_LOGIN)) {
+                            Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT)
+                        } else {
+                            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT)
+                        }
+                    }
+                }
             }
 
             override fun onCompleted() {
                 Debug.log("Likes Feed Item Send like OK")
+                RxUtils.safeUnsubscribe(mSendLikeSubscription)
             }
 
             override fun onNext(t: Rate?) {

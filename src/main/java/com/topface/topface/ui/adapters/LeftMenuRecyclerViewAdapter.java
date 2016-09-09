@@ -51,12 +51,6 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
 
     }
 
-    @NotNull
-    @Override
-    protected Class<LeftMenuItemBinding> getItemBindingClass() {
-        return LeftMenuItemBinding.class;
-    }
-
     public void updateCounters(CountersData countersData) {
         ArrayList<LeftMenuData> data = getData();
         if (data != null) {
