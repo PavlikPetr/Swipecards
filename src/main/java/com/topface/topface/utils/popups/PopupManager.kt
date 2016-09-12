@@ -22,8 +22,10 @@ object PopupManager {
     private var mActivity: FragmentActivity? = null
 
     fun init(activity: FragmentActivity) {
-        mActivity = activity
-        mActionFactory = StartActionFactory()
+        if (mActivity == null || mActionFactory == null) {
+            mActivity = activity
+            mActionFactory = StartActionFactory()
+        }
     }
 
     fun release() {
