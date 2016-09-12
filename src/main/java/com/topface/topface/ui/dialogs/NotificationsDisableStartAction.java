@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
@@ -14,7 +15,6 @@ import com.topface.topface.ui.IDialogListener;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener;
 import com.topface.topface.utils.popups.PopupManager;
 
 import java.lang.ref.WeakReference;
@@ -124,6 +124,21 @@ public class NotificationsDisableStartAction implements IStartAction {
             bundle.putBoolean(IS_MARKET_BUTTON_VISIBLE, isButtonVisible);
             dialog.setArguments(bundle);
             return dialog;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            setRetainInstance(true);
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public void onDestroyView() {
+            //https://code.google.com/p/android/issues/detail?id=17423
+            if (getDialog() != null && getRetainInstance()) {
+                getDialog().setDismissMessage(null);
+            }
+            super.onDestroyView();
         }
 
         @NonNull

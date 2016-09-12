@@ -1,6 +1,6 @@
 package com.topface.topface.ui.analytics;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.DialogFragment;
 
 import com.topface.topface.statistics.ScreensShowStatistics;
@@ -8,8 +8,8 @@ import com.topface.topface.utils.Utils;
 
 public class TrackedDialogFragment extends DialogFragment {
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         if (isTrackable()) {
             senPopupShownStatistics();
         }

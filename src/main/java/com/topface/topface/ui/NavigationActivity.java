@@ -246,6 +246,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
+        //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
+        PopupManager.INSTANCE.init(this);
     }
 
     private void initPopups() {
