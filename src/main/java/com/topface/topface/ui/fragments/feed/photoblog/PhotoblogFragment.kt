@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.photoblog
 
+import android.content.Context
 import android.content.Intent
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
@@ -46,9 +47,8 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
         adapter.setHeader(FixedViewInfo(R.layout.header_photo_blog, mHeaderViewModel))
         adapter
     }
-    private val mPhotoHelper by lazy {
-        AddPhotoHelper(this@PhotoblogFragment, null).setOnResultHandler(mHandler)
-    }
+    private lateinit var mPhotoHelper: AddPhotoHelper
+
     private val mHandler = object : Handler() {
         override fun handleMessage(msg: Message) {
             AddPhotoHelper.handlePhotoMessage(msg)
@@ -61,6 +61,11 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(object : RxUtils.ShortSubscription<Long>() {
             override fun onNext(type: Long?) = mViewModel.loadTopFeeds()
         })
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mPhotoHelper = AddPhotoHelper(this@PhotoblogFragment, null).setOnResultHandler(mHandler)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

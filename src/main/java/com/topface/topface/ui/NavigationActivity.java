@@ -543,6 +543,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
     }
 
     private void toggleDrawerLayout() {
