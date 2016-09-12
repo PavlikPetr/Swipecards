@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.topface.topface.data.leftMenu.LeftMenuData;
@@ -23,24 +24,33 @@ public class LeftMenuItemViewModel {
     public ObservableBoolean isSelected = new ObservableBoolean(false);
 
     private String mIcon;
-    private int mBadgeCount;
+    private String mBadge;
     private SpannableString mTitle;
     private boolean mIsDividerEnabled;
     private boolean mIsSelected;
 
     public LeftMenuItemViewModel(LeftMenuData data) {
-        setBadgeCount(data.getBadgeCount());
+        setBadgeCount(data.getBadge());
         setTitle(data.getTitle());
         setDividerEnable(data.isDividerEnabled());
         setIcon(data.getIcon());
         setSelected(data.isSelected());
     }
 
-    public void setBadgeCount(int count) {
-        if (mBadgeCount != count) {
-            mBadgeCount = count;
-            badgeVisibility.set(count > 0 ? View.VISIBLE : View.GONE);
-            badgeCount.set(String.valueOf(count));
+    private void setBadgeCount(String value) {
+        if (mBadge == null || !mBadge.equals(value)) {
+            mBadge = value;
+            int count;
+            try {
+                count = Integer.valueOf(value);
+                if (count <= 0) {
+                    value = Utils.EMPTY;
+                }
+            } catch (NumberFormatException e) {
+                // ничего не делаем, в бэйдж может быть установлена строка
+            }
+            badgeVisibility.set(!TextUtils.isEmpty(value) ? View.VISIBLE : View.GONE);
+            badgeCount.set(String.valueOf(value));
         }
     }
 
@@ -51,7 +61,7 @@ public class LeftMenuItemViewModel {
         }
     }
 
-    public void setDividerEnable(boolean isEnable) {
+    private void setDividerEnable(boolean isEnable) {
         if (mIsDividerEnabled != isEnable) {
             mIsDividerEnabled = isEnable;
             dividerVisibility.set(isEnable ? View.VISIBLE : View.GONE);
@@ -69,8 +79,8 @@ public class LeftMenuItemViewModel {
         return mIcon;
     }
 
-    private void setSelected(boolean isSelected){
-        if(isSelected!=mIsSelected){
+    private void setSelected(boolean isSelected) {
+        if (isSelected != mIsSelected) {
             mIsSelected = isSelected;
             this.isSelected.set(isSelected);
         }
