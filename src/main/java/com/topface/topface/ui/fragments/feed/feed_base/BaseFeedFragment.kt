@@ -94,21 +94,9 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mLockerControllerBase.setLockerLayout(getEmptyFeedLayout())
     }
 
-    override fun onDeleteFeedItems() {
-        if (mMultiselectionController.mSelected.size > 0) {
-            mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
-        } else {
-            onActionModeFinish()
-        }
-    }
+    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
 
-    override fun onAddToBlackList() {
-        if (mMultiselectionController.mSelected.size > 0) {
-            mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
-        } else {
-            onActionModeFinish()
-        }
-    }
+    override fun onAddToBlackList() = mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
 
     override fun onSetToolbarVisibility(visibility: Boolean) {
     }
@@ -123,7 +111,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mAdapter.isNeedHighLight = null
     }
 
-    override fun onSelected(size: Int) = mActionModeController.setTitle(size)
+    override fun onSelected(size: Int) = mActionModeController.setSelectedCount(size)
 
     override fun itemLongClick(view: View?, itemPosition: Int, data: T?) =
             if (!mActionModeController.isActionModeEnabled() && data != null && view != null && activity is AppCompatActivity) {

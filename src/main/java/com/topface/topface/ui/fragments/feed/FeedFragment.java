@@ -137,10 +137,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
                 if ((ListUtils.isNotEmpty(ids) || id != 0) && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
-                        if(ListUtils.isNotEmpty(ids)) {
+                        if (ListUtils.isNotEmpty(ids)) {
                             getListAdapter().removeByUserIds(ids);
-                        }
-                        else if(id != 0) {
+                        } else if (id != 0) {
                             getListAdapter().removeByUserId(id);
                         }
                     } else {
@@ -225,6 +224,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
                 public void onSelected(int size, boolean overlimit) {
+                    if (mActionMode != null && size == 0) {
+                        mActionMode.finish();
+                        return;
+                    }
                     if (overlimit) {
                         Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
                     }
@@ -252,25 +255,17 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             switch (item.getItemId()) {
                 case R.id.delete_list_item:
                     List<T> selectedItems = adapter.getSelectedItems();
-                    if(ListUtils.isNotEmpty(selectedItems)) {
-                        onDeleteFeedItems(getSelectedFeedIds(adapter), selectedItems);
-                    }else{
-                        finishActionMode();
-                    }
+                    onDeleteFeedItems(getSelectedFeedIds(adapter), selectedItems);
                     break;
                 case R.id.add_to_black_list:
                     selectedItems = adapter.getSelectedItems();
-                    if(ListUtils.isNotEmpty(selectedItems)) {
-                        onAddToBlackList(adapter.getSelectedUsersIds(), selectedItems);
-                    }else{
-                        finishActionMode();
-                    }
+                    onAddToBlackList(adapter.getSelectedUsersIds(), selectedItems);
                     break;
                 default:
                     result = false;
             }
             if (result) {
-                finishActionMode();
+                if (mActionMode != null) mActionMode.finish();
             }
 
             return result;
@@ -283,12 +278,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             setToolBarVisibility(true);
         }
     };
-
-    private void finishActionMode(){
-        if(mActionMode!=null){
-            mActionMode.finish();
-        }
-    }
 
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair(true, false);
     private View mInflated;
@@ -1007,7 +996,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             onFilledFeed();
         }
     }
-
 
 
     protected void onFilledFeed() {
