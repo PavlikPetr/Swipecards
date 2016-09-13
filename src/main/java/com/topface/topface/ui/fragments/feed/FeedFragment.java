@@ -137,10 +137,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
                 boolean value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false);
                 if ((ListUtils.isNotEmpty(ids) || id != 0) && hasValue) {
                     if (value == whetherDeleteIfBlacklisted()) {
-                        if(ListUtils.isNotEmpty(ids)) {
+                        if (ListUtils.isNotEmpty(ids)) {
                             getListAdapter().removeByUserIds(ids);
-                        }
-                        else if(id != 0) {
+                        } else if (id != 0) {
                             getListAdapter().removeByUserId(id);
                         }
                     } else {
@@ -225,6 +224,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             adapter.setMultiSelectionListener(new MultiselectionController.IMultiSelectionListener() {
                 @Override
                 public void onSelected(int size, boolean overlimit) {
+                    if (mActionMode != null && size == 0) {
+                        mActionMode.finish();
+                        return;
+                    }
                     if (overlimit) {
                         Utils.showToastNotification(R.string.maximum_number_of_users, Toast.LENGTH_LONG);
                     }
@@ -991,7 +994,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             onFilledFeed();
         }
     }
-
 
 
     protected void onFilledFeed() {
