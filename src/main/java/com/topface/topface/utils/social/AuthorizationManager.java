@@ -153,6 +153,7 @@ public class AuthorizationManager {
         App.getConfig().onLogout();
         NavigationActivity.isPhotoAsked = false;
         PopupManager.INSTANCE.clear();
+        NavigationActivity.hasNewOptionsOrProfile = false;
         SharedPreferences preferences = App.getContext().getSharedPreferences(App.PREFERENCES_TAG_SHARED, Context.MODE_PRIVATE);
         if (preferences != null) {
             preferences.edit().clear().apply();
