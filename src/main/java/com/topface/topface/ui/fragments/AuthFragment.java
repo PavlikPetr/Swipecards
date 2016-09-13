@@ -336,7 +336,7 @@ public class AuthFragment extends BaseAuthFragment {
                             case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
                             case AuthTokenStateData.TOKEN_NOT_READY:
                                 hideProgress();
-                                showButtons();
+                                showButtons(true);
                                 break;
                         }
                     }
@@ -405,7 +405,11 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void showButtons() {
-        if (mGoToSocNetAuthScreen) {
+        showButtons(false);
+    }
+
+    private void showButtons(boolean isCertainlyShowButton) {
+        if (!isCertainlyShowButton && mGoToSocNetAuthScreen) {
             return;
         }
         setAllSocNetBtnVisibility(mIsSocNetBtnVisible, false, false);
