@@ -15,8 +15,6 @@ import com.topface.topface.databinding.LeftMenuItemBinding;
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
@@ -57,8 +55,8 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
             for (int i = 0; i < data.size(); i++) {
                 LeftMenuData item = data.get(i);
                 int count = countersData.getCounterByFragmentId(item.getSettings().getFragmentId());
-                if (count >= 0 && count != item.getBadgeCount()) {
-                    item.setBadgeCount(count);
+                if (count >= 0 && !String.valueOf(count).equals(item.getBadge())) {
+                    item.setBadge(String.valueOf(count));
                     notifyItemChange(i);
                 }
             }
@@ -93,7 +91,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         }
     }
 
-    private int getDataPositionByFragmentId(int fragmentId) {
+    public int getDataPositionByFragmentId(int fragmentId) {
         ArrayList<LeftMenuData> data = getData();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getSettings().getUniqueKey() == fragmentId) {

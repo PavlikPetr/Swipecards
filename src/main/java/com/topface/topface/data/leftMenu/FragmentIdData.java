@@ -25,10 +25,11 @@ public class FragmentIdData {
     public static final int INTEGRATION_PAGE = 12;
     public static final int BALLANCE = 13;
     public static final int UNDEFINED = -1;
+    public static final int BECOME_VIP = 14;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({VIP_PROFILE, PROFILE, DATING, TABBED_DIALOGS, TABBED_VISITORS, TABBED_LIKES, PHOTO_BLOG,
-            GEO, BONUS, EDITOR, SETTINGS, INTEGRATION_PAGE, BALLANCE, UNDEFINED})
+            GEO, BONUS, EDITOR, SETTINGS, INTEGRATION_PAGE, BALLANCE, BECOME_VIP, UNDEFINED})
     public @interface FragmentId {
     }
 
@@ -61,6 +62,8 @@ public class FragmentIdData {
                 return INTEGRATION_PAGE;
             case BALLANCE:
                 return BALLANCE;
+            case BECOME_VIP:
+                return BECOME_VIP;
             default:
                 return UNDEFINED;
         }
@@ -95,6 +98,8 @@ public class FragmentIdData {
                 return INTEGRATION_PAGE;
             case "BALLANCE":
                 return BALLANCE;
+            case "BECOME_VIP":
+                return BECOME_VIP;
             case "UNDEFINED":
                 return UNDEFINED;
         }

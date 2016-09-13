@@ -135,6 +135,12 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         addData(data, 0);
     }
 
+    public void addFirst(D data) {
+        ArrayList<D> list = new ArrayList<>();
+        list.add(data);
+        addFirst(list);
+    }
+
     public void addData(ArrayList<D> data) {
         addData(data, EMPTY_POS);
     }
