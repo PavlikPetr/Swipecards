@@ -235,7 +235,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 if (response.isCodeEqual(ErrorCodes.PAYMENT)) {
                     startActivity(PurchasesActivity.createBuyingIntent("Gifts"
                             , PurchasesFragment.TYPE_GIFT, item.price, options.topfaceOfferwallRedirect));
-                } else {
+                } else if (!response.isCodeEqual(ErrorCodes.UNCONFIRMED_LOGIN, ErrorCodes.UNCONFIRMED_LOGIN_ACTION)) {
                     Utils.showErrorMessage();
                 }
             }

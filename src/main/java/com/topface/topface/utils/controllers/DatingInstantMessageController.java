@@ -172,7 +172,7 @@ public class DatingInstantMessageController {
             public void fail(int codeError, IApiResponse response) {
                 if (response.isCodeEqual(ErrorCodes.PREMIUM_ACCESS_ONLY)) {
                     startPurchasesActivity(App.get().getOptions().instantMessagesForNewbies.getText(), "InstantMessageLimitExceeded");
-                } else {
+                } else if (!response.isCodeEqual(ErrorCodes.UNCONFIRMED_LOGIN, ErrorCodes.UNCONFIRMED_LOGIN_ACTION)) {
                     Utils.showErrorMessage();
                 }
             }
