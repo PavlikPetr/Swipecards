@@ -204,7 +204,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         return getMainTag();
     }
 
-    private void closeFragment() {
+    protected void closeFragment() {
         if (mOnPromoDialogEventsListener != null) {
             mOnPromoDialogEventsListener.onClose();
         }
