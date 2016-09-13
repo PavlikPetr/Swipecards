@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.flurry.sdk.it
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
@@ -93,9 +94,21 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mLockerControllerBase.setLockerLayout(getEmptyFeedLayout())
     }
 
-    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
+    override fun onDeleteFeedItems() {
+        if (mMultiselectionController.mSelected.size > 0) {
+            mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
+        } else {
+            onActionModeFinish()
+        }
+    }
 
-    override fun onAddToBlackList() = mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
+    override fun onAddToBlackList() {
+        if (mMultiselectionController.mSelected.size > 0) {
+            mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
+        } else {
+            onActionModeFinish()
+        }
+    }
 
     override fun onSetToolbarVisibility(visibility: Boolean) {
     }

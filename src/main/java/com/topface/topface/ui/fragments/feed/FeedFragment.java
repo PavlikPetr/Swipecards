@@ -251,16 +251,26 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             FeedAdapter<T> adapter = getListAdapter();
             switch (item.getItemId()) {
                 case R.id.delete_list_item:
-                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
+                    List<T> selectedItems = adapter.getSelectedItems();
+                    if(ListUtils.isNotEmpty(selectedItems)) {
+                        onDeleteFeedItems(getSelectedFeedIds(adapter), selectedItems);
+                    }else{
+                        finishActionMode();
+                    }
                     break;
                 case R.id.add_to_black_list:
-                    onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
+                    selectedItems = adapter.getSelectedItems();
+                    if(ListUtils.isNotEmpty(selectedItems)) {
+                        onAddToBlackList(adapter.getSelectedUsersIds(), selectedItems);
+                    }else{
+                        finishActionMode();
+                    }
                     break;
                 default:
                     result = false;
             }
             if (result) {
-                if (mActionMode != null) mActionMode.finish();
+                finishActionMode();
             }
 
             return result;
@@ -273,6 +283,12 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             setToolBarVisibility(true);
         }
     };
+
+    private void finishActionMode(){
+        if(mActionMode!=null){
+            mActionMode.finish();
+        }
+    }
 
     private FeedRequest.UnreadStatePair mLastUnreadState = new FeedRequest.UnreadStatePair(true, false);
     private View mInflated;
