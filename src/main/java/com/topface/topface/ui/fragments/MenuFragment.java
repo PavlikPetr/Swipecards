@@ -131,6 +131,7 @@ public class MenuFragment extends Fragment {
         }
     };
 
+    @NotNull
     private ArrayList<LeftMenuData> getAddedIntegrationItems(ArrayList<LeftMenuData> data) {
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         for (LeftMenuData item : data) {
@@ -171,6 +172,7 @@ public class MenuFragment extends Fragment {
         }
     }
 
+    @NotNull
     private ArrayList<LeftMenuData> getIntegrationItems(Options options) {
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         if (options != null && options.leftMenuItems != null && options.leftMenuItems.size() > 0) {
@@ -275,6 +277,7 @@ public class MenuFragment extends Fragment {
         return root;
     }
 
+    @NotNull
     private LeftMenuRecyclerViewAdapter initAdapter() {
         LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems());
         adapter.setOnItemClickListener(mItemClickListener);
@@ -282,10 +285,12 @@ public class MenuFragment extends Fragment {
         return adapter;
     }
 
+    @NotNull
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
         return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.firstName, profile.age, profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
+    @NotNull
     private IPhoto getValidatedUserPhotoInterface(@NotNull Profile profile) {
         if (profile.photo != null && !profile.photo.isFake()) {
             return profile.photo;
@@ -312,6 +317,7 @@ public class MenuFragment extends Fragment {
         getAdapter().updateTitle(FragmentIdData.BALLANCE, getBalanceTitle());
     }
 
+    @NotNull
     private ArrayList<LeftMenuData> getLeftMenuItems() {
         Options options = App.get().getOptions();
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
@@ -345,21 +351,25 @@ public class MenuFragment extends Fragment {
         return arrayList;
     }
 
+    @NotNull
     private LeftMenuData getBecomeVipItem() {
         return new LeftMenuData(R.drawable.ic_crown_left_menu, getString(R.string.chat_auto_reply_button),
                 BECOME_VIP_BAGE, false, new LeftMenuSettingsData(FragmentIdData.BECOME_VIP));
     }
 
+    @NotNull
     private LeftMenuData getBalansItem() {
         return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), Utils.EMPTY, false,
                 new LeftMenuSettingsData(FragmentIdData.BALLANCE));
     }
 
+    @NotNull
     private LeftMenuData getBonusItem() {
         return new LeftMenuData(R.drawable.ic_bonus_left_menu, App.getContext().getString(R.string.general_bonus),
                 Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.BONUS));
     }
 
+    @NotNull
     private LeftMenuData getEditorItem() {
         return new LeftMenuData("", new SpannableString(getString(R.string.editor_menu_admin)), Utils.EMPTY,
                 true, new LeftMenuSettingsData(FragmentIdData.EDITOR));
@@ -395,6 +405,7 @@ public class MenuFragment extends Fragment {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressWarnings("deprecation")
+    @NotNull
     private SpannableString getBalanceTitle() {
         String title = String.format(App.getCurrentLocale(), BALANCE_TEMPLATE,
                 getString(R.string.purchase_header_title),
