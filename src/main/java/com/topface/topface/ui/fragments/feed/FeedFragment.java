@@ -254,12 +254,10 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             FeedAdapter<T> adapter = getListAdapter();
             switch (item.getItemId()) {
                 case R.id.delete_list_item:
-                    List<T> selectedItems = adapter.getSelectedItems();
-                    onDeleteFeedItems(getSelectedFeedIds(adapter), selectedItems);
+                    onDeleteFeedItems(getSelectedFeedIds(adapter), adapter.getSelectedItems());
                     break;
                 case R.id.add_to_black_list:
-                    selectedItems = adapter.getSelectedItems();
-                    onAddToBlackList(adapter.getSelectedUsersIds(), selectedItems);
+                    onAddToBlackList(adapter.getSelectedUsersIds(), adapter.getSelectedItems());
                     break;
                 default:
                     result = false;
