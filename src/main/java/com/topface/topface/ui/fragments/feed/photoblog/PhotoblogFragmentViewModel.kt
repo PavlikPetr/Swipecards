@@ -60,7 +60,7 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
 
     override fun release() {
         super.release()
-        //RxUtils.safeUnsubscribe(mRefreshIntervalSubscription)
+        RxUtils.safeUnsubscribe(mRefreshIntervalSubscription)
     }
 
 }
