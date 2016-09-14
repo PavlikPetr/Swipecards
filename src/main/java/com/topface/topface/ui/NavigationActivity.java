@@ -55,7 +55,6 @@ import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
-import com.topface.topface.utils.debug.FuckingVoodooMagic;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.popups.PopupManager;
 import com.topface.topface.utils.popups.PopupSequence;
@@ -66,6 +65,7 @@ import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
 import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Timer;
@@ -246,8 +246,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
-        //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
-        PopupManager.INSTANCE.init(this);
     }
 
     private void initPopups() {
@@ -339,10 +337,17 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    @FuckingVoodooMagic(description = "если ничего не сохранять в стейт, то перестанет показывться очередь(см. onCreate)")
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(FRAGMENT_SETTINGS, getNavigationManager().getCurrentFragmentSettings());
+        mFullscreenController.onSaveInstanceState(outState);
+        PopupManager.INSTANCE.saveState();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mFullscreenController.onRestoreInstanceState(savedInstanceState);
     }
 
     private void initDrawerLayout() {
@@ -384,14 +389,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (mFullscreenController != null) {
-            mFullscreenController.onPause();
-        }
-    }
-
-    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.hasExtra(GCMUtils.NEXT_INTENT)) {
@@ -410,8 +407,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
+        PopupManager.INSTANCE.init(this);
+    }
+
+    @Override
     protected void onResumeFragments() {
         super.onResumeFragments();
+        PopupManager.INSTANCE.restoreState();
         tryPostponedStartFragment();
         if (mFullscreenController != null) {
             mFullscreenController.onResume();
