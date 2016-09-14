@@ -16,10 +16,6 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.RxUtils
-import rx.Observable
-import rx.Subscription
-import rx.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
 
 /**
  * Фрагмент постановки в лидеры
@@ -29,7 +25,6 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
 
     companion object {
         val ADD_TO_PHOTO_BLOG_ACTIVITY_ID = 1
-        private val UPDATE_DELAY = 20L
     }
 
     private val mHeaderViewModel by  lazy {
@@ -54,14 +49,6 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
             AddPhotoHelper.handlePhotoMessage(msg)
         }
     }
-    private lateinit var mRefreshIntervalSubscription: Subscription
-
-    init {
-        mRefreshIntervalSubscription = Observable.interval(UPDATE_DELAY, UPDATE_DELAY, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(object : RxUtils.ShortSubscription<Long>() {
-            override fun onNext(type: Long?) = mViewModel.loadTopFeeds()
-        })
-    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -76,7 +63,6 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     override fun onDestroy() {
         super.onDestroy()
         RxUtils.safeUnsubscribe(mHeaderViewModel.profileSubscription)
-        RxUtils.safeUnsubscribe(mRefreshIntervalSubscription)
         mPhotoHelper.releaseHelper()
     }
 
