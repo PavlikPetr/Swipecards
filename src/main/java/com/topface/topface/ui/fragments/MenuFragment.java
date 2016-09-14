@@ -93,24 +93,24 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
-            LeftMenuData data = getBalansItem();
+            LeftMenuData data = getBalanceItem();
             if (options.showRefillBalanceInSideMenu) {
-                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data, FragmentIdData.GEO);
                 }
             } else {
-                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
                     adapter.removeItem(data);
                 }
             }
 
             data = getBonusItem();
             if (options.offerwallsSettings.isEnable()) {
-                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data, FragmentIdData.GEO);
                 }
             } else {
-                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
                     adapter.removeItem(data);
                 }
             }
@@ -347,7 +347,7 @@ public class MenuFragment extends Fragment {
                 String.valueOf(mCountersData.getPeopleNearby()), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
 
         if (options.showRefillBalanceInSideMenu) {
-            arrayList.add(getBalansItem());
+            arrayList.add(getBalanceItem());
         }
 
         if (options.offerwallsSettings.isEnable()) {
@@ -367,7 +367,7 @@ public class MenuFragment extends Fragment {
     }
 
     @NotNull
-    private LeftMenuData getBalansItem() {
+    private LeftMenuData getBalanceItem() {
         return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), Utils.EMPTY, false,
                 new LeftMenuSettingsData(FragmentIdData.BALLANCE));
     }

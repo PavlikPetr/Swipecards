@@ -114,12 +114,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         if (ListUtils.isNotEmpty(data)) {
             position = position < 0 ? 0 : position + 1;
             getData().addAll(position, data);
-            int size = data.size();
-            if (size > 1) {
-                notifyItemRangeChanged(position, size);
-            } else {
-                notifyItemChange(position);
-            }
+            notifyItemRangeChanged(position, data.size());
         }
     }
 
