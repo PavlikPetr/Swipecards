@@ -391,7 +391,7 @@ public class MenuFragment extends Fragment {
                 getAdapter().addFirst(data);
             }
         } else {
-            getAdapter().removeItem(data.getSettings().getUniqueKey());
+            getAdapter().removeItem(data);
         }
     }
 
