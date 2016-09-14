@@ -111,9 +111,16 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     }
 
     private void addItemsAfterPosition(ArrayList<LeftMenuData> data, int position) {
-        position = position < 0 ? 0 : position + 1;
-        getData().addAll(position, data);
-        notifyItemRangeChanged(position, ListUtils.isNotEmpty(data)?data.size():0);
+        if (ListUtils.isNotEmpty(data)) {
+            position = position < 0 ? 0 : position + 1;
+            getData().addAll(position, data);
+            int size = data.size();
+            if (size > 1) {
+                notifyItemRangeChanged(position, size);
+            } else {
+                notifyItemChange(position);
+            }
+        }
     }
 
     public void addItemAfterFragment(LeftMenuData data, int... fragmentId) {

@@ -93,17 +93,26 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
-
+            LeftMenuData data = getBalansItem();
             if (options.showRefillBalanceInSideMenu) {
-                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.GEO);
+                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                    adapter.addItemAfterFragment(data, FragmentIdData.GEO);
+                }
             } else {
-                adapter.removeItem(getBalansItem());
+                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                    adapter.removeItem(data);
+                }
             }
 
+            data = getBonusItem();
             if (options.offerwallsSettings.isEnable()) {
-                adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
+                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                    adapter.addItemAfterFragment(data, FragmentIdData.GEO);
+                }
             } else {
-                adapter.removeItem(getBonusItem());
+                if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                    adapter.removeItem(data);
+                }
             }
             updateIntegrationPage(options);
         }
@@ -376,10 +385,15 @@ public class MenuFragment extends Fragment {
     }
 
     private void updateEditorItem(@NotNull Profile profile) {
+        LeftMenuData data = getEditorItem();
         if (profile.isEditor()) {
-            getAdapter().updateEditorsItem(getEditorItem());
+            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                getAdapter().updateEditorsItem(data);
+            }
         } else {
-            getAdapter().removeItem(getEditorItem().getSettings().getUniqueKey());
+            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                getAdapter().removeItem(data);
+            }
         }
     }
 
@@ -391,7 +405,9 @@ public class MenuFragment extends Fragment {
                 getAdapter().addFirst(data);
             }
         } else {
-            getAdapter().removeItem(data);
+            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                getAdapter().removeItem(data);
+            }
         }
     }
 

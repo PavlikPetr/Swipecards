@@ -175,7 +175,7 @@ public class LeftMenuData {
         if (mIcon != null ? !mIcon.equals(data.getIcon()) : data.getIcon() != null) return false;
         if (mTitle != null ? !mTitle.toString().equals(data.getTitle().toString()) : data.getTitle() != null)
             return false;
-        if (mBadge != null ? mBadge.equals(data.getBadge()) : data.getBadge() != null) return false;
+        if (mBadge != null ? !mBadge.equals(data.getBadge()) : data.getBadge() != null) return false;
         if (mIsDividerEnabled != data.isDividerEnabled()) return false;
         return mSettings != null ? mSettings.equals(data.getSettings()) : data.getSettings() != null;
     }
