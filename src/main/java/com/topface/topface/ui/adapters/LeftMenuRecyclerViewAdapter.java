@@ -12,6 +12,7 @@ import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.databinding.LeftMenuItemBinding;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
 
@@ -112,7 +113,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     private void addItemsAfterPosition(ArrayList<LeftMenuData> data, int position) {
         position = position < 0 ? 0 : position + 1;
         getData().addAll(position, data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(position, ListUtils.isNotEmpty(data)?data.size():0);
     }
 
     public void addItemAfterFragment(LeftMenuData data, int... fragmentId) {
@@ -168,7 +169,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().remove(pos);
-            notifyDataSetChanged();
+            notifyItemRemoved(pos);
         }
     }
 }
