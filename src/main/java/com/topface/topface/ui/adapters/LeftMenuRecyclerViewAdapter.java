@@ -40,11 +40,6 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     }
 
     @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(hasStableIds);
-    }
-
-    @Override
     protected Bundle getUpdaterEmitObject() {
         return null;
     }
