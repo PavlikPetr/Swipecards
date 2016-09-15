@@ -1,5 +1,6 @@
 package com.topface.topface.ui.adapters;
 
+import android.annotation.SuppressLint;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -23,6 +24,24 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
     public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data) {
         super();
         addData(data);
+        setHasStableIds(true);
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Override
+    public long getItemId(int position) {
+        switch (getItemType(position)) {
+            case TYPE_ITEM:
+                return ListUtils.isEntry(position, getData()) ?
+                        getData().get(position).getSettings().getUniqueKey() :
+                        super.getItemId(position);
+        }
+        return super.getItemId(position);
+    }
+
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
     }
 
     @Override
@@ -58,9 +77,9 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
                 int count = countersData.getCounterByFragmentId(item.getSettings().getFragmentId());
                 if (count >= 0 && !String.valueOf(count).equals(item.getBadge())) {
                     item.setBadge(String.valueOf(count));
-                    notifyItemChange(i);
                 }
             }
+            notifyDataSetChanged();
         }
     }
 
@@ -72,7 +91,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setTitle(title);
-            notifyItemChange(pos);
+            notifyDataSetChanged();
         }
     }
 
@@ -80,7 +99,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setIcon(icon);
-            notifyItemChange(pos);
+            notifyDataSetChanged();
         }
     }
 
@@ -106,7 +125,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         ArrayList<FixedViewInfo> headers = getHeadersData();
         if (headers.size() > 0) {
             headers.get(0).setData(data);
-            notifyItemChanged(0);
+            notifyDataSetChanged();
         }
     }
 
@@ -114,7 +133,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         if (ListUtils.isNotEmpty(data)) {
             position = position < 0 ? 0 : position + 1;
             getData().addAll(position, data);
-            notifyItemRangeChanged(position, data.size());
+            notifyDataSetChanged();
         }
     }
 
@@ -146,7 +165,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(data.getSettings().getUniqueKey());
         if (pos != EMPTY_POS) {
             getData().remove(pos);
-            notifyItemRemoved(pos);
+            notifyDataSetChanged();
         }
     }
 
@@ -171,7 +190,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().remove(pos);
-            notifyItemRemoved(pos);
+            notifyDataSetChanged();
         }
     }
 }

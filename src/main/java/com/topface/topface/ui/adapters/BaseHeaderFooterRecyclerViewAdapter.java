@@ -20,9 +20,9 @@ import java.util.ArrayList;
  */
 public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBinding, D> extends BaseRecyclerViewAdapter<T, D> {
 
-    private static final int TYPE_HEADER = 1;
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_FOOTER = 2;
+    protected static final int TYPE_HEADER = 1;
+    protected static final int TYPE_ITEM = 0;
+    protected static final int TYPE_FOOTER = 2;
 
     @IntDef({TYPE_HEADER, TYPE_ITEM, TYPE_FOOTER})
     public @interface ItemType {
@@ -89,7 +89,7 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
     }
 
     @ItemType
-    private int getItemType(int pos) {
+    protected int getItemType(int pos) {
         if (pos < mHeaders.size()) {
             return TYPE_HEADER;
         } else if (pos >= mHeaders.size() + getData().size()) {
