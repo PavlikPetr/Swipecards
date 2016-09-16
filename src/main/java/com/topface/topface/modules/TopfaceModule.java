@@ -44,10 +44,9 @@ import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.FansFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel;
@@ -134,8 +133,6 @@ import dagger.Provides;
                 DrawerLayoutManager.class,
                 DialogsFragment.class,
                 BookmarksFragment.class,
-                VisitorsFragment.class,
-                FansFragment.class,
                 AuthFragment.class,
                 ChatActivity.class,
                 AddPhotoHelper.class,
@@ -153,8 +150,8 @@ import dagger.Provides;
                 DatingLockPopup.class,
                 ChooseCityPopupAction.class,
                 FullscreenController.class,
-                HeaderPhotoBlogViewModel.class
-
+                HeaderPhotoBlogViewModel.class,
+                FansLockScreenViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

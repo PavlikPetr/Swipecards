@@ -143,6 +143,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         super.onDestroy()
         mActionModeController.finishIfEnabled()
         mViewModel.release()
+        mLockerControllerBase.release()
     }
 
     override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE

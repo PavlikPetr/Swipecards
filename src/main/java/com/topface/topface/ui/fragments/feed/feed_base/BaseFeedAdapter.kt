@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.adapters.BaseHeaderFooterRecyclerViewAdapter
-import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getLastItem
 import com.topface.topface.ui.fragments.feed.feed_utils.hasItem
@@ -46,6 +45,13 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
         }
     }
 
+    fun disableAllHighlight() {
+        data.forEachIndexed { position, item ->
+            item.unread = false
+            notifyItemChanged(position)
+        }
+    }
+
     override fun getUpdaterEmitObject(): Bundle {
         val last = data.getLastItem()
         val bundle = Bundle()
@@ -69,6 +75,6 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
         return result
     }
 
-
+    override fun getItemId(position: Int) = getDataItem(position).id.toLong()
 
 }

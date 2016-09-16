@@ -106,7 +106,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();
     private NavigationManager mNavigationManager;
-    private static boolean hasNewOptionsOrProfile = false;
+    public static boolean hasNewOptionsOrProfile = false;
 
     /**
      * Перезапускает NavigationActivity, нужно например при смене языка
@@ -543,6 +543,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+        Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
     }
 
     private void toggleDrawerLayout() {

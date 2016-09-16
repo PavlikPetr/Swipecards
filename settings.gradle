@@ -3,7 +3,7 @@ rootProject.name = 'topface-android'
 //Topface sub projects
 include ':libs:statistics-android'
 //Third part libs
-include ':libs:PullToRefresh', ':libs:unity-ads-1.5.8', ':libs:cheetah-mobile-3.4.7'
+include ':libs:PullToRefresh'//, ':libs:unity-ads-1.5.8', ':libs:cheetah-mobile-3.4.7'
 //Social networks
 include ':libs:odnoklassniki'
 //Topface Offerwall
