@@ -91,6 +91,7 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
     override fun getClickListenerForMultiselectHandle() = arrayOf<View.OnClickListener>(binding.clickListener)
 
     override fun onAvatarClickActionModeDisabled() {
+        super.onAvatarClickActionModeDisabled()
         ReadLikeRequest(context, item.getUserId()).exec()
         AdmobInterstitialUtils.
                 requestPreloadedInterstitial(context, App.get().options.interstitial)

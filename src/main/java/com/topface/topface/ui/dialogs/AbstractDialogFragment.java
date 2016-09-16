@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.social.AuthToken;
@@ -92,6 +91,7 @@ public abstract class AbstractDialogFragment extends BaseDialog {
                 super.show(manager, tag);
             }
         } catch (Exception e) {
+            mShowingDialogs.remove(tag);
             Debug.error("AbstractDialogFragment " + tag + " show error: " + e.getMessage());
         }
     }

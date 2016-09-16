@@ -357,7 +357,7 @@ dependencies {
         //и на нее ругается gradle
         exclude group: 'org.json'
     }
-    compile('com.android.support:recyclerview-v7:23.1.1') {
+    compile('com.android.support:recyclerview-v7:24.2.1') {
         exclude group: 'com.android.support'
     }
     compile 'com.google.code.gson:gson:2.7'
@@ -427,6 +427,7 @@ exclude module: 'support-annotations'
         exclude group: 'com.squareup.retrofit2'
         exclude group: 'io.reactivex'
     }
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }
 
 project(':libs:PullToRefresh') {

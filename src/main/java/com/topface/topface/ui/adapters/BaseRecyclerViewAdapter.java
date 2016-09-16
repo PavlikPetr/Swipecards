@@ -116,10 +116,10 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         if (position == EMPTY_POS) {
             int startUpdatePosition = mAdapterData.size() == 0 ? 0 : mAdapterData.size();
             mAdapterData.addAll(data);
-            notifyAdapterData(startUpdatePosition, data.size() - 1, notifyAll);
+            notifyAdapterData(startUpdatePosition, data.size(), notifyAll);
         } else {
             mAdapterData.addAll(position, data);
-            notifyAdapterData(position, data.size() - 1, notifyAll);
+            notifyAdapterData(position, data.size(), notifyAll);
         }
     }
 
@@ -133,6 +133,12 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
 
     public void addFirst(ArrayList<D> data) {
         addData(data, 0);
+    }
+
+    public void addFirst(D data) {
+        ArrayList<D> list = new ArrayList<>();
+        list.add(data);
+        addFirst(list);
     }
 
     public void addData(ArrayList<D> data) {

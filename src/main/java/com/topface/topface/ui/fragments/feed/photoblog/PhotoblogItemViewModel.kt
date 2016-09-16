@@ -18,7 +18,7 @@ class PhotoblogItemViewModel(binding: FeedPhotoblogItemBinding, item: FeedPhotoB
         get() = item.user.status
 
     override fun onAvatarClickActionModeDisabled() =
-            if (App.get().profile.uid != item.user?.id) {
+            if (App.get().profile.uid == item.user?.id) {
                 mNavigator.showOwnProfile()
             } else {
                 super.onAvatarClickActionModeDisabled()

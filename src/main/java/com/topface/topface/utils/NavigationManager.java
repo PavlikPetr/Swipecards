@@ -245,6 +245,18 @@ public class NavigationManager {
             mActivityDelegate.getIntent().putExtra(FRAGMENT_SETTINGS, new LeftMenuSettingsData(FragmentIdData.UNDEFINED));
         }
         switch (data.getData().getFragmentId()) {
+            case FragmentIdData.BECOME_VIP:
+                closeMenuAndSwitchAfter(new ISimpleCallback() {
+                    @Override
+                    public void onCall() {
+                        if (mActivityDelegate != null) {
+                            mActivityDelegate.startActivityForResult(PurchasesActivity
+                                    .createVipBuyIntent(null, "LeftMenu"), PurchasesActivity.INTENT_BUY_VIP);
+                            selectPreviousLeftMenuItem();
+                        }
+                    }
+                });
+                break;
             case FragmentIdData.BALLANCE:
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
                     @Override

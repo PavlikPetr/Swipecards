@@ -14,6 +14,8 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.promo.dialogs.PromoDialog;
+import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
 import com.topface.topface.promo.dialogs.PromoKey81Dialog;
 import com.topface.topface.state.AuthState;
@@ -151,7 +153,9 @@ import dagger.Provides;
                 ChooseCityPopupAction.class,
                 FullscreenController.class,
                 HeaderPhotoBlogViewModel.class,
-                FansLockScreenViewModel.class
+                FansLockScreenViewModel.class,
+                PromoDialog.class,
+                PromoExpressMessages.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

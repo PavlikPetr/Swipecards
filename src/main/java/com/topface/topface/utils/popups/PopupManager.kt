@@ -22,13 +22,30 @@ object PopupManager {
     private var mActivity: FragmentActivity? = null
 
     fun init(activity: FragmentActivity) {
-        mActivity = activity
-        mActionFactory = StartActionFactory()
+        if (mActivity == null || mActionFactory == null) {
+            mActivity = activity
+            mActionFactory = StartActionFactory()
+        }
+    }
+
+    private var mPendingAction: IStartAction? = null
+
+    //Уходим из фулскрина, навигэйшн еще не резюмнулось, а мы уже пробуем запустить его попап. Провал
+    private var mIsStateRestored: Boolean = true
+
+    fun saveState() {
+        mIsStateRestored = false
+    }
+
+    fun restoreState() {
+        mIsStateRestored = true
+        runAction(mPendingAction)
     }
 
     fun release() {
         mActivity = null
         mActionFactory = null
+        mPendingAction = null
     }
 
     /**
@@ -61,6 +78,11 @@ object PopupManager {
 
     private fun runAction(action: IStartAction?) {
         action?.let {
+            if (!mIsStateRestored) {
+                mPendingAction = action
+                Debug.log("PopupMANAGER w8 stable state")
+                return
+            }
             Debug.log("PopupMANAGER Action ${action.actionName} runned")
             doAsync(executorService = Executors.newCachedThreadPool()) {
                 action.callInBackground()

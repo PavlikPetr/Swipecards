@@ -50,6 +50,10 @@ public class ViewInjectManager {
                         itemView = factory.construct(parent);
                     }
             }
+            if (itemView != null) {
+                //хак для биндингов. там к вьюхе прилеплен объект биндинга.
+                itemView.setTag(null);
+            }
             handleFakePosition(position);
         }
         return itemView;

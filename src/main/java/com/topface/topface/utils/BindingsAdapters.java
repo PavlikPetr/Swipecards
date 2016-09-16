@@ -7,7 +7,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.bumptech.glide.Glide;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -171,4 +171,14 @@ public class BindingsAdapters {
     public static void setRangeSeekBarMinValueTitle(RangeSeekBar view, String value) {
         view.setMinimalValueTitle(value);
     }
+
+    @BindingAdapter("remoteSrcGlide")
+    public static void setImgeByGlide(ImageViewRemote view, String res) {
+        if (res.contains(Utils.LOCAL_RES)) {
+            Glide.with(view.getContext().getApplicationContext()).load(Integer.valueOf(res.replace(Utils.LOCAL_RES, Utils.EMPTY))).into(view);
+        } else {
+            Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
+        }
+    }
+
 }

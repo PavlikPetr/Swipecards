@@ -8,9 +8,13 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.config.FeedsCache
-import com.topface.topface.utils.debug.FuckingVoodooMagic
 import com.topface.topface.utils.gcmutils.GCMUtils
+import rx.Observable
+import rx.Subscription
+import rx.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 
 /**
  * VM for photoblog
@@ -18,6 +22,19 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  */
 class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedPhotoBlog>(binding, mNavigator, api) {
+
+    private lateinit var mRefreshIntervalSubscription: Subscription
+
+    companion object {
+        private val UPDATE_DELAY = 20L
+    }
+
+    init {
+        mRefreshIntervalSubscription = Observable.interval(UPDATE_DELAY, UPDATE_DELAY, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(object : RxUtils.ShortSubscription<Long>() {
+            override fun onNext(type: Long?) = loadTopFeeds()
+        })
+    }
 
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_UNKNOWN)
@@ -40,5 +57,10 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
             } else {
                 super.itemClick(view, itemPosition, data)
             }
+
+    override fun release() {
+        super.release()
+        RxUtils.safeUnsubscribe(mRefreshIntervalSubscription)
+    }
 
 }

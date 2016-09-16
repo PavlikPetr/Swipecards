@@ -18,10 +18,6 @@ import com.topface.topface.utils.Utils
  */
 abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFooterRecyclerViewAdapter<V, T>() {
 
-    init {
-        setHasStableIds(true)
-    }
-
     var isNeedHighLight: ((T) -> Boolean)? = null
         set(value) {
             isActionModeEnabled = value != null

@@ -4,7 +4,6 @@ import android.databinding.ViewDataBinding
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedLike
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData
@@ -15,8 +14,8 @@ import com.topface.topface.viewModels.BaseViewModel
  * Базовая моделька для итема фидов. Может аватарку, имя и онлайн. Может Уйти в профиль
  * Created by tiberal on 19.08.16.
  */
-open class BaseFeedItemViewModel<T : ViewDataBinding, out D: FeedItem>(binding: T, val item: D, private val mNavigator: IFeedNavigator,
-                                                                       private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
+open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding: T, val item: D, private val mNavigator: IFeedNavigator,
+                                                                        private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
 
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
@@ -55,7 +54,6 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D: FeedItem>(binding: 
                 }
                 onAvatarClickActionModeEnabled()
             } else {
-                mNavigator.showProfile(item)
                 onAvatarClickActionModeDisabled()
             }
 
@@ -67,6 +65,6 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D: FeedItem>(binding: 
     open fun onAvatarClickActionModeEnabled() {
     }
 
-    open fun onAvatarClickActionModeDisabled() {
-    }
+    open fun onAvatarClickActionModeDisabled() = mNavigator.showProfile(item)
+
 }

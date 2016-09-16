@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.topface.topface.R;
 import com.topface.topface.ui.IDialogListener;
@@ -27,6 +28,12 @@ public class OldVersionDialog extends TrackedDialogFragment {
         bundle.putBoolean(IS_DIALOG_CANCELABLE, cancelable);
         oldVersionDialog.setArguments(bundle);
         return oldVersionDialog;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
     }
 
     @NonNull
@@ -68,6 +75,15 @@ public class OldVersionDialog extends TrackedDialogFragment {
 
     public void setDialogInterface(IDialogListener dialogInterface) {
         mIDialogListener = dialogInterface;
+    }
+
+    @Override
+    public void onDestroyView() {
+        //https://code.google.com/p/android/issues/detail?id=17423
+        if (getDialog() != null && getRetainInstance()) {
+            getDialog().setDismissMessage(null);
+        }
+        super.onDestroyView();
     }
 
     @Override

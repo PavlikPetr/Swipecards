@@ -78,7 +78,7 @@ public class Utils {
     public static final String EMPTY = "";
     public static final String AMPERSAND = "&";
     public static final String SEMICOLON = ":";
-    public static final String LOCAL_RES = "drawable://%d";
+    public static final String LOCAL_RES = "drawable://";
     public static final String PLATFORM = "Android";
     private static final String DASH_SYMBOL = "-";
     private static final String HYPHEN_SYMBOL = "&#8209;";
@@ -99,12 +99,16 @@ public class Utils {
     public static final String USER_ID = "{userId}";
     public static final String SECRET_KEY = "{secretKey}";
 
+    public static String getLocalRes() {
+        return LOCAL_RES.concat("%d");
+    }
+
     public static int unixtimeInSeconds() {
         return (int) (System.currentTimeMillis() / 1000L);
     }
 
     public static String getLocalResUrl(@DrawableRes int res) {
-        return String.format(App.getCurrentLocale(), Utils.LOCAL_RES, res);
+        return String.format(App.getCurrentLocale(), Utils.getLocalRes(), res);
     }
 
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {

@@ -15,7 +15,7 @@ public class LeftMenuData {
 
     private String mIcon;
     private SpannableString mTitle;
-    private int mBadgeCount;
+    private String mBadge;
     private boolean mIsDividerEnabled;
     private boolean mIsSelected;
     private LeftMenuSettingsData mSettings;
@@ -29,7 +29,7 @@ public class LeftMenuData {
      * @param isDividerEnabled set visibility of divider
      * @param settings         item settings
      */
-    public LeftMenuData(@DrawableRes int iconRes, String title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
+    public LeftMenuData(@DrawableRes int iconRes, String title, String badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
         this(Utils.getLocalResUrl(iconRes), new SpannableString(title), badgeCount, isDividerEnabled, settings);
     }
 
@@ -42,7 +42,7 @@ public class LeftMenuData {
      * @param isDividerEnabled set visibility of divider
      * @param settings         item settings
      */
-    public LeftMenuData(@DrawableRes int iconRes, SpannableString title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
+    public LeftMenuData(@DrawableRes int iconRes, SpannableString title, String badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
         this(Utils.getLocalResUrl(iconRes), new SpannableString(title), badgeCount, isDividerEnabled, settings);
     }
 
@@ -55,7 +55,7 @@ public class LeftMenuData {
      * @param isDividerEnabled set visibility of divider
      * @param settings         item settings
      */
-    public LeftMenuData(@DrawableRes int iconRes, @StringRes int title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
+    public LeftMenuData(@DrawableRes int iconRes, @StringRes int title, String badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
         this(Utils.getLocalResUrl(iconRes), new SpannableString(App.getContext().getResources().getString(title)), badgeCount, isDividerEnabled, settings);
     }
 
@@ -68,10 +68,10 @@ public class LeftMenuData {
      * @param isDividerEnabled set visibility of divider
      * @param settings         item settings
      */
-    public LeftMenuData(String icon, SpannableString title, int badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
+    public LeftMenuData(String icon, SpannableString title, String badgeCount, boolean isDividerEnabled, LeftMenuSettingsData settings) {
         mIcon = icon;
         mTitle = title;
-        mBadgeCount = badgeCount;
+        mBadge = badgeCount;
         mIsDividerEnabled = isDividerEnabled;
         mSettings = settings;
         mIsSelected = false;
@@ -118,17 +118,17 @@ public class LeftMenuData {
      *
      * @return unreaded feeds
      */
-    public int getBadgeCount() {
-        return mBadgeCount;
+    public String getBadge() {
+        return mBadge;
     }
 
     /**
      * set unreaded feeds count
      *
-     * @param count unreaded feeds
+     * @param value unreaded feeds
      */
-    public void setBadgeCount(int count) {
-        mBadgeCount = count;
+    public void setBadge(String value) {
+        mBadge = value;
     }
 
     /**
@@ -175,7 +175,7 @@ public class LeftMenuData {
         if (mIcon != null ? !mIcon.equals(data.getIcon()) : data.getIcon() != null) return false;
         if (mTitle != null ? !mTitle.toString().equals(data.getTitle().toString()) : data.getTitle() != null)
             return false;
-        if (mBadgeCount != data.getBadgeCount()) return false;
+        if (mBadge != null ? !mBadge.equals(data.getBadge()) : data.getBadge() != null) return false;
         if (mIsDividerEnabled != data.isDividerEnabled()) return false;
         return mSettings != null ? mSettings.equals(data.getSettings()) : data.getSettings() != null;
     }
@@ -184,7 +184,7 @@ public class LeftMenuData {
     public int hashCode() {
         int result = mIcon != null ? mIcon.hashCode() : 0;
         result = 31 * result + (mTitle != null ? mTitle.hashCode() : 0);
-        result = 31 * result + mBadgeCount;
+        result = 31 * result + (mBadge != null ? mBadge.hashCode() : 0);
         result = 31 * result + (mIsDividerEnabled ? 1 : 0);
         return 31 * result + mSettings.hashCode();
     }

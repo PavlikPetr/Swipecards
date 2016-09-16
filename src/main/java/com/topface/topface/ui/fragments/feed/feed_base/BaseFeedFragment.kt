@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.flurry.sdk.it
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
@@ -110,7 +111,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mAdapter.isNeedHighLight = null
     }
 
-    override fun onSelected(size: Int) = mActionModeController.setTitle(size)
+    override fun onSelected(size: Int) = mActionModeController.setSelectedCount(size)
 
     override fun itemLongClick(view: View?, itemPosition: Int, data: T?) =
             if (!mActionModeController.isActionModeEnabled() && data != null && view != null && activity is AppCompatActivity) {
