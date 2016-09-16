@@ -97,7 +97,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         removeDublicates(collection);
         boolean result = super.addAll(location, collection);
         int position = getSearchPosition();
-        if (position >= location) {
+        if (position > location) {
             setSearchPosition(position + collection.size());
         }
 
