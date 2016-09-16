@@ -2,18 +2,31 @@ package com.topface.topface.promo.dialogs;
 
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.leftMenu.FragmentIdData;
+import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 import static com.topface.topface.R.drawable.fake_girl1;
 
@@ -28,6 +41,41 @@ public class PromoExpressMessages extends PromoDialog {
     private int mCurrentPosition = Integer.MAX_VALUE;
 
     private Random mRandom;
+
+    @Inject
+    NavigationState mNavigationState;
+    @Inject
+    TopfaceAppState mAppState;
+    private Subscription mBalanceSubscription;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.get().inject(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBalanceSubscription = mAppState
+                .getObservable(BalanceData.class)
+                .subscribe(new Action1<BalanceData>() {
+                    @Override
+                    public void call(BalanceData balanceData) {
+                        if (balanceData.premium) {
+                            // хак для открытия диалогов после покупки вип на случай когда протух фрагмент под активити покупок
+                            PromoExpressMessages.this.closeFragment();
+                            mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS), WrappedNavigationData.SELECT_EXTERNALY));
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        RxUtils.safeUnsubscribe(mBalanceSubscription);
+    }
 
     @Override
     public Options.PromoPopupEntity getPremiumEntity() {

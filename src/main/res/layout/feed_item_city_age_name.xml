@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,9 +10,11 @@
 
         <import type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel" />
 
+        <import type="com.topface.topface.data.FeedItem" />
+
         <variable
             name="model"
-            type="BaseFeedItemViewModel&lt;ViewDataBinding&gt;" />
+            type="BaseFeedItemViewModel&lt;ViewDataBinding, FeedItem&gt;" />
 
         <variable
             name="city"
@@ -28,12 +30,12 @@
     </data>
 
     <LinearLayout
-        app:onLongItemClick="@{longClickListener}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:onClick="@{clickListener::onClick}"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
             android:layout_width="wrap_content"

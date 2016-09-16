@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/vfEmptyViews"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:clickable="true" />
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.photoblog.PhotoblogLockController" />
+
+    </data>
+
+    <ViewFlipper
+        android:id="@+id/empty_photoblog"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="true" />
+
+</layout>

@@ -67,6 +67,7 @@ public class MenuFragment extends Fragment {
     private static final String COINS_ICON = "coins_icon";
     private static final String LIKES_ICON = "likes_icon";
     private static final String SELECTED_POSITION = "selected_position";
+    private static final String BECOME_VIP_BAGE = "!";
 
     @Inject
     TopfaceAppState mAppState;
@@ -92,18 +93,26 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
-
+            LeftMenuData data = getBalanceItem();
             if (options.showRefillBalanceInSideMenu) {
-                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.GEO);
-            }
-            else {
-                adapter.removeItem(getBalansItem());
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                    adapter.addItemAfterFragment(data, FragmentIdData.GEO);
+                }
+            } else {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                    adapter.removeItem(data);
+                }
             }
 
+            data = getBonusItem();
             if (options.offerwallsSettings.isEnable()) {
-                adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                    adapter.addItemAfterFragment(data, FragmentIdData.GEO);
+                }
             } else {
-                adapter.removeItem(getBonusItem());
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                    adapter.removeItem(data);
+                }
             }
             updateIntegrationPage(options);
         }
@@ -112,6 +121,7 @@ public class MenuFragment extends Fragment {
         public void onProfileUpdate(Profile profile) {
             getAdapter().updateHeader(getHeaderData(profile));
             updateEditorItem(profile);
+            updateBecomeVipItem(profile.premium);
         }
     };
 
@@ -130,6 +140,7 @@ public class MenuFragment extends Fragment {
         }
     };
 
+    @NotNull
     private ArrayList<LeftMenuData> getAddedIntegrationItems(ArrayList<LeftMenuData> data) {
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         for (LeftMenuData item : data) {
@@ -158,17 +169,25 @@ public class MenuFragment extends Fragment {
         ArrayList<LeftMenuData> integrationData = getIntegrationItems(options);
         ArrayList<LeftMenuData> addedIntegrationData = getAddedIntegrationItems(data);
         if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
-            data.removeAll(addedIntegrationData);
+            for (int i = 0; i < data.size(); i++) {
+                for (LeftMenuData leftMenuData : addedIntegrationData) {
+                    if (data.get(i).getSettings().getUniqueKey() == leftMenuData.getSettings().getUniqueKey()) {
+                        data.remove(i);
+                        break;
+                    }
+                }
+            }
             getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.GEO);
         }
     }
 
+    @NotNull
     private ArrayList<LeftMenuData> getIntegrationItems(Options options) {
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         if (options != null && options.leftMenuItems != null && options.leftMenuItems.size() > 0) {
             int pos = 0;
             for (Options.LeftMenuIntegrationItems leftMenuItem : options.leftMenuItems) {
-                arrayList.add(new LeftMenuData(leftMenuItem.iconUrl, new SpannableString(leftMenuItem.title), 0, false, new IntegrationSettingsData(FragmentIdData.INTEGRATION_PAGE, pos, leftMenuItem.url, leftMenuItem.external, leftMenuItem.title)));
+                arrayList.add(new LeftMenuData(leftMenuItem.iconUrl, new SpannableString(leftMenuItem.title), Utils.EMPTY, false, new IntegrationSettingsData(FragmentIdData.INTEGRATION_PAGE, pos, leftMenuItem.url, leftMenuItem.external, leftMenuItem.title)));
                 pos++;
             }
         }
@@ -205,7 +224,9 @@ public class MenuFragment extends Fragment {
                 .filter(new Func1<BalanceData, Boolean>() {
                     @Override
                     public Boolean call(BalanceData balanceData) {
-                        return mBalanceData.likes != balanceData.likes || mBalanceData.money != balanceData.money;
+                        return mBalanceData.likes != balanceData.likes
+                                || mBalanceData.money != balanceData.money
+                                || mBalanceData.premium != balanceData.premium;
                     }
                 })
                 .subscribe(new Action1<BalanceData>() {
@@ -213,6 +234,7 @@ public class MenuFragment extends Fragment {
                     public void call(BalanceData balanceData) {
                         mBalanceData = balanceData;
                         updateBalance();
+                        updateBecomeVipItem(balanceData.premium);
                     }
                 }));
         mSubscription.add(mNavigationState
@@ -264,6 +286,7 @@ public class MenuFragment extends Fragment {
         return root;
     }
 
+    @NotNull
     private LeftMenuRecyclerViewAdapter initAdapter() {
         LeftMenuRecyclerViewAdapter adapter = new LeftMenuRecyclerViewAdapter(getLeftMenuItems());
         adapter.setOnItemClickListener(mItemClickListener);
@@ -271,10 +294,12 @@ public class MenuFragment extends Fragment {
         return adapter;
     }
 
+    @NotNull
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
         return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.firstName, profile.age, profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
     }
 
+    @NotNull
     private IPhoto getValidatedUserPhotoInterface(@NotNull Profile profile) {
         if (profile.photo != null && !profile.photo.isFake()) {
             return profile.photo;
@@ -301,18 +326,28 @@ public class MenuFragment extends Fragment {
         getAdapter().updateTitle(FragmentIdData.BALLANCE, getBalanceTitle());
     }
 
+    @NotNull
     private ArrayList<LeftMenuData> getLeftMenuItems() {
         Options options = App.get().getOptions();
         ArrayList<LeftMenuData> arrayList = new ArrayList<>();
-        arrayList.add(new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog, 0, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating, 0, false, new LeftMenuSettingsData(FragmentIdData.DATING)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_like_left_menu, R.string.general_sympathies, mCountersData.getLikes(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_chat_left_menu, R.string.settings_messages, mCountersData.getDialogs(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors, mCountersData.getVisitors(), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby, mCountersData.getPeopleNearby(), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
+        if (!App.get().getProfile().premium) {
+            arrayList.add(getBecomeVipItem());
+        }
+        arrayList.add(new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog,
+                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating,
+                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.DATING)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_like_left_menu, R.string.general_sympathies,
+                String.valueOf(mCountersData.getLikes()), false, new LeftMenuSettingsData(FragmentIdData.TABBED_LIKES)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_chat_left_menu, R.string.settings_messages,
+                String.valueOf(mCountersData.getDialogs()), false, new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_guests_left_menu, R.string.general_visitors,
+                String.valueOf(mCountersData.getVisitors()), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
+        arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby,
+                String.valueOf(mCountersData.getPeopleNearby()), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
 
         if (options.showRefillBalanceInSideMenu) {
-            arrayList.add(getBalansItem());
+            arrayList.add(getBalanceItem());
         }
 
         if (options.offerwallsSettings.isEnable()) {
@@ -325,23 +360,54 @@ public class MenuFragment extends Fragment {
         return arrayList;
     }
 
-    private LeftMenuData getBalansItem() {
-        return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), 0, false, new LeftMenuSettingsData(FragmentIdData.BALLANCE));
+    @NotNull
+    private LeftMenuData getBecomeVipItem() {
+        return new LeftMenuData(R.drawable.ic_crown_left_menu, getString(R.string.chat_auto_reply_button),
+                BECOME_VIP_BAGE, false, new LeftMenuSettingsData(FragmentIdData.BECOME_VIP));
     }
 
+    @NotNull
+    private LeftMenuData getBalanceItem() {
+        return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), Utils.EMPTY, false,
+                new LeftMenuSettingsData(FragmentIdData.BALLANCE));
+    }
+
+    @NotNull
     private LeftMenuData getBonusItem() {
-        return new LeftMenuData(R.drawable.ic_bonus_left_menu,  App.getContext().getString(R.string.general_bonus), 0, false, new LeftMenuSettingsData(FragmentIdData.BONUS));
+        return new LeftMenuData(R.drawable.ic_bonus_left_menu, App.getContext().getString(R.string.general_bonus),
+                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.BONUS));
     }
 
+    @NotNull
     private LeftMenuData getEditorItem() {
-        return new LeftMenuData("", new SpannableString(getString(R.string.editor_menu_admin)), 0, true, new LeftMenuSettingsData(FragmentIdData.EDITOR));
+        return new LeftMenuData("", new SpannableString(getString(R.string.editor_menu_admin)), Utils.EMPTY,
+                true, new LeftMenuSettingsData(FragmentIdData.EDITOR));
     }
 
     private void updateEditorItem(@NotNull Profile profile) {
+        LeftMenuData data = getEditorItem();
         if (profile.isEditor()) {
-            getAdapter().updateEditorsItem(getEditorItem());
+            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                getAdapter().updateEditorsItem(data);
+            }
         } else {
-            getAdapter().removeItem(getEditorItem().getSettings().getUniqueKey());
+            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                getAdapter().removeItem(data);
+            }
+        }
+    }
+
+    private void updateBecomeVipItem(boolean isPremium) {
+        LeftMenuData data = getBecomeVipItem();
+        if (!isPremium) {
+            int pos = getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey());
+            if (pos == EMPTY_POS) {
+                getAdapter().addFirst(data);
+            }
+        } else {
+            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                getAdapter().removeItem(data);
+            }
         }
     }
 
@@ -355,6 +421,7 @@ public class MenuFragment extends Fragment {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressWarnings("deprecation")
+    @NotNull
     private SpannableString getBalanceTitle() {
         String title = String.format(App.getCurrentLocale(), BALANCE_TEMPLATE,
                 getString(R.string.purchase_header_title),

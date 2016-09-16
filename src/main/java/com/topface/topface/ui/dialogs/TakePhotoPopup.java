@@ -14,6 +14,7 @@ import com.topface.topface.databinding.TakePhotoDialogBinding;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
@@ -42,6 +43,7 @@ public class TakePhotoPopup extends AbstractDialogFragment implements View.OnCli
     @Nullable
     private Bundle mArgs;
 
+    @NotNull
     public static TakePhotoPopup newInstance(String plc) {
         TakePhotoPopup popup = new TakePhotoPopup();
         Bundle arg = new Bundle();

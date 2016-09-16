@@ -935,4 +935,9 @@
     <string name="dont_miss_a_beat">¡Estate al loro!</string>
     <string name="push_alert_dating_title">¿Quieres recibir una notificación cuando %s envíe una respuesta mutua?</string>
     <string name="push_alert_chat_title">¿Quieres recibir una notificación cuando %s responda?</string>
+    <string name="photo_feed_no_conversations">Ahora mismo no tienes mensajes</string>
+    <string name="photo_feed_start_dating">Empieza a conocer a gente nueva</string>
+    <string name="mutual_write_them_first">Escríbeles</string>
+    <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
+    <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
 </resources>

@@ -829,4 +829,9 @@
   <string name="dont_miss_a_beat">Don\'t miss a beat!</string>
   <string name="push_alert_dating_title">Want to get a notification when %s sends a mutual reply?</string>
   <string name="push_alert_chat_title">Want to get a notification when %s replies?</string>
+  <string name="photo_feed_no_conversations">Right now you have no messages</string>
+  <string name="photo_feed_start_dating">Start dating to find new people</string>
+  <string name="mutual_write_them_first">Write to them</string>
+  <string name="mutual_no_mutuals">Right now you have no mutual Likes</string>
+  <string name="mutual_module_title">MUTUAL</string>
 </resources>

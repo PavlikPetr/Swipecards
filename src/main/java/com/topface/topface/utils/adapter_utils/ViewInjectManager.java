@@ -3,13 +3,14 @@ package com.topface.topface.utils.adapter_utils;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 
 /**
- * Этот волшебный класс поможет вам наткать разных View в лист, не вставляя при этом фейковых итемов в данные адаптера.
+ * Этот волшебный класс поможет вам натыкать разных View в лист, не вставляя при этом фейковых итемов в данные адаптера.
  * И вообще адаптер будет думать, что все ок и он работает в штатном режиме.
  * Created by tiberal on 23.06.16.
  */
@@ -29,7 +30,7 @@ public class ViewInjectManager {
      * @return вьюха, которую нужно заинжектить в лист
      */
     @Nullable
-    public View getView(int position) {
+    public View getView(int position, ViewGroup parent) {
         View itemView = null;
         InjectViewBucket bucket = getInjectableViewForPos(position);
         if (bucket != null) {
@@ -37,7 +38,7 @@ public class ViewInjectManager {
                 case InjectViewBucket.RES:
                     throwExceptionIfNeed(InjectViewBucket.RES);
                     itemView = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                            .inflate(bucket.getInjectLayoutRes(), null, true);
+                            .inflate(bucket.getInjectLayoutRes(), parent, true);
                     break;
                 case InjectViewBucket.VIEW:
                     throwExceptionIfNeed(InjectViewBucket.VIEW);
@@ -46,7 +47,7 @@ public class ViewInjectManager {
                 case InjectViewBucket.FACTORY:
                     IInjectViewFactory factory = bucket.getInjectLayoutFactory();
                     if (factory != null) {
-                        itemView = factory.construct();
+                        itemView = factory.construct(parent);
                     }
             }
             if (itemView != null) {
@@ -99,9 +100,13 @@ public class ViewInjectManager {
      * Получаем настоящую позицию в данных списка. Без учета вставленных итемов.
      */
     public int getTruePosition(int position) {
-        return mFakePositions.isEmpty() || mFakePositions.getLast() > position
-                ? position - mFakePositions.indexOf(position - 1) - 1
-                : position - mFakePositions.size();
+        if (position == 0) {
+            return 0;
+        } else {
+            return mFakePositions.isEmpty() || mFakePositions.getLast() > position
+                    ? position - mFakePositions.indexOf(position - 1) - 1
+                    : position - mFakePositions.size();
+        }
     }
 
     @Nullable
@@ -116,7 +121,17 @@ public class ViewInjectManager {
     }
 
     public boolean isFakePosition(int position) {
-        return mFakePositions.contains(position);
+        return mFakePositions.contains(position) || checkPositionByBucketRules(position);
+    }
+
+    private boolean checkPositionByBucketRules(int position) {
+        for (InjectViewBucket mViewBucket : mViewBuckets) {
+            IViewInjectRule rule = mViewBucket.getFilter();
+            if (rule != null && rule.isNeedInject(position)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean hasInjectableView() {

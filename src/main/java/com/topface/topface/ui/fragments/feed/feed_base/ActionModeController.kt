@@ -72,7 +72,15 @@ class ActionModeController(private val mMenuInflater: MenuInflater,
         mActionMode = null
     }
 
-    fun setTitle(size: Int) {
+    fun setSelectedCount(size: Int) {
+        if (size > 0) {
+            setTitle(size)
+        } else {
+            finish()
+        }
+    }
+
+    private fun setTitle(size: Int) {
         mActionModeTitle.text = Utils.getQuantityString(R.plurals.selected, size, size)
     }
 

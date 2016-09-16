@@ -45,7 +45,7 @@
                 <com.topface.topface.ui.views.ImageViewRemote
                     style="@style/LeftMenuIcon"
                     app:postProcessor="cropped"
-                    app:remoteSrc="@{viewModel.iconSrc}" />
+                    app:remoteSrcGlide="@{viewModel.iconSrc}" />
 
                 <TextView
                     style="@style/LeftMenuTitile"

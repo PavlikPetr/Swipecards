@@ -13,5 +13,8 @@ interface IFeedNavigator {
     fun <T : FeedItem> showProfile(item: T?)
     fun <T : FeedItem> showChat(item: T?)
     fun showDating()
+    fun showAddToLeader()
+    fun showOwnProfile()
+    fun showTakePhotoPopup()
 
 }

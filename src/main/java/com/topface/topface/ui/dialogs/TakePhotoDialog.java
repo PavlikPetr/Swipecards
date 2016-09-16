@@ -15,6 +15,10 @@ import com.topface.framework.imageloader.BitmapUtils;
 import com.topface.topface.R;
 import com.topface.topface.utils.IPhotoTakerWithDialog;
 
+/**
+ * Это не тот диалог, который ты ищешь! Посмотри TakePhotoPopup!!!
+ */
+
 public class TakePhotoDialog extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "Topface_TakePhotoDialog_Tag";

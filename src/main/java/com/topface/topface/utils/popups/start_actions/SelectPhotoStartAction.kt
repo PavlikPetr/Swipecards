@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager
 import com.topface.topface.App
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.controllers.startactions.IStartAction
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener
 import com.topface.topface.utils.popups.PopupManager
 import com.topface.topface.utils.social.AuthToken
 
@@ -25,7 +25,7 @@ class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, priv
             NavigationActivity.isPhotoAsked = true
             var popup = mFragmentManager.findFragmentByTag(TakePhotoPopup.TAG) as TakePhotoPopup?
             if (popup == null) {
-                popup = TakePhotoPopup()
+                popup = TakePhotoPopup.newInstance(Utils.EMPTY)
             }
             popup.setOnCancelListener(DialogInterface.OnCancelListener {
                 PopupManager.informManager(mFrom)
@@ -35,7 +35,7 @@ class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, priv
     }
 
     override fun isApplicable() = !AuthToken.getInstance().isEmpty && App.get().profile.photo == null
-    && !App.getConfig().userConfig.isUserAvatarAvailable
+            && !App.getConfig().userConfig.isUserAvatarAvailable
 
     override fun getPriority() = mPriority
 

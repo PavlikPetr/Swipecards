@@ -1,6 +1,9 @@
 package com.topface.topface.utils.adapter_utils;
 
 import android.view.View;
+import android.view.ViewGroup;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Фабричный интефейс,использовать, когда нужно воткнуть несколько одинаковых вьюх.
@@ -8,6 +11,6 @@ import android.view.View;
  */
 public interface IInjectViewFactory {
 
-    View construct();
+    View construct(@Nullable ViewGroup parent);
 
 }

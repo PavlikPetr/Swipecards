@@ -1,5 +1,6 @@
 package com.topface.topface.ui.adapters;
 
+import android.annotation.SuppressLint;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -12,18 +13,37 @@ import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.LeftMenuData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.databinding.LeftMenuItemBinding;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
 
     public LeftMenuRecyclerViewAdapter(ArrayList<LeftMenuData> data) {
         super();
         addData(data);
+        setHasStableIds(true);
+    }
+
+    @SuppressLint("SwitchIntDef")
+    @Override
+    public long getItemId(int position) {
+        switch (getItemType(position)) {
+            case TYPE_ITEM:
+                return ListUtils.isEntry(position, getData()) ?
+                        getData().get(position).getSettings().getUniqueKey() :
+                        super.getItemId(position);
+            case TYPE_HEADER:
+                Object header = getHeaderItem(position);
+                return header != null ? header.hashCode() : Calendar.getInstance().getTimeInMillis();
+            case TYPE_FOOTER:
+                Object footer = getFooterItem(position - getHeadersData().size() - getData().size());
+                return footer != null ? footer.hashCode() : Calendar.getInstance().getTimeInMillis();
+        }
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     @Override
@@ -51,23 +71,17 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
 
     }
 
-    @NotNull
-    @Override
-    protected Class<LeftMenuItemBinding> getItemBindingClass() {
-        return LeftMenuItemBinding.class;
-    }
-
     public void updateCounters(CountersData countersData) {
         ArrayList<LeftMenuData> data = getData();
         if (data != null) {
             for (int i = 0; i < data.size(); i++) {
                 LeftMenuData item = data.get(i);
                 int count = countersData.getCounterByFragmentId(item.getSettings().getFragmentId());
-                if (count >= 0 && count != item.getBadgeCount()) {
-                    item.setBadgeCount(count);
-                    notifyItemChange(i);
+                if (count >= 0 && !String.valueOf(count).equals(item.getBadge())) {
+                    item.setBadge(String.valueOf(count));
                 }
             }
+            notifyDataSetChanged();
         }
     }
 
@@ -79,7 +93,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setTitle(title);
-            notifyItemChange(pos);
+            notifyDataSetChanged();
         }
     }
 
@@ -87,7 +101,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(fragmentId);
         if (pos != EMPTY_POS) {
             getData().get(pos).setIcon(icon);
-            notifyItemChange(pos);
+            notifyDataSetChanged();
         }
     }
 
@@ -99,7 +113,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         }
     }
 
-    private int getDataPositionByFragmentId(int fragmentId) {
+    public int getDataPositionByFragmentId(int fragmentId) {
         ArrayList<LeftMenuData> data = getData();
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).getSettings().getUniqueKey() == fragmentId) {
@@ -113,14 +127,16 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         ArrayList<FixedViewInfo> headers = getHeadersData();
         if (headers.size() > 0) {
             headers.get(0).setData(data);
-            notifyItemChanged(0);
+            notifyDataSetChanged();
         }
     }
 
     private void addItemsAfterPosition(ArrayList<LeftMenuData> data, int position) {
-        position = position < 0 ? 0 : position + 1;
-        getData().addAll(position, data);
-        notifyDataSetChanged();
+        if (ListUtils.isNotEmpty(data)) {
+            position = position < 0 ? 0 : position + 1;
+            getData().addAll(position, data);
+            notifyDataSetChanged();
+        }
     }
 
     public void addItemAfterFragment(LeftMenuData data, int... fragmentId) {
@@ -151,7 +167,7 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
         int pos = getDataPositionByFragmentId(data.getSettings().getUniqueKey());
         if (pos != EMPTY_POS) {
             getData().remove(pos);
-            notifyItemRemoved(pos);
+            notifyDataSetChanged();
         }
     }
 
