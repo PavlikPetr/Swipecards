@@ -18,6 +18,7 @@ import com.topface.topface.viewModels.LeftMenuHeaderViewModel;
 import com.topface.topface.viewModels.LeftMenuItemViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAdapter<LeftMenuItemBinding, LeftMenuData> {
 
@@ -35,8 +36,14 @@ public class LeftMenuRecyclerViewAdapter extends BaseHeaderFooterRecyclerViewAda
                 return ListUtils.isEntry(position, getData()) ?
                         getData().get(position).getSettings().getUniqueKey() :
                         super.getItemId(position);
+            case TYPE_HEADER:
+                Object header = getHeaderItem(position);
+                return header != null ? header.hashCode() : Calendar.getInstance().getTimeInMillis();
+            case TYPE_FOOTER:
+                Object footer = getFooterItem(position - getHeadersData().size() - getData().size());
+                return footer != null ? footer.hashCode() : Calendar.getInstance().getTimeInMillis();
         }
-        return super.getItemId(position);
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     @Override

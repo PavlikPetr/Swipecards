@@ -175,9 +175,9 @@ public class BindingsAdapters {
     @BindingAdapter("remoteSrcGlide")
     public static void setImgeByGlide(ImageViewRemote view, String res) {
         if (res.contains(Utils.LOCAL_RES)) {
-            Glide.with(view.getContext()).load(Integer.valueOf(res.replace(Utils.LOCAL_RES, Utils.EMPTY))).into(view);
+            Glide.with(view.getContext().getApplicationContext()).load(Integer.valueOf(res.replace(Utils.LOCAL_RES, Utils.EMPTY))).into(view);
         } else {
-            Glide.with(view.getContext()).load(res).into(view);
+            Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
         }
     }
 
