@@ -13,8 +13,8 @@ import com.topface.topface.utils.Utils
 /**
  * Базовый адаптер для всех фидов
  * Created by tiberal on 01.08.16.
- * @param V - feed item binding
- * @param T - feed item data item
+ * @param V feed item binding
+ * @param T feed item data item
  */
 abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFooterRecyclerViewAdapter<V, T>() {
 
