@@ -32,7 +32,7 @@ import rx.Subscription
 /**
  * Базовая VM для всех фидов
  * Created by tiberal on 01.08.16.
- * @param T - feed item type
+ * @param T feed item type
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
@@ -114,7 +114,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
-    private fun createAndRegisterBroadcasts() {
+    open protected fun createAndRegisterBroadcasts() {
         mGcmReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 for (type in gcmType) {
@@ -185,26 +185,30 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         }
                     }
 
-                    override fun onNext(data: FeedListData<T>?) {
-                        data?.let {
-                            if (isDataFromCache) {
-                                mAdapter?.let { adapter ->
-                                    adapter.data.clear()
-                                    adapter.notifyDataSetChanged()
-                                }
-                                isDataFromCache = false
-                            }
-                            handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
-                            val adapter = mAdapter
-                            if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
-                                stubView?.onEmptyFeed()
-                            } else {
-                                isListVisible.set(View.VISIBLE)
-                            }
-                            adapter?.addData(data.items)
-                        }
-                    }
+                    override fun onNext(data: FeedListData<T>?) = updateFeedsLoaded(data, updateBundle)
                 })
+    }
+
+    protected open fun updateFeedsLoaded(data: FeedListData<T>?, updateBundle: Bundle) {
+        data?.let {
+            if (isDataFromCache) {
+                mAdapter?.let { adapter ->
+                    adapter.data.clear()
+                    adapter.notifyDataSetChanged()
+                }
+                isDataFromCache = false
+            }
+            handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
+            val adapter = mAdapter
+            if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
+                stubView?.onEmptyFeed()
+            } else {
+                isListVisible.set(View.VISIBLE)
+                isLockViewVisible.set(View.GONE)
+                stubView?.onFilledFeed()
+            }
+            adapter?.addData(data.items)
+        }
     }
 
     private fun onErrorProcess(e: Throwable) {
@@ -266,17 +270,20 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         }
                     }
 
-                    override fun onNext(data: FeedListData<T>?) {
-                        data?.let {
-                            if (!data.items.isEmpty()) {
-                                handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
-                                removeOldDuplicates(data)
-                                mAdapter?.addFirst(data.items)
-                                binding.feedList.layoutManager.scrollToPosition(0)
-                            }
-                        }
-                    }
+                    override fun onNext(data: FeedListData<T>?) = topFeedsLoaded(data, requestBundle)
+
                 })
+    }
+
+    protected open fun topFeedsLoaded(data: FeedListData<T>?, requestBundle: Bundle) {
+        data?.let {
+            if (!data.items.isEmpty()) {
+                handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
+                removeOldDuplicates(data)
+                mAdapter?.addFirst(data.items)
+                binding.feedList.layoutManager.scrollToPosition(0)
+            }
+        }
     }
 
     @FuckingVoodooMagic(description = "Если нет новых фидов сервер присылает итем от которого проходила выборка(первый)")

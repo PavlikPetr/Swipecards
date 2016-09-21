@@ -13,14 +13,14 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
-        updatePageCounter(VisitorsFragment.class.getName(), countersData.getVisitors());
-        updatePageCounter(FansFragment.class.getName(), countersData.getFans());
+        updatePageCounter(com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment.class.getName(), countersData.getVisitors());
+        updatePageCounter(com.topface.topface.ui.fragments.feed.fans.FansFragment.class.getName(), countersData.getFans());
     }
 
     @Override
     protected void addPages() {
-        addBodyPage(VisitorsFragment.class.getName(), getString(R.string.general_visitors_tab_views), mCountersData.getVisitors());
-        addBodyPage(FansFragment.class.getName(), getString(R.string.general_fans), mCountersData.getFans());
+        addBodyPage(com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment.class.getName(), getString(R.string.general_visitors_tab_views), mCountersData.getVisitors());
+        addBodyPage(com.topface.topface.ui.fragments.feed.fans.FansFragment.class.getName(), getString(R.string.general_fans), mCountersData.getFans());
     }
 
     @Override

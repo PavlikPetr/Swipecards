@@ -26,8 +26,8 @@ import com.topface.topface.utils.extensions.inflateBinding
 /**
  * Новый, и усосвершенствованный FeedFragment
  * Created by tiberal on 01.08.16.
- * @param T - feed item type
- * @param V - empty screen binding class
+ * @param T feed item type
+ * @param V empty screen binding class
  */
 abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         BaseFragment(), MultiselectionController.IMultiSelectionListener,
@@ -144,6 +144,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         super.onDestroy()
         mActionModeController.finishIfEnabled()
         mViewModel.release()
+        mLockerControllerBase.release()
     }
 
     override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE

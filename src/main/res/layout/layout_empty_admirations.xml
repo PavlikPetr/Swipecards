@@ -43,12 +43,6 @@
                 android:layout_marginRight="8dp"
                 android:text="@string/buy_resources" />
 
-            <Button
-                style="@style/UnlockButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:tag="btnUnlock" />
         </LinearLayout>
 
         <LinearLayout
@@ -112,10 +106,6 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/buying_vip_status" />
 
-            <Button
-                style="@style/UnlockButtonStyle"
-                android:layout_width="210dp"
-                android:tag="btnUnlock" />
         </LinearLayout>
     </ViewFlipper>
 </android.support.v4.widget.NestedScrollView>

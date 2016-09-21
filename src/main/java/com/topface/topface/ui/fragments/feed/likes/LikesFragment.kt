@@ -19,12 +19,11 @@ import com.topface.topface.viewModels.BaseViewModel
 @FlurryOpenEvent(name = LikesFragment.PAGE_NAME)
 class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
 
-    override fun createLockerFactory(): BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> =
-            object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> {
-                override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyLikesBinding> {
-                    return LikesLockScreenViewModel(binding as LayoutEmptyLikesBinding, mApi, mNavigator, App.get().dataUpdater, this@LikesFragment)
-                }
-            }
+    override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> {
+        override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyLikesBinding> {
+            return LikesLockScreenViewModel(binding as LayoutEmptyLikesBinding, mApi, mNavigator, App.get().dataUpdater, this@LikesFragment)
+        }
+    }
 
     override val mAdapter by lazy {
         LikesFeedAdapter(mNavigator, mApi)
