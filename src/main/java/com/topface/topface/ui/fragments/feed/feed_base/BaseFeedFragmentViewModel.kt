@@ -32,7 +32,7 @@ import rx.Subscription
 /**
  * Базовая VM для всех фидов
  * Created by tiberal on 01.08.16.
- * @param T - feed item type
+ * @param T feed item type
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {

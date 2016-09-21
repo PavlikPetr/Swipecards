@@ -406,6 +406,8 @@ exclude module: 'support-annotations'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+
+
     ifreeCompile('com.ifree.monetize:monetization-library:2.2.5') {
         exclude group: "com.fasterxml.jackson.core"
         exclude module: "support-v4"
