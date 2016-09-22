@@ -1,48 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadingEdge="none"
-    android:fillViewport="true">
 
-    <LinearLayout
-        style="@style/EmptyFeedsViewGravity"
+<layout>
+
+    <data>
+
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.dialogs.DialogsLockScreenViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:fillViewport="true">
 
-        <ImageView
-            style="@style/LandscapePortraitImagesVisibility"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            style="@style/EmptyFeedsViewGravity"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_msg" />
-
-        <TextView
-            android:id="@+id/tvText"
-            style="@style/ListItemEmptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="20dp"
+            android:clickable="true"
             android:gravity="center"
-            android:text="@string/nobody_chat_with_you_sympathies_will_help" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnBuyVip"
-            style="@style/BigStretchedBlueButton"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="@string/buy_resources" />
+            <ImageView
+                style="@style/LandscapePortraitImagesVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_msg" />
 
-        <Button
-            android:id="@+id/btnStartRate"
-            style="@style/BigStretchedGrayButton"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="12dp"
-            android:text="@string/general_get_dating" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/text"
+                style="@style/ListItemEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/nobody_chat_with_you_sympathies_will_help" />
+
+            <Button
+                android:id="@+id/buy_vip"
+                style="@style/BigStretchedBlueButton"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:onClick="@{() -> lockViewModel.showPurchaseVip()}"
+                android:text="@string/buy_resources" />
+
+            <Button
+                android:id="@+id/start_rate"
+                style="@style/BigStretchedGrayButton"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="12dp"
+                android:onClick="@{() -> lockViewModel.showDating()}"
+                android:text="@string/general_get_dating" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

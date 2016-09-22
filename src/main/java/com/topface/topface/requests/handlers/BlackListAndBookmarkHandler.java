@@ -77,16 +77,20 @@ public class BlackListAndBookmarkHandler extends VipApiHandler {
         return intent;
     }
 
+    public static Intent getValuedActionsUpdateIntent(ActionTypes type, boolean value, int... userIds) {
+        Intent intent = new Intent(UPDATE_USER_CATEGORY);
+        intent.putExtra(TYPE, type);
+        intent.putExtra(VALUE, value);
+        intent.putExtra(FEED_IDS, userIds);
+        return intent;
+    }
+
     public static Intent getValuedActionsUpdateIntent(ActionTypes type, List<Integer> userIds, boolean value) {
         int[] ids = new int[userIds.size()];
         for (int i = 0; i < userIds.size(); i++) {
             ids[i] = userIds.get(i);
         }
-        Intent intent = new Intent(UPDATE_USER_CATEGORY);
-        intent.putExtra(TYPE, type);
-        intent.putExtra(VALUE, value);
-        intent.putExtra(FEED_IDS, ids);
-        return intent;
+        return getValuedActionsUpdateIntent(type, value, ids);
     }
 
     @Override

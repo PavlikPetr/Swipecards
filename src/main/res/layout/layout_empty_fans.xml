@@ -1,44 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fadingEdge="none"
-    android:fillViewport="true">
 
-    <LinearLayout
+<layout>
+
+    <data>
+
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:fadingEdge="none"
+        android:fillViewport="true">
 
-        <ImageView
-            android:id="@+id/ic_guitar"
-            style="@style/LandscapePortraitImagesVisibility"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_guitar" />
-
-        <TextView
-            android:id="@+id/tvText"
-            style="@style/ListItemEmptyText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="20dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
             android:gravity="center"
-            android:text="@string/buy_status_and_watch_your_fans" />
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnBuy"
-            style="@style/BigStretchedBlueButton"
-            android:layout_width="240dp"
-            android:text="@string/buying_vip_status" />
+            <ImageView
+                android:id="@+id/ic_guitar"
+                style="@style/LandscapePortraitImagesVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_guitar" />
 
-        <Button
-            android:id="@+id/btnUnlock"
-            style="@style/UnlockButtonStyle"
-            android:layout_width="240dp" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/tvText"
+                style="@style/ListItemEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/buy_status_and_watch_your_fans" />
+
+            <Button
+                android:id="@+id/btnBuy"
+                style="@style/BigStretchedBlueButton"
+                android:layout_width="240dp"
+                android:onClick="@{()->lockViewModel.showPurchaseVip()}"
+                android:text="@string/buying_vip_status" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>
+

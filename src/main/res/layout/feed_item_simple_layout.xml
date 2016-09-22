@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.fans.FansItemViewModel" />
+
+        <variable
+            name="longClickListener"
+            type="android.view.View.OnLongClickListener" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener::onClick}"
+        android:orientation="horizontal"
+        app:onLongItemClick="@{longClickListener}">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> model.onAvatarClick()}">
+
+            <include
+                android:id="@+id/avatar_frame"
+                layout="@layout/feed_item_round_avatar"
+                bind:avatarHolder="@{model.avatarHolder}" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include
+                    layout="@layout/feed_item_user_name_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    bind:nameAndAge="@{model.nameAndAge}" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/ListMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{model.text}" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

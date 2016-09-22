@@ -133,11 +133,6 @@
                         android:onClick="@{() -> lockViewModel.onBuyVipClick()}"
                         android:text="@{lockViewModel.buttonMessage}" />
 
-                    <Button
-                        style="@style/UnlockButtonStyle"
-                        android:layout_width="240dp"
-                        android:tag="btnUnlock" />
-
                 </LinearLayout>
 
                 <include layout="@layout/layout_paid_likes_for_vip" />

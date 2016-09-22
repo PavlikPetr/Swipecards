@@ -55,7 +55,6 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                 Utils.showErrorMessage()
             }
         }
-
     }
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Boolean> {
