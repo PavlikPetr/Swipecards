@@ -244,8 +244,12 @@ public class ChatStabsController {
         switch (mLockType) {
             case LOCK_MESSAGE_SEND:
             case LOCK_CHAT:
-                showPopularUserDialog();
-                return false;
+                if (!isAccessAllowed()) {
+                    showPopularUserDialog();
+                    return false;
+                } else {
+                    return true;
+                }
             case MUTUAL_SYMPATHY:
                 unlock();
                 break;
@@ -257,8 +261,12 @@ public class ChatStabsController {
         switch (mLockType) {
             case LOCK_CHAT:
             case LOCK_MESSAGE_SEND:
-                showPopularUserDialog();
-                return false;
+                if (!isAccessAllowed()) {
+                    showPopularUserDialog();
+                    return false;
+                } else {
+                    return true;
+                }
         }
         return true;
     }

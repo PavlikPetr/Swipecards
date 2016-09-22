@@ -1,0 +1,249 @@
+Connected to daemon DaemonInfo{pid=22211, address=[c1852c2c-3da0-4537-99e2-7a219c27f6c3 port:39085, addresses:[/0:0:0:0:0:0:0:1%lo, /127.0.0.1]], idle=true, lastBusy=1474449209851, context=DefaultDaemonContext[uid=a0a4f87d-18af-4d9a-a761-b55e0c901fa6,javaHome=/usr/lib/jvm/java-8-oracle,daemonRegistryDir=/home/user/.gradle/daemon,pid=22211,idleTimeout=10800000,daemonOpts=-XX:MaxPermSize=1024m,-XX:+HeapDumpOnOutOfMemoryError,-Xmx4096m,-Dfile.encoding=UTF-8,-Duser.country=RU,-Duser.language=ru,-Duser.variant]}. Dispatching request Build{id=08d7bff7-046f-4a79-947d-95c9269e96ef.1, currentDir=/usr/develop/topface-android}.
+Received result org.gradle.launcher.daemon.protocol.BuildStarted@12a94400 from daemon DaemonInfo{pid=22211, address=[c1852c2c-3da0-4537-99e2-7a219c27f6c3 port:39085, addresses:[/0:0:0:0:0:0:0:1%lo, /127.0.0.1]], idle=true, lastBusy=1474449209851, context=DefaultDaemonContext[uid=a0a4f87d-18af-4d9a-a761-b55e0c901fa6,javaHome=/usr/lib/jvm/java-8-oracle,daemonRegistryDir=/home/user/.gradle/daemon,pid=22211,idleTimeout=10800000,daemonOpts=-XX:MaxPermSize=1024m,-XX:+HeapDumpOnOutOfMemoryError,-Xmx4096m,-Dfile.encoding=UTF-8,-Duser.country=RU,-Duser.language=ru,-Duser.variant]} (build should be starting).
+The client will now receive all logging from the daemon (pid: 22211). The daemon log file: /home/user/.gradle/daemon/2.14.1/daemon-22211.out.log
+Starting 3rd build in daemon [uptime: 1 mins 50.256 secs, performance: 96%, no major garbage collections]
+Executing build with daemon context: DefaultDaemonContext[uid=a0a4f87d-18af-4d9a-a761-b55e0c901fa6,javaHome=/usr/lib/jvm/java-8-oracle,daemonRegistryDir=/home/user/.gradle/daemon,pid=22211,idleTimeout=10800000,daemonOpts=-XX:MaxPermSize=1024m,-XX:+HeapDumpOnOutOfMemoryError,-Xmx4096m,-Dfile.encoding=UTF-8,-Duser.country=RU,-Duser.language=ru,-Duser.variant]
+Starting Build
+Settings evaluated using settings file '/usr/develop/topface-android/settings.gradle'.
+Projects loaded. Root project using build file '/usr/develop/topface-android/build.gradle'.
+Included projects: [root project 'topface-android', project ':libs', project ':libs:PullToRefresh', project ':libs:cheetah-mobile-3.4.7', project ':libs:odnoklassniki', project ':libs:statistics-android', project ':libs:tf-offerwall', project ':libs:unity-ads-1.5.8', project ':libs:tf-offerwall:sdk']
+Parallel execution is an incubating feature.
+Evaluating root project 'topface-android' using build file '/usr/develop/topface-android/build.gradle'.
+Creating configuration compile
+Creating configuration apk
+Creating configuration provided
+Creating configuration wearApp
+Creating configuration annotationProcessor
+Creating configuration androidTestCompile
+Creating configuration androidTestApk
+Creating configuration androidTestProvided
+Creating configuration androidTestWearApp
+Creating configuration androidTestAnnotationProcessor
+Creating configuration testCompile
+Creating configuration testApk
+Creating configuration testProvided
+Creating configuration testWearApp
+Creating configuration testAnnotationProcessor
+Creating configuration debugCompile
+Creating configuration debugApk
+Creating configuration debugProvided
+Creating configuration debugWearApp
+Creating configuration debugAnnotationProcessor
+Creating configuration testDebugCompile
+Creating configuration testDebugApk
+Creating configuration testDebugProvided
+Creating configuration testDebugWearApp
+Creating configuration testDebugAnnotationProcessor
+Creating configuration releaseCompile
+Creating configuration releaseApk
+Creating configuration releaseProvided
+Creating configuration releaseWearApp
+Creating configuration releaseAnnotationProcessor
+Creating configuration testReleaseCompile
+Creating configuration testReleaseApk
+Creating configuration testReleaseProvided
+Creating configuration testReleaseWearApp
+Creating configuration testReleaseAnnotationProcessor
+Creating configuration googleCompile
+Creating configuration googleApk
+Creating configuration googleProvided
+Creating configuration googleWearApp
+Creating configuration googleAnnotationProcessor
+Creating configuration androidTestGoogleCompile
+Creating configuration androidTestGoogleApk
+Creating configuration androidTestGoogleProvided
+Creating configuration androidTestGoogleWearApp
+Creating configuration androidTestGoogleAnnotationProcessor
+Creating configuration testGoogleCompile
+Creating configuration testGoogleApk
+Creating configuration testGoogleProvided
+Creating configuration testGoogleWearApp
+Creating configuration testGoogleAnnotationProcessor
+Creating configuration amazonCompile
+Creating configuration amazonApk
+Creating configuration amazonProvided
+Creating configuration amazonWearApp
+Creating configuration amazonAnnotationProcessor
+Creating configuration androidTestAmazonCompile
+Creating configuration androidTestAmazonApk
+Creating configuration androidTestAmazonProvided
+Creating configuration androidTestAmazonWearApp
+Creating configuration androidTestAmazonAnnotationProcessor
+Creating configuration testAmazonCompile
+Creating configuration testAmazonApk
+Creating configuration testAmazonProvided
+Creating configuration testAmazonWearApp
+Creating configuration testAmazonAnnotationProcessor
+Creating configuration blueStacksCompile
+Creating configuration blueStacksApk
+Creating configuration blueStacksProvided
+Creating configuration blueStacksWearApp
+Creating configuration blueStacksAnnotationProcessor
+Creating configuration androidTestBlueStacksCompile
+Creating configuration androidTestBlueStacksApk
+Creating configuration androidTestBlueStacksProvided
+Creating configuration androidTestBlueStacksWearApp
+Creating configuration androidTestBlueStacksAnnotationProcessor
+Creating configuration testBlueStacksCompile
+Creating configuration testBlueStacksApk
+Creating configuration testBlueStacksProvided
+Creating configuration testBlueStacksWearApp
+Creating configuration testBlueStacksAnnotationProcessor
+Creating configuration okCompile
+Creating configuration okApk
+Creating configuration okProvided
+Creating configuration okWearApp
+Creating configuration okAnnotationProcessor
+Creating configuration androidTestOkCompile
+Creating configuration androidTestOkApk
+Creating configuration androidTestOkProvided
+Creating configuration androidTestOkWearApp
+Creating configuration androidTestOkAnnotationProcessor
+Creating configuration testOkCompile
+Creating configuration testOkApk
+Creating configuration testOkProvided
+Creating configuration testOkWearApp
+Creating configuration testOkAnnotationProcessor
+Creating configuration ifreeCompile
+Creating configuration ifreeApk
+Creating configuration ifreeProvided
+Creating configuration ifreeWearApp
+Creating configuration ifreeAnnotationProcessor
+Creating configuration androidTestIfreeCompile
+Creating configuration androidTestIfreeApk
+Creating configuration androidTestIfreeProvided
+Creating configuration androidTestIfreeWearApp
+Creating configuration androidTestIfreeAnnotationProcessor
+Creating configuration testIfreeCompile
+Creating configuration testIfreeApk
+Creating configuration testIfreeProvided
+Creating configuration testIfreeWearApp
+Creating configuration testIfreeAnnotationProcessor
+Creating configuration derivedCompile
+Creating configuration derivedApk
+Creating configuration derivedProvided
+Creating configuration derivedWearApp
+Creating configuration derivedAnnotationProcessor
+Creating configuration androidTestDerivedCompile
+Creating configuration androidTestDerivedApk
+Creating configuration androidTestDerivedProvided
+Creating configuration androidTestDerivedWearApp
+Creating configuration androidTestDerivedAnnotationProcessor
+Creating configuration testDerivedCompile
+Creating configuration testDerivedApk
+Creating configuration testDerivedProvided
+Creating configuration testDerivedWearApp
+Creating configuration testDerivedAnnotationProcessor
+Creating configuration applandCompile
+Creating configuration applandApk
+Creating configuration applandProvided
+Creating configuration applandWearApp
+Creating configuration applandAnnotationProcessor
+Creating configuration androidTestApplandCompile
+Creating configuration androidTestApplandApk
+Creating configuration androidTestApplandProvided
+Creating configuration androidTestApplandWearApp
+Creating configuration androidTestApplandAnnotationProcessor
+Creating configuration testApplandCompile
+Creating configuration testApplandApk
+Creating configuration testApplandProvided
+Creating configuration testApplandWearApp
+Creating configuration testApplandAnnotationProcessor
+Creating configuration qaCompile
+Creating configuration qaApk
+Creating configuration qaProvided
+Creating configuration qaWearApp
+Creating configuration qaAnnotationProcessor
+Creating configuration testQaCompile
+Creating configuration testQaApk
+Creating configuration testQaProvided
+Creating configuration testQaWearApp
+Creating configuration testQaAnnotationProcessor
+WARNING: The `android.dexOptions.incremental` property is deprecated and it has no effect on the build process.
+Creating configuration compile
+Creating configuration publish
+Creating configuration provided
+Creating configuration wearApp
+Creating configuration annotationProcessor
+Creating configuration androidTestCompile
+Creating configuration androidTestPublish
+Creating configuration androidTestProvided
+Creating configuration androidTestWearApp
+Creating configuration androidTestAnnotationProcessor
+Creating configuration testCompile
+Creating configuration testPublish
+Creating configuration testProvided
+Creating configuration testWearApp
+Creating configuration testAnnotationProcessor
+Creating configuration debugCompile
+Creating configuration debugPublish
+Creating configuration debugProvided
+Creating configuration debugWearApp
+Creating configuration debugAnnotationProcessor
+Creating configuration testDebugCompile
+Creating configuration testDebugPublish
+Creating configuration testDebugProvided
+Creating configuration testDebugWearApp
+Creating configuration testDebugAnnotationProcessor
+Creating configuration releaseCompile
+Creating configuration releasePublish
+Creating configuration releaseProvided
+Creating configuration releaseWearApp
+Creating configuration releaseAnnotationProcessor
+Creating configuration testReleaseCompile
+Creating configuration testReleasePublish
+Creating configuration testReleaseProvided
+Creating configuration testReleaseWearApp
+Creating configuration testReleaseAnnotationProcessor
+Creating configuration compile
+Creating configuration publish
+Creating configuration provided
+Creating configuration wearApp
+Creating configuration annotationProcessor
+Creating configuration androidTestCompile
+Creating configuration androidTestPublish
+Creating configuration androidTestProvided
+Creating configuration androidTestWearApp
+Creating configuration androidTestAnnotationProcessor
+Creating configuration testCompile
+Creating configuration testPublish
+Creating configuration testProvided
+Creating configuration testWearApp
+Creating configuration testAnnotationProcessor
+Creating configuration debugCompile
+Creating configuration debugPublish
+Creating configuration debugProvided
+Creating configuration debugWearApp
+Creating configuration debugAnnotationProcessor
+Creating configuration testDebugCompile
+Creating configuration testDebugPublish
+Creating configuration testDebugProvided
+Creating configuration testDebugWearApp
+Creating configuration testDebugAnnotationProcessor
+Creating configuration releaseCompile
+Creating configuration releasePublish
+Creating configuration releaseProvided
+Creating configuration releaseWearApp
+Creating configuration releaseAnnotationProcessor
+Creating configuration testReleaseCompile
+Creating configuration testReleasePublish
+Creating configuration testReleaseProvided
+Creating configuration testReleaseWearApp
+Creating configuration testReleaseAnnotationProcessor
+Parsing the SDK, no caching allowed
+Creating configuration amazonQaCompile
+Creating configuration amazonQaApk
+Creating configuration amazonQaProvided
+Creating configuration amazonQaWearApp
+Creating configuration amazonQaAnnotationProcessor
+Evaluating project ':libs:unity-ads-1.5.8' using build file '/usr/develop/topface-android/libs/unity-ads-1.5.8/build.gradle'.
+Evaluating project ':libs:cheetah-mobile-3.4.7' using build file '/usr/develop/topface-android/libs/cheetah-mobile-3.4.7/build.gradle'.
+Evaluating project ':libs:statistics-android' using build file '/usr/develop/topface-android/libs/statistics-android/build.gradle'.
+Resource missing. [HTTP HEAD: https://repo1.maven.org/maven2/com/android/tools/build/gradle/2.2.0/gradle-2.2.0.pom]
+Resource missing. [HTTP HEAD: https://repo1.maven.org/maven2/com/android/tools/build/gradle/2.2.0/gradle-2.2.0.jar]
+
+BUILD FAILED
+
+Total time: 3.046 secs
+Stopped 0 compiler daemon(s).
+Received result Failure[value=org.gradle.initialization.ReportedException: org.gradle.internal.exceptions.LocationAwareException: A problem occurred configuring root project 'topface-android'.] from daemon DaemonInfo{pid=22211, address=[c1852c2c-3da0-4537-99e2-7a219c27f6c3 port:39085, addresses:[/0:0:0:0:0:0:0:1%lo, /127.0.0.1]], idle=true, lastBusy=1474449209851, context=DefaultDaemonContext[uid=a0a4f87d-18af-4d9a-a761-b55e0c901fa6,javaHome=/usr/lib/jvm/java-8-oracle,daemonRegistryDir=/home/user/.gradle/daemon,pid=22211,idleTimeout=10800000,daemonOpts=-XX:MaxPermSize=1024m,-XX:+HeapDumpOnOutOfMemoryError,-Xmx4096m,-Dfile.encoding=UTF-8,-Duser.country=RU,-Duser.language=ru,-Duser.variant]} (build should be done).
