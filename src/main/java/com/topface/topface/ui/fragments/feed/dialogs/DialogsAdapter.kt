@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
+import android.databinding.ViewDataBinding
+import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.FeedItemDialogBinding
@@ -17,6 +19,12 @@ class DialogsAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter<F
         super.bindData(binding, position)
         binding?.let {
             binding.model = DialogsItemViewModel(it, getDataItem(position), mNavigator) { isActionModeEnabled }
+        }
+    }
+
+    override fun bindHeader(binding: ViewDataBinding?, position: Int) {
+        binding?.let {
+            it.setVariable(BR.viewModel, getHeaderItem(position))
         }
     }
 }

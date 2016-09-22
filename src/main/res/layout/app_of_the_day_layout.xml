@@ -5,12 +5,8 @@
     <data>
 
         <variable
-            name="appOfTheDay"
-            type="com.topface.topface.data.Options.AppOfTheDay" />
-
-        <variable
-            name="click"
-            type="android.view.View.OnClickListener" />
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.dialogs.DialogAppOfTheDayModel" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +16,7 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             style="@style/ListItemContainer"
-            android:onClick="@{click}"
+            android:onClick="@{() -> viewModel.onBannerClick()}"
             android:orientation="horizontal">
 
             <com.topface.topface.ui.views.ImageViewRemote
@@ -29,7 +25,7 @@
                 android:layout_marginRight="10dp"
                 android:foreground="@drawable/feed_avatar_overlay_selector"
                 android:scaleType="centerCrop"
-                app:remoteSrc="@{appOfTheDay.iconUrl}" />
+                app:remoteSrc="@{viewModel.iconUrl}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:text="@{appOfTheDay.title}" />
+                        android:text="@{viewModel.title}" />
 
                     <TextView
                         android:id="@+id/ad"
@@ -74,7 +70,7 @@
                     android:layout_marginTop="5dp"
                     android:ellipsize="end"
                     android:lines="2"
-                    android:text="@{appOfTheDay.description}" />
+                    android:text="@{viewModel.description}" />
             </LinearLayout>
 
             <View

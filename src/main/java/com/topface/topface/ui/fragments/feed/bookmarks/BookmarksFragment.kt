@@ -35,4 +35,8 @@ class BookmarksFragment : BaseFeedFragment<FeedBookmark, LayoutEmptyBookmarksBin
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_bookmarks
 
+    override fun onResume() {
+        super.onResume()
+        mViewModel.onResume()
+    }
 }
