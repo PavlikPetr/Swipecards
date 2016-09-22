@@ -422,7 +422,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         for (History message : mHistoryFeedList) {
                             // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
                             // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
-                            if ((message.type == LOCK_CHAT || message.type == MUTUAL_SYMPATHY) && message.unread) {
+                            if (message.unread) {
                                 loadedItemsCount++;
                             }
                         }

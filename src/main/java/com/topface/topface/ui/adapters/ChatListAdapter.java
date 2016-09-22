@@ -50,7 +50,10 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private OnBuyVipButtonClick mBuyVipButtonClickListener;
     private CustomMovementMethod mCustomMovementMethod;
 
-    public ChatListAdapter(IActivityDelegate iActivityDelegate, FeedList<History> data, Updater updateCallback, OnBuyVipButtonClick listener) {
+    public ChatListAdapter(IActivityDelegate iActivityDelegate,
+                           FeedList<History> data,
+                           Updater updateCallback,
+                           OnBuyVipButtonClick listener) {
         super(iActivityDelegate.getApplicationContext(), data, updateCallback);
         mBuyVipButtonClickListener = listener;
         if (!data.isEmpty()) {
