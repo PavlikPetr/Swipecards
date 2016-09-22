@@ -43,13 +43,16 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
                     val value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false)
                     if (hasValue) {
                         if (!value && ids != null) {
-//                            mAdapter?.data?.forEachIndexed { i, feedBookmark ->
-//                                ids.forEach {
-//                                    if (feedBookmark.user.id == it) {
-//                                        mAdapter?.removeItem(i)
-//                                    }
-//                                }
-//                            }
+                            var deletedUsers = listOf<FeedBookmark>()
+                            ids.forEach {id->
+                                mAdapter?.data?.forEach forEachData@{
+                                    if (it.user.id == id) {
+                                        deletedUsers = deletedUsers.plus(it)
+                                        return@forEachData
+                                    }
+                                }
+                            }
+                            mAdapter?.removeItems(deletedUsers)
                         } else {
                             mIsNeedToUpdate = true
                         }

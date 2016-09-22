@@ -258,6 +258,7 @@ public class Utils {
         Intent i = Utils.getIntentToOpenUrl(url);
         if (i != null) {
             FlurryManager.getInstance().sendExternalUrlEvent(url);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }
     }
