@@ -290,7 +290,6 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
         addLoaderItem(data.more);
         notifyDataSetChanged();
         setLastUpdate();
-
     }
 
     public void setData(FeedList<T> data) {
