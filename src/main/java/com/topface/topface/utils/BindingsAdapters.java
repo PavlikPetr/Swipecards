@@ -26,6 +26,11 @@ import com.topface.topface.ui.views.RangeSeekBar;
  */
 public class BindingsAdapters {
 
+    @BindingAdapter("bind:setCompoundDrawablesWithIntrinsicBounds")
+    public static void setCompoundDrawablesWithIntrinsicBounds(TextView view, int image) {
+        view.setCompoundDrawablesWithIntrinsicBounds(image, 0, 0, 0);
+    }
+
     @BindingAdapter("bind:isActivated")
     public static void isActivated(View view, boolean isActivated) {
         view.setActivated(isActivated);
