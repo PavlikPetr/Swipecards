@@ -20,7 +20,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  */
 class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedBookmark>(binding, navigator, api) {
-
+    var mIsNeedToUpdate: Boolean = false
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS
     override val itemClass: Class<FeedBookmark>
@@ -34,28 +34,29 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
 
     override fun createAndRegisterBroadcasts() {
         super.createAndRegisterBroadcasts()
-        /*
-
-
         mBookmarkedReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                if (intent.hasExtra(BlackListAndBookmarkHandler.TYPE) &&
-                        intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE) == BlackListAndBookmarkHandler.ActionTypes.BOOKMARK && isAdded()) {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent != null && intent.hasExtra(BlackListAndBookmarkHandler.TYPE) &&
+                        intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE) == BlackListAndBookmarkHandler.ActionTypes.BOOKMARK) {
                     val ids = intent.getIntArrayExtra(BlackListAndBookmarkHandler.FEED_IDS)
                     val hasValue = intent.hasExtra(BlackListAndBookmarkHandler.VALUE)
                     val value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false)
                     if (hasValue) {
                         if (!value && ids != null) {
-                           // getListAdapter().removeByUserIds(ids)
-                            //TODO НУЖНО ДОБАВИТЬ ОБРАБОТКУ НОВОГО ИТЕМА
+//                            mAdapter?.data?.forEachIndexed { i, feedBookmark ->
+//                                ids.forEach {
+//                                    if (feedBookmark.user.id == it) {
+//                                        mAdapter?.removeItem(i)
+//                                    }
+//                                }
+//                            }
                         } else {
-                          //  updateOnResume()
+                            mIsNeedToUpdate = true
                         }
                     }
                 }
             }
         }
-        */
         LocalBroadcastManager.getInstance(context).registerReceiver(mBookmarkedReceiver,
                 IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY))
     }
@@ -63,5 +64,12 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
     override fun release() {
         super.release()
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mBookmarkedReceiver)
+    }
+
+    fun onResume() {
+        if (mIsNeedToUpdate) {
+            loadTopFeeds()
+            mIsNeedToUpdate = false
+        }
     }
 }

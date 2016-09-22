@@ -38,7 +38,7 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
     override val mAdapter by lazy {
         val adapter = DialogsAdapter(mNavigator)
         App.get().options.appOfTheDay?.let {
-            adapter.setHeader(FixedViewInfo(R.layout.header_photo_blog, mAppOfTheDayModel))
+            adapter.setHeader(FixedViewInfo(R.layout.app_of_the_day_layout, mAppOfTheDayModel))
         }
         adapter
     }

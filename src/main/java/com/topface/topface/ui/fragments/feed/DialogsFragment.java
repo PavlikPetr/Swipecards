@@ -1,12 +1,8 @@
 package com.topface.topface.ui.fragments.feed;
 
-import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -18,7 +14,6 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
-import com.topface.topface.databinding.AppOfTheDayLayoutBinding;
 import com.topface.topface.requests.DeleteAbstractRequest;
 import com.topface.topface.requests.DeleteDialogsRequest;
 import com.topface.topface.requests.FeedRequest;
@@ -29,10 +24,6 @@ import com.topface.topface.ui.adapters.DialogListAdapter;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.utils.CountersManager;
-import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.adapter_utils.IInjectViewFactory;
-import com.topface.topface.utils.adapter_utils.IViewInjectRule;
-import com.topface.topface.utils.adapter_utils.InjectViewBucket;
 import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
@@ -86,31 +77,6 @@ public class DialogsFragment extends FeedFragment<FeedDialog> {
         super.onViewCreated(view, savedInstanceState);
         FeedAdapter adapter = getListAdapter();
         final Options.AppOfTheDay appOfTheDay = App.get().getOptions().appOfTheDay;
-        if (adapter != null && appOfTheDay != null) {
-            InjectViewBucket bucket = new InjectViewBucket(new IInjectViewFactory() {
-                @Override
-                public View construct(ViewGroup parent) {
-                    AppOfTheDayLayoutBinding binding = DataBindingUtil.inflate((LayoutInflater) App.getContext()
-                            .getSystemService(Context.LAYOUT_INFLATER_SERVICE), R.layout.app_of_the_day_layout, null, true);
-                    binding.setClick(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Utils.goToUrl(getActivity(), appOfTheDay.targetUrl);
-                        }
-                    });
-                    binding.setAppOfTheDay(appOfTheDay);
-                    binding.executePendingBindings();
-                    return binding.getRoot();
-                }
-            });
-            bucket.addFilter(new IViewInjectRule() {
-                @Override
-                public boolean isNeedInject(int pos) {
-                    return pos == 0;
-                }
-            });
-            adapter.registerViewBucket(bucket);
-        }
     }
 
     @Override
