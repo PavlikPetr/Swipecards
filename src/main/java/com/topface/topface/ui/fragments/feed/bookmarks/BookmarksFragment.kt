@@ -39,4 +39,6 @@ class BookmarksFragment : BaseFeedFragment<FeedBookmark, LayoutEmptyBookmarksBin
         super.onResume()
         mViewModel.onResume()
     }
+
+    override fun getTitle(): String = getString(R.string.settings_messages)
 }

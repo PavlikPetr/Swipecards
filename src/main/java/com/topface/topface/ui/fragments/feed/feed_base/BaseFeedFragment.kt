@@ -49,7 +49,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         FeedApi(context, this, mDelRequestFactory, mFeedRequestFactory)
     }
     private val mActionModeController by lazy {
-        ActionModeController(activity.menuInflater, this)
+        ActionModeController(activity.menuInflater, getActionModeMenu(), this)
     }
     private val mMultiselectionController by lazy {
         MultiselectionController<T>(this)
@@ -71,6 +71,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         setupLocker()
         return mBinding.root
     }
+
+    open fun getActionModeMenu() = R.menu.feed_context_menu
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

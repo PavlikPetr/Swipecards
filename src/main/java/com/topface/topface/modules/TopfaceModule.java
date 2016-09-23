@@ -54,6 +54,7 @@ import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.mutual.MutualLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel;
+import com.topface.topface.ui.fragments.feed.visitors.VisitorsLockScreenViewModel;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
@@ -155,7 +156,8 @@ import dagger.Provides;
                 HeaderPhotoBlogViewModel.class,
                 FansLockScreenViewModel.class,
                 PromoDialog.class,
-                PromoExpressMessages.class
+                PromoExpressMessages.class,
+                VisitorsLockScreenViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

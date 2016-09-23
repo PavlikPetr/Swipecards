@@ -17,7 +17,7 @@ import javax.inject.Inject
  * Меню открывающееся при лонг тапу по фиду
  * Created by tiberal on 01.08.16.
  */
-class ActionModeController(private val mMenuInflater: MenuInflater,
+class ActionModeController(private val mMenuInflater: MenuInflater, private val mActionModeMenu: Int,
                            private val mActionModeEventsListener: OnActionModeEventsListener) : ActionMode.Callback {
 
     @Inject lateinit internal var context: Context
@@ -62,7 +62,7 @@ class ActionModeController(private val mMenuInflater: MenuInflater,
         }
         mActionModeEventsListener.onSetToolbarVisibility(false)
         menu?.clear()
-        mMenuInflater.inflate(R.menu.feed_context_menu, menu)
+        mMenuInflater.inflate(mActionModeMenu, menu)
         return true
     }
 
