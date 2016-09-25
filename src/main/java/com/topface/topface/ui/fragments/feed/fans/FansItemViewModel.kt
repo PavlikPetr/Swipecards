@@ -10,4 +10,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
  */
 class FansItemViewModel(binding: FeedItemSimpleLayoutBinding, item: FeedBookmark, navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedItemSimpleLayoutBinding, FeedBookmark>(binding, item, navigator, isActionModeEnabled) {
+
+    override val text: String?
+        get() = item.user?.city?.name
 }

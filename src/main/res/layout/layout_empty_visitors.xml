@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout>
 
     <data>
@@ -46,10 +45,8 @@
                 android:id="@+id/btnBuyVip"
                 style="@style/BigStretchedBlueButton"
                 android:layout_width="240dp"
-                android:onClick="@{()->lockViewModel.showPurchaseVip()}"
+                android:onClick="@{lockViewModel::onButtonClick}"
                 android:text="@{lockViewModel.buttonText}" />
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </layout>

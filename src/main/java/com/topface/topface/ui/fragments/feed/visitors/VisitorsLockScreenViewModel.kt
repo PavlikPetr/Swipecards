@@ -18,12 +18,12 @@ import javax.inject.Inject
  * Моделька локскрина гостей
  * Created by tiberal on 09.09.16.
  */
-class VisitorsLockScreenViewModel(binding: LayoutEmptyVisitorsBinding, private val mNavigator: IFeedNavigator, private val mIFeedUnlocked: IFeedUnlocked) :
+class VisitorsLockScreenViewModel(binding: LayoutEmptyVisitorsBinding, val mNavigator: IFeedNavigator, private val mIFeedUnlocked: IFeedUnlocked) :
         BaseViewModel<LayoutEmptyVisitorsBinding>(binding) {
 
     @Inject lateinit var mState: TopfaceAppState
     private var mBalanceSubscription: Subscription? = null
-    private var onButtonClickListener: OnClickListener? = null
+    private var onButtonClickListener: View.OnClickListener? = null
     val title = ObservableField<String>("")
     val buttonText = ObservableField<String>("")
 
@@ -40,13 +40,11 @@ class VisitorsLockScreenViewModel(binding: LayoutEmptyVisitorsBinding, private v
                 })
     }
 
-    fun showPurchaseVip() = mNavigator.showPurchaseVip()
-
     fun onButtonClick(view: View) {
         onButtonClickListener?.onClick(view)
     }
 
-    fun setOnButtonClickListener(listener: OnClickListener) {
+    fun setOnButtonClickListener(listener: View.OnClickListener) {
         onButtonClickListener = listener;
     }
 

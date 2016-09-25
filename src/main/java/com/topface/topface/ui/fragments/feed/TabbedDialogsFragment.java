@@ -3,12 +3,14 @@ package com.topface.topface.ui.fragments.feed;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.ui.fragments.feed.bookmarks.BookmarksFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment;
 
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
-        updatePageCounter(com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment.class.getName(), countersData.getDialogs());
+        updatePageCounter(DialogsFragment.class.getName(), countersData.getDialogs());
     }
 
 
@@ -19,8 +21,8 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
 
     @Override
     protected void addPages() {
-        addBodyPage(com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment.class.getName(), getString(R.string.general_dbl_all), mCountersData.getDialogs());
-        addBodyPage(com.topface.topface.ui.fragments.feed.bookmarks.BookmarksFragment.class.getName(), getString(R.string.general_bookmarks), 0);
+        addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), mCountersData.getDialogs());
+        addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_bookmarks), 0);
     }
 
     @Override

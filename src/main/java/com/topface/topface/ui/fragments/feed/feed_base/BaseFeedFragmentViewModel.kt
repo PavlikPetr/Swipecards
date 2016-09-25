@@ -164,7 +164,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         } else {
                             dataItem.unread = false
                         }
-                        adapter.notifyItemChanged(position)
+                        adapter.notifyItemChange(position)
                     }
                 }
             }
@@ -183,6 +183,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         e?.let {
                             onErrorProcess(it)
                         }
+                        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
+                        isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
                     override fun onNext(data: FeedListData<T>?) = updateFeedsLoaded(data, updateBundle)
@@ -268,6 +270,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         e?.let {
                             onErrorProcess(it)
                         }
+                        if (isRefreshing.get()) {
+                            isRefreshing.set(false)
+                        }
                     }
 
                     override fun onNext(data: FeedListData<T>?) = topFeedsLoaded(data, requestBundle)
@@ -342,6 +347,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
         override fun onError(e: Throwable?) {
             Utils.showErrorMessage()
+            isLockViewVisible.set(View.GONE)
         }
 
         override fun onNext(t: Boolean?) {
@@ -351,6 +357,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     isListVisible.set(View.INVISIBLE)
                     stubView?.onEmptyFeed()
                 }
+                mCache.saveToCache(adapter.data)
             }
         }
     }

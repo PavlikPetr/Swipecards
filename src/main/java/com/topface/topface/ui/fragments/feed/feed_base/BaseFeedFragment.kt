@@ -121,7 +121,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
                 mMultiselectionController.startMultiSelection()
                 mMultiselectionController.handleSelected(data, view, itemPosition)
                 mAdapter.isNeedHighLight = { data -> mMultiselectionController.mSelected.contains(data) }
-                mAdapter.notifyItemChanged(itemPosition)
+                mAdapter.notifyItemChange(itemPosition)
             } else Unit
 
 
