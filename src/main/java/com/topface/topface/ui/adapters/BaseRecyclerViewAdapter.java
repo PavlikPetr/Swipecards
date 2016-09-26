@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.BR;
+import com.topface.topface.utils.ListUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -154,8 +155,9 @@ public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> exte
         return mAdapterData;
     }
 
+    @Nullable
     public D getDataItem(int position) {
-        return mAdapterData.get(position);
+        return ListUtils.isEntry(position, mAdapterData) ? mAdapterData.get(position) : null;
     }
 
     public Observable<Bundle> getUpdaterObservable() {

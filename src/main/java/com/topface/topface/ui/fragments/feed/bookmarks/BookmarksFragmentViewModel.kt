@@ -15,9 +15,6 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-/**
- * Created by tiberal on 19.09.16.
- */
 class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedBookmark>(binding, navigator, api) {
     var mIsNeedToUpdate: Boolean = false

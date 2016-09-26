@@ -28,6 +28,7 @@ import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
+import java.util.*
 
 /**
  * Базовая VM для всех фидов
@@ -328,10 +329,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         return adapter != null && !adapter.data.isEmpty()
     }
 
-    fun onDeleteFeedItems(items: MutableList<T>) {
+    fun onDeleteFeedItems(items: MutableList<T>, idsList: ArrayList<String>) {
         val tempItems = items.toList()
         isLockViewVisible.set(View.VISIBLE)
-        mDeleteSubscription = mApi.callDelete(feedsType, tempItems).subscribe(createSubscriber(tempItems))
+        mDeleteSubscription = mApi.callDelete(feedsType, idsList).subscribe(createSubscriber(tempItems))
     }
 
     fun onAddToBlackList(items: MutableList<T>) {

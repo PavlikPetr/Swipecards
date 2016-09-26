@@ -27,12 +27,15 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
 
     private fun handleHighlight(binding: V, position: Int) {
         binding.root.isSelected = false
-        if (getDataItem(position).unread) {
+        val item = getDataItem(position)
+        if (item?.unread ?: false) {
             binding.root.setBackgroundResource(R.drawable.new_feed_list_item_selector)
         } else {
             binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
         }
-        binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(getDataItem(position)) ?: false
+        if (item != null) {
+            binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(item) ?: false
+        }
     }
 
     override fun bindData(binding: V?, position: Int) {
@@ -71,6 +74,8 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
         return result
     }
 
-    override fun getItemId(position: Int) = getDataItem(position).id.toLong()
+    override fun getItemId(position: Int): Long {
+        return getDataItem(position)?.id?.toLong() ?: super.getItemId(position)
+    }
 
 }

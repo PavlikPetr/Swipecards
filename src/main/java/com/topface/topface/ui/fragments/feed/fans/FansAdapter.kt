@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.fans
 
+import android.support.v7.widget.RecyclerView
 import com.topface.topface.R
 import com.topface.topface.data.FeedBookmark
 import com.topface.topface.databinding.FeedItemSimpleLayoutBinding
@@ -16,12 +17,14 @@ class FansAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter<Feed
 
     override fun bindData(binding: FeedItemSimpleLayoutBinding?, position: Int) {
         super.bindData(binding, position)
-        binding?.let {
-            binding.model = FansItemViewModel(it, getDataItem(position), mNavigator) { isActionModeEnabled }
+        binding?.let { bind ->
+            getDataItem(position)?.let {
+                binding.model = FansItemViewModel(bind, it, mNavigator) { isActionModeEnabled }
+            }
         }
     }
 
     @FuckingVoodooMagic(description = "костылина на сервере, id в формате 1:2 , 1 - время перехода, 2 - user id")
-    override fun getItemId(position: Int) = getDataItem(position).id.hashCode().toLong()
+    override fun getItemId(position: Int) = getDataItem(position)?.id?.hashCode()?.toLong() ?: RecyclerView.NO_ID
 
 }

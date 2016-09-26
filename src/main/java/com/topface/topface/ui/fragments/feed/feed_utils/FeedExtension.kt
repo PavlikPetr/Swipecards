@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.feed_utils
 
 import com.topface.topface.data.FeedItem
+import java.util.*
 
 /** Ништяки для фидов
  * Created by tiberal on 10.08.16.
@@ -56,3 +57,31 @@ fun <T : FeedItem> MutableList<T>.removeLast() {
 }
 
 fun <T : FeedItem> T?.getUserId() = if (this != null && user != null) user.id else 0
+
+fun <T : FeedItem> MutableList<T>.getFeedIdList(): ArrayList<String> {
+    val list = ArrayList<String>()
+    this.filter { !it.isLoaderOrRetrier }
+            .forEach { list.add(it.id) }
+    return list
+}
+
+fun <T : FeedItem> MutableList<T>.getUserIdList(): List<Int> {
+    var list: List<Int> = listOf()
+    this.filter { !it.isLoaderOrRetrier }
+            .forEach {
+                it.user?.let {
+                    list = list.plus(it.id)
+                }
+            }
+    return list
+}
+
+fun List<Int>.convertFeedIdList(): ArrayList<String> {
+    val list = ArrayList<String>()
+    this.forEach {
+        list.add(it.toString())
+    }
+    return list
+}
+
+
