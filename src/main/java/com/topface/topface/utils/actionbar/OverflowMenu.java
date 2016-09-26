@@ -32,7 +32,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -422,7 +422,7 @@ public class OverflowMenu {
                             super.success(response);
                             showBlackListToast(false);
                             LocalBroadcastManager.getInstance(mContext).
-                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
+                                    sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
                                             .putExtra(USER_ID_FOR_REMOVE, -1));
                         }
 
@@ -444,7 +444,7 @@ public class OverflowMenu {
                             super.success(response);
                             showBlackListToast(true);
                             LocalBroadcastManager.getInstance(mContext).
-                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
+                                    sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
                                             .putExtra(USER_ID_FOR_REMOVE, userId));
                         }
 

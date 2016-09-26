@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout>
 
     <data>
@@ -39,17 +38,15 @@
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="@string/with_vip_find_your_visitors"
+                android:text="@{lockViewModel.title}"
                 android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btnBuyVip"
                 style="@style/BigStretchedBlueButton"
                 android:layout_width="240dp"
-                android:onClick="@{()->lockViewModel.showPurchaseVip()}"
-                android:text="@string/buying_vip_status" />
-
+                android:onClick="@{lockViewModel::onButtonClick}"
+                android:text="@{lockViewModel.buttonText}" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </layout>

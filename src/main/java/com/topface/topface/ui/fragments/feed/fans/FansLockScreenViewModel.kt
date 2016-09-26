@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed.fans
 
+import android.databinding.ObservableField
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.data.BalanceData
 import com.topface.topface.databinding.LayoutEmptyFansBinding
@@ -12,11 +14,14 @@ import rx.Subscription
 import javax.inject.Inject
 
 
-class FansLockScreenViewModel(binding: LayoutEmptyFansBinding, private val mNavigator: IFeedNavigator, private val mIFeedUnlocked: IFeedUnlocked) :
+class FansLockScreenViewModel(binding: LayoutEmptyFansBinding, val mNavigator: IFeedNavigator, private val mIFeedUnlocked: IFeedUnlocked) :
         BaseViewModel<LayoutEmptyFansBinding>(binding) {
 
     @Inject lateinit var mState: TopfaceAppState
     private var mBalanceSubscription: Subscription? = null
+    private var onButtonClickListener: View.OnClickListener? = null
+    val title = ObservableField<String>("")
+    val buttonText = ObservableField<String>("")
 
     init {
         App.get().inject(this)
@@ -31,11 +36,16 @@ class FansLockScreenViewModel(binding: LayoutEmptyFansBinding, private val mNavi
                 })
     }
 
-    fun showPurchaseVip() = mNavigator.showPurchaseVip()
+    fun onButtonClick(view: View) {
+        onButtonClickListener?.onClick(view)
+    }
+
+    fun setOnButtonClickListener(listener: View.OnClickListener) {
+        onButtonClickListener = listener;
+    }
 
     override fun release() {
         super.release()
         RxUtils.safeUnsubscribe(mBalanceSubscription)
     }
-
 }

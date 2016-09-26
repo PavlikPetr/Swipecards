@@ -13,5 +13,4 @@ class VisitorsItemViewModel(binding: FeedItemSimpleTimeBinding, item: Visitor, n
 
     override val text: String?
         get() = item.user?.city?.name
-
 }

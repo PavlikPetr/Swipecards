@@ -8,7 +8,6 @@ import com.topface.topface.databinding.LayoutEmptyVisitorsBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
-import com.topface.topface.viewModels.BaseViewModel
 
 @FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
 class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>() {
@@ -28,10 +27,10 @@ class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>()
     }
 
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyVisitorsBinding> {
-        override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyVisitorsBinding> {
-            return VisitorsLockScreenViewModel(binding as LayoutEmptyVisitorsBinding, mNavigator, this@VisitorsFragment)
-        }
+        override fun construct(binding: ViewDataBinding) = VisitorsLockScreenViewModel(binding as LayoutEmptyVisitorsBinding, mNavigator, this@VisitorsFragment)
     }
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_visitors
+
+    override fun getTitle(): String = getString(R.string.general_visitors)
 }

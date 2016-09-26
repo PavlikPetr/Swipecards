@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
@@ -35,7 +34,6 @@
                 android:id="@+id/avatar_frame"
                 layout="@layout/feed_item_round_avatar"
                 bind:avatarHolder="@{model.avatarHolder}" />
-
         </FrameLayout>
 
         <LinearLayout
@@ -53,21 +51,17 @@
 
                 <include
                     layout="@layout/feed_item_user_name_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     bind:nameAndAge="@{model.nameAndAge}" />
 
                 <TextView
                     android:id="@+id/time"
                     style="@style/ListTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="right"
-                    android:paddingRight = "12dp"
+                    android:paddingRight="12dp"
                     android:text="@{model.time}" />
-
             </LinearLayout>
-
 
             <TextView
                 android:id="@+id/text"
@@ -76,8 +70,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@{model.text}" />
-
         </LinearLayout>
-
     </LinearLayout>
 </layout>

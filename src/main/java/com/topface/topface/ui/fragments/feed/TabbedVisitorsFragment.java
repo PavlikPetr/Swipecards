@@ -3,6 +3,8 @@ package com.topface.topface.ui.fragments.feed;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
+import com.topface.topface.ui.fragments.feed.fans.FansFragment;
+import com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment;
 
 public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
@@ -13,14 +15,14 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
-        updatePageCounter(com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment.class.getName(), countersData.getVisitors());
-        updatePageCounter(com.topface.topface.ui.fragments.feed.fans.FansFragment.class.getName(), countersData.getFans());
+        updatePageCounter(VisitorsFragment.class.getName(), countersData.getVisitors());
+        updatePageCounter(FansFragment.class.getName(), countersData.getFans());
     }
 
     @Override
     protected void addPages() {
-        addBodyPage(com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment.class.getName(), getString(R.string.general_visitors_tab_views), mCountersData.getVisitors());
-        addBodyPage(com.topface.topface.ui.fragments.feed.fans.FansFragment.class.getName(), getString(R.string.general_fans), mCountersData.getFans());
+        addBodyPage(VisitorsFragment.class.getName(), getString(R.string.general_visitors_tab_views), mCountersData.getVisitors());
+        addBodyPage(FansFragment.class.getName(), getString(R.string.general_fans), mCountersData.getFans());
     }
 
     @Override

@@ -14,14 +14,7 @@ class MultiselectionController<T>(val mSelectionListener: IMultiSelectionListene
         val MAX_SELECTED_ITEMS_COUNT = 99
     }
 
-    fun startMultiSelection(selectionLimit: Int = MAX_SELECTED_ITEMS_COUNT) {
-        if (!mSelected.isEmpty()) {
-            mSelected.clear()
-        }
-        mSelectionLimit = selectionLimit
-    }
-
-    fun handleSelected(item: T, view: View, itemPosition:Int) {
+    fun handleSelected(item: T, view: View, itemPosition: Int) {
         if (!isOverlimit()) {
             if (mSelected.contains(item)) {
                 mSelectedItemsPositions.remove(itemPosition)
@@ -36,6 +29,13 @@ class MultiselectionController<T>(val mSelectionListener: IMultiSelectionListene
         } else {
             Toast.makeText(view.context.applicationContext, R.string.maximum_number_of_users, Toast.LENGTH_LONG).show()
         }
+    }
+
+    fun startMultiSelection(selectionLimit: Int = MAX_SELECTED_ITEMS_COUNT) {
+        if (!mSelected.isEmpty()) {
+            mSelected.clear()
+        }
+        mSelectionLimit = selectionLimit
     }
 
     private fun addSelection(item: T) {
