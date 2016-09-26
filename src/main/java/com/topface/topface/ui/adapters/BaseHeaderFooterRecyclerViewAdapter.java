@@ -143,8 +143,9 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
     }
 
     public void notifyItemChange(int pos) {
-        if (pos < getItemCount()) {
-            notifyItemChanged(pos + mHeaders.size());
+        int headerSize =  mHeaders.size();
+        if (pos < getItemCount()-headerSize) {
+            notifyItemChanged(pos + headerSize);
         }
     }
 

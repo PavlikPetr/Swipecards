@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.photoblog.PhotoblogItemViewModel" />
+            type="com.topface.topface.ui.fragments.feed.blacklist.BlackListItemViewModel" />
 
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="longClickListener"
+            type="android.view.View.OnLongClickListener" />
     </data>
 
     <LinearLayout
+        app:onLongItemClick="@{longClickListener}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener::onClick}"

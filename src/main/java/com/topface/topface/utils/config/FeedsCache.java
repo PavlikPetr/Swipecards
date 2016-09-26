@@ -8,6 +8,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS;
+import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_BLACK_LIST_FEEDS;
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS;
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS;
 import static com.topface.topface.utils.config.FeedsCache.FEEDS_TYPE.DATA_FANS_FEEDS;
@@ -75,6 +76,7 @@ public class FeedsCache extends AbstractConfig {
         addField(settingsMap, DATA_VISITORS_FEEDS.getText(), "");
         addField(settingsMap, DATA_FANS_FEEDS.getText(), "");
         addField(settingsMap, DATA_ADMIRATION_FEEDS.getText(), "");
+        addField(settingsMap, DATA_BLACK_LIST_FEEDS.getText(), "");
     }
 
     @Override
