@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true"
-    android:fadingEdge="none"
-    android:fillViewport="true">
+    <data>
 
-    <TextView
-        style="@style/ListItemEmptyText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="@string/black_list_empty" />
+        <variable
+            name="lockViewModel"
+            type="com.topface.topface.ui.fragments.feed.blacklist.BlackListLockScreenViewModel" />
+    </data>
 
-</android.support.v4.widget.NestedScrollView>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:fadingEdge="none"
+        android:fillViewport="true">
+
+        <TextView
+            style="@style/ListItemEmptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/black_list_empty" />
+
+    </android.support.v4.widget.NestedScrollView>
+</layout>

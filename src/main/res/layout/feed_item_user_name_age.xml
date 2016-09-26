@@ -6,6 +6,8 @@
 
         <import type="android.view.View" />
 
+        <import type="java.lang.Math" />
+
         <variable
             name="nameAndAge"
             type="com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData" />
@@ -25,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="45dp"
-            android:drawablePadding="6dp"
+            android:drawablePadding="@{Math.round(nameAndAge.iconRes!=0?@dimen/user_device_icon_padding_left:0)}"
             android:drawableRight="@{nameAndAge.iconRes}"
             android:text="@{nameAndAge.name}" />
 

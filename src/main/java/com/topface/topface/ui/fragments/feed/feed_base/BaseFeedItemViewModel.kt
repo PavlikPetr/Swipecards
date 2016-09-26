@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.databinding.ViewDataBinding
 import android.view.View
+import com.flurry.sdk.it
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
@@ -24,9 +25,11 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
     init {
         item.user?.let {
             avatarHolder = AvatarHolder(it.photo, getStubResourсe())
-            nameAndAge = AgeAndNameData(it.nameAndAge, null, getOnlineRes(it))
+            nameAndAge = getNameAndAge(it)
         }
     }
+
+    open fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(feedUser.nameAndAge, null, getOnlineRes(feedUser))
 
     private fun getOnlineRes(user: FeedUser): Int {
         if (user.state == null) {

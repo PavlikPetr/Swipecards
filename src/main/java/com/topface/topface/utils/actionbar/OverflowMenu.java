@@ -65,7 +65,8 @@ public class OverflowMenu {
     @Inject
     TopfaceAppState mAppState;
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
-    public static final String USER_ID_FOR_REMOVE = "user_id";
+    public static final String USER_ID_FOR_REMOVE = "user_id_for_remove";
+    public static final String USER_ID_FOR_REMOVE_FROM_BLACK_LIST = "user_id_for_remove_from_black_list";
 
     private Menu mBarActions;
     private OverflowMenuType mOverflowMenuType;
@@ -423,7 +424,7 @@ public class OverflowMenu {
                             showBlackListToast(false);
                             LocalBroadcastManager.getInstance(mContext).
                                     sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
-                                            .putExtra(USER_ID_FOR_REMOVE, -1));
+                                            .putExtra(USER_ID_FOR_REMOVE_FROM_BLACK_LIST, userId));
                         }
 
                         @Override

@@ -8,9 +8,6 @@ import android.text.style.StyleSpan;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.databinding.CityItemBinding;
-import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter;
-
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

@@ -2,8 +2,7 @@ package com.topface.topface.ui;
 
 import android.support.v4.app.Fragment;
 
-import com.topface.topface.ui.fragments.feed.BlackListFragment;
-
+import com.topface.topface.ui.fragments.feed.blacklist.BlackListFragment;
 
 public class BlackListActivity extends SingleFragmentActivity {
 
