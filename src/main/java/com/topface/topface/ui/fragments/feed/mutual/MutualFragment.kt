@@ -8,10 +8,7 @@ import com.topface.topface.databinding.LayoutEmptyMutualBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.feed_utils.convertFeedIdList
-import com.topface.topface.ui.fragments.feed.feed_utils.getUserIdList
 import com.topface.topface.viewModels.BaseViewModel
-import java.util.*
 
 /**
  * Фрагмент взаимных симпатий
@@ -19,10 +16,6 @@ import java.util.*
  */
 @FlurryOpenEvent(name = MutualFragment.PAGE_NAME)
 class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() {
-
-    override fun getDeleteItemsList(mSelected: MutableList<FeedMutual>): ArrayList<String> {
-        return mSelected.getUserIdList().convertFeedIdList()
-    }
 
     companion object {
         const val PAGE_NAME = "Mutual"

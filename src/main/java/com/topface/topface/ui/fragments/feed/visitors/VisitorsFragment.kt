@@ -8,15 +8,9 @@ import com.topface.topface.databinding.LayoutEmptyVisitorsBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
-import java.util.*
 
 @FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
 class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>() {
-
-    override fun getDeleteItemsList(mSelected: MutableList<Visitor>): ArrayList<String> {
-        return mSelected.getFeedIdList()
-    }
 
     companion object {
         const val SCREEN_TYPE = "Visitors"

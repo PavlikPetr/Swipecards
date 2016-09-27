@@ -20,6 +20,7 @@ import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
+import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.inflateBinding
 import java.util.*
@@ -144,7 +145,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         }
     }
 
-    open fun getDeleteItemsList(mSelected: MutableList<T>) = ArrayList<String>()
+    open fun getDeleteItemsList(mSelected: MutableList<T>) = mSelected.getFeedIdList()
 
     override fun onDestroy() {
         super.onDestroy()

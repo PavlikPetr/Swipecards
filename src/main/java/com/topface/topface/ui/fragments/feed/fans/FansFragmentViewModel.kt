@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments.feed.fans
 
 import android.os.Bundle
+import com.topface.framework.utils.Debug
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedBookmark
 import com.topface.topface.data.FeedListData
 import com.topface.topface.databinding.FragmentFeedBaseBinding
@@ -15,6 +17,9 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 
 class FansFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedBookmark>(binding, navigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return newCounters.fans != currentCounters.fans
+    }
 
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_FANS_FEEDS

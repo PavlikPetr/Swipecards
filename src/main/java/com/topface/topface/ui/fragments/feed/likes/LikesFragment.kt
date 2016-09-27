@@ -10,9 +10,7 @@ import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.LikesFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.viewModels.BaseViewModel
-import java.util.*
 
 /**
  * Фрагмент симпатий
@@ -20,10 +18,6 @@ import java.util.*
  */
 @FlurryOpenEvent(name = LikesFragment.PAGE_NAME)
 class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
-
-    override fun getDeleteItemsList(mSelected: MutableList<FeedLike>): ArrayList<String> {
-        return mSelected.getFeedIdList()
-    }
 
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> {
         override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyLikesBinding> {

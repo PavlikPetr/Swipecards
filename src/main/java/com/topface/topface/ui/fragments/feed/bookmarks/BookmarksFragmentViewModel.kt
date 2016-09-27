@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
+import com.topface.framework.utils.Debug
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedBookmark
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
@@ -17,6 +19,10 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 
 class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedBookmark>(binding, navigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return false
+    }
+
     var mIsNeedToUpdate: Boolean = false
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS
@@ -41,7 +47,7 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
                     if (hasValue) {
                         if (!value && ids != null) {
                             var deletedUsers = listOf<FeedBookmark>()
-                            ids.forEach {id->
+                            ids.forEach { id ->
                                 mAdapter?.data?.forEach forEachData@{
                                     if (it.user.id == id) {
                                         deletedUsers = deletedUsers.plus(it)
