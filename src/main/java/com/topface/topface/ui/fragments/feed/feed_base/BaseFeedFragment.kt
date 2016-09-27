@@ -20,8 +20,10 @@ import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
+import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.inflateBinding
+import java.util.*
 
 /**
  * Новый, и усосвершенствованный FeedFragment
@@ -96,7 +98,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mLockerControllerBase.setLockerLayout(getEmptyFeedLayout())
     }
 
-    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
+    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected,
+            getDeleteItemsList(mMultiselectionController.mSelected))
 
     override fun onAddToBlackList() = mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
 
@@ -141,6 +144,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
             mActionModeController.finishIfEnabled()
         }
     }
+
+    open fun getDeleteItemsList(mSelected: MutableList<T>) = mSelected.getFeedIdList()
 
     override fun onDestroy() {
         super.onDestroy()

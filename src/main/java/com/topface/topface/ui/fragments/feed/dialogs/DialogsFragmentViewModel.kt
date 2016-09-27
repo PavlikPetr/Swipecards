@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.content.Intent
+import com.topface.framework.utils.Debug
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.History
 import com.topface.topface.databinding.FragmentFeedBaseBinding
@@ -13,11 +15,11 @@ import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-/**
- * Created by tiberal on 18.09.16.
- */
 class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedDialog>(binding, navigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return newCounters.dialogs != currentCounters.dialogs
+    }
 
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS

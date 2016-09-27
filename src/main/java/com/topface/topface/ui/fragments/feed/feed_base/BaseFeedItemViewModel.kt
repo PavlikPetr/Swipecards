@@ -1,8 +1,10 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.databinding.ViewDataBinding
+import android.text.Html
+import android.text.TextUtils
 import android.view.View
-import com.flurry.sdk.it
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
@@ -17,7 +19,8 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding: T, val item: D, private val mNavigator: IFeedNavigator,
                                                                         private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
-
+    val AGE_TEMPLATE = ", %d"
+    val DOTS = "&#8230;"
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
     open val text: String? = null
@@ -29,7 +32,12 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
         }
     }
 
-    open fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(feedUser.nameAndAge, null, getOnlineRes(feedUser))
+    open fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(
+            if (TextUtils.isEmpty(feedUser.firstName))
+                Html.fromHtml(DOTS).toString()
+            else
+                feedUser.firstName,
+            String.format(App.getCurrentLocale(), AGE_TEMPLATE, feedUser.age), getOnlineRes(feedUser))
 
     private fun getOnlineRes(user: FeedUser): Int {
         if (user.state == null) {

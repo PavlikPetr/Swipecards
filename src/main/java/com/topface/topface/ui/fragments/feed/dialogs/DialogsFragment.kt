@@ -12,6 +12,9 @@ import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
+import com.topface.topface.ui.fragments.feed.feed_utils.convertFeedIdList
+import com.topface.topface.ui.fragments.feed.feed_utils.getUserIdList
+import java.util.*
 
 /**
  * Это кароч диалоги
@@ -20,6 +23,10 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>() {
+
+    override fun getDeleteItemsList(mSelected: MutableList<FeedDialog>): ArrayList<String> {
+        return mSelected.getUserIdList().convertFeedIdList()
+    }
 
     companion object {
         const val PAGE_NAME = "Dialogs"

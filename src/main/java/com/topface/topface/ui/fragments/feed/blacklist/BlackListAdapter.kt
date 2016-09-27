@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.blacklist
 
+import com.flurry.sdk.it
 import com.topface.topface.R
 import com.topface.topface.data.BlackListItem
 import com.topface.topface.databinding.BlackListItemBinding
@@ -10,8 +11,10 @@ class BlackListAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter
 
     override fun bindData(binding: BlackListItemBinding?, position: Int) {
         super.bindData(binding, position)
-        binding?.let {
-            binding.model = BlackListItemViewModel(it, getDataItem(position), mNavigator) { isActionModeEnabled }
+        binding?.let { bind ->
+            getDataItem(position)?.let {
+                binding.model = BlackListItemViewModel(bind, it, mNavigator) { isActionModeEnabled }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.mutual
 
+import com.flurry.sdk.it
 import com.topface.topface.R
 import com.topface.topface.data.FeedMutual
 import com.topface.topface.databinding.FeedItemCityAgeNameBinding
@@ -12,10 +13,11 @@ class MutualFeedAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapte
 
     override fun bindData(binding: FeedItemCityAgeNameBinding?, position: Int) {
         super.bindData(binding, position)
-        binding?.let {
-            val item = getDataItem(position)
-            it.model = BaseFeedItemViewModel(it, item, mNavigator, { isActionModeEnabled })
-            it.city = item.user.city
+        binding?.let { bind ->
+            getDataItem(position)?.let { item ->
+                bind.model = BaseFeedItemViewModel(bind, item, mNavigator, { isActionModeEnabled })
+                bind.city = item.user.city
+            }
         }
     }
 
