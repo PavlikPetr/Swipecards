@@ -223,7 +223,8 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-config.txt'
+                    'proguard-config.txt',
+                    'proguard-appodeal.txt'
         }
         release {
             minifyEnabled true
@@ -290,14 +291,12 @@ android {
 }
 
 dependencies {
-    compile project(':libs:unity-ads-1.5.8')
-    compile project(':libs:cheetah-mobile-3.4.7')
     //Kotlin
     compile "org.jetbrains.anko:anko-sdk15:$anko_version"
-    compile ("org.jetbrains.anko:anko-support-v4:$anko_version"){
+    compile("org.jetbrains.anko:anko-support-v4:$anko_version") {
         exclude module: 'anko-common'
     }
-    compile ("org.jetbrains.anko:anko-appcompat-v7:$anko_version"){
+    compile("org.jetbrains.anko:anko-appcompat-v7:$anko_version") {
         exclude module: 'anko-common'
         exclude module: 'anko-support-v4'
     }
@@ -316,6 +315,10 @@ dependencies {
     }
     //Google play services
     compile "com.google.android.gms:play-services-gcm:$google_play_services_version"
+    compile("com.google.android.gms:play-services-location:$google_play_services_version") {
+        exclude module: 'play-services-base'
+        exclude module: 'play-services-basement'
+    }
     compile("com.google.android.gms:play-services-ads:$google_play_services_version") {
         exclude module: 'play-services-base'
         exclude module: 'play-services-basement'
@@ -335,7 +338,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     // flurry analytics
-    compile 'com.flurry.android:analytics:6.2.0'
+    compile 'com.flurry.android:analytics:6.5.0'
     //Topface sub libs
     compile(project(':libs:statistics-android')) {
         exclude group: 'com.google.code.gson'
@@ -368,8 +371,8 @@ dependencies {
         exclude group: 'com.intellij'
     }
     //View Bind
-    compile ('com.jakewharton:butterknife:8.2.1'){
-exclude module: 'support-annotations'
+    compile('com.jakewharton:butterknife:8.2.1') {
+        exclude module: 'support-annotations'
     }
     provided 'com.jakewharton:butterknife-compiler:8.2.1'
     kapt 'com.jakewharton:butterknife-compiler:8.2.1'
