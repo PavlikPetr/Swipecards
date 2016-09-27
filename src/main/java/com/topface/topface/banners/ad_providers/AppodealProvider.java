@@ -24,6 +24,7 @@ public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
     private static final String YANDEX_NETWORK = "yandex";
+    private static final String CHEETAH_NETWORK = "cheetah";
 
     @Inject
     static WeakStorage mWeakStorage;
@@ -32,6 +33,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setLogging(Debug.isDebugLogsEnabled());
+        Appodeal.disableNetwork(activity.getApplicationContext(), CHEETAH_NETWORK);
         Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
@@ -157,10 +159,10 @@ public class AppodealProvider extends AbstractAdsProvider {
         if (TextUtils.isEmpty(fullscreenSegment)) {
             String bannerSegment = mWeakStorage.getAppodealBannerSegmentName();
             Debug.log("BANNER_SETTINGS : set segment " + bannerSegment);
-            Appodeal.setCustomSegment(bannerSegment, 0);
+            Appodeal.setCustomRule(bannerSegment, 0);
         } else {
             Debug.log("BANNER_SETTINGS : set segment " + fullscreenSegment);
-            Appodeal.setCustomSegment(fullscreenSegment, 0);
+            Appodeal.setCustomRule(fullscreenSegment, 0);
         }
     }
 }
