@@ -52,5 +52,6 @@ class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFee
         }
     }
 
+    override fun considerDuplicates(first: FeedDialog, second: FeedDialog) = first.user?.id == second.user?.id
 }
 

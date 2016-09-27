@@ -158,4 +158,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     override fun getContainerForAd() = view?.findViewById(R.id.banner_container_for_feeds) as ViewGroup
 
+    override fun onResumeFragment() {
+        super.onResumeFragment()
+        mViewModel.onResumeFragments()
+    }
 }

@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
@@ -69,6 +68,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     open val isForPremium: Boolean = false
     open val isNeedReadItems: Boolean = false
     open val isNeedCacheItems: Boolean = true
+    private var mIsNeedUpdateList: Boolean = false
     private val mCounters by lazy {
         CountersData()
     }
@@ -133,7 +133,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     override fun onNext(newCounters: CountersData?) {
                         super.onNext(newCounters)
                         newCounters?.let {
-                            loadTopFeeds()
+                            mIsNeedUpdateList = true
                         }
                     }
                 })
@@ -338,7 +338,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     @FuckingVoodooMagic(description = "нужен для removeOldDuplicates")
-    protected fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
+    protected open fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
 
     private fun constructFeedRequestArgs(isPullToRef: Boolean = true, from: String? = Utils.EMPTY,
                                          to: String? = Utils.EMPTY) =
@@ -408,5 +408,12 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+    }
+
+    fun onResumeFragments() {
+        if (mIsNeedUpdateList) {
+            loadTopFeeds()
+            mIsNeedUpdateList = false
+        }
     }
 }

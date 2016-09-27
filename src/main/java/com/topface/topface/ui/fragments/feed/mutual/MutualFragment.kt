@@ -48,5 +48,4 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
             mViewModel.loadTopFeeds()
         }
     }
-
 }
