@@ -8,6 +8,7 @@ import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.ActionModeController;
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel;
+import com.topface.topface.ui.fragments.feed.feed_base.BaseLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.mutual.MutualFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragmentViewModel;
@@ -29,7 +30,8 @@ import dagger.Provides;
                 MutualFragmentViewModel.class,
                 PhotoblogFragmentViewModel.class,
                 VisitorsFragmentViewModel.class,
-                DialogsFragmentViewModel.class
+                DialogsFragmentViewModel.class,
+                BaseLockScreenViewModel.class
         })
 public class FeedModule {
 

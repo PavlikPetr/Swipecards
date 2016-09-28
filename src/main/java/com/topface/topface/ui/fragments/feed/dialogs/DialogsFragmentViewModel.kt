@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.content.Intent
-import com.topface.framework.utils.Debug
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.History
@@ -18,7 +17,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedDialog>(binding, navigator, api) {
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-        return newCounters.dialogs != currentCounters.dialogs
+        return newCounters.dialogs > currentCounters.dialogs
     }
 
     override val feedsType: FeedsCache.FEEDS_TYPE
@@ -53,5 +52,9 @@ class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFee
     }
 
     override fun considerDuplicates(first: FeedDialog, second: FeedDialog) = first.user?.id == second.user?.id
+
+    override fun makeItemReadWithFeedId(id: String) {
+        //feed will be marked read in another method
+    }
 }
 

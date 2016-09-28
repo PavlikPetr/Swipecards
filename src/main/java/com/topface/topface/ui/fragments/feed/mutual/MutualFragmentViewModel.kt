@@ -17,7 +17,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 class MutualFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedMutual>(binding, navigator, api) {
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-        return newCounters.mutual!=currentCounters.mutual
+        return newCounters.mutual > currentCounters.mutual
     }
 
     override val gcmType: Array<Int>

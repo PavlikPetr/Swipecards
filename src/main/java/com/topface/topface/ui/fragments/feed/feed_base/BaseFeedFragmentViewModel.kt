@@ -68,7 +68,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     open val isForPremium: Boolean = false
     open val isNeedReadItems: Boolean = false
     open val isNeedCacheItems: Boolean = true
-    private var mIsNeedUpdateList: Boolean = false
     private val mCounters by lazy {
         CountersData()
     }
@@ -133,7 +132,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     override fun onNext(newCounters: CountersData?) {
                         super.onNext(newCounters)
                         newCounters?.let {
-                            mIsNeedUpdateList = true
+                            loadTopFeeds()
                         }
                     }
                 })
@@ -171,7 +170,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-    protected fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
+    open fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
         adapter.data.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
                 dataItem.unread = false
@@ -311,6 +310,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         data?.let {
             if (!data.items.isEmpty()) {
                 if (mAdapter?.itemCount == 0) {
+                    isListVisible.set(View.VISIBLE)
+                    isLockViewVisible.set(View.GONE)
                     stubView?.onFilledFeed()
                 }
                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
@@ -408,12 +409,5 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
-    }
-
-    fun onResumeFragments() {
-        if (mIsNeedUpdateList) {
-            loadTopFeeds()
-            mIsNeedUpdateList = false
-        }
     }
 }

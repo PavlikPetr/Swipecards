@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.visitors
 
 import android.os.Bundle
-import com.topface.framework.utils.Debug
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.Visitor
@@ -18,7 +17,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 class VisitorsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<Visitor>(binding, navigator, api) {
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-        return newCounters.visitors != currentCounters.visitors
+        return newCounters.visitors > currentCounters.visitors
     }
 
     override val feedsType: FeedsCache.FEEDS_TYPE
