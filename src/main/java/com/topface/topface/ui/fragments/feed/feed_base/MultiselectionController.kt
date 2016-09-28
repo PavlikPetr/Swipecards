@@ -15,7 +15,10 @@ class MultiselectionController<T>(val mSelectionListener: IMultiSelectionListene
     }
 
     fun handleSelected(item: T, view: View, itemPosition: Int) {
-        if (!isOverlimit()) {
+        val isContain = mSelected.contains(item)
+        if (isOverlimit() && !isContain) {
+            Toast.makeText(view.context.applicationContext, R.string.maximum_number_of_users, Toast.LENGTH_LONG).show()
+        } else {
             if (mSelected.contains(item)) {
                 mSelectedItemsPositions.remove(itemPosition)
                 view.isSelected = false
@@ -26,8 +29,6 @@ class MultiselectionController<T>(val mSelectionListener: IMultiSelectionListene
                 addSelection(item)
             }
             mSelectionListener.onSelected(mSelected.count())
-        } else {
-            Toast.makeText(view.context.applicationContext, R.string.maximum_number_of_users, Toast.LENGTH_LONG).show()
         }
     }
 
