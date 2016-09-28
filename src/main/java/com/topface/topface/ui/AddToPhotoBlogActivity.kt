@@ -41,10 +41,6 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
     lateinit private var mHeaderBinding: AddToPhotoBlogHeaderLayoutBinding
     lateinit private var mScreenViewModel: AddToPhotoBlogViewModel
     lateinit private var mScreenBinding: AddToPhotoBlogLayoutBinding
-    //    private val mScreenBinding by lazy {
-//        DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
-//    }
-//    private val mScreenViewModel by lazy { AddToPhotoBlogViewModel(mScreenBinding, AddPhotoHelper(this)) }
     private val mAdapter by lazy {
         val profile = App.get().profile
         (LeadersRecyclerViewAdapter(
