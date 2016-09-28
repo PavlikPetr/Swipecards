@@ -205,7 +205,7 @@ public abstract class BasePhotoRecyclerViewAdapter<T extends ViewDataBinding> ex
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView;
         boolean isBindingView = true;
-        mItemWidth = parent.getWidth() / mColumnCount;
+        mItemWidth = parent.getMeasuredWidth() / mColumnCount;
         switch (viewType) {
             case TYPE_ADD:
                 itemView = inflater.inflate(R.layout.item_user_gallery_add_btn, null, false);
