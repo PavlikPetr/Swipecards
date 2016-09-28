@@ -189,6 +189,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                             dataItem.unreadCounter = unread
                         } else {
                             dataItem.unread = false
+                            dataItem.unreadCounter = 0
                         }
                         adapter.notifyItemChange(position)
                     }
