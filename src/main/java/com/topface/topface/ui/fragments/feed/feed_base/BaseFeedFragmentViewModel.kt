@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
@@ -171,7 +170,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-    protected fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
+    open fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
         adapter.data.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
                 dataItem.unread = false
@@ -311,6 +310,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         data?.let {
             if (!data.items.isEmpty()) {
                 if (mAdapter?.itemCount == 0) {
+                    isListVisible.set(View.VISIBLE)
+                    isLockViewVisible.set(View.GONE)
                     stubView?.onFilledFeed()
                 }
                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
@@ -338,7 +339,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     @FuckingVoodooMagic(description = "нужен для removeOldDuplicates")
-    protected fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
+    protected open fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
 
     private fun constructFeedRequestArgs(isPullToRef: Boolean = true, from: String? = Utils.EMPTY,
                                          to: String? = Utils.EMPTY) =

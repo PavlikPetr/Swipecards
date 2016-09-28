@@ -111,7 +111,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mMultiselectionController.mSelectedItemsPositions.filter {
             it < mAdapter.data.size
         }.map {
-            mAdapter.notifyItemChanged(it)
+            mAdapter.notifyItemChange(it)
         }
         mAdapter.isNeedHighLight = null
     }
@@ -157,5 +157,4 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
 
     override fun getContainerForAd() = view?.findViewById(R.id.banner_container_for_feeds) as ViewGroup
-
 }

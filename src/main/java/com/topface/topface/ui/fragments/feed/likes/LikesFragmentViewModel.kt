@@ -23,7 +23,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-        return newCounters.likes!=currentCounters.likes
+        return newCounters.likes > currentCounters.likes
     }
 
     override val gcmType: Array<Int>

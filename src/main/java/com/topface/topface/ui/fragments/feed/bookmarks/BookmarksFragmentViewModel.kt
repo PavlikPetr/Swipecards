@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
-import com.topface.framework.utils.Debug
+import android.view.View
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedBookmark
 import com.topface.topface.databinding.FragmentFeedBaseBinding
@@ -55,7 +55,14 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
                                     }
                                 }
                             }
-                            mAdapter?.removeItems(deletedUsers)
+                            mAdapter?.let { adapter ->
+                                adapter.removeItems(deletedUsers)
+                                if (adapter.data?.isEmpty() ?: false) {
+                                    isListVisible.set(View.INVISIBLE)
+                                    stubView?.onEmptyFeed()
+                                }
+                            }
+
                         } else {
                             mIsNeedToUpdate = true
                         }

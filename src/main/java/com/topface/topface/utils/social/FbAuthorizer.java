@@ -17,6 +17,7 @@ import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.state.AuthState;
@@ -152,6 +153,7 @@ public class FbAuthorizer extends Authorizer {
     public static void initFB() {
         String appId = getFbId();
         if (!FacebookSdk.isInitialized() || !FacebookSdk.getApplicationId().equals(appId)) {
+            FacebookSdk.setIsDebugEnabled(Debug.isDebugLogsEnabled());
             FacebookSdk.setApplicationId(appId);
             FacebookSdk.sdkInitialize(App.getContext());
         }

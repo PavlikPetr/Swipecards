@@ -5,6 +5,7 @@ import android.databinding.ViewStubProxy
 import android.support.annotation.LayoutRes
 import android.view.View
 import android.view.ViewStub
+import com.topface.framework.utils.Debug
 import com.topface.topface.BR
 import com.topface.topface.viewModels.BaseViewModel
 
@@ -32,15 +33,18 @@ abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<
     }
 
     override fun onFilledFeed() {
+        Debug.error("FEED onFilledFeed")
         setStubVisibility(View.GONE)
     }
 
     override fun onEmptyFeed() {
+        Debug.error("FEED onEmptyFeed")
         setStubVisibility(View.VISIBLE)
         initEmptyFeedStub()
     }
 
     override fun onLockedFeed(errorCode: Int) {
+        Debug.error("FEED onLockedFeed")
         setStubVisibility(View.VISIBLE)
         initLockedFeedStub(errorCode)
     }

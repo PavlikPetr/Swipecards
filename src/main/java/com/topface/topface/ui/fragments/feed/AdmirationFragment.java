@@ -99,7 +99,10 @@ public class AdmirationFragment extends LikesFragment {
         switch (child) {
             case FIRST_CHILD:
                 if (mStubFlipper != null) {
-                    getUnlockButtonView(FIRST_CHILD).setVisibility(View.GONE);
+                    Button button = getUnlockButtonView(FIRST_CHILD);
+                    if (button != null) {
+                        button.setVisibility(View.GONE);
+                    }
                     mStubFlipper.setDisplayedChild(FIRST_CHILD);
                 }
                 inflated.findViewById(R.id.btnStartRate).setOnClickListener(buttonClick);
@@ -140,6 +143,7 @@ public class AdmirationFragment extends LikesFragment {
         }
     }
 
+    @Nullable
     private Button getUnlockButtonView(@FlipperChild int child) {
         initFlipper(mEmptyFeedView);
         return (Button) (mStubFlipper != null ? mStubFlipper.getChildAt(child).findViewWithTag("btnUnlock") : null);
