@@ -40,7 +40,7 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
         if (localPos != EMPTY_POS && viewType != TYPE_ITEM) {
             switch (viewType) {
                 case TYPE_FOOTER:
-                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), parent, false),null);
+                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), parent, false), null);
                 case TYPE_HEADER:
                     return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), parent, false), null);
             }
@@ -143,13 +143,22 @@ public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBind
     }
 
     public void notifyItemChange(int pos) {
-        int headerSize =  mHeaders.size();
-        if (pos < getItemCount()-headerSize) {
+        int headerSize = mHeaders.size();
+        if (pos < getItemCount() - headerSize) {
             notifyItemChanged(pos + headerSize);
         }
     }
 
-    protected void bindHeader(ViewDataBinding binding, int position){}
+    public void notifyItemRemove(int pos) {
+        int headerSize = mHeaders.size();
+        if (pos < getItemCount() - headerSize) {
+            notifyItemRemoved(pos + headerSize);
+        }
+    }
 
-    protected void bindFooter(ViewDataBinding binding, int position){}
+    protected void bindHeader(ViewDataBinding binding, int position) {
+    }
+
+    protected void bindFooter(ViewDataBinding binding, int position) {
+    }
 }

@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.fans
 import android.os.Bundle
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedBookmark
+import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedListData
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
@@ -41,4 +42,6 @@ class FansFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNa
             }
         }
     }
+
+    override fun considerDuplicates(first: FeedBookmark, second: FeedBookmark) = first.user?.id == second.user?.id
 }

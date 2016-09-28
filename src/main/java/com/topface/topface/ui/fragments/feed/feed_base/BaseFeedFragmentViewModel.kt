@@ -330,7 +330,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 val feed = feedsIterator.next()
                 for (newFeed in data.items) {
                     if (considerDuplicates(feed, newFeed)) {
+                        val pos = adapter.data.indexOf(feed)
                         feedsIterator.remove()
+                        adapter.notifyItemRemove(pos)
                         break
                     }
                 }
