@@ -37,13 +37,12 @@ class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFee
         if (history != null && userId > 0) {
             val adapter = mAdapter
             if (adapter is DialogsAdapter) {
-                for (i in 0..adapter.itemCount - 1) {
-                    val dialog = adapter.getDataItem(i)
-                    if (dialog != null && dialog.user != null && dialog.user.id == userId) {
-                        dialog.type = history.type
-                        dialog.text = history.text
-                        dialog.target = history.target
-                        dialog.createdRelative = DateUtils.getRelativeDate(dialog.created, true)
+                adapter.data.forEachIndexed { i, item ->
+                    if (item.user.id == userId) {
+                        item.type = history.type
+                        item.text = history.text
+                        item.target = history.target
+                        item.createdRelative = DateUtils.getRelativeDate(item.created, true)
                         adapter.notifyItemChange(i)
                     }
                 }
