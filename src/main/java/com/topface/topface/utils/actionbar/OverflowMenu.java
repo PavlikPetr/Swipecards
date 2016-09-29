@@ -32,7 +32,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -65,7 +65,8 @@ public class OverflowMenu {
     @Inject
     TopfaceAppState mAppState;
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
-    public static final String USER_ID_FOR_REMOVE = "user_id";
+    public static final String USER_ID_FOR_REMOVE = "user_id_for_remove";
+    public static final String USER_ID_FOR_REMOVE_FROM_BLACK_LIST = "user_id_for_remove_from_black_list";
 
     private Menu mBarActions;
     private OverflowMenuType mOverflowMenuType;
@@ -422,8 +423,8 @@ public class OverflowMenu {
                             super.success(response);
                             showBlackListToast(false);
                             LocalBroadcastManager.getInstance(mContext).
-                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
-                                            .putExtra(USER_ID_FOR_REMOVE, -1));
+                                    sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
+                                            .putExtra(USER_ID_FOR_REMOVE_FROM_BLACK_LIST, userId));
                         }
 
                         @Override
@@ -444,7 +445,7 @@ public class OverflowMenu {
                             super.success(response);
                             showBlackListToast(true);
                             LocalBroadcastManager.getInstance(mContext).
-                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
+                                    sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
                                             .putExtra(USER_ID_FOR_REMOVE, userId));
                         }
 

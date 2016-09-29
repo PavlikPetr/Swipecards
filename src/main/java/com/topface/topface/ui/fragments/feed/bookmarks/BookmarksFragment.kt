@@ -8,12 +8,16 @@ import com.topface.topface.databinding.LayoutEmptyBookmarksBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
+import com.topface.topface.ui.fragments.feed.feed_utils.convertFeedIdList
+import com.topface.topface.ui.fragments.feed.feed_utils.getUserIdList
+import java.util.*
 
-/**
- * Created by tiberal on 19.09.16.
- */
 @FlurryOpenEvent(name = BookmarksFragment.PAGE_NAME)
 class BookmarksFragment : BaseFeedFragment<FeedBookmark, LayoutEmptyBookmarksBinding>() {
+
+    override fun getDeleteItemsList(mSelected: MutableList<FeedBookmark>): ArrayList<String> {
+        return mSelected.getUserIdList().convertFeedIdList()
+    }
 
     companion object {
         const val PAGE_NAME = "Bookmarks"
@@ -39,4 +43,8 @@ class BookmarksFragment : BaseFeedFragment<FeedBookmark, LayoutEmptyBookmarksBin
         super.onResume()
         mViewModel.onResume()
     }
+
+    override fun getTitle(): String = getString(R.string.settings_messages)
+
+    override fun getActionModeMenu() = R.menu.feed_context_menu_blacklist
 }

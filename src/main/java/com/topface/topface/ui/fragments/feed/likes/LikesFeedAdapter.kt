@@ -17,9 +17,10 @@ class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi:
 
     override fun bindData(binding: FeedItemHeartBinding?, position: Int) {
         super.bindData(binding, position)
-        binding?.let {
-            val item = getDataItem(position)
-            it.model = LikesItemViewModel(it, item, mNavigator, mApi, handleDuplicates) { isActionModeEnabled }
+        binding?.let { bind ->
+            getDataItem(position)?.let {
+                bind.model = LikesItemViewModel(bind, it, mNavigator, mApi, handleDuplicates) { isActionModeEnabled }
+            }
         }
     }
 

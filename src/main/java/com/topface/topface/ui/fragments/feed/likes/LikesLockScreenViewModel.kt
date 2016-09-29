@@ -36,7 +36,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
     lateinit private var mBalanceData: BalanceData
     private var mBalanceSubscription: Subscription
     private var mOptionsSubscription: Subscription
-    lateinit private var mLikesAccessSubscription: Subscription
     val message = ObservableField<String>()
     val buttonMessage = ObservableField<String>()
     private var mBlockSympathy = dataUpdater.options.blockSympathy
@@ -112,7 +111,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
 
     override fun release() {
         RxUtils.safeUnsubscribe(mBalanceSubscription)
-        RxUtils.safeUnsubscribe(mLikesAccessSubscription)
     }
 
 }

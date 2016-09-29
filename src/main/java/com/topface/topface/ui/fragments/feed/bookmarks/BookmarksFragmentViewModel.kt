@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
+import android.view.View
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedBookmark
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
@@ -15,11 +17,12 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-/**
- * Created by tiberal on 19.09.16.
- */
 class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedBookmark>(binding, navigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return false
+    }
+
     var mIsNeedToUpdate: Boolean = false
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS
@@ -43,13 +46,23 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
                     val value = intent.getBooleanExtra(BlackListAndBookmarkHandler.VALUE, false)
                     if (hasValue) {
                         if (!value && ids != null) {
-//                            mAdapter?.data?.forEachIndexed { i, feedBookmark ->
-//                                ids.forEach {
-//                                    if (feedBookmark.user.id == it) {
-//                                        mAdapter?.removeItem(i)
-//                                    }
-//                                }
-//                            }
+                            var deletedUsers = listOf<FeedBookmark>()
+                            ids.forEach { id ->
+                                mAdapter?.data?.forEach forEachData@{
+                                    if (it.user.id == id) {
+                                        deletedUsers = deletedUsers.plus(it)
+                                        return@forEachData
+                                    }
+                                }
+                            }
+                            mAdapter?.let { adapter ->
+                                adapter.removeItems(deletedUsers)
+                                if (adapter.data?.isEmpty() ?: false) {
+                                    isListVisible.set(View.INVISIBLE)
+                                    stubView?.onEmptyFeed()
+                                }
+                            }
+
                         } else {
                             mIsNeedToUpdate = true
                         }

@@ -364,7 +364,7 @@
   <string name="my_location">Ma localisation</string>
   <string name="settings_feedback_email">Saisissez votre e-mail pour que nous puissions vous recontacter.</string>
   <string name="settings_invalid_email">Email incorrect</string>
-  <string name="chat_write_message">Rédiger un message</string>
+  <string name="chat_write_message">Écrire un message</string>
   <string name="dating_message">Message…</string>
   <string name="buying_sympathies">Achat de J\'aime</string>
   <string name="general_reconnect_social">Impossible de se connecter au réseau social. Veuillez

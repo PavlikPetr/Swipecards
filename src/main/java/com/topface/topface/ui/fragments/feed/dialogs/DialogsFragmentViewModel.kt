@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.content.Intent
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.History
 import com.topface.topface.databinding.FragmentFeedBaseBinding
@@ -13,11 +14,11 @@ import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-/**
- * Created by tiberal on 18.09.16.
- */
 class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedDialog>(binding, navigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return newCounters.dialogs > currentCounters.dialogs
+    }
 
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS
@@ -36,13 +37,12 @@ class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFee
         if (history != null && userId > 0) {
             val adapter = mAdapter
             if (adapter is DialogsAdapter) {
-                for (i in 0..adapter.itemCount - 1) {
-                    val dialog = adapter.getDataItem(i)
-                    if (dialog != null && dialog.user != null && dialog.user.id == userId) {
-                        dialog.type = history.type
-                        dialog.text = history.text
-                        dialog.target = history.target
-                        dialog.createdRelative = DateUtils.getRelativeDate(dialog.created, true)
+                adapter.data.forEachIndexed { i, item ->
+                    if (item.user.id == userId) {
+                        item.type = history.type
+                        item.text = history.text
+                        item.target = history.target
+                        item.createdRelative = DateUtils.getRelativeDate(item.created, true)
                         adapter.notifyItemChange(i)
                     }
                 }
@@ -50,5 +50,10 @@ class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFee
         }
     }
 
+    override fun considerDuplicates(first: FeedDialog, second: FeedDialog) = first.user?.id == second.user?.id
+
+    override fun makeItemReadWithFeedId(id: String) {
+        //feed will be marked read in another method
+    }
 }
 

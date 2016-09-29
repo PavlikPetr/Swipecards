@@ -898,7 +898,7 @@
     <string name="reply">Ответить</string>
     <string name="measurement_unit_weight">кг</string>
     <string name="measurement_unit_height">см</string>
-    <string name="maximum_number_of_users">Выбрано максимальное количестово пользователей.</string>
+    <string name="maximum_number_of_users">Выбрано максимальное количество пользователей.</string>
     <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует.
         Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s
     </string>
@@ -1115,7 +1115,7 @@
     <string name="publish_photo">Разместить фото</string>
 
     <string name="dont_miss_a_beat">Не пропустите важное!</string>
-    
+
     <string name="push_alert_dating_title">Хотите получить уведомление, когда %s ответит взаимностью?</string>
     <string name="push_alert_chat_title">Хотите получить уведомление, когда %s ответит?</string>
 

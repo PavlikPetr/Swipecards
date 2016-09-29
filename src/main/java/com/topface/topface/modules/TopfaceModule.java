@@ -44,8 +44,6 @@ import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.feed.AdmirationFragment;
-import com.topface.topface.ui.fragments.feed.BookmarksFragment;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
@@ -133,8 +131,6 @@ import dagger.Provides;
                 LifeCycleReporter.class,
                 RunningStateManager.class,
                 DrawerLayoutManager.class,
-                DialogsFragment.class,
-                BookmarksFragment.class,
                 AuthFragment.class,
                 ChatActivity.class,
                 AddPhotoHelper.class,

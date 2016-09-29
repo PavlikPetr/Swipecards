@@ -33,7 +33,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.DatingMessageStatistics;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
@@ -149,7 +149,7 @@ public class DatingInstantMessageController {
             @Override
             protected void success(History data, IApiResponse response) {
                 LocalBroadcastManager.getInstance(mActivity)
-                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                        .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                 editText.clear();
                 Utils.hideSoftKeyboard(mActivity, mMessageText);
 

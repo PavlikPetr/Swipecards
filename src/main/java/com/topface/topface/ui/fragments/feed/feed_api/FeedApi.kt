@@ -74,10 +74,10 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
-    fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: List<FeedItem>): Observable<Boolean> {
+    fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Boolean> {
         return Observable.create {
             val arg = Bundle()
-            arg.putStringArrayList(DeleteFeedRequestFactory.USER_ID_FOR_DELETE, getFeedStringIds(ids))
+            arg.putStringArrayList(DeleteFeedRequestFactory.USER_ID_FOR_DELETE, ids)
             arg.putSerializable(DeleteFeedRequestFactory.FEED_TYPE, feedsType)
             val deleteFeedsRequest = mDeleteRequestFactory.construct(arg)
             if (deleteFeedsRequest != null) {
@@ -124,12 +124,10 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         return ids
     }
 
-    private fun getFeedStringIds(list: List<FeedItem>): ArrayList<String> {
+    private fun getFeedStringIds(list: List<Int>): ArrayList<String> {
         val ids = ArrayList<String>()
-        list.filter {
-            !it.isLoaderOrRetrier
-        }.forEach {
-            ids.add(it.id)
+        list.forEach {
+            ids.add(it.toString())
         }
         return ids
     }

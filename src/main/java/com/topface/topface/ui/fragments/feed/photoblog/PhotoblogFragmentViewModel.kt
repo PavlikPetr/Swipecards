@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments.feed.photoblog
 
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
@@ -22,6 +24,9 @@ import java.util.concurrent.TimeUnit
  */
 class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedPhotoBlog>(binding, mNavigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return false
+    }
 
     private lateinit var mRefreshIntervalSubscription: Subscription
 

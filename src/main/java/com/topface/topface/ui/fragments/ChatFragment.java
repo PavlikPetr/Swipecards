@@ -77,7 +77,7 @@ import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.utils.AddPhotoHelper;
@@ -422,7 +422,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         for (History message : mHistoryFeedList) {
                             // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
                             // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
-                            if ((message.type == LOCK_CHAT || message.type == MUTUAL_SYMPATHY) && message.unread) {
+                            if (message.unread) {
                                 loadedItemsCount++;
                             }
                         }
@@ -995,7 +995,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                             onNewMessageAdded(sendGiftAnswer.history);
                         }
                         LocalBroadcastManager.getInstance(getActivity())
-                                .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                                .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                     }
                 }
                 break;
@@ -1080,7 +1080,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     onNewMessageAdded(data);
                 }
                 LocalBroadcastManager.getInstance(getActivity())
-                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                        .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                 scrollListToTheEnd();
             }
 

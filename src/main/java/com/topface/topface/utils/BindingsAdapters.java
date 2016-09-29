@@ -185,5 +185,4 @@ public class BindingsAdapters {
             Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
         }
     }
-
 }

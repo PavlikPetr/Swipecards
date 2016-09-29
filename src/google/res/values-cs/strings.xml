@@ -734,8 +734,8 @@
     <string name="premium_for_invitations">Abyste získali status VIP na 1 den, musíte nasbírat 5
         registrací.
     </string>
-    <string name="premium_for_invitations_current_status">Získali jste už přihlášení a registrací
-    </string>
+    <string name="premium_for_invitations_current_status">Získali jste už:\nPřihlášení: 
+        %1$d\na Registrací: %2$d</string>
     <string name="no_contacts_available">V přístroji nejsou kontakty, které je možno zobrazit
     </string>
     <string name="sms_invite_title">Získejte VIP na 24 hodin!</string>

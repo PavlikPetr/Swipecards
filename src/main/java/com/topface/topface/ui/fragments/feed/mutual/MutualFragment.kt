@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.mutual
 
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.FeedMutual
 import com.topface.topface.databinding.LayoutEmptyMutualBinding
@@ -49,5 +48,4 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
             mViewModel.loadTopFeeds()
         }
     }
-
 }

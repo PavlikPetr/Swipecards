@@ -173,4 +173,6 @@
     <dimen name="mutual_sympathy_stub_avatar_size">198dp</dimen>
     <dimen name="mutual_sympathy_icon_size">40dp</dimen>
 
+    <dimen name="user_device_icon_padding_left">6dp</dimen>
+
 </resources>

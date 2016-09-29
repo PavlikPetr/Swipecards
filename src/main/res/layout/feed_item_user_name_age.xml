@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
         <import type="android.view.View" />
+
+        <import type="java.lang.Math" />
 
         <variable
             name="nameAndAge"
@@ -12,7 +14,7 @@
 
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -25,8 +27,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="45dp"
-            android:drawablePadding="6dp"
-            android:drawableRight="@{nameAndAge.iconRes}"
             android:text="@{nameAndAge.name}" />
 
         <!--Сдвигаем вью на размер отступа во вью имени-->
@@ -36,8 +36,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="-45dp"
-            android:text="@{nameAndAge.age}"
-            android:visibility="gone" />
+            android:drawablePadding="@{Math.round(nameAndAge.iconRes!=0?@dimen/user_device_icon_padding_left:0)}"
+            android:drawableRight="@{nameAndAge.iconRes}"
+            android:ellipsize="none"
+            android:lines="1"
+            android:text="@{nameAndAge.age}" />
     </LinearLayout>
 
 </layout>

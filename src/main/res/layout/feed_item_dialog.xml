@@ -25,7 +25,6 @@
         android:layout_height="wrap_content"
         android:onClick="@{clickListener::onClick}"
         android:orientation="horizontal"
-        android:paddingRight="12dp"
         app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
@@ -44,7 +43,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingRight="12dp">
 
             <LinearLayout
                 android:id="@+id/ifp_name_container"

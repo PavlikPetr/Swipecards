@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.visitors
 
+import android.support.v7.widget.RecyclerView
 import com.topface.topface.R
 import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.FeedItemSimpleTimeBinding
@@ -14,12 +15,14 @@ class VisitorsAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter<
 
     override fun bindData(binding: FeedItemSimpleTimeBinding?, position: Int) {
         super.bindData(binding, position)
-        binding?.let {
-            binding.model = VisitorsItemViewModel(it, getDataItem(position), mNavigator) { isActionModeEnabled }
+        binding?.let { bind ->
+            getDataItem(position)?.let {
+                binding.model = VisitorsItemViewModel(bind, it, mNavigator) { isActionModeEnabled }
+            }
         }
     }
 
     @FuckingVoodooMagic(description = "костылина на сервере, id в формате 1:2 , 1 - время перехода, 2 - user id")
-    override fun getItemId(position: Int) = getDataItem(position).id.hashCode().toLong()
+    override fun getItemId(position: Int) = getDataItem(position)?.id?.hashCode()?.toLong() ?: RecyclerView.NO_ID
 
 }

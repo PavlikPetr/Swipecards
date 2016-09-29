@@ -20,8 +20,10 @@ import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
+import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.inflateBinding
+import java.util.*
 
 /**
  * Новый, и усосвершенствованный FeedFragment
@@ -49,7 +51,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         FeedApi(context, this, mDelRequestFactory, mFeedRequestFactory)
     }
     private val mActionModeController by lazy {
-        ActionModeController(activity.menuInflater, this)
+        ActionModeController(activity.menuInflater, getActionModeMenu(), this)
     }
     private val mMultiselectionController by lazy {
         MultiselectionController<T>(this)
@@ -71,6 +73,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         setupLocker()
         return mBinding.root
     }
+
+    open fun getActionModeMenu() = R.menu.feed_context_menu
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,7 +98,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mLockerControllerBase.setLockerLayout(getEmptyFeedLayout())
     }
 
-    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected)
+    override fun onDeleteFeedItems() = mViewModel.onDeleteFeedItems(mMultiselectionController.mSelected,
+            getDeleteItemsList(mMultiselectionController.mSelected))
 
     override fun onAddToBlackList() = mViewModel.onAddToBlackList(mMultiselectionController.mSelected)
 
@@ -106,7 +111,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mMultiselectionController.mSelectedItemsPositions.filter {
             it < mAdapter.data.size
         }.map {
-            mAdapter.notifyItemChanged(it)
+            mAdapter.notifyItemChange(it)
         }
         mAdapter.isNeedHighLight = null
     }
@@ -119,7 +124,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
                 mMultiselectionController.startMultiSelection()
                 mMultiselectionController.handleSelected(data, view, itemPosition)
                 mAdapter.isNeedHighLight = { data -> mMultiselectionController.mSelected.contains(data) }
-                mAdapter.notifyItemChanged(itemPosition)
+                mAdapter.notifyItemChange(itemPosition)
             } else Unit
 
 
@@ -140,6 +145,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         }
     }
 
+    open fun getDeleteItemsList(mSelected: MutableList<T>) = mSelected.getFeedIdList()
+
     override fun onDestroy() {
         super.onDestroy()
         mActionModeController.finishIfEnabled()
@@ -150,5 +157,4 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
 
     override fun getContainerForAd() = view?.findViewById(R.id.banner_container_for_feeds) as ViewGroup
-
 }
