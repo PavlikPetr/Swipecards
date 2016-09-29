@@ -230,6 +230,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
             handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
             val adapter = mAdapter
             if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
+                isListVisible.set(View.INVISIBLE)
                 stubView?.onEmptyFeed()
             } else {
                 isListVisible.set(View.VISIBLE)
