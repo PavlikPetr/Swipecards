@@ -12,6 +12,7 @@ import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
@@ -103,7 +104,9 @@ public class PurchaseButtonList {
             discount = getDiscount(buyBtn);
             pricePerItem = getPricePerItem(buyBtn);
         }
-        return builder.discount(discount).totalPrice(totalPrice).pricePerItem(pricePerItem).build(context);
+        return UiTestsExtensionKt.setTag(builder.discount(discount).totalPrice(totalPrice)
+                        .pricePerItem(pricePerItem).build(context),
+                UiTestsExtensionKt.getTag(buyBtn));
     }
 
     @Nullable
@@ -196,14 +199,16 @@ public class PurchaseButtonList {
         if (context == null) {
             return null;
         }
-        return new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0).showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value).onClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onClick(buyBtn.id, buyBtn);
-                }
-            }
-        }).build(context);
+        return UiTestsExtensionKt.setTag(new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0)
+                .showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value)
+                .onClick(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onClick(buyBtn.id, buyBtn);
+                        }
+                    }
+                }).build(context), UiTestsExtensionKt.getTag(buyBtn));
     }
 
     private String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {

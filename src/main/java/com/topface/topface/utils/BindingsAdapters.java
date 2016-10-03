@@ -185,4 +185,12 @@ public class BindingsAdapters {
             Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
         }
     }
+
+    /*
+    *Если надо через DB засетить тег для автоматизированного тестирования, то следует использовать этот атрибут
+    */
+    @BindingAdapter("specialTag")
+    public static void setTag(View view, String tag) {
+        view.setTag(tag);
+    }
 }

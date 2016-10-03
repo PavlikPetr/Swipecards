@@ -28,13 +28,15 @@ public class TabLayoutCreator {
     private ArrayList<TabViewsContainer> mTabViews;
     private ArrayList<String> mPagesTitles;
     private ArrayList<Integer> mPagesCounters;
+    private ArrayList<String> mPagesClassNames;
 
     public TabLayoutCreator(Context context, ViewPager pager, TabLayout tabLayout
-            , ArrayList<String> pageTitles, ArrayList<Integer> pageCounters) {
+            , ArrayList<String> pageTitles, ArrayList<Integer> pageCounters, ArrayList<String> pagesClassNames) {
         mContext = context.getApplicationContext();
         mPagesCounters = pageCounters;
         mPagesTitles = pageTitles;
         mTabLayout = tabLayout;
+        mPagesClassNames = pagesClassNames;
         mTabLayout.setupWithViewPager(pager);
         initTabView();
     }
@@ -42,12 +44,7 @@ public class TabLayoutCreator {
     public void release() {
         mTabLayout = null;
         mContext = null;
-        if (mPagesCounters != null) {
-            mPagesCounters.clear();
-        }
-        if (mPagesTitles != null) {
-            mPagesTitles.clear();
-        }
+        ListUtils.clearLists(mPagesCounters, mPagesTitles, mPagesClassNames);
         for (TabViewsContainer container : mTabViews) {
             container.clear();
         }
@@ -93,6 +90,10 @@ public class TabLayoutCreator {
             TabViewsContainer container = ListUtils.isEntry(i, mTabViews) ? mTabViews.get(i) : new TabViewsContainer(mContext);
             container.titleView.setEnabled(i == position);
             container.titleView.setText(title);
+            if (ListUtils.isEntry(i, mPagesClassNames)) {
+                // тэги для автоматизированного тестирования
+                container.tabView.setTag(mPagesClassNames.get(i));
+            }
             if (counter > 0) {
                 container.counterView.setEnabled(i == position);
                 container.counterView.setText(String.valueOf(counter));
