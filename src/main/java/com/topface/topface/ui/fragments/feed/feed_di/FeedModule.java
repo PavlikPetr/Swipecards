@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.feed_di;
 
 import android.content.Context;
 
+import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.blacklist.BlackListFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.bookmarks.BookmarksFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragmentViewModel;
@@ -27,6 +28,7 @@ import dagger.Provides;
                 BaseFeedFragmentViewModel.class,
                 FansFragmentViewModel.class,
                 LikesFragmentViewModel.class,
+                AdmirationFragmentViewModel.class,
                 MutualFragmentViewModel.class,
                 PhotoblogFragmentViewModel.class,
                 VisitorsFragmentViewModel.class,

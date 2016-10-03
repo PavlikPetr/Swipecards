@@ -43,10 +43,11 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.feed.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.admiration.AdmirationLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
+import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel;
@@ -143,6 +144,7 @@ import dagger.Provides;
                 AddToPhotoBlogViewModel.class,
                 AddToPhotoBlogHeaderViewModel.class,
                 LikesLockScreenViewModel.class,
+                AdmirationLockScreenViewModel.class,
                 FeedNavigator.class,
                 MutualLockScreenViewModel.class,
                 DatingLockPopup.class,

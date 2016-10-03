@@ -19,7 +19,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
         updatePageCounter(com.topface.topface.ui.fragments.feed.likes.LikesFragment.class.getName(), countersData.getLikes());
         updatePageCounter(MutualFragment.class.getName(), countersData.getMutual());
         if (!App.from(getActivity()).getOptions().isHideAdmirations) {
-            updatePageCounter(AdmirationFragment.class.getName(), countersData.getAdmirations());
+            updatePageCounter(com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment.class.getName(), countersData.getAdmirations());
         }
     }
 
@@ -33,7 +33,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
         addBodyPage(com.topface.topface.ui.fragments.feed.likes.LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.getLikes());
         addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.getMutual());
         if (!App.from(getActivity()).getOptions().isHideAdmirations) {
-            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.getAdmirations());
+            addBodyPage(com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.getAdmirations());
         }
     }
 
