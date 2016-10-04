@@ -215,6 +215,7 @@
     <style name="ButtonWhiteText" parent="ItemTitleText">
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="ButtonWhiteText.SetAvatar">
@@ -347,6 +348,7 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="LeftMenuButtons">
@@ -824,6 +826,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="Widget.Topface.Button">
@@ -1490,7 +1493,7 @@
 
     <style name="FilterItemTextStyle.Title">
         <item name="android:textColor">@color/filter_item_title_text_color</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
     </style>
 

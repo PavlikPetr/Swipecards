@@ -28,7 +28,7 @@ public class BuyScreenStatistics {
 
     public static void buyScreenShowSendStatistics(String screenName, String screenVersion) {
         if (screenName != null) {
-            screenName = screenName.toLowerCase();
+            screenName = screenName.toLowerCase(App.getCurrentLocale());
         } else {
             return;
         }

@@ -3,6 +3,7 @@ package com.topface.topface.statistics;
 
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.App;
 
 public class AdStatistics {
     private static final String BANNER_SHOW = "mobile_%s_banner_show";
@@ -17,7 +18,7 @@ public class AdStatistics {
     private static void send(String command, String bannerName, Slices slices) {
         if (bannerName != null) {
             StatisticsTracker.getInstance()
-                    .sendEvent(String.format(command, bannerName.toLowerCase()), 1, slices);
+                    .sendEvent(String.format(command, bannerName.toLowerCase(App.getCurrentLocale())), 1, slices);
         }
     }
 

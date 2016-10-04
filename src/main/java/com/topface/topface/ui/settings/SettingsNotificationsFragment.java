@@ -198,7 +198,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
         }
         if (notification.mail) {
             if (notification.apns) {
-                textBuilder.append(", ").append(context.getString(R.string.on_mail).toLowerCase());
+                textBuilder.append(", ").append(context.getString(R.string.on_mail).toLowerCase(App.getCurrentLocale()));
             } else {
                 textBuilder.append(context.getString(R.string.on_mail));
             }

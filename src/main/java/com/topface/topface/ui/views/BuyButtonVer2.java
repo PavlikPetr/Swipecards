@@ -246,7 +246,7 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         if (sticker.isVisible()) {
             padding = (int) getContext().getResources().getDimension(R.dimen.sticker_width);
             mBtnHandler.stickerBackgroundRes.set(sticker.getBackground());
-            mBtnHandler.stickerText.set(getContext().getString(sticker.getTitle()).toUpperCase());
+            mBtnHandler.stickerText.set(getContext().getString(sticker.getTitle()).toUpperCase(App.getCurrentLocale()));
         }
         mBtnHandler.buttonTextPaddingLeft.set(padding);
         mBtnHandler.buttonTextPaddingRight.set(padding);
