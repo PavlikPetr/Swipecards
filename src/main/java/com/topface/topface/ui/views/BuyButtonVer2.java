@@ -16,6 +16,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.BuyButtonVer2Binding;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -148,6 +149,7 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         setStickerType(builder.mStickerType);
         setDescription(builder.mDiscount, builder.mPricePerItem, builder.mTotalPrice);
         setOnClickListener(builder.mButtonClickListener);
+        UiTestsExtensionKt.setTag(mBinding.button, builder.mTag);
     }
 
     @Override
@@ -275,7 +277,14 @@ public class BuyButtonVer2 extends BuyButton<BuyButtonVer2.BuyButtonBuilder> {
         private String mDiscount;
         private String mPricePerItem;
         private String mTotalPrice;
+        private Object mTag;
         private OnClickListener mButtonClickListener;
+
+        public BuyButtonBuilder tag(Object tag) {
+            mTag = tag;
+            return this;
+        }
+
 
         public BuyButtonBuilder title(String title) {
             mTitle = title;

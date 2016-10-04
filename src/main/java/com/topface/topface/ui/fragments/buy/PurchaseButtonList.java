@@ -83,12 +83,16 @@ public class PurchaseButtonList {
         String discount = null;
         String totalPrice = null;
         String pricePerItem = null;
-        BuyButtonVer2.BuyButtonBuilder builder = new BuyButtonVer2.BuyButtonBuilder().title(buyBtn.title).type(BuyButtonVer2.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer2.STICKER_TYPE_NONE).onClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(buyBtn.id, buyBtn);
-            }
-        });
+        BuyButtonVer2.BuyButtonBuilder builder = new BuyButtonVer2.BuyButtonBuilder()
+                .title(buyBtn.title)
+                .type(BuyButtonVer2.BUTTON_TYPE_BLUE)
+                .stickerType(BuyButtonVer2.STICKER_TYPE_NONE)
+                .onClick(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.onClick(buyBtn.id, buyBtn);
+                    }
+                });
         int pos = getIndex(getNoTrialProductsList(), buyBtn);
         if (buyBtn.trialPeriodInDays == 0) {
             // catch the second not trial product
@@ -199,7 +203,8 @@ public class PurchaseButtonList {
         if (context == null) {
             return null;
         }
-        return UiTestsExtensionKt.setTag(new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0)
+        return new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0)
+                .tag(UiTestsExtensionKt.getTag(buyBtn))
                 .showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value)
                 .onClick(new View.OnClickListener() {
                     @Override
@@ -208,7 +213,7 @@ public class PurchaseButtonList {
                             listener.onClick(buyBtn.id, buyBtn);
                         }
                     }
-                }).build(context), UiTestsExtensionKt.getTag(buyBtn));
+                }).build(context);
     }
 
     private String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {
