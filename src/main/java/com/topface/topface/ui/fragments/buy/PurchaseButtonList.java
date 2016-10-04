@@ -10,7 +10,6 @@ import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.ui.views.BuyButtonVer1;
-import com.topface.topface.ui.views.BuyButtonVer2;
 import com.topface.topface.utils.CacheProfile;
 
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +18,6 @@ import org.json.JSONArray;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,12 +29,11 @@ public class PurchaseButtonList {
 
     private ArrayList<ValidatedAndDeffProductPrice> mValidatedAndDeffProductPrices;
     private List<BuyButtonData> mAllButtonArray;
-    private List<BuyButtonData> mNoProductsTrialList;
-    private Boolean mIsAllNotTrialProductsValidated;
 
+
+    // TODO: 04.10.16 УБРАТЬ enum, но узнать по поводу viewsVersions и их применений в проекте
     public enum ViewsVersions {
-        V1("v1"),
-        V2("v2");
+        V1("v1");
 
         private String mVersionName;
 
@@ -49,14 +46,15 @@ public class PurchaseButtonList {
         }
     }
 
-    public ArrayList<View> getButtonsListView(String version, LinearLayout root, List<BuyButtonData> buttons,
+
+    public ArrayList<View> getButtonsListView(LinearLayout root, List<BuyButtonData> buttons,
                                               Context context, BuyButtonClickListener listener) {
         mAllButtonArray = buttons;
         getAllProductsPrices();
         ArrayList<View> allViews = new ArrayList<>();
         View tempView;
         for (BuyButtonData buyBtn : buttons) {
-            tempView = getButtonView(getVersionByName(version), buyBtn, context, listener);
+            tempView = getButtonView(buyBtn, context, listener);
             if (tempView != null) {
                 root.addView(tempView);
                 tempView.setTag(buyBtn);
@@ -67,94 +65,8 @@ public class PurchaseButtonList {
     }
 
     @Nullable
-    private View getButtonView(ViewsVersions viewsType, BuyButtonData buyBtn,
-                               Context context, BuyButtonClickListener listener) {
-        switch (viewsType) {
-            case V2:
-                return getViewV2(buyBtn, listener, context);
-            case V1:
-            default:
+    private View getButtonView(BuyButtonData buyBtn, Context context, BuyButtonClickListener listener) {
                 return getViewV1(buyBtn, context, listener);
-        }
-    }
-
-    private View getViewV2(final BuyButtonData buyBtn, final BuyButtonClickListener listener, Context context) {
-        String discount = null;
-        String totalPrice = null;
-        String pricePerItem = null;
-        BuyButtonVer2.BuyButtonBuilder builder = new BuyButtonVer2.BuyButtonBuilder().title(buyBtn.title).type(BuyButtonVer2.BUTTON_TYPE_BLUE).stickerType(BuyButtonVer2.STICKER_TYPE_NONE).onClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onClick(buyBtn.id, buyBtn);
-            }
-        });
-        int pos = getIndex(getNoTrialProductsList(), buyBtn);
-        if (buyBtn.trialPeriodInDays == 0) {
-            // catch the second not trial product
-            if (pos == 1) {
-                builder.stickerType(BuyButtonVer2.STICKER_TYPE_POPULAR);
-            }
-            // catch the last not trial product
-            if (pos == getNoTrialProductsList().size() - 1) {
-                builder.stickerType(BuyButtonVer2.STICKER_TYPE_BEST_VALUE);
-                builder.type(BuyButtonVer2.BUTTON_TYPE_GREEN);
-            }
-            totalPrice = getTotalPrice(buyBtn);
-            discount = getDiscount(buyBtn);
-            pricePerItem = getPricePerItem(buyBtn);
-        }
-        return builder.discount(discount).totalPrice(totalPrice).pricePerItem(pricePerItem).build(context);
-    }
-
-    @Nullable
-    private String getTotalPrice(BuyButtonData buyBtn) {
-        if (buyBtn.totalTemplate.isEmpty()) {
-            return null;
-        }
-        String formatedPrice = getCurrentButtonFormatedPrice(buyBtn);
-        return buyBtn.totalTemplate.replace(Products.PRICE, formatedPrice);
-    }
-
-    @Nullable
-    private String getDiscount(BuyButtonData buyBtn) {
-        if (buyBtn.discountTemplate.isEmpty()) {
-            return null;
-        }
-        BuyButtonData firstNotTrialProduct = getNoTrialProductsList().get(0);
-        ValidatedAndDeffProductPrice firstNtTrialProductPrices = getCurrentProductPrices(firstNotTrialProduct);
-        ValidatedAndDeffProductPrice currentProductPrices = getCurrentProductPrices(buyBtn);
-        double firstNotTrialProductPrice = isAllNotTrialProductsValidated() ? firstNtTrialProductPrices.getValidatedPrice().getPrice() : firstNtTrialProductPrices.getDeffPrice().getPrice();
-        double currentProductPrice = isAllNotTrialProductsValidated() ? currentProductPrices.getValidatedPrice().getPrice() : currentProductPrices.getDeffPrice().getPrice();
-        firstNotTrialProductPrice /= firstNotTrialProduct.periodInDays;
-        currentProductPrice /= buyBtn.periodInDays;
-        double free = (firstNotTrialProductPrice - currentProductPrice) * 100 / firstNotTrialProductPrice;
-        return (int) free > 0 ? buyBtn.discountTemplate.replace(Products.DISCOUNT, String.valueOf((int) free)) : null;
-    }
-
-    @Nullable
-    private String getPricePerItem(BuyButtonData buyBtn) {
-        if (buyBtn.pricePerItemTemplate.isEmpty()) {
-            return null;
-        }
-        ValidatedAndDeffProductPrice currentProductPrices = getCurrentProductPrices(buyBtn);
-        double pricePerItem = isAllNotTrialProductsValidated() ? currentProductPrices.getValidatedPrice().getPrice() / buyBtn.amount : currentProductPrices.getDeffPrice().getPrice() / buyBtn.amount;
-        NumberFormat currentFormat = isAllNotTrialProductsValidated() ? currentProductPrices.getValidatedPrice().getCurrencyFormat() : currentProductPrices.getDeffPrice().getCurrencyFormat();
-        return buyBtn.pricePerItemTemplate.replace(Products.PRICE_PER_ITEM, getFormatedPrice(pricePerItem, currentFormat));
-    }
-
-    private String getCurrentButtonFormatedPrice(BuyButtonData buyBtn) {
-        ValidatedAndDeffProductPrice prices = getCurrentProductPrices(buyBtn);
-        return isAllNotTrialProductsValidated() ? prices.getValidatedPrice().getFormatedPrice() : prices.getDeffPrice().getFormatedPrice();
-    }
-
-    private LinkedList<BuyButtonData> discardTrialProducts(List<BuyButtonData> products) {
-        LinkedList<BuyButtonData> noTrialList = new LinkedList<>();
-        for (BuyButtonData data : products) {
-            if (data.trialPeriodInDays == 0) {
-                noTrialList.add(data);
-            }
-        }
-        return noTrialList;
     }
 
     private ValidatedAndDeffProductPrice getCurrentProductPrices(BuyButtonData buyBtn) {
@@ -170,15 +82,6 @@ public class PurchaseButtonList {
             currentProductPrice = getProductPrices(buyBtn);
         }
         return currentProductPrice;
-    }
-
-    private int getIndex(List<BuyButtonData> products, BuyButtonData buyBtn) {
-        for (int i = 0; i < products.size(); i++) {
-            if (buyBtn.id.equals(products.get(i).id)) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     @Nullable
@@ -222,15 +125,6 @@ public class PurchaseButtonList {
         } else {
             return price;
         }
-    }
-
-    private ViewsVersions getVersionByName(String name) {
-        for (ViewsVersions version : ViewsVersions.values()) {
-            if (version.getVersionName().equals(name)) {
-                return version;
-            }
-        }
-        return ViewsVersions.V1;
     }
 
     public static JSONArray getSupportedViews() {
@@ -278,13 +172,6 @@ public class PurchaseButtonList {
         return mValidatedAndDeffProductPrices;
     }
 
-    private List<BuyButtonData> getNoTrialProductsList() {
-        if (mNoProductsTrialList == null) {
-            mNoProductsTrialList = discardTrialProducts(mAllButtonArray);
-        }
-        return mNoProductsTrialList;
-    }
-
     private ArrayList<ValidatedAndDeffProductPrice> getAllProductsPrices(List<BuyButtonData> buttons) {
         ArrayList<ValidatedAndDeffProductPrice> prices = new ArrayList<>();
         if (buttons != null) {
@@ -293,33 +180,6 @@ public class PurchaseButtonList {
             }
         }
         return prices;
-    }
-
-    private ArrayList<ValidatedAndDeffProductPrice> getAllNotTrialProductsPrices() {
-        if (getNoTrialProductsList().size() == mAllButtonArray.size()) {
-            return getAllProductsPrices();
-        }
-        ArrayList<ValidatedAndDeffProductPrice> prices = new ArrayList<>();
-        for (BuyButtonData buyBtn : getNoTrialProductsList()) {
-            prices.add(getCurrentProductPrices(buyBtn));
-        }
-        return prices;
-    }
-
-    private boolean isAllNotTrialProductsValidated() {
-        if (mIsAllNotTrialProductsValidated == null) {
-            mIsAllNotTrialProductsValidated = checkAllNotTrialProducts();
-        }
-        return mIsAllNotTrialProductsValidated;
-    }
-
-    private boolean checkAllNotTrialProducts() {
-        for (ValidatedAndDeffProductPrice prices : getAllNotTrialProductsPrices()) {
-            if (prices.getValidatedPrice() == null) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private class ValidatedAndDeffProductPrice {
@@ -365,9 +225,6 @@ public class PurchaseButtonList {
             return mPrice;
         }
 
-        public String getFormatedPrice() {
-            return mFormatPrice;
-        }
     }
 
     public interface BuyButtonClickListener {

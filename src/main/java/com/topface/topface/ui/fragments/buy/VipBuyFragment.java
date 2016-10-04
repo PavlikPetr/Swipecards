@@ -150,7 +150,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initVipLiberty(LayoutInflater inflater, LinearLayout root) {
         if (root != null
-                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion(null))
+                && PurchaseButtonList.ViewsVersions.V1.getVersionName().equals(getBuyVipViewVersion(null))
                 && isVipLibertyBlockAvailable()) {
             root.addView(inflater.inflate(R.layout.vip_liberty_list, root, false));
         }
@@ -202,7 +202,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         List<BuyButtonData> availableButtons = getAvailableButtons(products.premium);
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(availableButtons.isEmpty() ? View.VISIBLE : View.GONE);
 
-        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products, null), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+        new PurchaseButtonList().getButtonsListView(btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);
