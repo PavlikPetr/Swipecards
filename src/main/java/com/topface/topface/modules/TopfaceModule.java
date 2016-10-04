@@ -43,16 +43,10 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.admiration.AdmirationLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
-import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
-import com.topface.topface.ui.fragments.feed.likes.LikesLockScreenViewModel;
-import com.topface.topface.ui.fragments.feed.mutual.MutualLockScreenViewModel;
-import com.topface.topface.ui.fragments.feed.photoblog.HeaderPhotoBlogViewModel;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
@@ -104,9 +98,7 @@ import dagger.Provides;
                 PurchasesActivity.class,
                 PhotoSwitcherActivity.class,
                 PurchasesFragment.class,
-                LikesFragment.class,
                 MenuFragment.class,
-                AdmirationFragment.class,
                 NavigationActivity.class,
                 PeopleNearbyFragment.class,
                 PromoKey71Dialog.class,
@@ -143,14 +135,10 @@ import dagger.Provides;
                 ExpressMessageAction.class,
                 AddToPhotoBlogViewModel.class,
                 AddToPhotoBlogHeaderViewModel.class,
-                LikesLockScreenViewModel.class,
-                AdmirationLockScreenViewModel.class,
                 FeedNavigator.class,
-                MutualLockScreenViewModel.class,
                 DatingLockPopup.class,
                 ChooseCityPopupAction.class,
                 FullscreenController.class,
-                HeaderPhotoBlogViewModel.class,
                 FansLockScreenViewModel.class,
                 PromoDialog.class,
                 PromoExpressMessages.class
