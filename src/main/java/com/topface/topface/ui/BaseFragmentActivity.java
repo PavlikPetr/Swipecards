@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,7 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -102,7 +104,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = getToolBarView();
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
         }
@@ -120,6 +122,21 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mToolbar != null) {
             mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         }
+    }
+
+    protected Toolbar getToolBarView() {
+        ViewStub viewStub = (ViewStub) findViewById(R.id.viewStub);
+        if (viewStub != null) {
+            viewStub.setLayoutResource(getToolBarLayout());
+            viewStub.inflate();
+            return (Toolbar) findViewById(R.id.toolbar);
+        }
+        return null;
+    }
+
+    @LayoutRes
+    protected int getToolBarLayout() {
+        return R.layout.toolbar;
     }
 
     protected abstract int getContentLayout();
