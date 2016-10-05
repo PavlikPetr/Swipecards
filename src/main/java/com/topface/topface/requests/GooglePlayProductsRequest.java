@@ -25,9 +25,7 @@ public class GooglePlayProductsRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject result = new JSONObject();
-        result.put("acceptViews", null);
-        return result;
+        return new JSONObject();
     }
 
     @Override
