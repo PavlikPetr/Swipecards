@@ -15,6 +15,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
  * МV для заглушки экрана восхищений
  * Created by siberia87 on 30.09.16.
  */
+
 class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding,
                                     private val mNavigator: IFeedNavigator,
                                     private val dataUpdater: IStateDataUpdater,
@@ -43,8 +44,4 @@ class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding,
 			} else {
 				maleIcon
 			}
-
-	override fun release() {
-		super.release()
-	}
 }

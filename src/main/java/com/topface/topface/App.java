@@ -108,7 +108,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
     public static final String CONNECTIVITY_CHANGE_ACTION = "android.net.conn.CONNECTIVITY_CHANGE";
-    public static final String COMSCORE_C2 = "1901ma5876";
+    public static final String COMSCORE_C2 = "19015876";
     public static final String COMSCORE_SECRET_KEY = "b83e932c608c2e08273eeddf01c2a70e";
     public static final String PREFERENCES_TAG_SHARED = "preferences_general";
     public static final String INTENT_REQUEST_KEY = "requestCode";

@@ -19,8 +19,8 @@
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/avatar"
             style="@style/RoundListAvatar"
-            app:setPhoto="@{avatarHolder.photo}"
             app:stubResId="@{avatarHolder.stubResource}"
+            app:setPhoto="@{avatarHolder.photo}"
             documentation:info="не менять местами stubResId и setPhoto!!!!"/>
     </FrameLayout>
 </layout>

@@ -36,8 +36,4 @@
         <item name="android:layout_marginEnd">@dimen/album_gift_margin_right</item>
     </style>
 
-    <style name="AlbumDeleteButton" parent="AlbumDeleteButtonBase">
-        <item name="android:layout_alignParentEnd">true</item>
-        <item name="android:layout_marginEnd">@dimen/album_delete_button_margin_right</item>
-    </style>
 </resources>

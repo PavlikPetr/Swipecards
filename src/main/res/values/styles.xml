@@ -136,41 +136,10 @@
         <item name="android:drawableLeft">@drawable/checkbox_selector</item>
     </style>
 
-    <style name="actionsFont">
-        <item name="android:textSize">16sp</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
-
-    <style name="BackgroundText">
-        <item name="android:textColor">#2F2F2F</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
     <style name="BackgroundTitleText">
         <item name="android:textColor">#2F2F2F</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="BackgroundFormTitleText">
-        <item name="android:tag">tvTitle</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="BackgroundFormTitleText.Faq">
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="ItemTitleText">
@@ -252,12 +221,6 @@
         <item name="android:textColor">@color/list_text_black</item>
     </style>
 
-    <style name="VipItemTitleWhiteText">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-    </style>
-
     <style name="ButtonBlueText" parent="ButtonGrayText">
         <item name="android:textColor">#9FCCF3</item>
     </style>
@@ -271,12 +234,6 @@
     <style name="ItemWhiteText">
         <item name="android:textColor">@color/list_text_black</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">normal</item>
-    </style>
-
-    <style name="ItemGrayText">
-        <item name="android:textColor">@color/text_color_gray</item>
-        <item name="android:textSize">17sp</item>
         <item name="android:textStyle">normal</item>
     </style>
 
@@ -299,71 +256,6 @@
         <item name="android:textScaleX">0.9</item>
     </style>
 
-    <style name="ProfileButtonsText">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">10sp</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textScaleX">0.9</item>
-    </style>
-
-    <style name="ButtonsText">
-        <item name="android:textColor">#FFFFFF</item>
-    </style>
-
-    <style name="AuthButtonsVerySmallText">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">10sp</item>
-    </style>
-
-    <style name="AuthButtonsSmallText">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="AuthButtonsBigText">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="AuthBackButtonStyle" parent="AuthButtonsBigText">
-        <item name="android:layout_centerHorizontal">true</item>
-        <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:text">@string/general_back</item>
-        <item name="android:drawableLeft">@drawable/back</item>
-        <item name="android:drawablePadding">8dp</item>
-    </style>
-
-    <style name="RecoveryButtonsBigText">
-        <item name="android:textColor">@color/btn_signin</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="NotificationText">
-        <item name="android:textSize">9sp</item>
-        <item name="android:textColor">@color/text_white</item>
-    </style>
-
-    <style name="EditPhotoButtonsText" parent="ButtonsText">
-        <item name="android:textSize">10sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps" tools:ignore="NewApi">false</item>
-        <item name="textAllCaps">false</item>
-    </style>
-
-    <style name="LeftMenuButtons">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/left_menu_text</item>
-        <item name="android:paddingRight">4dp</item>
-        <item name="android:lines">1</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:layout_marginLeft">32dp</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
     <style name="LoadingLocker">
         <item name="android:background">#55000000</item>
         <item name="android:layout_width">fill_parent</item>
@@ -378,31 +270,6 @@
         <item name="android:gravity">center</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="BackgroundFont">
-        <item name="android:textColor">#737373</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="EditAvatar">
-        <item name="preProcessor">mask</item>
-        <item name="clipMask">@drawable/edit_main_avatar_mask</item>
-        <item name="android:background">@drawable/edit_main_avatar_background</item>
-        <item name="android:layout_centerInParent">true</item>
-        <item name="android:layout_width">100dp</item>
-        <item name="android:layout_height">100dp</item>
-    </style>
-
-    <style name="FeedAvatar">
-        <item name="preProcessor">mask</item>
-        <item name="clipMask">@drawable/feed_photo_mask</item>
-        <item name="border">@drawable/feed_photo_border</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_margin">8dp</item>
-        <item name="android:layout_width">73dp</item>
-        <item name="android:layout_height">73dp</item>
     </style>
 
     <style name="ListItemContainer">
@@ -487,16 +354,6 @@
         <item name="android:layout_marginLeft">6dp</item>
     </style>
 
-    <style name="ListCity">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/list_text_gray</item>
-    </style>
-
     <style name="FeedItemNameAge">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
@@ -523,10 +380,6 @@
         <item name="android:textStyle">normal</item>
         <item name="android:ellipsize">none</item>
         <item name="android:singleLine">true</item>
-    </style>
-
-    <style name="WhiteHeader">
-        <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="FeedHeart.Selector">
@@ -621,20 +474,6 @@
         <item name="android:layout_marginRight">@dimen/album_gift_margin_right</item>
     </style>
 
-    <style name="AlbumDeleteButtonBase">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:padding">@dimen/album_delete_button_padding</item>
-        <item name="android:scaleType">fitXY</item>
-    </style>
-
-    <style name="AlbumDeleteButton" parent="AlbumDeleteButtonBase">
-        <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginRight">@dimen/album_delete_button_margin_right</item>
-    </style>
-
     <style name="ChatMessageLayout">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -714,14 +553,6 @@
         <item name="android:layout_marginLeft">8dp</item>
     </style>
 
-    <style name="ProfileAvatar">
-        <item name="border">@drawable/photo_border</item>
-        <item name="android:layout_marginRight">6dp</item>
-        <item name="android:layout_marginLeft">6dp</item>
-        <item name="android:layout_width">72dp</item>
-        <item name="android:layout_height">72dp</item>
-    </style>
-
     <style name="TopfaceTextAppearance">
         <item name="android:textColor">#FFFFFF</item>
     </style>
@@ -736,23 +567,6 @@
 
     <style name="TopfaceTextAppearance.Small" parent="TopfaceTextAppearance">
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="LikeRequestButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:background">@drawable/btn_like_request_selector</item>
-        <item name="android:drawableRight">@drawable/ic_like</item>
-        <item name="android:drawablePadding">10dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:paddingLeft">25dp</item>
-        <item name="android:paddingRight">25dp</item>
-        <item name="android:paddingBottom">2dp</item>
-        <item name="android:layout_marginTop">3dp</item>
-        <item name="android:layout_marginBottom">3dp</item>
-        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="GalleryItem">
@@ -773,49 +587,12 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="TopItem">
-        <item name="preProcessor">mask</item>
-        <item name="clipMask">@drawable/frame_top_mask</item>
-        <item name="android:background">@drawable/frame_top</item>
-        <item name="android:paddingLeft">1dp</item>
-        <item name="android:paddingRight">1dp</item>
-        <item name="android:paddingTop">1dp</item>
-        <item name="android:paddingBottom">1dp</item>
-        <item name="android:scaleType">centerCrop</item>
-        <item name="android:layout_width">106dp</item>
-        <item name="android:layout_height">108dp</item>
-    </style>
-
-    <style name="EditTextAuth">
-        <item name="android:singleLine">true</item>
-        <item name="android:textColor">#454545</item>
-        <item name="android:textColorHint">#AAAAAA</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:imeOptions">flagNoExtractUi</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:includeFontPadding">false</item>
-    </style>
-
     <style name="RedAlertTextView">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_alignParentTop">true</item>
-    </style>
-
-    <style name="ChatButtonsText">
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:gravity">center_horizontal|bottom</item>
-        <item name="android:textColor">@color/color_chat_btn_text</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="ChatVipTitleText">
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="Widget.Topface.Button.Big">
@@ -973,25 +750,6 @@
         <item name="android:dividerHeight">@dimen/filter_fragment_divider_height</item>
     </style>
 
-    <style name="SpinnerTextView">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:tag">dropDownTextView</item>
-        <item name="android:textColor">#333333</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="SpinnerDropDownView" parent="SpinnerTextView">
-        <item name="android:paddingBottom">15dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingTop">15dp</item>
-    </style>
-
-    <style name="SpinnerDropDownView.Selector">
-        <item name="android:background">@drawable/spinner_selector</item>
-    </style>
-
     <style name="AutoCompleteTextViewStyle" parent="@style/Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable" tools:ignore="NewApi">@null</item>
         <item name="android:paddingLeft">6dp</item>
@@ -1065,12 +823,6 @@
         <item name="android:textSize">13sp</item>
     </style>
 
-    <style name="FlatGrayButton">
-        <item name="android:background">@drawable/flat_gray_btn</item>
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
     <style name="GrayText">
         <item name="android:textColor">@color/text_color_gray</item>
         <item name="android:textSize">16sp</item>
@@ -1100,10 +852,6 @@
     </style>
 
     <style name="WhiteListItem.Underline">
-        <item name="android:background">@drawable/list_item_btn</item>
-    </style>
-
-    <style name="FilterParamSelector">
         <item name="android:background">@drawable/list_item_btn</item>
     </style>
 
@@ -1242,12 +990,6 @@
         <item name="android:src">@drawable/btn_send_gift_selector</item>
     </style>
 
-    <style name="LeftMenuViewStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">16dp</item>
-    </style>
-
     <style name="LeftMenuTitleBase">
         <item name="android:lines">1</item>
         <item name="android:maxLines">1</item>
@@ -1327,21 +1069,6 @@
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_height">20dp</item>
-    </style>
-
-    <style name="ItemFeedStyle">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">12dp</item>
-        <item name="android:paddingTop">8dp</item>
-    </style>
-
-    <style name="FilterDialogSelector">
-        <item name="android:listSelector">
-            @drawable/filter_light_edit_form_dialog_background_color_selector
-        </item>
     </style>
 
     <style name="BigStretchedBlueButtonRestore" parent="BigStretchedBlueButton">
