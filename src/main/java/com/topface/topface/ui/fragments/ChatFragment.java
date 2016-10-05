@@ -19,6 +19,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -138,6 +139,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String BANNED_USER = "banned_user";
     public static final String SEX = "sex";
 
+
+    private int deleteItemsCount = 0;
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -434,6 +437,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
+                loadedItemsCount-=deleteItemsCount;                          // add KOSTYL for fixing bug with unreadable messages after delete
                 Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -617,7 +621,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
      * @param position сообщени в списке
      */
     private void deleteItem(final int position) {
-        History item = mAdapter.getItem(position);
+        final History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
             Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
@@ -631,6 +635,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (isAdded()) {
                     int invertedPosition = mAdapter.getPosition(position);
                     mAdapter.removeItem(invertedPosition);
+                    if (item.unread) {
+                        deleteItemsCount++;
+                    }
                 }
             }
 
