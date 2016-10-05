@@ -27,6 +27,7 @@ public class FragmentIdData {
     public static final int UNDEFINED = -1;
     public static final int BECOME_VIP = 14;
 
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({VIP_PROFILE, PROFILE, DATING, TABBED_DIALOGS, TABBED_VISITORS, TABBED_LIKES, PHOTO_BLOG,
             GEO, BONUS, EDITOR, SETTINGS, INTEGRATION_PAGE, BALLANCE, BECOME_VIP, UNDEFINED})
