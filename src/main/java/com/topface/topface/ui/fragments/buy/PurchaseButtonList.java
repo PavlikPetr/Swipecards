@@ -13,7 +13,6 @@ import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
 
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONArray;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -29,22 +28,6 @@ public class PurchaseButtonList {
 
     private ArrayList<ValidatedAndDeffProductPrice> mValidatedAndDeffProductPrices;
     private List<BuyButtonData> mAllButtonArray;
-
-
-    // TODO: 04.10.16 УБРАТЬ enum, но узнать по поводу viewsVersions и их применений в проекте
-    public enum ViewsVersions {
-        V1("v1");
-
-        private String mVersionName;
-
-        ViewsVersions(String name) {
-            mVersionName = name;
-        }
-
-        public String getVersionName() {
-            return mVersionName;
-        }
-    }
 
 
     public ArrayList<View> getButtonsListView(LinearLayout root, List<BuyButtonData> buttons,
@@ -127,15 +110,7 @@ public class PurchaseButtonList {
         }
     }
 
-    public static JSONArray getSupportedViews() {
-        JSONArray array = new JSONArray();
-        for (ViewsVersions version : ViewsVersions.values()) {
-            array.put(version.getVersionName());
-        }
-        return array;
-    }
-
-    private ValidatedAndDeffProductPrice getProductPrices(BuyButtonData buyBtn) {
+ private ValidatedAndDeffProductPrice getProductPrices(BuyButtonData buyBtn) {
         ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
         Currency currency;
         NumberFormat currencyFormatter;
@@ -143,7 +118,7 @@ public class PurchaseButtonList {
         currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
         currencyFormatter.setCurrency(currency);
         double price = (double) buyBtn.price / 100;
-        ProductPriceData deffPrice = new ProductPriceData(currencyFormatter, price, getFormatedPrice(price, currencyFormatter));
+        ProductPriceData deffPrice = new ProductPriceData(currencyFormatter, price);
         ProductPriceData validatedPrice = null;
         if (productsDetails != null && !TextUtils.isEmpty(buyBtn.totalTemplate)) {
             ProductsDetails.ProductDetail detail = productsDetails.getProductDetail(buyBtn.id);
@@ -153,7 +128,7 @@ public class PurchaseButtonList {
                 currencyFormatter = detail.currency.equalsIgnoreCase(Products.USD)
                         ? NumberFormat.getCurrencyInstance(Locale.US) : NumberFormat.getCurrencyInstance(new Locale(App.getLocaleConfig().getApplicationLocale()));
                 currencyFormatter.setCurrency(currency);
-                validatedPrice = new ProductPriceData(currencyFormatter, price, getFormatedPrice(price, currencyFormatter));
+                validatedPrice = new ProductPriceData(currencyFormatter, price);
             }
         }
         buyBtn.currency = currency;
@@ -209,12 +184,11 @@ public class PurchaseButtonList {
     private class ProductPriceData {
         private NumberFormat mCurrencyFormat;
         private double mPrice;
-        private String mFormatPrice;
 
-        public ProductPriceData(NumberFormat currencyFormat, double price, String formatPrice) {
+
+        public ProductPriceData(NumberFormat currencyFormat, double price) {
             mCurrencyFormat = currencyFormat;
             mPrice = price;
-            mFormatPrice = formatPrice;
         }
 
         public NumberFormat getCurrencyFormat() {
