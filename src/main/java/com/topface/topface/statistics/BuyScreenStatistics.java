@@ -11,7 +11,6 @@ public class BuyScreenStatistics {
 
     public static final String BUY_SCREEN_SHOW = "buy_screen_show";
     public static final String BUY_SCREEN_SHOW_UNIQUE = "buy_screen_show_unique";
-    public static final String TAG = "tag";
     public static final String PLC = "plc";
 
     private static void sendUniqueStatistics(String screenName, Slices slices) {
@@ -26,20 +25,19 @@ public class BuyScreenStatistics {
                 .sendEvent(BUY_SCREEN_SHOW, 1, slices);
     }
 
-    public static void buyScreenShowSendStatistics(String screenName, String screenVersion) {
+    public static void buyScreenShowSendStatistics(String screenName) {
         if (screenName != null) {
             screenName = screenName.toLowerCase(App.getCurrentLocale());
         } else {
             return;
         }
-        Slices slices = generateSlices(screenVersion, screenName);
+        Slices slices = generateSlices(screenName);
         sendUniqueStatistics(screenName, slices);
         sendRegularStatistics(slices);
     }
 
-    private static Slices generateSlices(String version, String screenName) {
+    private static Slices generateSlices(String screenName) {
         return new Slices()
-                .putSlice(TAG, version)
                 .putSlice(PLC, screenName);
     }
 }
