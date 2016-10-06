@@ -19,7 +19,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -138,7 +137,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
     public static final String SEX = "sex";
-
 
     private int deleteItemsCount = 0;
     private int mUserId;
@@ -437,7 +435,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
-                loadedItemsCount+=deleteItemsCount;                     // add KOSTYL for fixing bug with unreadable messages after delete
+                // add KOSTYL for fixing bug with unreadable messages after delete
+                loadedItemsCount += deleteItemsCount;
                 Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
