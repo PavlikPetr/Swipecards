@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="handlers"
-            type="com.topface.topface.ui.dialogs.TakePhotoPopup.Handlers" />
+            type="com.topface.topface.ui.dialogs.TakePhotoPopup.Handlers"/>
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white"
@@ -24,7 +24,7 @@
             android:background="@color/action_bar_color"
             app:contentInsetStart="0dp">
 
-            <include layout="@layout/actionbar_container_title_view" />
+            <include layout="@layout/actionbar_container_title_view"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -47,13 +47,13 @@
                     android:layout_width="@dimen/take_photo_placeholder_size"
                     android:layout_height="@dimen/take_photo_placeholder_size"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/upload_photo_male" />
+                    android:background="@drawable/upload_photo_male"/>
 
                 <TextView
                     style="@style/TakePhotoText"
                     android:paddingBottom="20dp"
                     android:paddingTop="32dp"
-                    android:text="@string/take_photo_text_1" />
+                    android:text="@string/take_photo_text_1"/>
 
                 <Button
                     android:id="@+id/btn_take_photo"
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:onClick="@{handlers::onTakeClick}"
-                    android:text="@string/profile_add_camera" />
+                    android:text="@string/profile_add_camera"/>
 
                 <Button
                     android:id="@+id/btn_choose_photo"
@@ -70,12 +70,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{handlers::onChooseClick}"
-                    android:text="@string/profile_add_album" />
+                    android:text="@string/profile_add_album"/>
 
                 <TextView
                     style="@style/TakePhotoText.Medium"
                     android:paddingTop="@dimen/take_photo_padding_40"
-                    android:text="@string/take_photo_text_2" />
+                    android:text="@string/take_photo_text_2"/>
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
