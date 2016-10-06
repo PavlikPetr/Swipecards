@@ -437,7 +437,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
-                loadedItemsCount-=deleteItemsCount;                          // add KOSTYL for fixing bug with unreadable messages after delete
+                loadedItemsCount+=deleteItemsCount;                     // add KOSTYL for fixing bug with unreadable messages after delete
                 Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
