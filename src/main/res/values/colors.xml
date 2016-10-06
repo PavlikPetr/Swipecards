@@ -233,5 +233,8 @@
     <color name="mutual_sympathy_stub_date">#aa000000</color>
     <color name="mutual_sympathy_stub_aditional_info">#61000000</color>
 
+    <!--Toolbar colors-->
+    <color name="toolbar_background_white">@color/bg_white</color>
+    <color name="toolbar_title_color">#232C35</color>
 
 </resources>

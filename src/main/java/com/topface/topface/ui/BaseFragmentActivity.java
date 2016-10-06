@@ -18,7 +18,6 @@ import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -42,9 +41,12 @@ import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.Locale;
+
+import static com.topface.topface.R.id.viewStub;
 
 public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
@@ -58,6 +60,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private Toolbar mToolbar;
+    private FrameLayout mToolBarWrapper;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -104,10 +107,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        mToolbar = getToolBarView();
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
+        setToolbar();
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -115,7 +115,42 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
-        initActionBar(getSupportActionBar());
+//        initActionBar(getSupportActionBar());
+    }
+
+    private void setToolbar() {
+        setToolbar(getToolbarView());
+    }
+
+    public void setToolbar(@LayoutRes int layout) {
+        setToolbar(inflateToolbarView(layout));
+    }
+
+    public void setToolbar(Toolbar view) {
+        mToolbar = view;
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+        }
+    }
+
+    private FrameLayout getToolbarWrapper() {
+        if (mToolBarWrapper == null) {
+            mToolBarWrapper = (FrameLayout) findViewById(viewStub);
+        }
+        return mToolBarWrapper;
+    }
+
+    @Nullable
+    private Toolbar inflateToolbarView(@LayoutRes int layout) {
+        FrameLayout frameLayout = getToolbarWrapper();
+        if (frameLayout != null) {
+            if (mToolbar != null) {
+                frameLayout.removeView(mToolbar);
+            }
+            frameLayout.addView(getLayoutInflater().inflate(layout, null));
+            return (Toolbar) findViewById(R.id.toolbar);
+        }
+        return null;
     }
 
     public void setToolBarVisibility(boolean isVisible) {
@@ -124,14 +159,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    protected Toolbar getToolBarView() {
-        ViewStub viewStub = (ViewStub) findViewById(R.id.viewStub);
-        if (viewStub != null) {
-            viewStub.setLayoutResource(getToolBarLayout());
-            viewStub.inflate();
-            return (Toolbar) findViewById(R.id.toolbar);
-        }
-        return null;
+    @Nullable
+    protected Toolbar getToolbarView() {
+        return inflateToolbarView(getToolBarLayout());
     }
 
     @LayoutRes

@@ -1583,4 +1583,14 @@
         <item name="android:text">@string/start_chat_with_gift</item>
         <item name="android:drawableLeft">@drawable/ic_arrow_down</item>
     </style>
+
+    <style name="Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/action_bar_color</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+
+
+    </style>
 </resources>

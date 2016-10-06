@@ -13,6 +13,10 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
         updatePageCounter(DialogsFragment.class.getName(), countersData.getDialogs());
     }
 
+    @Override
+    protected int getToolbarLayout() {
+        return R.layout.test_toolbar;
+    }
 
     @Override
     protected String getTitle() {
