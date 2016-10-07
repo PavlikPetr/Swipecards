@@ -46,8 +46,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.Locale;
 
-import static com.topface.topface.R.id.viewStub;
-
 public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
@@ -135,7 +133,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     private FrameLayout getToolbarWrapper() {
         if (mToolBarWrapper == null) {
-            mToolBarWrapper = (FrameLayout) findViewById(viewStub);
+            mToolBarWrapper = (FrameLayout) findViewById(R.id.viewStub);
         }
         return mToolBarWrapper;
     }

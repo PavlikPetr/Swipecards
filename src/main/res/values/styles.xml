@@ -619,7 +619,7 @@
 
     <!-- наследуются стили Widget-->
 
-    <style name="Widget.Topface" />
+    <style name="Widget.Topface"/>
 
     <style name="Widget.Topface.Button.Big.Gray">
         <item name="android:background">@drawable/btn_gray_selector</item>
@@ -891,9 +891,9 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
-    <style name="FeedbackEditText" parent="WhiteBackgroundEdit" />
+    <style name="FeedbackEditText" parent="WhiteBackgroundEdit"/>
 
-    <style name="FeedbackTextView" parent="WhiteBackgroundTitle" />
+    <style name="FeedbackTextView" parent="WhiteBackgroundTitle"/>
 
     <style name="ComplainsHeader" parent="FormTitleText">
         <item name="android:layout_width">fill_parent</item>
@@ -1124,7 +1124,7 @@
         <item name="android:visibility">visible</item>
     </style>
 
-    <style name="OkProfileUserName" parent="VkProfileUserName" />
+    <style name="OkProfileUserName" parent="VkProfileUserName"/>
 
     <style name="InvisibleProgress">
         <item name="android:visibility">gone</item>
@@ -1164,7 +1164,7 @@
         <item name="android:visibility">visible</item>
     </style>
 
-    <style name="EmptyFeedsViewGravity" />
+    <style name="EmptyFeedsViewGravity"/>
 
     <style name="OfferwallItemBase">
         <item name="android:layout_width">match_parent</item>
@@ -1318,9 +1318,5 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/action_bar_color</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-
-
     </style>
 </resources>
