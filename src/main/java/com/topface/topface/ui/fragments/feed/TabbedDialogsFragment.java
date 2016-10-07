@@ -14,11 +14,6 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected int getToolbarLayout() {
-        return R.layout.test_toolbar;
-    }
-
-    @Override
     protected String getTitle() {
         return getString(R.string.settings_messages);
     }

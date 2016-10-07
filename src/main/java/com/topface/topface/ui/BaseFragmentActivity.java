@@ -41,7 +41,6 @@ import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.Locale;
@@ -58,7 +57,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private Toolbar mToolbar;
-    private FrameLayout mToolBarWrapper;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -105,7 +103,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        setToolbar();
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -113,58 +110,33 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
-//        initActionBar(getSupportActionBar());
     }
 
-    private void setToolbar() {
-        setToolbar(getToolbarView());
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        getToolbar();
     }
 
-    public void setToolbar(@LayoutRes int layout) {
-        setToolbar(inflateToolbarView(layout));
-    }
-
-    public void setToolbar(Toolbar view) {
-        mToolbar = view;
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
-    }
-
-    private FrameLayout getToolbarWrapper() {
-        if (mToolBarWrapper == null) {
-            mToolBarWrapper = (FrameLayout) findViewById(R.id.viewStub);
-        }
-        return mToolBarWrapper;
-    }
-
-    @Nullable
-    private Toolbar inflateToolbarView(@LayoutRes int layout) {
-        FrameLayout frameLayout = getToolbarWrapper();
-        if (frameLayout != null) {
+    protected Toolbar getToolbar() {
+        if (mToolbar == null) {
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
             if (mToolbar != null) {
-                frameLayout.removeView(mToolbar);
+                // Дефолтное состояние тулбара, стрелка влево и название приложения в title
+                mToolbar.setNavigationIcon(R.drawable.ic_arrow_up);
+                mToolbar.setNavigationContentDescription(getResources().getString(R.string
+                        .app_name));
+                setSupportActionBar(mToolbar);
             }
-            frameLayout.addView(getLayoutInflater().inflate(layout, null));
-            return (Toolbar) findViewById(R.id.toolbar);
         }
-        return null;
+        return mToolbar;
     }
 
     public void setToolBarVisibility(boolean isVisible) {
-        if (mToolbar != null) {
-            mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        Toolbar bar = getToolbar();
+        if (bar != null) {
+            bar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
         }
-    }
-
-    @Nullable
-    protected Toolbar getToolbarView() {
-        return inflateToolbarView(getToolBarLayout());
-    }
-
-    @LayoutRes
-    protected int getToolBarLayout() {
-        return R.layout.toolbar;
     }
 
     protected abstract int getContentLayout();

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel"/>
+    </data>
+
+<android.support.v7.widget.Toolbar
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
@@ -9,3 +16,5 @@
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
     app:titleMarginStart="0dp"/>
+
+</layout>

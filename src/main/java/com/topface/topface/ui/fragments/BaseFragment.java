@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -69,11 +68,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (savedInstanceState != null) {
             mNeedTitles = savedInstanceState.getBoolean(STATE_NEED_TITLES, true);
         }
-    }
-
-    @LayoutRes
-    protected int getToolbarLayout() {
-        return 0;
     }
 
     protected int getStatusBarColor() {
@@ -157,10 +151,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onResume() {
         super.onResume();
-        int layout = getToolbarLayout();
-        if (layout > 0 && getActivity() instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) getActivity()).setToolbar(layout);
-        }
         setStatusBarColor();
         if (mProfileLoadReceiver == null) {
             mProfileLoadReceiver = new BroadcastReceiver() {
