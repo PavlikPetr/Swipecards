@@ -51,5 +51,4 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
 		AdmobInterstitialUtils.
 				requestPreloadedInterstitial(context, App.get().options.interstitial)
 	}
-
 }
