@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.app_day.AppDayItemViewModel"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> viewModel.onBannerClick()}"
+        android:orientation="vertical">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:layout_width="match_parent"
+            android:background="@android:color/black"
+            android:layout_height="wrap_content"
+            app:remoteSrcGlide="@{viewModel.iconUrl}"/>
+
+    </LinearLayout>
+</layout>

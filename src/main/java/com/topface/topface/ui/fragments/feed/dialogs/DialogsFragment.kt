@@ -24,45 +24,38 @@ import java.util.*
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>() {
 
-    override fun getDeleteItemsList(mSelected: MutableList<FeedDialog>): ArrayList<String> {
-        return mSelected.getUserIdList().convertFeedIdList()
-    }
+	override fun getDeleteItemsList(mSelected: MutableList<FeedDialog>): ArrayList<String> {
+		return mSelected.getUserIdList().convertFeedIdList()
+	}
 
-    companion object {
-        const val PAGE_NAME = "Dialogs"
-    }
+	companion object {
+		const val PAGE_NAME = "Dialogs"
+	}
 
-    private val mAppOfTheDayModel by lazy {
-        DialogAppOfTheDayModel(App.getContext(), App.get().options.appOfTheDay)
-    }
+	override val mViewModel by lazy {
+		DialogsFragmentViewModel(mBinding, mNavigator, mApi)
+	}
+	override val mLockerControllerBase by lazy {
+		DialogsLockController(mBinding.emptyFeedStub as ViewStubProxy)
+	}
+	override val mAdapter by lazy {
+		val adapter = DialogsAdapter(mNavigator)
+		adapter.setHeader(FixedViewInfo(bannerRes, mAppDayViewModel))
+		adapter
+	}
 
-    override val mViewModel by lazy {
-        DialogsFragmentViewModel(mBinding, mNavigator, mApi)
-    }
-    override val mLockerControllerBase by lazy {
-        DialogsLockController(mBinding.emptyFeedStub as ViewStubProxy)
-    }
-    override val mAdapter by lazy {
-        val adapter = DialogsAdapter(mNavigator)
-        App.get().options.appOfTheDay?.let {
-            adapter.setHeader(FixedViewInfo(R.layout.app_of_the_day_layout, mAppOfTheDayModel))
-        }
-        adapter
-    }
+	override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyDialogsBinding> {
+		override fun construct(binding: ViewDataBinding) = DialogsLockScreenViewModel(binding as LayoutEmptyDialogsBinding, mNavigator, this@DialogsFragment)
+	}
 
-    override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyDialogsBinding> {
-        override fun construct(binding: ViewDataBinding) = DialogsLockScreenViewModel(binding as LayoutEmptyDialogsBinding, mNavigator, this@DialogsFragment)
-    }
+	override fun getEmptyFeedLayout() = R.layout.layout_empty_dialogs
 
-    override fun getEmptyFeedLayout() = R.layout.layout_empty_dialogs
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+		if (requestCode == ChatActivity.REQUEST_CHAT) {
+			data?.let { mViewModel.updatePreview(it) }
+		}
+	}
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ChatActivity.REQUEST_CHAT) {
-            data?.let { mViewModel.updatePreview(it) }
-        }
-    }
-
-    override fun getTitle(): String = getString(R.string.settings_messages)
+	override fun getTitle(): String = getString(R.string.settings_messages)
 }
