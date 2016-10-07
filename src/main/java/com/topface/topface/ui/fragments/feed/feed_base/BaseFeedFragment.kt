@@ -14,9 +14,12 @@ import com.topface.topface.banners.BannersController
 import com.topface.topface.banners.IPageWithAds
 import com.topface.topface.banners.PageInfo
 import com.topface.topface.data.FeedItem
+import com.topface.topface.databinding.AppDayListBinding
+import com.topface.topface.databinding.AppOfTheDayLayoutBinding
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.ui.adapters.ItemEventListener
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
@@ -40,6 +43,8 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
     open val res: Int = R.layout.fragment_feed_base
     protected val mBinding by inflateBinding<FragmentFeedBaseBinding>(res)
+    open val bannerRes: Int = R.layout.app_day_list
+    protected val mBannerBinding by inflateBinding<AppDayListBinding>(bannerRes)
     private lateinit var mBannersController: BannersController
     private val mDelRequestFactory by lazy {
         DeleteFeedRequestFactory(context)
@@ -58,6 +63,9 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     }
     protected val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
+    }
+    protected val mAppDayViewModel by lazy {
+        AppDayViewModel(mBannerBinding)
     }
 
     abstract val mViewModel: BaseFeedFragmentViewModel<T>
