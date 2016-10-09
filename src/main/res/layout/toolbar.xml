@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable
-            name="viewModel"
-            type="com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel"/>
-    </data>
-
-<android.support.v7.widget.Toolbar
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/action_bar_color"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp"
-    app:titleMarginStart="0dp"/>
-
-</layout>
+    app:elevation="4dp"
+    android:background="@color/toolbar_background_white"/>
+    <!--android:navigationIcon="@drawable/ic_arrow_up"-->
+    <!--android:subtitleTextColor="@color/toolbar_subtitle_color"-->
+    <!--android:title="@string/app_name"-->
+    <!--android:elevation="4dp"-->
+    <!--android:titleTextColor="@color/toolbar_title_color" />-->

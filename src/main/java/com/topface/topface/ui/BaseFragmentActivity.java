@@ -30,6 +30,9 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.IActivityDelegate;
@@ -57,6 +60,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
     private Toolbar mToolbar;
+    private ToolbarBaseViewModel mToolbarBaseViewModel;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -110,6 +114,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
+        initActionBarOptions(getSupportActionBar());
     }
 
     @Override
@@ -122,14 +127,37 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mToolbar == null) {
             mToolbar = (Toolbar) findViewById(R.id.toolbar);
             if (mToolbar != null) {
-                // Дефолтное состояние тулбара, стрелка влево и название приложения в title
-                mToolbar.setNavigationIcon(R.drawable.ic_arrow_up);
-                mToolbar.setNavigationContentDescription(getResources().getString(R.string
-                        .app_name));
                 setSupportActionBar(mToolbar);
             }
         }
         return mToolbar;
+    }
+
+    protected ToolbarBaseViewModel generateToolbarViewModel() {
+        return new ToolbarBaseViewModel(getToolbar());
+    }
+
+    protected ToolbarBaseViewModel getToolbarViewModel() {
+        if (mToolbarBaseViewModel == null) {
+            mToolbarBaseViewModel = generateToolbarViewModel();
+        }
+
+        return mToolbarBaseViewModel;
+    }
+
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        ToolbarBaseViewModel toolbarBaseViewModel = getToolbarViewModel();
+        if (toolbarBaseViewModel != null) {
+            if (settings.getTitle() != null) {
+                toolbarBaseViewModel.setTitle(settings.getTitle());
+            }
+            if (settings.getSubtitle() != null) {
+                toolbarBaseViewModel.setSubtitle(settings.getSubtitle());
+            }
+            if (settings.getIcon() != null) {
+                toolbarBaseViewModel.setUpButton(settings.getIcon());
+            }
+        }
     }
 
     public void setToolBarVisibility(boolean isVisible) {
@@ -187,23 +215,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    /**
-     * Выставляем опции для ActionBar
-     */
-    protected void initActionBar(ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBarView = new ActionBarView(actionBar, this);
-            setActionBarView();
-            initActionBarOptions(actionBar);
-        }
-    }
-
     protected void initActionBarOptions(ActionBar actionBar) {
-        actionBar.setIcon(android.R.color.transparent);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayShowTitleEnabled(true);
     }
 
     protected void setActionBarView() {

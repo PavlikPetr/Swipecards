@@ -41,6 +41,8 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
@@ -246,6 +248,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
+    }
+
+    @Override
+    protected ToolbarBaseViewModel generateToolbarViewModel() {
+        return new NavigationToolbarViewModel(getToolbar(), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleDrawerLayout();
+            }
+        });
     }
 
     private void initPopups() {
@@ -605,10 +617,5 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (getSupportActionBar() != null) {
             getSupportActionBar().show();
         }
-    }
-
-    @Override
-    public void onUpClick() {
-        toggleDrawerLayout();
     }
 }

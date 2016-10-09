@@ -23,6 +23,8 @@ import com.topface.topface.App;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.Utils;
@@ -91,6 +93,12 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    public void setToolbarSettings(ToolbarSettingsData settings) {
+        if (getActivity() instanceof BaseFragmentActivity) {
+            ((BaseFragmentActivity) getActivity()).setToolbarSettings(settings);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -120,7 +128,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void refreshActionBarTitles() {
-        setActionBarTitles(getTitle(), getSubtitle());
+        setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle()));
     }
 
     @SuppressWarnings("unused")

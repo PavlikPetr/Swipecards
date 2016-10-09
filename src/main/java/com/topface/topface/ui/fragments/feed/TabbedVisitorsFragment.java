@@ -14,6 +14,11 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
     }
 
     @Override
+    protected String getSubtitle() {
+        return "";
+    }
+
+    @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(VisitorsFragment.class.getName(), countersData.getVisitors());
         updatePageCounter(FansFragment.class.getName(), countersData.getFans());

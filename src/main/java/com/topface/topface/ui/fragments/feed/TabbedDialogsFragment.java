@@ -19,6 +19,11 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
     }
 
     @Override
+    protected String getSubtitle() {
+        return "";
+    }
+
+    @Override
     protected void addPages() {
         addBodyPage(DialogsFragment.class.getName(), getString(R.string.general_dbl_all), mCountersData.getDialogs());
         addBodyPage(BookmarksFragment.class.getName(), getString(R.string.general_bookmarks), 0);

@@ -51,6 +51,7 @@ import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
@@ -141,7 +142,8 @@ import dagger.Provides;
                 FullscreenController.class,
                 FansLockScreenViewModel.class,
                 PromoDialog.class,
-                PromoExpressMessages.class
+                PromoExpressMessages.class,
+                NavigationToolbarViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

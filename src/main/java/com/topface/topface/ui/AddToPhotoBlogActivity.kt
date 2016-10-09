@@ -21,6 +21,8 @@ import com.topface.topface.ui.adapters.LoadingListAdapter
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.ui.dialogs.TakePhotoPopup
 import com.topface.topface.ui.fragments.PurchasesFragment
+import com.topface.topface.ui.views.toolbar.BackToolbarViewModel
+import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.ActionBarView
@@ -33,9 +35,13 @@ import com.topface.topface.viewModels.AddToPhotoBlogViewModel
  * Created by tiberal on 25.07.16.
  */
 
-class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderViewModel.ILockerVisualisator
+class AddToPhotoBlogActivity : BaseFragmentActivity(), AddToPhotoBlogHeaderViewModel.ILockerVisualisator
         , AddToPhotoBlogHeaderViewModel.IPurchasesFragmentVisualisator
         , AddToPhotoBlogHeaderViewModel.IPhotoHelperVisualisator, AddToPhotoBlogHeaderViewModel.IAdapterInteractor {
+
+    override fun getContentLayout(): Int {
+        return R.layout.add_to_photo_blog_layout
+    }
 
     lateinit private var mHeaderViewModel: AddToPhotoBlogHeaderViewModel
     lateinit private var mHeaderBinding: AddToPhotoBlogHeaderLayoutBinding
@@ -73,7 +79,8 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
     }
 
     override fun showPhotoHelper() {
-        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager, TakePhotoPopup.TAG)
+        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager,
+                TakePhotoPopup.TAG)
     }
 
     override fun getSelectedPhotoId() = mAdapter.selectedPhotoId
@@ -93,33 +100,25 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         return mHeaderBinding.root
     }
 
+    override fun generateToolbarViewModel(): ToolbarBaseViewModel {
+        return BackToolbarViewModel(toolbar, getString(R.string.publish_photo),
+                View.OnClickListener { finish() })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         savedInstanceState?.let {
             onRestoreState(it)
         }
-        initActionBar(supportActionBar)
-        mScreenBinding = DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
+        mScreenBinding = DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, getContentLayout())
         //https://youtrack.jetbrains.com/issue/KT-12402
         initRecyclerView(mScreenBinding.userPhotosGrid)
     }
 
-    fun initActionBar(actionBar: ActionBar?) {
-        actionBar?.let {
-            ActionBarView(it, this).setArrowUpView(getString(R.string.publish_photo)) { finish() }
-            with(it) {
-                setIcon(android.R.color.transparent)
-                setDisplayHomeAsUpEnabled(false)
-                setDisplayUseLogoEnabled(true)
-                setDisplayShowCustomEnabled(true)
-                setDisplayShowTitleEnabled(false)
-            }
-        }
-    }
-
     private fun initRecyclerView(recyclerView: RecyclerView) {
         with(recyclerView) {
-            layoutManager = GridLayoutManager(this@AddToPhotoBlogActivity, resources.getInteger(R.integer.add_to_leader_column_count))
+            layoutManager = GridLayoutManager(this@AddToPhotoBlogActivity,
+                    resources.getInteger(R.integer.add_to_leader_column_count))
             adapter = mAdapter
             post {
                 mAdapter.selectedPhotoPos = mSelectedPos

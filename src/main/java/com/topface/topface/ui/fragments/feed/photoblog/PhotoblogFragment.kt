@@ -82,5 +82,6 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
 
     override fun getTitle(): String? = getString(R.string.general_photoblog)
 
+    override fun getSubtitle() = ""
 }
 

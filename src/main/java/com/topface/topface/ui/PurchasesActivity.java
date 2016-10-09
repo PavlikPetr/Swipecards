@@ -233,17 +233,17 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         }
     }
 
-    @Override
-    protected void initActionBar(ActionBar actionBar) {
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBarView = new ActionBarView(actionBar, this);
-        actionBarView.setPurchasesView((String) getTitle());
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setIcon(android.R.color.transparent);
-        actionBar.setLogo(android.R.color.transparent);
-    }
+//    @Override
+//    protected void initActionBar(ActionBar actionBar) {
+//        actionBar.setDisplayHomeAsUpEnabled(false);
+//        actionBar.setDisplayUseLogoEnabled(true);
+//        actionBarView = new ActionBarView(actionBar, this);
+//        actionBarView.setPurchasesView((String) getTitle());
+//        actionBar.setDisplayShowCustomEnabled(true);
+//        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setIcon(android.R.color.transparent);
+//        actionBar.setLogo(android.R.color.transparent);
+//    }
 
 
     private static boolean needTFOfferwallOnOpenRedirect(int itemPrice, TopfaceOfferwallRedirect topfaceOfferwallRedirect) {

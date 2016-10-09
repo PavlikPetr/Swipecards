@@ -76,6 +76,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.AnimationHelper;
 import com.topface.topface.utils.CacheProfile;
@@ -1307,7 +1308,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         FlurryManager.getInstance().sendEmptyDatingListEvent();
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
-        setActionBarTitles(getString(R.string.general_dating));
+        setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_dating)));
         getTitleSetter().setOnline(false);
         mFragmentSwitcherListener.onShowActionBar();
         mDatingCounter.setVisibility(View.GONE);
