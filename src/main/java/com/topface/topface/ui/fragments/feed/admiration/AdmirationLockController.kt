@@ -9,7 +9,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
  * Контроллер заглушек для экрана восхищений
  * Created by siberia87 on 30.09.16.
  */
-class AdmirationLockController(stub: ViewStubProxy) : BaseFeedLockerController<LayoutEmptyAdmirationsBinding, AdmirationLockScreenViewModel>(stub) {
+class AdmirationLockController(stub: ViewStubProxy) :
+		BaseFeedLockerController<LayoutEmptyAdmirationsBinding, AdmirationLockScreenViewModel>(stub) {
+
 	override fun initLockedFeedStub(errorCode: Int) {
 		when (errorCode) {
 			ErrorCodes.PREMIUM_ACCESS_ONLY -> {

@@ -4,6 +4,7 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike
+import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.ReadLikeRequest
@@ -20,6 +21,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * Created by siberia87 on 30.09.16.
  */
 class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) : BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
+
 	override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
 		return newCounters.admirations > currentCounters.admirations
 	}
@@ -51,5 +53,7 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
 		AdmobInterstitialUtils.
 				requestPreloadedInterstitial(context, App.get().options.interstitial)
 	}
+
+	override fun considerDuplicates(first: FeedLike, second: FeedLike) = first.user?.id == second.user?.id
 
 }
