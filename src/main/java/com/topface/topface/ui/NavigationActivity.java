@@ -128,12 +128,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void initActionBarOptions(ActionBar actionBar) {
+        super.initActionBarOptions(actionBar);
         if (actionBar != null) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
-                            | ActionBar.DISPLAY_SHOW_TITLE
-                            | ActionBar.DISPLAY_SHOW_HOME
-                            | ActionBar.DISPLAY_HOME_AS_UP);
             mNotificationController = new CustomViewNotificationController(actionBar);
         }
     }
@@ -252,12 +248,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected ToolbarBaseViewModel generateToolbarViewModel() {
-        return new NavigationToolbarViewModel(getToolbar(), new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleDrawerLayout();
-            }
-        });
+        return new NavigationToolbarViewModel(getToolbar(), this);
     }
 
     private void initPopups() {
@@ -617,5 +608,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         if (getSupportActionBar() != null) {
             getSupportActionBar().show();
         }
+    }
+
+    @Override
+    public void onUpClick() {
+        toggleDrawerLayout();
     }
 }

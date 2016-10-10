@@ -30,7 +30,8 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation;
 import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
@@ -48,7 +49,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient,
+        IToolbarNavigation {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -87,7 +89,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     };
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
-    private boolean mHasContent = true;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -104,7 +105,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setWindowOptions();
-        if (mHasContent) {
+        if (isHasContent()) {
             setContentView(getContentLayout());
         }
         Intent intent = getIntent();
@@ -121,11 +122,13 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
         getToolbar();
+        getToolbarViewModel();
     }
+
 
     protected Toolbar getToolbar() {
         if (mToolbar == null) {
-            mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            mToolbar = initToolbar();
             if (mToolbar != null) {
                 setSupportActionBar(mToolbar);
             }
@@ -133,8 +136,12 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         return mToolbar;
     }
 
+    protected Toolbar initToolbar() {
+        return (Toolbar) findViewById(R.id.toolbar);
+    }
+
     protected ToolbarBaseViewModel generateToolbarViewModel() {
-        return new ToolbarBaseViewModel(getToolbar());
+        return new BackToolbarViewModel(getToolbar(), getString(R.string.app_name), this);
     }
 
     protected ToolbarBaseViewModel getToolbarViewModel() {
@@ -215,9 +222,15 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
+
     protected void initActionBarOptions(ActionBar actionBar) {
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setDisplayShowTitleEnabled(true);
+        if (actionBar != null) {
+//            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+//                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
+//                            | ActionBar.DISPLAY_SHOW_TITLE
+//                            | ActionBar.DISPLAY_SHOW_HOME
+//                            | ActionBar.DISPLAY_HOME_AS_UP);
+        }
     }
 
     protected void setActionBarView() {
@@ -531,6 +544,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
+    @Override
+    public void onUpButtonClick() {
+        onUpClick();
+    }
+
     public void onUpClick() {
         if (doPreFinish()) {
             if (!onSupportNavigateUp()) {
@@ -560,7 +578,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         return mRunning;
     }
 
-    protected void setHasContent(boolean value) {
-        mHasContent = value;
+    protected boolean isHasContent() {
+        return true;
     }
 }

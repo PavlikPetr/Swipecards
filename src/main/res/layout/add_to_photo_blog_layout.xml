@@ -8,6 +8,10 @@
         android:background="@color/bg_white"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/user_photos_grid"
             android:layout_width="match_parent"

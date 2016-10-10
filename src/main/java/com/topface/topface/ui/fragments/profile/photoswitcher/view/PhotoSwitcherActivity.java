@@ -201,8 +201,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     }
 
     @Override
+    protected boolean isHasContent() {
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setHasContent(false);
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getContentLayout());
         App.get().inject(this);

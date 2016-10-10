@@ -66,9 +66,13 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setHasContent(false);
         super.onCreate(savedInstanceState);
         new ExternalLinkExecuter(mListener).execute(this, getIntent());
+    }
+
+    @Override
+    protected boolean isHasContent() {
+        return false;
     }
 
     @Override
