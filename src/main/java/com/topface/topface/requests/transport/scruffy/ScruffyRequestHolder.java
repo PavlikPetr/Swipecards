@@ -9,8 +9,6 @@ import com.topface.topface.requests.MultipartApiResponse;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.statistics.ScruffyStatistics;
 
-import org.apache.http.HttpStatus;
-
 public class ScruffyRequestHolder implements RequestHolder {
     private IApiResponse mResponse;
     private IApiRequest mRequest;
@@ -38,7 +36,7 @@ public class ScruffyRequestHolder implements RequestHolder {
         IApiResponse resp;
         if (mRequest instanceof MultipartApiRequest) {
             resp = new MultipartApiResponse(
-                    HttpStatus.SC_OK,
+                    200,
                     response.getContentType(),
                     response.getBody()
             );
