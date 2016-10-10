@@ -15,7 +15,6 @@ import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
 class AppDayAdapter : BaseRecyclerViewAdapter<ItemAppDayBinding, AppDayImage>() {
 
 	override fun bindData(binding: ItemAppDayBinding?, position: Int) {
-		Debug.log("AppDayAdapter","bindData position = $position")
 		binding?.let { bind ->
 			getDataItem(position)?.let {
 				bind.viewModel = AppDayItemViewModel(bind, it)
@@ -23,18 +22,7 @@ class AppDayAdapter : BaseRecyclerViewAdapter<ItemAppDayBinding, AppDayImage>() 
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ItemViewHolder {
-		Debug.log("AppDayAdapter","onCreateViewHolder")
-		return super.onCreateViewHolder(parent, viewType)
-	}
-
-	override fun getItemCount(): Int {
-		Debug.log("AppDayAdapter","getItemCount")
-		return super.getItemCount()
-	}
-
-	override fun getItemLayout():Int {
-		Debug.log("AppDayAdapter","getItemLayout")
+	override fun getItemLayout(): Int {
 		return R.layout.item_app_day
 	}
 

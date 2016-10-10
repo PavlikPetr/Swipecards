@@ -55,5 +55,4 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
 	}
 
 	override fun considerDuplicates(first: FeedLike, second: FeedLike) = first.user?.id == second.user?.id
-
 }

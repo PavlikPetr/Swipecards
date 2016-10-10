@@ -10,6 +10,8 @@ import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.LayoutEmptyDialogsBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.ChatActivity
+import com.topface.topface.ui.fragments.feed.app_day.models.AppDay
+import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.feed_utils.convertFeedIdList
@@ -23,6 +25,17 @@ import java.util.*
 
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>() {
+
+	private val tempData by lazy {
+		AppDay(0, 0, 0, arrayListOf(
+				AppDayImage("http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
+						"http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
+						false),
+				AppDayImage("https://www.android.com/static/img/android.png",
+						"https://www.android.com/static/img/android.png",
+						false)
+		))
+	}
 
 	override fun getDeleteItemsList(mSelected: MutableList<FeedDialog>): ArrayList<String> {
 		return mSelected.getUserIdList().convertFeedIdList()
@@ -39,8 +52,8 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
 		DialogsLockController(mBinding.emptyFeedStub as ViewStubProxy)
 	}
 	override val mAdapter by lazy {
-		val adapter = DialogsAdapter(mNavigator)
-		adapter.setHeader(FixedViewInfo(bannerRes, mAppDayViewModel))
+		val adapter = DialogsAdapter(mNavigator, activity)
+		adapter.setHeader(FixedViewInfo(bannerRes, tempData))
 		adapter
 	}
 
