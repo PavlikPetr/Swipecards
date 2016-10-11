@@ -6,7 +6,7 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
-import com.topface.topface.requests.ReadLikeRequest
+import com.topface.topface.requests.ReadAdmirationRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
@@ -47,7 +47,7 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
 
 	override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
 		super.itemClick(view, itemPosition, data)
-		ReadLikeRequest(context, data.getUserId()).exec()
+		ReadAdmirationRequest(context, listOf(data.getUserId())).exec()
 		AdmobInterstitialUtils.
 				requestPreloadedInterstitial(context, App.get().options.interstitial)
 	}
