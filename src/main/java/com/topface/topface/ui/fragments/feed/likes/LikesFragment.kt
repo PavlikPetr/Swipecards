@@ -22,11 +22,6 @@ class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
         const val PAGE_NAME = "Likes"
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mAdapter.clearData()
-    }
-
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> {
         override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyLikesBinding> {
             return LikesLockScreenViewModel(
