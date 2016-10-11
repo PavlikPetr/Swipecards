@@ -10,6 +10,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedLike
 import com.topface.topface.data.Rate
 import com.topface.topface.databinding.FeedItemHeartBinding
+import com.topface.topface.requests.ApiRequest
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.ReadLikeRequest
 import com.topface.topface.requests.handlers.ApiHandler
@@ -30,9 +31,9 @@ import rx.Subscription
  * VM для итема лайков
  * Created by tiberal on 15.08.16.
  */
-class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigator: IFeedNavigator,
-                         private val mApi: FeedApi, private val mHandleDuplicates: (Boolean, Int) -> Unit,
-                         isActionModeEnabled: () -> Boolean) :
+open class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigator: IFeedNavigator,
+                              private val mApi: FeedApi, private val mHandleDuplicates: (Boolean, Int) -> Unit,
+                              isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedItemHeartBinding, FeedLike>(binding, item, navigator, isActionModeEnabled) {
 
     private var mSendLikeSubscription: Subscription? = null
@@ -65,13 +66,13 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
             override fun onNext(t: Rate?) {
                 item.mutualed = true
                 Utils.showToastNotification(R.string.general_mutual, Toast.LENGTH_SHORT)
-                sendReadLikeRequest(userId)
+                sendReadItemRequest(userId)
                 SearchCacheManager.markUserAsRatedInCache(userId)
             }
         })
     }
 
-    private fun sendReadLikeRequest(userId: Int) = ReadLikeRequest(context, userId)
+    private fun sendReadItemRequest(userId: Int) = getReadItemRequest()
             .callback(object : ApiHandler() {
                 override fun success(response: IApiResponse?) {
                     Debug.log("Likes Feed Item ReadLikeRequest OK")
@@ -92,9 +93,13 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
 
     override fun onAvatarClickActionModeDisabled() {
         super.onAvatarClickActionModeDisabled()
-        ReadLikeRequest(context, item.getUserId()).exec()
+        getReadItemRequest().exec()
         AdmobInterstitialUtils.
                 requestPreloadedInterstitial(context, App.get().options.interstitial)
+    }
+
+    open fun getReadItemRequest(): ApiRequest {
+        return ReadLikeRequest(context, item.getUserId())
     }
 
     override fun release() {

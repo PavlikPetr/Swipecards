@@ -13,7 +13,7 @@ import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
  * Адаптре для симпатий
  * Created by tiberal on 10.08.16.
  */
-class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi: FeedApi) : BaseFeedAdapter<FeedItemHeartBinding, FeedLike>() {
+open class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi: FeedApi) : BaseFeedAdapter<FeedItemHeartBinding, FeedLike>() {
 
     override fun bindData(binding: FeedItemHeartBinding?, position: Int) {
         super.bindData(binding, position)
