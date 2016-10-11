@@ -250,6 +250,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 isListVisible.set(View.INVISIBLE)
                 isFeedProgressBarVisible.set(View.INVISIBLE)
                 stubView?.onLockedFeed(codeError)
+                mCache.clearCache()
+                mAdapter?.clearData()
                 return
             }
             else -> {
