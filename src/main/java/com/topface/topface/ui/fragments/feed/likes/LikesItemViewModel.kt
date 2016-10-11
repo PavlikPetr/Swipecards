@@ -41,7 +41,5 @@ class LikesItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, navigato
 
     override fun getClickListenerForMultiselectHandle() = arrayOf<View.OnClickListener>(binding.clickListener)
 
-    override fun getReadItemRequest(): ApiRequest {
-        return ReadLikeRequest(context, item.getUserId())
-    }
+    override fun getReadItemRequest() = ReadLikeRequest(context, item.getUserId())
 }
