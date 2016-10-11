@@ -19,29 +19,29 @@ import com.topface.topface.viewModels.BaseViewModel
 @FlurryOpenEvent(name = AdmirationFragment.PAGE_NAME)
 class AdmirationFragment : BaseFeedFragment<FeedLike, LayoutEmptyAdmirationsBinding>() {
 
-	companion object {
-		const val PAGE_NAME = "Admirations"
-	}
+    companion object {
+        const val PAGE_NAME = "Admirations"
+    }
 
-	override val mViewModel by lazy {
-		AdmirationFragmentViewModel(mBinding, mNavigator, mApi)
-	}
+    override val mViewModel by lazy {
+        AdmirationFragmentViewModel(mBinding, mNavigator, mApi)
+    }
 
-	override val mLockerControllerBase by lazy {
-		AdmirationLockController(mBinding.emptyFeedStub as ViewStubProxy)
-	}
+    override val mLockerControllerBase by lazy {
+        AdmirationLockController(mBinding.emptyFeedStub as ViewStubProxy)
+    }
 
-	override val mAdapter by lazy {
-		LikesFeedAdapter(mNavigator, mApi)
-	}
+    override val mAdapter by lazy {
+        LikesFeedAdapter(mNavigator, mApi)
+    }
 
-	override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyAdmirationsBinding> {
-		override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyAdmirationsBinding> {
-			return AdmirationLockScreenViewModel(binding as LayoutEmptyAdmirationsBinding, mNavigator, App.get().dataUpdater, this@AdmirationFragment)
-		}
-	}
+    override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyAdmirationsBinding> {
+        override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyAdmirationsBinding> {
+            return AdmirationLockScreenViewModel(binding as LayoutEmptyAdmirationsBinding, mNavigator, App.get().dataUpdater, this@AdmirationFragment)
+        }
+    }
 
-	override fun getEmptyFeedLayout(): Int = R.layout.layout_empty_admirations
+    override fun getEmptyFeedLayout(): Int = R.layout.layout_empty_admirations
 
-	override fun getTitle(): String? = getString(R.string.general_sympathies)
+    override fun getTitle(): String? = getString(R.string.general_sympathies)
 }

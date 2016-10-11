@@ -22,37 +22,37 @@ import java.util.*
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>() {
 
-	override fun getDeleteItemsList(mSelected: MutableList<FeedDialog>): ArrayList<String> {
-		return mSelected.getUserIdList().convertFeedIdList()
-	}
+    override fun getDeleteItemsList(mSelected: MutableList<FeedDialog>): ArrayList<String> {
+        return mSelected.getUserIdList().convertFeedIdList()
+    }
 
-	companion object {
-		const val PAGE_NAME = "Dialogs"
-	}
+    companion object {
+        const val PAGE_NAME = "Dialogs"
+    }
 
-	override val mViewModel by lazy {
-		DialogsFragmentViewModel(mBinding, mNavigator, mApi)
-	}
-	override val mLockerControllerBase by lazy {
-		DialogsLockController(mBinding.emptyFeedStub as ViewStubProxy)
-	}
-	override val mAdapter by lazy {
-		val adapter = DialogsAdapter(mNavigator, activity)
-		adapter
-	}
+    override val mViewModel by lazy {
+        DialogsFragmentViewModel(mBinding, mNavigator, mApi)
+    }
+    override val mLockerControllerBase by lazy {
+        DialogsLockController(mBinding.emptyFeedStub as ViewStubProxy)
+    }
+    override val mAdapter by lazy {
+        val adapter = DialogsAdapter(mNavigator, activity)
+        adapter
+    }
 
-	override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyDialogsBinding> {
-		override fun construct(binding: ViewDataBinding) = DialogsLockScreenViewModel(binding as LayoutEmptyDialogsBinding, mNavigator, this@DialogsFragment)
-	}
+    override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyDialogsBinding> {
+        override fun construct(binding: ViewDataBinding) = DialogsLockScreenViewModel(binding as LayoutEmptyDialogsBinding, mNavigator, this@DialogsFragment)
+    }
 
-	override fun getEmptyFeedLayout() = R.layout.layout_empty_dialogs
+    override fun getEmptyFeedLayout() = R.layout.layout_empty_dialogs
 
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		if (requestCode == ChatActivity.REQUEST_CHAT) {
-			data?.let { mViewModel.updatePreview(it) }
-		}
-	}
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ChatActivity.REQUEST_CHAT) {
+            data?.let { mViewModel.updatePreview(it) }
+        }
+    }
 
-	override fun getTitle(): String = getString(R.string.settings_messages)
+    override fun getTitle(): String = getString(R.string.settings_messages)
 }

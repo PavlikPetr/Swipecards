@@ -10,17 +10,17 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
  * Created by siberia87 on 30.09.16.
  */
 class AdmirationLockController(stub: ViewStubProxy) :
-		BaseFeedLockerController<LayoutEmptyAdmirationsBinding, AdmirationLockScreenViewModel>(stub) {
+        BaseFeedLockerController<LayoutEmptyAdmirationsBinding, AdmirationLockScreenViewModel>(stub) {
 
-	override fun initLockedFeedStub(errorCode: Int) {
-		when (errorCode) {
-			ErrorCodes.PREMIUM_ACCESS_ONLY -> {
-				mStubModel?.currentChildPod?.set(1)
-			}
-		}
-	}
+    override fun initLockedFeedStub(errorCode: Int) {
+        when (errorCode) {
+            ErrorCodes.PREMIUM_ACCESS_ONLY -> {
+                mStubModel?.currentChildPod?.set(1)
+            }
+        }
+    }
 
-	override fun initEmptyFeedStub() {
-		mStubModel?.currentChildPod?.set(0)
-	}
+    override fun initEmptyFeedStub() {
+        mStubModel?.currentChildPod?.set(0)
+    }
 }

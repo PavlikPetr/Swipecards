@@ -21,37 +21,36 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * Created by tiberal on 08.08.16.
  */
 class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
-		BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
+        BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
 
-	override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-		return newCounters.likes > currentCounters.likes
-	}
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return newCounters.likes > currentCounters.likes
+    }
+    override val gcmType: Array<Int>
+        get() = arrayOf(GCMUtils.GCM_TYPE_LIKE)
 
-	override val gcmType: Array<Int>
-		get() = arrayOf(GCMUtils.GCM_TYPE_LIKE)
+    override val gcmTypeUpdateAction: String?
+        get() = GCMUtils.GCM_LIKE_UPDATE
 
-	override val gcmTypeUpdateAction: String?
-		get() = GCMUtils.GCM_LIKE_UPDATE
+    override val isNeedReadItems: Boolean
+        get() = true
 
-	override val isNeedReadItems: Boolean
-		get() = true
+    override val service: FeedRequest.FeedService
+        get() = FeedRequest.FeedService.LIKES
 
-	override val service: FeedRequest.FeedService
-		get() = FeedRequest.FeedService.LIKES
+    override val itemClass: Class<FeedLike>
+        get() = FeedLike::class.java
 
-	override val itemClass: Class<FeedLike>
-		get() = FeedLike::class.java
+    override val isForPremium: Boolean
+        get() = true
 
-	override val isForPremium: Boolean
-		get() = true
+    override val feedsType: FeedsCache.FEEDS_TYPE
+        get() = FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS
 
-	override val feedsType: FeedsCache.FEEDS_TYPE
-		get() = FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS
-
-	override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
-		super.itemClick(view, itemPosition, data)
-		ReadLikeRequest(context, data.getUserId()).exec()
-		AdmobInterstitialUtils.
-				requestPreloadedInterstitial(context, App.get().options.interstitial)
-	}
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
+        super.itemClick(view, itemPosition, data)
+        ReadLikeRequest(context, data.getUserId()).exec()
+        AdmobInterstitialUtils.
+                requestPreloadedInterstitial(context, App.get().options.interstitial)
+    }
 }

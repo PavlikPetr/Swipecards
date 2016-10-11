@@ -12,8 +12,8 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 class AppDayItemViewModel(val binding: ItemAppDayBinding,
                           val image: AppDayImage) :
-		BaseViewModel<ItemAppDayBinding>(binding) {
+        BaseViewModel<ItemAppDayBinding>(binding) {
 
-	val iconUrl: ObservableField<String> = ObservableField(image.imgSrc)
-	fun onBannerClick() = Utils.goToUrl(context, image.url)
+    val iconUrl: ObservableField<String> = ObservableField(image.imgSrc)
+    fun onBannerClick() = Utils.goToUrl(context, image.url)
 }
