@@ -12,7 +12,9 @@ import java.util.*
  * VM для ленты рекламы приложений дня
  * Created by siberia87 on 06.10.16.
  */
-class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) : BaseViewModel<AppDayListBinding>(binding) {
+class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) :
+		BaseViewModel<AppDayListBinding>(binding) {
+
 	val isProgressBarVisible = ObservableInt(View.INVISIBLE)
 	val mAdapter by lazy {
 		val adapter = AppDayAdapter()
@@ -24,6 +26,7 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
 		with(binding.bannerList) {
 			setHasFixedSize(true)
 			layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+			binding.bannerList.layoutManager.isAutoMeasureEnabled = true
 			adapter = mAdapter
 			setNestedScrollingEnabled(false)
 		}

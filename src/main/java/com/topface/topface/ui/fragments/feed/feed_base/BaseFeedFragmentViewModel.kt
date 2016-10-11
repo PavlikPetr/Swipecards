@@ -11,15 +11,19 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedListData
+import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.ChatFragment
+import com.topface.topface.ui.fragments.feed.app_day.models.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RxUtils
@@ -39,9 +43,12 @@ import javax.inject.Inject
  * Created by tiberal on 01.08.16.
  * @param T feed item type
  */
-abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
-                                                       private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding),
+abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding,
+                                                       private val mNavigator: IFeedNavigator,
+                                                       private val mApi: FeedApi) :
+		BaseViewModel<FragmentFeedBaseBinding>(binding),
 		SwipeRefreshLayout.OnRefreshListener {
+
 	@Inject lateinit var mState: TopfaceAppState
 	var isRefreshing = object : ObservableBoolean() {
 		override fun set(value: Boolean) {
@@ -59,6 +66,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 	protected val mAdapter: BaseFeedAdapter<*, T>? by lazy {
 		binding.feedList.adapter as? BaseFeedAdapter<*, T>
 	}
+
 	abstract val feedsType: FeedsCache.FEEDS_TYPE
 	abstract val itemClass: Class<T>
 	abstract val service: FeedRequest.FeedService
@@ -68,6 +76,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 	open val isForPremium: Boolean = false
 	open val isNeedReadItems: Boolean = false
 	open val isNeedCacheItems: Boolean = true
+	open val bannerRes: Int = R.layout.app_day_list
 	private val mCounters by lazy {
 		CountersData()
 	}
@@ -224,6 +233,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 				mAdapter?.let { adapter ->
 					adapter.data.clear()
 					adapter.notifyDataSetChanged()
+					getAppDayRequest()
 				}
 				isDataFromCache = false
 			}
@@ -239,6 +249,24 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 			}
 			adapter?.addData(data.items)
 		}
+	}
+
+	fun getAppDayRequest() {
+		mApi.getAppDayRequest().subscribe(object : Subscriber<AppDay>() {
+			override fun onCompleted() {
+			}
+
+			override fun onError(e: Throwable?) {
+				e?.let { Debug.log("App day banner error request: $it") }
+			}
+
+			override fun onNext(t: AppDay?) {
+				t?.let {
+					mAdapter?.setHeader(FixedViewInfo(bannerRes, t.result?.let { it }))
+					mAdapter?.notifyItemChange(0)
+				}
+			}
+		})
 	}
 
 	private fun onErrorProcess(e: Throwable) {

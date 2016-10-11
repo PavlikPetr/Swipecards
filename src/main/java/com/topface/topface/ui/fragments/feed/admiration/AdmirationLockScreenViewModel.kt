@@ -19,7 +19,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding,
                                     private val mNavigator: IFeedNavigator,
                                     private val dataUpdater: IStateDataUpdater,
-                                    mIFeedUnlocked: IFeedUnlocked) : BaseLockScreenViewModel<LayoutEmptyAdmirationsBinding>(binding, mIFeedUnlocked) {
+                                    mIFeedUnlocked: IFeedUnlocked) :
+		BaseLockScreenViewModel<LayoutEmptyAdmirationsBinding>(binding, mIFeedUnlocked) {
+
 	val currentChildPod = ObservableInt(1)
 	val muzzleVisibility = ObservableInt(View.VISIBLE)
 	val firstMuzzle = ObservableInt(getMuzzleIcon(1))

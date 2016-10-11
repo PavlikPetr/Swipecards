@@ -10,17 +10,13 @@
 
     </data>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <com.topface.topface.ui.views.ImageViewRemote
+        android:id="@+id/app_day_image"
+        android:layout_width="wrap_content"
+        android:layout_height="86dp"
+        android:layout_margin="3dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/black"
         android:onClick="@{() -> viewModel.onBannerClick()}"
-        android:orientation="vertical">
-
-        <com.topface.topface.ui.views.ImageViewRemote
-            android:layout_width="match_parent"
-            android:background="@android:color/black"
-            android:layout_height="wrap_content"
-            app:remoteSrcGlide="@{viewModel.iconUrl}"/>
-
-    </LinearLayout>
+        app:remoteSrcGlide="@{viewModel.iconUrl}"/>
 </layout>

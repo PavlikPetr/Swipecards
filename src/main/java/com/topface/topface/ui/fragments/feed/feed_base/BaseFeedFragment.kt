@@ -7,26 +7,21 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.flurry.sdk.it
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
 import com.topface.topface.banners.IPageWithAds
 import com.topface.topface.banners.PageInfo
 import com.topface.topface.data.FeedItem
-import com.topface.topface.databinding.AppDayListBinding
-import com.topface.topface.databinding.AppOfTheDayLayoutBinding
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.ui.adapters.ItemEventListener
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.inflateBinding
-import java.util.*
 
 /**
  * Новый, и усосвершенствованный FeedFragment
@@ -43,8 +38,6 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
 
 	open val res: Int = R.layout.fragment_feed_base
 	protected val mBinding by inflateBinding<FragmentFeedBaseBinding>(res)
-	open val bannerRes: Int = R.layout.app_day_list
-	protected val mBannerBinding by inflateBinding<AppDayListBinding>(bannerRes)
 	private lateinit var mBannersController: BannersController
 	private val mDelRequestFactory by lazy {
 		DeleteFeedRequestFactory(context)

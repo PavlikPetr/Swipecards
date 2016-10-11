@@ -4,7 +4,6 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike
-import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.ReadLikeRequest

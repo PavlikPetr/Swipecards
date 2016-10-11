@@ -11,7 +11,7 @@
     <RelativeLayout
         android:id="@+id/appDayRootView"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content">
 
         <ProgressBar
             android:id="@+id/backgroung_progress"
@@ -23,7 +23,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/banner_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"/>
     </RelativeLayout>
 
 </layout>
