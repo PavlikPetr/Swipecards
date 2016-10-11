@@ -23,13 +23,13 @@ class ReadAdmirationRequest(context: Context, val idArray: List<Int>) : ApiReque
         return jsonObject
     }
 
-    override fun exec() {
-        if (!isContainEmptyId()) {
-            super.exec()
-        } else {
-            handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id")
-        }
-    }
+    override fun exec() =
+            if (!isContainEmptyId()) {
+                super.exec()
+            } else {
+                handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id")
+            }
+
 
     private fun isContainEmptyId() = idArray.isEmpty() || idArray.find { it <= 0 } != null
 
