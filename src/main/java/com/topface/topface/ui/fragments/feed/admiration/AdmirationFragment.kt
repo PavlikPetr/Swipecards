@@ -43,5 +43,5 @@ class AdmirationFragment : BaseFeedFragment<FeedLike, LayoutEmptyAdmirationsBind
 
 	override fun getEmptyFeedLayout(): Int = R.layout.layout_empty_admirations
 
-	override fun getTitle(): String = getString(R.string.general_admirations)
+	override fun getTitle(): String? = getString(R.string.general_sympathies)
 }
