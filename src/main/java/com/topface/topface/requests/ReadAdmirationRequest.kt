@@ -12,36 +12,26 @@ import org.json.JSONObject
  */
 class ReadAdmirationRequest(context: Context, val idArray: List<Int>) : ApiRequest(context) {
 
-	@Throws(JSONException::class)
-	override fun getRequestData(): JSONObject {
-		val jsonObject = JSONObject()
-		val jsonArray = JSONArray()
-		for (id in idArray) {
-			jsonArray.put(id)
-		}
-		jsonObject.put("feedIds", jsonArray)
-		return jsonObject
-	}
+    @Throws(JSONException::class)
+    override fun getRequestData(): JSONObject {
+        val jsonObject = JSONObject()
+        val jsonArray = JSONArray()
+        for (id in idArray) {
+            jsonArray.put(id)
+        }
+        jsonObject.put("feedIds", jsonArray)
+        return jsonObject
+    }
 
-	override fun exec() {
-		if (!isContainEmptyId()) {
-			super.exec()
-		} else {
-			handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id")
-		}
-	}
+    override fun exec() {
+        if (!isContainEmptyId()) {
+            super.exec()
+        } else {
+            handleFail(ErrorCodes.ERRORS_PROCESSED, "Invalid id")
+        }
+    }
 
-	private fun isContainEmptyId(): Boolean {
-		if (idArray.isEmpty()) {
-			return true
-		}
-		if (idArray.find { it <= 0 } != null) {
-			return true
-		}
-		return false
-	}
+    private fun isContainEmptyId() = idArray.isEmpty() || idArray.find { it <= 0 } != null
 
-	override fun getServiceName(): String {
-		return "admiration.read"
-	}
+    override fun getServiceName() = "admiration.read"
 }
