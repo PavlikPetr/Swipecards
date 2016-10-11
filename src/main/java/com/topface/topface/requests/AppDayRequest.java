@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- *
+ * Класс запроса приложения дня
  * Created by siberia87 on 10.10.16.
  */
 

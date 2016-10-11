@@ -28,7 +28,7 @@ class DialogsAdapter(private val mNavigator: IFeedNavigator,
 	}
 
 	override fun bindHeader(binding: ViewDataBinding?, position: Int) {
-		binding?.let {bind->
+		binding?.let { bind ->
 			(getHeaderItem(position) as? List<AppDayImage>)?.let {
 				bind.setVariable(BR.viewModel, AppDayViewModel(bind as AppDayListBinding, it))
 			}

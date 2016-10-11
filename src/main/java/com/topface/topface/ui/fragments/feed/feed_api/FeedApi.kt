@@ -69,8 +69,9 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
 			request.callback(object : DataApiHandler<AppDay>() {
 				override fun success(data: AppDay?, response: IApiResponse?) = it.onNext(data)
 				override fun parseResponse(response: ApiResponse?): AppDay = tempData
-//						JsonUtils.fromJson(response?.jsonResult.let { it.toString() }, AppDay::class.java)
+				//						JsonUtils.fromJson(response?.jsonResult.let { it.toString() }, AppDay::class.java)
 				override fun fail(codeError: Int, response: IApiResponse?) = it.onError(Throwable(codeError.toString()))
+
 				override fun always(response: IApiResponse?) {
 					super.always(response)
 				}
