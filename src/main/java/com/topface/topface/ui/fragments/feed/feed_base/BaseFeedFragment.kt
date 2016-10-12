@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.flurry.sdk.it
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
@@ -23,7 +22,6 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.inflateBinding
-import java.util.*
 
 /**
  * Новый, и усосвершенствованный FeedFragment
