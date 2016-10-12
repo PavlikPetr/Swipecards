@@ -95,11 +95,11 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initActionBar(supportActionBar)
+        mScreenBinding = DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
         savedInstanceState?.let {
             onRestoreState(it)
         }
-        initActionBar(supportActionBar)
-        mScreenBinding = DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
         //https://youtrack.jetbrains.com/issue/KT-12402
         initRecyclerView(mScreenBinding.userPhotosGrid)
     }
