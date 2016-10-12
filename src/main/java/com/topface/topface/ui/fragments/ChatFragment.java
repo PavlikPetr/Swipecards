@@ -684,12 +684,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             }
         });
 
-        boolean x = isTakePhotoApplicable();
-        boolean y = mUserType == ChatStabsController.LOCK_CHAT;
-        boolean z = mStubsController.isChatLocked();
-
-        historyRequest.leave = (x || y || z);
-
+        historyRequest.leave = isTakePhotoApplicable() ||
+                                mUserType == ChatStabsController.LOCK_CHAT ||
+                                mStubsController.isChatLocked();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
