@@ -96,7 +96,7 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initActionBar(supportActionBar)
-        mScreenBinding = DataBindingUtil.setContentView<AddToPhotoBlogLayoutBinding>(this, R.layout.add_to_photo_blog_layout)
+        mScreenBinding = DataBindingUtil.setContentView(this, R.layout.add_to_photo_blog_layout)
         savedInstanceState?.let {
             onRestoreState(it)
         }

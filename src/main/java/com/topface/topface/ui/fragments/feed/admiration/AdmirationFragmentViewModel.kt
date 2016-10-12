@@ -48,9 +48,8 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
 
     override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
         super.itemClick(view, itemPosition, data)
-        val id = data?.id?.toInt()
-        id?.let {
-            ReadAdmirationRequest(context, listOf(id)).exec()
+        data?.id?.toInt()?.let {
+            ReadAdmirationRequest(context, listOf(it)).exec()
         }
         AdmobInterstitialUtils.
                 requestPreloadedInterstitial(context, App.get().options.interstitial)
