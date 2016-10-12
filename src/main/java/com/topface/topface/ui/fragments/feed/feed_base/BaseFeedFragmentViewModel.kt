@@ -174,8 +174,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         adapter.data.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
                 dataItem.unread = false
+                adapter.notifyItemChanged(position)
             }
-            adapter.notifyItemChanged(position)
         }
     }
 
