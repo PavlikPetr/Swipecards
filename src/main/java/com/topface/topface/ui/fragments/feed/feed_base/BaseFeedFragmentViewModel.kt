@@ -164,7 +164,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        LocalBroadcastManager.getInstance(context).registerReceiver(mReadItemReceiver, filter)
+        LocalBroadcastManager.getInstance(context).registerReceiver (mReadItemReceiver, filter)
         gcmTypeUpdateAction?.let {
             LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
         }

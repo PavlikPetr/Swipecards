@@ -683,7 +683,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mIsUpdating = true;
             }
         });
-        historyRequest.leave = isTakePhotoApplicable();
+
+        boolean x = isTakePhotoApplicable();
+        boolean y = mUserType == ChatStabsController.LOCK_CHAT;
+        boolean z = mStubsController.isChatLocked();
+
+        historyRequest.leave = (x || y || z);
+
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -749,11 +755,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     if (!data.items.isEmpty()) {
                         if (pullToRefresh) {
                             mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
-                            if (!data.more && !data.items.isEmpty()) {
+                            if (!data.more) {
                                 onNewMessageAdded(data.items.get(0));
                             }
                         } else {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                            onNewMessageAdded(data.items.get(0));
                         }
                     } else {
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();

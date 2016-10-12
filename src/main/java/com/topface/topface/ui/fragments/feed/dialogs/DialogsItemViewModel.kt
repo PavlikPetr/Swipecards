@@ -14,7 +14,10 @@ import com.topface.topface.utils.Utils
  * Моделька для тема диалога. С счетчиками сообщений и иконками в превьюхах диалогов
  * Created by tiberal on 18.09.16.
  */
-class DialogsItemViewModel(binding: FeedItemDialogBinding, item: FeedDialog, navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) :
+class DialogsItemViewModel(binding: FeedItemDialogBinding,
+                           item: FeedDialog,
+                           navigator: IFeedNavigator,
+                           isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedItemDialogBinding, FeedDialog>(binding, item, navigator, isActionModeEnabled) {
 
     private companion object {
