@@ -154,9 +154,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 }
             }
 
-            override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
-                LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
-            }
+            override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
         }
         mStateManager.registerAppChangeStateListener(appStateListener)
     }
