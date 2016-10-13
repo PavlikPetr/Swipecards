@@ -22,6 +22,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
+import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
@@ -94,6 +95,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     private lateinit var mReadItemReceiver: BroadcastReceiver
     private lateinit var mGcmReceiver: BroadcastReceiver
+    private lateinit var appStateListener: RunningStateManager.OnAppChangeStateListener
+    private var mStateManager = RunningStateManager()
 
     init {
         App.get().inject(this)
@@ -137,6 +140,25 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     }
                 })
         createAndRegisterBroadcasts()
+        createAndRegisterRunningStateManager()
+    }
+
+    open protected fun createAndRegisterRunningStateManager() {
+        appStateListener = object : RunningStateManager.OnAppChangeStateListener {
+            override fun onAppForeground(timeOnStart: Long) {
+                gcmTypeUpdateAction?.let {
+                    LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
+                }
+                for (type in gcmType) {
+                    GCMUtils.cancelNotification(context, type)
+                }
+            }
+
+            override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+            }
+        }
+        mStateManager.registerAppChangeStateListener(appStateListener)
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -164,7 +186,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        LocalBroadcastManager.getInstance(context).registerReceiver (mReadItemReceiver, filter)
+        LocalBroadcastManager.getInstance(context).registerReceiver(mReadItemReceiver, filter)
         gcmTypeUpdateAction?.let {
             LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
         }
@@ -415,5 +437,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+        mStateManager.unregisterAppChangeStateListener(appStateListener)
     }
 }
