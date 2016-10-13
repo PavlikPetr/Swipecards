@@ -21,6 +21,8 @@ class FansFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNa
         return newCounters.fans > currentCounters.fans
     }
 
+    override val typeFeedFragment: String?
+        get() = null
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_FANS_FEEDS
     override val itemClass: Class<FeedBookmark>

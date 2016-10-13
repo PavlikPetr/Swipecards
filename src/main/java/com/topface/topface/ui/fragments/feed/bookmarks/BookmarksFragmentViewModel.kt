@@ -23,6 +23,8 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
         return false
     }
 
+    override val typeFeedFragment: String?
+        get() = null
     var mIsNeedToUpdate: Boolean = false
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS

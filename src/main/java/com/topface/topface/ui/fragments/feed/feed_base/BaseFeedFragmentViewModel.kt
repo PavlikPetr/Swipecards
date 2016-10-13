@@ -71,6 +71,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     abstract val itemClass: Class<T>
     abstract val service: FeedRequest.FeedService
     abstract val gcmType: Array<Int>
+    abstract val typeFeedFragment: String?
     abstract fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean
     open val gcmTypeUpdateAction: String? = null
     open val isForPremium: Boolean = false
@@ -188,7 +189,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-
     protected fun makeItemReadUserId(uid: Int, readMessages: Int) =
             mAdapter?.let { adapter ->
                 adapter.data.forEachIndexed { position, dataItem ->
@@ -233,7 +233,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 mAdapter?.let { adapter ->
                     adapter.data.clear()
                     adapter.notifyDataSetChanged()
-                    getAppDayRequest()
+                    typeFeedFragment?.let { getAppDayRequest(it) }
                 }
                 isDataFromCache = false
             }
@@ -251,19 +251,21 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-    fun getAppDayRequest() {
-        mApi.getAppDayRequest().subscribe(object : Subscriber<AppDay>() {
-            override fun onCompleted() {
-            }
+    fun getAppDayRequest(typeFeedFragment: String) {
+        mApi.getAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
+            override fun onCompleted() { }
 
             override fun onError(e: Throwable?) {
                 e?.let { Debug.log("App day banner error request: $it") }
             }
 
             override fun onNext(t: AppDay?) {
-                t?.let {
-                    mAdapter?.setHeader(FixedViewInfo(bannerRes, t.result?.let { it }))
-                    mAdapter?.notifyItemChange(0)
+                t?.list?.let { imageArray ->
+                    if (!imageArray.isEmpty()) {
+                        mAdapter?.setHeader(FixedViewInfo(bannerRes, imageArray))
+                        mAdapter?.notifyItemChange(0)
+                    }
+
                 }
             }
         })
@@ -338,15 +340,15 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     protected open fun topFeedsLoaded(data: FeedListData<T>?, requestBundle: Bundle) {
         data?.let {
-            if (!data.items.isEmpty()) {
+            if (!it.items.isEmpty()) {
                 if (mAdapter?.itemCount == 0) {
                     isListVisible.set(View.VISIBLE)
                     isLockViewVisible.set(View.GONE)
                     stubView?.onFilledFeed()
                 }
                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
-                removeOldDuplicates(data)
-                mAdapter?.addFirst(data.items)
+                removeOldDuplicates(it)
+                mAdapter?.addFirst(it.items)
                 binding.feedList.layoutManager.scrollToPosition(0)
             }
         }

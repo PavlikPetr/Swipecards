@@ -1,6 +1,7 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
+import android.os.StrictMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,15 +12,18 @@ import org.json.JSONObject;
  */
 
 public class AppDayRequest extends ApiRequest {
-    public String SERVICE_NAME = "nothing";
+    private static String SERVICE_NAME = "ad.appListOfTheDay";
+    private String mTypeFeedFragment;
 
-    public AppDayRequest(Context context) {
+    public AppDayRequest(Context context, String typeFeedFragment) {
         super(context);
+        mTypeFeedFragment = typeFeedFragment;
+
     }
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject();
+        return new JSONObject().put("type", mTypeFeedFragment);
     }
 
     @Override

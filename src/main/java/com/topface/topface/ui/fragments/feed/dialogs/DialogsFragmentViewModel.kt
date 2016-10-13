@@ -16,6 +16,7 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 
 class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedDialog>(binding, navigator, api) {
+
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
         return newCounters.dialogs > currentCounters.dialogs
     }
@@ -30,6 +31,8 @@ class DialogsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFee
         get() = arrayOf(GCMUtils.GCM_TYPE_DIALOGS, GCMUtils.GCM_TYPE_MESSAGE, GCMUtils.GCM_TYPE_GIFT)
     override val gcmTypeUpdateAction: String?
         get() = GCMUtils.GCM_DIALOGS_UPDATE
+    override val typeFeedFragment: String
+        get() = "dialog"
 
     fun updatePreview(data: Intent) {
         val history = data.getParcelableExtra<History>(ChatActivity.LAST_MESSAGE)

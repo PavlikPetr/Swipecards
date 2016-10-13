@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.feed_api
 
 import android.content.Context
 import android.os.Bundle
+import com.topface.framework.JsonUtils
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.Rate
@@ -23,30 +24,6 @@ import java.util.*
 class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
               private val mDeleteRequestFactory: IRequestFactory, private val mFeedRequestFactory: IRequestFactory) {
 
-    private val tempData by lazy {
-        AppDay(0, 0, 0, arrayListOf(
-                AppDayImage("http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        "http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        false),
-                AppDayImage("https://www.android.com/static/img/android.png",
-                        "https://www.android.com/static/img/android.png",
-                        false),
-                AppDayImage("http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        "http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        false),
-                AppDayImage("https://www.android.com/static/img/android.png",
-                        "https://www.android.com/static/img/android.png",
-                        false),
-                AppDayImage("http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        "http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        false),
-                AppDayImage("http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        "http://batona.net/uploads/posts/2011-08/1313578288_15.jpg",
-                        false)
-        ))
-    }
-
-
     fun callLikesAccessRequest(): Observable<IApiResponse> {
         return Observable.create {
             val request = BuyLikesAccessRequest(mContext)
@@ -62,15 +39,19 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
-    fun getAppDayRequest(): Observable<AppDay> {
+    fun getAppDayRequest(typeFeedFragment: String): Observable<AppDay> {
         return Observable.create {
-            val request = TestRequest(mContext)
+            val request = AppDayRequest(mContext, typeFeedFragment)
             mRequestClient.registerRequest(request)
             request.callback(object : DataApiHandler<AppDay>() {
-                override fun success(data: AppDay?, response: IApiResponse?) = it.onNext(data)
-                override fun parseResponse(response: ApiResponse?): AppDay = tempData
-                //						JsonUtils.fromJson(response?.jsonResult.let { it.toString() }, AppDay::class.java)
-                override fun fail(codeError: Int, response: IApiResponse?) = it.onError(Throwable(codeError.toString()))
+                override fun success(data: AppDay?, response: IApiResponse?) =
+                        it.onNext(data)
+
+                override fun parseResponse(response: ApiResponse?): AppDay =
+                        JsonUtils.fromJson(response?.jsonResult.let { it.toString() }, AppDay::class.java)
+
+                override fun fail(codeError: Int, response: IApiResponse?) =
+                        it.onError(Throwable(codeError.toString()))
 
                 override fun always(response: IApiResponse?) {
                     super.always(response)
