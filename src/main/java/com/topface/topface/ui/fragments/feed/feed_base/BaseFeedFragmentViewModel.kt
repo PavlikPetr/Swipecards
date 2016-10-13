@@ -42,7 +42,7 @@ import javax.inject.Inject
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding),
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
     @Inject lateinit var mState: TopfaceAppState
     var isRefreshing = object : ObservableBoolean() {
         override fun set(value: Boolean) {
@@ -140,23 +140,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     }
                 })
         createAndRegisterBroadcasts()
-        createAndRegisterRunningStateManager()
-    }
-
-    open protected fun createAndRegisterRunningStateManager() {
-        appStateListener = object : RunningStateManager.OnAppChangeStateListener {
-            override fun onAppForeground(timeOnStart: Long) {
-                gcmTypeUpdateAction?.let {
-                    LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
-                }
-                for (type in gcmType) {
-                    GCMUtils.cancelNotification(context, type)
-                }
-            }
-
-            override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
-        }
-        mStateManager.registerAppChangeStateListener(appStateListener)
+        mStateManager.registerAppChangeStateListener(this)
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -419,6 +403,18 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
+    override fun onAppForeground(timeOnStart: Long) {
+        gcmTypeUpdateAction?.let {
+            LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
+        }
+        for (type in gcmType) {
+            GCMUtils.cancelNotification(context, type)
+        }
+    }
+
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+
+
     override fun release() {
         super.release()
         RxUtils.safeUnsubscribe(mUpdaterSubscription)
@@ -435,6 +431,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
-        mStateManager.unregisterAppChangeStateListener(appStateListener)
+        mStateManager.unregisterAppChangeStateListener(this)
     }
 }
