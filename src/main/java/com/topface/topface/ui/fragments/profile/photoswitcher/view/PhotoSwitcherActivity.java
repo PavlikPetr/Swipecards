@@ -592,7 +592,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mPhotoLinks != null) {
             int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            actionBarView.setArrowUpView(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE, mCurrentPosition + 1, photosLinksSize));
         }
     }
 

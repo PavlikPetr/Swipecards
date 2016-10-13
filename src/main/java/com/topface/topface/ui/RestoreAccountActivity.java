@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 
 import com.topface.topface.R;
@@ -14,7 +13,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
-import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -40,12 +38,6 @@ public class RestoreAccountActivity extends TrackedFragmentActivity {
         при которой приложение думает что оно авторизованно, но на самом деле нет=)
          */
         AuthToken.getInstance().removeToken();
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayShowCustomEnabled(true);
-            new ActionBarView(actionBar, this).setSimpleView();
-            actionBar.show();
-        }
     }
 
     @Override

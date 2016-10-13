@@ -19,22 +19,22 @@ abstract class ToolbarBaseViewModel @JvmOverloads constructor(private val mToolb
                                                           mNavigation: IToolbarNavigation) {
 
 	init {
-		setTitle(title)
-		setSubtitle(subTitle)
-		setUpButton(icon)
-		mToolbar.setNavigationOnClickListener { mNavigation.onUpButtonClick() }
+//		setTitle(title)
+//		setSubtitle(subTitle)
+//		setUpButton(icon)
+//		mToolbar.setNavigationOnClickListener { mNavigation.onUpButtonClick() }
 	}
 
 	open fun setTitle(title: String) {
-		mToolbar.title = title
+//		mToolbar.title = title
 	}
 
 	open fun setSubtitle(subtitle: String) {
-		mToolbar.subtitle = subtitle
+//		mToolbar.subtitle = subtitle
 	}
 
 	open fun setUpButton(@DrawableRes icon: Int) {
-		mToolbar.navigationIconResource = icon
+//		mToolbar.navigationIconResource = icon
 	}
 
 	open fun release() {

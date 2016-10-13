@@ -11,7 +11,6 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,10 +33,6 @@ public class BanActivity extends TrackedFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBarView actionBarView = new ActionBarView(getSupportActionBar(), this);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        actionBarView.setArrowUpView();
-        getSupportActionBar().hide();
         setContentView(R.layout.ban_activity);
         BaseFragment fragment = getFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.ban_content, fragment, null).commit();

@@ -36,7 +36,6 @@ import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
 import com.topface.topface.utils.RxUtils;
-import com.topface.topface.utils.actionbar.ActionBarView;
 
 import java.util.ArrayList;
 import java.util.List;

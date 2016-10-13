@@ -85,7 +85,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             return;
         }
         mSuccessUrl = getSuccessUrl(widgetUrl);
-        actionBarView.setActionBarTitle(R.string.purchase_header_title);
 
         // Progress
         mProgressBar = findViewById(R.id.prsWebLoading);

@@ -39,7 +39,6 @@ import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
@@ -56,7 +55,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
-    public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private boolean mNeedAnimate = true;
@@ -225,16 +223,14 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     protected void initActionBarOptions(ActionBar actionBar) {
         if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
 //            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
 //                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
 //                            | ActionBar.DISPLAY_SHOW_TITLE
 //                            | ActionBar.DISPLAY_SHOW_HOME
 //                            | ActionBar.DISPLAY_HOME_AS_UP);
         }
-    }
-
-    protected void setActionBarView() {
-        actionBarView.setArrowUpView((String) getTitle());
     }
 
     /**

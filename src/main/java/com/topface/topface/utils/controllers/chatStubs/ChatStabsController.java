@@ -33,12 +33,13 @@ public class ChatStabsController {
     public static final int MUTUAL_SYMPATHY = 7;
     public static final int LOCK_CHAT = 35;
     public static final int LOCK_MESSAGE_SEND = 36;
+    public static final int UNDEFINED = 0;
     private static final String POPULAR_USER_DIALOG = "POPULAR_USER_DIALOG";
     private static final String LOCK_TYPE = "lock_type";
     private static final String PHOTO = "photo";
     private static final String HISTORY = "history";
 
-    private int mLockType;
+    private int mLockType = UNDEFINED;
     private PopularUserStub mPopularUserStub;
     private MutualSympathyStub mMutualSympathyStub;
     private ViewStub mViewStub;

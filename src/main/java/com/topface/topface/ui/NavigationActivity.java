@@ -135,11 +135,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    protected void setActionBarView() {
-        actionBarView.setLeftMenuView();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
