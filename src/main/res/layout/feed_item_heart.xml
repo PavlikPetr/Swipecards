@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.likes.LikesItemViewModel" />
+            type="com.topface.topface.ui.fragments.feed.feed_base.BaseSymphatiesItemViewModel" />
 
         <variable
             name="longClickListener"

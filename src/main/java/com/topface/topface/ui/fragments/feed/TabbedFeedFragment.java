@@ -150,7 +150,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mPagesCounters);
         mPager.setAdapter(mBodyPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters);
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters, mPagesClassNames);
     }
 
     @Override

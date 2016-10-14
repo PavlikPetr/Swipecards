@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.InterstitialCallbacks;
+import com.appodeal.ads.utils.Log;
 import com.google.android.gms.ads.AdActivity;
 import com.google.android.gms.ads.AdListener;
 import com.topface.framework.JsonUtils;
@@ -295,9 +296,8 @@ public class FullscreenController {
         Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
         Appodeal.disableNetwork(mActivity.getApplicationContext(), AppodealProvider.CHEETAH_NETWORK);
         Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
-        if (BuildConfig.DEBUG) {
-            Appodeal.setTesting(true);
-        }
+        Appodeal.setTesting(Debug.isDebugLogsEnabled());
+        Appodeal.setLogLevel(Log.LogLevel.debug);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             App.get().registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }

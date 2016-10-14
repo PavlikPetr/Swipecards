@@ -60,7 +60,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         finish();
     }
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

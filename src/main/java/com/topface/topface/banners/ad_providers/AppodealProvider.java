@@ -9,6 +9,7 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
+import com.appodeal.ads.utils.Log;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -32,7 +33,8 @@ public class AppodealProvider extends AbstractAdsProvider {
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
-        Appodeal.setLogging(Debug.isDebugLogsEnabled());
+        Appodeal.setTesting(Debug.isDebugLogsEnabled());
+        Appodeal.setLogLevel(Log.LogLevel.debug);
         Appodeal.disableNetwork(activity.getApplicationContext(), CHEETAH_NETWORK);
         Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);

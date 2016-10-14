@@ -105,6 +105,8 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initActionBar(supportActionBar)
+        mScreenBinding = DataBindingUtil.setContentView(this, R.layout.add_to_photo_blog_layout)
         savedInstanceState?.let {
             onRestoreState(it)
         }

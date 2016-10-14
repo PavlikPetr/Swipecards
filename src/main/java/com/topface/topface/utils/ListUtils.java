@@ -15,4 +15,18 @@ public class ListUtils {
     public static boolean isNotEmpty(int[] list) {
         return list != null && list.length > 0;
     }
+
+    private static void clearList(List list) {
+        if (list != null) {
+            list.clear();
+        }
+    }
+
+    public static void clearLists(List... list) {
+        if (list != null) {
+            for (List item : list) {
+                clearList(item);
+            }
+        }
+    }
 }
