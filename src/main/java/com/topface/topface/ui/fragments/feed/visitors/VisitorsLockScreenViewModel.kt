@@ -23,7 +23,7 @@ class VisitorsLockScreenViewModel(binding: LayoutEmptyVisitorsBinding, val mNavi
     }
 
     fun setOnButtonClickListener(listener: View.OnClickListener) {
-        onButtonClickListener = listener;
+        onButtonClickListener = listener
     }
 
     override fun release() {

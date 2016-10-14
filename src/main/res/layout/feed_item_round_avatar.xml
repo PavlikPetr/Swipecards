@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:documentation="documentation.topface">
 
     <data>
 
         <variable
             name="avatarHolder"
-            type="com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder" />
+            type="com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder"/>
     </data>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:documentation="documentation.topface"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -18,8 +19,8 @@
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/avatar"
             style="@style/RoundListAvatar"
-            documentation:info="не менять местами stubResId и setPhoto!!!!"
             app:stubResId="@{avatarHolder.stubResource}"
-            app:setPhoto="@{avatarHolder.photo}" />
+            app:setPhoto="@{avatarHolder.photo}"
+            documentation:info="не менять местами stubResId и setPhoto!!!!"/>
     </FrameLayout>
 </layout>

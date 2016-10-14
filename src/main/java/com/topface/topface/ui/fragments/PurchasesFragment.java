@@ -200,7 +200,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private void createTabList(ArrayList<PurchasesTabData> list) {
         for (PurchasesTabData tab : list) {
-            mPagesTitle.add(tab.name.toUpperCase());
+            mPagesTitle.add(tab.name.toUpperCase(App.getCurrentLocale()));
         }
     }
 

@@ -64,7 +64,6 @@
   <string name="black_list_add">Добавить в черный список</string>
   <string name="vip_invisible_mode">Режим невидимки</string>
   <string name="buying_profile_coins">На вашем счете</string>
-  <string name="vip_info_title">VIP-привилегии</string>
   <string name="profile_gifts_empty">Этому пользователю еще никто не дарил подарков</string>
   <string name="profile_mygifts_empty">Вам еще никто не дарил подарков</string>
   <string name="dating_people_unnoticed">Десять человек остались без вашего внимания!</string>
@@ -848,16 +847,6 @@
   <string name="NSLocationWhenInUseUsageDescription">Для получения доступа к функционалу вам необходимо разрешить доступ.</string>
   <string name="buy_button_sticker_popular">Хит продаж</string>
   <string name="buy_button_sticker_best_value">Лучшая цена</string>
-  <string name="ban_liberty_title">Без рекламы!</string>
-  <string name="ban_liberty_description">Только знакомства, ничего лишнего</string>
-  <string name="guest_liberty_title">Гости</string>
-  <string name="guest_liberty_description">Узнайте, кто заходил на Вашу страницу</string>
-  <string name="star_liberty_title">Популярные пользователи</string>
-  <string name="star_liberty_description">Самые популярные открыты к общению</string>
-  <string name="crown_liberty_title">Выделяйтесь</string>
-  <string name="crown_liberty_description">Сложно не заметить в поиске и сообщениях</string>
-  <string name="like_liberty_title">Симпатии</string>
-  <string name="like_liberty_description">Посмотрите, кому вы нравитесь</string>
   <string name="refill_balance_view_title">На вашем счете</string>
   <string name="access_to_location_popup_title">Геопозиция недоступна</string>
   <string name="access_to_location_popup_description">К сожалению, ваша геопозиция недоступна, чтобы продолжить необходимо разрешить доступ</string>

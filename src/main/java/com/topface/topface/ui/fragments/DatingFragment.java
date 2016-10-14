@@ -1073,7 +1073,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
 
     public void setCounter(int position) {
         if (mCurrentUser != null) {
-            mDatingCounter.setText(String.format(App.getCurrentLocale(),"%d/%d", (position + 1), mCurrentUser.photos.size()));
+            mDatingCounter.setText(String.format(App.getCurrentLocale(), "%d/%d", (position + 1), mCurrentUser.photos.size()));
             if (!mIsHide) mDatingCounter.setVisibility(View.VISIBLE);
         } else {
             mDatingCounter.setText("-/-");

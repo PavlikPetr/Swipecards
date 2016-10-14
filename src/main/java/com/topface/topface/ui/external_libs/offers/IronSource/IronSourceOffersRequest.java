@@ -45,7 +45,7 @@ public class IronSourceOffersRequest {
                         params.put(APPLICATION_USER_ID_KEY, String.valueOf(App.get().getProfile().uid));
                         params.put(FORMAT_KEY, FORMAT_VALUE);
                         params.put(NATIVE_AD_KEY, NATIVE_AD_VALUE);
-                        params.put(DEVICE_OS_KEY, Utils.PLATFORM.toLowerCase());
+                        params.put(DEVICE_OS_KEY, Utils.PLATFORM.toLowerCase(App.getCurrentLocale()));
                         params.put(DEVICE_OS_VERSION_KEY, String.valueOf(Build.VERSION.SDK_INT));
                         params.put(PAGE_SIZE_KEY, PAGE_SIZE_VALUE);
                         params.put(LANGUAGE_KEY, App.getCurrentLocale().getLanguage());

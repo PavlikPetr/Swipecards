@@ -27,6 +27,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
 import com.topface.topface.ui.fragments.feed.mutual.MutualFragment;
@@ -73,10 +74,13 @@ public class GCMUtils {
     public static final int GCM_TYPE_FAN_UPDATE_PROFILE = 11;
     public static final int GCM_TYPE_FAN_ADD_PHOTO = 12;
     public static final int GCM_TYPE_FAN_ONLINE = 13;
+    public static final int GCM_TYPE_ADMIRATION = 18;
+
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final String GCM_DIALOGS_UPDATE = "com.topface.topface.action.GCM_DIALOGS_UPDATE";
+    public static final String GCM_ADMIRATION_UPDATE = "com.topface.topface.action.GCM_ADMIRATION_UPDATE";
     public static final String GCM_MUTUAL_UPDATE = "com.topface.topface.action.GCM_MUTUAL_UPDATE";
     public static final String GCM_LIKE_UPDATE = "com.topface.topface.action.GCM_LIKE_UPDATE";
     public static final String GCM_GUESTS_UPDATE = "com.topface.topface.action.GCM_GUESTS_UPDATE";
@@ -92,6 +96,7 @@ public class GCMUtils {
     private static boolean showLikes = false;
     private static boolean showSympathy = false;
     private static boolean showVisitors = false;
+    private static boolean showAdmirations = false;
     public static final String NOTIFICATION_INTENT = "GCM";
     /**
      * Extras key for gcm type.
@@ -400,6 +405,14 @@ public class GCMUtils {
                 }
                 break;
 
+            case GCM_TYPE_ADMIRATION:
+                if (showAdmirations) {
+                    lastNotificationType = GCM_TYPE_ADMIRATION;
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, AdmirationFragment.class.getName());
+                }
+                break;
             case GCM_TYPE_GUESTS:
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;

@@ -17,6 +17,7 @@ import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.InviteVkFriendsActivity;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.vk.sdk.VKAccessToken;
@@ -235,7 +236,9 @@ public class VkProfileFragment extends ProfileInnerFragment {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 mVkUserRequest = null;
-                mVkUser = ((VKList<VKApiUser>) response.parsedModel).get(0);
+                VKList<VKApiUser> userList = (VKList<VKApiUser>) response.parsedModel;
+                int pos = 0;
+                mVkUser = ListUtils.isEntry(pos, userList) ? userList.get(pos) : null;
                 setAvatar(true);
                 setUserName(true);
                 checkCurrentRequests();

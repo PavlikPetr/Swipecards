@@ -23,7 +23,7 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
-        <item>0</item>
+        <item>0</item>`
     </integer-array>
 
     <!-- Education ******************************************************************************** -->
@@ -462,16 +462,6 @@
         <!-- own_female -->
     </string-array>
 
-    <string-array name="form_social_marriage">
-        <item>@string/form_social_marriage_0</item>
-        <!-- male -->
-        <item>@string/form_social_marriage_1</item>
-        <!-- female -->
-        <item>@string/form_social_marriage_2</item>
-        <!-- own_male -->
-        <item>@string/form_social_marriage_3</item>
-        <!-- own_female -->
-    </string-array>
     <string-array name="form_social_education">
         <item>@string/form_social_education_0</item>
         <!-- male -->
