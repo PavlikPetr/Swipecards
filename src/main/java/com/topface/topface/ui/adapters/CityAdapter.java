@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
 import com.topface.topface.databinding.CityItemBinding;
@@ -37,7 +38,7 @@ public class CityAdapter extends BaseRecyclerViewAdapter<CityItemBinding, City> 
 
     private SpannableString getHighlightCity(String city) {
         SpannableString spanString = null;
-        if (mCitySearchPrefix != null && city.toLowerCase().startsWith(mCitySearchPrefix)) {
+        if (mCitySearchPrefix != null && city.toLowerCase(App.getCurrentLocale()).startsWith(mCitySearchPrefix)) {
             spanString = new SpannableString(city);
             spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, mCitySearchPrefix.length(), 0);
         }

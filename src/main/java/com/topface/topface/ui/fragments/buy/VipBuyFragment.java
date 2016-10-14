@@ -131,7 +131,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
         initViews(view);
-        initVipLiberty(inflater, (LinearLayout) view.findViewById(R.id.fbpBtnContainer));
         initActionBar();
         return view;
     }
@@ -146,18 +145,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         initBuyVipViews(root);
         initEditVipViews(root);
         switchLayouts();
-    }
-
-    private void initVipLiberty(LayoutInflater inflater, LinearLayout root) {
-        if (root != null
-                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion(null))
-                && isVipLibertyBlockAvailable()) {
-            root.addView(inflater.inflate(R.layout.vip_liberty_list, root, false));
-        }
-    }
-
-    protected boolean isVipLibertyBlockAvailable() {
-        return true;
     }
 
     private void switchLayouts() {
@@ -202,7 +189,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         List<BuyButtonData> availableButtons = getAvailableButtons(products.premium);
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(availableButtons.isEmpty() ? View.VISIBLE : View.GONE);
 
-        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products, null), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+        new PurchaseButtonList().getButtonsListView(btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);
@@ -213,7 +200,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onResumeFragment() {
         super.onResumeFragment();
-        BuyScreenStatistics.buyScreenShowSendStatistics(getClass().getSimpleName(), getBuyVipViewVersion(PurchaseButtonList.ViewsVersions.V1.getVersionName()));
+        BuyScreenStatistics.buyScreenShowSendStatistics(getClass().getSimpleName());
     }
 
     protected void buy(String id, BuyButtonData curBtn) {

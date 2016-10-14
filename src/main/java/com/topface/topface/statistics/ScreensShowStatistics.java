@@ -3,6 +3,7 @@ package com.topface.topface.statistics;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.App;
 
 /**
  * Created by ppetr on 14.03.16.
@@ -18,7 +19,7 @@ public class ScreensShowStatistics {
             // логи для тестеров, после теста задачи #46897 можно удалить
             Debug.log("ScreensShowStatistics", command + " " + SLICE_PLC + ":" + screenName);
             Slices slices = new Slices();
-            slices.put(SLICE_PLC, screenName.toLowerCase());
+            slices.put(SLICE_PLC, screenName.toLowerCase(App.getCurrentLocale()));
             StatisticsTracker.getInstance()
                     .sendEvent(command, 1, slices);
         }

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.viewModels.CitySearchPopupViewModel" />
+            type="com.topface.topface.viewModels.CitySearchPopupViewModel"/>
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:id="@+id/city_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,7 +28,7 @@
             android:background="@color/action_bar_color"
             app:contentInsetStart="0dp">
 
-            <include layout="@layout/actionbar_container_title_view" />
+            <include layout="@layout/actionbar_container_title_view"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -44,7 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/city_item_height"
                 android:background="@color/bg_white"
-                android:elevation="@dimen/elevation_value"
+                app:elevation="@dimen/elevation_value"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp">
 
@@ -57,7 +57,7 @@
                     android:text="@string/city_selector_your_city"
                     android:textColor="@color/dark_primary_text"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/current_city"
@@ -67,7 +67,7 @@
                     android:layout_marginRight="18dp"
                     android:text="@{viewModel.cityObservableField}"
                     android:textColor="@color/dark_secondary_text"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"/>
 
             </FrameLayout>
 
@@ -86,13 +86,12 @@
             android:lines="1"
             android:maxLines="1"
             android:paddingLeft="16dp"
-            android:singleLine="true"
-            android:text="@={viewModel.editTextObservable}" />
+            android:text="@={viewModel.editTextObservable}"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/top_menu_disabled_text_color" />
+            android:background="@color/top_menu_disabled_text_color"/>
 
         <ProgressBar
             android:id="@+id/requestProgress"
@@ -100,13 +99,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:paddingTop="15dp"
-            android:visibility="@{viewModel.isRequestInProgress}" />
+            android:visibility="@{viewModel.isRequestInProgress}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/city_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{!viewModel.isRequestInProgress}" />
+            android:visibility="@{!viewModel.isRequestInProgress}"/>
 
     </LinearLayout>
 </layout>

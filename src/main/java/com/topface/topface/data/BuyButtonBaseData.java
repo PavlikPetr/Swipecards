@@ -65,8 +65,8 @@ public class BuyButtonBaseData {
                 if (detail != null) {
                     double price = detail.price / ProductsDetails.MICRO_AMOUNT;
                     double pricePerItem = price / amount;
-                    title = titleTemplate.replace(Products.PRICE, String.format("%.2f %s", price, detail.currency));
-                    title = title.replace(Products.PRICE_PER_ITEM, String.format("%.2f %s", pricePerItem, detail.currency));
+                    title = titleTemplate.replace(Products.PRICE, String.format(App.getCurrentLocale(), "%.2f %s", price, detail.currency));
+                    title = title.replace(Products.PRICE_PER_ITEM, String.format(App.getCurrentLocale(), "%.2f %s", pricePerItem, detail.currency));
                 }
             }
         }

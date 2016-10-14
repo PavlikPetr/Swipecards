@@ -139,7 +139,7 @@ public class PurchasesFragment extends BaseFragment {
         ButterKnife.bind(this, root);
         initViews(root, savedInstanceState);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitle, null);
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitle, null, null);
         mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
         return root;
     }
@@ -200,7 +200,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private void createTabList(ArrayList<PurchasesTabData> list) {
         for (PurchasesTabData tab : list) {
-            mPagesTitle.add(tab.name.toUpperCase());
+            mPagesTitle.add(tab.name.toUpperCase(App.getCurrentLocale()));
         }
     }
 

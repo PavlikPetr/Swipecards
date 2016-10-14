@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
         android:textColor="@color/vk_black"
-        android:textSize="49dp"
+        android:textSize="49sp"
         android:text="E M P T Y"/>
 
 </LinearLayout>

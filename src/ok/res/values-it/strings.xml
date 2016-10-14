@@ -65,7 +65,6 @@
     <string name="black_list_add">Aggiungi nella black list</string>
     <string name="vip_invisible_mode">Stato di invisibilità</string>
     <string name="buying_profile_coins">Sul tuo conto</string>
-    <string name="vip_info_title">Privilegi di essere VIP</string>
     <string name="profile_gifts_empty">Questo utente non ha ancora ricevuto regali da nessuno</string>
     <string name="profile_mygifts_empty">Non hai ancora ricevuto regali da nessuno</string>
     <string name="dating_people_unnoticed">Hai lasciato sfuggire alla tua vista dieci persone!</string>
@@ -888,16 +887,6 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="NSLocationWhenInUseUsageDescription">Per accedere a questa funzione devi fornire il permesso</string>
     <string name="buy_button_sticker_popular">Il più\n venduto</string>
     <string name="buy_button_sticker_best_value">Miglior\n prezzo</string>
-    <string name="ban_liberty_title">Senza pubblicità!</string>
-    <string name="ban_liberty_description">Solo un appuntamento, puro e semplice</string>
-    <string name="guest_liberty_title">Ospiti</string>
-    <string name="guest_liberty_description">Scopri chi ha visitato il tuo profilo</string>
-    <string name="star_liberty_title">Utenti popolari</string>
-    <string name="star_liberty_description">Il più famoso rompighiaccio per iniziare a conversare</string>
-    <string name="crown_liberty_title">Distinguiti</string>
-    <string name="crown_liberty_description">Spicca facilmente tra le Ricerche e i Messaggi</string>
-    <string name="like_liberty_title">Mi piace</string>
-    <string name="like_liberty_description">Scopri a chi piaci</string>
     <string name="refill_balance_view_title">Il tuo saldo</string>
     <string name="access_to_location_popup_title">Geo localizzazione non disponibile</string>
     <string name="access_to_location_popup_description">Sfortunatamente la geo localizzazione non è disponibile per la tua posizione. Per continuare, devi consentire l\'accesso.</string>

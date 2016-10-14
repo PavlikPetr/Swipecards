@@ -62,7 +62,6 @@
   <string name="black_list_add">Añadir a la lista negra</string>
   <string name="vip_invisible_mode">Modo invisible</string>
   <string name="buying_profile_coins">En tu cuenta</string>
-  <string name="vip_info_title">Privilegios del estatus VIP</string>
   <string name="profile_gifts_empty">A este usuario, nadie aún le ha hecho regalos</string>
   <string name="profile_mygifts_empty">Nadie te ha hecho regalos todavía</string>
   <string name="dating_people_unnoticed">¡Has dejado de atender a diez personas!</string>
@@ -802,16 +801,6 @@
   <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
   <string name="buy_button_sticker_popular">Los más\n vendidos</string>
   <string name="buy_button_sticker_best_value">El mejor\n precio</string>
-  <string name="ban_liberty_title">¡Sin publicidad!</string>
-  <string name="ban_liberty_description">Solo conocer gente, nada más</string>
-  <string name="guest_liberty_title">Invitados</string>
-  <string name="guest_liberty_description">Averigua, quién ha entrado a tu página</string>
-  <string name="star_liberty_title">Usuarios populares</string>
-  <string name="star_liberty_description">Las aperturas más populares para comunicarse</string>
-  <string name="crown_liberty_title">Destaca</string>
-  <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes</string>
-  <string name="like_liberty_title">Simpatías</string>
-  <string name="like_liberty_description">Mira a quién le gustas</string>
   <string name="refill_balance_view_title">En tu cuenta</string>
   <string name="access_to_location_popup_title">No es accesible la geolocalización</string>
   <string name="access_to_location_popup_description">Por desgracia, tu geolocalización no es accesible. Para continuar, es necesario que permitas el acceso</string>

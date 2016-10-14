@@ -49,6 +49,9 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
                     case GCMUtils.GCM_TYPE_LIKE:
                         updateIntent = new Intent(GCMUtils.GCM_LIKE_UPDATE);
                         break;
+                    case GCMUtils.GCM_TYPE_ADMIRATION:
+                        updateIntent = new Intent(GCMUtils.GCM_ADMIRATION_UPDATE);
+                        break;
                     case GCMUtils.GCM_TYPE_GUESTS:
                         updateIntent = new Intent(GCMUtils.GCM_GUESTS_UPDATE);
                         break;

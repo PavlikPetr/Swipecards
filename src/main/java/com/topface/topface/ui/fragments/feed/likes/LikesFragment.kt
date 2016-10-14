@@ -7,7 +7,6 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedLike
 import com.topface.topface.databinding.LayoutEmptyLikesBinding
 import com.topface.topface.statistics.FlurryOpenEvent
-import com.topface.topface.ui.fragments.feed.LikesFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.viewModels.BaseViewModel
@@ -19,9 +18,18 @@ import com.topface.topface.viewModels.BaseViewModel
 @FlurryOpenEvent(name = LikesFragment.PAGE_NAME)
 class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
 
+    companion object {
+        const val PAGE_NAME = "Likes"
+    }
+
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyLikesBinding> {
         override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyLikesBinding> {
-            return LikesLockScreenViewModel(binding as LayoutEmptyLikesBinding, mApi, mNavigator, App.get().dataUpdater, this@LikesFragment)
+            return LikesLockScreenViewModel(
+                    binding as LayoutEmptyLikesBinding,
+                    mApi,
+                    mNavigator,
+                    App.get().dataUpdater,
+                    this@LikesFragment)
         }
     }
 
