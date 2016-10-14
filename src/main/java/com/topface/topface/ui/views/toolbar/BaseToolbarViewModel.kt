@@ -19,7 +19,7 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
     val background = ObservableInt(R.color.toolbar_background_white)
     val subTitle = ObservableField<String>("")
     val titleTextColor = ObservableInt(R.color.toolbar_title_color)
-    val subTitleTextColor = ObservableInt(R.color.toolbar_subtitle_color)
+    val subTitleTextColor = ObservableInt(context.resources.getColor(R.color.toolbar_subtitle_color))
     val titleDrawableRight = ObservableInt(0)
     val upIcon = ObservableInt(R.drawable.ic_arrow_up)
 

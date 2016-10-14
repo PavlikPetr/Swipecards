@@ -94,8 +94,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void setToolbarSettings(ToolbarSettingsData settings) {
-        if (getActivity() instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) getActivity()).setToolbarSettings(settings);
+        if (getActivity() instanceof ToolbarActivity) {
+            ((ToolbarActivity) getActivity()).setToolbarSettings(settings);
         }
     }
 

@@ -105,8 +105,6 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initActionBar(supportActionBar)
-        mScreenBinding = DataBindingUtil.setContentView(this, R.layout.add_to_photo_blog_layout)
         savedInstanceState?.let {
             onRestoreState(it)
         }
@@ -166,5 +164,9 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
         super.onResume()
         setToolbarSettings(ToolbarSettingsData(title = getToolbarTitle()))
         if (App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) showPhotoHelper()
+    }
+
+    override fun onUpClick() {
+        finish()
     }
 }

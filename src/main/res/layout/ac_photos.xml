@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
             type="com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel"/>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.BaseToolbarViewModel"/>
 
     </data>
 
@@ -17,7 +22,8 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar"/>
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

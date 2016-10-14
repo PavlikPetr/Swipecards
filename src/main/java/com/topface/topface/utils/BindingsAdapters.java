@@ -26,6 +26,7 @@ import android.widget.ViewFlipper;
 import com.bumptech.glide.Glide;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 
@@ -195,16 +196,10 @@ public class BindingsAdapters {
         }
     }
 
-    @BindingAdapter("android:layout")
-    public static void setViewStubLayout(ViewStub view, @LayoutRes int resource) {
-        view.setLayoutResource(resource);
-        view.inflate();
-    }
-
-    @BindingAdapter("subtitleTextColor")
-    public static void setSubtitleTextColor(Toolbar view, @ColorInt int color) {
-        view.setSubtitleTextColor(color);
-    }
+//    @BindingAdapter("subtitleTextColor")
+//    public static void setSubtitleTextColor(Toolbar view, int color) {
+//        view.setSubtitleTextColor(view.getContext().getResources().getColor(color));
+//    }
 
     @BindingAdapter("titleTextColor")
     public static void setTitleTextColor(Toolbar view, @ColorInt int color) {
@@ -221,6 +216,11 @@ public class BindingsAdapters {
             ss.setSpan(span, 0, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             view.setTitle(ss);
         }
+    }
+
+    @BindingAdapter("navigationIcon")
+    public static void setNavigationIcon(Toolbar view, @DrawableRes int resource) {
+        view.setNavigationIcon(resource);
     }
 
     /*

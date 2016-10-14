@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.BaseToolbarViewModel"/>
+    </data>
 
     <LinearLayout
         android:id="@+id/root"
@@ -10,7 +18,8 @@
 
         <include
             android:id="@+id/toolbar"
-            layout="@layout/toolbar"/>
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/user_photos_grid"

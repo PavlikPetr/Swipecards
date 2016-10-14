@@ -7,6 +7,4 @@ import android.databinding.ViewDataBinding;
  * empty parrent for NavigationActivity (it needs in i-free flavour)
  */
 public abstract class ParentNavigationActivity<T extends ViewDataBinding> extends BaseFragmentActivity<T> {
-
-    protected abstract int getContentLayoutId();
 }

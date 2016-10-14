@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.AttributeSet
 import android.view.View
 import com.flurry.sdk.it
+import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentMenuBinding
 import com.topface.topface.databinding.ToolbarBinding
@@ -39,7 +40,8 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         viewBinding = DataBindingUtil.setContentView<T>(this@ToolbarActivity, getLayout())
         setContentView(viewBinding.root)
         toolbarBinding = getToolbarBinding(viewBinding)
-
+        viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
+        setSupportActionBar(toolbarBinding?.toolbar);
     }
 
     fun setToolBarVisibility(isVisible: Boolean) {
@@ -48,9 +50,15 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     fun setToolbarSettings(settings: ToolbarSettingsData) {
         getToolbarViewModel().let { toolbarViewModel ->
-            settings.title?.let { toolbarViewModel.title.set(it) }
-            settings.subtitle?.let { toolbarViewModel.subTitle.set(it) }
-            settings.icon?.let { toolbarViewModel.upIcon.set(it) }
+            settings.title?.let {
+                toolbarViewModel.title.set(it)
+            }
+            settings.subtitle?.let {
+                toolbarViewModel.subTitle.set(it)
+            }
+            settings.icon?.let {
+                toolbarViewModel.upIcon.set(it)
+            }
         }
     }
 
@@ -98,5 +106,10 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowHomeEnabled(true)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mToolbarBaseViewModel?.release()
     }
 }

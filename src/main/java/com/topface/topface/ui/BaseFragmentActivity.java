@@ -9,11 +9,9 @@ import android.databinding.ViewDataBinding;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBar;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -87,8 +85,8 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setWindowOptions();
+        super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
