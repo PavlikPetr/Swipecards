@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.databinding.ViewDataBinding;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -24,19 +24,13 @@ import android.widget.FrameLayout;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.views.toolbar.BackToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.IToolbarNavigation;
-import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
-import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
-import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -48,8 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient,
-        IToolbarNavigation {
+public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T> implements IRequestClient {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -59,8 +52,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
-    private Toolbar mToolbar;
-    private ToolbarBaseViewModel mToolbarBaseViewModel;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -94,18 +85,10 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unused")
-    public IActivityDelegate getActivityDelegate() {
-        return this;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setWindowOptions();
-        if (isHasContent()) {
-            setContentView(getContentLayout());
-        }
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -115,64 +98,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         LocaleConfig.updateConfiguration(getBaseContext());
         initActionBarOptions(getSupportActionBar());
     }
-
-    @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-        getToolbar();
-        getToolbarViewModel();
-    }
-
-
-    protected Toolbar getToolbar() {
-        if (mToolbar == null) {
-            mToolbar = initToolbar();
-            if (mToolbar != null) {
-                setSupportActionBar(mToolbar);
-            }
-        }
-        return mToolbar;
-    }
-
-    protected Toolbar initToolbar() {
-        return (Toolbar) findViewById(R.id.toolbar);
-    }
-
-    protected ToolbarBaseViewModel generateToolbarViewModel() {
-        return new BackToolbarViewModel(getToolbar(), getString(R.string.app_name), this);
-    }
-
-    protected ToolbarBaseViewModel getToolbarViewModel() {
-        if (mToolbarBaseViewModel == null) {
-            mToolbarBaseViewModel = generateToolbarViewModel();
-        }
-
-        return mToolbarBaseViewModel;
-    }
-
-    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
-        ToolbarBaseViewModel toolbarBaseViewModel = getToolbarViewModel();
-        if (toolbarBaseViewModel != null) {
-            if (settings.getTitle() != null) {
-                toolbarBaseViewModel.setTitle(settings.getTitle());
-            }
-            if (settings.getSubtitle() != null) {
-                toolbarBaseViewModel.setSubtitle(settings.getSubtitle());
-            }
-            if (settings.getIcon() != null) {
-                toolbarBaseViewModel.setUpButton(settings.getIcon());
-            }
-        }
-    }
-
-    public void setToolBarVisibility(boolean isVisible) {
-        Toolbar bar = getToolbar();
-        if (bar != null) {
-            bar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    protected abstract int getContentLayout();
 
     @Override
     protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
@@ -220,18 +145,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-
-    protected void initActionBarOptions(ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-//            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-//                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
-//                            | ActionBar.DISPLAY_SHOW_TITLE
-//                            | ActionBar.DISPLAY_SHOW_HOME
-//                            | ActionBar.DISPLAY_HOME_AS_UP);
-        }
-    }
 
     /**
      * Установка флагов Window
@@ -480,14 +393,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    public boolean doPreFinish() {
-        return onPreFinish();
-    }
-
-    protected boolean onPreFinish() {
-        return true;
-    }
-
     protected void onProfileUpdated() {
     }
 
@@ -541,19 +446,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     }
 
     @Override
-    public void onUpButtonClick() {
-        onUpClick();
-    }
-
-    public void onUpClick() {
-        if (doPreFinish()) {
-            if (!onSupportNavigateUp()) {
-                finish();
-            }
-        }
-    }
-
-    @Override
     public boolean supportShouldUpRecreateTask(Intent targetIntent) {
         return super.supportShouldUpRecreateTask(targetIntent) && isTaskRoot();
     }
@@ -572,9 +464,5 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @SuppressWarnings("unused")
     public boolean isRunning() {
         return mRunning;
-    }
-
-    protected boolean isHasContent() {
-        return true;
     }
 }

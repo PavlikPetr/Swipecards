@@ -75,12 +75,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     }
 
     @Override
-    protected int getContentLayout() {
-        // the fragment frame layout _without_ background definition
-        return R.layout.ac_fragment_frame_no_background;
-    }
-
-    @Override
     protected String getFragmentTag() {
         return ChatFragment.class.getSimpleName();
     }

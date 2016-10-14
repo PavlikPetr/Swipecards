@@ -7,17 +7,21 @@ import android.widget.Toast;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.databinding.BanActivityBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class BanActivity extends TrackedFragmentActivity {
+public class BanActivity extends TrackedFragmentActivity<BanActivityBinding> {
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;
@@ -33,7 +37,6 @@ public class BanActivity extends TrackedFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ban_activity);
         BaseFragment fragment = getFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.ban_content, fragment, null).commit();
 
@@ -93,5 +96,16 @@ public class BanActivity extends TrackedFragmentActivity {
             startActivity(intent);
             super.onBackPressed();
         }
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull BanActivityBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ban_activity;
     }
 }

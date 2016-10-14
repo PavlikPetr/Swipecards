@@ -2,6 +2,8 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,7 @@ import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -41,8 +44,9 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
+import com.topface.topface.ui.views.toolbar.BackToolbarViewModel1;
+import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel1;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
@@ -241,9 +245,21 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }));
     }
 
+    @NotNull
     @Override
-    protected ToolbarBaseViewModel generateToolbarViewModel() {
-        return new NavigationToolbarViewModel(getToolbar(), this);
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new NavigationToolbarViewModel1(toolbar, this);
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
+        return null;
+    }
+
+    @Override
+    public int getLayout() {
+        return 0;
     }
 
     private void initPopups() {

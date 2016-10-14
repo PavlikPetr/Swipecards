@@ -16,6 +16,8 @@ import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.databinding.AcGiftsBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
@@ -29,12 +31,14 @@ import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static com.topface.topface.utils.FlurryManager.BUY_GIFT;
 
-public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
+public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implements IGiftSendListener {
 
     public static final int INTENT_REQUEST_GIFT = 111;
     public static final String INTENT_GIFT_PRICE = "gift_price";
@@ -110,11 +114,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         }).build();
         mLockScreen.addView(mRetryView.getView());
-    }
-
-    @Override
-    protected int getContentLayout() {
-        return R.layout.ac_gifts;
     }
 
     /**
@@ -239,5 +238,16 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 }
             }
         }).exec();
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcGiftsBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_gifts;
     }
 }

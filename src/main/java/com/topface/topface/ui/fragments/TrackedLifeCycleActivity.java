@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 
 import com.topface.topface.utils.ActivityLifeCycleReporter;
@@ -9,7 +10,7 @@ import com.topface.topface.utils.IActivityDelegate;
  * Created by ppavlik on 04.04.16.
  * Observe activity lifecycle
  */
-public class TrackedLifeCycleActivity extends CrashReportActivity implements IActivityDelegate {
+public abstract class TrackedLifeCycleActivity<T extends ViewDataBinding> extends ToolbarActivity<T> {
 
     private ActivityLifeCycleReporter mLifeCycleReporter = new ActivityLifeCycleReporter(getClass().getName());
     private boolean mIsActivityRestoredState = false;

@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
 
         <variable
             name="handlers"
-            type="com.topface.topface.ui.RestoreAccountActivity.Handlers" />
+            type="com.topface.topface.ui.RestoreAccountActivity.Handlers"/>
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/restore_top_padding">
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_profile" />
+            android:layout_marginTop="@dimen/restore_top_padding"
+            android:src="@drawable/ic_profile"/>
 
         <TextView
             style="@style/MessageRestore"
-            android:text="@string/delete_account_will_be_restored_are_you_sure" />
+            android:text="@string/delete_account_will_be_restored_are_you_sure"/>
 
         <Button
             android:id="@+id/restore_account"
@@ -34,6 +39,6 @@
             style="@style/BigStretchedGrayButtonRestore"
             android:layout_marginTop="@dimen/restore_buttons_padding"
             android:onClick="@{handlers::onCancelClick}"
-            android:text="@string/general_cancel" />
+            android:text="@string/general_cancel"/>
     </LinearLayout>
 </layout>

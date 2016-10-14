@@ -3,10 +3,17 @@ package com.topface.topface.utils;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.animation.AlphaAnimation;
@@ -192,5 +199,27 @@ public class BindingsAdapters {
     public static void setViewStubLayout(ViewStub view, @LayoutRes int resource) {
         view.setLayoutResource(resource);
         view.inflate();
+    }
+
+    @BindingAdapter("subtitleTextColor")
+    public static void setSubtitleTextColor(Toolbar view, @ColorInt int color) {
+        view.setSubtitleTextColor(color);
+    }
+
+    @BindingAdapter("titleTextColor")
+    public static void setTitleTextColor(Toolbar view, @ColorInt int color) {
+        view.setTitleTextColor(color);
+    }
+
+    @BindingAdapter("titleDrawableRight")
+    public static void setTitleDrawableRight(Toolbar view, @DrawableRes int resource) {
+        if (resource != 0) {
+            SpannableString ss = new SpannableString(view.getTitle());
+            Drawable d = view.getContext().getResources().getDrawable(resource);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
+            ss.setSpan(span, 0, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            view.setTitle(ss);
+        }
     }
 }

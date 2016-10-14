@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments
 import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import com.topface.topface.R
+import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.hockeyApp.HockeyAppCrashManager
 import net.hockeyapp.android.CrashManager
 
@@ -11,7 +12,7 @@ import net.hockeyapp.android.CrashManager
  * Base activity for a whole project, cause it send a crash reports
  */
 
-abstract class CrashReportActivity : AppCompatActivity() {
+abstract class CrashReportActivity : AppCompatActivity(), IActivityDelegate {
 
 	override fun onResume() {
 		super.onResume()

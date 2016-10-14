@@ -15,11 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/toolbar_background_white"
+        app:subtitle="@{viewModel.subTitle}"
         app:title="@{viewModel.title}"
-        app:titleMarginStart="15dp"/>
+        app:titleMarginStart="15dp"
+        app:navigationIcon="@{viewModel.upIcon}">
+        <!--app:subtitleTextColor="@{viewModel.subTitleTextColor}"-->
+        <!--app:titleDrawableRight = "@{viewModel.titleDrawableRight}"-->
+        <!--app:titleTextColor="@{viewModel.titleTextColor}"-->
 
-    <ViewStub
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout="@{viewModel.customView}"/>
+    <!--<ViewStub-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout="@{viewModel.customView}"/>-->
+   </android.support.v7.widget.Toolbar>
 </layout>

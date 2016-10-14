@@ -17,6 +17,8 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcInviteVkFriendsBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.FlurryManager;
@@ -28,6 +30,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiUser;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,7 +43,7 @@ import butterknife.ButterKnife;
 
 import static com.topface.topface.statistics.InvitesStatistics.PLC_VK_INVITES;
 
-public class InviteVkFriendsActivity extends BaseFragmentActivity {
+public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFriendsBinding> {
     private final static int ITEMS_COUNT_BEFORE_END = 5;
     private final static int MAX_RE_REQUEST_COUNT = 3;
 
@@ -170,11 +173,6 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected int getContentLayout() {
-        return R.layout.ac_invite_vk_friends;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
     }
@@ -248,6 +246,17 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private String packFriendsList(List<VKApiUser> friends) {
         return JsonUtils.toJson(friends);
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcInviteVkFriendsBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_invite_vk_friends;
     }
 
     private static class VKFriendsAdapter extends BaseAdapter {

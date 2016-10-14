@@ -7,8 +7,12 @@ import android.view.MenuItem;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 
-public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity {
+import org.jetbrains.annotations.NotNull;
+
+public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity<AcFragmentFrameBinding> {
 
     private T mFragment;
 
@@ -63,12 +67,14 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
         mFragment.setArguments(getIntent().getExtras());
     }
 
+    @NotNull
     @Override
-    protected int getContentLayout() {
-        // this layout (R.layout.ac_fragment_frame) defines its own background,
-        // so windowBackground in some activities (e.g. ChatActivity) defined in themes
-        // doesn't work properly - overlayed by fragment background
-        // so ChatActivity now has its own fragment frame layout
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
         return R.layout.ac_fragment_frame;
     }
 

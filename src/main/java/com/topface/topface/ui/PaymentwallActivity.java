@@ -18,8 +18,12 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.BuyButtonData;
+import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.WebViewFragmentBinding;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -32,7 +36,7 @@ import javax.inject.Inject;
 import rx.Subscription;
 import rx.functions.Action1;
 
-public class PaymentwallActivity extends BaseFragmentActivity {
+public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBinding> {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
     public static final int ACTION_BUY = 100;
     public static final String PW_URL = "pw_url";
@@ -128,11 +132,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         finish();
     }
 
-    @Override
-    protected int getContentLayout() {
-        return R.layout.web_view_fragment;
-    }
-
     private void onFatalError() {
         Utils.showErrorMessage();
         setResult(RESULT_ERROR);
@@ -170,6 +169,17 @@ public class PaymentwallActivity extends BaseFragmentActivity {
             url = App.from(this).getOptions().getPaymentwallLink();
         }
         return url;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull WebViewFragmentBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.web_view_fragment;
     }
 
     private static class PaymentwallClient extends WebViewClient {
