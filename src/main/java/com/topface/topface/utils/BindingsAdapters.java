@@ -4,9 +4,11 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -184,5 +186,11 @@ public class BindingsAdapters {
         } else {
             Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
         }
+    }
+
+    @BindingAdapter("android:layout")
+    public static void setViewStubLayout(ViewStub view, @LayoutRes int resource) {
+        view.setLayoutResource(resource);
+        view.inflate();
     }
 }
