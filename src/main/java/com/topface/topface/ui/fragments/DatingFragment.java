@@ -76,6 +76,7 @@ import com.topface.topface.ui.views.ILocker;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.AnimationHelper;
@@ -314,9 +315,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     public void onDetach() {
         super.onDetach();
         mFragmentSwitcherListener = null;
-        if (getTitleSetter() != null) {
-            getTitleSetter().setOnline(false);
-        }
+        setToolbarSettings(new ToolbarSettingsData(null, null, null, false));
     }
 
     private boolean isValidUserCache() {
@@ -404,9 +403,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             showControls();
         }
         super.onResume();
-        if (getTitleSetter() != null) {
-            getTitleSetter().setOnline(mCurrentUser != null && mCurrentUser.online);
-        }
+        setToolbarSettings(new ToolbarSettingsData(null, null, null, mCurrentUser != null && mCurrentUser.online));
         LocalBroadcastManager.getInstance(getActivity())
                 .registerReceiver(mReceiver, new IntentFilter(RetryRequestReceiver.RETRY_INTENT));
         LocalBroadcastManager.getInstance(getActivity())
@@ -988,9 +985,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUserOnlineStatus(SearchUser currUser) {
-        if (getTitleSetter() != null) {
-            getTitleSetter().setOnline(currUser != null && currUser.online);
-        }
+        setToolbarSettings(new ToolbarSettingsData(null, null, null, currUser != null && currUser.online));
     }
 
     @SuppressWarnings("deprecation")
@@ -1199,7 +1194,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             mImageSwitcher.setVisibility(View.GONE);
             mCurrentUser = null;
             refreshActionBarTitles();
-            getTitleSetter().setOnline(false);
+            setToolbarSettings(new ToolbarSettingsData(null, null, null, false));
             mUserInfoStatus.setText(Utils.EMPTY);
         }
     }
@@ -1308,8 +1303,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         FlurryManager.getInstance().sendEmptyDatingListEvent();
         mImageSwitcher.setVisibility(View.GONE);
         mRetryView.setVisibility(View.VISIBLE);
-        setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_dating)));
-        getTitleSetter().setOnline(false);
+        setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_dating), null, null, false));
         mFragmentSwitcherListener.onShowActionBar();
         mDatingCounter.setVisibility(View.GONE);
     }

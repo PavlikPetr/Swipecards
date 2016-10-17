@@ -5,6 +5,7 @@ import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
@@ -17,6 +18,7 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewStub;
 import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,9 +28,11 @@ import android.widget.ViewFlipper;
 import com.bumptech.glide.Glide;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -196,25 +200,20 @@ public class BindingsAdapters {
         }
     }
 
-//    @BindingAdapter("subtitleTextColor")
-//    public static void setSubtitleTextColor(Toolbar view, int color) {
-//        view.setSubtitleTextColor(view.getContext().getResources().getColor(color));
-//    }
-
-    @BindingAdapter("titleTextColor")
-    public static void setTitleTextColor(Toolbar view, @ColorInt int color) {
-        view.setTitleTextColor(color);
-    }
-
+    //временная костылина
     @BindingAdapter("titleDrawableRight")
     public static void setTitleDrawableRight(Toolbar view, @DrawableRes int resource) {
         if (resource != 0) {
-            SpannableString ss = new SpannableString(view.getTitle());
+            String TEMPLATE_WITH_DRAWABLE = "%s  ";
+            String currentTitle = String.format(App.getCurrentLocale(), TEMPLATE_WITH_DRAWABLE, view.getTitle());
+            SpannableString ss = new SpannableString(currentTitle);
             Drawable d = view.getContext().getResources().getDrawable(resource);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-            ss.setSpan(span, 0, 3, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+            ss.setSpan(span, currentTitle.length() - 1, currentTitle.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             view.setTitle(ss);
+        } else {
+            view.setTitle(view.getTitle());
         }
     }
 

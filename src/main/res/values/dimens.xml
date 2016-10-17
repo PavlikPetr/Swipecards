@@ -165,5 +165,6 @@
 
     <!--Toolbar sizes-->
     <dimen name="toolbar_title_size">20sp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
 
 </resources>

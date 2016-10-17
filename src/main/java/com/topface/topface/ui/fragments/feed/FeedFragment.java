@@ -56,7 +56,6 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.CountersDataProvider;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -66,6 +65,7 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
@@ -434,7 +434,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     protected void initNavigationBar() {
-        setActionBarTitles(getTitle());
+        //TODO TITLE getTitle()
     }
 
     abstract protected Type getFeedListDataType();
@@ -1266,7 +1266,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void setToolBarVisibility(boolean isVisible) {
-        BaseFragmentActivity activity = ((BaseFragmentActivity) getActivity());
+        ToolbarActivity activity = ((ToolbarActivity) getActivity());
         if (activity != null) {
             activity.setToolBarVisibility(isVisible);
         }

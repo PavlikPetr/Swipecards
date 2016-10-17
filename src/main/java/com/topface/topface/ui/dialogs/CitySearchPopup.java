@@ -12,6 +12,8 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.CitySearchPopupBinding;
 import com.topface.topface.ui.adapters.CityAdapter;
+import com.topface.topface.ui.views.toolbar.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.debug.FuckingVoodooMagic;
@@ -38,6 +40,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
     private CityAdapter mAdapter;
     private CitySearchPopupBinding mBinding;
     private IOnCitySelected mOnCitySelected;
+    private BackToolbarViewModel mBackToolbarViewModel;
 
     public static CitySearchPopup newInstance(@Nullable String cityNameOnStart, @Nullable ArrayList<City> defaultCities) {
         CitySearchPopup popup = new CitySearchPopup();
@@ -66,13 +69,14 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
         mModel = new CitySearchPopupViewModel(mBinding, getArguments(), this);
         mAdapter.setOnItemClickListener(mModel);
         mBinding.setViewModel(mModel);
-        ((TextView) root.findViewById(R.id.title)).setText(R.string.my_location);
-        root.findViewById(R.id.title_clickable).setOnClickListener(new View.OnClickListener() {
+        mBackToolbarViewModel = new BackToolbarViewModel(mBinding.toolbar, getContext().getString(R.string.my_location), new IToolbarNavigation() {
             @Override
-            public void onClick(View v) {
+            public void onUpButtonClick() {
                 getDialog().cancel();
             }
         });
+        mBinding.setToolbarViewModel(mBackToolbarViewModel);
+        mBackToolbarViewModel.init();
     }
 
     @Override
@@ -119,6 +123,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
     public void onDetach() {
         super.onDetach();
         mModel.release();
+        mBackToolbarViewModel.release();
     }
 
     public void setOnCitySelected(IOnCitySelected listener) {

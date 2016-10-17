@@ -100,7 +100,7 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
     }
 
     override fun generateToolbarViewModel(toolbar: ToolbarBinding) =
-            BackToolbarViewModel1(toolbar,
+            BackToolbarViewModel(toolbar,
                     getToolbarTitle(), this@AddToPhotoBlogActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {

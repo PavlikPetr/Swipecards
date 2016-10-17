@@ -23,12 +23,10 @@ import com.topface.topface.App;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.ui.views.toolbar.ToolbarBaseViewModel;
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.http.IRequestClient;
 
@@ -48,7 +46,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-    protected ActionBarTitleSetterDelegate mTitleSetter;
     private boolean mNeedTitles = true;
     private Unbinder mUnbinder;
 
@@ -84,7 +81,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clearPreviousState();
-        mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
         if (view != null) {
             AppConfig appConfig = App.getAppConfig();
@@ -102,7 +98,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mTitleSetter = null;
         if (isButterKnifeAvailable() && mUnbinder != null) {
             mUnbinder.unbind();
         }
@@ -124,7 +119,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private void clearPreviousState() {
         mSupportActionBar = null;
-        mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
@@ -295,36 +289,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             AppCompatActivity abActivity = (AppCompatActivity) activity;
             abActivity.setSupportProgressBarIndeterminateVisibility(visible);
         }
-    }
-
-    protected void setActionBarTitles(String title, String subtitle) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, subtitle);
-            mTitleSetter.setOnline(false);
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    protected void setActionBarTitles(int title, int subtitle) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, subtitle);
-        }
-    }
-
-    protected void setActionBarTitles(String title) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, null);
-        }
-    }
-
-    protected void setActionBarTitles(int title) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, null);
-        }
-    }
-
-    public ActionBarTitleSetterDelegate getTitleSetter() {
-        return mTitleSetter;
     }
 
     protected String getTitle() {

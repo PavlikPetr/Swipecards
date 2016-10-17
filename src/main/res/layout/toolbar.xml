@@ -13,14 +13,16 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/toolbar_background_white"
-        app:subtitle="@{viewModel.subTitle}"
-        app:title="@{viewModel.title}"
-        app:titleMarginStart="15dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/toolbar_elevation"
+        android:background="@{viewModel.background}"
+        android:visibility="@{viewModel.isVisible}"
         app:navigationIcon="@{viewModel.upIcon}"
+        app:subtitle="@{viewModel.subTitle}"
         app:subtitleTextColor="@{viewModel.subTitleTextColor}"
-        app:titleDrawableRight = "@{viewModel.titleDrawableRight}"
+        app:title="@{viewModel.title}"
+        app:titleDrawableRight="@{viewModel.titleDrawableRight}"
+        app:titleMarginStart="15dp"
         app:titleTextColor="@{viewModel.titleTextColor}">
-   </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 </layout>

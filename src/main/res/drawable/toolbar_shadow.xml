@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size android:height="@dimen/toolbar_elevation"/>
+    <gradient
+        android:angle="270"
+        android:endColor="@color/toolbar_shadow_end_color"
+        android:startColor="@color/toolbar_shadow_start_color"/>
+</shape>

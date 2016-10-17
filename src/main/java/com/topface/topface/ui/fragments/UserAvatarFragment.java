@@ -72,18 +72,13 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     @Override
     public void setOnline(boolean online) {
-        if (mTitleSetter != null) {
-            mTitleSetter.setOnline(online);
-        }
+        //TODO ONLINE online
     }
 
     @Override
     public void refreshActionBarTitles() {
         super.refreshActionBarTitles();
-        if (mTitleSetter != null) {
-            IUniversalUser user = getUniversalUser();
-            mTitleSetter.setOnline(user.isOnline());
-        }
+        //TODO ONLINE getUniversalUser().isOnline();
     }
 
 
@@ -106,7 +101,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-    protected void showStubAvatar(int sex){
+    protected void showStubAvatar(int sex) {
         ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                 .findViewById(R.id.ivBarAvatar))
                 .setImageResource(sex == Profile.GIRL ?

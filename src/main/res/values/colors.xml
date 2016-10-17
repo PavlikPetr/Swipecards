@@ -237,4 +237,6 @@
     <color name="toolbar_background_white">@color/bg_white</color>
     <color name="toolbar_title_color">#232C35</color>
     <color name="toolbar_subtitle_color">#232C35</color>
+    <color name="toolbar_shadow_start_color">#61000000</color>
+    <color name="toolbar_shadow_end_color">#00000000</color>
 </resources>

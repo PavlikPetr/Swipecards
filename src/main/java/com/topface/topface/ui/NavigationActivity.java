@@ -44,7 +44,7 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel1;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
@@ -246,7 +246,7 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new NavigationToolbarViewModel1(toolbar, this);
+        return new NavigationToolbarViewModel(toolbar, this);
     }
 
     private void initPopups() {

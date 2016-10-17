@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,6 +11,10 @@
         <variable
             name="viewModel"
             type="com.topface.topface.viewModels.CitySearchPopupViewModel"/>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.BaseToolbarViewModel"/>
     </data>
 
     <LinearLayout
@@ -21,32 +26,24 @@
         android:focusableInTouchMode="true"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <include
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/action_bar_color"
-            app:contentInsetStart="0dp">
-
-            <include layout="@layout/actionbar_container_title_view"/>
-
-        </android.support.v7.widget.Toolbar>
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/gray_bg"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp">
+            android:paddingBottom="4dp"            >
 
             <FrameLayout
                 android:id="@+id/current_city_item"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/city_item_height"
                 android:background="@color/bg_white"
-                app:elevation="@dimen/elevation_value"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp">
+                app:elevation="@dimen/elevation_value">
 
                 <TextView
                     android:id="@+id/u_city"

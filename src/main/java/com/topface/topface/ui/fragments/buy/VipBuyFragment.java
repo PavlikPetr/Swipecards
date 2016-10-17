@@ -137,7 +137,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
 
     private void initActionBar() {
         if (getArguments() != null && getArguments().getBoolean(PurchasesConstants.ACTION_BAR_CONST, false)) {
-            setActionBarTitles(R.string.vip_buy_vip);
+            //TODO TITLE R.string.vip_buy_vip
         }
     }
 

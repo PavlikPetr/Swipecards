@@ -142,11 +142,6 @@ public class SettingsFragment extends ProfileInnerFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.settings_header_title);
-    }
-
-    @Override
     public boolean isTrackable() {
         return false;
     }

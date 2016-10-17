@@ -22,7 +22,6 @@ import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.FlurryManager;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
@@ -75,7 +74,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFrie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.vk_profile_invite_friends_title, null);
+        //TODO TITLE R.string.vk_profile_invite_friends_title
         mFooterView = getLayoutInflater().inflate(R.layout.gridview_footer_progress_bar, null);
         mListView.addFooterView(mFooterView);
         int position = 0;

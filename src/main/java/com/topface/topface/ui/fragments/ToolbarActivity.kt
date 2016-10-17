@@ -1,28 +1,18 @@
 package com.topface.topface.ui.fragments
 
-import android.content.Context
-import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
 import android.view.View
-import com.flurry.sdk.it
 import com.topface.topface.BR
 import com.topface.topface.R
-import com.topface.topface.databinding.FragmentMenuBinding
 import com.topface.topface.databinding.ToolbarBinding
-import com.topface.topface.ui.views.toolbar.BackToolbarViewModel1
+import com.topface.topface.ui.views.toolbar.BackToolbarViewModel
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData
-import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.hockeyApp.HockeyAppCrashManager
-import net.hockeyapp.android.CrashManager
 
 /**
  * Created by ppavlik on 14.10.16.
@@ -33,7 +23,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     lateinit var viewBinding: T
     var toolbarBinding: ToolbarBinding? = null
-    private var mToolbarBaseViewModel: BaseToolbarViewModel? = null
+    var mToolbarBaseViewModel: BaseToolbarViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +31,13 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         setContentView(viewBinding.root)
         toolbarBinding = getToolbarBinding(viewBinding)
         viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
-        setSupportActionBar(toolbarBinding?.toolbar);
+        setSupportActionBar(toolbarBinding?.toolbar)
+        // увы, но колбэк будет работать только если установить его после setSupportActionBar
+        mToolbarBaseViewModel?.init()
     }
 
     fun setToolBarVisibility(isVisible: Boolean) {
-        toolbarBinding?.toolbar?.setVisibility(if (isVisible) View.VISIBLE else View.GONE)
+        mToolbarBaseViewModel?.let { it.isVisible.set(isVisible) }
     }
 
     fun setToolbarSettings(settings: ToolbarSettingsData) {
@@ -58,6 +50,9 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
             }
             settings.icon?.let {
                 toolbarViewModel.upIcon.set(it)
+            }
+            settings.isOnline?.let {
+                toolbarViewModel.setOnline(it)
             }
         }
     }
@@ -83,7 +78,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     open protected fun generateToolbarViewModel(toolbar: ToolbarBinding): BaseToolbarViewModel {
-        return BackToolbarViewModel1(toolbar, getString(R.string.app_name), this)
+        return BackToolbarViewModel(toolbar, getString(R.string.app_name), this)
     }
 
     protected fun getToolbarViewModel(): BaseToolbarViewModel {
@@ -103,7 +98,6 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     open protected fun initActionBarOptions(actionBar: ActionBar?) {
         actionBar?.let {
-            it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowHomeEnabled(true)
         }
     }

@@ -740,7 +740,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
 
                 refreshActionBarTitles();
-                getTitleSetter().setOnline(data.user.online);
+                //TODO ONLINE data.user.online
                 mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
@@ -866,9 +866,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     public void setOnline(boolean online) {
-        if (getTitleSetter() != null) {
-            getTitleSetter().setOnline(online);
-        }
+        //TODO ONLINE online
     }
 
     @Override
