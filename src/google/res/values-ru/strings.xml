@@ -1113,4 +1113,10 @@
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
 
+    <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
+    <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
+    <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
+    <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
+    <string name="buy_vip_free_admirations">Отправляйте восхищения бесплатно</string>
+    <string name="buy_vip_know_guests">Узнайте, кто смотрел вашу анкету</string>
 </resources>
