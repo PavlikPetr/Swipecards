@@ -841,4 +841,10 @@
     <string name="mutual_write_them_first">Onlara mesaj yaz</string>
     <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
     <string name="mutual_module_title">ORTAK</string>
+    <string name="buy_vip_more_views">1.5 kat daha fazla profil ziyareti al.</string>
+    <string name="buy_vip_dating_only">Sadece buluşmalar, açık ve net.</string>
+    <string name="buy_vip_message">Beğenileri bekleme, sohbete başla!</string>
+    <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
+    <string name="buy_vip_free_admirations">Ücretsiz hayranlık gönder</string>
+    <string name="buy_vip_know_guests">Profilini ziyaret edenleri gör</string>
 </resources>

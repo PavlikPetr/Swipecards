@@ -867,4 +867,10 @@
     <string name="mutual_write_them_first">Schreibe die erste Nachricht</string>
     <string name="mutual_no_mutuals">Momentan hast du keine beidseitige Likes</string>
     <string name="mutual_module_title">BEIDSEITIG</string>
+    <string name="buy_vip_more_views">Erhalte 1,5 mal mehr Profilaufrufe</string>
+    <string name="buy_vip_dating_only">Reines Dating, klar und einfach</string>
+    <string name="buy_vip_message">Warte nicht auf Likes, sondern starte ein Gespräch!</string>
+    <string name="buy_vip_write_tops">Schreibe ohne Einschränkungen an Top Profile</string>
+    <string name="buy_vip_free_admirations">Verschicke gratis Verehrungen</string>
+    <string name="buy_vip_know_guests">Erfahre, wer dein Profil besucht hat</string>
 </resources>

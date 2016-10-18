@@ -929,4 +929,10 @@
     <string name="mutual_write_them_first">Escríbeles</string>
     <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
     <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
+    <string name="buy_vip_more_views">Recibe 1,5 más de visitas en tu perfil</string>
+    <string name="buy_vip_dating_only">Solo citas, así de simple.</string>
+    <string name="buy_vip_message">No esperes a que lleguen las simpatías, ¡empieza una conversación!</string>
+    <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
+    <string name="buy_vip_free_admirations">Envía admiraciones gratis</string>
+    <string name="buy_vip_know_guests">Descubre quién ha visto tu perfil</string>
 </resources>
