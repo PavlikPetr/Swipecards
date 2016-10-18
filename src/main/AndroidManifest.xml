@@ -220,7 +220,7 @@
         <activity android:name=".ui.TopfaceAuthActivity"/>
         <activity
             android:name=".ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity"
-            android:theme="@style/Topface.Theme.TransparentActionBarActivity"/>
+            android:theme="@style/Topface.Theme.Album"/>
         <activity
             android:name=".ui.edit.EditContainerActivity"
             android:theme="@style/Theme.Topface.Light"/>

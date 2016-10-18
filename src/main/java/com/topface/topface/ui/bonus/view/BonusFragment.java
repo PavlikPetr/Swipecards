@@ -54,6 +54,11 @@ public class BonusFragment extends BaseFragment implements IBonusView {
         return getString(R.string.general_bonus);
     }
 
+    @Override
+    protected String getSubtitle() {
+        return "";
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

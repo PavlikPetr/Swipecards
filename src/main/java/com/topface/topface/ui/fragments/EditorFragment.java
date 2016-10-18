@@ -458,4 +458,9 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     protected String getTitle() {
         return getString(R.string.editor_menu_admin);
     }
+
+    @Override
+    protected String getSubtitle() {
+        return "";
+    }
 }

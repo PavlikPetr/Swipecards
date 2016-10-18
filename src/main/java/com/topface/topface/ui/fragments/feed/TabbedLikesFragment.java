@@ -31,6 +31,11 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     }
 
     @Override
+    protected String getSubtitle() {
+        return "";
+    }
+
+    @Override
     protected void addPages() {
         addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.getLikes());
         addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.getMutual());

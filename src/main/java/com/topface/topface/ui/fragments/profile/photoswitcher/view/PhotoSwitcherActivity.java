@@ -2,13 +2,11 @@ package com.topface.topface.ui.fragments.profile.photoswitcher.view;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -51,6 +49,8 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
+import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.PhotoSwitcherToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
@@ -291,13 +291,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     }
 
     private void setPhotoAlbumControlVisibility(int state, boolean isAnimated) {
-        ActionBar actionbar = getSupportActionBar();
         if (state != View.VISIBLE) {
             mPhotoAlbumControlVisibility = View.GONE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            if (actionbar != null) {
-                actionbar.hide();
-            }
+            getToolbarBaseViewModel().getVisibility().set(View.INVISIBLE);
             if (isAnimated) {
                 animateHidePhotoAlbumControlAction();
             } else {
@@ -306,9 +303,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         } else {
             mPhotoAlbumControlVisibility = View.VISIBLE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            if (actionbar != null) {
-                actionbar.show();
-            }
+            getToolbarBaseViewModel().getVisibility().set(View.VISIBLE);
             if (isAnimated) {
                 animateShowPhotoAlbumControlAction();
             } else {
@@ -582,6 +577,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         if (mPhotoLinks != null) {
             int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
+            getToolbarViewModel().getTitle().set(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE,
+                    mCurrentPosition + 1, photosLinksSize));
         }
     }
 
@@ -716,6 +713,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         animation.setDuration(ANIMATION_TIME);
         animation.setAnimationListener(mAnimationListener);
         mPhotoAlbumControl.startAnimation(animation);
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new PhotoSwitcherToolbarViewModel(toolbar, this);
     }
 
     @NotNull

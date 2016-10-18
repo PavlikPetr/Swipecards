@@ -373,6 +373,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
+    protected String getSubtitle() {
+        return "";
+    }
+
+    @Override
     protected int getEmptyFeedLayout() {
         return R.layout.layout_empty_geo;
     }

@@ -38,6 +38,11 @@ public class IntegrationWebViewFragment extends WebViewFragment {
     }
 
     @Override
+    protected String getSubtitle() {
+        return "";
+    }
+
+    @Override
     public boolean isNeedTitles() {
         return true;
     }

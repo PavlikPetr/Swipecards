@@ -8,10 +8,12 @@ import com.topface.topface.databinding.ToolbarBinding
  * Created by petrp on 09.10.2016.
  */
 
-class BackToolbarViewModel(binding: ToolbarBinding, titleString: String, mNavigation: IToolbarNavigation)
+class BackToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, titleString: String? = null, mNavigation: IToolbarNavigation? = null)
 : BaseToolbarViewModel(binding, mNavigation) {
 
     init {
-        title.set(titleString)
+        titleString?.let {
+            title.set(it)
+        }
     }
 }

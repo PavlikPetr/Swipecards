@@ -12,37 +12,38 @@ import javax.inject.Inject
 
 /**
  * Created by petrp on 09.10.2016.
+ * вьюмодель тулбара для NavigationActivity
  */
 
-class NavigationToolbarViewModel(val toolbar: ToolbarBinding, mNavigation: IToolbarNavigation)
+class NavigationToolbarViewModel @JvmOverloads constructor(val toolbar: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
 : BaseToolbarViewModel(toolbar, mNavigation) {
-	@Inject lateinit var mState: TopfaceAppState
-	private var mBalanceSubscription: Subscription? = null
-	private var mHasNotification: Boolean? = null
+    @Inject lateinit var mState: TopfaceAppState
+    private var mBalanceSubscription: Subscription? = null
+    private var mHasNotification: Boolean? = null
 
-	init {
-		App.get().inject(this)
-		mBalanceSubscription = mState.getObservable(CountersData::class.java)
-				.map {
-					it.dialogs > 0 || it.mutual > 0
-				}
-				.filter {
-					mHasNotification == null || mHasNotification != it
-				}
-				.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
-					override fun onNext(isHasNotif: Boolean?) {
-						super.onNext(isHasNotif)
-						mHasNotification = isHasNotif
-						upIcon.set(if (mHasNotification != null && mHasNotification!!)
-							R.drawable.ic_home_notification
-						else
-							R.drawable.ic_home)
-					}
-				})
-	}
+    init {
+        App.get().inject(this)
+        mBalanceSubscription = mState.getObservable(CountersData::class.java)
+                .map {
+                    it.dialogs > 0 || it.mutual > 0
+                }
+                .filter {
+                    mHasNotification == null || mHasNotification != it
+                }
+                .subscribe(object : RxUtils.ShortSubscription<Boolean>() {
+                    override fun onNext(isHasNotif: Boolean?) {
+                        super.onNext(isHasNotif)
+                        mHasNotification = isHasNotif
+                        upIcon.set(if (mHasNotification != null && mHasNotification!!)
+                            R.drawable.menu_gray_notification
+                        else
+                            R.drawable.menu_gray)
+                    }
+                })
+    }
 
-	override fun release() {
-		super.release()
-		RxUtils.safeUnsubscribe(mBalanceSubscription)
-	}
+    override fun release() {
+        super.release()
+        RxUtils.safeUnsubscribe(mBalanceSubscription)
+    }
 }

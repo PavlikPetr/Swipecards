@@ -14,9 +14,9 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/toolbar_elevation"
         android:background="@{viewModel.background}"
-        android:visibility="@{viewModel.isVisible}"
+        android:paddingBottom="@dimen/toolbar_elevation"
+        android:visibility="@{viewModel.visibility}"
         app:navigationIcon="@{viewModel.upIcon}"
         app:subtitle="@{viewModel.subTitle}"
         app:subtitleTextColor="@{viewModel.subTitleTextColor}"
@@ -24,5 +24,10 @@
         app:titleDrawableRight="@{viewModel.titleDrawableRight}"
         app:titleMarginStart="15dp"
         app:titleTextColor="@{viewModel.titleTextColor}">
+
+        <FrameLayout
+            android:id="@+id/toolbarCustomView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </android.support.v7.widget.Toolbar>
 </layout>

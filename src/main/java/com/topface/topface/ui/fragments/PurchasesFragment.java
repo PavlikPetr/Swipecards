@@ -12,8 +12,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.android.Slices;
@@ -28,9 +26,11 @@ import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.TabLayoutCreator;
+import com.topface.topface.ui.views.toolbar.PurchaseToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
@@ -71,8 +71,6 @@ public class PurchasesFragment extends BaseFragment {
             setResourceInfoText(null);
         }
     };
-    private TextView mCurCoins;
-    private TextView mCurLikes;
     private boolean mSkipBonus;
     private boolean mIsVip;
     private String mResourceInfoText;
@@ -224,7 +222,7 @@ public class PurchasesFragment extends BaseFragment {
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
-        initBalanceCounters(getSupportActionBar().getCustomView());
+//        initBalanceCounters(getSupportActionBar().getCustomView());
         setResourceInfoText();
         if (savedInstanceState != null) {
             int pos = savedInstanceState.getInt(LAST_PAGE, 0);
@@ -271,30 +269,13 @@ public class PurchasesFragment extends BaseFragment {
         return products;
     }
 
-    private void initBalanceCounters(View root) {
-        final LinearLayout containerView = (LinearLayout) root.findViewById(R.id.resources_layout);
-        containerView.setVisibility(View.VISIBLE);
-        containerView.post(new Runnable() {
-            @Override
-            public void run() {
-                int containerWidth = containerView.getMeasuredWidth();
-                if (mCurCoins != null && mCurLikes != null) {
-                    mCurCoins.setMaxWidth(containerWidth / 2);
-                    mCurLikes.setMaxWidth(containerWidth / 2);
-                }
-            }
-        });
-        mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
-        mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
-        mCurCoins.setSelected(true);
-        mCurLikes.setSelected(true);
-        updateBalanceCounters(mBalanceData);
-    }
-
     private void updateBalanceCounters(BalanceData balance) {
-        if (mCurCoins != null && mCurLikes != null && balance != null) {
-            mCurCoins.setText(Integer.toString(balance.money));
-            mCurLikes.setText(Integer.toString(balance.likes));
+        PurchasesActivity activity = (PurchasesActivity) getActivity();
+        if (activity != null) {
+            PurchaseToolbarViewModel toolbarViewModel = (PurchaseToolbarViewModel) activity.getToolbarBaseViewModel();
+            if (toolbarViewModel != null) {
+                toolbarViewModel.setBalance(balance);
+            }
         }
     }
 

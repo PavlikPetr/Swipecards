@@ -23,7 +23,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     lateinit var viewBinding: T
     var toolbarBinding: ToolbarBinding? = null
-    var mToolbarBaseViewModel: BaseToolbarViewModel? = null
+    var toolbarBaseViewModel: BaseToolbarViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +33,11 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
         setSupportActionBar(toolbarBinding?.toolbar)
         // увы, но колбэк будет работать только если установить его после setSupportActionBar
-        mToolbarBaseViewModel?.init()
+        toolbarBaseViewModel?.init()
     }
 
     fun setToolBarVisibility(isVisible: Boolean) {
-        mToolbarBaseViewModel?.let { it.isVisible.set(isVisible) }
+        toolbarBaseViewModel?.let { it.visibility.set(if (isVisible) View.VISIBLE else View.GONE) }
     }
 
     fun setToolbarSettings(settings: ToolbarSettingsData) {
@@ -82,13 +82,13 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     protected fun getToolbarViewModel(): BaseToolbarViewModel {
-        if (mToolbarBaseViewModel == null && toolbarBinding != null) {
+        if (toolbarBaseViewModel == null && toolbarBinding != null) {
             toolbarBinding?.let {
-                mToolbarBaseViewModel = generateToolbarViewModel(it)
+                toolbarBaseViewModel = generateToolbarViewModel(it)
             }
         }
 
-        return mToolbarBaseViewModel as BaseToolbarViewModel
+        return toolbarBaseViewModel as BaseToolbarViewModel
     }
 
     abstract fun getToolbarBinding(binding: T): ToolbarBinding
@@ -104,6 +104,6 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     override fun onDestroy() {
         super.onDestroy()
-        mToolbarBaseViewModel?.release()
+        toolbarBaseViewModel?.release()
     }
 }

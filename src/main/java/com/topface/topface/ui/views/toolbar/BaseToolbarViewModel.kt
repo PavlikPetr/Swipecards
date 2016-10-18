@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.graphics.drawable.Drawable
+import android.view.View
 import com.topface.internal.ViewCompat
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.utils.extensions.getString
@@ -19,22 +20,23 @@ import com.topface.topface.utils.extensions.getDrawable
  */
 
 abstract class BaseToolbarViewModel(binding: ToolbarBinding,
-                                    val mNavigation: IToolbarNavigation) : BaseViewModel<ToolbarBinding>(binding) {
+                                    val mNavigation: IToolbarNavigation? = null) : BaseViewModel<ToolbarBinding>(binding) {
     val title = ObservableField<String>(R.string.app_name.getString())
     val background = ObservableInt(R.drawable.toolbar_background)
     val subTitle = ObservableField<String>("")
     val titleTextColor = ObservableInt(R.color.toolbar_title_color.getColor())
     val subTitleTextColor = ObservableInt(R.color.toolbar_subtitle_color.getColor())
     val titleDrawableRight = ObservableInt(0)
-    val upIcon = ObservableInt(R.drawable.ic_arrow_up)
-    val isVisible = ObservableBoolean(true)
+    val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)
+    val visibility = ObservableInt(View.VISIBLE)
 
     // увы, но колбэк будет работать только если установить его после setSupportActionBar
-    fun init() = with(binding.toolbar) {
-        setNavigationOnClickListener {
-            mNavigation.onUpButtonClick()
-        }
-    }
+    fun init() =
+            mNavigation?.let { navigator ->
+                binding.toolbar.setNavigationOnClickListener {
+                    navigator.onUpButtonClick()
+                }
+            }
 
     fun setOnline(isOnline: Boolean) =
             with(titleDrawableRight) {

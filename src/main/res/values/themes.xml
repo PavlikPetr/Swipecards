@@ -173,6 +173,10 @@
         <item name="android:windowBackground">@color/album_background</item>
     </style>
 
+    <style name="Topface.Theme.Album" parent="Theme.Topface.Navigation">
+        <item name="android:windowBackground">@color/album_background</item>
+    </style>
+
     <style name="Theme.Topface.Chat" parent="NoWindowAnimation">
         <item name="android:windowBackground">@color/bg_white</item>
     </style>

@@ -131,14 +131,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
         initViews(view);
-        initActionBar();
         return view;
-    }
-
-    private void initActionBar() {
-        if (getArguments() != null && getArguments().getBoolean(PurchasesConstants.ACTION_BAR_CONST, false)) {
-            //TODO TITLE R.string.vip_buy_vip
-        }
     }
 
     private void initViews(View root) {

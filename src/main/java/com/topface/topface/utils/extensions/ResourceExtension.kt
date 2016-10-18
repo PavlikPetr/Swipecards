@@ -14,6 +14,7 @@ import com.topface.topface.R
  * Created by petrp on 09.10.2016.
  */
 
+@JvmOverloads
 fun Int.getString(default: String = ""): String {
     var res: String
     try {
@@ -40,6 +41,7 @@ fun Int.getColor(default: Int = Color.BLACK): Int {
     return res
 }
 
+@JvmOverloads
 @DimenRes
 fun Int.getDimen(default: Float = 0f): Float {
     var res: Float

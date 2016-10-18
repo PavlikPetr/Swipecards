@@ -27,9 +27,12 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.GiftsListFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.toolbar.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -238,6 +241,12 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
                 }
             }
         }).exec();
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.profile_gifts), this);
     }
 
     @NotNull

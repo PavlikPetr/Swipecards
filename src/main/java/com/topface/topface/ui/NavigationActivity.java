@@ -129,7 +129,7 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
     }
 
     @Override
-    protected void initActionBarOptions(ActionBar actionBar) {
+    protected void initActionBarOptions(@Nullable ActionBar actionBar) {
         super.initActionBarOptions(actionBar);
         if (actionBar != null) {
             mNotificationController = new CustomViewNotificationController(actionBar);

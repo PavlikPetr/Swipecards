@@ -291,7 +291,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
         ButterKnife.bind(this, root);
-        initNavigationBar();
         mLockView.setVisibility(View.GONE);
         init();
         initViews(root);
@@ -431,10 +430,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected ViewStub getEmptyFeedViewStub() {
         return mEmptyScreenStub;
-    }
-
-    protected void initNavigationBar() {
-        //TODO TITLE getTitle()
     }
 
     abstract protected Type getFeedListDataType();
