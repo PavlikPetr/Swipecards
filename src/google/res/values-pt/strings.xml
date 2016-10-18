@@ -924,4 +924,10 @@
     <string name="mutual_write_them_first">Escreve-lhes uma mensagem</string>
     <string name="mutual_no_mutuals">De momento não têm Gostos mútuos</string>
     <string name="mutual_module_title">MÚTUO</string>
+    <string name="buy_vip_more_views">Ganha 1.5x mais visualizações de perfil</string>
+    <string name="buy_vip_dating_only">Apenas namorar, pura e simplesmente</string>
+    <string name="buy_vip_message">Não fiques à espera de receber Gostos, começa uma conversa!</string>
+    <string name="buy_vip_write_tops">Envia mensagens a perfis do TOP sem restrições</string>
+    <string name="buy_vip_free_admirations">Envia Admirações gratuitamente</string>
+    <string name="buy_vip_know_guests">Descobre quem viu o teu perfil</string>
 </resources>
