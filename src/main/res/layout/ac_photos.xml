@@ -14,17 +14,6 @@
             type="com.topface.topface.ui.views.toolbar.BaseToolbarViewModel"/>
 
     </data>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar"
-            bind:viewModel="@{toolbarViewModel}"/>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -93,6 +82,10 @@
                 style="@style/LoadingLocker"
                 android:visibility="gone"/>
 
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar"
+                bind:viewModel="@{toolbarViewModel}"/>
+
         </RelativeLayout>
-    </LinearLayout>
 </layout>

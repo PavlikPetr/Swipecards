@@ -11,7 +11,7 @@
     <dimen name="padding_left_for_online_icon">8dp</dimen>
 
     <dimen name="action_bar_title_size">20sp</dimen>
-    <dimen name="action_bar_subtitle_size">13sp</dimen>
+    <dimen name="action_bar_subtitle_size">16sp</dimen>
 
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
@@ -166,5 +166,6 @@
     <!--Toolbar sizes-->
     <dimen name="toolbar_title_size">20sp</dimen>
     <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="toolbar_title_padding_left">15dp</dimen>
 
 </resources>

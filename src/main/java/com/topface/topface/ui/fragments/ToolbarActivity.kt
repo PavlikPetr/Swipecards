@@ -32,6 +32,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         toolbarBinding = getToolbarBinding(viewBinding)
         viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
         setSupportActionBar(toolbarBinding?.toolbar)
+        initActionBarOptions(supportActionBar)
         // увы, но колбэк будет работать только если установить его после setSupportActionBar
         toolbarBaseViewModel?.init()
     }
@@ -40,7 +41,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         toolbarBaseViewModel?.let { it.visibility.set(if (isVisible) View.VISIBLE else View.GONE) }
     }
 
-    fun setToolbarSettings(settings: ToolbarSettingsData) {
+    open fun setToolbarSettings(settings: ToolbarSettingsData) {
         getToolbarViewModel().let { toolbarViewModel ->
             settings.title?.let {
                 toolbarViewModel.title.set(it)

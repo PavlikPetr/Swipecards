@@ -80,6 +80,7 @@ import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
@@ -685,8 +686,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         });
 
         historyRequest.leave = isTakePhotoApplicable() ||
-                                mUserType == ChatStabsController.LOCK_CHAT ||
-                                mStubsController.isChatLocked();
+                mUserType == ChatStabsController.LOCK_CHAT ||
+                mStubsController.isChatLocked();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -740,7 +741,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
 
                 refreshActionBarTitles();
-                //TODO ONLINE data.user.online
+                setToolbarSettings(new ToolbarSettingsData(null, null, null, data.user.online));
                 mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
@@ -866,7 +867,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     public void setOnline(boolean online) {
-        //TODO ONLINE online
+        setToolbarSettings(new ToolbarSettingsData(null, null, null, online));
     }
 
     @Override

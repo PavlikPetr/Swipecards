@@ -6,6 +6,7 @@ import com.topface.topface.databinding.ToolbarBinding
 
 /**
  * Created by petrp on 09.10.2016.
+ * вьюмодель самого простого тулбара со стрелкой влево (upButton) и title
  */
 
 class BackToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, titleString: String? = null, mNavigation: IToolbarNavigation? = null)

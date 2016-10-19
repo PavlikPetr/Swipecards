@@ -3,6 +3,7 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
@@ -11,9 +12,16 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.ChatToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 
@@ -108,11 +116,45 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         return intent;
     }
 
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new ChatToolbarViewModel(toolbar, this);
+    }
+
     @Override
     public Intent getSupportParentActivityIntent() {
         Intent intent = super.getSupportParentActivityIntent();
         FeedScreensIntent.equipMessageAllIntent(intent);
         return intent;
+    }
+
+    @Override
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        ChatToolbarViewModel toolbarViewModel = (ChatToolbarViewModel) getToolbarBaseViewModel();
+        if (toolbarViewModel != null) {
+            if (settings.getTitle() != null) {
+                toolbarViewModel.setTitle(settings.getTitle());
+            }
+            if (settings.getSubtitle() != null) {
+                toolbarViewModel.setSubTitle(settings.getSubtitle());
+            }
+            if (settings.isOnline() != null) {
+                //noinspection ConstantConditions
+                toolbarViewModel.setOnlineState(settings.isOnline());
+            }
+            if (settings.getIcon() != null) {
+                toolbarViewModel.getUpIcon().set(settings.getIcon());
+            }
+        }
+    }
+
+    @Override
+    protected void initActionBarOptions(@Nullable ActionBar actionBar) {
+        super.initActionBarOptions(actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayShowCustomEnabled(true);
+        }
     }
 
     @Override

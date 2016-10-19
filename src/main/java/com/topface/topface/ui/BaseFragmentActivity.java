@@ -94,7 +94,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
-        initActionBarOptions(getSupportActionBar());
     }
 
     @Override

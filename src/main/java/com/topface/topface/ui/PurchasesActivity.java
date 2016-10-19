@@ -248,14 +248,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
     @Override
     protected void initActionBarOptions(@Nullable ActionBar actionBar) {
         super.initActionBarOptions(actionBar);
-//        actionBar.setDisplayHomeAsUpEnabled(false);
-//        actionBar.setDisplayUseLogoEnabled(true);
         if (actionBar != null) {
             actionBar.setDisplayShowCustomEnabled(true);
         }
-//        actionBar.setDisplayShowTitleEnabled(false);
-//        actionBar.setIcon(android.R.color.transparent);
-//        actionBar.setLogo(android.R.color.transparent);
     }
 
 
