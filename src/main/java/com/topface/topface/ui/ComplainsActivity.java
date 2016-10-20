@@ -3,9 +3,14 @@ package com.topface.topface.ui;
 import android.content.Intent;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 
-public class ComplainsActivity extends CheckAuthActivity<ComplainsFragment> {
+import org.jetbrains.annotations.NotNull;
+
+public class ComplainsActivity extends CheckAuthActivity<ComplainsFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_COMPLAIN = 9;
 
@@ -30,5 +35,16 @@ public class ComplainsActivity extends CheckAuthActivity<ComplainsFragment> {
     @Override
     protected ComplainsFragment createFragment() {
         return new ComplainsFragment();
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

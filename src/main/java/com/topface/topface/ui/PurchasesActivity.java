@@ -22,6 +22,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
@@ -59,7 +60,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> implements TrialVipPopup.OnFragmentActionsListener {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> implements TrialVipPopup.OnFragmentActionsListener {
 
     /**
      * Constant keys for different fragments
@@ -424,4 +425,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         return screensArray;
     }
 
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
 }

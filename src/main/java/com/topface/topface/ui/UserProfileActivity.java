@@ -4,14 +4,19 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.Photo;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 
-public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> {
+import org.jetbrains.annotations.NotNull;
+
+public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_USER_PROFILE = 6;
 
@@ -35,6 +40,17 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         }
         intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_USER_PROFILE);
         return intent;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 
     @Override

@@ -62,7 +62,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         classpath 'com.google.gms:google-services:3.0.0'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
     }
 }
 
@@ -78,18 +77,16 @@ allprojects {
         maven {
             url "https://dl.bintray.com/supersonic/android-sdk"
         }
-        maven { url "https://jitpack.io" }
         jcenter()
         flatDir {
             dirs 'libs'
         }
+        maven { url "https://jitpack.io" }
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'android-apt'
-
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -275,6 +272,7 @@ android {
         //@see https://code.google.com/p/android/issues/detail?id=40409
         jumboMode true
         //@see https://code.google.com/p/android/issues/detail?id=176638
+        incremental true
         javaMaxHeapSize "4g"
     }
 
@@ -362,7 +360,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
-    compile('com.android.support:recyclerview-v7:24.2.1') {
+    compile('com.android.support:recyclerview-v7:25.0.0') {
         exclude group: 'com.android.support'
     }
     compile 'com.google.code.gson:gson:2.7'
@@ -444,7 +442,7 @@ dependencies {
         exclude module: 'kotlin-stdlib'
         exclude module: 'javapoet'
     }
-    apt "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version"
+    provided "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version"
     kapt "com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version"
 }
 

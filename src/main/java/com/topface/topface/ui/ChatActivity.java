@@ -12,6 +12,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
@@ -29,7 +30,7 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public class ChatActivity extends CheckAuthActivity<ChatFragment> {
+public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFrameBinding> {
 
     public static final int REQUEST_CHAT = 3;
     public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";
@@ -38,6 +39,17 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     @Inject
     EventBus mEventBus;
     private Subscription mTakePhotoSubscription;
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbar;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
 
     @Override
     protected void onCreate(Bundle bundle) {

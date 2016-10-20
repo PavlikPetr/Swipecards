@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,12 +8,8 @@ import android.view.MenuItem;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
 
-import org.jetbrains.annotations.NotNull;
-
-public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFragmentActivity<AcFragmentFrameBinding> {
+public abstract class SingleFragmentActivity<T extends Fragment, V extends ViewDataBinding> extends BaseFragmentActivity<V> {
 
     private T mFragment;
 
@@ -65,17 +62,6 @@ public abstract class SingleFragmentActivity<T extends Fragment> extends BaseFra
 
     protected void setArguments() {
         mFragment.setArguments(getIntent().getExtras());
-    }
-
-    @NotNull
-    @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
-        return binding.toolbar;
-    }
-
-    @Override
-    public int getLayout() {
-        return R.layout.ac_fragment_frame;
     }
 
     protected T getFragment() {
