@@ -1,13 +1,18 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -33,6 +38,7 @@ import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -42,12 +48,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 import rx.Subscription;
 import rx.functions.Action1;
 
 import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 
-
+@RuntimePermissions
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private final static int WAIT_LOCATION_DELAY = 10000;
@@ -88,12 +98,33 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         App.from(getActivity()).inject(this);
-        startWaitLocationTimer();
-        mGeoLocationManager = new GeoLocationManager();
-        mGeoLocationManager.registerProvidersChangedActionReceiver();
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         super.onCreate(savedInstanceState);
+        PeopleNearbyFragmentPermissionsDispatcher.geolocationManagerInitWithCheck(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PeopleNearbyFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    public void geolocationManagerInit() {
+        mGeoLocationManager = new GeoLocationManager();
+        mGeoLocationManager.registerProvidersChangedActionReceiver();
+        startWaitLocationTimer();
+    }
+
+    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    public void doNotNeed() {
+        Utils.showToastNotification("Ну ок, потом спрошу", Toast.LENGTH_LONG);
+    }
+
+    @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    public void doNotAskMeAgain() {
+        Utils.showToastNotification("Ах ты ж ...", Toast.LENGTH_LONG);
     }
 
     @Override
@@ -106,7 +137,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         super.allViewsInitialized();
         if (!isGeoEnabled()) {
             stopWaitLocationTimer();
-            showCannotGetGeoErrorOnEmptyScreen();
         }
     }
 

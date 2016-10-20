@@ -542,7 +542,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
-                    new FindAndSendCurrentLocation();
+//                    new FindAndSendCurrentLocation();
                 }
             });
         }
