@@ -1,11 +1,13 @@
 package com.topface.topface.ui.fragments
 
 import android.content.pm.PackageManager
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.topface.topface.R
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.hockeyApp.HockeyAppCrashManager
 import net.hockeyapp.android.CrashManager
+import net.hockeyapp.android.metrics.MetricsManager
 
 /**
  * Created by ppavlik on 10.10.16.
@@ -17,6 +19,11 @@ abstract class CrashReportActivity : AppCompatActivity(), IActivityDelegate {
 	override fun onResume() {
 		super.onResume()
 		checkForCrashes();
+	}
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		MetricsManager.register(getApplication());
 	}
 
 	private fun checkForCrashes() {
