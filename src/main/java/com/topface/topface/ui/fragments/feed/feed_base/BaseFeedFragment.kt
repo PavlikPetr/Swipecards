@@ -85,7 +85,6 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
-            setHasFixedSize(true)
         }
         mAdapter.setOnItemLongClickListener(this)
         mAdapter.setOnItemClickListener(this)

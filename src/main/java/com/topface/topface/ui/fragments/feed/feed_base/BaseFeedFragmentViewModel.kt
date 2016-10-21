@@ -253,21 +253,21 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     fun getAppDayRequest(typeFeedFragment: String) {
         mApi.getAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
-            override fun onCompleted() { }
+            override fun onCompleted() {
+            }
 
             override fun onError(e: Throwable?) {
                 e?.let { Debug.log("App day banner error request: $it") }
             }
 
-            override fun onNext(t: AppDay?) {
-                t?.list?.let { imageArray ->
-                    if (!imageArray.isEmpty()) {
-                        mAdapter?.setHeader(FixedViewInfo(bannerRes, imageArray))
-                        mAdapter?.notifyItemChange(0)
-                    }
-
+            override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
+                if (!imageArray.isEmpty()) {
+                    mAdapter?.setHeader(FixedViewInfo(bannerRes, imageArray))
+                    mAdapter?.notifyItemChange(0)
                 }
-            }
+
+            } ?: Unit
+
         })
     }
 
@@ -415,7 +415,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
             isLockViewVisible.set(View.GONE)
         }
 
-        override fun onNext(t: Boolean?) {
+        override fun onNext(appDay: Boolean?) {
             mAdapter?.let { adapter ->
                 adapter.removeItems(items)
                 if (adapter.data.isEmpty()) {

@@ -14,6 +14,6 @@ class AppDayItemViewModel(val binding: ItemAppDayBinding,
                           val image: AppDayImage) :
         BaseViewModel<ItemAppDayBinding>(binding) {
 
-    val iconUrl: ObservableField<String> = ObservableField(image.imgSrc)
+    val iconUrl = ObservableField(image.imgSrc)
     fun onBannerClick() = Utils.goToUrl(context, image.url)
 }

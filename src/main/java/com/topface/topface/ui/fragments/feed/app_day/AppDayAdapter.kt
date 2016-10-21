@@ -12,18 +12,15 @@ import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
  */
 class AppDayAdapter : BaseRecyclerViewAdapter<ItemAppDayBinding, AppDayImage>() {
 
-    override fun bindData(binding: ItemAppDayBinding?, position: Int) {
-        binding?.let { bind ->
-            getDataItem(position)?.let {
-                bind.root.tag = null
-                bind.viewModel = AppDayItemViewModel(bind, it)
-            }
+    override fun bindData(binding: ItemAppDayBinding?, position: Int) = binding?.let { bind ->
+        getDataItem(position)?.let {
+            bind.root.tag = null  //хак, чтобы избежать java.lang.IllegalArgumentException: You must not call setTag() on a view Glide is targeting
+            bind.viewModel = AppDayItemViewModel(bind, it)
         }
-    }
 
-    override fun getItemLayout(): Int {
-        return R.layout.item_app_day
-    }
+    } ?: Unit
+
+    override fun getItemLayout() = R.layout.item_app_day
 
     override fun getUpdaterEmitObject(): Bundle? = null
 }

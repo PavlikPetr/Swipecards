@@ -8,16 +8,16 @@
             type="com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel"/>
     </data>
 
-    <RelativeLayout
-        android:id="@+id/appDayRootView"
+    <FrameLayout
+        android:id="@+id/app_day_root_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ProgressBar
-            android:id="@+id/backgroung_progress"
+            android:id="@+id/background_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:visibility="@{viewModel.isProgressBarVisible}"/>
 
         <android.support.v7.widget.RecyclerView
@@ -25,6 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="3dp"/>
-    </RelativeLayout>
+    </FrameLayout>
 
 </layout>

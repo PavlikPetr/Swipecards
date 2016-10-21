@@ -26,6 +26,7 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
         with(binding.bannerList) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager.isAutoMeasureEnabled = true
             binding.bannerList.layoutManager.isAutoMeasureEnabled = true
             adapter = mAdapter
             setNestedScrollingEnabled(false)

@@ -23,9 +23,8 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding,
                                   navigator: IFeedNavigator,
                                   api: FeedApi) : BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
 
-    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-        return newCounters.admirations > currentCounters.admirations
-    }
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData) =
+            newCounters.admirations > currentCounters.admirations
 
     override val typeFeedFragment: String?
         get() = null
