@@ -1112,5 +1112,7 @@
     <string name="mutual_write_them_first">Напишите им</string>
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
+    
+    <string name="geo_switched_off_explanation">Необходимо включить службу геопозиции в настройках, чтобы увидеть людей рядом</string>
 
 </resources>

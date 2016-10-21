@@ -36,6 +36,7 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.utils.AnimationUtils;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
@@ -110,19 +111,19 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         PeopleNearbyFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
-    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     public void geolocationManagerInit() {
         mGeoLocationManager = new GeoLocationManager();
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         startWaitLocationTimer();
     }
 
-    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     public void doNotNeed() {
         Utils.showToastNotification("Ну ок, потом спрошу", Toast.LENGTH_LONG);
     }
 
-    @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION})
+    @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     public void doNotAskMeAgain() {
         Utils.showToastNotification("Ах ты ж ...", Toast.LENGTH_LONG);
     }
@@ -137,6 +138,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         super.allViewsInitialized();
         if (!isGeoEnabled()) {
             stopWaitLocationTimer();
+            showCannotGetGeoErrorOnEmptyScreen();
         }
     }
 
@@ -252,29 +254,30 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected void initLockedFeed(View inflated, int errorCode) {
-        initEmptyScreenOnBlocked(inflated, App.get().getOptions().blockPeople);
+//        initEmptyScreenOnBlocked(inflated, App.get().getOptions().blockPeople);
     }
 
     @Override
     protected void initEmptyFeedView(View inflated, int errorCode) {
-        initEmptyScreen(inflated, errorCode);
+//        initEmptyScreen(inflated, errorCode);
     }
 
     private void initEmptyScreen(View emptyView, int errorCode) {
         if (emptyView != null) {
-            emptyView.findViewById(R.id.controls_layout).setVisibility(View.GONE);
-            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(
-                    errorCode == ErrorCodes.CANNOT_GET_GEO ? R.string.cannot_get_geo : R.string.nobody_nearby
-            );
+            emptyView.findViewById(R.id.animation_view).startAnimation(android.view.animation.AnimationUtils.loadAnimation(getActivity(),R.anim.unavailable_location_animator));
+//            emptyView.findViewById(R.id.controls_layout).setVisibility(View.GONE);
+//            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(
+//                    errorCode == ErrorCodes.CANNOT_GET_GEO ? R.string.cannot_get_geo : R.string.nobody_nearby
+//            );
         }
     }
 
     private void initEmptyScreenOnBlocked(final View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
         if (emptyView != null) {
-            emptyView.findViewById(R.id.controls_layout).setVisibility(View.VISIBLE);
-            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(blockPeopleNearby.text);
-            initBuyCoinsButton(emptyView, blockPeopleNearby);
-            initBuyVipButton(emptyView, blockPeopleNearby);
+//            emptyView.findViewById(R.id.controls_layout).setVisibility(View.VISIBLE);
+//            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(blockPeopleNearby.text);
+//            initBuyCoinsButton(emptyView, blockPeopleNearby);
+//            initBuyVipButton(emptyView, blockPeopleNearby);
         }
     }
 

@@ -13,9 +13,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@{viewModel.background}"
-        android:paddingBottom="@dimen/toolbar_elevation"
+        android:layout_height="?actionBarSize"
+        android:background="@color/toolbar_background_white"
         android:visibility="@{viewModel.visibility}"
         app:navigationIcon="@{viewModel.upIcon}"
         app:subtitle="@{viewModel.subTitle}"

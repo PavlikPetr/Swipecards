@@ -442,11 +442,11 @@ dependencies {
         exclude module: 'kotlin-stdlib'
         exclude module: 'javapoet'
     }
-    provided ("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version"){
+    provided("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version") {
         exclude module: 'kotlin-stdlib'
         exclude module: 'javapoet'
     }
-    kapt ("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version"){
+    kapt("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version") {
         exclude module: 'kotlin-stdlib'
         exclude module: 'javapoet'
     }
