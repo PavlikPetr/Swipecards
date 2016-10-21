@@ -86,6 +86,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
     private var mCallUpdateSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
+    private var mAppDayRequestSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
     private var mBlackListSubscription: Subscription? = null
     private var mCountersSubscription: Subscription? = null
@@ -252,13 +253,12 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     fun getAppDayRequest(typeFeedFragment: String) {
-        mApi.getAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
+        mAppDayRequestSubscription = mApi.getAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
             override fun onCompleted() {
             }
 
-            override fun onError(e: Throwable?) {
-                e?.let { Debug.log("App day banner error request: $it") }
-            }
+            override fun onError(e: Throwable?) =
+                    e?.let { Debug.log("App day banner error request: $it") } ?: Unit
 
             override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
                 if (!imageArray.isEmpty()) {
@@ -434,6 +434,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         RxUtils.safeUnsubscribe(mDeleteSubscription)
         RxUtils.safeUnsubscribe(mBlackListSubscription)
         RxUtils.safeUnsubscribe(mCountersSubscription)
+        RxUtils.safeUnsubscribe(mAppDayRequestSubscription)
         if (isNeedCacheItems) {
             mAdapter?.let { adapter ->
                 if (!adapter.data.isEmpty()) {

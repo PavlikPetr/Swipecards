@@ -19,9 +19,8 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * VM для фрагментма восхищений
  * Created by siberia87 on 30.09.16.
  */
-class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding,
-                                  navigator: IFeedNavigator,
-                                  api: FeedApi) : BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
+class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
+        BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
 
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData) =
             newCounters.admirations > currentCounters.admirations

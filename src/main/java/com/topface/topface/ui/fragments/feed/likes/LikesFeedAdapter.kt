@@ -1,9 +1,14 @@
 package com.topface.topface.ui.fragments.feed.likes
 
+import android.databinding.ViewDataBinding
+import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedLike
+import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.databinding.FeedItemHeartBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
+import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
@@ -32,6 +37,14 @@ class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi:
         }
     }
 
+    override fun bindHeader(binding: ViewDataBinding?, position: Int) {
+        binding?.let { bind ->
+            (getHeaderItem(position) as? List<AppDayImage>)?.let {
+                bind.setVariable(BR.viewModel, AppDayViewModel(bind as AppDayListBinding, it))
+            }
+        }
+    }
+
     val handleDuplicates = { isOk: Boolean, userId: Int ->
         data.forEachIndexed { position, feedItem ->
             if (feedItem.getUserId().equals(userId)) {
@@ -42,6 +55,5 @@ class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi:
     }
 
     override fun getItemLayout() = R.layout.feed_item_heart
-
 
 }

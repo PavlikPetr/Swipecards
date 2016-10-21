@@ -10,8 +10,7 @@ import com.topface.topface.viewModels.BaseViewModel
  * VM итема рекламы
  * Created by siberia87 on 06.10.16.
  */
-class AppDayItemViewModel(val binding: ItemAppDayBinding,
-                          val image: AppDayImage) :
+class AppDayItemViewModel(val binding: ItemAppDayBinding, val image: AppDayImage) :
         BaseViewModel<ItemAppDayBinding>(binding) {
 
     val iconUrl = ObservableField(image.imgSrc)

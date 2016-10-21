@@ -16,10 +16,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
  * Created by siberia87 on 30.09.16.
  */
 
-class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding,
-                                    private val mNavigator: IFeedNavigator,
-                                    private val dataUpdater: IStateDataUpdater,
-                                    mIFeedUnlocked: IFeedUnlocked) :
+class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding, private val mNavigator: IFeedNavigator,
+                                    private val dataUpdater: IStateDataUpdater, mIFeedUnlocked: IFeedUnlocked) :
         BaseLockScreenViewModel<LayoutEmptyAdmirationsBinding>(binding, mIFeedUnlocked) {
 
     val currentChildPod = ObservableInt(1)
