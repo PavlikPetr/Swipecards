@@ -56,4 +56,5 @@ class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi:
 
     override fun getItemLayout() = R.layout.feed_item_heart
 
+
 }
