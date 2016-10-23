@@ -258,13 +258,17 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated, int errorCode) {
+    protected void initEmptyFeedView(final View inflated, int errorCode) {
 //        initEmptyScreen(inflated, errorCode);
+
+//        inflated.findViewById(R.id.animation_view)
+//                .startAnimation(android.view.animation.AnimationUtils
+//                        .loadAnimation(getActivity(), R.anim.unavailable_location_animator));
     }
+
 
     private void initEmptyScreen(View emptyView, int errorCode) {
         if (emptyView != null) {
-            emptyView.findViewById(R.id.animation_view).startAnimation(android.view.animation.AnimationUtils.loadAnimation(getActivity(),R.anim.unavailable_location_animator));
 //            emptyView.findViewById(R.id.controls_layout).setVisibility(View.GONE);
 //            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(
 //                    errorCode == ErrorCodes.CANNOT_GET_GEO ? R.string.cannot_get_geo : R.string.nobody_nearby

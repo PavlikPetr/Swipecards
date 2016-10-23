@@ -4,21 +4,17 @@ import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
+import android.support.annotation.AnimRes;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.view.View;
-import android.view.ViewStub;
 import android.view.animation.AlphaAnimation;
-import android.widget.FrameLayout;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,7 +28,6 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
-import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -228,5 +223,13 @@ public class BindingsAdapters {
     @BindingAdapter("specialTag")
     public static void setTag(View view, String tag) {
         view.setTag(tag);
+    }
+
+        @BindingAdapter("animationSrc")
+    public static void setAnimationSrc(View view, Animation resource) {
+        Debug.error("animationSrc resource=" + resource);
+        view.startAnimation(resource);
+//        view.startAnimation(android.view.animation.AnimationUtils
+//                .loadAnimation(view.getContext(), R.anim.unavailable_location_animator));
     }
 }
