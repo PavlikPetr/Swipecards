@@ -1,12 +1,17 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -270,26 +275,34 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         initEmptyScreen(findViewFlipper(inflated), errorCode);
     }
 
+    private boolean isGeoPermissionsGranted() {
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                && PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+    }
+
 
     private void initEmptyScreen(ViewFlipper emptyView, int errorCode) {
         if (emptyView != null) {
-            switch (errorCode) {
-                case ErrorCodes.CANNOT_GET_GEO:
-                    emptyView.setDisplayedChild(2);
-                    LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                    binding.setClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });
-//                    emptyView.setDisplayedChild(0);
-//                    ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(R.string.cannot_get_geo);
-                    break;
-                default:
-                    emptyView.setDisplayedChild(0);
-                    ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(R.string.nobody_nearby);
-                    break;
+            if (isGeoPermissionsGranted()) {
+                emptyView.setDisplayedChild(0);
+                ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
+                        .setText(errorCode == ErrorCodes.CANNOT_GET_GEO
+                                ? R.string.cannot_get_geo
+                                : R.string.nobody_nearby);
+            } else {
+                emptyView.setDisplayedChild(2);
+                LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
+                binding.setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                                Uri.fromParts("package", getActivity().getPackageName(), null));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                });
             }
         }
     }
