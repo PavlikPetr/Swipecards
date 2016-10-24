@@ -1122,8 +1122,8 @@
     
     <string name="vip_info_title">VIP-привилегии</string>
     
-    <string name="chat_buy_vip_popular_male">%@ очень популярен!</string>
-    <string name="chat_buy_vip_popular_female">%@ очень популярна!</string>
+    <string name="chat_buy_vip_popular_male">%s очень популярен!</string>
+    <string name="chat_buy_vip_popular_female">%s очень популярна!</string>
     <string name="buy_vip_to_chat_male">Чтобы начать общаться с ним, активируйте VIP-статус</string>
     <string name="buy_vip_to_chat_female">Чтобы начать общаться с ней, активируйте VIP-статус</string>
     <string name="chat_activate_vip">Активировать VIP</string>
