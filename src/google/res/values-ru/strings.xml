@@ -1120,5 +1120,13 @@
     <string name="buy_vip_free_admirations">Отправляйте восхищения бесплатно</string>
     <string name="buy_vip_know_guests">Узнайте, кто смотрел вашу анкету</string>
     
-     <string name="vip_info_title">VIP-привилегии</string>
+    <string name="vip_info_title">VIP-привилегии</string>
+    
+    <string name="chat_buy_vip_popular_male">%@ очень популярен!</string>
+    <string name="chat_buy_vip_popular_female">%@ очень популярна!</string>
+    <string name="buy_vip_to_chat_male">Чтобы начать общаться с ним, активируйте VIP-статус</string>
+    <string name="buy_vip_to_chat_female">Чтобы начать общаться с ней, активируйте VIP-статус</string>
+    <string name="chat_activate_vip">Активировать VIP</string>
+    <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
+    <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
 </resources>
