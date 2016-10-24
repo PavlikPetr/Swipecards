@@ -967,7 +967,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1112,7 +1112,8 @@
     <string name="mutual_write_them_first">Напишите им</string>
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
-    
+
     <string name="geo_switched_off_explanation">Необходимо включить службу геопозиции в настройках, чтобы увидеть людей рядом</string>
+    <string name="turn_on_geo">Включить геопозицию</string>
 
 </resources>

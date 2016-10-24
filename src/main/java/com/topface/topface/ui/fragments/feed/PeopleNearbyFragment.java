@@ -1,9 +1,8 @@
 package com.topface.topface.ui.fragments.feed;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.database.DataSetObserver;
+import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,6 +12,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -21,6 +21,7 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
+import com.topface.topface.databinding.LayoutUnavailableGeoBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -36,13 +37,14 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
-import com.topface.topface.utils.AnimationUtils;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -120,7 +122,8 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     public void doNotNeed() {
-        Utils.showToastNotification("Ну ок, потом спрошу", Toast.LENGTH_LONG);
+        getListView().setVisibility(View.GONE);
+        onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
     }
 
     @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -254,34 +257,49 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected void initLockedFeed(View inflated, int errorCode) {
-//        initEmptyScreenOnBlocked(inflated, App.get().getOptions().blockPeople);
+        initEmptyScreenOnBlocked(findViewFlipper(inflated), App.get().getOptions().blockPeople);
+    }
+
+    @Nullable
+    private ViewFlipper findViewFlipper(View inflated) {
+        return (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
     }
 
     @Override
     protected void initEmptyFeedView(final View inflated, int errorCode) {
-//        initEmptyScreen(inflated, errorCode);
-
-//        inflated.findViewById(R.id.animation_view)
-//                .startAnimation(android.view.animation.AnimationUtils
-//                        .loadAnimation(getActivity(), R.anim.unavailable_location_animator));
+        initEmptyScreen(findViewFlipper(inflated), errorCode);
     }
 
 
-    private void initEmptyScreen(View emptyView, int errorCode) {
+    private void initEmptyScreen(ViewFlipper emptyView, int errorCode) {
         if (emptyView != null) {
-//            emptyView.findViewById(R.id.controls_layout).setVisibility(View.GONE);
-//            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(
-//                    errorCode == ErrorCodes.CANNOT_GET_GEO ? R.string.cannot_get_geo : R.string.nobody_nearby
-//            );
+            switch (errorCode) {
+                case ErrorCodes.CANNOT_GET_GEO:
+                    emptyView.setDisplayedChild(2);
+                    LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
+                    binding.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+//                    emptyView.setDisplayedChild(0);
+//                    ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(R.string.cannot_get_geo);
+                    break;
+                default:
+                    emptyView.setDisplayedChild(0);
+                    ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(R.string.nobody_nearby);
+                    break;
+            }
         }
     }
 
-    private void initEmptyScreenOnBlocked(final View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
+    private void initEmptyScreenOnBlocked(ViewFlipper emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
         if (emptyView != null) {
-//            emptyView.findViewById(R.id.controls_layout).setVisibility(View.VISIBLE);
-//            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(blockPeopleNearby.text);
-//            initBuyCoinsButton(emptyView, blockPeopleNearby);
-//            initBuyVipButton(emptyView, blockPeopleNearby);
+            emptyView.setDisplayedChild(0);
+            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(blockPeopleNearby.text);
+            initBuyCoinsButton(emptyView, blockPeopleNearby);
+            initBuyVipButton(emptyView, blockPeopleNearby);
         }
     }
 

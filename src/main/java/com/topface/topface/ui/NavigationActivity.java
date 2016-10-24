@@ -57,7 +57,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
-import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.popups.PopupManager;
@@ -267,7 +266,8 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
                 .addChosenAction(SelectPhotoStartAction.class, ChooseCityPopupAction.class)
                 .addAction(NotificationsDisableStartAction.class)
                 .addAction(PromoPopupStartAction.class)
-                .addAction(InvitePopupAction.class)
+//                Отключаем до момента поддержки пермишинов на контакты
+//                .addAction(InvitePopupAction.class)
                 .addAction(RatePopupStartAction.class);
     }
 

@@ -70,7 +70,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     // здесь настраивается вероятность, с которой будут отображаться экраны в случае "холостого" выхода
     // с экрана покупок
     private enum EXTRA_SCREEN {
-        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 70);
+        // занулил вероятность показа SMS_INVITE_SCREEN пока не впилим роддержку пермишинов для смс и контактов
+        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 0);
 
         private int pos;
         private int probability;

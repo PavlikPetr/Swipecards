@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <include
-        layout="@layout/layout_unavailable_geo"/>
-</LinearLayout>
-<!--<ViewStub xmlns:android="http://schemas.android.com/apk/res/android"-->
-          <!--android:layout_width="match_parent"-->
-          <!--android:layout_height="match_parent">-->
+    android:layout_height="match_parent"
+    android:fadingEdge="none"
+    android:fillViewport="true">
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:fadingEdge="none"-->
-        <!--android:fillViewport="true">-->
-        <!---->
+    <ViewFlipper
+        android:id="@+id/vfEmptyViews"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true">
 
-        <!--<LinearLayout-->
-            <!--style="@style/EmptyFeedsViewGravity"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="vertical">-->
+        <LinearLayout
+            style="@style/EmptyFeedsViewGravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <!--<ImageView-->
-                <!--style="@style/LandscapePortraitImagesVisibility"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="20dp"-->
-                <!--android:src="@drawable/background_people_close"/>-->
+            <ImageView
+                style="@style/LandscapePortraitImagesVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/background_people_close"/>
 
-            <!--<TextView-->
-                <!--android:id="@+id/blocked_geo_text"-->
-                <!--style="@style/ListItemEmptyText"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="center"/>-->
+            <TextView
+                android:id="@+id/blocked_geo_text"
+                style="@style/ListItemEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"/>
+        </LinearLayout>
 
-            <!--<include-->
-                <!--layout="@layout/layout_empty_feed_controls"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"/>-->
-        <!--</LinearLayout>-->
-    <!--</android.support.v4.widget.NestedScrollView>-->
-<!--</ViewStub>-->
+        <include
+            layout="@layout/layout_empty_feed_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <include
+            android:id="@+id/unavailableGeoRootView"
+            layout="@layout/layout_unavailable_geo"/>
+    </ViewFlipper>
+</android.support.v4.widget.NestedScrollView>

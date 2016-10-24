@@ -3,6 +3,8 @@ package com.topface.topface.utils;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
+import android.databinding.BindingMethod;
+import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.AnimRes;
 import android.support.annotation.DrawableRes;
@@ -225,11 +227,8 @@ public class BindingsAdapters {
         view.setTag(tag);
     }
 
-        @BindingAdapter("animationSrc")
+    @BindingAdapter("animationSrc")
     public static void setAnimationSrc(View view, Animation resource) {
-        Debug.error("animationSrc resource=" + resource);
         view.startAnimation(resource);
-//        view.startAnimation(android.view.animation.AnimationUtils
-//                .loadAnimation(view.getContext(), R.anim.unavailable_location_animator));
     }
 }
