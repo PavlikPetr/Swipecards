@@ -873,4 +873,12 @@
     <string name="buy_vip_write_tops">Schreibe ohne Einschränkungen an Top Profile</string>
     <string name="buy_vip_free_admirations">Verschicke gratis Verehrungen</string>
     <string name="buy_vip_know_guests">Erfahre, wer dein Profil besucht hat</string>
+    <string name="vip_info_title">VIP-Privilegien</string>
+    <string name="chat_buy_vip_popular_male">%s ist super beliebt!</string>
+    <string name="chat_buy_vip_popular_female">%s ist super beliebt!</string>
+    <string name="buy_vip_to_chat_male">Starte einen Chat mit ihm, aktiviere den VIP-Status</string>
+    <string name="buy_vip_to_chat_female">Starte einen Chat mit ihr, aktiviere den VIP-Status</string>
+    <string name="chat_activate_vip">VIP aktivieren</string>
+    <string name="chat_no_mutual_symphaty">Momentan kein beidseitiges Like!</string>
+    <string name="chat_with_no_mutual_buy_vip">Du kannst ohne einen beidseitigen Like einen Chat starten, aber dafür musst du den VIP-Status aktivieren</string>
 </resources>

@@ -407,4 +407,5 @@
     <string name="restore">저장하기</string>
     <string name="admiration_sended">감탄사가 전송되었습니다.</string>
     <string name="novice_sympathy">당신이 \n 정말 호감이 있는 상대에게 \n 기분 좋은 만남을 이끌어내기 위해 호감도를 전달해보세요.</string>
+    <string name="vip_info_title">VIP특전</string>
 </resources>
