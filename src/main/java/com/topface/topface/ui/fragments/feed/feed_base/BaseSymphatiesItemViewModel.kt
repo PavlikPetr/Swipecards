@@ -51,6 +51,7 @@ abstract class BaseSymphatiesItemViewModel
         mHandleDuplicates(true, userId)
         mSendLikeSubscription = mApi.callSendLike(userId, App.get().options.blockUnconfirmed).subscribe(object : Subscriber<Rate>() {
             override fun onError(e: Throwable?) {
+                item.mutualed = false
                 if (e != null) {
                     e.message?.let {
                         if (it.equals(ErrorCodes.UNCONFIRMED_LOGIN)) {
