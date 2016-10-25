@@ -525,7 +525,6 @@
     <string name="with_vip_find_your_visitors">VIP-durumuyla sayfanızı kimin ziyaret ettiğini
         öğrenirsiniz
     </string>
-    <string name="on_avatar">Profil resmi olarak ayarla</string>
     <string name="your_avatar">Profil resminiz</string>
     <string name="avatar_set_successfully">Profil fotoğrafınız başarıyla yüklendi</string>
     <string name="incorrect_photo">Uygunsuz fotoğraf. Başka bir tane yüklemeyi deneyin.</string>
