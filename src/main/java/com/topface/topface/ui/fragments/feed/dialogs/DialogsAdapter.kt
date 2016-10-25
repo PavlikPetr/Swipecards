@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.content.Context
 import android.databinding.ViewDataBinding
+import android.support.v7.widget.RecyclerView
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
@@ -12,8 +13,7 @@ import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 
-class DialogsAdapter(private val mNavigator: IFeedNavigator,
-                     private val contextTemp: Context) :
+class DialogsAdapter(private val mNavigator: IFeedNavigator, private val contextTemp: Context) :
         BaseFeedAdapter<FeedItemDialogBinding, FeedDialog>() {
 
     override fun getItemLayout() = R.layout.feed_item_dialog
