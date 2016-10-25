@@ -63,7 +63,6 @@
     <string name="black_list_add">Kara listeye ekle</string>
     <string name="vip_invisible_mode">Görünmez durumu</string>
     <string name="buying_profile_coins">Hesabınız</string>
-    <string name="vip_info_title">VIP-ayrıcalık</string>
     <string name="profile_gifts_empty">Bu kullanıcıya henüz kimse hediye göndermedi</string>
     <string name="profile_mygifts_empty">Size henüz kimse hediye göndermedi</string>
     <string name="dating_people_unnoticed">On kişiyi dikkatinizden kaçırdınız!</string>
@@ -803,16 +802,6 @@
     <string name="NSLocationWhenInUseUsageDescription">Bu fonksiyona erişebilmek için izin vermeniz gerekiyor.</string>
     <string name="buy_button_sticker_popular">Popüler</string>
     <string name="buy_button_sticker_best_value">Süper fırsat</string>
-    <string name="ban_liberty_title">Reklamsız!</string>
-    <string name="ban_liberty_description">Sadece arkadaşlık, gayet basit ve kolay</string>
-    <string name="guest_liberty_title">Ziyaretçiler</string>
-    <string name="guest_liberty_description">Profil sayfanı kimler ziyaret etmiş öğren!</string>
-    <string name="star_liberty_title">Popüler kullanıcılar</string>
-    <string name="star_liberty_description">Sohbete başlamak ve kaynaşmak için en iyi yöntemler</string>
-    <string name="crown_liberty_title">Öne çık</string>
-    <string name="crown_liberty_description">Arama sonuçlarında ve mesajlar sayfasına öne çık</string>
-    <string name="like_liberty_title">Beğeni</string>
-    <string name="like_liberty_description">Bak bakalım seni kimler beğeniyor</string>
     <string name="refill_balance_view_title">Hesap bakiyeniz</string>
     <string name="access_to_location_popup_title">Lokasyon hedefleme mümkün değil</string>
     <string name="access_to_location_popup_description">Maalesef, bulunduğunuz konum için lokasyon hedefleme mümkün değil. Devam etmek için erişime izin vermeniz gerekiyor.</string>
@@ -852,4 +841,10 @@
     <string name="mutual_write_them_first">Onlara mesaj yaz</string>
     <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
     <string name="mutual_module_title">ORTAK</string>
+    <string name="buy_vip_more_views">1.5 kat daha fazla profil ziyareti al.</string>
+    <string name="buy_vip_dating_only">Sadece buluşmalar, açık ve net.</string>
+    <string name="buy_vip_message">Beğenileri bekleme, sohbete başla!</string>
+    <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
+    <string name="buy_vip_free_admirations">Ücretsiz hayranlık gönder</string>
+    <string name="buy_vip_know_guests">Profilini ziyaret edenleri gör</string>
 </resources>

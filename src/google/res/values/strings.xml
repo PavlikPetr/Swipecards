@@ -63,7 +63,6 @@
     <string name="black_list_add">Add to the Blacklist</string>
     <string name="vip_invisible_mode">Invisibility Mode</string>
     <string name="buying_profile_coins">Your account</string>
-    <string name="vip_info_title">VIP Privileges</string>
     <string name="profile_gifts_empty">No one has sent any gifts to this user yet.</string>
     <string name="profile_mygifts_empty">No one has sent gifts to you yet.</string>
     <string name="dating_people_unnoticed">You took no notice of 10 people!</string>
@@ -231,7 +230,7 @@
         <item quantity="other">You are short of %d coins</item>
         <item quantity="one">You are short of %d coin</item>
     </plurals>
-    <string name="buying_default_message">You can send gifts and adorations with coins</string>
+    <string name="buying_default_message">You can send Gifts and Adorations for Coins</string>
     <string name="buying_money">Purchase coins</string>
     <string name="gifts_title">Choose a gift</string>
     <string name="profile_header_title">My profile</string>
@@ -510,7 +509,7 @@
     <string name="cant_delete_fake_item">This message has not yet been sent, you can\'t delete it.
         Try again later.
     </string>
-    <string name="vip_stop_ads">Only chatting, nothing trivial. VIP-users won\'t see ads!</string>
+    <string name="vip_stop_ads">Just dating, pure and simple. VIP-users won\'t see ads!</string>
     <string name="friend_email_hint">Enter your friend\'s email or phone number</string>
     <string name="general_add">Add</string>
     <string name="general_invite_friends">Invite friends</string>
@@ -665,8 +664,8 @@
     <string name="delete_admirations">Delete Adorations</string>
     <string name="general_admirations">Adorations</string>
     <plurals name="popup_vip_admirations">
-        <item quantity="other">You have %d adorations</item>
-        <item quantity="one">You have %d adoration</item>
+        <item quantity="other">You sent adorations to %d people</item>
+        <item quantity="one">You sent adorations to %d people</item>
     </plurals>
     <string name="select_all">Select all</string>
     <string name="silent_ringtone">Silent mode</string>
@@ -861,16 +860,6 @@
     <string name="NSLocationWhenInUseUsageDescription">To access this function you must give your permission</string>
     <string name="buy_button_sticker_popular">Popular</string>
     <string name="buy_button_sticker_best_value">Best\n value</string>
-    <string name="ban_liberty_title">No ads!</string>
-    <string name="ban_liberty_description">Just dating, pure and simple</string>
-    <string name="guest_liberty_title">Guests</string>
-    <string name="guest_liberty_description">Find out who visited your profile page</string>
-    <string name="star_liberty_title">Popular Users</string>
-    <string name="star_liberty_description">Most popular ice-breakers to start a conversation</string>
-    <string name="crown_liberty_title">Stand out</string>
-    <string name="crown_liberty_description">Easily stand out in Search and Messages</string>
-    <string name="like_liberty_title">Likes</string>
-    <string name="like_liberty_description">See who likes you</string>
     <string name="refill_balance_view_title">Your balance</string>
     <string name="access_to_location_popup_title">Geopositioning is unavailable</string>
     <string name="access_to_location_popup_description">Unfortunately, geopositioning for your location is unavailable. To continue, you must allow access.</string>
@@ -910,4 +899,10 @@
     <string name="mutual_write_them_first">Write to them</string>
     <string name="mutual_no_mutuals">Right now you have no mutual Likes</string>
     <string name="mutual_module_title">MUTUAL</string>
+    <string name="buy_vip_more_views">Get x1.5 more profile views</string>
+    <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
+    <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>
+    <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
+    <string name="buy_vip_free_admirations">Send Adorations for free</string>
+    <string name="buy_vip_know_guests">Find out who viewed your profile</string>
 </resources>

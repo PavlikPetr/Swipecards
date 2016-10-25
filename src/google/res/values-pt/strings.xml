@@ -67,7 +67,6 @@
     <string name="black_list_add">Adicionar à Lista Negra</string>
     <string name="vip_invisible_mode">Modo de Invisibilidade</string>
     <string name="buying_profile_coins">A tua conta</string>
-    <string name="vip_info_title">Privilégios VIP</string>
     <string name="profile_gifts_empty">Ainda ninguém enviou presentes a este utilizador.</string>
     <string name="profile_mygifts_empty">Ainda ninguém lhe enviou presentes.</string>
     <string name="dating_people_unnoticed">Não te apercebeste de 10 pessoas!</string>
@@ -886,16 +885,6 @@
     <string name="NSLocationWhenInUseUsageDescription">Para teres acesso a esta funcionalidade, tens de dar a tua permissão</string>
     <string name="buy_button_sticker_popular">Mais\n Vendido</string>
     <string name="buy_button_sticker_best_value">Melhor\n preço</string>
-    <string name="ban_liberty_title">Sem anúncios!</string>
-    <string name="ban_liberty_description">Apenas namorar, pura e simplesmente</string>
-    <string name="guest_liberty_title">Visitantes</string>
-    <string name="guest_liberty_description">Descobre quem visitou a tua página de perfil</string>
-    <string name="star_liberty_title">Utilizadores Populares</string>
-    <string name="star_liberty_description">As melhores frases para quebrar o gelo numa conversa</string>
-    <string name="crown_liberty_title">Destaca-te</string>
-    <string name="crown_liberty_description">Destaca-te facilmente na Pesquisa e nas Mensagens</string>
-    <string name="like_liberty_title">Gostos</string>
-    <string name="like_liberty_description">Vê quem gosta de ti</string>
     <string name="refill_balance_view_title">A tua conta</string>
     <string name="access_to_location_popup_title">O geoposicionamento está indisponível</string>
     <string name="access_to_location_popup_description">Infelizmente, o geoposicionamento para a tua localização não está disponível. Para continuar, tens de dar permissão.</string>
@@ -935,4 +924,10 @@
     <string name="mutual_write_them_first">Escreve-lhes uma mensagem</string>
     <string name="mutual_no_mutuals">De momento não têm Gostos mútuos</string>
     <string name="mutual_module_title">MÚTUO</string>
+    <string name="buy_vip_more_views">Ganha 1.5x mais visualizações de perfil</string>
+    <string name="buy_vip_dating_only">Apenas namorar, pura e simplesmente</string>
+    <string name="buy_vip_message">Não fiques à espera de receber Gostos, começa uma conversa!</string>
+    <string name="buy_vip_write_tops">Envia mensagens a perfis do TOP sem restrições</string>
+    <string name="buy_vip_free_admirations">Envia Admirações gratuitamente</string>
+    <string name="buy_vip_know_guests">Descobre quem viu o teu perfil</string>
 </resources>

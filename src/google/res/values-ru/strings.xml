@@ -79,7 +79,6 @@
     <string name="black_list_add">Добавить в черный список</string>
     <string name="vip_invisible_mode">Режим невидимки</string>
     <string name="buying_profile_coins">На вашем счете</string>
-    <string name="vip_info_title">VIP-привилегии</string>
     <string name="profile_gifts_empty">Этому пользователю еще никто не дарил подарков</string>
     <string name="profile_mygifts_empty">Вам еще никто не дарил подарков</string>
 
@@ -1060,17 +1059,6 @@
     <string name="buy_button_sticker_popular">Хит продаж</string>
     <string name="buy_button_sticker_best_value">Лучшая цена</string>
 
-    <string name="ban_liberty_title">Без рекламы!</string>
-    <string name="ban_liberty_description">Только знакомства, ничего лишнего</string>
-    <string name="guest_liberty_title">Гости</string>
-    <string name="guest_liberty_description">Узнайте, кто заходил на Вашу страницу</string>
-    <string name="star_liberty_title">Популярные пользователи</string>
-    <string name="star_liberty_description">Самые популярные открыты к общению</string>
-    <string name="crown_liberty_title">Выделяйтесь</string>
-    <string name="crown_liberty_description">Сложно не заметить в поиске и сообщениях</string>
-    <string name="like_liberty_title">Симпатии</string>
-    <string name="like_liberty_description">Посмотрите, кому вы нравитесь</string>
-
     <string name="refill_balance_view_title">На вашем счете</string>
 
     <string name="access_to_location_popup_title">Геопозиция недоступна</string>
@@ -1125,4 +1113,20 @@
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
 
+    <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
+    <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
+    <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
+    <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
+    <string name="buy_vip_free_admirations">Отправляйте восхищения бесплатно</string>
+    <string name="buy_vip_know_guests">Узнайте, кто смотрел вашу анкету</string>
+    
+    <string name="vip_info_title">VIP-привилегии</string>
+    
+    <string name="chat_buy_vip_popular_male">%s очень популярен!</string>
+    <string name="chat_buy_vip_popular_female">%s очень популярна!</string>
+    <string name="buy_vip_to_chat_male">Чтобы начать общаться с ним, активируйте VIP-статус</string>
+    <string name="buy_vip_to_chat_female">Чтобы начать общаться с ней, активируйте VIP-статус</string>
+    <string name="chat_activate_vip">Активировать VIP</string>
+    <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
+    <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
 </resources>

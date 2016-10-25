@@ -56,27 +56,27 @@ public class BindingsAdapters {
         }
     }
 
-    @BindingAdapter("bind:setCompoundDrawablesWithIntrinsicBounds")
+    @BindingAdapter("setCompoundDrawablesWithIntrinsicBounds")
     public static void setCompoundDrawablesWithIntrinsicBounds(TextView view, int image) {
         view.setCompoundDrawablesWithIntrinsicBounds(image, 0, 0, 0);
     }
 
-    @BindingAdapter("bind:isActivated")
+    @BindingAdapter("isActivated")
     public static void isActivated(View view, boolean isActivated) {
         view.setActivated(isActivated);
     }
 
-    @BindingAdapter("bind:showChild")
+    @BindingAdapter("showChild")
     public static void showChild(ViewFlipper flipper, int childPosition) {
         flipper.setDisplayedChild(childPosition);
     }
 
-    @BindingAdapter("bind:OnSwipeRefreshListener")
+    @BindingAdapter("OnSwipeRefreshListener")
     public static void OnSwipeRefreshListener(SwipeRefreshLayout refreshLayout, SwipeRefreshLayout.OnRefreshListener refreshListener) {
         refreshLayout.setOnRefreshListener(refreshListener);
     }
 
-    @BindingAdapter("bind:setRefresh")
+    @BindingAdapter("setRefresh")
     public static void setRefresh(SwipeRefreshLayout refreshLayout, boolean isRefresh) {
         refreshLayout.setRefreshing(isRefresh);
     }
@@ -214,5 +214,13 @@ public class BindingsAdapters {
         } else {
             Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
         }
+    }
+
+    /*
+    *Если надо через DB засетить тег для автоматизированного тестирования, то следует использовать этот атрибут
+    */
+    @BindingAdapter("specialTag")
+    public static void setTag(View view, String tag) {
+        view.setTag(tag);
     }
 }

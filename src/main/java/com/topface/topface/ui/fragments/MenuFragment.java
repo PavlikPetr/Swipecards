@@ -62,6 +62,7 @@ import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_
  * extends ListFragment and does not have any xml layout
  */
 public class MenuFragment extends Fragment {
+    public static final String ITEM_TAG_TEMPLATE = "left_menu_%d";
 
     private static final String BALANCE_TEMPLATE = "%s    %s %d   %s %d";
     private static final String COINS_ICON = "coins_icon";

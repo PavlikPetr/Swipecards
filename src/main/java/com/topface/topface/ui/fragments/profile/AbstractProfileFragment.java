@@ -32,6 +32,7 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -168,7 +169,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         final View root = inflater.inflate(R.layout.fragment_profile, null);
         bindView(root);
         initBodyPages(root);
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null, BODY_PAGES_CLASS_NAMES);
         mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
         return root;
     }
@@ -268,7 +269,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     }
 
     protected void addBodyPage(String className, String pageTitle) {
-        BODY_PAGES_TITLES.add(pageTitle.toUpperCase());
+        BODY_PAGES_TITLES.add(pageTitle.toUpperCase(App.getCurrentLocale()));
         BODY_PAGES_CLASS_NAMES.add(className);
     }
 

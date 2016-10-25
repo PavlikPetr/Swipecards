@@ -206,7 +206,7 @@ public class FlurryManager {
      */
     public void sendPageOpenEvent(String name) {
         if (!TextUtils.isEmpty(name)) {
-            sendEvent(String.format(PAGE_NAME_TEMPLATE, name.toLowerCase()));
+            sendEvent(String.format(PAGE_NAME_TEMPLATE, name.toLowerCase(App.getCurrentLocale())));
         }
     }
 
