@@ -8,6 +8,9 @@
         <item name="colorAccent">@color/light_theme_color_accent</item>
         <item name="android:windowContentOverlay">@null</item>
 
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
         <item name="android:dropDownListViewStyle">@style/FilterSpinnerDropDownList</item>

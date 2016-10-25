@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.likes
 
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike

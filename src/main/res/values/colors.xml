@@ -233,5 +233,12 @@
     <color name="mutual_sympathy_stub_date">#aa000000</color>
     <color name="mutual_sympathy_stub_aditional_info">#61000000</color>
 
+    <color name="dating_fab_small">#f5f5f5</color>
+    <color name="dating_fab_skip">#499aff</color>
+    <color name="dating_fab_like">#fe63cd</color>
+    <color name="toolbar_gradient_start_color">#80000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="album_gradient_start">#bd000000</color>
+
 
 </resources>

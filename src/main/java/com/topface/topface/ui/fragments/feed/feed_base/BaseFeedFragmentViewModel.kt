@@ -26,6 +26,7 @@ import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.debug.FuckingVoodooMagic
+import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
@@ -198,11 +199,11 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     fun update(updateBundle: Bundle = Bundle()) {
         isFeedProgressBarVisible.set(View.VISIBLE)
-        mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass,
+        mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass,
                 constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(TO, Utils.EMPTY))).
                 subscribe(object : Observer<FeedListData<T>> {
                     override fun onCompleted() {
-                        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
+                        mCallUpdateSubscription.safeUnsubscribe()
                         isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
@@ -210,7 +211,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         e?.let {
                             onErrorProcess(it)
                         }
-                        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
+                        mCallUpdateSubscription.safeUnsubscribe()
                         isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
@@ -286,7 +287,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
             it.id
         } ?: Utils.EMPTY
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
-        mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass, requestBundle)
+        mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
                         if (isRefreshing.get()) {
@@ -399,11 +400,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     override fun release() {
         super.release()
-        RxUtils.safeUnsubscribe(mUpdaterSubscription)
-        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
-        RxUtils.safeUnsubscribe(mDeleteSubscription)
-        RxUtils.safeUnsubscribe(mBlackListSubscription)
-        RxUtils.safeUnsubscribe(mCountersSubscription)
+        arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
+                mBlackListSubscription,mCountersSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             mAdapter?.let { adapter ->
                 if (!adapter.data.isEmpty()) {

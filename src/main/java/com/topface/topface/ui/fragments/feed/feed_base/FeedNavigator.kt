@@ -3,10 +3,13 @@ package com.topface.topface.ui.fragments.feed.feed_base
 import android.content.Intent
 import com.topface.topface.App
 import com.topface.topface.data.FeedItem
+import com.topface.topface.data.FeedUser
+import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.data.leftMenu.WrappedNavigationData
+import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.TakePhotoPopup
@@ -45,12 +48,30 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    /**
+     * Show chat from feed
+     */
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
-            if (!it.user.isEmpty) {
-                val user = it.user
-                val intent = ChatActivity.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, item.type, user.banned)
-                mActivityDelegate.startActivityForResult(intent, ChatActivity.REQUEST_CHAT)
+            it.user?.let {
+                showChat(it) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, banned) }
+            }
+        }
+    }
+
+    /**
+     * Show chat from dating
+     */
+    override fun showChat(user: SearchUser?, answer: SendGiftAnswer?) {
+        user?.let {
+            showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
+        }
+    }
+
+    private inline fun <T : FeedUser> showChat(user: T, func: T.() -> Intent?) {
+        if (!user.isEmpty) {
+            user.func()?.let {
+                mActivityDelegate.startActivityForResult(it, ChatActivity.REQUEST_CHAT)
             }
         }
     }

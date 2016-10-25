@@ -13,6 +13,8 @@
     <dimen name="action_bar_title_size">20sp</dimen>
     <dimen name="action_bar_subtitle_size">13sp</dimen>
 
+    <dimen name="dating_album_height">432dp</dimen>
+
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
 

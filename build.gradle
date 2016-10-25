@@ -265,8 +265,6 @@ android {
     dexOptions {
         //@see https://code.google.com/p/android/issues/detail?id=40409
         jumboMode true
-        //@see https://code.google.com/p/android/issues/detail?id=176638
-        incremental true
         javaMaxHeapSize "4g"
     }
 
@@ -312,6 +310,7 @@ dependencies {
     compile(rootProject.ANDROID_BUILD_DESIGN_SUPPORT_VERSION) {
         exclude module: 'appcompat-v7'
         exclude module: 'support-v4'
+        exclude module: 'recyclerview-v7'
     }
     //Google play services
     compile "com.google.android.gms:play-services-gcm:$google_play_services_version"

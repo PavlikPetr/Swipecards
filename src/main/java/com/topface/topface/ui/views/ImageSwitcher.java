@@ -310,6 +310,14 @@ public class ImageSwitcher extends ViewPager {
         mImageSwitcherAdapter.notifyDataSetChanged();
     }
 
+    public void setCurrentItemSmoothly(int item) {
+        setCurrentItem(item, true);
+    }
+
+    public void setCurrentItemImmediately(int item) {
+        setCurrentItem(item, false);
+    }
+
     @Override
     public void setCurrentItem(int item, boolean smoothScroll) {
         super.setCurrentItem(item, smoothScroll);
