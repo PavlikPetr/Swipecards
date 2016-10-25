@@ -27,8 +27,6 @@ import static com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoS
 
 public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
 
-    @DrawableRes
-    public final int GIFT_SELECTOR_RESOURCE = R.drawable.photoswitcher_send_gift_selector;
     private final static int EMPTY_UID = -1;
 
     private IActivityDelegate mIActivityDelegate;
@@ -36,7 +34,6 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
     private View.OnClickListener mOnAvatarButtonClick;
     private View.OnClickListener mOnDeleteButtonClick;
 
-    public final ObservableField<String> giftLink = new ObservableField<>();
     public final ObservableInt albumText = new ObservableInt();
     public final ObservableBoolean avatarVisibility = new ObservableBoolean();
     public final ObservableBoolean avatarEnable = new ObservableBoolean();
@@ -54,7 +51,6 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
         }
         Intent intent = mIActivityDelegate.getIntent();
         parseUid(intent);
-        showGift(extractUserGifts(intent));
     }
 
     private void parseUid(Intent intent) {
@@ -78,20 +74,8 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
         return null;
     }
 
-    public void showGift(String link) {
-        giftLink.set(link);
-    }
-
     public void setButtonText(@StringRes int stringRes) {
         albumText.set(stringRes);
-    }
-
-    public final void onGiftClick(View view) {
-        if (mIActivityDelegate != null) {
-            mIActivityDelegate.startActivityForResult(
-                    GiftsActivity.getSendGiftIntent(App.getContext(), mUid),
-                    GiftsActivity.INTENT_REQUEST_GIFT);
-        }
     }
 
     public final void onDeleteButtonClick(View view) {
@@ -112,10 +96,6 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
 
     public void setOnDeleteButtonClickListener(View.OnClickListener listener) {
         mOnDeleteButtonClick = listener;
-    }
-
-    public final boolean isOwnerProfile() {
-        return mUid == App.get().getProfile().uid;
     }
 
     public void setAvatarEnable(boolean state) {
