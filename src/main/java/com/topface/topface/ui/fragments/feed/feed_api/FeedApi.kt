@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.feed_api
 
 import android.content.Context
 import android.os.Bundle
+import com.topface.framework.JsonUtils
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.Rate
@@ -9,15 +10,19 @@ import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.requests.handlers.SimpleApiHandler
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
+import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
 import rx.Observable
 import java.util.*
 
-/** Набор методов для взаимодействия с сервером в фидах
+/**
+ * Набор методов для взаимодействия с сервером в фидах
  * Created by tiberal on 09.08.16.
  */
+
 class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
               private val mDeleteRequestFactory: IRequestFactory, private val mFeedRequestFactory: IRequestFactory) {
 
@@ -32,6 +37,24 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                     super.always(response)
                     it.onCompleted()
                 }
+            }).exec()
+        }
+    }
+
+    fun getAppDayRequest(typeFeedFragment: String): Observable<AppDay> {
+        return Observable.create {
+            val request = AppDayRequest(mContext, typeFeedFragment)
+            mRequestClient.registerRequest(request)
+            request.callback(object : DataApiHandler<AppDay>() {
+                override fun success(data: AppDay?, response: IApiResponse?) =
+                        it.onNext(data)
+
+                override fun parseResponse(response: ApiResponse?): AppDay =
+                        JsonUtils.fromJson(response?.jsonResult.let { it.toString() }, AppDay::class.java)
+
+                override fun fail(codeError: Int, response: IApiResponse?) =
+                        it.onError(Throwable(codeError.toString()))
+
             }).exec()
         }
     }

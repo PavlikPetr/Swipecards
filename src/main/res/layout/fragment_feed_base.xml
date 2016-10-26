@@ -27,7 +27,7 @@
             android:layout_weight="1">
 
             <ProgressBar
-                android:id="@+id/backgroung_progress"
+                android:id="@+id/background_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
