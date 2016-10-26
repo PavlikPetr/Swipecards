@@ -39,30 +39,32 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
             binding.bannerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    val adapter = recyclerView?.let { it.adapter as AppDayAdapter }
-                    val lm = recyclerView?.layoutManager as LinearLayoutManager
+                    val adapter = recyclerView?.let { adapter as AppDayAdapter }
+                    val lm = recyclerView?.let { layoutManager as LinearLayoutManager }
                     val resultSequence = mutableListOf<Int>()
 
-                    with(lm) {
-                        findFirstCompletelyVisibleItemPosition()..findLastCompletelyVisibleItemPosition()
-                    }
-                            .toMutableList()
-                            .apply {
-                                with(resultSequence) {
-                                    addAll(this@apply)
-                                    removeAll(mRes.intersect(this@apply))
-                                }
-                            }
-                            .apply { mRes = this }
-                            .forEach {
-                                Debug.log(TAG_LOG, "id: $it")
-                                doAsync {
-                                    adapter?.getDataItem(it)?.let {
-                                        Debug.log(TAG_LOG, "send id: $it")
-                                        AppBannerStatistics.sendBannerShown(it.id)
+                    lm?.let {
+                        with(lm) {
+                            findFirstCompletelyVisibleItemPosition()..findLastCompletelyVisibleItemPosition()
+                        }
+                                .toMutableList()
+                                .apply {
+                                    with(resultSequence) {
+                                        addAll(this@apply)
+                                        removeAll(mRes.intersect(this@apply))
                                     }
                                 }
-                            }
+                                .apply { mRes = this }
+                                .forEach {
+                                    Debug.log(TAG_LOG, "id: $it")
+                                    doAsync {
+                                        adapter?.getDataItem(it)?.let {
+                                            Debug.log(TAG_LOG, "send id: $it")
+                                            AppBannerStatistics.sendBannerShown(it.id)
+                                        }
+                                    }
+                                }
+                    }
                 }
 
             })
