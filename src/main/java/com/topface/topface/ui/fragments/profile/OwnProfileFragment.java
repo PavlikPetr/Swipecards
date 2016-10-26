@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
@@ -17,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
@@ -174,6 +177,14 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (mAddPhotoHelper != null) {
             mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 

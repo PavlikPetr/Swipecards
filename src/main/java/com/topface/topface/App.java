@@ -78,7 +78,6 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
-import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
 import com.topface.topface.utils.gcmutils.RegistrationService;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
@@ -89,8 +88,6 @@ import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -100,10 +97,10 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
+import permissions.dispatcher.RuntimePermissions;
 
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
-@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
@@ -470,8 +467,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         });
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
-        //Включаем логирование ошибок
-        initAcra();
         //Базовые настройки приложения, инитим их один раз при старте приложения
         Configurations baseConfig = getConfig();
         Editor.setConfig(baseConfig.getAppConfig());
@@ -548,7 +543,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
-                    new FindAndSendCurrentLocation();
+//                    new FindAndSendCurrentLocation();
                 }
             });
         }
@@ -621,11 +616,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 }
             }
         });
-    }
-
-    private void initAcra() {
-        ACRA.init(this);
-        ACRA.getErrorReporter().setReportSender(new HockeySender());
     }
 
     private void initComScore() {

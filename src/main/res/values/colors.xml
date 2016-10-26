@@ -232,5 +232,13 @@
     <color name="mutual_sympathy_stub_date">#aa000000</color>
     <color name="mutual_sympathy_stub_aditional_info">#61000000</color>
 
+    <!--Geo-->
+    <color name="unabailable_geo_animation_bigger_circle">#fbfbfb</color>
+    <color name="unabailable_geo_animation_smaller_circle">#f2f2f2</color>
 
+    <!--Popups-->
+    <color name="popup_background">@color/bg_white</color>
+    <color name="popup_title">#de000000</color>
+    <color name="popup_message">#de000000</color>
+    <color name="popup_green_button_text">#ffffff</color>
 </resources>

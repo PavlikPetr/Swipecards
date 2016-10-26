@@ -1,15 +1,19 @@
 package com.topface.topface.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -42,6 +46,7 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.TakePhotoPopup;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -57,6 +62,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import permissions.dispatcher.NeedsPermission;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -79,6 +85,7 @@ public class AddPhotoHelper {
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 1702;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG = 1701;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 1700;
+    public static final int WRITE_EXTERNAL_STORAGE_PERMISSION_ID = 2000;
     public static final String EXTRA_BUTTON_ID = "btn_id";
     public static String PATH_TO_FILE;
     private static HashMap<String, File> fileNames = new HashMap<>();
@@ -143,7 +150,7 @@ public class AddPhotoHelper {
                         if (holder != null) {
                             switch (holder.getAction()) {
                                 case ACTION_CAMERA_CHOSEN:
-                                    startCamera(false);
+                                    askPermissionsAndStartCamera(false);
                                     System.out.println("PopupHive  ACTION_CAMERA_CHOSEN ");
                                     TakePhotoStatistics.sendCameraAction(holder.getPlc());
                                     break;
@@ -188,7 +195,29 @@ public class AddPhotoHelper {
     }
 
     public void startCamera() {
-        startCamera(false);
+        askPermissionsAndStartCamera(false);
+    }
+
+    public void askPermissionsAndStartCamera(final boolean withDialog) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            if (PermissionsExtensionsKt.isGrantedPermissions(activity.getApplicationContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                startCamera(withDialog);
+            } else {
+                Fragment fragment = mFragment != null ? mFragment.get() : null;
+                if (fragment != null) {
+                    PermissionsExtensionsKt.showPermissionDialog(fragment, WRITE_EXTERNAL_STORAGE_PERMISSION_ID,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+                Activity currentActivity = mActivity != null ? mActivity.get() : null;
+                if(currentActivity!=null) {
+                    PermissionsExtensionsKt.showPermissionDialog(currentActivity,
+                            WRITE_EXTERNAL_STORAGE_PERMISSION_ID,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                }
+            }
+        }
     }
 
     public void startCamera(final boolean withDialog) {
@@ -289,12 +318,30 @@ public class AddPhotoHelper {
         return this;
     }
 
+    public void processRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case WRITE_EXTERNAL_STORAGE_PERMISSION_ID: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    startCamera(false);
+
+                } else {
+                    //TODO внятная реакция на отказ на доступ к записи на диск
+                    Utils.showToastNotification("Ой все", Toast.LENGTH_LONG);
+                }
+                break;
+            }
+
+        }
+    }
+
     public Uri processActivityResult(int requestCode, int resultCode, Intent data) {
         //check for result from TakePhotoActivity
         return processActivityResult(requestCode, resultCode, data, true);
     }
 
-    public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
+    private Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
         Uri photoUri = null;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {

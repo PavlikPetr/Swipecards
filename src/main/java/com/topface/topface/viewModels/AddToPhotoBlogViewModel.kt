@@ -119,6 +119,10 @@ class AddToPhotoBlogViewModel(binding: AddToPhotoBlogLayoutBinding, private val 
         mPhotoHelper.processActivityResult(requestCode, resultCode, data)
     }
 
+    fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        mPhotoHelper.processRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
     override fun release() {
         super.release()
         mPhotoHelper.releaseHelper()

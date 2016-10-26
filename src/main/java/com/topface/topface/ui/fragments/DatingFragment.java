@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -94,6 +95,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import permissions.dispatcher.RuntimePermissions;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -1234,6 +1236,14 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
             if (mAddPhotoHelper != null) {
                 mAddPhotoHelper.processActivityResult(requestCode, resultCode, data);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 

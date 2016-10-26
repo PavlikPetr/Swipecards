@@ -97,8 +97,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setWindowOptions();
+        super.onCreate(savedInstanceState);
         if (mHasContent) {
             setContentView(getContentLayout());
         }

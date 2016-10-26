@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
@@ -685,8 +686,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         });
 
         historyRequest.leave = isTakePhotoApplicable() ||
-                                mUserType == ChatStabsController.LOCK_CHAT ||
-                                mStubsController.isChatLocked();
+                mUserType == ChatStabsController.LOCK_CHAT ||
+                mStubsController.isChatLocked();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -984,6 +985,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         super.onPause();
         LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(mNewMessageReceiver);
         stopTimer();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (mAddPhotoHelper != null) {
+            mAddPhotoHelper.processRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @Override

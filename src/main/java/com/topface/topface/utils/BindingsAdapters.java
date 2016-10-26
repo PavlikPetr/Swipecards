@@ -8,6 +8,7 @@ import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -192,5 +193,10 @@ public class BindingsAdapters {
     @BindingAdapter("specialTag")
     public static void setTag(View view, String tag) {
         view.setTag(tag);
+    }
+
+    @BindingAdapter("animationSrc")
+    public static void setAnimationSrc(View view, Animation resource) {
+        view.startAnimation(resource);
     }
 }
