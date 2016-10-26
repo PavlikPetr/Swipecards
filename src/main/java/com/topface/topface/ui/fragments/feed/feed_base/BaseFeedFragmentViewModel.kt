@@ -265,7 +265,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 }
 
             } ?: Unit
-
         })
     }
 

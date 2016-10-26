@@ -6,8 +6,11 @@ import android.view.View;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.topface.App;
 import com.topface.topface.data.HeaderFooterData;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
 import com.topface.topface.utils.Utils;
+
+import static com.topface.topface.ui.fragments.MenuFragment.ITEM_TAG_TEMPLATE;
 
 public class LeftMenuHeaderViewModel {
 
@@ -74,5 +77,10 @@ public class LeftMenuHeaderViewModel {
         if (mOnClick != null) {
             mOnClick.onClick(view, mData != null ? mData.getData() : null);
         }
+    }
+
+    // тэги для автоматизированного тестирования
+    public String getTag(){
+        return String.format(App.getCurrentLocale(), ITEM_TAG_TEMPLATE, FragmentIdData.PROFILE);
     }
 }

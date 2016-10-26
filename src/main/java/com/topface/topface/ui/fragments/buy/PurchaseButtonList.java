@@ -11,6 +11,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -82,14 +83,17 @@ public class PurchaseButtonList {
         if (context == null) {
             return null;
         }
-        return new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0).showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value).onClick(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onClick(buyBtn.id, buyBtn);
-                }
-            }
-        }).build(context);
+        return new BuyButtonVer1.BuyButtonBuilder().discount(buyBtn.discount > 0)
+                .tag(UiTestsExtensionKt.getTag(buyBtn))
+                .showType(buyBtn.showType).title(TextUtils.isEmpty(value) ? buyBtn.title : value)
+                .onClick(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (listener != null) {
+                            listener.onClick(buyBtn.id, buyBtn);
+                        }
+                    }
+                }).build(context);
     }
 
     private String formatPrice(double price, NumberFormat currencyFormatter, BuyButtonData buyBtn) {

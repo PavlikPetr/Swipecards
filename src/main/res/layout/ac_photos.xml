@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel" />
+            type="com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel"/>
 
     </data>
 
@@ -21,24 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inflatedId="@+id/galleryAlbum"
-            android:layout="@layout/ac_photos_image_switcher" />
+            android:layout="@layout/ac_photos_image_switcher"/>
 
         <!-- header bar -->
         <RelativeLayout
             android:id="@+id/loPhotoAlbumControl"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <com.topface.topface.ui.views.ImageViewRemote
-                style="@style/AlbumGift"
-                android:layout_width="@dimen/album_gift_size"
-                android:layout_height="@dimen/album_gift_size"
-                android:onClick="@{viewModel::onGiftClick}"
-                android:visibility="@{!viewModel.ownerProfile}"
-                app:defaultSelector="@{viewModel.GIFT_SELECTOR_RESOURCE}"
-                app:remoteSrc="@{viewModel.giftLink}"
-                app:roundedImgBorderColor="@color/rounded_image_blue_border"
-                app:roundedImgBorderWidth="@dimen/album_gift_border_size" />
 
             <RelativeLayout
                 android:id="@+id/loBottomPanel"
@@ -51,18 +40,18 @@
                     android:onClick="@{viewModel::onAvatarButtonClick}"
                     android:src="@{viewModel.avatarSrc}"
                     android:visibility="@{viewModel.avatarVisibility}"
-                    app:enable="@{viewModel.avatarEnable}" />
+                    app:enable="@{viewModel.avatarEnable}"/>
 
                 <ImageButton
                     style="@style/AlbumButton.Trash"
                     android:onClick="@{viewModel::onDeleteButtonClick}"
                     android:src="@{viewModel.trashSrc}"
                     android:visibility="@{viewModel.trashVisibility}"
-                    app:enable="@{viewModel.trashEnable}" />
+                    app:enable="@{viewModel.trashEnable}"/>
 
                 <TextView
                     style="@style/ButtonWhiteText.SetAvatar"
-                    android:text="@{viewModel.albumText}" />
+                    android:text="@{viewModel.albumText}"/>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -71,12 +60,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bg_main"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <com.topface.topface.ui.views.LockerView
             android:id="@+id/llvProfileLoading"
             style="@style/LoadingLocker"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </layout>

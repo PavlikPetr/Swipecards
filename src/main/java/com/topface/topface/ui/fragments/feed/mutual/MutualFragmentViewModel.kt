@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.mutual
 
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedMutual
+import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -49,4 +50,5 @@ class MutualFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeed
         }
     }
 
+    override fun considerDuplicates(first: FeedMutual, second: FeedMutual) = first.user?.id == second.user?.id
 }

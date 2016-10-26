@@ -169,7 +169,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         final View root = inflater.inflate(R.layout.fragment_profile, null);
         bindView(root);
         initBodyPages(root);
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
+        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null, BODY_PAGES_CLASS_NAMES);
         mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
         return root;
     }

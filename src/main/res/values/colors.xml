@@ -222,7 +222,6 @@
 
     <color name="range_seek_bar_selected_range_color">#499aff</color>
 
-    <color name="rounded_image_blue_border">#499aff</color>
     <color name="rounded_image_pink_border">#ff69d0</color>
     <color name="black">#000000</color>
     <color name="photo_feed_header_bg_color">#eceff1</color>.

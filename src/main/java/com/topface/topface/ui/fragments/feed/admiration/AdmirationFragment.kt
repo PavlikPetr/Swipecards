@@ -9,7 +9,7 @@ import com.topface.topface.databinding.LayoutEmptyAdmirationsBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.likes.LikesFeedAdapter
+import com.topface.topface.ui.fragments.feed.admiration.AdmirationsFeedAdapter
 import com.topface.topface.viewModels.BaseViewModel
 
 /**
@@ -31,9 +31,9 @@ class AdmirationFragment : BaseFeedFragment<FeedLike, LayoutEmptyAdmirationsBind
         AdmirationLockController(mBinding.emptyFeedStub as ViewStubProxy)
     }
 
-    override val mAdapter by lazy {
-        LikesFeedAdapter(mNavigator, mApi)
-    }
+	override val mAdapter by lazy {
+		AdmirationsFeedAdapter(mNavigator, mApi)
+	}
 
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyAdmirationsBinding> {
         override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyAdmirationsBinding> {
@@ -43,5 +43,5 @@ class AdmirationFragment : BaseFeedFragment<FeedLike, LayoutEmptyAdmirationsBind
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_admirations
 
-    override fun getTitle(): String? = getString(R.string.general_sympathies)
+	override fun getTitle(): String? = getString(R.string.general_sympathies)
 }

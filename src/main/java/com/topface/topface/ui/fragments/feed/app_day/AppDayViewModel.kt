@@ -24,7 +24,7 @@ import java.util.*
  */
 class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) :
         BaseViewModel<AppDayListBinding>(binding) {
-    val TAG_LOG = AppDayViewModel::class.java.name
+    val TAG_LOG = "banner_show"
 
     val isProgressBarVisible = ObservableInt(View.INVISIBLE)
     private var res = mutableListOf<Int>()
@@ -57,10 +57,12 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
 
                     resultSequence.addAll(temp)
                     resultSequence.removeAll(res.intersect(temp))
+                    Debug.log(TAG_LOG, resultSequence.toString())
 
-                    for (i in resultSequence) adapter.getDataItem(i)?.let {
-                        AppBannerStatistics.sendBannerShown(it.id)
-                        Debug.log(TAG_LOG, resultSequence.toString())
+                    doAsync {
+                        for (i in resultSequence) adapter.getDataItem(i)?.let {
+                            AppBannerStatistics.sendBannerShown(it.id)
+                        }
                     }
 
                     res = temp

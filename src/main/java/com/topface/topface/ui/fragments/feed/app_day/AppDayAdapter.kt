@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemAppDayBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.ui.adapters.ItemEventListener
 import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 
 /**
