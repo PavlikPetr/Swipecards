@@ -44,7 +44,7 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
                     val resultSequence = mutableListOf<Int>()
 
                     lm?.let {
-                        with(lm) {
+                        with(it) {
                             findFirstCompletelyVisibleItemPosition()..findLastCompletelyVisibleItemPosition()
                         }
                                 .toMutableList()
