@@ -270,16 +270,11 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         initEmptyScreen(findViewFlipper(inflated), errorCode);
     }
 
-    private boolean isGeoPermissionsGranted() {
-        return PermissionsExtensionsKt.isGrantedPermissions(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-    }
-
-
     private void initEmptyScreen(ViewFlipper emptyView, int errorCode) {
         if (emptyView != null) {
-            if (isGeoPermissionsGranted()) {
+            if (PermissionsExtensionsKt.isGrantedPermissions(getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 emptyView.setDisplayedChild(0);
                 ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
                         .setText(errorCode == ErrorCodes.CANNOT_GET_GEO

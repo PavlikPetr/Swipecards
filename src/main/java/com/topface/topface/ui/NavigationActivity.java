@@ -258,11 +258,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     public PopupSequence createPopupSequence() {
         return new PopupSequence()
                 .addAction(OldVersionStartAction.class)

@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -62,7 +61,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import permissions.dispatcher.NeedsPermission;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -201,17 +199,21 @@ public class AddPhotoHelper {
     public void askPermissionsAndStartCamera(final boolean withDialog) {
         Activity activity = getActivity();
         if (activity != null) {
+            //Проверка статуса пермишина записи на диск
             if (PermissionsExtensionsKt.isGrantedPermissions(activity.getApplicationContext(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 startCamera(withDialog);
             } else {
+                //Чтобы получить колбек во фрагменте, надо вызывать другой метод showPermissionDialog
                 Fragment fragment = mFragment != null ? mFragment.get() : null;
+                Activity currentActivity = mActivity != null ? mActivity.get() : null;
+                //Если fragment!=null, значит хэлпер создавался во фрагменте, следовательно ловить
+                //статус пермишина надо во фрагменте
                 if (fragment != null) {
                     PermissionsExtensionsKt.showPermissionDialog(fragment, WRITE_EXTERNAL_STORAGE_PERMISSION_ID,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                }
-                Activity currentActivity = mActivity != null ? mActivity.get() : null;
-                if(currentActivity!=null) {
+
+                } else if (currentActivity != null) {
                     PermissionsExtensionsKt.showPermissionDialog(currentActivity,
                             WRITE_EXTERNAL_STORAGE_PERMISSION_ID,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -327,7 +329,7 @@ public class AddPhotoHelper {
                     startCamera(false);
 
                 } else {
-                    //TODO внятная реакция на отказ на доступ к записи на диск
+                    //TODO внятная реакция на отказ доступа к записи на диск
                     Utils.showToastNotification("Ой все", Toast.LENGTH_LONG);
                 }
                 break;

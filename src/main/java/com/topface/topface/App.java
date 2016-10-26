@@ -97,7 +97,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
-import permissions.dispatcher.RuntimePermissions;
 
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
@@ -543,6 +542,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
+                    //TODO в поисках решения для запроса пермишина ГЕО при старте приложения
 //                    new FindAndSendCurrentLocation();
                 }
             });
