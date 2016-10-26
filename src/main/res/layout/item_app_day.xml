@@ -13,10 +13,9 @@
     <com.topface.topface.ui.views.ImageViewRemote
         android:id="@+id/app_day_image"
         android:layout_width="wrap_content"
-        android:layout_height="86dp"
+        android:layout_height="66dp"
         android:layout_margin="3dp"
         android:adjustViewBounds="true"
-        android:background="@android:color/black"
         android:onClick="@{() -> viewModel.onBannerClick()}"
         app:remoteSrcGlide="@{viewModel.iconUrl}"/>
 </layout>

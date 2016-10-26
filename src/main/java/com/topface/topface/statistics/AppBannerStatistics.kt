@@ -15,20 +15,14 @@ class AppBannerStatistics {
         private val BANNER_CLICK = "mobile_app_of_the_day_click"
         private val PLC = "plc"
 
-        private fun send(command: String, slices: Slices?) {
-            StatisticsTracker.getInstance().sendEvent(command, 1, slices)
-        }
+        private fun send(command: String, slices: Slices?) =
+                StatisticsTracker.getInstance().sendEvent(command, 1, slices)
 
-        fun sendBannerShown(bannerId: String) {
-            send(BANNER_SHOW, generateSlices(bannerId))
-        }
+        fun sendBannerShown(bannerId: String) = send(BANNER_SHOW, generateSlices(bannerId))
 
-        fun sendBannerClicked(bannerId: String) {
-            send(BANNER_CLICK, generateSlices(bannerId))
-        }
+        fun sendBannerClicked(bannerId: String) = send(BANNER_CLICK, generateSlices(bannerId))
 
-        private fun generateSlices(value: String): Slices {
-            return Slices().putSlice(PLC, value)
-        }
+        private fun generateSlices(value: String) = Slices().putSlice(PLC, value)
+
     }
 }

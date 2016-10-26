@@ -13,7 +13,7 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 class AppDayItemViewModel(val binding: ItemAppDayBinding, val image: AppDayImage) :
         BaseViewModel<ItemAppDayBinding>(binding) {
-    val TAG_LOG = "banner_clicked"
+    val TAG_LOG = "app_of_the_day_banner_clicked"
 
     val iconUrl = ObservableField(image.imgSrc)
     fun onBannerClick() {

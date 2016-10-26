@@ -3,19 +3,12 @@ package com.topface.topface.ui.fragments.feed.app_day
 import android.databinding.ObservableInt
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.OnScrollListener
 import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.Toast
 import com.topface.framework.utils.Debug
 import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.statistics.AppBannerStatistics
-import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
-import com.topface.topface.utils.extensions.toList
 import com.topface.topface.viewModels.BaseViewModel
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.linearLayout
-import java.io.LineNumberReader
 import java.util.*
 
 /**
@@ -24,10 +17,10 @@ import java.util.*
  */
 class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) :
         BaseViewModel<AppDayListBinding>(binding) {
-    val TAG_LOG = "banner_show"
+    val TAG_LOG = "app_of_the_day_banner_show"
 
-    val isProgressBarVisible = ObservableInt(View.INVISIBLE)
-    private var res = mutableListOf<Int>()
+    var isProgressBarVisible = ObservableInt(View.VISIBLE)
+    private var mRes = mutableListOf<Int>()
 
     val mAdapter by lazy {
         val adapter = AppDayAdapter()
@@ -40,36 +33,40 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             layoutManager.isAutoMeasureEnabled = true
-            binding.bannerList.layoutManager.isAutoMeasureEnabled = true
             adapter = mAdapter
             setNestedScrollingEnabled(false)
 
             binding.bannerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    val adapter = recyclerView?.adapter as AppDayAdapter
+                    val adapter = recyclerView?.let { it.adapter as AppDayAdapter }
                     val lm = recyclerView?.layoutManager as LinearLayoutManager
                     val resultSequence = mutableListOf<Int>()
 
-                    val firstCompletelyVisibleItem = lm.findFirstCompletelyVisibleItemPosition()
-                    val lastCompletelyVisibleItem = lm.findLastCompletelyVisibleItemPosition()
-                    val temp = (firstCompletelyVisibleItem..lastCompletelyVisibleItem).toList()
-
-                    resultSequence.addAll(temp)
-                    resultSequence.removeAll(res.intersect(temp))
-                    Debug.log(TAG_LOG, resultSequence.toString())
-
-                    doAsync {
-                        for (i in resultSequence) adapter.getDataItem(i)?.let {
-                            AppBannerStatistics.sendBannerShown(it.id)
-                        }
+                    with(lm) {
+                        findFirstCompletelyVisibleItemPosition()..findLastCompletelyVisibleItemPosition()
                     }
-
-                    res = temp
+                            .toMutableList()
+                            .apply {
+                                with(resultSequence) {
+                                    addAll(this@apply)
+                                    removeAll(mRes.intersect(this@apply))
+                                }
+                            }
+                            .apply { mRes = this }
+                            .forEach {
+                                Debug.log(TAG_LOG, "id: $it")
+                                doAsync {
+                                    adapter?.getDataItem(it)?.let {
+                                        Debug.log(TAG_LOG, "send id: $it")
+                                        AppBannerStatistics.sendBannerShown(it.id)
+                                    }
+                                }
+                            }
                 }
-            })
 
+            })
         }
     }
-
 }
+
