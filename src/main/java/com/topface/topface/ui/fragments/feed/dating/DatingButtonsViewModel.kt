@@ -29,7 +29,6 @@ import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * VM for dating buttons
@@ -44,7 +43,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
         BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility {
 
     var currentUser: SearchUser? = null
-    private var mIsAdmirationFailed = AtomicBoolean(false)
     private var mLikeSubscription: Subscription? = null
     private var mSkipSubscription: Subscription? = null
     private var mAdmirationSubscription: Subscription? = null
@@ -55,7 +53,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
 
     private companion object {
         const val CURRENT_USER = "current_user"
-        const val ADMIRATION_FAILED = "admiration_failed"
         const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
     }
 
@@ -70,7 +67,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
                             skip()
                         }
                         BlackListAndBookmarkHandler.ActionTypes.SYMPATHY -> {
-                            binding.sendAdmiration.isEnabled = false
+                            binding.sendLike.isEnabled = false
                             binding.sendAdmiration.isEnabled = false
                             currentUser?.let {
                                 it.rated = true
@@ -92,12 +89,12 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     fun skip() = currentUser?.let {
         if (!it.skipped && !it.rated) {
             if (App.isOnline()) {
+                showNextUser()
                 mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {
                     override fun onCompleted() = mSkipSubscription.safeUnsubscribe()
                     override fun onError(e: Throwable?) = e?.printStackTrace() ?: Unit
                     override fun onNext(t: IApiResponse?) {
                         for (user in mUserSearchList) {
-                            showNextUser()
                             if (user.id == it.id) {
                                 user.skipped = true
                                 return
@@ -126,16 +123,14 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
                 }
 
                 override fun onNext(rate: Rate?) {
-                    binding.sendAdmiration.isEnabled = false
                     it.rated = true
                     SearchCacheManager.markUserAsRatedInCache(it.id)
-                    showNextUser()
                     mDatingButtonsView.unlockControls()
                 }
             })
-        } else {
+        }/* else {
             showNextUser()
-        }
+        }*/
     }
 
     fun sendAdmiration() = sendSomething {
@@ -149,11 +144,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
             }
 
             override fun onNext(rate: Rate?) {
-                mIsAdmirationFailed.set(true)
                 EasyTracker.sendEvent("Dating", "Rate",
                         "AdmirationSend" + if (mutualId == SendLikeRequest.DEFAULT_MUTUAL) "mutual" else Utils.EMPTY,
                         App.get().options.priceAdmiration.toLong())
-                showNextUser()
             }
 
             override fun onCompleted() {
@@ -166,6 +159,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     private inline fun sendSomething(func: (SearchUser) -> Unit) =
             if (!isNeedTakePhoto()) {
                 currentUser?.let {
+                    showNextUser()
                     func(it)
                 }
             } else {
@@ -187,13 +181,11 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         currentUser = getParcelable<SearchUser>(CURRENT_USER)
-        mIsAdmirationFailed.set(getBoolean(ADMIRATION_FAILED, false))
         isDatingButtonsLocked.set(getBoolean(DATING_BUTTONS_LOCKED))
     }
 
     override fun onSavedInstanceState(state: Bundle) = with(state) {
         putParcelable(CURRENT_USER, currentUser)
-        putBoolean(ADMIRATION_FAILED, mIsAdmirationFailed.get())
         putBoolean(DATING_BUTTONS_LOCKED, isDatingButtonsLocked.get())
     }
 
