@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.app_day.models
+package com.topface.topface.ui.fragments.feed.app_day
 
 /**
  * Модель банера апы дня и картинки

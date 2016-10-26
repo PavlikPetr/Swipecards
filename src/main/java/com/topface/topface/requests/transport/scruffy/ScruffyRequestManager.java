@@ -101,7 +101,6 @@ public class ScruffyRequestManager {
         //Слушаем строки которые шлет нам сервер (если будет gzip то будем слушать бинарные данные)
         public void onStringAvailable(String s) {
             Debug.log("Scruffy:: Response <<<\n" + s);
-            Debug.showChunkedLogDebug("Scruffy_adm", s);
             processResponseWrapper(s);
         }
     };

@@ -2,7 +2,7 @@ package com.topface.topface.ui.fragments.feed.app_day
 
 import android.databinding.ObservableField
 import com.topface.topface.databinding.ItemAppDayBinding
-import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
+import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
 

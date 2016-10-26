@@ -8,7 +8,7 @@ import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.databinding.FeedItemHeartBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
-import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
+import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator

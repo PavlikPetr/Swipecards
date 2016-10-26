@@ -15,18 +15,16 @@ class AppBannerStatistics {
         private val BANNER_CLICK = "mobile_app_of_the_day_click"
         private val PLC = "plc"
 
-        private fun send(command: String, bannerName: String?, slices: Slices?) {
-            if (bannerName != null) {
-                StatisticsTracker.getInstance().sendEvent(String.format(command, bannerName.toLowerCase(App.getCurrentLocale())), 1, slices)
-            }
+        private fun send(command: String, slices: Slices?) {
+            StatisticsTracker.getInstance().sendEvent(command, 1, slices)
         }
 
         fun sendBannerShown(bannerId: String) {
-            send(BANNER_SHOW, null, generateSlices(bannerId))
+            send(BANNER_SHOW, generateSlices(bannerId))
         }
 
         fun sendBannerClicked(bannerId: String) {
-            send(BANNER_CLICK, null, generateSlices(bannerId))
+            send(BANNER_CLICK, generateSlices(bannerId))
         }
 
         private fun generateSlices(value: String): Slices {

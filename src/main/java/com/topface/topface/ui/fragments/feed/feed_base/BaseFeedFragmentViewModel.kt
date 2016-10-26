@@ -23,7 +23,7 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.ChatFragment
-import com.topface.topface.ui.fragments.feed.app_day.models.AppDay
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RxUtils
@@ -43,11 +43,9 @@ import javax.inject.Inject
  * Created by tiberal on 01.08.16.
  * @param T feed item type
  */
-abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding,
-                                                       private val mNavigator: IFeedNavigator,
+abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) :
-        BaseViewModel<FragmentFeedBaseBinding>(binding),
-        SwipeRefreshLayout.OnRefreshListener {
+        BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
 
     @Inject lateinit var mState: TopfaceAppState
     var isRefreshing = object : ObservableBoolean() {
@@ -71,7 +69,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     abstract val itemClass: Class<T>
     abstract val service: FeedRequest.FeedService
     abstract val gcmType: Array<Int>
-    abstract val typeFeedFragment: String?
+    open val typeFeedFragment: String? = null
     abstract fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean
     open val gcmTypeUpdateAction: String? = null
     open val isForPremium: Boolean = false

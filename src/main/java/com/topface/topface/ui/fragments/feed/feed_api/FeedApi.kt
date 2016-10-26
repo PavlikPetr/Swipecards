@@ -10,17 +10,19 @@ import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.requests.handlers.SimpleApiHandler
-import com.topface.topface.ui.fragments.feed.app_day.models.AppDay
-import com.topface.topface.ui.fragments.feed.app_day.models.AppDayImage
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
+import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
 import rx.Observable
 import java.util.*
 
-/** Набор методов для взаимодействия с сервером в фидах
+/**
+ * Набор методов для взаимодействия с сервером в фидах
  * Created by tiberal on 09.08.16.
  */
+
 class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
               private val mDeleteRequestFactory: IRequestFactory, private val mFeedRequestFactory: IRequestFactory) {
 

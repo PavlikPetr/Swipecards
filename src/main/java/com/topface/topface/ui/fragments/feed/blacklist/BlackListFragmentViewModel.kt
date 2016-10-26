@@ -23,8 +23,6 @@ class BlackListFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
         return false
     }
 
-    override val typeFeedFragment: String?
-        get() = null
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_BLACK_LIST_FEEDS
     override val itemClass: Class<BlackListItem>

@@ -25,9 +25,6 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData) =
             newCounters.admirations > currentCounters.admirations
 
-    override val typeFeedFragment: String?
-        get() = null
-
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_ADMIRATION)
 
