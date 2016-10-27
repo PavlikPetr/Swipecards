@@ -152,11 +152,6 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         mScreenViewModel.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        mScreenViewModel.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
     override fun onPause() {
         super.onPause()
     }

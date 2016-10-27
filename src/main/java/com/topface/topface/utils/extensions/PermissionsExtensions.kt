@@ -37,20 +37,20 @@ fun Context.isGrantedPermissions(vararg permissions: String) = permissions.find 
             it)
 } == null
 
-// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
-fun Activity.showPermissionDialog(requestId: Int, vararg permissions: String) =
-        ActivityCompat.requestPermissions(this,
-                permissions,
-                requestId)
-
-// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
-// показ диалога на запрогс пермишина с возвратом в колбек фрагмента
-fun Fragment.showPermissionDialog(requestId: Int, vararg permissions: String) =
-        this.requestPermissions(permissions,
-                requestId)
-
-// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
-// прост небольшой врапер
-fun Activity.isNeedShowPermissionRationale(permissions: String) =
-        ActivityCompat.shouldShowRequestPermissionRationale(this,
-                permissions)
+//// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
+//fun Activity.showPermissionDialog(requestId: Int, vararg permissions: String) =
+//        ActivityCompat.requestPermissions(this,
+//                permissions,
+//                requestId)
+//
+//// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
+//// показ диалога на запрогс пермишина с возвратом в колбек фрагмента
+//fun Fragment.showPermissionDialog(requestId: Int, vararg permissions: String) =
+//        this.requestPermissions(permissions,
+//                requestId)
+//
+//// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
+//// прост небольшой врапер
+//fun Activity.isNeedShowPermissionRationale(permissions: String) =
+//        ActivityCompat.shouldShowRequestPermissionRationale(this,
+//                permissions)

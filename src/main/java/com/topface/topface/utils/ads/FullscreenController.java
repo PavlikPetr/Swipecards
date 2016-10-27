@@ -296,8 +296,8 @@ public class FullscreenController {
         Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
         Appodeal.disableNetwork(mActivity.getApplicationContext(), AppodealProvider.CHEETAH_NETWORK);
         Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
-        Appodeal.setTesting(Debug.isDebugLogsEnabled());
-        Appodeal.setLogLevel(Log.LogLevel.debug);
+        Appodeal.setTesting(false);
+        Appodeal.setLogLevel(Log.LogLevel.verbose);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             App.get().registerActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
         }

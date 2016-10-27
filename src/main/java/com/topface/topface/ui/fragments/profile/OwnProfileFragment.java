@@ -178,14 +178,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (mAddPhotoHelper != null) {
-            mAddPhotoHelper.processRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
     private void initAddPhotoHelper() {
         mAddPhotoHelper = new AddPhotoHelper(this, null);
         mAddPhotoHelper.setOnResultHandler(mHandler);

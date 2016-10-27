@@ -542,8 +542,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 @Override
                 public void run() {
                     sendProfileAndOptionsRequests();
-                    //TODO в поисках решения для запроса пермишина ГЕО при старте приложения
-//                    new FindAndSendCurrentLocation();
+                    new FindAndSendCurrentLocation();
                 }
             });
         }

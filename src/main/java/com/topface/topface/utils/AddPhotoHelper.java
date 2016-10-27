@@ -7,11 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -83,7 +86,6 @@ public class AddPhotoHelper {
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_CAMERA = 1702;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY_WITH_DIALOG = 1701;
     public static final int GALLERY_IMAGE_ACTIVITY_REQUEST_CODE_LIBRARY = 1700;
-    public static final int WRITE_EXTERNAL_STORAGE_PERMISSION_ID = 2000;
     public static final String EXTRA_BUTTON_ID = "btn_id";
     public static String PATH_TO_FILE;
     private static HashMap<String, File> fileNames = new HashMap<>();
@@ -148,7 +150,7 @@ public class AddPhotoHelper {
                         if (holder != null) {
                             switch (holder.getAction()) {
                                 case ACTION_CAMERA_CHOSEN:
-                                    askPermissionsAndStartCamera(false);
+                                    startCamera(false);
                                     System.out.println("PopupHive  ACTION_CAMERA_CHOSEN ");
                                     TakePhotoStatistics.sendCameraAction(holder.getPlc());
                                     break;
@@ -193,33 +195,7 @@ public class AddPhotoHelper {
     }
 
     public void startCamera() {
-        askPermissionsAndStartCamera(false);
-    }
-
-    public void askPermissionsAndStartCamera(final boolean withDialog) {
-        Activity activity = getActivity();
-        if (activity != null) {
-            //Проверка статуса пермишина записи на диск
-            if (PermissionsExtensionsKt.isGrantedPermissions(activity.getApplicationContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                startCamera(withDialog);
-            } else {
-                //Чтобы получить колбек во фрагменте, надо вызывать другой метод showPermissionDialog
-                Fragment fragment = mFragment != null ? mFragment.get() : null;
-                Activity currentActivity = mActivity != null ? mActivity.get() : null;
-                //Если fragment!=null, значит хэлпер создавался во фрагменте, следовательно ловить
-                //статус пермишина надо во фрагменте
-                if (fragment != null) {
-                    PermissionsExtensionsKt.showPermissionDialog(fragment, WRITE_EXTERNAL_STORAGE_PERMISSION_ID,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-                } else if (currentActivity != null) {
-                    PermissionsExtensionsKt.showPermissionDialog(currentActivity,
-                            WRITE_EXTERNAL_STORAGE_PERMISSION_ID,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                }
-            }
-        }
+        startCamera(false);
     }
 
     public void startCamera(final boolean withDialog) {
@@ -318,24 +294,6 @@ public class AddPhotoHelper {
     public AddPhotoHelper setOnResultHandler(Handler handler) {
         mHandler = handler;
         return this;
-    }
-
-    public void processRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case WRITE_EXTERNAL_STORAGE_PERMISSION_ID: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                    startCamera(false);
-
-                } else {
-                    //TODO внятная реакция на отказ доступа к записи на диск
-                    Utils.showToastNotification("Ой все", Toast.LENGTH_LONG);
-                }
-                break;
-            }
-
-        }
     }
 
     public Uri processActivityResult(int requestCode, int resultCode, Intent data) {

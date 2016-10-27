@@ -1239,14 +1239,6 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (mAddPhotoHelper != null) {
-            mAddPhotoHelper.processRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
     private void hideEmptySearchDialog() {
         mRetryView.setVisibility(View.GONE);
     }
