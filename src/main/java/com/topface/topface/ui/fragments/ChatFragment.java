@@ -77,7 +77,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
@@ -1296,7 +1296,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
             if (isTakePhotoApplicable()) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+                TakePhotoPopup.Companion.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.Companion.getTAG());
             }
         }
     }

@@ -4,7 +4,7 @@ import android.content.DialogInterface
 import android.support.v4.app.FragmentManager
 import com.topface.topface.App
 import com.topface.topface.ui.NavigationActivity
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.controllers.startactions.IStartAction
 import com.topface.topface.utils.popups.PopupManager
@@ -16,6 +16,10 @@ import com.topface.topface.utils.social.AuthToken
  */
 class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, private val mPriority: Int, val mFrom: String) : IStartAction {
 
+    companion object {
+        val TAKE_PHOTO_PLC = "select_photo_start_action"
+    }
+
 
     override fun callInBackground() {
     }
@@ -25,7 +29,7 @@ class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, priv
             NavigationActivity.isPhotoAsked = true
             var popup = mFragmentManager.findFragmentByTag(TakePhotoPopup.TAG) as TakePhotoPopup?
             if (popup == null) {
-                popup = TakePhotoPopup.newInstance(Utils.EMPTY)
+                popup = TakePhotoPopup.newInstance(TAKE_PHOTO_PLC)
             }
             popup.setOnCancelListener(DialogInterface.OnCancelListener {
                 PopupManager.informManager(mFrom)

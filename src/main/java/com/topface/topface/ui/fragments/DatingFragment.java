@@ -70,7 +70,7 @@ import com.topface.topface.ui.INavigationFragmentsListener;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.views.ILocker;
@@ -875,7 +875,7 @@ public class DatingFragment extends BaseFragment implements View.OnClickListener
     private boolean takePhotoIfNeed(String plc) {
         if (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null) {
             if (mAddPhotoHelper != null) {
-                TakePhotoPopup.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+                TakePhotoPopup.Companion.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.Companion.getTAG());
                 return true;
             }
         }

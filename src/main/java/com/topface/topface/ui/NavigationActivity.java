@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.inputmethodservice.Keyboard;
 import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;

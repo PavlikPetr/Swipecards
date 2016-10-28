@@ -40,6 +40,7 @@ public class BaseViewModel<T extends ViewDataBinding> {
         return mContext;
     }
 
+    @Nullable
     public Bundle getArguments() {
         return mArguments;
     }

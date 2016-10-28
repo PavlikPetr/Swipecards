@@ -32,7 +32,7 @@ import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
@@ -88,7 +88,7 @@ import dagger.Provides;
  * Created by ppetr on 16/06/15.
  * module injecting AppState
  */
-@Module(includes = {ExternalLibsInjectModule.class, FeedModule.class},
+@Module(includes = {ExternalLibsInjectModule.class, FeedModule.class, DialogModule.class},
         injects = {
                 PeopleNearbyFragment.class,
                 GeoLocationManager.class,
