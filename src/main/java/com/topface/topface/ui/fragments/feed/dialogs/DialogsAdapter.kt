@@ -1,14 +1,20 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
+import android.content.Context
 import android.databinding.ViewDataBinding
+import android.support.v7.widget.RecyclerView
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
+import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.databinding.FeedItemDialogBinding
+import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
+import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 
-class DialogsAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter<FeedItemDialogBinding, FeedDialog>() {
+class DialogsAdapter(private val mNavigator: IFeedNavigator, private val contextTemp: Context) :
+        BaseFeedAdapter<FeedItemDialogBinding, FeedDialog>() {
 
     override fun getItemLayout() = R.layout.feed_item_dialog
 
@@ -22,8 +28,10 @@ class DialogsAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter<F
     }
 
     override fun bindHeader(binding: ViewDataBinding?, position: Int) {
-        binding?.let {
-            it.setVariable(BR.viewModel, getHeaderItem(position))
+        binding?.let { bind ->
+            (getHeaderItem(position) as? List<AppDayImage>)?.let {
+                bind.setVariable(BR.viewModel, AppDayViewModel(bind as AppDayListBinding, it))
+            }
         }
     }
 }

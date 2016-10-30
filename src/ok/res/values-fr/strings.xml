@@ -567,7 +567,6 @@
     <string name="with_vip_find_your_visitors">Avec le statut VIP, vous pouvez découvrir qui a
         visité votre page.
     </string>
-    <string name="on_avatar">Définir comme photo de profil</string>
     <string name="your_avatar">Photo de profil</string>
     <string name="avatar_set_successfully">Votre photo de profil a été définie avec succès</string>
     <string name="incorrect_photo">Photo incorrecte. Veuillez en télécharger une autre.</string>

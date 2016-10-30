@@ -44,6 +44,10 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
         }
     }
 
+    override fun bindHeader(binding: ViewDataBinding?, position: Int) {
+        super.bindHeader(binding, position)
+    }
+
     fun disableAllHighlight() {
         data.forEachIndexed { position, item ->
             item.unread = false

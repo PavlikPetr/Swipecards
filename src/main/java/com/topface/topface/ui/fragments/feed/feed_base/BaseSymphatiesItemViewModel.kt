@@ -51,11 +51,14 @@ abstract class BaseSymphatiesItemViewModel
         mHandleDuplicates(true, userId)
         mSendLikeSubscription = mApi.callSendLike(userId, App.get().options.blockUnconfirmed).subscribe(object : Subscriber<Rate>() {
             override fun onError(e: Throwable?) {
-                e?.message?.let {
-                    if (it.toInt() == ErrorCodes.UNCONFIRMED_LOGIN) {
-                        Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT)
-                    } else {
-                        Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT)
+                item.mutualed = false
+                if (e != null) {
+                    e.message?.let {
+                        if (it.equals(ErrorCodes.UNCONFIRMED_LOGIN)) {
+                            Utils.showToastNotification(R.string.confirm_email_for_dating, Toast.LENGTH_SHORT)
+                        } else {
+                            Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_SHORT)
+                        }
                     }
                 }
             }
