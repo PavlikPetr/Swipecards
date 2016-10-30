@@ -47,7 +47,6 @@ public class CacheProfile {
     // State
     public static long profileUpdateTime;               // время последнего вызова setProfile(...)
     public static boolean wasCityAsked = false;         // был ли показан экран выбора города новичку
-    public static boolean needShowBonusCounter = false;
     public static AtomicBoolean isLoaded = new AtomicBoolean(false);
 
     private static void setProfileCache(final String profile) {
@@ -139,14 +138,6 @@ public class CacheProfile {
             }
         }
         return products;
-    }
-
-    public static boolean isDataFilled(Context context) {
-        if (context == null) {
-            return false;
-        }
-        Profile profile = App.from(context).getProfile();
-        return profile.city != null && !profile.city.isEmpty() && profile.age != 0 && profile.firstName != null && profile.photo != null;
     }
 
     /**
@@ -265,11 +256,6 @@ public class CacheProfile {
 
     public static void incrementPhotoPosition(Context context, int diff) {
         incrementPhotoPosition(context, diff, true);
-    }
-
-    public static void completeSetNoviceSympathiesBonus(Context context) {
-        Profile profile = App.from(context).getProfile();
-        profile.giveNoviceLikes = false;
     }
 
 }

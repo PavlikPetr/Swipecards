@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dating.DatingAlbumViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.topface.topface.ui.views.ImageSwitcher
+            android:id="@+id/dating_album"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:currentItemSmoothly="@{model.currentItem}"
+            app:data="@{model.albumData}"
+            app:needAnimateLoader="@{model.isNeedAnimateLoader}"
+            app:onPageChangeListener="@{model}"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="136dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/dating_album_gradient"
+            android:paddingBottom="44dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="7dp">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="@{model.nameAgeOnline}"
+                android:textSize="24sp"
+                app:online="@{model.isOnline}"/>
+
+            <TextView
+                android:id="@+id/photos_counter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:drawableLeft="@drawable/foto"
+                android:text="@{model.photosCounter}"
+                android:textSize="14sp"
+                android:visibility="@{model.isPhotosCounterVisible}"/>
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+</layout>

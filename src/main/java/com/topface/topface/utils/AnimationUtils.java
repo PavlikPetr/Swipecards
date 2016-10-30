@@ -2,6 +2,7 @@ package com.topface.topface.utils;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.os.Build;
 import android.view.View;
 
 public class AnimationUtils {
@@ -91,5 +92,11 @@ public class AnimationUtils {
         animator.setDuration(Defaults.AppearingImage.TIMING.duration);
         animator.setStartDelay(Defaults.AppearingImage.TIMING.startDelay);
         return animator;
+    }
+
+    public static void cancelViewAnivation(View view) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            view.animate().cancel();
+        }
     }
 }

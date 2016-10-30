@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dating.DatingFragmentViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:paddingTop="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:textColor="#000000"
+            android:text="DATING\nDATING\nDATING\nDATING\nDATING\nDATING\nDATING\nDATING\nDATING\nDATING\nDATING\n"
+            android:textSize="50sp"/>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

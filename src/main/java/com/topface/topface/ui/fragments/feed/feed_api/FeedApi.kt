@@ -2,16 +2,18 @@ package com.topface.topface.ui.fragments.feed.feed_api
 
 import android.content.Context
 import android.os.Bundle
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedListData
-import com.topface.topface.data.Rate
+import com.topface.topface.data.*
+import com.topface.topface.data.search.SearchUser
+import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.requests.handlers.SimpleApiHandler
+import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
+import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import rx.Observable
 import java.util.*
 
@@ -19,7 +21,79 @@ import java.util.*
  * Created by tiberal on 09.08.16.
  */
 class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
-              private val mDeleteRequestFactory: IRequestFactory, private val mFeedRequestFactory: IRequestFactory) {
+              private val mDeleteRequestFactory: IRequestFactory? = null, private val mFeedRequestFactory: IRequestFactory? = null) {
+
+    fun callAlbumRequest(currentSearchUser: SearchUser, loadedPosition: Int): Observable<AlbumPhotos> {
+        return Observable.create {
+            val request = AlbumRequest(mContext, currentSearchUser.id, loadedPosition, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW)
+            request.callback(object : DataApiHandler<AlbumPhotos>() {
+                override fun success(data: AlbumPhotos, response: IApiResponse) = it.onNext(data)
+                override fun parseResponse(response: ApiResponse) = AlbumPhotos(response)
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+            }).exec()
+        }
+    }
+
+    /**
+     * @param isNeedRefresh обнулить кэш на сервере и показать юзеров заново
+     */
+    fun callDatingUpdate(onlyOnline: Boolean, isNeedRefresh: Boolean): Observable<UsersList<SearchUser>> {
+        return Observable.create {
+            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh)
+            mRequestClient.registerRequest(request)
+            request.callback(object : DataApiHandler<UsersList<SearchUser>>() {
+                override fun parseResponse(response: ApiResponse): UsersList<SearchUser> = UsersList(response, SearchUser::class.java)
+                override fun success(data: UsersList<SearchUser>, response: IApiResponse) = it.onNext(data)
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }
+    }
+
+    fun callFilterRequest(filter: FilterData): Observable<DatingFilter> {
+        return Observable.create {
+            val request = FilterRequest(filter, mContext)
+            mRequestClient.registerRequest(request)
+            request.callback(object : DataApiHandler<DatingFilter>() {
+                override fun parseResponse(response: ApiResponse): DatingFilter = DatingFilter(response.getJsonResult())
+                override fun success(dataFilter: DatingFilter, response: IApiResponse) = it.onNext(dataFilter)
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+                override fun cancel() {
+                    super.cancel()
+                    it.onCompleted()
+                }
+
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }
+    }
+
+    fun callResetFilterRequest(): Observable<DatingFilter> {
+        return Observable.create {
+            val request = ResetFilterRequest(mContext)
+            mRequestClient.registerRequest(request)
+            request.callback(object : DataApiHandler<DatingFilter>() {
+                override fun parseResponse(response: ApiResponse) = DatingFilter(response.getJsonResult())
+                override fun success(dataFilter: DatingFilter, response: IApiResponse) = it.onNext(dataFilter)
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+                override fun cancel() {
+                    super.cancel()
+                    it.onCompleted()
+                }
+
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }
+    }
 
     fun callLikesAccessRequest(): Observable<IApiResponse> {
         return Observable.create {
@@ -36,9 +110,9 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
-    fun <T : FeedItem> callUpdate(isForPremium: Boolean, mItemClass: Class<T>, requestArgs: Bundle): Observable<FeedListData<T>> {
+    fun <T : FeedItem> callFeedUpdate(isForPremium: Boolean, mItemClass: Class<T>, requestArgs: Bundle): Observable<FeedListData<T>> {
         return Observable.create {
-            val request = mFeedRequestFactory.construct(requestArgs)
+            val request = mFeedRequestFactory?.construct(requestArgs)
             if (request != null) {
                 mRequestClient.registerRequest(request)
                 request.callback(object : DataApiHandler<FeedListData<T>>() {
@@ -79,7 +153,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             val arg = Bundle()
             arg.putStringArrayList(DeleteFeedRequestFactory.USER_ID_FOR_DELETE, ids)
             arg.putSerializable(DeleteFeedRequestFactory.FEED_TYPE, feedsType)
-            val deleteFeedsRequest = mDeleteRequestFactory.construct(arg)
+            val deleteFeedsRequest = mDeleteRequestFactory?.construct(arg)
             if (deleteFeedsRequest != null) {
                 deleteFeedsRequest.callback(object : SimpleApiHandler() {
                     override fun success(response: IApiResponse) = it.onNext(true)
@@ -97,9 +171,18 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
-    fun callSendLike(userId: Int, blockUnconfirmed: Boolean): Observable<Rate> {
+    fun callSendLike(userId: Int, blockUnconfirmed: Boolean, mutualId: Int = SendLikeRequest.DEFAULT_NO_MUTUAL,
+                     from: Int = SendLikeRequest.FROM_FEED) =
+            callRate { SendLikeRequest(mContext, userId, mutualId, from, blockUnconfirmed) }
+
+
+    fun callSendAdmiration(userId: Int, blockUnconfirmed: Boolean, mutualId: Int = SendLikeRequest.DEFAULT_NO_MUTUAL,
+                           from: Int = SendLikeRequest.FROM_FEED) =
+            callRate { SendAdmirationRequest(mContext, userId, mutualId, from, blockUnconfirmed) }
+
+    private inline fun callRate(func: () -> ApiRequest): Observable<Rate> {
+        val request = func()
         return Observable.create {
-            val request = SendLikeRequest(mContext, userId, SendLikeRequest.DEFAULT_NO_MUTUAL, SendLikeRequest.FROM_FEED, blockUnconfirmed)
             request.callback(object : DataApiHandler<Rate>() {
                 override fun success(rate: Rate, response: IApiResponse) = it.onNext(rate)
                 override fun parseResponse(response: ApiResponse) = Rate.parse(response)
@@ -112,6 +195,31 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             mRequestClient.registerRequest(request)
             request.exec()
         }
+    }
+
+    fun callSkipRequest(id: Int): Observable<IApiResponse> = Observable.create { subscriber ->
+        val skipRateRequest = SkipRateRequest(mContext)
+        mRequestClient.registerRequest(skipRateRequest)
+        skipRateRequest.userid = id
+        skipRateRequest.callback(object : SimpleApiHandler() {
+            override fun success(response: IApiResponse?) {
+                response?.let {
+                    subscriber.onNext(it)
+                }
+            }
+
+            override fun fail(codeError: Int, response: IApiResponse?) {
+                super.fail(codeError, response)
+                response?.let {
+                    subscriber.onError(Exception(codeError.toString()))
+                }
+            }
+
+            override fun always(response: IApiResponse?) {
+                super.always(response)
+                subscriber.onCompleted()
+            }
+        }).exec()
     }
 
     private fun getFeedIntIds(list: List<FeedItem>): ArrayList<Int> {

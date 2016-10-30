@@ -32,6 +32,8 @@ import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.IStateSaver;
+import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.ActionBarView;
@@ -41,10 +43,12 @@ import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
+public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient, IStateSaverRegistrator {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -83,6 +87,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
     private boolean mHasContent = true;
+    private ArrayList<IStateSaver> stateSavers = new ArrayList<>();
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -102,7 +107,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (mHasContent) {
             setContentView(getContentLayout());
         }
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         if (mToolbar != null) {
             setSupportActionBar(mToolbar);
         }
@@ -125,14 +130,30 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     protected abstract int getContentLayout();
 
     @Override
+    public void registerStateDelegate(@NotNull IStateSaver... stateSaver) {
+        stateSavers.addAll(Arrays.asList(stateSaver));
+    }
+
+    @Override
+    public void unregisterStateDelegate(@NotNull IStateSaver... stateSaver) {
+        stateSavers.removeAll(Arrays.asList(stateSaver));
+    }
+
+    @Override
     protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGoogleAuthStarted = savedInstanceState.getBoolean(GOOGLE_AUTH_STARTED);
+        for (IStateSaver saver : stateSavers) {
+            saver.onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        for (IStateSaver saver : stateSavers) {
+            saver.onSavedInstanceState(outState);
+        }
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }
