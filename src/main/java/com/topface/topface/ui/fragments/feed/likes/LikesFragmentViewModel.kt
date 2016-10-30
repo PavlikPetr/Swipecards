@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.likes
 
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike
@@ -22,9 +21,15 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  */
 class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
-    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
-        return newCounters.likes > currentCounters.likes
-    }
+
+    private val TYPE_FEED_FRAGMENT = "like"
+
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData) =
+            newCounters.likes > currentCounters.likes
+
+
+    override val typeFeedFragment: String?
+        get() = TYPE_FEED_FRAGMENT
 
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_LIKE)

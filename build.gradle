@@ -271,7 +271,6 @@ android {
     dexOptions {
         //@see https://code.google.com/p/android/issues/detail?id=40409
         jumboMode true
-        //@see https://code.google.com/p/android/issues/detail?id=176638
         javaMaxHeapSize "4g"
     }
 

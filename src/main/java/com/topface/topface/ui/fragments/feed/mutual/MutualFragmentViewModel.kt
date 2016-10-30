@@ -21,6 +21,9 @@ class MutualFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeed
         return newCounters.mutual > currentCounters.mutual
     }
 
+    override val typeFeedFragment: String?
+        get() = null
+
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_MUTUAL)
 

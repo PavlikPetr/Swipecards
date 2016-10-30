@@ -898,4 +898,18 @@
     <string name="mutual_write_them_first">Write to them</string>
     <string name="mutual_no_mutuals">Right now you have no mutual Likes</string>
     <string name="mutual_module_title">MUTUAL</string>
+    <string name="buy_vip_more_views">Get x1.5 more profile views</string>
+    <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
+    <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>
+    <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
+    <string name="buy_vip_free_admirations">Send Adorations for free</string>
+    <string name="buy_vip_know_guests">Find out who viewed your profile</string>
+    <string name="vip_info_title">VIP Privileges</string>
+    <string name="chat_buy_vip_popular_male">%s is super popular!</string>
+    <string name="chat_buy_vip_popular_female">%s is super popular!</string>
+    <string name="buy_vip_to_chat_male">To start chatting with him, activate VIP-status</string>
+    <string name="buy_vip_to_chat_female">To start chatting with her, activate VIP-status</string>
+    <string name="chat_activate_vip">Activate VIP</string>
+    <string name="chat_no_mutual_symphaty">No mutual Like at the moment!</string>
+    <string name="chat_with_no_mutual_buy_vip">You can start chatting without a mutual Like, but to do so, you need to activate VIP-status</string>
 </resources>

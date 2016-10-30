@@ -16,32 +16,32 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
  * Created by siberia87 on 30.09.16.
  */
 
-class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding,
-                                    private val mNavigator: IFeedNavigator,
-                                    private val dataUpdater: IStateDataUpdater,
-                                    mIFeedUnlocked: IFeedUnlocked) : BaseLockScreenViewModel<LayoutEmptyAdmirationsBinding>(binding, mIFeedUnlocked) {
-	val currentChildPod = ObservableInt(1)
-	val muzzleVisibility = ObservableInt(View.VISIBLE)
-	val firstMuzzle = ObservableInt(getMuzzleIcon(1))
-	val secondMuzzle = ObservableInt(getMuzzleIcon(2))
-	val thirdMuzzle = ObservableInt(getMuzzleIcon(3))
-	val flipperVisibility = ObservableInt(View.VISIBLE)
+class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding, private val mNavigator: IFeedNavigator,
+                                    private val dataUpdater: IStateDataUpdater, mIFeedUnlocked: IFeedUnlocked) :
+        BaseLockScreenViewModel<LayoutEmptyAdmirationsBinding>(binding, mIFeedUnlocked) {
 
-	fun onBuyCoins() = mNavigator.showPurchaseCoins()
+    val currentChildPod = ObservableInt(1)
+    val muzzleVisibility = ObservableInt(View.VISIBLE)
+    val firstMuzzle = ObservableInt(getMuzzleIcon(1))
+    val secondMuzzle = ObservableInt(getMuzzleIcon(2))
+    val thirdMuzzle = ObservableInt(getMuzzleIcon(3))
+    val flipperVisibility = ObservableInt(View.VISIBLE)
 
-	fun onBuyVipClick() = mNavigator.showPurchaseVip()
+    fun onBuyCoins() = mNavigator.showPurchaseCoins()
 
-	private fun getMuzzleIcon(iconNumber: Int) = when (iconNumber) {
-		1 -> choiceIcon(R.drawable.likes_female_one, R.drawable.likes_male_one)
-		2 -> choiceIcon(R.drawable.likes_female_two, R.drawable.likes_male_two)
-		3 -> choiceIcon(R.drawable.likes_female_three, R.drawable.likes_male_three)
-		else -> -1
-	}
+    fun onBuyVipClick() = mNavigator.showPurchaseVip()
 
-	private fun choiceIcon(@DrawableRes femaleIcon: Int, @DrawableRes maleIcon: Int) =
-			if (dataUpdater.profile.dating != null && dataUpdater.profile.dating.sex == Profile.GIRL) {
-				femaleIcon
-			} else {
-				maleIcon
-			}
+    private fun getMuzzleIcon(iconNumber: Int) = when (iconNumber) {
+        1 -> choiceIcon(R.drawable.likes_female_one, R.drawable.likes_male_one)
+        2 -> choiceIcon(R.drawable.likes_female_two, R.drawable.likes_male_two)
+        3 -> choiceIcon(R.drawable.likes_female_three, R.drawable.likes_male_three)
+        else -> -1
+    }
+
+    private fun choiceIcon(@DrawableRes femaleIcon: Int, @DrawableRes maleIcon: Int) =
+            if (dataUpdater.profile.dating != null && dataUpdater.profile.dating.sex == Profile.GIRL) {
+                femaleIcon
+            } else {
+                maleIcon
+            }
 }

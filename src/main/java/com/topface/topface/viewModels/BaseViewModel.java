@@ -4,6 +4,8 @@ import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 
+import com.topface.topface.utils.IStateSaver;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,8 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * Модель с базовым функционалом
  * Created by tiberal on 28.06.16.
  */
-public class BaseViewModel<T extends ViewDataBinding> {
-
+public class BaseViewModel<T extends ViewDataBinding> implements IStateSaver {
     private Bundle mArguments;
     private T mBinding;
     private Context mContext;
@@ -43,5 +44,15 @@ public class BaseViewModel<T extends ViewDataBinding> {
     @Nullable
     public Bundle getArguments() {
         return mArguments;
+    }
+
+    @Override
+    public void onSavedInstanceState(@NotNull Bundle state) {
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(@NotNull Bundle state) {
+
     }
 }
