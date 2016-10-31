@@ -42,7 +42,7 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed;
+package com.topface.topface.ui.fragments.feed.people_nearby;
 
 import android.Manifest;
 import android.database.DataSetObserver;
@@ -7,7 +7,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -22,7 +21,6 @@ import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.FeedListData;
 import com.topface.topface.data.Options;
-import com.topface.topface.databinding.LayoutUnavailableGeoBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.DeleteAbstractRequest;
@@ -38,9 +36,12 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.feed.NoFilterFeedFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragmentPermissionsDispatcher;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.extensions.PermissionsExtensions;
 import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
@@ -272,23 +273,27 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private void initEmptyScreen(ViewFlipper emptyView, int errorCode) {
         if (emptyView != null) {
-            if (PermissionsExtensionsKt.isGrantedPermissions(getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                emptyView.setDisplayedChild(0);
-                ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
-                        .setText(errorCode == ErrorCodes.CANNOT_GET_GEO
-                                ? R.string.cannot_get_geo
-                                : R.string.nobody_nearby);
-            } else {
-                emptyView.setDisplayedChild(2);
-                LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                binding.setClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        PermissionsExtensionsKt.showAppSettings(getContext());
-                    }
-                });
+            switch ((int) PermissionsExtensionsKt.getPermissionStatus(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                case (int) PermissionsExtensions.PERMISSION_GRANTED:
+                    emptyView.setDisplayedChild(0);
+                    ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
+                            .setText(errorCode == ErrorCodes.CANNOT_GET_GEO
+                                    ? R.string.cannot_get_geo
+                                    : R.string.nobody_nearby);
+                    break;
+                case (int) PermissionsExtensions.PERMISSION_DENIED:
+                    emptyView.setDisplayedChild(2);
+                    com.topface.topface.databinding.LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
+                    binding.setClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            PermissionsExtensionsKt.showAppSettings(getContext());
+                        }
+                    });
+                    break;
+                case (int) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN:
+
+                    break;
             }
         }
     }

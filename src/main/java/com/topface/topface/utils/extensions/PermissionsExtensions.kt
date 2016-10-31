@@ -1,20 +1,30 @@
 package com.topface.topface.utils.extensions
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
+import android.support.annotation.IntDef
 import android.support.v4.content.ContextCompat
+import permissions.dispatcher.PermissionUtils
 
 /**
  * расширения для работы с пермишинами
  * Created by ppavlik on 26.10.16.
  */
+class PermissionsExtensions {
+    companion object {
+        const val PERMISSION_GRANTED = 0L
+        const val PERMISSION_DENIED = 1L
+        const val PERMISSION_NEVER_ASK_AGAIN = 2L
+    }
+
+    @IntDef(PERMISSION_GRANTED, PERMISSION_DENIED, PERMISSION_NEVER_ASK_AGAIN)
+    annotation class PermissionState
+}
 
 /**
  * Show app settings
@@ -32,25 +42,27 @@ fun Context.showAppSettings() =
  * It will check all *permissions* in list and return true if all of it are granted
  * @return true if all *permissions* in list are granted
  */
-fun Context.isGrantedPermissions(vararg permissions: String) = permissions.find {
-    PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this,
+fun Context.isGrantedPermissions(vararg permissions: String) = this.isGrantedPermissions(permissions.sorted())
+
+fun Context.isGrantedPermissions(permissions: List<String>) = permissions.find { PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this,
             it)
 } == null
 
-//// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
-//fun Activity.showPermissionDialog(requestId: Int, vararg permissions: String) =
-//        ActivityCompat.requestPermissions(this,
-//                permissions,
-//                requestId)
-//
-//// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
-//// показ диалога на запрогс пермишина с возвратом в колбек фрагмента
-//fun Fragment.showPermissionDialog(requestId: Int, vararg permissions: String) =
-//        this.requestPermissions(permissions,
-//                requestId)
-//
-//// временное решение для фотохелпера, т.к. permissionsDispatcher работает только с фрагментами и активити
-//// прост небольшой врапер
-//fun Activity.isNeedShowPermissionRationale(permissions: String) =
-//        ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                permissions)
+fun Activity.shouldShowRequestPermissionRationale(vararg permissions: String) =
+        this.shouldShowRequestPermissionRationale(permissions.sorted())
+
+fun Activity.shouldShowRequestPermissionRationale(permissions: List<String>) = if (Build.VERSION.SDK_INT >=
+        Build.VERSION_CODES.M)
+    permissions.find {
+        this.shouldShowRequestPermissionRationale(it)
+    } != null
+else
+    false
+
+@PermissionsExtensions.PermissionState
+fun Activity.getPermissionStatus(vararg permissions: String)=
+    if (PermissionUtils.getTargetSdkVersion(this) < Build.VERSION_CODES.M &&
+            !PermissionUtils.hasSelfPermissions(this, permissions[0])) PermissionsExtensions.PERMISSION_DENIED
+    else if (this.isGrantedPermissions(permissions.sorted())) PermissionsExtensions.PERMISSION_GRANTED
+    else if (!this.shouldShowRequestPermissionRationale(permissions.sorted())) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN
+        else PermissionsExtensions.PERMISSION_DENIED
