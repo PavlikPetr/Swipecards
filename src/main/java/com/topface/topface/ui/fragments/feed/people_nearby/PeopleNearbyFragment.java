@@ -53,6 +53,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -106,13 +108,18 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         super.onCreate(savedInstanceState);
-        PeopleNearbyFragmentPermissionsDispatcher.geolocationManagerInitWithCheck(this);
+        if (PermissionsExtensionsKt.isGrantedPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            geolocationManagerInit();
+        } else {
+            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PeopleNearbyFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        App.getAppConfig().putPermissionsState(permissions, grantResults);
     }
 
     @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
@@ -284,15 +291,20 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 case (int) PermissionsExtensions.PERMISSION_DENIED:
                     emptyView.setDisplayedChild(2);
                     com.topface.topface.databinding.LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                    binding.setClickListener(new View.OnClickListener() {
+                    UnavailableGeoViewModel unavailableGeoViewModel = new UnavailableGeoViewModel(binding, new Function0<Unit>() {
                         @Override
-                        public void onClick(View view) {
-                            PermissionsExtensionsKt.showAppSettings(getContext());
+                        public Unit invoke() {
+                            PeopleNearbyFragmentPermissionsDispatcher.geolocationManagerInitWithCheck(PeopleNearbyFragment.this);
+                            return null;
                         }
                     });
+                    binding.setViewModel(unavailableGeoViewModel);
                     break;
                 case (int) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN:
-
+                    emptyView.setDisplayedChild(2);
+                    binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
+                    DontAskGeoViewModel dontAskGeoViewModel = new DontAskGeoViewModel(binding);
+                    binding.setViewModel(dontAskGeoViewModel);
                     break;
             }
         }

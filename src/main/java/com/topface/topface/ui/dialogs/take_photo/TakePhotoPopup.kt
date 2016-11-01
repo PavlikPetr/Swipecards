@@ -70,6 +70,7 @@ class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         TakePhotoPopupPermissionsDispatcher.onRequestPermissionsResult(this@TakePhotoPopup, requestCode, grantResults)
+        App.getAppConfig().putPermissionsState(permissions, grantResults)
     }
 
     override fun initViews(root: View) {

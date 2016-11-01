@@ -1128,6 +1128,8 @@
     <string name="chat_activate_vip">Активировать VIP</string>
     <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
     <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
-    <string name="geo_switched_off_explanation">Необходимо включить службу геопозиции в настройках, чтобы увидеть людей рядом</string>
+    <string name="geo_switched_off_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию</string>
     <string name="turn_on_geo">Включить геопозицию</string>
+    <string name="geo_show_settings_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию в настройках телефона</string>
+    <string name="show_geo_settings">Открыть настройку</string>
 </resources>

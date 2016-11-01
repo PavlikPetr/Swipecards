@@ -9,6 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import android.support.annotation.IntDef
 import android.support.v4.content.ContextCompat
+import com.topface.topface.App
 import permissions.dispatcher.PermissionUtils
 
 /**
@@ -44,7 +45,8 @@ fun Context.showAppSettings() =
  */
 fun Context.isGrantedPermissions(vararg permissions: String) = this.isGrantedPermissions(permissions.sorted())
 
-fun Context.isGrantedPermissions(permissions: List<String>) = permissions.find { PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this,
+fun Context.isGrantedPermissions(permissions: List<String>) = permissions.find {
+    PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this,
             it)
 } == null
 
@@ -60,9 +62,10 @@ else
     false
 
 @PermissionsExtensions.PermissionState
-fun Activity.getPermissionStatus(vararg permissions: String)=
-    if (PermissionUtils.getTargetSdkVersion(this) < Build.VERSION_CODES.M &&
-            !PermissionUtils.hasSelfPermissions(this, permissions[0])) PermissionsExtensions.PERMISSION_DENIED
-    else if (this.isGrantedPermissions(permissions.sorted())) PermissionsExtensions.PERMISSION_GRANTED
-    else if (!this.shouldShowRequestPermissionRationale(permissions.sorted())) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN
+fun Activity.getPermissionStatus(vararg permissions: String) =
+        if (PermissionUtils.getTargetSdkVersion(this) < Build.VERSION_CODES.M &&
+                permissions.find { !PermissionUtils.hasSelfPermissions(this, it) } != null) PermissionsExtensions.PERMISSION_DENIED
+        else if (this.isGrantedPermissions(permissions.sorted())) PermissionsExtensions.PERMISSION_GRANTED
+        else if (!this.shouldShowRequestPermissionRationale(permissions.sorted()) &&
+                permissions.find { App.getAppConfig().permissionStateMap.containsKey(it) } != null) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN
         else PermissionsExtensions.PERMISSION_DENIED
