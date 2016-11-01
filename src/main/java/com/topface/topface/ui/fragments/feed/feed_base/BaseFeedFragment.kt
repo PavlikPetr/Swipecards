@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
+import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -21,7 +22,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.extensions.inflateBinding
+import org.jetbrains.anko.layoutInflater
 
 /**
  * Новый, и усосвершенствованный FeedFragment
@@ -36,8 +37,10 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         ItemEventListener.OnRecyclerViewItemClickListener<T>,
         IFeedUnlocked, IPageWithAds {
 
-    open val res: Int = R.layout.fragment_feed_base
-    protected val mBinding by inflateBinding<FragmentFeedBaseBinding>(res)
+    protected open val res: Int = R.layout.fragment_feed_base
+    protected val mBinding: FragmentFeedBaseBinding by lazy {
+        DataBindingUtil.inflate<FragmentFeedBaseBinding>(context.layoutInflater, res, null, false)
+    }
     private lateinit var mBannersController: BannersController
     private val mDelRequestFactory by lazy {
         DeleteFeedRequestFactory(context)

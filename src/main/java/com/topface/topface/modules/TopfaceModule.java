@@ -32,18 +32,18 @@ import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.BaseAuthFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
@@ -89,11 +89,10 @@ import dagger.Provides;
  * Created by ppetr on 16/06/15.
  * module injecting AppState
  */
-@Module(includes = {ExternalLibsInjectModule.class, FeedModule.class},
+@Module(includes = {ExternalLibsInjectModule.class, FeedModule.class, DialogModule.class},
         injects = {
                 PeopleNearbyFragment.class,
                 GeoLocationManager.class,
-                DatingFragment.class,
                 CountersManager.class,
                 OverflowMenu.class,
                 PurchasesActivity.class,
@@ -143,6 +142,7 @@ import dagger.Provides;
                 FansLockScreenViewModel.class,
                 PromoDialog.class,
                 PromoExpressMessages.class,
+                DatingFragmentViewModel.class,
                 NavigationToolbarViewModel.class
         },
         staticInjections = {

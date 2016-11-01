@@ -2,8 +2,10 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.inputmethodservice.Keyboard;
 import android.os.BadParcelableException;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -266,8 +268,8 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
                 .addChosenAction(SelectPhotoStartAction.class, ChooseCityPopupAction.class)
                 .addAction(NotificationsDisableStartAction.class)
                 .addAction(PromoPopupStartAction.class)
-//                Отключаем до момента поддержки пермишинов на контакты
-//                .addAction(InvitePopupAction.class)
+                //TODO Отключаем до момента поддержки пермишинов на контакты
+                //.addAction(InvitePopupAction.class)
                 .addAction(RatePopupStartAction.class);
     }
 

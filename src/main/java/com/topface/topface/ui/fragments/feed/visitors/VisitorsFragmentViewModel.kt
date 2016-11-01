@@ -21,6 +21,8 @@ class VisitorsFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFe
         return newCounters.visitors > currentCounters.visitors
     }
 
+    override val typeFeedFragment: String?
+        get() = null
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_VISITORS_FEEDS
     override val itemClass: Class<Visitor>

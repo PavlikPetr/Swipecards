@@ -559,21 +559,6 @@ public class Utils {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 
-//    public static void sendHockeyMessage(final String message) {
-//        final Context context = App.getContext();
-//        new BackgroundThread() {
-//            @Override
-//            public void execute() {
-//                HockeySender hockeySender = new HockeySender();
-//                try {
-//                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
-//                } catch (ReportSenderException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//    }
-
     public static String getUnlockButtonText(int sec) {
         int minutes = (int) Math.ceil((float) sec / (float) DateUtils.MINUTE_IN_SECONDS);
         return String.format(App.getContext().getString(R.string.unlock_by_viewed_ad_video_button_text),

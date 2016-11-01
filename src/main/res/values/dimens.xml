@@ -13,6 +13,8 @@
     <dimen name="action_bar_title_size">20sp</dimen>
     <dimen name="action_bar_subtitle_size">16sp</dimen>
 
+    <dimen name="dating_album_height">432dp</dimen>
+
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
 
@@ -141,16 +143,13 @@
     <dimen name="filter_value_padding">8dp</dimen>
 
     <!--PhotoSwitcher-->
-    <dimen name="album_gift_margin_right">14dp</dimen>
     <dimen name="album_gift_margin_bottom">14dp</dimen>
-    <dimen name="album_gift_size">86dp</dimen>
 
     <!--PhotoBlog-->
     <dimen name="margin_item_photoblog">16dp</dimen>
     <dimen name="margin_button_photoblog">8dp</dimen>
 
     <!--Rounded images border size-->
-    <dimen name="album_gift_border_size">2dp</dimen>
     <dimen name="mutual_sympathy_border_size">1dp</dimen>
 
     <!--Mutual sympathy stub-->

@@ -20,14 +20,14 @@ import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
+import com.topface.topface.ui.fragments.feed.dating.DatingFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 

@@ -595,8 +595,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 mViewModel.setTrashSrc(R.drawable.ico_restore_photo_selector);
                 mViewModel.setAvatarVisibility(false);
                 mViewModel.setButtonText(R.string.album_photo_deleted);
-                //TODO узнать у ios об использовании строк, см. ниже
-//                mViewModel.setButtonText(R.string.edit_restore);
             } else {
                 mViewModel.setAvatarVisibility(true);
                 mViewModel.setTrashVisibility(true);
@@ -605,8 +603,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 mViewModel.setAvatarEnable(!isMainPhoto);
                 mViewModel.setTrashEnable(!isMainPhoto);
                 mViewModel.setButtonText(isMainPhoto ? R.string.album_main_photo : 0);
-                //TODO узнать у ios об использовании строк, см. ниже
-//                mViewModel.setButtonText(isMainPhoto ? R.string.your_avatar : R.string.on_avatar);
             }
         }
     }
@@ -628,9 +624,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 if (resultCode == Activity.RESULT_OK) {
                     FeedGift feedGift = getFeedGiftFromIntent(data);
                     if (feedGift != null) {
-                        if (mViewModel != null) {
-                            mViewModel.showGift(feedGift.gift.link);
-                        }
                         Intent intent = new Intent(ADD_NEW_GIFT);
                         intent.putExtra(INTENT_GIFT, feedGift);
                         LocalBroadcastManager.getInstance(this)

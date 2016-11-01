@@ -37,6 +37,8 @@ import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
 
@@ -76,6 +78,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     };
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
+    private ArrayList<IStateSaver> stateSavers = new ArrayList<>();
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -97,14 +100,30 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     }
 
     @Override
+    public void registerStateDelegate(@NotNull IStateSaver... stateSaver) {
+        stateSavers.addAll(Arrays.asList(stateSaver));
+    }
+
+    @Override
+    public void unregisterStateDelegate(@NotNull IStateSaver... stateSaver) {
+        stateSavers.removeAll(Arrays.asList(stateSaver));
+    }
+
+    @Override
     protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGoogleAuthStarted = savedInstanceState.getBoolean(GOOGLE_AUTH_STARTED);
+        for (IStateSaver saver : stateSavers) {
+            saver.onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        for (IStateSaver saver : stateSavers) {
+            saver.onSavedInstanceState(outState);
+        }
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }

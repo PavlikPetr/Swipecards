@@ -572,7 +572,6 @@
     <string name="with_vip_find_your_visitors">Са VIP-статусом можете сазнати ко је посећивао на
         Вашу страницу
     </string>
-    <string name="on_avatar">Подесите као слику профила</string>
     <string name="your_avatar">Слика профила</string>
     <string name="avatar_set_successfully">Слика профила је успешно постављена</string>
     <string name="incorrect_photo">Неподесна фотографија. Покушајте да поставите другу.</string>
@@ -936,4 +935,18 @@
     <string name="mutual_write_them_first">Пишите им</string>
     <string name="mutual_no_mutuals">Још увек немате узајамна свиђања</string>
     <string name="mutual_module_title">УЗАЈАМНО</string>
+    <string name="buy_vip_more_views">Добијте 1,5 пута више прегледа Вашег профила</string>
+    <string name="buy_vip_dating_only">Само упознавања, ништа више</string>
+    <string name="buy_vip_message">Не чекајте да добијете свиђање, започните разговор одмах</string>
+    <string name="buy_vip_write_tops">Пишите популарнима без ограничења</string>
+    <string name="buy_vip_free_admirations">Шаљите дивљења бесплатно</string>
+    <string name="buy_vip_know_guests">Сазнајте ко је погледао Ваш профил</string>
+    <string name="vip_info_title">VIP привилегије</string>
+    <string name="chat_buy_vip_popular_male">%s веома популаран!</string>
+    <string name="chat_buy_vip_popular_female">%s веома популарна!</string>
+    <string name="buy_vip_to_chat_male">Како бисте почели да разговарате са њим, активирајте VIP статус</string>
+    <string name="buy_vip_to_chat_female">Како бисте почели да разговарате са њом, активирајте VIP статус</string>
+    <string name="chat_activate_vip">Активирати VIP</string>
+    <string name="chat_no_mutual_symphaty">Тренутно нема узајамних свиђања!</string>
+    <string name="chat_with_no_mutual_buy_vip">Можете започети разговор без узајамног свиђања, али вам је за то потребно да активирате VIP статус</string>
 </resources>

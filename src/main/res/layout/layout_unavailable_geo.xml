@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener"/>
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.people_nearby.UnavailableGeoBaseViewModel"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -53,15 +53,15 @@
 
             <TextView
                 style="@style/PopupMessage"
-                android:text="@string/geo_switched_off_explanation"/>
+                android:text="@{viewModel.text}"/>
 
             <ImageView
                 style="@style/PopupArrow"/>
 
             <Button
                 style="@style/PopupGreenButton"
-                android:onClick="@{clickListener::onClick}"
-                android:text="@string/turn_on_geo"/>
+                android:onClick="@{() -> viewModel.onButtonClick()}"
+                android:text="@{viewModel.button}"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

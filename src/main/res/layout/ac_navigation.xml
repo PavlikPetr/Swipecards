@@ -1,42 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:bind="http://schemas.android.com/tools">
 
-    <data>
+<com.topface.topface.ui.views.HackyDrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loNavigationDrawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_white">
 
-        <variable
-            name="toolbarViewModel"
-            type="com.topface.topface.ui.views.toolbar.BaseToolbarViewModel"/>
-    </data>
-
-    <com.topface.topface.ui.views.HackyDrawerLayout
-        android:id="@+id/loNavigationDrawer"
+    <include
+        layout="@layout/app_bar"
+        android:id="@+id/navigation_app_bar"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_menu"
+        android:layout_width="@dimen/left_menu_width"
         android:layout_height="match_parent"
-        android:background="@color/bg_white">
+        android:layout_gravity="left"/>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:id="@+id/fragment_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="?attr/actionBarSize"/>
-
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/toolbar"
-                bind:viewModel="@{toolbarViewModel}"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/fragment_menu"
-            android:layout_width="@dimen/left_menu_width"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"/>
-
-    </com.topface.topface.ui.views.HackyDrawerLayout>
-</layout>
+</com.topface.topface.ui.views.HackyDrawerLayout>

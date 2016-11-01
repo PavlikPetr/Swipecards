@@ -1,6 +1,7 @@
 package com.topface.topface.utils;
 
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.BindingMethod;
@@ -9,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.AnimRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
@@ -16,6 +18,7 @@ import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +39,32 @@ import com.topface.topface.ui.views.RangeSeekBar;
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("online")
+    public static void setOnline(TextView view, boolean isOnline) {
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.ico_online : 0, 0);
+    }
+
+    @BindingAdapter("fabVisibility")
+    public static void setFabVisibility(FloatingActionButton fab, int visible) {
+        if (visible == View.VISIBLE) {
+            try {
+                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
+                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_show));
+                fab.show();
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
+                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
+                fab.hide();
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @BindingAdapter("setCompoundDrawablesWithIntrinsicBounds")
     public static void setCompoundDrawablesWithIntrinsicBounds(TextView view, int image) {
@@ -226,6 +255,12 @@ public class BindingsAdapters {
     public static void setTag(View view, String tag) {
         view.setTag(tag);
     }
+
+    @BindingAdapter("animationSrc")
+    public static void setAnimationSrc(View view, Animation resource) {
+        view.startAnimation(resource);
+    }
+}
 
     @BindingAdapter("animationSrc")
     public static void setAnimationSrc(View view, Animation resource) {

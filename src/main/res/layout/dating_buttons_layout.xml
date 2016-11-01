@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dating.DatingButtonsViewModel"/>
+    </data>
+
+    <com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
+        android:id="@+id/dating_buttons_root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:datingButtonsVisibility="@{model}"
+        app:layout_behavior="com.topface.topface.ui.fragments.feed.dating.DatingButtonsBehavior">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/show_chat"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="24dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.showChat()}"
+            android:src="@drawable/message"
+            app:backgroundTint="@color/dating_fab_small"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/skip"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.skip()}"
+            android:scaleType="center"
+            android:src="@drawable/dislike"
+            app:backgroundTint="@color/dating_fab_skip"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/send_like"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.sendLike()}"
+            android:scaleType="center"
+            android:src="@drawable/like"
+            app:backgroundTint="@color/dating_fab_like"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/send_admiration"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="15dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.sendAdmiration()}"
+            android:src="@drawable/admiration"
+            app:backgroundTint="@color/dating_fab_small"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+    </com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout>
+
+</layout>

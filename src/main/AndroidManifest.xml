@@ -384,13 +384,6 @@
             android:name="com.sponsorpay.publisher.ofw.SPOfferWallActivity"
             android:configChanges="orientation"/>
 
-        <activity
-            android:name="org.acra.CrashReportDialog"
-            android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="true"
-            android:launchMode="singleInstance"
-            android:theme="@style/Theme.Topface.NoActionBar"/>
-
         <!-- Alias for main Activity from first version. Just in case of previous problems with FB -->
         <activity-alias
             android:name=".ui.MainActivity"
@@ -765,4 +758,3 @@
     </application>
 
 </manifest>
-

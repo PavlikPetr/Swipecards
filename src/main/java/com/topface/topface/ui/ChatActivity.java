@@ -15,7 +15,8 @@ import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.state.EventBus;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.ChatToolbarViewModel;
@@ -55,16 +56,16 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         App.get().inject(this);
-        mTakePhotoSubscription = mEventBus.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
-                .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
+        mTakePhotoSubscription = mEventBus.getObservable(TakePhotoActionHolder.class)
+                .filter(new Func1<TakePhotoActionHolder, Boolean>() {
                     @Override
-                    public Boolean call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {
+                    public Boolean call(TakePhotoActionHolder takePhotoActionHolder) {
                         return takePhotoActionHolder != null && takePhotoActionHolder.getAction() == TakePhotoPopup.ACTION_CANCEL;
                     }
                 })
-                .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
+                .subscribe(new Action1<TakePhotoActionHolder>() {
                     @Override
-                    public void call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {
+                    public void call(TakePhotoActionHolder takePhotoActionHolder) {
                         finishWithResult(Activity.RESULT_CANCELED);
                     }
                 }, new Action1<Throwable>() {

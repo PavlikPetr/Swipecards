@@ -107,7 +107,6 @@ public class ScruffyRequestManager {
     private int mLastDecreasedSentRequestsCount;
     private long mLastDecreasedSentRequestTime;
     private boolean mScruffyAvailable = true;
-//    private HockeySender mHockeySender;
 
     /**
      * Parses common structure of response
@@ -141,7 +140,6 @@ public class ScruffyRequestManager {
     private ScruffyRequestManager() {
         mPendingRequests = new ConcurrentHashMap<>();
         mSentRequests = new ConcurrentHashMap<>();
-//        mHockeySender = new HockeySender();
     }
 
     public synchronized static ScruffyRequestManager getInstance() {
@@ -269,8 +267,6 @@ public class ScruffyRequestManager {
                     if (ex != null || webSocket == null) {
                         if (ex != null && ex.getClass() != null) {
                             ScruffyStatistics.sendScruffyConnectFailure(ex.getClass().toString());
-//                            HockeySender sender = getReportSender();
-//                            sender.sendDebug(sender.createLocalReport(App.getContext(), ex));
                         }
                         Debug.error("Scruffy::", ex);
                         if (listener != null) {
@@ -381,10 +377,6 @@ public class ScruffyRequestManager {
             mScruffyAvailable = false;
         }
     }
-
-//    public HockeySender getReportSender() {
-//        return mHockeySender;
-//    }
 
     private class ReconnectTask extends TimerTask {
 

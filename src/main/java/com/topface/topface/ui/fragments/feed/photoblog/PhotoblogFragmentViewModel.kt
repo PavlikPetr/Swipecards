@@ -31,6 +31,7 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
     private lateinit var mRefreshIntervalSubscription: Subscription
 
     companion object {
+
         private val UPDATE_DELAY = 20L
     }
 
@@ -40,6 +41,9 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
             override fun onNext(type: Long?) = loadTopFeeds()
         })
     }
+
+    override val typeFeedFragment: String?
+        get() = null
 
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_UNKNOWN)

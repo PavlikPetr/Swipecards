@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
@@ -23,7 +24,7 @@ import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
 import com.topface.topface.statistics.TakePhotoStatistics;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
@@ -93,7 +94,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private void showTakePhotoDialog(String plc, boolean forceShow) {
         if (!CacheProfile.isEmpty() && mAddPhotoHelper != null
                 && (!mIsPhotoAsked || forceShow) && (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null)) {
-            TakePhotoPopup.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+            TakePhotoPopup.Companion.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.Companion.getTAG());
             mIsPhotoAsked = true;
         }
     }

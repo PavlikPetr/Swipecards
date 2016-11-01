@@ -566,7 +566,6 @@
     <string name="with_vip_find_your_visitors">Lo stato VIP ti permette di scoprire chi ha visitato
         la tua pagina
     </string>
-    <string name="on_avatar">Sull’avatar</string>
     <string name="your_avatar">Il tuo avatar</string>
     <string name="avatar_set_successfully">L’avatar è stato caricato con successo</string>
     <string name="incorrect_photo">Foto scorretta. Prova a caricarne un’altra</string>
@@ -926,4 +925,18 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="mutual_write_them_first">Scrivi a loro</string>
     <string name="mutual_no_mutuals">In questo momento non hai Like reciproci</string>
     <string name="mutual_module_title">RECIPROCAMENTE</string>
+    <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
+    <string name="buy_vip_dating_only">Solo appuntamento, puro e semplice.</string>
+    <string name="buy_vip_message">Non aspettare i Like, inizia subito una conversazione!</string>
+    <string name="buy_vip_write_tops">Scrivi ai profili Migliori senza restrizioni</string>
+    <string name="buy_vip_free_admirations">Invia gratis le Adorazioni</string>
+    <string name="buy_vip_know_guests">Scopri chi ha visto il tuo profilo</string>
+    <string name="vip_info_title">Privilegi di essere VIP</string>
+    <string name="chat_buy_vip_popular_male">%s è molto popolare!</string>
+    <string name="chat_buy_vip_popular_female">%s è molto popolare!</string>
+    <string name="buy_vip_to_chat_male">Per iniziare a chattare con lui, attiva lo stato di VIP</string>
+    <string name="buy_vip_to_chat_female">Per iniziare a chattare con lei, attiva lo stato di VIP</string>
+    <string name="chat_activate_vip">Attiva VIP</string>
+    <string name="chat_no_mutual_symphaty">Al momento no avete un Like reciproco!</string>
+    <string name="chat_with_no_mutual_buy_vip">Puoi iniziare a chattare senza un Like reciproco, ma per farlo devi attivare lo stato di VIP</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -40,6 +42,7 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
+import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
@@ -47,10 +50,17 @@ import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
 import javax.inject.Inject;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 import rx.Subscription;
 import rx.functions.Action1;
 
+import static com.topface.topface.utils.AddPhotoHelper.EXTRA_BUTTON_ID;
+
 @FlurryOpenEvent(name = ProfilePhotoFragment.PAGE_NAME)
+@RuntimePermissions
 public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackPressedListener {
 
     private static final String POSITION = "POSITION";
@@ -58,7 +68,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     public static final String PAGE_NAME = "profile.photos";
     @Inject
     TopfaceAppState appState;
-    private Handlers handlers;
     private OwnProfileRecyclerViewAdapter mOwnProfileRecyclerViewAdapter;
 
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
@@ -147,6 +156,22 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }).exec();
     }
 
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    public void takeCameraPhoto() {
+        if (mBinding != null) {
+            mBinding.vfFlipper.setDisplayedChild(0);
+        }
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra(EXTRA_BUTTON_ID, R.id.btnAddPhotoCamera));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        ProfilePhotoFragmentPermissionsDispatcher.onRequestPermissionsResult(ProfilePhotoFragment.this, requestCode, grantResults);
+        App.getAppConfig().putPermissionsState(permissions, grantResults);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -155,8 +180,14 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
         }
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_photos, container, false);
-        handlers = new Handlers(getActivity(), mBinding.vfFlipper);
-        mBinding.setHandlers(handlers);
+        ProfilePhotoFragmentViewModel viewModel = new ProfilePhotoFragmentViewModel(mBinding, new Function0<Unit>() {
+            @Override
+            public Unit invoke() {
+                ProfilePhotoFragmentPermissionsDispatcher.takeCameraPhotoWithCheck(ProfilePhotoFragment.this);
+                return null;
+            }
+        });
+        mBinding.setViewModel(viewModel);
         if (getActivity() instanceof EditContainerActivity) {
             getActivity().setResult(Activity.RESULT_OK);
             //TODO TITLE getString(R.string.edit_title), getString(R.string.edit_album)
@@ -295,7 +326,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        handlers = null;
         RxUtils.safeUnsubscribe(mSubscription);
     }
 
@@ -323,27 +353,4 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }
         return false;
     }
-
-    public static class Handlers {
-
-        private final Context mContext;
-        private final ViewFlipper mViewFlipper;
-
-        public Handlers(Context context, ViewFlipper flipper) {
-            mContext = context.getApplicationContext();
-            mViewFlipper = flipper;
-        }
-
-        public void addPhotoClick(View v) {
-            mViewFlipper.setDisplayedChild(0);
-            LocalBroadcastManager.getInstance(mContext).sendBroadcast(
-                    new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra("btn_id", v.getId()));
-        }
-
-        public void cancelClick(View v) {
-            mViewFlipper.setDisplayedChild(0);
-        }
-
-    }
-
 }

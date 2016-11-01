@@ -570,7 +570,6 @@
     <string name="with_vip_find_your_visitors">Su VIP-statusu jūs sužinosite, kas buvo užsukęs į
         jūsų puslapį
     </string>
-    <string name="on_avatar">Paveiksliukui</string>
     <string name="your_avatar">Jūsų avataras</string>
     <string name="avatar_set_successfully">Avataras sėkmingai nustatytas</string>
     <string name="incorrect_photo">Netinkama foto. Pamėginkite įkelti kitą</string>
@@ -841,4 +840,5 @@
     <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad
         pradėtumėte malonią pažintį
     </string>
+    <string name="vip_info_title">VIP privilegijos</string>
 </resources>
