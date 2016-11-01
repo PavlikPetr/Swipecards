@@ -41,26 +41,56 @@ fun Context.showAppSettings() =
  * Check *permissions* list
  *
  * It will check all *permissions* in list and return true if all of it are granted
+ * @param permissions array of permissions
  * @return true if all *permissions* in list are granted
  */
 fun Context.isGrantedPermissions(vararg permissions: String) = this.isGrantedPermissions(permissions.sorted())
 
-fun Context.isGrantedPermissions(permissions: List<String>) = permissions.find {
-    PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this,
-            it)
-} == null
+/**
+ * Check *permissions* list
+ *
+ * It will check all *permissions* in list and return true if all of it are granted
+ * @param permissions list of permissions
+ * @return true if all *permissions* in list are granted
+ */
+fun Context.isGrantedPermissions(permissions: List<String>) =
+        permissions.find {
+            PackageManager.PERMISSION_DENIED == ContextCompat.checkSelfPermission(this, it)
+        } == null
 
+/**
+ * Check *permissions* list
+ *
+ * It will check all *permissions* in list and return true if at least one are need
+ * ShowRequestPermissionRationale
+ * @param permissions array of permissions
+ * @return true if at least one are need ShowRequestPermissionRationale
+ */
 fun Activity.shouldShowRequestPermissionRationale(vararg permissions: String) =
         this.shouldShowRequestPermissionRationale(permissions.sorted())
 
-fun Activity.shouldShowRequestPermissionRationale(permissions: List<String>) = if (Build.VERSION.SDK_INT >=
-        Build.VERSION_CODES.M)
-    permissions.find {
-        this.shouldShowRequestPermissionRationale(it)
-    } != null
-else
-    false
+/**
+ * Check *permissions* list
+ *
+ * It will check all *permissions* in list and return true if at least one are need
+ * ShowRequestPermissionRationale
+ * @param permissions list of permissions
+ * @return true if at least one are need ShowRequestPermissionRationale
+ */
+fun Activity.shouldShowRequestPermissionRationale(permissions: List<String>) =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            permissions.find {
+                this.shouldShowRequestPermissionRationale(it)
+            } != null
+        else
+            false
 
+/**
+ * Get permission current state
+ *
+ * @param permissions array of permissions
+ * @return current state of permission group
+ */
 @PermissionsExtensions.PermissionState
 fun Activity.getPermissionStatus(vararg permissions: String) =
         if (PermissionUtils.getTargetSdkVersion(this) < Build.VERSION_CODES.M &&

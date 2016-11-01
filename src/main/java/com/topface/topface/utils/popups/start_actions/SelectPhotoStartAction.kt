@@ -17,7 +17,7 @@ import com.topface.topface.utils.social.AuthToken
 class SelectPhotoStartAction(private val mFragmentManager: FragmentManager, private val mPriority: Int, val mFrom: String) : IStartAction {
 
     companion object {
-        val TAKE_PHOTO_PLC = "select_photo_start_action"
+        const val TAKE_PHOTO_PLC = "select_photo_start_action"
     }
 
 

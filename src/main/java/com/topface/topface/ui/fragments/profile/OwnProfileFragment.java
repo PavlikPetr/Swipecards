@@ -94,7 +94,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     private void showTakePhotoDialog(String plc, boolean forceShow) {
         if (!CacheProfile.isEmpty() && mAddPhotoHelper != null
                 && (!mIsPhotoAsked || forceShow) && (!App.getConfig().getUserConfig().isUserAvatarAvailable() && App.get().getProfile().photo == null)) {
-            TakePhotoPopup.Companion.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.Companion.getTAG());
+            TakePhotoPopup.Companion.newInstance(plc).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             mIsPhotoAsked = true;
         }
     }

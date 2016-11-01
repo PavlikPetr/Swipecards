@@ -28,9 +28,8 @@ abstract class CrashReportActivity : AppCompatActivity(), IActivityDelegate {
         MetricsManager.register(getApplication());
     }
 
-    private fun checkForCrashes() {
-        CrashManager.register(this@CrashReportActivity, getAppId(), HockeyAppCrashManager())
-    }
+    private fun checkForCrashes() =
+            CrashManager.register(this, getAppId(), HockeyAppCrashManager())
 
     private fun getAppId(): String {
         val activityInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
