@@ -51,7 +51,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
-                        android:onClick="@{()->viewModel.takeCameraPhoto.invoke()}"
+                        android:onClick="@{() -> viewModel.takeCameraPhoto.invoke()}"
                         android:text="@string/profile_add_camera"/>
 
                     <Button
@@ -62,7 +62,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="14dp"
-                        android:onClick="@{()->viewModel.onTakeAlbumPhotoClick()}"
+                        android:onClick="@{() -> viewModel.onTakeAlbumPhotoClick()}"
                         android:text="@string/profile_add_album"/>
 
                     <Button
@@ -73,7 +73,7 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
-                        android:onClick="@{()->viewModel.onCancelClick()}"
+                        android:onClick="@{() -> viewModel.onCancelClick()}"
                         android:text="@string/general_cancel"/>
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>

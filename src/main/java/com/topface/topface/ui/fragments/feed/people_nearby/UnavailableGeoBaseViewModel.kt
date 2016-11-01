@@ -11,12 +11,7 @@ import com.topface.topface.viewModels.BaseViewModel
 abstract class UnavailableGeoBaseViewModel(binding: LayoutUnavailableGeoBinding,
                                            textExplanation: String,
                                            buttonText: String) : BaseViewModel<LayoutUnavailableGeoBinding>(binding) {
-    val text = ObservableField<String>()
-    val button = ObservableField<String>()
+    val text = ObservableField<String>(textExplanation)
+    val button = ObservableField<String>(buttonText)
     abstract fun onButtonClick()
-
-    init {
-        text.set(textExplanation)
-        button.set(buttonText)
-    }
 }
