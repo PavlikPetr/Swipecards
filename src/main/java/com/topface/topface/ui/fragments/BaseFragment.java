@@ -150,10 +150,17 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    protected Integer getToolbarChild(){
+        return 0;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         setStatusBarColor();
+        if (getActivity() instanceof ToolbarActivity) {
+            ((ToolbarActivity) getActivity()).getToolbarViewModel().getChild().set(getToolbarChild());
+        }
         if (mProfileLoadReceiver == null) {
             mProfileLoadReceiver = new BroadcastReceiver() {
                 @Override

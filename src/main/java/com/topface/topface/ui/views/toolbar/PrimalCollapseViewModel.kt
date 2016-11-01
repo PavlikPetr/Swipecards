@@ -8,7 +8,7 @@ import com.topface.topface.databinding.ToolbarBinding
  * Model for interaction with collapsing toolbar
  * Created by tiberal on 18.10.16.
  */
-class PrimalCollapseViewModel(binding: ToolbarBinding) : BaseToolbarViewModel(binding)
+class PrimalCollapseViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null) : NavigationToolbarViewModel(binding, mNavigation)
         , AppBarLayout.OnOffsetChangedListener {
 
 //    val background = ObservableField<Int>(R.drawable.tool_bar_gradient)
@@ -17,7 +17,7 @@ class PrimalCollapseViewModel(binding: ToolbarBinding) : BaseToolbarViewModel(bi
 
     init {
         child.set(1)
-        title.set("")
+        background.set(R.drawable.tool_bar_gradient)
     }
 
     //todo если сумма высоты экрана и verticalOffset меньше равна высоте при которой тулбар закрашивается (24+апи)

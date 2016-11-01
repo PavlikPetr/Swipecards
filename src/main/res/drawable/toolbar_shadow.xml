@@ -1,7 +1,22 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <size android:height="@dimen/toolbar_elevation" />
-    <gradient
-        android:angle="270"
-        android:endColor="@color/toolbar_shadow_end_color"
-        android:startColor="@color/toolbar_shadow_start_color" />
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <size android:height="@dimen/toolbar_elevation"/>
+            <gradient
+                android:angle="270"
+                android:centerColor="@color/toolbar_bottom_shadow_center_color"
+                android:endColor="@color/toolbar_bottom_shadow_end_color"
+                android:startColor="@color/toolbar_bottom_shadow_start_color"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <size android:height="5dp"/>
+            <padding android:bottom="5dp"/>
+            <gradient
+                android:angle="270"
+                android:endColor="@color/toolbar_top_shadow_end_color"
+                android:startColor="@color/toolbar_top_shadow_start_color"/>
+        </shape>
+    </item>
+</layer-list>

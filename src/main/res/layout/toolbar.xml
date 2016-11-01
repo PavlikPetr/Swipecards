@@ -22,7 +22,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:background="@color/toolbar_background_white"
+                android:background="@{viewModel.background}"
                 android:visibility="@{viewModel.visibility}"
                 app:navigationIcon="@{viewModel.upIcon}"
                 app:subtitle="@{viewModel.subTitle}"
@@ -75,8 +75,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:background="@{viewModel.background}"
-                        app:layout_collapseMode="pin"
-                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                        app:navigationIcon="@{viewModel.upIcon}"
+                        app:layout_collapseMode="pin"/>
 
                 </android.support.design.widget.CollapsingToolbarLayout>
 

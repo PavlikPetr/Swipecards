@@ -15,7 +15,7 @@ import javax.inject.Inject
  * вьюмодель тулбара для NavigationActivity
  */
 
-class NavigationToolbarViewModel @JvmOverloads constructor(val toolbar: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
+open class NavigationToolbarViewModel @JvmOverloads constructor(val toolbar: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
 : BaseToolbarViewModel(toolbar, mNavigation) {
     @Inject lateinit var mState: TopfaceAppState
     private var mBalanceSubscription: Subscription? = null

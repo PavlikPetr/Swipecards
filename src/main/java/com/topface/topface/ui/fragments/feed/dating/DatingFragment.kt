@@ -174,7 +174,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun hideEmptySearchDialog() {
-
     }
 
+    override fun getToolbarChild() = 1
 }
