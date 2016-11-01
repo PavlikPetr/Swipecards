@@ -33,7 +33,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
-        Appodeal.setTesting(false);
+        Appodeal.setTesting(Debug.isDebugLogsEnabled());
         Appodeal.setLogLevel(Log.LogLevel.verbose);
         Appodeal.disableNetwork(activity.getApplicationContext(), CHEETAH_NETWORK);
         Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
