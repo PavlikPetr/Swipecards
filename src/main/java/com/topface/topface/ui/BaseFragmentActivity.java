@@ -29,6 +29,8 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
+import com.topface.topface.utils.IStateSaver;
+import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.gcmutils.GCMUtils;
@@ -42,7 +44,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T> implements IRequestClient {
+public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T> implements IRequestClient, IStateSaverRegistrator {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";

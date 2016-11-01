@@ -29,6 +29,10 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
     val titleDrawableRight = ObservableInt(0)
     val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)
     val visibility = ObservableInt(View.VISIBLE)
+    val child = ObservableInt(0)
+
+    val anchorVisibility = ObservableInt(View.VISIBLE)
+    val collapseVisibility = ObservableInt(View.VISIBLE)
 
     // увы, но колбэк будет работать только если установить его после setSupportActionBar
     fun init() =

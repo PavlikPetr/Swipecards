@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
+import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsBehavior
+import com.topface.topface.ui.views.toolbar.PrimalCollapseViewModel
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -34,11 +36,11 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     }
 
     private val mAppBarBinding by lazy {
-        DataBindingUtil.bind<AppBarBinding>(activity.findViewById(R.id.navigation_app_bar))
+        DataBindingUtil.bind<ToolbarBinding>(activity.findViewById(R.id.toolbar))
     }
 
     private val mAppBarModel by lazy {
-        PrimalCollapseViewModel(mAppBarBinding)
+        com.topface.topface.ui.views.toolbar.PrimalCollapseViewModel(mAppBarBinding)
     }
 
     protected open fun setupToolbar(size: Int) {
@@ -51,7 +53,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     }
 
     open fun bindModels() {
-        mAppBarBinding.model = mAppBarModel
+        mAppBarBinding.viewModel = mAppBarModel
     }
 
 

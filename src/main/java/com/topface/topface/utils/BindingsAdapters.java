@@ -261,9 +261,3 @@ public class BindingsAdapters {
         view.startAnimation(resource);
     }
 }
-
-    @BindingAdapter("animationSrc")
-    public static void setAnimationSrc(View view, Animation resource) {
-        view.startAnimation(resource);
-    }
-}
