@@ -19,9 +19,11 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
@@ -101,6 +103,16 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? ToolbarActivity<*>)?.let { activity ->
+            (activity.toolbarBaseViewModel as? NavigationToolbarViewModel).let {
+                it?.isCollapsingToolbarStyle(true)
+            }
+        }
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
             mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
@@ -175,6 +187,4 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun hideEmptySearchDialog() {
     }
-
-    override fun getToolbarChild() = 1
 }

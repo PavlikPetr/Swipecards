@@ -174,7 +174,7 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull WebViewFragmentBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

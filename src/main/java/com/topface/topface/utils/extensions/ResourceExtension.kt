@@ -67,3 +67,10 @@ fun Int.getDrawable(): Drawable? {
     }
     return res
 }
+
+fun Int.isHasNotification(): Boolean {
+    return when (this) {
+        R.drawable.menu_white_notification, R.drawable.menu_gray_notification -> true
+        else -> false
+    }
+}

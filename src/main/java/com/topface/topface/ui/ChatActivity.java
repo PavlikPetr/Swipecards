@@ -44,7 +44,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

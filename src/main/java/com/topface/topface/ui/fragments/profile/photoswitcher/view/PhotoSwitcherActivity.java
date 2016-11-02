@@ -711,13 +711,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new PhotoSwitcherToolbarViewModel(toolbar, this);
+        PhotoSwitcherToolbarViewModel toolbarViewModel = new PhotoSwitcherToolbarViewModel(toolbar, this);
+        toolbarViewModel.getShadowVisibility().set(View.GONE);
+        return toolbarViewModel;
     }
 
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcPhotosBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

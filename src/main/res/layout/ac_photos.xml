@@ -72,7 +72,7 @@
                 android:visibility="gone"/>
 
             <include
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbarInclude"
                 layout="@layout/toolbar"
                 bind:viewModel="@{toolbarViewModel}"/>
 

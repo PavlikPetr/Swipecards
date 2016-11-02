@@ -40,7 +40,7 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
         , AddToPhotoBlogHeaderViewModel.IPurchasesFragmentVisualisator
         , AddToPhotoBlogHeaderViewModel.IPhotoHelperVisualisator, AddToPhotoBlogHeaderViewModel.IAdapterInteractor {
 
-    override fun getToolbarBinding(binding: AddToPhotoBlogLayoutBinding) = binding.toolbar
+    override fun getToolbarBinding(binding: AddToPhotoBlogLayoutBinding) = binding.toolbarInclude
 
     override fun getLayout() = R.layout.add_to_photo_blog_layout
 

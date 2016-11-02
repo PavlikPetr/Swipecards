@@ -45,7 +45,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

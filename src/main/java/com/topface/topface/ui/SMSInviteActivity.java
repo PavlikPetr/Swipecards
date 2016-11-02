@@ -34,7 +34,7 @@ public class SMSInviteActivity extends CheckAuthActivity<SmsInviteFragment, AcFr
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

@@ -101,7 +101,7 @@ public class BanActivity extends TrackedFragmentActivity<BanActivityBinding> {
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull BanActivityBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

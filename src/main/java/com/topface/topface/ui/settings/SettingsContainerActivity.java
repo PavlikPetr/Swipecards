@@ -97,7 +97,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

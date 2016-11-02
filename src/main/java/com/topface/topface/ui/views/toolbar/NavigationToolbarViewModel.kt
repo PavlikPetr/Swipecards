@@ -1,6 +1,6 @@
 package com.topface.topface.ui.views.toolbar
 
-import android.support.v7.widget.Toolbar
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
@@ -17,9 +17,16 @@ import javax.inject.Inject
 
 open class NavigationToolbarViewModel @JvmOverloads constructor(val toolbar: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
 : BaseToolbarViewModel(toolbar, mNavigation) {
+
+    companion object {
+        const val EMPTY_TITLE = ""
+    }
+
     @Inject lateinit var mState: TopfaceAppState
     private var mBalanceSubscription: Subscription? = null
     private var mHasNotification: Boolean? = null
+
+    private var isCollapsingToolbar = false
 
     init {
         App.get().inject(this)
@@ -34,12 +41,33 @@ open class NavigationToolbarViewModel @JvmOverloads constructor(val toolbar: Too
                     override fun onNext(isHasNotif: Boolean?) {
                         super.onNext(isHasNotif)
                         mHasNotification = isHasNotif
-                        upIcon.set(if (mHasNotification != null && mHasNotification!!)
-                            R.drawable.menu_gray_notification
-                        else
-                            R.drawable.menu_gray)
+                        setUpIconStyle(mHasNotification)
                     }
                 })
+        setCorrectStyle()
+    }
+
+    private fun setUpIconStyle(isHasNotification: Boolean?) {
+        upIcon.set(if (isHasNotification ?: false)
+            if (isCollapsingToolbar) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
+        else
+            if (isCollapsingToolbar) R.drawable.menu_white else R.drawable.menu_gray)
+    }
+
+
+    private fun setCorrectStyle() {
+        setUpIconStyle(mHasNotification)
+        shadowVisibility.set(if (isCollapsingToolbar) View.GONE else View.VISIBLE)
+        background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background_white)
+        if (isCollapsingToolbar) {
+            title.set(EMPTY_TITLE)
+            subTitle.set(EMPTY_TITLE)
+        }
+    }
+
+    fun isCollapsingToolbarStyle(isCollapsing: Boolean) = apply {
+        isCollapsingToolbar = isCollapsing
+        setCorrectStyle()
     }
 
     override fun release() {

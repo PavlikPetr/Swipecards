@@ -140,7 +140,7 @@ public class PromoExpressMessages extends PromoDialog {
     public void initViews(View root) {
         super.initViews(root);
         PromoExpressMessagesBinding binding = DataBindingUtil.bind(root);
-        BackToolbarViewModel toolbarViewModel = new BackToolbarViewModel(binding.toolbar, ResourceExtensionKt.getString(R.string.settings_messages));
+        BackToolbarViewModel toolbarViewModel = new BackToolbarViewModel(binding.toolbarInclude, ResourceExtensionKt.getString(R.string.settings_messages));
         toolbarViewModel.getUpIcon().set(R.drawable.menu_gray_notification);
         binding.setToolbarViewModel(toolbarViewModel);
         if (getPremiumEntity().getPopupVersion() == 1) {

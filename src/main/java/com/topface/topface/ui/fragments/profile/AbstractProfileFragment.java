@@ -21,12 +21,14 @@ import com.topface.topface.ui.adapters.ProfilePageAdapter;
 import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.TabLayoutCreator;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
 
@@ -162,6 +164,18 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
         }
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ToolbarActivity activity = (ToolbarActivity) getActivity();
+        if (activity != null) {
+            NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
+            if (vm != null) {
+                vm.isCollapsingToolbarStyle(false);
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

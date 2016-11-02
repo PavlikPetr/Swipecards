@@ -252,7 +252,7 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcGiftsBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

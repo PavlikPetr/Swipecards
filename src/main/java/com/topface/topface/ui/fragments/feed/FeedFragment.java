@@ -69,6 +69,7 @@ import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
@@ -470,6 +471,13 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
+        ToolbarActivity activity = (ToolbarActivity) getActivity();
+        if (activity != null) {
+            NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
+            if (vm != null) {
+                vm.isCollapsingToolbarStyle(false);
+            }
+        }
         removeBlackListUserFromFeed();
         FeedAdapter<T> adapter = getListAdapter();
         if (adapter.isNeedUpdate() || needUpdate) {

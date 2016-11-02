@@ -59,7 +59,7 @@ public class RestoreAccountActivity extends TrackedFragmentActivity<RestoreAccou
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull RestoreAccountActivityBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

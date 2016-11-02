@@ -429,7 +429,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

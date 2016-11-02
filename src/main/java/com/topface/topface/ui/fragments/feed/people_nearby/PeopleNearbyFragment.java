@@ -291,20 +291,18 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 case (int) PermissionsExtensions.PERMISSION_DENIED:
                     emptyView.setDisplayedChild(2);
                     com.topface.topface.databinding.LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                    UnavailableGeoViewModel unavailableGeoViewModel = new UnavailableGeoViewModel(binding, new Function0<Unit>() {
+                    binding.setViewModel(new UnavailableGeoViewModel(binding, new Function0<Unit>() {
                         @Override
                         public Unit invoke() {
                             PeopleNearbyFragmentPermissionsDispatcher.geolocationManagerInitWithCheck(PeopleNearbyFragment.this);
                             return null;
                         }
-                    });
-                    binding.setViewModel(unavailableGeoViewModel);
+                    }));
                     break;
                 case (int) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN:
                     emptyView.setDisplayedChild(2);
                     binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                    DontAskGeoViewModel dontAskGeoViewModel = new DontAskGeoViewModel(binding);
-                    binding.setViewModel(dontAskGeoViewModel);
+                    binding.setViewModel(new DontAskGeoViewModel(binding));
                     break;
             }
         }

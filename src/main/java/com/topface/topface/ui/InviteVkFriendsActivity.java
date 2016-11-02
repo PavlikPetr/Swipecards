@@ -250,7 +250,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFrie
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull AcInviteVkFriendsBinding binding) {
-        return binding.toolbar;
+        return binding.toolbarInclude;
     }
 
     @Override

@@ -69,7 +69,7 @@ public class CitySearchPopup extends AbstractDialogFragment implements IOnCitySe
         mModel = new CitySearchPopupViewModel(mBinding, getArguments(), this);
         mAdapter.setOnItemClickListener(mModel);
         mBinding.setViewModel(mModel);
-        mBackToolbarViewModel = new BackToolbarViewModel(mBinding.toolbar, getContext().getString(R.string.my_location), new IToolbarNavigation() {
+        mBackToolbarViewModel = new BackToolbarViewModel(mBinding.toolbarInclude, getContext().getString(R.string.my_location), new IToolbarNavigation() {
             @Override
             public void onUpButtonClick() {
                 getDialog().cancel();

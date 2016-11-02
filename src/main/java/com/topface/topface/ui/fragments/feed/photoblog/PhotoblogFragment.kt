@@ -12,8 +12,10 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.LayoutEmptyPhotoblogBinding
+import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.RxUtils
 
@@ -48,6 +50,16 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
         override fun handleMessage(msg: Message) {
             AddPhotoHelper.handlePhotoMessage(msg)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? ToolbarActivity<*>).let { activity ->
+            (activity!!.toolbarBaseViewModel as? NavigationToolbarViewModel).let {
+                it?.isCollapsingToolbarStyle(false)
+            }
+        }
+
     }
 
     override fun onAttach(context: Context?) {
