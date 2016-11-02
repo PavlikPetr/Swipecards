@@ -21,9 +21,7 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.RxUtils
-import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
@@ -34,12 +32,14 @@ import rx.Subscription
  * VM for dating buttons
  * Created by tiberal on 11.10.16.
  */
-class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mApi: FeedApi,
+class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
+                             private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
                              private val mUserSearchList: CachableSearchList<SearchUser>,
                              private val mDatingButtonsEvents: DatingButtonsEventsDelegate,
                              private val mDatingButtonsView: IDatingButtonsView,
-                             private val mEmptySearchVisibility: IEmptySearchVisibility) :
+                             private val mEmptySearchVisibility: IEmptySearchVisibility,
+                             private val mAdmirationPurchasePopup: IAnimateAdmirationPurchasePopup) :
         BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility {
 
     var currentUser: SearchUser? = null
@@ -134,26 +134,27 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     }
 
     fun sendAdmiration() = sendSomething {
-        val mutualId = getMutualId(it)
-        mDatingButtonsView.lockControls()
-        mAdmirationSubscription = mApi.callSendAdmiration(it.id, App.get().options.blockUnconfirmed,
-                mutualId, SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
-            override fun onError(e: Throwable?) {
-                mDatingButtonsView.unlockControls()
-                e?.printStackTrace()
-            }
-
-            override fun onNext(rate: Rate?) {
-                EasyTracker.sendEvent("Dating", "Rate",
-                        "AdmirationSend" + if (mutualId == SendLikeRequest.DEFAULT_MUTUAL) "mutual" else Utils.EMPTY,
-                        App.get().options.priceAdmiration.toLong())
-            }
-
-            override fun onCompleted() {
-                mAdmirationSubscription.safeUnsubscribe()
-                mDatingButtonsView.unlockControls()
-            }
-        })
+        mAdmirationPurchasePopup.show(binding.sendAdmiration)
+//        val mutualId = getMutualId(it)
+//        mDatingButtonsView.lockControls()
+//        mAdmirationSubscription = mApi.callSendAdmiration(it.id, App.get().options.blockUnconfirmed,
+//                mutualId, SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
+//            override fun onError(e: Throwable?) {
+//                mDatingButtonsView.unlockControls()
+//                e?.printStackTrace()
+//            }
+//
+//            override fun onNext(rate: Rate?) {
+//                EasyTracker.sendEvent("Dating", "Rate",
+//                        "AdmirationSend" + if (mutualId == SendLikeRequest.DEFAULT_MUTUAL) "mutual" else Utils.EMPTY,
+//                        App.get().options.priceAdmiration.toLong())
+//            }
+//
+//            override fun onCompleted() {
+//                mAdmirationSubscription.safeUnsubscribe()
+//                mDatingButtonsView.unlockControls()
+//            }
+//        })
     }
 
     private inline fun sendSomething(func: (SearchUser) -> Unit) =

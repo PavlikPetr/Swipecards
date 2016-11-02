@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.dating.AdmirationPurchasePopupViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{() -> viewModel.skip()}"
+        tools:context=".ui.fragments.feed.dating.AdmirationPurchasePopupActivity">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="32dp"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginTop="32dp"
+            android:elevation="6dp"
+            android:orientation="horizontal"
+            android:transitionName="@string/transition_name_admiration_popup">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.55"
+                android:background="@color/text_white"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/admiration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:src="@drawable/admiration_popup_heart_ico"
+                    app:postProcessor="inscribedAvatar"/>
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/user_face"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="-32dp"
+                    android:src="@drawable/admiration_popup_heart_ico"
+                    app:postProcessor="inscribedAvatar"
+                    app:roundedImgBorderColor="@android:color/white"
+                    app:roundedImgBorderWidth="3dp"/>
+
+                <Button
+                    android:id="@+id/coins_button"
+                    android:layout_width="220dp"
+                    android:layout_height="36dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#2ad54a"
+                    android:gravity="center"
+                    android:text="отправить за 3 монеты"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:id="@+id/label1"
+                    android:layout_width="220dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Получатель «восхищения» будет уведомлён и сразу его увидит"
+                    android:textColor="#9a9999"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.45"
+                android:background="@drawable/admiration_popup_land_bg">
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/vip"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="-8dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/admiration_popup_vip_ico"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/label2"
+                        android:layout_width="152dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="Отправляйте «восхищения» бесплатно!"
+                        android:textColor="#9a9999"
+                        android:textSize="13sp"/>
+
+                    <ImageView
+                        android:id="@+id/arrow_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:src="@drawable/arrow_bottom"/>
+
+                    <TextView
+                        android:id="@+id/vip_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="получить vip"
+                        android:textAllCaps="true"
+                        android:textColor="#3fd559"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

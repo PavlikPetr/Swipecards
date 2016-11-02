@@ -67,7 +67,6 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val NEED_MORE = "need_more"
     }
 
-
     fun updatePhotosCounter(position: Int) {
         val user = currentUser
         if (user != null) {

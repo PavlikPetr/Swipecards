@@ -68,7 +68,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         const val NEW_FILTER = "new_filter"
     }
 
-
     init {
         App.get().inject(this)
         //todo работаем по рофилю из кэша?

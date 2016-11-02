@@ -912,4 +912,8 @@
     <string name="chat_activate_vip">Activate VIP</string>
     <string name="chat_no_mutual_symphaty">No mutual Like at the moment!</string>
     <string name="chat_with_no_mutual_buy_vip">You can start chatting without a mutual Like, but to do so, you need to activate VIP-status</string>
+
+    <!--стринги для попапа восхищения-->
+    <string name="transition_name_admiration_popup" translatable="false">admiration_purchase_popup</string>
+
 </resources>

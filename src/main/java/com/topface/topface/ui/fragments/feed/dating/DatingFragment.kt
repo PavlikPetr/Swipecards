@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
+import android.support.v4.app.ActivityOptionsCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,7 @@ import org.jetbrains.anko.support.v4.dimen
  * Created by tiberal on 07.10.16.
  */
 class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
-        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility {
+        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IAnimateAdmirationPurchasePopup {
 
     override val anchorViewResId: Int
         get() = R.layout.dating_buttons_layout
@@ -55,7 +56,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private val mDatingButtonsViewModel by lazy {
         DatingButtonsViewModel(mAnchorBinding, mApi, mNavigator, mUserSearchList, mDatingButtonsEvents = this,
-                mDatingButtonsView = this, mEmptySearchVisibility = this)
+                mDatingButtonsView = this, mEmptySearchVisibility = this, mAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
         DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList)
@@ -77,7 +78,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         AlbumLoadController(AlbumLoadController.FOR_PREVIEW)
     }
     //~~~~~~~~~~~~~~~~~~~~~~~ конец ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
     companion object {
         const val USER_SEARCH_LIST = "user_search_list"
@@ -149,6 +149,18 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         mCollapseBinding.datingAlbum?.let {
             mDatingButtonsViewModel.currentUser = user
             mDatingAlbumViewModel.currentUser = user
+        }
+    }
+
+    override fun show(transitionView: View) {
+        val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            FabTransform.addExtras(intent, resources.getColor(R.color.dating_fab_small), R.drawable.admiration)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
+                    getString(R.string.transition_name_admiration_popup))
+            startActivityForResult(intent, 0, options.toBundle())
+        } else {
+            startActivity(intent)
         }
     }
 
