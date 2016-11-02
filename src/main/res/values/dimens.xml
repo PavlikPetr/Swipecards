@@ -162,4 +162,23 @@
 
     <dimen name="user_device_icon_padding_left">6dp</dimen>
 
+    <!--Toolbar sizes-->
+    <dimen name="toolbar_title_size">20sp</dimen>
+    <dimen name="toolbar_elevation">10dp</dimen>
+    <dimen name="toolbar_title_padding_left">15dp</dimen>
+
+    <!--Popups-->
+    <dimen name="popup_central_picture_size">210dp</dimen>
+    <dimen name="popup_central_picture_margin">34dp</dimen>
+    <dimen name="popup_root_view_padding_top">56dp</dimen>
+    <dimen name="popup_root_view_padding_bottom">56dp</dimen>
+    <dimen name="popup_root_view_padding_left">10dp</dimen>
+    <dimen name="popup_root_view_padding_right">10dp</dimen>
+    <dimen name="popup_title_text">25sp</dimen>
+    <dimen name="popup_central_picture_background_circle">156dp</dimen>
+    <dimen name="popup_message_text">16sp</dimen>
+    <dimen name="popup_message_padding_bottom">20dp</dimen>
+    <dimen name="popup_message_side_padding">46dp</dimen>
+    <dimen name="popup_button_text">14sp</dimen>
+
 </resources>

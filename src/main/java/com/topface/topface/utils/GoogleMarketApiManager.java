@@ -69,9 +69,11 @@ public class GoogleMarketApiManager extends BaseMarketApiManager {
     }
 
     public static boolean isGoogleAccountExists() {
-        AccountManager manager = AccountManager.get(App.getContext());
-        Account[] accounts = manager.getAccountsByType("com.google");
-        return accounts != null && accounts.length > 0;
+        //TODO Отключил проверку наличия аккаунта, т.к. для этого требуется пермишин GET_ACCOUNTS
+//        AccountManager manager = AccountManager.get(App.getContext());
+//        Account[] accounts = manager.getAccountsByType("com.google");
+//        return accounts != null && accounts.length > 0;
+        return true;
     }
 
     private void setParamServiceDisabled() {

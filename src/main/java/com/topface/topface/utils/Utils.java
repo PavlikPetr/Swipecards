@@ -43,7 +43,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.topface.framework.imageloader.IPhoto;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -57,11 +56,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.debug.HockeySender;
-import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.acra.sender.ReportSenderException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -561,21 +557,6 @@ public class Utils {
 
     public static String replaceDashWithHyphen(String text) {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
-    }
-
-    public static void sendHockeyMessage(final String message) {
-        final Context context = App.getContext();
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                HockeySender hockeySender = new HockeySender();
-                try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
-                } catch (ReportSenderException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
     }
 
     public static String getUnlockButtonText(int sec) {

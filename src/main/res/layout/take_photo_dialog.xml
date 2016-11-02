@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="handlers"
-            type="com.topface.topface.ui.dialogs.TakePhotoPopup.Handlers"/>
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.take_photo.TakePhotoPopupViewModel"/>
     </data>
 
     <LinearLayout
@@ -42,12 +42,11 @@
                 android:paddingTop="@dimen/take_photo_padding_40">
 
                 <View
-                    android:id="@+id/upload_photo_placeholder"
                     style="@style/LandscapePortraitImagesVisibility"
                     android:layout_width="@dimen/take_photo_placeholder_size"
                     android:layout_height="@dimen/take_photo_placeholder_size"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/upload_photo_male"/>
+                    android:background="@{viewModel.mainImage}"/>
 
                 <TextView
                     style="@style/TakePhotoText"
@@ -56,20 +55,18 @@
                     android:text="@string/take_photo_text_1"/>
 
                 <Button
-                    android:id="@+id/btn_take_photo"
                     style="@style/Widget.Topface.Button.Big.Blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:onClick="@{handlers::onTakeClick}"
+                    android:onClick="@{()->viewModel.takeCameraPhoto.invoke()}"
                     android:text="@string/profile_add_camera"/>
 
                 <Button
-                    android:id="@+id/btn_choose_photo"
                     style="@style/Widget.Topface.Button.Big.Blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{handlers::onChooseClick}"
+                    android:onClick="@{()->viewModel.takeAlbumPhoto.invoke()}"
                     android:text="@string/profile_add_album"/>
 
                 <TextView

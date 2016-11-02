@@ -44,10 +44,15 @@ def getTimestamp() {
 }
 
 buildscript {
-    ext.retrofit_version = '2.1.0'
-    ext.google_play_services_version = '9.4.0'
-    ext.kotlin_version = '1.0.3'
-    ext.anko_version = '0.9'
+    ext {
+        retrofit_version = '2.1.0'
+        google_play_services_version = '9.4.0'
+        kotlin_version = '1.0.4'
+        anko_version = '0.9'
+        permissionsdispatcher_version = '2.2.0'
+        hockeyAppReleaseAppId = '817b00ae731c4a663272b4c4e53e4b61'
+        hockeyAppQaAppId = '9bf289e229284c0cba8d47eba5da9618'
+    }
     repositories {
         jcenter()
         //костыль. как тольок будет выложена новыя версия плагина это можно убрать
@@ -72,17 +77,16 @@ allprojects {
         maven {
             url "https://dl.bintray.com/supersonic/android-sdk"
         }
-        maven { url "https://jitpack.io" }
         jcenter()
         flatDir {
             dirs 'libs'
         }
+        maven { url "https://jitpack.io" }
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -170,7 +174,8 @@ android {
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
-        manifestPlaceholders = [applicationClass: "com.topface.topface.App"]
+        manifestPlaceholders = [applicationClass: "com.topface.topface.App",
+                                HOCKEYAPP_APP_ID: "$hockeyAppQaAppId"];
 
         multiDexEnabled true
     }
@@ -239,6 +244,7 @@ android {
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
             shrinkResources false
+            manifestPlaceholders = [HOCKEYAPP_APP_ID: "$hockeyAppReleaseAppId"]
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
@@ -353,13 +359,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
     compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
-    //Acra
-    compile('ch.acra:acra:4.6.0RC2') {
-        //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
-        //и на нее ругается gradle
-        exclude group: 'org.json'
-    }
-    compile('com.android.support:recyclerview-v7:24.2.1') {
+    compile('com.android.support:recyclerview-v7:25.0.0') {
         exclude group: 'com.android.support'
     }
     compile 'com.google.code.gson:gson:2.7'
@@ -432,6 +432,23 @@ dependencies {
         exclude group: 'io.reactivex'
     }
     compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // add hockeyApp sdk to the project
+    compile 'net.hockeyapp.android:HockeySDK:4.1.1'
+
+    compile("com.github.hotchemi:permissionsdispatcher:$permissionsdispatcher_version") {
+        exclude module: "support-v4"
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'javapoet'
+    }
+    provided("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version") {
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'javapoet'
+    }
+    kapt("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version") {
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'javapoet'
+    }
 }
 
 project(':libs:PullToRefresh') {

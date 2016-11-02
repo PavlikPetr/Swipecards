@@ -2,16 +2,20 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
+import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
@@ -23,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,6 +70,7 @@ public class AppConfig extends AbstractConfig {
     private static final String IS_HARDWARE_ACCELERATED = "is_hardware_accelerated";
     private static final String IS_REFERRER_TRACK_SENT = "is_referrer_track_sent";
     private static final String REFERRER_TRACK = "referrer_track";
+    private static final String PERMISSIONS_REQUEST_STATE = "permissions_request_state";
 
     private static final String DEFAULT_REFERRER_TRACK = "";
 
@@ -122,6 +128,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, IS_REFERRER_TRACK_SENT, false);
         // данные referrer track
         addField(settingsMap, REFERRER_TRACK, DEFAULT_REFERRER_TRACK);
+        // храним статус пермишинов в приложении
+        addField(settingsMap, PERMISSIONS_REQUEST_STATE, "");
     }
 
     protected SharedPreferences getPreferences() {
@@ -502,5 +510,30 @@ public class AppConfig extends AbstractConfig {
     @Nullable
     public InstallReferrerData getReferrerTrackData() {
         return new InstallReferrerData(getStringField(getSettingsMap(), REFERRER_TRACK));
+    }
+
+    /**
+     * Return wrote permissions state map
+     *
+     * @return permissions state map
+     */
+    public HashMap<String, Integer> getPermissionStateMap() {
+        HashMap<String, Integer> permissions = JsonUtils.fromJson(getStringField(getSettingsMap(), PERMISSIONS_REQUEST_STATE), new TypeToken<HashMap<String, Integer>>() {
+        }.getType());
+        return permissions == null ? new HashMap<String, Integer>() : permissions;
+    }
+
+    /**
+     * Put permission state
+     *
+     * @param permissions  permissions name list
+     * @param grantResults permissions state list
+     */
+    public void putPermissionsState(@NonNull String[] permissions, @NonNull int[] grantResults) {
+        HashMap<String, Integer> currentPermissions = getPermissionStateMap();
+        for (int i = 0; i < Math.min(permissions.length, grantResults.length); i++) {
+            currentPermissions.put(permissions[i], grantResults[i]);
+        }
+        setField(getSettingsMap(), PERMISSIONS_REQUEST_STATE, JsonUtils.toJson(currentPermissions));
     }
 }

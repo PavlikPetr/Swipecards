@@ -19,7 +19,7 @@ import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.ui.adapters.LoadingListAdapter
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.fragments.PurchasesFragment
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.Utils

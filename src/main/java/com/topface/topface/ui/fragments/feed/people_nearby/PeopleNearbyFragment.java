@@ -1,13 +1,18 @@
-package com.topface.topface.ui.fragments.feed;
+package com.topface.topface.ui.fragments.feed.people_nearby;
 
+import android.Manifest;
 import android.database.DataSetObserver;
+import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.google.gson.reflect.TypeToken;
 import com.topface.topface.App;
@@ -31,23 +36,35 @@ import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
+import com.topface.topface.ui.fragments.feed.NoFilterFeedFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragmentPermissionsDispatcher;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.extensions.PermissionsExtensions;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.RuntimePermissions;
 import rx.Subscription;
 import rx.functions.Action1;
 
 import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 
-
+@RuntimePermissions
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private final static int WAIT_LOCATION_DELAY = 10000;
@@ -88,12 +105,38 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         App.from(getActivity()).inject(this);
-        startWaitLocationTimer();
-        mGeoLocationManager = new GeoLocationManager();
-        mGeoLocationManager.registerProvidersChangedActionReceiver();
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         super.onCreate(savedInstanceState);
+        if (PermissionsExtensionsKt.isGrantedPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            geolocationManagerInit();
+        } else {
+            onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PeopleNearbyFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        App.getAppConfig().putPermissionsState(permissions, grantResults);
+    }
+
+    @NeedsPermission({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    public void geolocationManagerInit() {
+        mGeoLocationManager = new GeoLocationManager();
+        mGeoLocationManager.registerProvidersChangedActionReceiver();
+        startWaitLocationTimer();
+    }
+
+    @OnNeverAskAgain({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    @OnPermissionDenied({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
+    public void doNotNeed() {
+        ListView lv = getListView();
+        if (lv != null) {
+            lv.setVisibility(View.GONE);
+        }
+        onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
     }
 
     @Override
@@ -222,26 +265,54 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     protected void initLockedFeed(View inflated, int errorCode) {
-        initEmptyScreenOnBlocked(inflated, App.get().getOptions().blockPeople);
+        initEmptyScreenOnBlocked(findViewFlipper(inflated), App.get().getOptions().blockPeople);
+    }
+
+    @Nullable
+    private ViewFlipper findViewFlipper(View inflated) {
+        return (ViewFlipper) inflated.findViewById(R.id.vfEmptyViews);
     }
 
     @Override
-    protected void initEmptyFeedView(View inflated, int errorCode) {
-        initEmptyScreen(inflated, errorCode);
+    protected void initEmptyFeedView(final View inflated, int errorCode) {
+        initEmptyScreen(findViewFlipper(inflated), errorCode);
     }
 
-    private void initEmptyScreen(View emptyView, int errorCode) {
+    private void initEmptyScreen(ViewFlipper emptyView, int errorCode) {
         if (emptyView != null) {
-            emptyView.findViewById(R.id.controls_layout).setVisibility(View.GONE);
-            ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(
-                    errorCode == ErrorCodes.CANNOT_GET_GEO ? R.string.cannot_get_geo : R.string.nobody_nearby
-            );
+            switch ((int) PermissionsExtensionsKt.getPermissionStatus(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                case (int) PermissionsExtensions.PERMISSION_GRANTED:
+                    emptyView.setDisplayedChild(0);
+                    ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
+                            .setText(errorCode == ErrorCodes.CANNOT_GET_GEO
+                                    ? R.string.cannot_get_geo
+                                    : R.string.nobody_nearby);
+                    break;
+                case (int) PermissionsExtensions.PERMISSION_DENIED:
+                    emptyView.setDisplayedChild(2);
+                    com.topface.topface.databinding.LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
+                    UnavailableGeoViewModel unavailableGeoViewModel = new UnavailableGeoViewModel(binding, new Function0<Unit>() {
+                        @Override
+                        public Unit invoke() {
+                            PeopleNearbyFragmentPermissionsDispatcher.geolocationManagerInitWithCheck(PeopleNearbyFragment.this);
+                            return null;
+                        }
+                    });
+                    binding.setViewModel(unavailableGeoViewModel);
+                    break;
+                case (int) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN:
+                    emptyView.setDisplayedChild(2);
+                    binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
+                    DontAskGeoViewModel dontAskGeoViewModel = new DontAskGeoViewModel(binding);
+                    binding.setViewModel(dontAskGeoViewModel);
+                    break;
+            }
         }
     }
 
-    private void initEmptyScreenOnBlocked(final View emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
+    private void initEmptyScreenOnBlocked(ViewFlipper emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {
         if (emptyView != null) {
-            emptyView.findViewById(R.id.controls_layout).setVisibility(View.VISIBLE);
+            emptyView.setDisplayedChild(0);
             ((TextView) emptyView.findViewById(R.id.blocked_geo_text)).setText(blockPeopleNearby.text);
             initBuyCoinsButton(emptyView, blockPeopleNearby);
             initBuyVipButton(emptyView, blockPeopleNearby);

@@ -1300,4 +1300,49 @@
         <item name="android:text">@string/start_chat_with_gift</item>
         <item name="android:drawableLeft">@drawable/ic_arrow_down</item>
     </style>
+
+    <style name="PopupTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/popup_title</item>
+        <item name="android:textSize">@dimen/popup_title_text</item>
+    </style>
+
+    <style name="PopupAnimatedBackground">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:minHeight">@dimen/popup_central_picture_background_circle</item>
+        <item name="android:minWidth">@dimen/popup_central_picture_background_circle</item>
+        <item name="android:src">@drawable/unavailable_geo_smaller_circle</item>
+    </style>
+
+    <style name="PopupMessage">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/popup_message_padding_bottom</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/popup_message_side_padding</item>
+        <item name="android:paddingRight">@dimen/popup_message_side_padding</item>
+        <item name="android:textColor">@color/popup_message</item>
+        <item name="android:textSize">@dimen/popup_message_text</item>
+    </style>
+
+    <style name="PopupArrow">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:src">@drawable/arrow</item>
+    </style>
+
+    <style name="PopupGreenButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/green_button_bg</item>
+        <item name="android:textColor">@color/popup_green_button_text</item>
+        <item name="android:textSize">@dimen/popup_button_text</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+    </style>
 </resources>
