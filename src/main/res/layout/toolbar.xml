@@ -11,13 +11,12 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        app:layout_collapseMode="pin"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="pin">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            app:layout_collapseMode="pin"
             android:layout_height="?actionBarSize"
             android:background="@{viewModel.background}"
             android:visibility="@{viewModel.visibility}"

@@ -7,6 +7,7 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.extensions.getColor
 import rx.Subscription
 import javax.inject.Inject
 
@@ -58,11 +59,12 @@ open class NavigationToolbarViewModel @JvmOverloads constructor(val toolbar: Too
     private fun setCorrectStyle() {
         setUpIconStyle(mHasNotification)
         shadowVisibility.set(if (isCollapsingToolbar) View.GONE else View.VISIBLE)
-        background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background_white)
+        background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background)
         if (isCollapsingToolbar) {
-            title.set(EMPTY_TITLE)
-            subTitle.set(EMPTY_TITLE)
+//            title.set(EMPTY_TITLE)
+//            subTitle.set(EMPTY_TITLE)
         }
+        titleTextColor.set((if (isCollapsingToolbar) R.color.toolbar_light_title_color else R.color.toolbar_dark_title_color).getColor())
     }
 
     fun isCollapsingToolbarStyle(isCollapsing: Boolean) = apply {

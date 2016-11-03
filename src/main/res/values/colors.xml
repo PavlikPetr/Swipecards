@@ -234,9 +234,11 @@
     <color name="mutual_sympathy_stub_aditional_info">#61000000</color>
 
     <!--Toolbar colors-->
-    <color name="toolbar_background_white">@color/bg_white</color>
+    <color name="toolbar_background">#ffffff</color>
     <color name="toolbar_title_white">@color/bg_white</color>
-    <color name="toolbar_title_color">#000000</color>
+    <color name="toolbar_light_title_color">#000000</color>
+    <color name="toolbar_transparent_title_color">#00000000</color>
+    <color name="toolbar_dark_title_color">#ffffff</color>
     <color name="toolbar_subtitle_color">#737373</color>
     <color name="toolbar_bottom_shadow_start_color">#14000000</color>
     <color name="toolbar_bottom_shadow_center_color">#01000000</color>

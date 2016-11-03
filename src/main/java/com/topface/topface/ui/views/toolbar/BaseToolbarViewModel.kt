@@ -1,10 +1,13 @@
 package com.topface.topface.ui.views.toolbar
 
+import android.databinding.Observable
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.text.TextUtils
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.utils.RxFieldObservable
 import com.topface.topface.utils.extensions.*
 import com.topface.topface.viewModels.BaseViewModel
 
@@ -15,10 +18,10 @@ import com.topface.topface.viewModels.BaseViewModel
 
 abstract class BaseToolbarViewModel(binding: ToolbarBinding,
                                     val mNavigation: IToolbarNavigation? = null) : BaseViewModel<ToolbarBinding>(binding) {
-    val title = ObservableField<String>(R.string.app_name.getString())
-    val background = ObservableInt(R.color.toolbar_background_white)
+    val title = RxFieldObservable<String>(R.string.app_name.getString())
+    val background = ObservableInt(R.color.toolbar_background)
     val subTitle = ObservableField<String>("")
-    val titleTextColor = ObservableInt(R.color.toolbar_title_color.getColor())
+    val titleTextColor = ObservableInt(R.color.toolbar_light_title_color.getColor())
     val subTitleTextColor = ObservableInt(R.color.toolbar_subtitle_color.getColor())
     val titleDrawableRight = ObservableInt(0)
     val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)
@@ -26,12 +29,13 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
     val shadowVisibility = ObservableInt(View.VISIBLE)
 
     // увы, но колбэк будет работать только если установить его после setSupportActionBar
-    fun init() =
-            mNavigation?.let { navigator ->
-                binding.toolbar.setNavigationOnClickListener {
-                    navigator.onUpButtonClick()
-                }
+    fun init() {
+        mNavigation?.let { navigator ->
+            binding.toolbar.setNavigationOnClickListener {
+                navigator.onUpButtonClick()
             }
+        }
+    }
 
     fun setOnline(isOnline: Boolean) =
             with(titleDrawableRight) {

@@ -24,9 +24,11 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
 import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
@@ -157,6 +159,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onDataReceived(user: SearchUser) {
+        setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge))
         mDatingAlbumViewModel.albumData.set(user.photos)
         mCollapseBinding.datingAlbum?.let {
             mDatingButtonsViewModel.currentUser = user
@@ -167,6 +170,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
     override fun onNewSearchUser(user: SearchUser) {
+        setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge))
         with(mDatingAlbumViewModel) {
             albumData.set(user.photos)
             currentUser = user

@@ -53,13 +53,12 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     }
 
     override fun onResume() {
-        super.onResume()
         (activity as? ToolbarActivity<*>).let { activity ->
             (activity!!.toolbarBaseViewModel as? NavigationToolbarViewModel).let {
                 it?.isCollapsingToolbarStyle(false)
             }
         }
-
+        super.onResume()
     }
 
     override fun onAttach(context: Context?) {

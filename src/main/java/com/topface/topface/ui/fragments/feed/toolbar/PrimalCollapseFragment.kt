@@ -37,7 +37,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         DataBindingUtil.bind<AppBarBinding>(activity.findViewById(R.id.navigation_app_bar))
     }
 
-    private val mAppBarModel by lazy {
+    val mAppBarModel by lazy {
         PrimalCollapseViewModel(mAppBarBinding)
     }
 

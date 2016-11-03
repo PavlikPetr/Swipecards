@@ -12,6 +12,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
+        android:background="@color/dating_fragment_background_color"
         android:layout_height="match_parent">
 
         <com.topface.topface.ui.views.ImageSwitcher

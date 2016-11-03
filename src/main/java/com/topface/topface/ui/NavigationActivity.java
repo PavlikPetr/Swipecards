@@ -42,11 +42,14 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseViewModel;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.ChatToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
@@ -619,5 +622,25 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
     @Override
     public int getLayout() {
         return R.layout.ac_navigation;
+    }
+
+    @Override
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        PrimalCollapseViewModel viewModel = getViewBinding().navigationAppBar.getModel();
+        if (viewModel != null) {
+            if (settings.getTitle() != null) {
+                viewModel.getTitle().set(settings.getTitle());
+            }
+//            if (settings.getSubtitle() != null) {
+//                toolbarViewModel.setSubTitle(settings.getSubtitle());
+//            }
+//            if (settings.isOnline() != null) {
+//                //noinspection ConstantConditions
+//                toolbarViewModel.setOnlineState(settings.isOnline());
+//            }
+//            if (settings.getIcon() != null) {
+//                toolbarViewModel.getUpIcon().set(settings.getIcon());
+//            }
+        }
     }
 }
