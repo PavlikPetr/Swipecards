@@ -33,7 +33,7 @@
                 app:contentScrim="@color/toolbar_background"
                 app:expandedTitleTextAppearance="@style/ExpandedToolbarStyle"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"
-                app:scrimVisibleHeightTrigger="100dp"
+                app:scrimVisibleHeightTrigger="@dimen/collapsing_scrim_size"
                 app:title="@{model.title}"
                 app:toolbarId="@+id/toolbar">
 

@@ -24,7 +24,7 @@ class PrimalCollapseViewModel(binding: AppBarBinding) : BaseViewModel<AppBarBind
 
     override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
         appBar?.let {
-            val isScrimsAreShown = it.getHeight() + verticalOffset < binding.collapsingLayout.getScrimVisibleHeightTrigger()
+            val isScrimsAreShown = it.getHeight() + verticalOffset < binding.collapsingLayout.scrimVisibleHeightTrigger
             binding.collapsingLayout.setCollapsedTitleTextColor((if (isScrimsAreShown) R.color.toolbar_light_title_color else R.color.toolbar_transparent_title_color).getColor())
             with(binding.viewModel) {
                 background.set(if (isScrimsAreShown) 0 else R.drawable.tool_bar_gradient)

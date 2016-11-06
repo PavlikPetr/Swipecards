@@ -166,6 +166,7 @@
     <dimen name="toolbar_title_size">20sp</dimen>
     <dimen name="toolbar_elevation">10dp</dimen>
     <dimen name="toolbar_title_padding_left">15dp</dimen>
+    <dimen name="collapsing_scrim_size">100dp</dimen>
 
     <!--Popups-->
     <dimen name="popup_central_picture_size">210dp</dimen>

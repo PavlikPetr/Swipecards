@@ -57,8 +57,8 @@ public class BindingsAdapters {
             }
         } else {
             try {
-                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
+//                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
+//                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
                 fab.hide();
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
