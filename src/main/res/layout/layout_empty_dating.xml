@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.dating.DatingEmptyViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/popup_background"
+        android:fadingEdge="none"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/popup_root_view_padding_bottom"
+            android:paddingLeft="@dimen/popup_root_view_padding_left"
+            android:paddingRight="@dimen/popup_root_view_padding_right"
+            android:paddingTop="@dimen/popup_root_view_padding_top">
+
+            <TextView
+                style="@style/PopupTitle"
+                android:text="@string/dating_empty_nothing_found"/>
+
+            <RelativeLayout
+                android:layout_width="@dimen/popup_central_picture_size"
+                android:layout_height="@dimen/popup_central_picture_size"
+                android:layout_marginBottom="@dimen/popup_central_picture_margin"
+                android:layout_marginTop="@dimen/popup_central_picture_margin"
+                android:background="@drawable/unavailable_geo_bigger_circle">
+
+                <ImageView
+                    style="@style/PopupAnimatedBackground"
+                    app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="2dp"
+                    android:src="@drawable/dating_empty"/>
+            </RelativeLayout>
+
+            <TextView
+                style="@style/PopupMessage"
+                android:text="@string/dating_empty_try_to_change_settings_or_reset"/>
+
+            <ImageView
+                style="@style/PopupArrow"/>
+
+            <Button
+                style="@style/PopupGreenButton"
+                android:onClick="@{() -> viewModel.onButtonClick()}"
+                android:text="@string/dating_empty_change_settings"/>
+
+            <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onButtonClick()}"
+                android:text="@string/dating_empty_reset"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>
