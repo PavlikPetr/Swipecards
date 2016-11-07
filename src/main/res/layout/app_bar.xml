@@ -29,12 +29,11 @@
                 android:id="@+id/collapsing_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:collapsedTitleTextAppearance="@style/CollapsedToolbarStyle"
+                app:collapsedTitleTextColor="@{@color/toolbar_transparent_title_color}"
                 app:contentScrim="@color/toolbar_background"
-                app:expandedTitleTextAppearance="@style/ExpandedToolbarStyle"
+                app:expandedTitleColor="@{@color/toolbar_transparent_title_color}"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"
                 app:scrimVisibleHeightTrigger="@dimen/collapsing_scrim_size"
-                app:title="@{model.title}"
                 app:toolbarId="@+id/toolbar">
 
                 <FrameLayout

@@ -1,9 +1,6 @@
 package com.topface.topface.ui.views.toolbar
 
-import android.databinding.Observable
-import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import android.text.TextUtils
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
@@ -20,7 +17,7 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
                                     val mNavigation: IToolbarNavigation? = null) : BaseViewModel<ToolbarBinding>(binding) {
     val title = RxFieldObservable<String>(R.string.app_name.getString())
     val background = ObservableInt(R.color.toolbar_background)
-    val subTitle = ObservableField<String>("")
+    val subTitle = RxFieldObservable<String>("")
     val titleTextColor = ObservableInt(R.color.toolbar_light_title_color.getColor())
     val subTitleTextColor = ObservableInt(R.color.toolbar_subtitle_color.getColor())
     val titleDrawableRight = ObservableInt(0)

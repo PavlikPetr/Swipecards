@@ -224,8 +224,8 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         super.onResume();
         ToolbarActivity activity = (ToolbarActivity) getActivity();
         if (activity != null) {
-            NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
-            if (vm != null) {
+            if (activity.getToolbarBaseViewModel() instanceof NavigationToolbarViewModel) {
+                NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
                 vm.isCollapsingToolbarStyle(false);
             }
         }

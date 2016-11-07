@@ -473,8 +473,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         super.onResume();
         ToolbarActivity activity = (ToolbarActivity) getActivity();
         if (activity != null) {
-            NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
-            if (vm != null) {
+            if (activity.getToolbarBaseViewModel() instanceof NavigationToolbarViewModel) {
+                NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
                 vm.isCollapsingToolbarStyle(false);
             }
         }

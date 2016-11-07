@@ -1358,12 +1358,4 @@
         <item name="android:singleLine">true</item>
         <item name="android:textSize">24sp</item>
     </style>
-
-    <style name="ExpandedToolbarStyle">
-        <item name="android:textColor">#0000</item>
-    </style>
-
-    <style name="CollapsedToolbarStyle">
-        <item name="android:textColor">#0000</item>
-    </style>
 </resources>

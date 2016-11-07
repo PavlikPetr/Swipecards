@@ -4,7 +4,6 @@ import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 
 import com.topface.topface.utils.ActivityLifeCycleReporter;
-import com.topface.topface.utils.IActivityDelegate;
 
 /**
  * Created by ppavlik on 04.04.16.

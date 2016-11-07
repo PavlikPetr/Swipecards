@@ -170,9 +170,11 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         super.onResume();
         ToolbarActivity activity = (ToolbarActivity) getActivity();
         if (activity != null) {
-            NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
-            if (vm != null) {
-                vm.isCollapsingToolbarStyle(false);
+            if (activity.getToolbarBaseViewModel() instanceof NavigationToolbarViewModel) {
+                NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarBaseViewModel();
+                if (vm != null) {
+                    vm.isCollapsingToolbarStyle(false);
+                }
             }
         }
     }

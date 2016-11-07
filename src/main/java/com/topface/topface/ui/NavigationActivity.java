@@ -2,15 +2,14 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
 import android.os.BadParcelableException;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,12 +41,10 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseViewModel;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.ChatToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
@@ -626,21 +623,14 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
 
     @Override
     public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
-        PrimalCollapseViewModel viewModel = getViewBinding().navigationAppBar.getModel();
-        if (viewModel != null) {
-            if (settings.getTitle() != null) {
-                viewModel.getTitle().set(settings.getTitle());
-            }
-//            if (settings.getSubtitle() != null) {
-//                toolbarViewModel.setSubTitle(settings.getSubtitle());
-//            }
-//            if (settings.isOnline() != null) {
-//                //noinspection ConstantConditions
-//                toolbarViewModel.setOnlineState(settings.isOnline());
-//            }
-//            if (settings.getIcon() != null) {
-//                toolbarViewModel.getUpIcon().set(settings.getIcon());
-//            }
+        super.setToolbarSettings(settings);
+        if (getToolbarBaseViewModel() instanceof NavigationToolbarViewModel) {
+            NavigationToolbarViewModel viewModel = (NavigationToolbarViewModel) getToolbarViewModel();
+            // т.к. в этой активити используется тулбар с кастомной вью, то появляется возможность рулить их отображением
+            viewModel.getExtraViewModel().getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+            viewModel.getExtraViewModel().getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+            Boolean isOnline = settings.isOnline();
+            viewModel.getExtraViewModel().isOnline().set(isOnline != null && isOnline);
         }
     }
 }

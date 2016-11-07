@@ -13,6 +13,9 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsBehavior
+import com.topface.topface.utils.extensions.getColor
+import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.extensions.getDrawable
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -79,7 +82,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
             anchorFrame.removeView(mAnchorBinding.root)
             collapseFrame.removeView(mCollapseBinding.root)
             appbar.removeOnOffsetChangedListener(mAppBarModel)
-            appbar.setExpanded(true)
+            appbar.setExpanded(true, false)
         }
         mAppBarModel.release()
     }
