@@ -226,23 +226,6 @@ public class BindingsAdapters {
         }
     }
 
-    //временная костылина
-    @BindingAdapter("titleDrawableRight")
-    public static void setTitleDrawableRight(Toolbar view, @DrawableRes int resource) {
-        if (resource != 0) {
-            String TEMPLATE_WITH_DRAWABLE = "%s  ";
-            String currentTitle = String.format(App.getCurrentLocale(), TEMPLATE_WITH_DRAWABLE, view.getTitle());
-            SpannableString ss = new SpannableString(currentTitle);
-            Drawable d = view.getContext().getResources().getDrawable(resource);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-            ss.setSpan(span, currentTitle.length() - 1, currentTitle.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            view.setTitle(ss);
-        } else {
-            view.setTitle(view.getTitle());
-        }
-    }
-
     @BindingAdapter("navigationIcon")
     public static void setNavigationIcon(Toolbar view, @DrawableRes int resource) {
         view.setNavigationIcon(resource);

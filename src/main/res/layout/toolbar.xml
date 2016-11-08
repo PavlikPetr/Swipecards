@@ -24,7 +24,6 @@
             app:subtitle="@{viewModel.subTitle}"
             app:subtitleTextColor="@{viewModel.subTitleTextColor}"
             app:title="@{viewModel.title}"
-            app:titleDrawableRight="@{viewModel.titleDrawableRight}"
             app:titleMarginStart="@dimen/toolbar_title_padding_left"
             app:titleTextColor="@{viewModel.titleTextColor}">
 

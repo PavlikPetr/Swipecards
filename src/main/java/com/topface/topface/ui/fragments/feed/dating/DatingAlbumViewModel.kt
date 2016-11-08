@@ -28,7 +28,8 @@ import java.util.*
  */
 class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: FeedApi,
                            private val mController: AlbumLoadController,
-                           private val mUserSearchList: CachableSearchList<SearchUser>) :
+                           private val mUserSearchList: CachableSearchList<SearchUser>,
+                           private val mAlbumActionsListener: IDatingAlbumView) :
         BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
 
     val photosCounter = ObservableField<String>()
@@ -42,6 +43,9 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     var currentUser: SearchUser? = null
         set(value) {
             field = value
+            value?.let {
+                mAlbumActionsListener.onUserShow(it)
+            }
             currentItem.set(0)
             updatePhotosCounter(0)
             nameAgeOnline.set(value?.nameAndAge ?: Utils.EMPTY)

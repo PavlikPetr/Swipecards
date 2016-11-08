@@ -122,7 +122,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void refreshActionBarTitles() {
-        setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle()));
+        setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle(), null, isOnline()));
     }
 
     @SuppressWarnings("unused")
@@ -296,6 +296,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected String getSubtitle() {
+        return null;
+    }
+
+    protected Boolean isOnline() {
         return null;
     }
 

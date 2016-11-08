@@ -21,6 +21,8 @@ import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.databinding.WebViewFragmentBinding;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.PurchaseToolbarViewModel;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,12 +52,6 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
     private static final int RESULT_ERROR = 1;
     private String mSuccessUrl;
     private View mProgressBar;
-    private TextView mCurCoins;
-    private TextView mCurLikes;
-    @Inject
-    TopfaceAppState mAppState;
-    private BalanceData mBalance;
-    private Subscription mBalanceSubscription;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PaymentwallActivity.class);
@@ -74,15 +70,6 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(this).inject(this);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
-            @Override
-            public void call(BalanceData balanceData) {
-                mBalance = balanceData;
-                updateBalanceCounters();
-            }
-        });
-        initBalanceCounters();
         String widgetUrl = getWidgetUrl();
         if (TextUtils.isEmpty(widgetUrl)) {
             onFatalError();
@@ -155,14 +142,6 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
         return result;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mBalanceSubscription != null) {
-            mBalanceSubscription.unsubscribe();
-        }
-    }
-
     private String getWidgetUrl() {
         String url = getIntent().getStringExtra(PW_URL);
         if (url == null) {
@@ -175,6 +154,12 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull WebViewFragmentBinding binding) {
         return binding.toolbarInclude;
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new PurchaseToolbarViewModel(toolbar, this);
     }
 
     @Override
@@ -235,42 +220,5 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
         void onPageFinished(String url);
 
         void onReceivedError();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateBalanceCounters();
-    }
-
-    private void initBalanceCounters() {
-        final LinearLayout containerView = (LinearLayout) findViewById(R.id.resources_layout);
-        containerView.setVisibility(View.VISIBLE);
-        containerView.post(new Runnable() {
-            @Override
-            public void run() {
-                int containerWidth = containerView.getMeasuredWidth();
-                if (mCurCoins != null && mCurLikes != null) {
-                    mCurCoins.setMaxWidth(containerWidth / 2);
-                    mCurLikes.setMaxWidth(containerWidth / 2);
-                }
-            }
-        });
-        mCurCoins = (TextView) findViewById(R.id.coins_textview);
-        mCurLikes = (TextView) findViewById(R.id.likes_textview);
-        mCurCoins.setSelected(true);
-        mCurLikes.setSelected(true);
-        updateBalanceCounters();
-    }
-
-    private void updateBalanceCounters() {
-        updateBalanceCounters(mBalance);
-    }
-
-    private void updateBalanceCounters(BalanceData balance) {
-        if (mCurCoins != null && mCurLikes != null && mBalance != null) {
-            mCurCoins.setText(String.valueOf(balance.money));
-            mCurLikes.setText(String.valueOf(balance.likes));
-        }
     }
 }

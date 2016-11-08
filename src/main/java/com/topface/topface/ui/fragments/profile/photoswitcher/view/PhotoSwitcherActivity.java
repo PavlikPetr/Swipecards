@@ -294,7 +294,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         if (state != View.VISIBLE) {
             mPhotoAlbumControlVisibility = View.GONE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            getToolbarBaseViewModel().getVisibility().set(View.INVISIBLE);
+            getToolbarViewModel().getVisibility().set(View.INVISIBLE);
             if (isAnimated) {
                 animateHidePhotoAlbumControlAction();
             } else {
@@ -303,7 +303,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         } else {
             mPhotoAlbumControlVisibility = View.VISIBLE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            getToolbarBaseViewModel().getVisibility().set(View.VISIBLE);
+            getToolbarViewModel().getVisibility().set(View.VISIBLE);
             if (isAnimated) {
                 animateShowPhotoAlbumControlAction();
             } else {

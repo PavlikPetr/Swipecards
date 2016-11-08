@@ -353,4 +353,19 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }
         return false;
     }
+
+    @Override
+    protected String getTitle() {
+        return App.get().getProfile().getNameAndAge();
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return App.get().getProfile().city.getName();
+    }
+
+    @Override
+    protected Boolean isOnline() {
+        return true;
+    }
 }

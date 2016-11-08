@@ -742,7 +742,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
 
                 refreshActionBarTitles();
-                setToolbarSettings(new ToolbarSettingsData(null, null, null, data.user.online));
+                setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle(), null, data.user.online));
                 mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
@@ -868,7 +868,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     @Override
     public void setOnline(boolean online) {
-        setToolbarSettings(new ToolbarSettingsData(null, null, null, online));
+        setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle(), null, online));
     }
 
     @Override

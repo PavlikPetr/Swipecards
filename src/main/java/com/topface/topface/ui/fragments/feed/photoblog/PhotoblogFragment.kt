@@ -53,8 +53,8 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     }
 
     override fun onResume() {
-        (activity as? ToolbarActivity<*>).let { activity ->
-            (activity!!.toolbarBaseViewModel as? NavigationToolbarViewModel).let {
+        (activity as? ToolbarActivity<*>)?.let { activity ->
+            (activity.getToolbarViewModel() as? NavigationToolbarViewModel).let {
                 it?.isCollapsingToolbarStyle(false)
             }
         }

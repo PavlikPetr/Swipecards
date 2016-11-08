@@ -18,9 +18,8 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
     val title = RxFieldObservable<String>(R.string.app_name.getString())
     val background = ObservableInt(R.color.toolbar_background)
     val subTitle = RxFieldObservable<String>("")
-    val titleTextColor = ObservableInt(R.color.toolbar_light_title_color.getColor())
+    val titleTextColor = ObservableInt(R.color.toolbar_title_color.getColor())
     val subTitleTextColor = ObservableInt(R.color.toolbar_subtitle_color.getColor())
-    val titleDrawableRight = ObservableInt(0)
     val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)
     val visibility = ObservableInt(View.VISIBLE)
     val shadowVisibility = ObservableInt(View.VISIBLE)
@@ -33,10 +32,4 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
             }
         }
     }
-
-    fun setOnline(isOnline: Boolean) =
-            with(titleDrawableRight) {
-                set(if (isOnline) R.drawable.im_list_online else 0)
-                notifyChange()
-            }
 }

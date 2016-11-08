@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -19,7 +20,7 @@ import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.ChatToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.CustomTitleSubTitleToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
 
 import org.jetbrains.annotations.NotNull;
@@ -132,7 +133,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new ChatToolbarViewModel(toolbar, this);
+        return new CustomTitleSubTitleToolbarViewModel(toolbar, this);
     }
 
     @Override
@@ -144,21 +145,21 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
 
     @Override
     public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
-        ChatToolbarViewModel toolbarViewModel = (ChatToolbarViewModel) getToolbarBaseViewModel();
-        if (toolbarViewModel != null) {
-            if (settings.getTitle() != null) {
-                toolbarViewModel.setTitle(settings.getTitle());
-            }
-            if (settings.getSubtitle() != null) {
-                toolbarViewModel.setSubTitle(settings.getSubtitle());
-            }
-            if (settings.isOnline() != null) {
-                //noinspection ConstantConditions
-                toolbarViewModel.setOnlineState(settings.isOnline());
-            }
-            if (settings.getIcon() != null) {
-                toolbarViewModel.getUpIcon().set(settings.getIcon());
-            }
+        CustomTitleSubTitleToolbarViewModel toolbarViewModel = (CustomTitleSubTitleToolbarViewModel) getToolbarViewModel();
+        toolbarViewModel.getExtraViewModel().getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+        toolbarViewModel.getExtraViewModel().getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+        if (settings.getTitle() != null) {
+            toolbarViewModel.getExtraViewModel().getTitle().set(settings.getTitle());
+        }
+        if (settings.getSubtitle() != null) {
+            toolbarViewModel.getExtraViewModel().getSubTitle().set(settings.getSubtitle());
+        }
+        if (settings.isOnline() != null) {
+            //noinspection ConstantConditions
+            toolbarViewModel.getExtraViewModel().isOnline().set(settings.isOnline());
+        }
+        if (settings.getIcon() != null) {
+            toolbarViewModel.getUpIcon().set(settings.getIcon());
         }
     }
 

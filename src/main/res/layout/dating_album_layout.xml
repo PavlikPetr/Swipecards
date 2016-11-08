@@ -41,7 +41,7 @@
                 android:layout_gravity="bottom"
                 android:text="@{model.nameAgeOnline}"
                 android:textSize="24sp"
-                android:drawablePadding="3dp"
+                android:drawablePadding="@dimen/online_icon_padding"
                 app:online="@{model.isOnline}"/>
 
             <TextView

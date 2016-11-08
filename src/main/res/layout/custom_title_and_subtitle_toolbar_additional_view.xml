@@ -6,38 +6,26 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.views.toolbar.CustomToolbarViewModel"/>
+            type="com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel"/>
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/toolbar_title_padding_left">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/title"
             style="@style/Widget.Topface.ActionBar.Title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="2dp"
-            android:paddingTop="4dp"
+            android:drawablePadding="@dimen/online_icon_padding"
             android:text="@{viewModel.title}"
-            android:textColor="@color/toolbar_light_title_color"
             android:visibility="@{viewModel.titleVisibility}"
             app:online="@{viewModel.isOnline}"/>
 
         <TextView
-            android:id="@+id/subtitle"
             style="@style/Widget.Topface.ActionBar.Subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:paddingTop="3dp"
-            android:singleLine="true"
             android:text="@{viewModel.subTitle}"
-            android:textColor="@color/toolbar_subtitle_color"
             android:visibility="@{viewModel.subTitleVisibility}"/>
     </LinearLayout>
 </layout>

@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -45,10 +44,11 @@ import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.CustomTitleSubTitleToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.NavigationManager;
@@ -127,14 +127,6 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
             intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
         }
         activity.startActivity(intent);
-    }
-
-    @Override
-    protected void initActionBarOptions(@Nullable ActionBar actionBar) {
-        super.initActionBarOptions(actionBar);
-        if (actionBar != null) {
-            mNotificationController = new CustomViewNotificationController(actionBar);
-        }
     }
 
     @Override
@@ -623,14 +615,18 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
 
     @Override
     public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
-        super.setToolbarSettings(settings);
-        if (getToolbarBaseViewModel() instanceof NavigationToolbarViewModel) {
-            NavigationToolbarViewModel viewModel = (NavigationToolbarViewModel) getToolbarViewModel();
-            // т.к. в этой активити используется тулбар с кастомной вью, то появляется возможность рулить их отображением
-            viewModel.getExtraViewModel().getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
-            viewModel.getExtraViewModel().getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+        if (getToolbarViewModel() instanceof NavigationToolbarViewModel) {
+            CustomToolbarViewModel customViewModel = ((NavigationToolbarViewModel) getToolbarViewModel()).getExtraViewModel();
+            customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+            customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
             Boolean isOnline = settings.isOnline();
-            viewModel.getExtraViewModel().isOnline().set(isOnline != null && isOnline);
+            customViewModel.isOnline().set(isOnline != null && isOnline);
+            if (settings.getTitle() != null) {
+                customViewModel.getTitle().set(settings.getTitle());
+            }
+            if (settings.getSubtitle() != null) {
+                customViewModel.getSubTitle().set(settings.getSubtitle());
+            }
         }
     }
 }

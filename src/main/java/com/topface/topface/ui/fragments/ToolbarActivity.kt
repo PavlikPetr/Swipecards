@@ -23,7 +23,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     lateinit var viewBinding: T
     var toolbarBinding: ToolbarBinding? = null
-    var toolbarBaseViewModel: BaseToolbarViewModel? = null
+    private var toolbarBaseViewModel: BaseToolbarViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     fun setToolBarVisibility(isVisible: Boolean) {
-        toolbarBaseViewModel?.let { it.visibility.set(if (isVisible) View.VISIBLE else View.GONE) }
+        toolbarBaseViewModel?.visibility?.set(if (isVisible) View.VISIBLE else View.GONE)
     }
 
     open fun setToolbarSettings(settings: ToolbarSettingsData) {
@@ -51,9 +51,6 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
             }
             settings.icon?.let {
                 toolbarViewModel.upIcon.set(it)
-            }
-            settings.isOnline?.let {
-                toolbarViewModel.setOnline(it)
             }
         }
     }
@@ -82,7 +79,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         return BackToolbarViewModel(toolbar, getString(R.string.app_name), this)
     }
 
-    protected fun getToolbarViewModel(): BaseToolbarViewModel {
+    fun getToolbarViewModel(): BaseToolbarViewModel {
         if (toolbarBaseViewModel == null && toolbarBinding != null) {
             toolbarBinding?.let {
                 toolbarBaseViewModel = generateToolbarViewModel(it)

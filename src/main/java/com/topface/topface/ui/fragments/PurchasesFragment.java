@@ -79,7 +79,6 @@ public class PurchasesFragment extends BaseFragment {
         @Override
         public void call(BalanceData balanceData) {
             mBalanceData = balanceData;
-            updateBalanceCounters(balanceData);
         }
     };
     private Subscription mBalanceSubscription;
@@ -152,7 +151,6 @@ public class PurchasesFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         setResourceInfoText(mBalanceData.premium ? null : getInfoText());
-        updateBalanceCounters(mBalanceData);
     }
 
     @Override
@@ -267,16 +265,6 @@ public class PurchasesFragment extends BaseFragment {
                 break;
         }
         return products;
-    }
-
-    private void updateBalanceCounters(BalanceData balance) {
-        PurchasesActivity activity = (PurchasesActivity) getActivity();
-        if (activity != null) {
-            PurchaseToolbarViewModel toolbarViewModel = (PurchaseToolbarViewModel) activity.getToolbarBaseViewModel();
-            if (toolbarViewModel != null) {
-                toolbarViewModel.setBalance(balance);
-            }
-        }
     }
 
     private String getInfoText() {

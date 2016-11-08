@@ -37,7 +37,7 @@ import org.jetbrains.anko.support.v4.dimen
  * Created by tiberal on 07.10.16.
  */
 class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
-        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility {
+        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IDatingAlbumView {
 
     override val anchorViewResId: Int
         get() = R.layout.dating_buttons_layout
@@ -61,7 +61,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this)
     }
     private val mDatingAlbumViewModel by lazy {
-        DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList)
+        DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mAlbumActionsListener = this)
     }
     private val mDatingFragmentViewModel by lazy {
         DatingFragmentViewModel(mBinding, mApi, mNavigator, mUserSearchList, mDatingViewModelEvents = this,
@@ -107,7 +107,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onResume() {
         super.onResume()
         (activity as? ToolbarActivity<*>)?.let { activity ->
-            (activity.toolbarBaseViewModel as? NavigationToolbarViewModel).let {
+            (activity.getToolbarViewModel() as? NavigationToolbarViewModel).let {
                 it?.isCollapsingToolbarStyle(true)
             }
         }
@@ -158,7 +158,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onDataReceived(user: SearchUser) {
-        setToolbarSettings(getToolbarSettings(user))
         mDatingAlbumViewModel.albumData.set(user.photos)
         mCollapseBinding.datingAlbum?.let {
             mDatingButtonsViewModel.currentUser = user
@@ -169,7 +168,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
     override fun onNewSearchUser(user: SearchUser) {
-        setToolbarSettings(getToolbarSettings(user))
         with(mDatingAlbumViewModel) {
             albumData.set(user.photos)
             currentUser = user
@@ -177,7 +175,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         mDatingButtonsViewModel.currentUser = user
     }
 
-    private fun getToolbarSettings(user: SearchUser) = ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online)
+    override fun onUserShow(user: SearchUser) {
+        setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+    }
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)
 

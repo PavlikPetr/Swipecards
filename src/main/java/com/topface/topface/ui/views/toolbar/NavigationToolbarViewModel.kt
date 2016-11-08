@@ -6,11 +6,12 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
+import com.topface.topface.data.Profile
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.RxUtils
-import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -23,10 +24,12 @@ import javax.inject.Inject
 class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation) {
     @Inject lateinit var mState: TopfaceAppState
+    var extraViewModel: CustomToolbarViewModel
+
     private var mHasNotification: Boolean? = null
     private var isCollapsingToolbar = false
-    private val subscriptions by lazy { CompositeSubscription() }
-    var extraViewModel: CustomToolbarViewModel
+    private val subscriptions = CompositeSubscription()
+    private var ownProfile: Profile = App.get().profile
 
     init {
         App.get().inject(this)
@@ -53,6 +56,11 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
                         setUpIconStyle(mHasNotification)
                     }
                 }))
+        subscriptions.add(mState.getObservable(Profile::class.java).subscribe(object : RxUtils.ShortSubscription<Profile>() {
+            override fun onNext(profile: Profile?) {
+                profile?.let { ownProfile = it }
+            }
+        }))
         setCorrectStyle()
     }
 
@@ -60,7 +68,6 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
         setUpIconStyle(mHasNotification)
         shadowVisibility.set(if (isCollapsingToolbar) View.GONE else View.VISIBLE)
         background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background)
-        titleTextColor.set((if (isCollapsingToolbar) R.color.toolbar_light_title_color else R.color.toolbar_dark_title_color).getColor())
     }
 
     fun isCollapsingToolbarStyle(isCollapsing: Boolean) = apply {
@@ -68,12 +75,11 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
         setCorrectStyle()
     }
 
-    private fun setUpIconStyle(isHasNotification: Boolean?) {
-        upIcon.set(if (isHasNotification ?: false)
-            if (isCollapsingToolbar) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
-        else
-            if (isCollapsingToolbar) R.drawable.menu_white else R.drawable.menu_gray)
-    }
+    private fun setUpIconStyle(isHasNotification: Boolean?) =
+            upIcon.set(if (isHasNotification ?: false)
+                if (isCollapsingToolbar) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
+            else
+                if (isCollapsingToolbar) R.drawable.menu_white else R.drawable.menu_gray)
 
     override fun release() {
         super.release()

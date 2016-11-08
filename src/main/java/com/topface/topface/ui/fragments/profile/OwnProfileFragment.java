@@ -28,10 +28,13 @@ import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.fragments.VkProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
+import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.BuyVipFragmentManager;
+import com.topface.topface.utils.BuyVipInsideProfile;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.social.AuthToken;
@@ -128,7 +131,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         super.initBody();
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(BuyVipFragmentManager.getClassName(), getResources().getString(R.string.vip_status));
+        addBodyPage(BuyVipInsideProfile.class.getName(), getResources().getString(R.string.vip_status));
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             addBodyPage(VkProfileFragment.class.getName(), getResources().getString(R.string.general_vk_profile));
@@ -166,8 +169,18 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     }
 
     @Override
-    protected String getDefaultTitle() {
-        return getString(R.string.profile_header_title);
+    protected String getTitle() {
+        return App.get().getProfile().getNameAndAge();
+    }
+
+    @Override
+    protected String getSubtitle() {
+        return App.get().getProfile().city.getName();
+    }
+
+    @Override
+    protected Boolean isOnline() {
+        return true;
     }
 
     @Override
