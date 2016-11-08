@@ -27,7 +27,7 @@ import javax.inject.Inject
  * Created by siberia87 on 01.11.16.
  */
 class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
-                                       private val mAdmirationPurchasePopupVisible: IAdmirationPurchasePopupHide,
+                                       private val mAdmirationPurchasePopupHide: IAdmirationPurchasePopupHide,
                                        private val mNavigator: FeedNavigator,
                                        currentUser: FeedUser?) :
         BaseViewModel<AdmirationPurchasePopupBinding>(binding) {
@@ -45,7 +45,7 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
     private val mVipBoughtBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
-                mAdmirationPurchasePopupVisible.hideAdmirationPurchasePopup(Activity.RESULT_OK)
+                mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(AdmirationPurchasePopupActivity.ADMIRATION_RESULT)
             }
         }
     }
@@ -67,13 +67,13 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
         }
     }
 
-    fun skip() = mAdmirationPurchasePopupVisible.hideAdmirationPurchasePopup(Activity.RESULT_OK)
+    fun skip() = mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_OK)
 
     fun buyVip() = mNavigator.showPurchaseVip()
 
     fun buyCoins() = mBalance?.let {
         if (it.money >= App.get().options.priceAdmiration) {
-            mAdmirationPurchasePopupVisible.hideAdmirationPurchasePopup(Activity.RESULT_OK)
+            mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(AdmirationPurchasePopupActivity.ADMIRATION_RESULT)
         } else {
             mNavigator.showPurchaseCoins()
         }

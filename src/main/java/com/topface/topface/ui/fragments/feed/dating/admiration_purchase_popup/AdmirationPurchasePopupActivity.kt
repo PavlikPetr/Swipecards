@@ -17,6 +17,7 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity(), IAdmirationPu
 
     companion object {
         const val INTENT_ADMIRATION_PURCHASE_POPUP = 69
+        const val ADMIRATION_RESULT = 96
         const val CURRENT_USER = "current_user"
     }
 
@@ -25,7 +26,7 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity(), IAdmirationPu
     }
 
     private val mAdmirationPurchasePopupViewModel by lazy {
-        AdmirationPurchasePopupViewModel(mBinding, mAdmirationPurchasePopupVisible = this, mNavigator = mNavigator,
+        AdmirationPurchasePopupViewModel(mBinding, mAdmirationPurchasePopupHide = this, mNavigator = mNavigator,
                 currentUser = intent.getParcelableExtra(CURRENT_USER))
     }
 
