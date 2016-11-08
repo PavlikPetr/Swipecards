@@ -1,17 +1,21 @@
 package com.topface.topface.ui.fragments.feed.dating
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
@@ -20,15 +24,18 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IAnimateAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
-import com.topface.topface.utils.AddPhotoHelper
-import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.IStateSaverRegistrator
+import com.topface.topface.utils.*
+import com.topface.topface.utils.config.UserConfig
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
+import org.jetbrains.anko.wrapContent
 
 /**
  * Знакомства. Такие дела.
@@ -56,7 +63,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private val mDatingButtonsViewModel by lazy {
         DatingButtonsViewModel(mAnchorBinding, mApi, mNavigator, mUserSearchList, mDatingButtonsEvents = this,
-                mDatingButtonsView = this, mEmptySearchVisibility = this, mAdmirationPurchasePopup = this)
+                mDatingButtonsView = this, mEmptySearchVisibility = this, mAnimateAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
         DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList)
@@ -136,6 +143,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == AdmirationPurchasePopupActivity.RESULT_CODE_BOUGHT_VIP ||
+                resultCode == AdmirationPurchasePopupActivity.RESULT_CODE_BOUGHT_COINS) {
+            mDatingButtonsViewModel.wrapperSendAdmiration()
+        }
+
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
@@ -152,15 +164,16 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         }
     }
 
-    override fun show(transitionView: View) {
+    override fun startAnimateAdmirationPurchasePopup(transitionView: View) {
         val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
-        if (android.os.Build.VERSION.SDK_INT >= 21) {
+        intent.putExtra(AdmirationPurchasePopupActivity.CURRENT_USER, mDatingFragmentViewModel.getCurrentUser())
+        if (Utils.isLollipop()) {
             FabTransform.addExtras(intent, resources.getColor(R.color.dating_fab_small), R.drawable.admiration)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
                     getString(R.string.transition_name_admiration_popup))
             startActivityForResult(intent, 0, options.toBundle())
         } else {
-            startActivity(intent)
+            startActivityForResult(intent, 0)
         }
     }
 
@@ -186,7 +199,5 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun hideEmptySearchDialog() {
-
     }
-
 }

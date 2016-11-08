@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.dating.AdmirationPurchasePopupViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel"/>
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:onClick="@{() -> viewModel.skip()}"
-        tools:context=".ui.fragments.feed.dating.AdmirationPurchasePopupActivity">
+        tools:context=".ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity">
 
         <RelativeLayout
             android:id="@+id/container"
@@ -25,6 +25,7 @@
             android:layout_marginRight="32dp"
             android:layout_marginTop="56dp"
             android:background="@color/text_white"
+            android:clickable="false"
             android:elevation="6dp"
             android:transitionName="@string/transition_name_admiration_popup">
 
@@ -44,10 +45,10 @@
                 android:layout_below="@+id/admiration"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="-32dp"
-                android:src="@drawable/admiration_popup_heart_ico"
                 app:postProcessor="inscribedAvatar"
                 app:roundedImgBorderColor="@android:color/white"
-                app:roundedImgBorderWidth="3dp"/>
+                app:roundedImgBorderWidth="3dp"
+                app:setPhoto="@{viewModel.iconUrl}"/>
 
             <Button
                 android:id="@+id/coins_button"
@@ -56,10 +57,10 @@
                 android:layout_below="@+id/user_face"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
-                android:background="#2ad54a"
+                android:background="@color/buy_coins_button_bg"
                 android:gravity="center"
-                android:text="отправить за 3 монеты"
-                android:textAllCaps="true"
+                android:onClick="@{() -> viewModel.buyCoins()}"
+                android:text="@string/buy_vip_button_text_admiration_purchase_popup"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"/>
 
@@ -70,10 +71,10 @@
                 android:layout_alignLeft="@+id/coins_button"
                 android:layout_alignStart="@+id/coins_button"
                 android:layout_below="@+id/coins_button"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:gravity="center"
-                android:text="Получатель «восхищения» будет уведомлён и сразу его увидит"
-                android:textColor="#9a9999"
+                android:text="@string/label1_text_admiration_purchase_popup"
+                android:textColor="@color/label1_text_color"
                 android:textSize="13sp"/>
 
             <View
@@ -102,8 +103,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Отправляйте «восхищения» бесплатно!"
-                android:textColor="#9a9999"
+                android:text="@string/label2_text_admiration_purchase_popup"
+                android:textColor="@color/label2_text_color"
                 android:textSize="13sp"/>
 
             <ImageView
@@ -121,12 +122,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/arrow_bottom"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="24dp"
-                android:text="получить vip"
-                android:textAllCaps="true"
-                android:textColor="#3fd559"
+                android:layout_marginTop="8dp"
+                android:background="@color/dating_fab_small"
+                android:onClick="@{() -> viewModel.buyVip()}"
+                android:padding="16dp"
+                android:textColor="@color/buy_vip_text_color"
+                android:text="@string/buy_vip_button_text"
                 android:textSize="14sp"/>
-
         </RelativeLayout>
 
     </FrameLayout>

@@ -176,7 +176,7 @@
             android:theme="@style/FullyTranslucent"/>
         <!-- Активити попапа восхищения -->
         <activity
-            android:name=".ui.fragments.feed.dating.AdmirationPurchasePopupActivity"
+            android:name=".ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity"
             android:parentActivityName=".ui.NavigationActivity"
             android:theme="@style/AdmirationPurchasePopupStyle">
             <meta-data

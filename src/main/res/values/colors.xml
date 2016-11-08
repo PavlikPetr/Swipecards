@@ -250,5 +250,8 @@
     <color name="popup_green_button_text">#ffffff</color>
     <!--цвет оверлея для попапа восхищения-->
     <color name="overlay">#99323232</color>
-
+    <color name="buy_coins_button_bg">#2ad54a</color>
+    <color name="buy_vip_text_color">#2ad54a</color>
+    <color name="label1_text_color">#9a9999</color>
+    <color name="label2_text_color">#737373</color>
 </resources>

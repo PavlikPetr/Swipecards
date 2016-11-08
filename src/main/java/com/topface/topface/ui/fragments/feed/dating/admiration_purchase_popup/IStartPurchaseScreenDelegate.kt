@@ -7,5 +7,4 @@ package com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup
 interface IStartPurchaseScreenDelegate {
     fun startCoinScreenPurchase()
     fun startVIPScreenPurchase()
-//    fun <T, R> startCoinScreenPurchase(receiver: T, block: T.() -> R): R = receiver.block()
 }

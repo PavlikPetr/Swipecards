@@ -91,6 +91,7 @@ public class UserConfig extends AbstractConfig {
     private static final String FULLSCREEN_SETTINGS = "fullscreen_settings";
     private static final String BANNER_SETTINGS = "banner_settings";
     private static final String LOCALE_CHANGE = "locale_change";
+    private static final String ADMIRATION_PURCHASE_POPUP_SHOWN = "admiration_popup_purchase_shown";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -210,6 +211,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, BANNER_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
         //флаг смены локализации
         addField(settingsMap, LOCALE_CHANGE, false);
+
+        addField(settingsMap, ADMIRATION_PURCHASE_POPUP_SHOWN, false);
     }
 
     @Override
@@ -331,6 +334,15 @@ public class UserConfig extends AbstractConfig {
     @SuppressWarnings("UnusedDeclaration")
     public String getPinCode() {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
+    }
+
+
+    public void setAdmirationPurchasePopupShown() {
+        setField(getSettingsMap(), ADMIRATION_PURCHASE_POPUP_SHOWN, true);
+    }
+
+    public Boolean isAdmirationPurchasePopupShown() {
+        return getBooleanField(getSettingsMap(), ADMIRATION_PURCHASE_POPUP_SHOWN);
     }
 
     /**

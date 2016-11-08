@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.databinding.ViewDataBinding;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.topface.framework.imageloader.IPhoto;
@@ -57,6 +59,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.viewModels.BaseViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -661,6 +664,10 @@ public class Utils {
     public static String prepareUrl(@NotNull String url) {
         return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId())
                 .replace(SECRET_KEY, Ssid.get());
+    }
+
+    public static Boolean isLollipop() {
+        return android.os.Build.VERSION.SDK_INT >= 21;
     }
 
 }

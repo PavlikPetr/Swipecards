@@ -37,9 +37,8 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity(), IAdmirationPu
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mBinding.root)
-        Utils.setViewModel(mBinding, mAdmirationPurchasePopupViewModel)
-//        закоменчено поскольку в котлине  бага, которая не позволяет сеттить модель в биндинг лейаута разных ориентаций
-//        mBinding.viewModel = mAdmirationPurchasePopupViewModel
+//      используется метод setViewModel() поскольку при работе с пропертей viewModel возникает ошибка: Unresolved reference
+        mBinding.setViewModel(mAdmirationPurchasePopupViewModel)
         if (Utils.isLollipop()) {
             FabTransform.setup(this, mBinding.container)
         }

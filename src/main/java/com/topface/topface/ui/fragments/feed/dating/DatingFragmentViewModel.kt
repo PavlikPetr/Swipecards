@@ -87,6 +87,8 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         createAndRegisterBroadcasts()
     }
 
+    fun getCurrentUser() = mCurrentUser
+
     private fun createAndRegisterBroadcasts() {
         mReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) = mPreloadManager.checkConnectionType()
