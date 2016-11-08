@@ -73,11 +73,13 @@
 
                 <Button
                     style="@style/PopupGreenButton"
+                    android:id="@+id/btnChangeFilterDating"
                     android:onClick="@{() -> viewModel.onButtonClick()}"
                     android:text="@string/dating_empty_change_settings"/>
 
                 <Button
                     style="@style/Widget.AppCompat.Button.Borderless"
+                    android:id="@+id/btnClearFilterDating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.onButtonClick()}"
