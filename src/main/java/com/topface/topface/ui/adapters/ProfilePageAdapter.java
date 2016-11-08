@@ -61,18 +61,19 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
         try {
             String fragmentClassName = mFragmentsClasses.get(position);
             //create fragments
-            if (fragmentClassName.equals(BuyVipFragmentManager.getClassName())) {
-                //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
-                //то вместо покупок через GP показываем покупки через PaymentWall
-                if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !new GoogleMarketApiManager().isMarketApiAvailable()) {
-                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off));
-                } else {
-                    fragment = BuyVipFragmentManager.getVipInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off));
-                }
-            } else {
+            //TODO добавить обработку отсутствия сервисов при показе экрана покупок в профиле
+//            if (fragmentClassName.equals(BuyVipFragmentManager.getClassName())) {
+//                //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
+//                //то вместо покупок через GP показываем покупки через PaymentWall
+//                if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !new GoogleMarketApiManager().isMarketApiAvailable()) {
+//                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off));
+//                } else {
+//                    fragment = BuyVipFragmentManager.getVipInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off));
+//                }
+//            } else {
                 Class fragmentClass = Class.forName(fragmentClassName);
                 fragment = (Fragment) fragmentClass.newInstance();
-            }
+//            }
             mProfileUpdater.bindFragment(fragment);
             mProfileUpdater.update();
         } catch (Exception ex) {

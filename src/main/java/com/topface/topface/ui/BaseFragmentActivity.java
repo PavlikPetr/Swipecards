@@ -398,19 +398,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                if (onPreFinish()) {
-//                    finish();
-//                }
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-
     protected void onProfileUpdated() {
     }
 

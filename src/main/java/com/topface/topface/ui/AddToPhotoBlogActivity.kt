@@ -78,10 +78,10 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
                 PurchasesFragment.TYPE_LEADERS, price, App.get().options.topfaceOfferwallRedirect))
     }
 
-    override fun showPhotoHelper() {
-        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager,
-                TakePhotoPopup.TAG)
-    }
+    override fun showPhotoHelper() =
+            TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager,
+                    TakePhotoPopup.TAG)
+
 
     override fun getSelectedPhotoId() = mAdapter.selectedPhotoId
 
@@ -115,7 +115,6 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
         with(recyclerView) {
-            layoutManager = LinearLayoutManager(this@AddToPhotoBlogActivity, LinearLayoutManager.HORIZONTAL, false)
             layoutManager = GridLayoutManager(this@AddToPhotoBlogActivity,
                     resources.getInteger(R.integer.add_to_leader_column_count))
             adapter = mAdapter

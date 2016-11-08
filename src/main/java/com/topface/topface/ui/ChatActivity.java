@@ -164,14 +164,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     }
 
     @Override
-    protected void initActionBarOptions(@Nullable ActionBar actionBar) {
-        super.initActionBarOptions(actionBar);
-        if (actionBar != null) {
-            actionBar.setDisplayShowCustomEnabled(true);
-        }
-    }
-
-    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);

@@ -7,7 +7,7 @@ import com.topface.topface.ui.fragments.feed.blacklist.BlackListFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-public class BlackListActivity extends SingleFragmentActivity<BlackListFragment,AcFragmentFrameBinding> {
+public class BlackListActivity extends SingleFragmentActivity<BlackListFragment, AcFragmentFrameBinding> {
 
     @Override
     protected String getFragmentTag() {
