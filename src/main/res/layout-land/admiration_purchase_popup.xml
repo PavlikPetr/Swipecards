@@ -25,8 +25,7 @@
             android:layout_marginRight="56dp"
             android:layout_marginTop="32dp"
             android:elevation="6dp"
-            android:orientation="horizontal"
-            android:transitionName="@string/transition_name_admiration_popup">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -46,10 +45,8 @@
 
                 <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/user_face"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    style="@style/AdmirationPopupUserAvatar"
                     android:layout_below="@+id/admiration"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="-32dp"
                     app:postProcessor="inscribedAvatar"
                     app:roundedImgBorderColor="@android:color/white"
@@ -58,14 +55,10 @@
 
                 <Button
                     android:id="@+id/coins_button"
-                    android:layout_width="220dp"
-                    android:layout_height="36dp"
+                    style="@style/AdmirationPopupBuyCoinsButton"
                     android:layout_marginTop="8dp"
-                    android:background="@color/buy_coins_button_bg"
                     android:gravity="center"
-                    android:text="@string/buy_vip_button_text_admiration_purchase_popup"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"/>
+                    android:onClick="@{() -> viewModel.buyCoins()}"/>
 
                 <TextView
                     android:id="@+id/label1"
@@ -105,14 +98,11 @@
 
                     <TextView
                         android:id="@+id/label2"
+                        style="@style/AdmirationPopupLabel2Style"
                         android:layout_width="152dp"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:gravity="center"
-                        android:text="@string/label2_text_admiration_purchase_popup"
-                        android:textColor="@color/label2_text_color"
-                        android:textSize="13sp"/>
+                        android:layout_centerVertical="true"/>
 
                     <ImageView
                         android:id="@+id/arrow_bottom"
@@ -123,17 +113,10 @@
 
                     <TextView
                         android:id="@+id/vip_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/AdmirationPopupBuyVipButton"
                         android:layout_below="@+id/arrow_bottom"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/dating_fab_small"
-                        android:onClick="@{() -> viewModel.buyVip()}"
-                        android:padding="16dp"
-                        android:textColor="@color/buy_vip_text_color"
-                        android:text="@string/buy_vip_button_text"
-                        android:textSize="14sp"/>
+                        android:onClick="@{() -> viewModel.buyVip()}"/>
 
                 </LinearLayout>
 

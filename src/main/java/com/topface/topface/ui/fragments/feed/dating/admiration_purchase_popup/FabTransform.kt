@@ -37,17 +37,14 @@ class FabTransform(@ColorInt private val color: Int, @DrawableRes private val ic
         duration = DEFAULT_DURATION
     }
 
-    override fun getTransitionProperties(): Array<String> {
-        return TRANSITION_PROPERTIES
-    }
+    override fun getTransitionProperties(): Array<String> = TRANSITION_PROPERTIES
 
-    override fun captureStartValues(transitionValues: TransitionValues) {
-        captureValues(transitionValues)
-    }
 
-    override fun captureEndValues(transitionValues: TransitionValues) {
-        captureValues(transitionValues)
-    }
+    override fun captureStartValues(transitionValues: TransitionValues) = captureValues(transitionValues)
+
+
+    override fun captureEndValues(transitionValues: TransitionValues) = captureValues(transitionValues)
+
 
     override fun createAnimator(sceneRoot: ViewGroup,
                                 startValues: TransitionValues?,

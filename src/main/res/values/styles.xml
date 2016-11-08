@@ -606,7 +606,7 @@
 
     <!-- наследуются стили Widget-->
 
-    <style name="Widget.Topface" />
+    <style name="Widget.Topface"/>
 
     <style name="Widget.Topface.Button.Big.Gray">
         <item name="android:background">@drawable/btn_gray_selector</item>
@@ -878,9 +878,9 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
-    <style name="FeedbackEditText" parent="WhiteBackgroundEdit" />
+    <style name="FeedbackEditText" parent="WhiteBackgroundEdit"/>
 
-    <style name="FeedbackTextView" parent="WhiteBackgroundTitle" />
+    <style name="FeedbackTextView" parent="WhiteBackgroundTitle"/>
 
     <style name="ComplainsHeader" parent="FormTitleText">
         <item name="android:layout_width">fill_parent</item>
@@ -1111,7 +1111,7 @@
         <item name="android:visibility">visible</item>
     </style>
 
-    <style name="OkProfileUserName" parent="VkProfileUserName" />
+    <style name="OkProfileUserName" parent="VkProfileUserName"/>
 
     <style name="InvisibleProgress">
         <item name="android:visibility">gone</item>
@@ -1151,7 +1151,7 @@
         <item name="android:visibility">visible</item>
     </style>
 
-    <style name="EmptyFeedsViewGravity" />
+    <style name="EmptyFeedsViewGravity"/>
 
     <style name="OfferwallItemBase">
         <item name="android:layout_width">match_parent</item>
@@ -1356,5 +1356,43 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <style name="AdmirationPopupBuyVipButton">
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@color/dating_fab_small</item>
+        <item name="android:text">@string/buy_vip_button_text</item>
+        <item name="android:textColor">@color/buy_vip_text_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AdmirationPopupBuyCoinsButton">
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:background">@color/buy_coins_button_bg</item>
+        <item name="android:text">@string/buy_vip_button_text_admiration_purchase_popup</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AdmirationPopupUserAvatar">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="AdmirationPopupLabel2Style">
+        <item name="android:text">@string/label2_text_admiration_purchase_popup</item>
+        <item name="android:textColor">@color/label2_text_color</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 
 </resources>

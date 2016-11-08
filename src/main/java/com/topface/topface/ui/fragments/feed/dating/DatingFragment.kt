@@ -25,6 +25,7 @@ import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IAnimateAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -143,9 +144,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == AdmirationPurchasePopupActivity.RESULT_CODE_BOUGHT_VIP ||
-                resultCode == AdmirationPurchasePopupActivity.RESULT_CODE_BOUGHT_COINS) {
-            mDatingButtonsViewModel.wrapperSendAdmiration()
+        if (resultCode == Activity.RESULT_OK && requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
+            mDatingButtonsViewModel.onActivityResult()
         }
 
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
@@ -164,18 +164,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         }
     }
 
-    override fun startAnimateAdmirationPurchasePopup(transitionView: View) {
-        val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
-        intent.putExtra(AdmirationPurchasePopupActivity.CURRENT_USER, mDatingFragmentViewModel.getCurrentUser())
-        if (Utils.isLollipop()) {
-            FabTransform.addExtras(intent, resources.getColor(R.color.dating_fab_small), R.drawable.admiration)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
-                    getString(R.string.transition_name_admiration_popup))
-            startActivityForResult(intent, 0, options.toBundle())
-        } else {
-            startActivityForResult(intent, 0)
-        }
-    }
+    override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
+            mNavigator.showAdmirationPurchasePopup(mDatingFragmentViewModel.getCurrentUser(), transitionView, activity)
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 

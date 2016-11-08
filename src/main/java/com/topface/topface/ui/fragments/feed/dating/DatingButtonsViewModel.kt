@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dating
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,7 +10,7 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
-import com.topface.framework.utils.Debug
+import android.widget.Toast
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.RetryRequestReceiver
@@ -22,7 +23,7 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IAnimateAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -61,12 +62,11 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     @Inject lateinit internal var mAppState: TopfaceAppState
     private val mBalanceDataSubscriptions = CompositeSubscription()
-    lateinit private var mBalance: BalanceData
+    private var mBalance: BalanceData? = null
 
     private val mUpdateActionsReceiver: BroadcastReceiver
 
     private companion object {
-        private val CURRENT_COINS_COUNT = 3
         const val CURRENT_USER = "current_user"
         const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
     }
@@ -74,9 +74,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     init {
         App.get().inject(this)
         mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
-            override fun onNext(balance: BalanceData?) = balance?.let {
+            override fun onNext(balance: BalanceData?) = balance.let {
                 mBalance = it
-            } ?: Unit
+            }
         }))
 
         mUpdateActionsReceiver = object : BroadcastReceiver() {
@@ -155,27 +155,27 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }*/
     }
 
-    fun sendAdmiration() {
+    fun validateSendAdmiration() {
+        val priceAdmiration = App.get().options.priceAdmiration
         val isShown = App.getUserConfig().isAdmirationPurchasePopupShown
-        if (!mBalance.premium && mBalance.money >= AdmirationPurchasePopupViewModel.CURRENT_COINS_COUNT && !isShown) {
-            App.getUserConfig().setAdmirationPurchasePopupShown()
-            mAnimateAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
+
+        mBalance?.let {
+            if (it.premium) {
+                sendAdmiration()
+            } else if (!it.premium && (it.money >= priceAdmiration && !isShown) || (it.money < priceAdmiration)) {
+                App.getUserConfig().setAdmirationPurchasePopupShown()
+                mAnimateAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
+            } else if (!it.premium && it.money >= priceAdmiration && isShown) {
+                sendAdmiration()
+            } else {
+                App.getUserConfig().setAdmirationPurchasePopupShown()
+                mAnimateAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
+            }
         }
 
-        if (!mBalance.premium && mBalance.money >= AdmirationPurchasePopupViewModel.CURRENT_COINS_COUNT && isShown) {
-            wrapperSendAdmiration()
-        }
-
-        if (!mBalance.premium && mBalance.money < AdmirationPurchasePopupViewModel.CURRENT_COINS_COUNT) {
-            mAnimateAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
-        }
-
-        if (mBalance.premium) {
-            wrapperSendAdmiration()
-        }
     }
 
-    fun wrapperSendAdmiration() = sendSomething {
+    fun sendAdmiration() = sendSomething {
         val mutualId = getMutualId(it)
         mDatingButtonsView.lockControls()
         mAdmirationSubscription = mApi.callSendAdmiration(it.id, App.get().options.blockUnconfirmed,
@@ -192,11 +192,15 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
             }
 
             override fun onCompleted() {
-                Utils.showToastNotification(R.string.admiration_sended, 0)
+                Utils.showToastNotification(R.string.admiration_sended, Toast.LENGTH_SHORT)
                 mAdmirationSubscription.safeUnsubscribe()
                 mDatingButtonsView.unlockControls()
             }
         })
+    }
+
+    fun onActivityResult() {
+            sendAdmiration()
     }
 
     private inline fun sendSomething(func: (SearchUser) -> Unit) =

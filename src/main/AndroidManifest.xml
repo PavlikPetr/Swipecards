@@ -81,7 +81,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/fb_app_id"/>
-
+        <meta-data
+            android:name="@string/hockey_app_meta_data_name"
+            android:value="${HOCKEYAPP_APP_ID}"/>
         <!-- AdToApp meta-data start -->
         <meta-data
             android:name="applovin.sdk.key"
@@ -351,12 +353,6 @@
         <activity
             android:name="com.sponsorpay.publisher.ofw.SPOfferWallActivity"
             android:configChanges="orientation"/>
-        <activity
-            android:name="org.acra.CrashReportDialog"
-            android:excludeFromRecents="true"
-            android:finishOnTaskLaunch="true"
-            android:launchMode="singleInstance"
-            android:theme="@style/Theme.Topface.NoActionBar"/>
 
         <!-- Alias for main Activity from first version. Just in case of previous problems with FB -->
         <activity-alias

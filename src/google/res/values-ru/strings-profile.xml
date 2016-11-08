@@ -262,11 +262,4 @@
     <string name="form_main_about_status_1">О ней</string>
     <string name="form_main_about_status_2">О себе</string>
     <string name="form_main_about_status_3">О себе</string>
-
-
-    <string name="buy_vip_button_text_admiration_purchase_popup">ОТПРАВИТЬ ЗА 3 МОНЕТЫ</string>
-    <string name="label1_text_admiration_purchase_popup">Получатель «восхищения» будет уведомлён и сразу его увидит</string>
-    <string name="label2_text_admiration_purchase_popup">Отправляйте «восхищения» бесплатно!</string>
-    <string name="buy_vip_button_text">ПОЛУЧИТЬ VIP</string>
-
 </resources>
