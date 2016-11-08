@@ -53,10 +53,6 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity(), IAdmirationPu
         }
     }
 
-    override fun startCoinScreenPurchase() = mNavigator.showPurchaseCoins()
-
-    override fun startVIPScreenPurchase() = mNavigator.showPurchaseVip()
-
     override fun onDestroy() {
         super.onDestroy()
         mAdmirationPurchasePopupViewModel.release()
