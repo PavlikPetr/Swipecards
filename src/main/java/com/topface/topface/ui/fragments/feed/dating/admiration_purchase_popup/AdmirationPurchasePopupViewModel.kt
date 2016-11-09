@@ -18,7 +18,6 @@ import com.topface.topface.utils.CountersManager
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
-import rx.lang.kotlin.observable
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -36,7 +35,10 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
         const val TRANSITION_NAME = "admiration_purchase_popup"
     }
 
-    val iconUrl = ObservableField(currentUser?.photo)
+    val buyCoinsButtonText = String.format(context.resources.getString(R.string.buy_vip_button_text_admiration_purchase_popup),
+            App.get().options.priceAdmiration)
+
+    val userAvatar = ObservableField(currentUser?.photo)
 
     @Inject lateinit internal var mAppState: TopfaceAppState
     private val mBalanceDataSubscriptions = CompositeSubscription()
@@ -45,35 +47,35 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
     private val mVipBoughtBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
-                mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(AdmirationPurchasePopupActivity.ADMIRATION_RESULT)
+                mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_OK)
             }
         }
     }
 
     init {
         App.get().inject(this)
-        mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
-            override fun onNext(balance: BalanceData?) = balance.let {
-                mBalance = it
-            }
-        }))
+        mBalanceDataSubscriptions
+                .add(mAppState.getObservable(BalanceData::class.java)
+                        .subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
+                            override fun onNext(balance: BalanceData?) = balance.let {
+                                mBalance = it
+                            }
+                        }))
 
         LocalBroadcastManager.getInstance(context).registerReceiver(mVipBoughtBroadcastReceiver, IntentFilter(CountersManager.UPDATE_VIP_STATUS))
-        binding.coinsButton.text = String.format(context.resources.getString(R.string.buy_vip_button_text_admiration_purchase_popup),
-                App.get().options.priceAdmiration)
 
         if (Utils.isLollipop()) {
             binding.container.transitionName = TRANSITION_NAME
         }
     }
 
-    fun skip() = mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_OK)
+    fun skip() = mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_CANCELED)
 
     fun buyVip() = mNavigator.showPurchaseVip()
 
     fun buyCoins() = mBalance?.let {
         if (it.money >= App.get().options.priceAdmiration) {
-            mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(AdmirationPurchasePopupActivity.ADMIRATION_RESULT)
+            mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_OK)
         } else {
             mNavigator.showPurchaseCoins()
         }

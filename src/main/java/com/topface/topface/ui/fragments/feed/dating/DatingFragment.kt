@@ -1,21 +1,16 @@
 package com.topface.topface.ui.fragments.feed.dating
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.LocalBroadcastManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
@@ -25,25 +20,21 @@ import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IAnimateAdmirationPurchasePopup
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
 import com.topface.topface.utils.*
-import com.topface.topface.utils.config.UserConfig
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
-import org.jetbrains.anko.wrapContent
 
 /**
  * Знакомства. Такие дела.
  * Created by tiberal on 07.10.16.
  */
 class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
-        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IAnimateAdmirationPurchasePopup {
+        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IStartAdmirationPurchasePopup {
 
     override val anchorViewResId: Int
         get() = R.layout.dating_buttons_layout
@@ -64,7 +55,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private val mDatingButtonsViewModel by lazy {
         DatingButtonsViewModel(mAnchorBinding, mApi, mNavigator, mUserSearchList, mDatingButtonsEvents = this,
-                mDatingButtonsView = this, mEmptySearchVisibility = this, mAnimateAdmirationPurchasePopup = this)
+                mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
         DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList)
@@ -144,7 +135,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == AdmirationPurchasePopupActivity.ADMIRATION_RESULT &&
+        if (resultCode == Activity.RESULT_OK &&
                 requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
             mDatingButtonsViewModel.onActivityResult()
         }
@@ -166,7 +157,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
-            mNavigator.showAdmirationPurchasePopup(mDatingFragmentViewModel.getCurrentUser(), transitionView, activity)
+        mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
+
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 

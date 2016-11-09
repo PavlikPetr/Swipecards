@@ -1376,7 +1376,6 @@
         <item name="android:layout_width">220dp</item>
         <item name="android:layout_height">36dp</item>
         <item name="android:background">@color/buy_coins_button_bg</item>
-        <item name="android:text">@string/buy_vip_button_text_admiration_purchase_popup</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">14sp</item>
     </style>

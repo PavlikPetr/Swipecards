@@ -45,12 +45,13 @@
                 app:postProcessor="inscribedAvatar"
                 app:roundedImgBorderColor="@android:color/white"
                 app:roundedImgBorderWidth="3dp"
-                app:setPhoto="@{viewModel.iconUrl}"/>
+                app:setPhoto="@{viewModel.userAvatar}"/>
 
             <Button
                 android:id="@+id/coins_button"
                 style="@style/AdmirationPopupBuyCoinsButton"
                 android:layout_below="@+id/user_face"
+                android:text="@{viewModel.buyCoinsButtonText}"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:gravity="center"

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.dating
 
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -23,8 +22,7 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IAnimateAdmirationPurchasePopup
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
@@ -50,7 +48,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                              private val mDatingButtonsEvents: DatingButtonsEventsDelegate,
                              private val mDatingButtonsView: IDatingButtonsView,
                              private val mEmptySearchVisibility: IEmptySearchVisibility,
-                             private val mAnimateAdmirationPurchasePopup: IAnimateAdmirationPurchasePopup) :
+                             private val mStartAdmirationPurchasePopup: IStartAdmirationPurchasePopup) :
         BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility {
 
     var currentUser: SearchUser? = null
@@ -160,19 +158,18 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         val isShown = App.getUserConfig().isAdmirationPurchasePopupShown
 
         mBalance?.let {
-            if (it.premium) {
-                sendAdmiration()
-            } else if (!it.premium && (it.money >= priceAdmiration && !isShown) || (it.money < priceAdmiration)) {
-                App.getUserConfig().setAdmirationPurchasePopupShown()
-                mAnimateAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
-            } else if (!it.premium && it.money >= priceAdmiration && isShown) {
-                sendAdmiration()
-            } else {
-                App.getUserConfig().setAdmirationPurchasePopupShown()
-                mAnimateAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
+            val hasMoneyForAdmiration = it.money >= priceAdmiration
+            when {
+                (it.premium || hasMoneyForAdmiration && !isShown) -> sendAdmiration()
+                (hasMoneyForAdmiration && !isShown) || (!hasMoneyForAdmiration) -> startAdmirationPurchasePopup()
+                else -> startAdmirationPurchasePopup()
             }
         }
+    }
 
+    private fun startAdmirationPurchasePopup() {
+        App.getUserConfig().setAdmirationPurchasePopupShown()
+        mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
     }
 
     fun sendAdmiration() = sendSomething {
