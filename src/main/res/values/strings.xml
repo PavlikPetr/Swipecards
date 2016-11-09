@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="dating_empty_nothing_found">Ничего не найдено!</string>
-    <string name="dating_empty_reset">СБРОСИТЬ</string>
-    <string name="dating_empty_change_settings">ИЗМЕНИТЬ</string>
-    <string name="dating_empty_try_to_change_settings_or_reset">Попробуйте сбросить или изменить параметры поиска</string>
-</resources>

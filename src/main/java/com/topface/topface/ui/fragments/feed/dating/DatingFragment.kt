@@ -51,6 +51,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private lateinit var mUserSearchList: CachableSearchList<SearchUser>
 
+    private val mDatingEmptyFragment by lazy { DatingEmptyFragment(mApi) }
+
     // ------------- этот блок нужно будет вынести в даггер2 --------------
 
     private val mDatingButtonsViewModel by lazy {
@@ -171,10 +173,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun unlockControls() = mDatingButtonsViewModel.isDatingButtonsLocked.set(true)
 
     override fun showEmptySearchDialog() {
+        mDatingEmptyFragment.show(fragmentManager, "DATING_EMPTY_FRAGMENT")
     }
 
     override fun hideEmptySearchDialog() {
-
+        mDatingEmptyFragment.dialog?.cancel()
     }
 
 }
