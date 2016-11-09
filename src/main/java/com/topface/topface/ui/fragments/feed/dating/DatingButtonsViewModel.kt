@@ -52,7 +52,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     private val mUpdateActionsReceiver: BroadcastReceiver
 
     private companion object {
-        const val CURRENT_USER = "current_user"
+        const val CURRENT_USER = "current_user_dating_buttons"
         const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
     }
 
@@ -177,6 +177,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
         mEmptySearchVisibility.hideEmptySearchDialog()
         mDatingButtonsView.unlockControls()
         mDatingButtonsEvents.onNewSearchUser(it)
+        currentUser = it
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {

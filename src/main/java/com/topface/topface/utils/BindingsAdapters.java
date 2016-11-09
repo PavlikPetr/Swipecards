@@ -8,6 +8,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
@@ -29,6 +30,16 @@ import com.topface.topface.ui.views.RangeSeekBar;
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("pxTextSize")
+    public static void setPxTextSize(TextView view, int size) {
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+    }
+
+    @BindingAdapter("textTypeface")
+    public static void setTextTypeface(TextView view, int typeface) {
+        view.setTypeface(null, typeface);
+    }
 
     @BindingAdapter("online")
     public static void setOnline(TextView view, boolean isOnline) {

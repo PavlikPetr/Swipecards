@@ -295,6 +295,8 @@
     <!-- Gifts -->
     <string name="gifts_title">Выберите подарок</string>
 
+    <string name="gifts">Подарки</string>
+
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
 
@@ -967,7 +969,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1119,9 +1121,9 @@
     <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
     <string name="buy_vip_free_admirations">Отправляйте восхищения бесплатно</string>
     <string name="buy_vip_know_guests">Узнайте, кто смотрел вашу анкету</string>
-    
+
     <string name="vip_info_title">VIP-привилегии</string>
-    
+
     <string name="chat_buy_vip_popular_male">%s очень популярен!</string>
     <string name="chat_buy_vip_popular_female">%s очень популярна!</string>
     <string name="buy_vip_to_chat_male">Чтобы начать общаться с ним, активируйте VIP-статус</string>
@@ -1129,4 +1131,8 @@
     <string name="chat_activate_vip">Активировать VIP</string>
     <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
     <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
+
+    <string name="about">О себе</string>
+    <string name="moar_info">Вы можете узнать недостающую информацию!</string>
+
 </resources>

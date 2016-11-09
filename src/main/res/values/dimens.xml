@@ -14,6 +14,10 @@
     <dimen name="action_bar_subtitle_size">13sp</dimen>
 
     <dimen name="dating_album_height">432dp</dimen>
+    <dimen name="dating_parent_item_title_size">16sp</dimen>
+    <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
+
+
 
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
@@ -164,5 +168,7 @@
     <dimen name="mutual_sympathy_icon_size">40dp</dimen>
 
     <dimen name="user_device_icon_padding_left">6dp</dimen>
+
+    <dimen name="form_list_padding">30dp</dimen>
 
 </resources>
