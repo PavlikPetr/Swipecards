@@ -13,7 +13,7 @@ import com.topface.topface.utils.extensions.isHasNotification
  * Model for interaction with collapsing toolbar
  * Created by tiberal on 18.10.16.
  */
-class PrimalCollapseViewModel(binding: AppBarBinding) : BaseViewModel<AppBarBinding>(binding)
+class PrimalCollapseViewModel(binding: AppBarBinding, val mScrimStateListener: IAppBarScrimState) : BaseViewModel<AppBarBinding>(binding)
         , AppBarLayout.OnOffsetChangedListener {
 
     val anchorVisibility = ObservableInt(View.VISIBLE)
@@ -22,6 +22,7 @@ class PrimalCollapseViewModel(binding: AppBarBinding) : BaseViewModel<AppBarBind
     override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
         appBar?.let {
             val isScrimsAreShown = it.getHeight() + verticalOffset < binding.collapsingLayout.scrimVisibleHeightTrigger
+            mScrimStateListener.isScrimVisible(isScrimsAreShown)
             (binding.viewModel as? NavigationToolbarViewModel)?.let {
                 // делаем title видимым только когда началась анимация по сворачиванию collapsingToolbar
                 it.extraViewModel.titleVisibility.set(if (isScrimsAreShown) View.VISIBLE else View.GONE)

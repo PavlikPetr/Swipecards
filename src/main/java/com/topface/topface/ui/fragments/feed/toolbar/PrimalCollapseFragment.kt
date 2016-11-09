@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -23,7 +24,7 @@ import org.jetbrains.anko.layoutInflater
  * @param V collapse binding class
  * Created by tiberal on 10.10.16.
  */
-abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataBinding> : BaseFragment() {
+abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataBinding> : BaseFragment(), IAppBarScrimState {
 
     abstract val anchorViewResId: Int
     abstract val collapseViewResId: Int
@@ -40,7 +41,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     }
 
     val mAppBarModel by lazy {
-        PrimalCollapseViewModel(mAppBarBinding)
+        PrimalCollapseViewModel(mAppBarBinding, this)
     }
 
     protected open fun setupToolbar(size: Int) {

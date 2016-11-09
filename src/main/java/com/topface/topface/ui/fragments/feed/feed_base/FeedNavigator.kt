@@ -24,6 +24,10 @@ import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 import javax.inject.Inject
+import com.topface.topface.ui.edit.EditContainerActivity
+import android.support.v4.app.ActivityCompat.startActivityForResult
+
+
 
 /**
  * Класс для управления переходами между эркраними в фидах
@@ -107,5 +111,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-
+    override fun showFilter(activityDelegate:IActivityDelegate) {
+        val intent = Intent(activityDelegate.getApplicationContext(),
+                EditContainerActivity::class.java)
+        activityDelegate.startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER)
+    }
 }

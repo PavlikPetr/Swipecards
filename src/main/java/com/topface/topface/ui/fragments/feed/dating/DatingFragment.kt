@@ -11,15 +11,14 @@ import android.os.Message
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
+import com.topface.topface.ui.CrashReportActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
@@ -35,6 +34,7 @@ import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
+import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
@@ -54,6 +54,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         get() = dimen(R.dimen.dating_album_height)
 
     private lateinit var mAddPhotoHelper: AddPhotoHelper
+    private var mFilterItem: MenuItem? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentDatingLayoutBinding>(context.layoutInflater, R.layout.fragment_dating_layout, null, false)
@@ -186,8 +187,14 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
-        mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
+            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
 
+    override fun getOptionsMenuRes() = R.menu.actions_dating
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        mFilterItem = menu?.findItem(R.id.action_dating_filter)
+    }
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
@@ -201,6 +208,19 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_dating_filter -> {
+                (activity as? CrashReportActivity)?.let { mNavigator.showFilter(it) }
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun isScrimVisible(isVisible: Boolean) = mFilterItem?.let {
+        it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
+    } ?: Unit
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)
 
