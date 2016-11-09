@@ -11,6 +11,7 @@ import android.view.View
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.ui.CrashReportActivity
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
