@@ -8,6 +8,8 @@ import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.fragments.SmsInviteFragment;
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +31,12 @@ public class SMSInviteActivity extends CheckAuthActivity<SmsInviteFragment, AcFr
     @Override
     protected SmsInviteFragment createFragment() {
         return new SmsInviteFragment();
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new BackToolbarViewModel(toolbar, getString(R.string.sms_invite_title), this);
     }
 
     @NotNull

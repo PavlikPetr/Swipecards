@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
@@ -23,27 +22,34 @@ import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.fragments.VkProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.BuyVipFragmentManager;
 import com.topface.topface.utils.BuyVipInsideProfile;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.social.AuthToken;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
 
 /**
  * Created by kirussell on 18.03.14.
  * Profile fragment for current authorized client with ui for customization of user settings
  */
 public class OwnProfileFragment extends OwnAvatarFragment {
+    @Inject
+    TopfaceAppState mAppState;
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
@@ -56,9 +62,16 @@ public class OwnProfileFragment extends OwnAvatarFragment {
             AddPhotoHelper.handlePhotoMessage(msg);
         }
     };
+    private Subscription mProfileSubscription;
 
     public static OwnProfileFragment newInstance() {
         return new OwnProfileFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        App.get().inject(this);
     }
 
     @Override
@@ -80,6 +93,12 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     public void onResume() {
         super.onResume();
+        mProfileSubscription = mAppState.getObservable(Profile.class).subscribe(new RxUtils.ShortSubscription<Profile>() {
+            @Override
+            public void onNext(Profile profile) {
+                ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(profile.getNameAndAge(), profile.city.getName(), null, true));
+            }
+        });
         mUpdateProfileReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -105,6 +124,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     public void onPause() {
         super.onPause();
+        RxUtils.safeUnsubscribe(mProfileSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateProfileReceiver);
     }
 
@@ -166,21 +186,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     protected Integer getOptionsMenuRes() {
         return R.menu.actions_avatar;
-    }
-
-    @Override
-    protected String getTitle() {
-        return App.get().getProfile().getNameAndAge();
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return App.get().getProfile().city.getName();
-    }
-
-    @Override
-    protected Boolean isOnline() {
-        return true;
     }
 
     @Override

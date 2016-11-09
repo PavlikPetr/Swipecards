@@ -1,7 +1,8 @@
-package com.topface.topface.ui.views.toolbar
+package com.topface.topface.ui.views.toolbar.view_models
 
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.utils.extensions.getColor
 
 /**

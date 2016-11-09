@@ -20,6 +20,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ModerationPunish;
 import com.topface.topface.requests.ModerationUnban;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
@@ -177,8 +179,9 @@ public class EditorProfileActionsFragment extends BaseFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getResources().getString(R.string.editor_profile_title);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.editor_profile_title)));
     }
 
     @SuppressWarnings("unused")

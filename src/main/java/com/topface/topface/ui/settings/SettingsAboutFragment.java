@@ -130,9 +130,4 @@ public class SettingsAboutFragment extends BaseFragment {
         }
         return time;
     }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.settings_about);
-    }
 }

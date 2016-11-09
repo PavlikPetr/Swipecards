@@ -5,6 +5,8 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.ui.fragments.feed.bookmarks.BookmarksFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 public class TabbedDialogsFragment extends TabbedFeedFragment {
 
@@ -14,13 +16,9 @@ public class TabbedDialogsFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.settings_messages);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return "";
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.settings_messages)));
     }
 
     @Override

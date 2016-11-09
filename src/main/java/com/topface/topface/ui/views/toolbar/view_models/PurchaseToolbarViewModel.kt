@@ -1,4 +1,4 @@
-package com.topface.topface.ui.views.toolbar
+package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import com.topface.topface.data.BalanceData
 import com.topface.topface.databinding.PurchaseToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.PurchaseCustomToolbarViewModel
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.extensions.getString
@@ -23,8 +24,8 @@ class PurchaseToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding
                                                          mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation) {
     @Inject lateinit var mState: TopfaceAppState
-    private lateinit var balanceSubscription: Subscription
-    private lateinit var additionalViewModel: PurchaseCustomToolbarViewModel
+    private var balanceSubscription: Subscription
+    private var additionalViewModel: PurchaseCustomToolbarViewModel
 
     init {
         App.get().inject(this)

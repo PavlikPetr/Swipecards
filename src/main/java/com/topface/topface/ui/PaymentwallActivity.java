@@ -10,19 +10,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.databinding.WebViewFragmentBinding;
-import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.PurchaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -32,11 +28,6 @@ import java.net.URLDecoder;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
-import rx.Subscription;
-import rx.functions.Action1;
 
 public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBinding> {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";

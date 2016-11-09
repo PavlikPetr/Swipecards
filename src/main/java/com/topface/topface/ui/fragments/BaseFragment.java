@@ -23,7 +23,7 @@ import com.topface.topface.App;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.analytics.TrackedFragment;
-import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.Utils;
@@ -91,7 +91,8 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     public void setToolbarSettings(ToolbarSettingsData settings) {
         if (getActivity() instanceof ToolbarActivity) {
-            ((ToolbarActivity) getActivity()).setToolbarSettings(settings);
+            //TODO SETTOOLBARSETTINGS
+//            ((ToolbarActivity) getActivity()).setToolbarSettings(settings);
         }
     }
 
@@ -122,7 +123,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     public void refreshActionBarTitles() {
-        setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle(), null, isOnline()));
     }
 
     @SuppressWarnings("unused")
@@ -289,18 +289,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             AppCompatActivity abActivity = (AppCompatActivity) activity;
             abActivity.setSupportProgressBarIndeterminateVisibility(visible);
         }
-    }
-
-    protected String getTitle() {
-        return null;
-    }
-
-    protected String getSubtitle() {
-        return null;
-    }
-
-    protected Boolean isOnline() {
-        return null;
     }
 
     protected void restoreState(Bundle savedInstanceState) {

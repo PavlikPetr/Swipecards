@@ -35,8 +35,8 @@ import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
-import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.PurchaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
 import com.topface.topface.utils.RxUtils;
@@ -94,7 +94,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new PurchaseToolbarViewModel(toolbar, this);
+        PurchaseToolbarViewModel toolbarViewModel = new PurchaseToolbarViewModel(toolbar, this);
+        toolbarViewModel.getTitle().set(getString(R.string.purchase_header_title));
+        return toolbarViewModel;
     }
 
 

@@ -29,6 +29,8 @@ import com.topface.topface.requests.SendFeedbackRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.AbstractEditFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.ClientUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -135,8 +137,9 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.settings_feedback);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.settings_feedback)));
     }
 
     protected String getSubtitle() {

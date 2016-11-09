@@ -46,12 +46,13 @@ import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.PurchaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.BuyVipInsideProfile;
@@ -145,7 +146,8 @@ import dagger.Provides;
                 DatingFragmentViewModel.class,
                 NavigationToolbarViewModel.class,
                 PurchaseToolbarViewModel.class,
-                BuyVipInsideProfile.class
+                BuyVipInsideProfile.class,
+                OwnProfileFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

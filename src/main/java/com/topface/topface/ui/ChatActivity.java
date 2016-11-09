@@ -3,7 +3,6 @@ package com.topface.topface.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -19,12 +18,11 @@ import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
-import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.CustomTitleSubTitleToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 

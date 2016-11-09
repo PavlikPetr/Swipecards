@@ -4,16 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
-import com.topface.billing.MarketApiType;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
-import com.topface.topface.R;
-import com.topface.topface.data.PaymentWallProducts;
-import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.utils.BuyVipFragmentManager;
-import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.ListUtils;
 
 import java.util.ArrayList;

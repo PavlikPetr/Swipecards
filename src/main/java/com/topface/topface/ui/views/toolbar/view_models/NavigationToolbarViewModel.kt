@@ -1,4 +1,4 @@
-package com.topface.topface.ui.views.toolbar
+package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.extensions.safeUnsubscribe

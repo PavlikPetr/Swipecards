@@ -23,8 +23,9 @@ import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel
-import com.topface.topface.ui.views.toolbar.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
@@ -104,16 +105,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? ToolbarActivity<*>)?.let { activity ->
-            (activity.getToolbarViewModel() as? NavigationToolbarViewModel).let {
-                it?.isCollapsingToolbarStyle(true)
-            }
-        }
-
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
             mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
@@ -176,8 +167,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onUserShow(user: SearchUser) {
-        setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+        ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
     }
+
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)
 

@@ -20,6 +20,8 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.BannersConfig;
@@ -89,6 +91,7 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.editor_configure_banners)));
         if (!Editor.isEditor()) {
             getActivity().finish();
         }
@@ -118,11 +121,6 @@ public class EditorBannersFragment extends BaseFragment implements View.OnClickL
             default:
                 break;
         }
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.editor_configure_banners);
     }
 
     private class PageConfigurator extends LinearLayout {

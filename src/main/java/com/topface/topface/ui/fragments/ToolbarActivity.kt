@@ -1,44 +1,49 @@
 package com.topface.topface.ui.fragments
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.ActionBar
+import android.util.AttributeSet
 import android.view.View
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
-import com.topface.topface.ui.views.toolbar.BackToolbarViewModel
-import com.topface.topface.ui.views.toolbar.BaseToolbarViewModel
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
-import com.topface.topface.ui.views.toolbar.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.utils.IToolbarSettings
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 
 /**
  * Created by ppavlik on 14.10.16.
  * Base activity for a whole project, cause it hold a toolbar
  */
 
-abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), IToolbarNavigation {
+abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), IToolbarNavigation, IToolbarSettings {
 
     lateinit var viewBinding: T
     var toolbarBinding: ToolbarBinding? = null
-    private var toolbarBaseViewModel: BaseToolbarViewModel? = null
+    private var mToolbarBaseViewModel: BaseToolbarViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = DataBindingUtil.setContentView<T>(this@ToolbarActivity, getLayout())
+        ToolbarManager.registerSettingsListener(this)
+        viewBinding = DataBindingUtil.setContentView<T>(this, getLayout())
         setContentView(viewBinding.root)
         toolbarBinding = getToolbarBinding(viewBinding)
         viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
         setSupportActionBar(toolbarBinding?.toolbar)
         initActionBarOptions(supportActionBar)
         // увы, но колбэк будет работать только если установить его после setSupportActionBar
-        toolbarBaseViewModel?.init()
+        mToolbarBaseViewModel?.init()
     }
 
     fun setToolBarVisibility(isVisible: Boolean) {
-        toolbarBaseViewModel?.visibility?.set(if (isVisible) View.VISIBLE else View.GONE)
+        mToolbarBaseViewModel?.visibility?.set(if (isVisible) View.VISIBLE else View.GONE)
     }
 
     open fun setToolbarSettings(settings: ToolbarSettingsData) {
@@ -80,13 +85,13 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     fun getToolbarViewModel(): BaseToolbarViewModel {
-        if (toolbarBaseViewModel == null && toolbarBinding != null) {
+        if (mToolbarBaseViewModel == null && toolbarBinding != null) {
             toolbarBinding?.let {
-                toolbarBaseViewModel = generateToolbarViewModel(it)
+                mToolbarBaseViewModel = generateToolbarViewModel(it)
             }
         }
 
-        return toolbarBaseViewModel as BaseToolbarViewModel
+        return mToolbarBaseViewModel as BaseToolbarViewModel
     }
 
     abstract fun getToolbarBinding(binding: T): ToolbarBinding
@@ -95,13 +100,17 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     abstract fun getLayout(): Int
 
     open protected fun initActionBarOptions(actionBar: ActionBar?) {
-        actionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-        }
+        actionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+
+    override fun onToolbarSettings(settings: ToolbarSettingsData) {
+        setToolbarSettings(settings)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        toolbarBaseViewModel?.release()
+        ToolbarManager.unregisterSettingsListener(this)
+        mToolbarBaseViewModel?.release()
     }
 }

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.views.toolbar
+package com.topface.topface.ui.views.toolbar.utils
 
 import android.support.annotation.DrawableRes
 

@@ -12,10 +12,9 @@ import android.widget.FrameLayout
 import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsBehavior
-import com.topface.topface.utils.extensions.getColor
-import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -70,8 +69,22 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    private fun setCollapsingToolbarStyle(isCollapsed: Boolean) {
+        (activity as? ToolbarActivity<*>)?.let { activity ->
+            (activity.getToolbarViewModel() as? NavigationToolbarViewModel).let {
+                it?.isCollapsingToolbarStyle(isCollapsed)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setCollapsingToolbarStyle(true)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        setCollapsingToolbarStyle(false)
         with(TypedValue()) {
             //устанавливаем стандартный размер тулбара
             if (activity.theme.resolveAttribute(android.R.attr.actionBarSize, this, true)) {

@@ -26,11 +26,9 @@ import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.FlurryUtils;
-import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.TabLayoutCreator;
-import com.topface.topface.ui.views.toolbar.PurchaseToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
@@ -308,11 +306,6 @@ public class PurchasesFragment extends BaseFragment {
             text = getResources().getString(R.string.buying_default_message);
         }
         return text;
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.purchase_header_title);
     }
 
     public boolean isVipProducts() {

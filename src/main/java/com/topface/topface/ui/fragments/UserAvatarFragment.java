@@ -15,7 +15,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 
@@ -169,23 +169,24 @@ public abstract class UserAvatarFragment extends BaseFragment
             );
         }
     }
-
-    @Override
-    protected String getTitle() {
-        IUniversalUser user = getUniversalUser();
-        return user.isEmpty() ? getDefaultTitle() : user.getNameAndAge();
-    }
-
-    protected abstract String getDefaultTitle();
-
-    @Override
-    protected String getSubtitle() {
-        IUniversalUser user = getUniversalUser();
-        return user.isEmpty() || TextUtils.isEmpty(user.getCity()) ? Utils.EMPTY : user.getCity();
-    }
-
-    @Override
-    protected Boolean isOnline() {
-        return getUniversalUser().isOnline();
-    }
+    //TODO SETTOOLBARSETTINGS
+//
+//    @Override
+//    protected String getTitle() {
+//        IUniversalUser user = getUniversalUser();
+//        return user.isEmpty() ? getDefaultTitle() : user.getNameAndAge();
+//    }
+//
+//    protected abstract String getDefaultTitle();
+//
+//    @Override
+//    protected String getSubtitle() {
+//        IUniversalUser user = getUniversalUser();
+//        return user.isEmpty() || TextUtils.isEmpty(user.getCity()) ? Utils.EMPTY : user.getCity();
+//    }
+//
+//    @Override
+//    protected Boolean isOnline() {
+//        return getUniversalUser().isOnline();
+//    }
 }

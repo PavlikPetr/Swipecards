@@ -47,7 +47,7 @@ buildscript {
     ext {
         retrofit_version = '2.1.0'
         google_play_services_version = '9.4.0'
-        kotlin_version = '1.0.4'
+        kotlin_version = '1.0.5'
         anko_version = '0.9'
         permissionsdispatcher_version = '2.2.0'
         hockeyAppReleaseAppId = '817b00ae731c4a663272b4c4e53e4b61'

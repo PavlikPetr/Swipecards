@@ -341,19 +341,4 @@ public class SettingsFragment extends ProfileInnerFragment {
         getSocialAccountName(mSocialNameText);
         getSocialAccountIcon(mSocialNameText);
     }
-
-    @Override
-    protected String getTitle() {
-        return App.get().getProfile().getNameAndAge();
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return App.get().getProfile().city.getName();
-    }
-
-    @Override
-    protected Boolean isOnline() {
-        return true;
-    }
 }

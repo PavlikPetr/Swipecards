@@ -13,6 +13,8 @@ import com.topface.topface.data.CountersData;
 import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.mutual.MutualFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
@@ -26,13 +28,9 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.general_sympathies);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return "";
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_sympathies)));
     }
 
     @Override

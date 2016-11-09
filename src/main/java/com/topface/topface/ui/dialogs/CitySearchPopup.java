@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.TextView;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -12,7 +11,7 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Profile;
 import com.topface.topface.databinding.CitySearchPopupBinding;
 import com.topface.topface.ui.adapters.CityAdapter;
-import com.topface.topface.ui.views.toolbar.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;

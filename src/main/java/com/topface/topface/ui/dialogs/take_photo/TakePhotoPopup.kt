@@ -10,7 +10,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.TakePhotoDialogBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
-import com.topface.topface.ui.views.toolbar.BackToolbarViewModel
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.utils.extensions.getString
 import permissions.dispatcher.NeedsPermission

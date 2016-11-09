@@ -32,6 +32,8 @@ import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.ui.EditorBannersActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
@@ -455,12 +457,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.editor_menu_admin);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return "";
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.editor_menu_admin)));
     }
 }

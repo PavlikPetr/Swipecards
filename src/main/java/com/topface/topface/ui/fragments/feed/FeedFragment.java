@@ -69,7 +69,7 @@ import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;

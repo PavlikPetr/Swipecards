@@ -25,6 +25,8 @@ import com.topface.topface.ui.fragments.PurchasesFragment
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
 import com.topface.topface.ui.views.toolbar.*
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.photosForPhotoBlog
@@ -162,7 +164,8 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
 
     override fun onResume() {
         super.onResume()
-        setToolbarSettings(ToolbarSettingsData(title = getToolbarTitle()))
+        //TODO SETTOOLBARSETTINGS
+//        setToolbarSettings(ToolbarSettingsData(title = getToolbarTitle()))
         if (App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) showPhotoHelper()
     }
 

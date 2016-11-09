@@ -7,7 +7,7 @@
 
         <variable
             name="toolbarViewModel"
-            type="com.topface.topface.ui.views.toolbar.BaseToolbarViewModel"/>
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
 
     </data>
 

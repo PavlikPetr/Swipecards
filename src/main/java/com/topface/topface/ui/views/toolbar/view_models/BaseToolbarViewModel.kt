@@ -1,9 +1,10 @@
-package com.topface.topface.ui.views.toolbar
+package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.ObservableInt
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.utils.RxFieldObservable
 import com.topface.topface.utils.extensions.*
 import com.topface.topface.viewModels.BaseViewModel

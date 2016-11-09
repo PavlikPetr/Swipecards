@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GestureDetectorCompat;
@@ -81,7 +80,8 @@ import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
-import com.topface.topface.ui.views.toolbar.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
@@ -108,7 +108,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.LOCK_CHAT;
-import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.MUTUAL_SYMPATHY;
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.SHOW_RETRY;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
@@ -580,21 +579,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    protected String getTitle() {
-        return mUserNameAndAge;
-    }
-
-    @Override
-    protected String getDefaultTitle() {
-        return mUserNameAndAge;
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (!TextUtils.isEmpty(mMessage)) {
@@ -742,7 +726,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
 
                 refreshActionBarTitles();
-                setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle(), null, data.user.online));
+                ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(mUserNameAndAge, TextUtils.isEmpty(mUserCity) ?
+                        Utils.EMPTY :
+                        mUserCity,
+                        null, data.user.online));
                 mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
@@ -867,11 +854,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    public void setOnline(boolean online) {
-        setToolbarSettings(new ToolbarSettingsData(getTitle(), getSubtitle(), null, online));
-    }
-
-    @Override
     protected void showStubAvatar(int sex) {
         super.showStubAvatar(sex == Profile.TRAP ? mSex : sex);
     }
@@ -948,7 +930,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log("onResume ");
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(mUserNameAndAge, TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity));
         setSavedMessage(mMessage);
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard();

@@ -6,7 +6,7 @@ import android.view.View
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.viewModels.BaseViewModel
 import com.topface.topface.R
-import com.topface.topface.ui.views.toolbar.NavigationToolbarViewModel
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.utils.extensions.isHasNotification
 
 /**

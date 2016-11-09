@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -18,7 +17,7 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.PromoExpressMessagesBinding;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.views.toolbar.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
