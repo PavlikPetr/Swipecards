@@ -28,6 +28,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.55"
@@ -73,6 +74,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.45"
@@ -83,9 +85,8 @@
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="-12dp"
+                    android:layout_marginLeft="-14dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/admiration_popup_vip_ico"/>
 
@@ -113,7 +114,11 @@
                         android:src="@drawable/arrow_bottom"/>
 
                     <TextView
+                        android:width="107dp"
+                        android:layout_height="50dp"
                         android:id="@+id/vip_button"
+                        android:textSize="14sp"
+                        android:gravity="center"
                         style="@style/AdmirationPopupBuyVipButton"
                         android:layout_below="@+id/arrow_bottom"
                         android:layout_centerHorizontal="true"
