@@ -145,7 +145,6 @@ import dagger.Provides;
                 DatingFragmentViewModel.class,
                 NavigationToolbarViewModel.class,
                 PurchaseToolbarViewModel.class,
-                BuyVipInsideProfile.class,
                 OwnProfileFragment.class
         },
         staticInjections = {
