@@ -29,11 +29,11 @@ import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.VkProfileFragment;
+import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.BuyVipInsideProfile;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -151,7 +151,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         super.initBody();
         addBodyPage(ProfilePhotoFragment.class.getName(), getResources().getString(R.string.profile_photo));
         addBodyPage(ProfileFormFragment.class.getName(), getResources().getString(R.string.profile_form));
-        addBodyPage(BuyVipInsideProfile.class.getName(), getResources().getString(R.string.vip_status));
+        addBodyPage(VipBuyFragment.class.getName(), getResources().getString(R.string.vip_status));
         addBodyPage(SettingsFragment.class.getName(), getResources().getString(R.string.settings_header_title));
         if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_VKONTAKTE)) {
             addBodyPage(VkProfileFragment.class.getName(), getResources().getString(R.string.general_vk_profile));

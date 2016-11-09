@@ -55,7 +55,6 @@ import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewMod
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
-import com.topface.topface.utils.BuyVipInsideProfile;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FragmentLifeCycleReporter;
