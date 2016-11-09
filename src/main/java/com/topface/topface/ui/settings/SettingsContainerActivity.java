@@ -7,12 +7,16 @@ import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.utils.social.AuthToken;
 
+import org.jetbrains.annotations.NotNull;
+
 import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType;
 
-public class SettingsContainerActivity extends BaseFragmentActivity {
+public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFrameBinding> {
 
     public static final String CONFIRMATION_CODE = "confirmation";
 
@@ -81,11 +85,6 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
         }
     }
 
-    @Override
-    protected int getContentLayout() {
-        return R.layout.ac_fragment_frame;
-    }
-
     public String getConfirmationCode() {
         return mConfirmCode;
     }
@@ -93,5 +92,16 @@ public class SettingsContainerActivity extends BaseFragmentActivity {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

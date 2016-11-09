@@ -9,8 +9,11 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
+import android.widget.Toast
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.RetryRequestReceiver
+import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Rate
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
@@ -18,6 +21,8 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
+import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
@@ -29,17 +34,21 @@ import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
+import javax.inject.Inject
 
 /**
  * VM for dating buttons
  * Created by tiberal on 11.10.16.
  */
-class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mApi: FeedApi,
+class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
+                             private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
                              private val mUserSearchList: CachableSearchList<SearchUser>,
                              private val mDatingButtonsEvents: DatingButtonsEventsDelegate,
                              private val mDatingButtonsView: IDatingButtonsView,
-                             private val mEmptySearchVisibility: IEmptySearchVisibility) :
+                             private val mEmptySearchVisibility: IEmptySearchVisibility,
+                             private val mStartAdmirationPurchasePopup: IStartAdmirationPurchasePopup) :
         BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility {
 
     var currentUser: SearchUser? = null
@@ -49,6 +58,10 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     val isDatingButtonsVisible = ObservableInt(View.VISIBLE)
     val isDatingButtonsLocked = ObservableBoolean(false)
 
+    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mBalanceDataSubscriptions = CompositeSubscription()
+    private var mBalance: BalanceData? = null
+
     private val mUpdateActionsReceiver: BroadcastReceiver
 
     private companion object {
@@ -57,6 +70,13 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     }
 
     init {
+        App.get().inject(this)
+        mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
+            override fun onNext(balance: BalanceData?) = balance.let {
+                mBalance = it
+            }
+        }))
+
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val type = intent.getSerializableExtra(BlackListAndBookmarkHandler.TYPE) as BlackListAndBookmarkHandler.ActionTypes?
@@ -133,6 +153,25 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
         }*/
     }
 
+    fun validateSendAdmiration() {
+        val priceAdmiration = App.get().options.priceAdmiration
+        val isShown = App.getUserConfig().isAdmirationPurchasePopupShown
+
+        mBalance?.let {
+            val hasMoneyForAdmiration = it.money >= priceAdmiration
+            when {
+                (it.premium || hasMoneyForAdmiration && !isShown) -> sendAdmiration()
+                (hasMoneyForAdmiration && !isShown) || (!hasMoneyForAdmiration) -> startAdmirationPurchasePopup()
+                else -> startAdmirationPurchasePopup()
+            }
+        }
+    }
+
+    private fun startAdmirationPurchasePopup() {
+        App.getUserConfig().setAdmirationPurchasePopupShown()
+        mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
+    }
+
     fun sendAdmiration() = sendSomething {
         val mutualId = getMutualId(it)
         mDatingButtonsView.lockControls()
@@ -150,10 +189,15 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
             }
 
             override fun onCompleted() {
+                Utils.showToastNotification(R.string.admiration_sended, Toast.LENGTH_SHORT)
                 mAdmirationSubscription.safeUnsubscribe()
                 mDatingButtonsView.unlockControls()
             }
         })
+    }
+
+    fun onActivityResult() {
+            sendAdmiration()
     }
 
     private inline fun sendSomething(func: (SearchUser) -> Unit) =
@@ -166,12 +210,10 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
                 mDatingButtonsEvents.showTakePhoto()
             }
 
-
     private fun getMutualId(user: SearchUser) = if (user.isMutualPossible)
         SendLikeRequest.DEFAULT_MUTUAL
     else
         SendLikeRequest.DEFAULT_NO_MUTUAL
-
 
     private fun showNextUser() = mUserSearchList.nextUser()?.let {
         mEmptySearchVisibility.hideEmptySearchDialog()
@@ -193,7 +235,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding, private val mA
     override fun release() {
         super.release()
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mUpdateActionsReceiver)
-        arrayOf(mLikeSubscription, mSkipSubscription, mAdmirationSubscription).safeUnsubscribe()
+        arrayOf(mLikeSubscription, mSkipSubscription, mAdmirationSubscription, mBalanceDataSubscriptions).safeUnsubscribe()
     }
 
     override fun showDatingButtons() = isDatingButtonsVisible.set(View.VISIBLE)

@@ -572,7 +572,6 @@
     <string name="with_vip_find_your_visitors">Con el estado VIP sabrás quién ha entrado a tu
         página
     </string>
-    <string name="on_avatar">Al avatar</string>
     <string name="your_avatar">Tu avatar</string>
     <string name="avatar_set_successfully">Avatar establecido con éxito</string>
     <string name="incorrect_photo">Foto incorrecta. Intenta subir otra</string>
@@ -935,4 +934,12 @@
     <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
     <string name="buy_vip_free_admirations">Envía admiraciones gratis</string>
     <string name="buy_vip_know_guests">Descubre quién ha visto tu perfil</string>
+    <string name="vip_info_title">Privilegios del estatus VIP</string>
+    <string name="chat_buy_vip_popular_male">¡%s es muy popular!</string>
+    <string name="chat_buy_vip_popular_female">¡%s es muy popular!</string>
+    <string name="buy_vip_to_chat_male">Para empezar a hablar con él, activa tu estado VIP</string>
+    <string name="buy_vip_to_chat_female">Para empezar a hablar con ella, activa tu estado VIP</string>
+    <string name="chat_activate_vip">Activar VIP</string>
+    <string name="chat_no_mutual_symphaty">¡No hay simpatía mutua por ahora!</string>
+    <string name="chat_with_no_mutual_buy_vip">Puedes empezar a chatear sin simpatía mutua, pero para hacerlo, necesitas activar tu estado VIP</string>
 </resources>

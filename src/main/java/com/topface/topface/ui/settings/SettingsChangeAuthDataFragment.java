@@ -23,6 +23,8 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
@@ -139,6 +141,9 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(mChangePassword ?
+                R.string.password_changing :
+                R.string.email_changing)));
         mBtnSave.setClickable(true);
     }
 
@@ -165,15 +170,6 @@ public class SettingsChangeAuthDataFragment extends BaseFragment {
         outState.putString(PASSWORD, mEdMainField.getText().toString());
         outState.putString(PASSWORD_CONFIRMATION, mEdConfirmationField.getText().toString());
         outState.putString(OLD_PASSWORD, mEdOldPassword.getText().toString());
-    }
-
-    @Override
-    protected String getTitle() {
-        if (mChangePassword) {
-            return getString(R.string.password_changing);
-        } else {
-            return getString(R.string.email_changing);
-        }
     }
 
     private void changePasswordFromAuth() {

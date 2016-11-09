@@ -694,7 +694,6 @@
     <string name="with_vip_find_your_visitors">С VIP-статусом вы узнаете, кто заходил к вам на
         страницу
     </string>
-    <string name="on_avatar">На аватарку</string>
     <string name="your_avatar">Ваша аватарка</string>
     <string name="avatar_set_successfully">Аватарка успешно установлена.</string>
     <string name="incorrect_photo">Некорректное фото. Попробуйте загрузить другое</string>
@@ -1135,4 +1134,14 @@
     <string name="about">О себе</string>
     <string name="moar_info">Вы можете узнать недостающую информацию!</string>
 
+    <string name="geo_switched_off_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию</string>
+    <string name="turn_on_geo">Включить геопозицию</string>
+    <string name="geo_show_settings_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию в настройках телефона</string>
+    <string name="show_geo_settings">Открыть настройку</string>
+
+    <!--строки попапа восхищений-->
+    <string name="buy_vip_button_text_admiration_purchase_popup">отправить за %d монеты</string>
+    <string name="label1_text_admiration_purchase_popup">Получатель «восхищения» будет уведомлён и сразу его увидит</string>
+    <string name="label2_text_admiration_purchase_popup">Отправляйте «восхищения» бесплатно!</string>
+    <string name="buy_vip_button_text">получить vip</string>
 </resources>

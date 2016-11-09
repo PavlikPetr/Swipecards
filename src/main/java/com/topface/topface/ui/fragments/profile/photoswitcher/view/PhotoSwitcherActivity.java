@@ -2,13 +2,11 @@ package com.topface.topface.ui.fragments.profile.photoswitcher.view;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -29,6 +27,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.databinding.AcPhotosBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -50,19 +49,22 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PhotoSwitcherToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-public class PhotoSwitcherActivity extends BaseFragmentActivity {
+public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding> {
 
     public static final String ADD_NEW_GIFT = "add_new_gift";
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
@@ -176,7 +178,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
     };
     private int mCurrentPosition = 0;
     private UserProfileLoader mUserProfileLoader;
-    private AcPhotosBinding mBinding;
     private PhotoSwitcherViewModel mViewModel;
 
     public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
@@ -202,19 +203,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setHasContent(false);
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, getContentLayout());
         App.get().inject(this);
-        mViewModel = new PhotoSwitcherViewModel(mBinding, this);
-        mBinding.setViewModel(mViewModel);
+        mViewModel = new PhotoSwitcherViewModel(getViewBinding(), this);
+        getViewBinding().setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
         // Extras
         Intent intent = getIntent();
         mUid = intent.getIntExtra(INTENT_USER_ID, -1);
         // Control layout
-        mPhotoAlbumControl = mBinding.loPhotoAlbumControl;
-        mOwnPhotosControl = mBinding.loBottomPanel;
+        mPhotoAlbumControl = getViewBinding().loPhotoAlbumControl;
+        mOwnPhotosControl = getViewBinding().loBottomPanel;
 
         Photo preloadPhoto = intent.getParcelableExtra(INTENT_PRELOAD_PHOTO);
         if (preloadPhoto != null) {
@@ -235,8 +234,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
             initViews(position, photosCount);
         } else {
             mUserProfileLoader = new UserProfileLoader(
-                    mBinding.lockScreen,
-                    mBinding.llvProfileLoading,
+                    getViewBinding().lockScreen,
+                    getViewBinding().llvProfileLoading,
                     mUserProfileReceiver,
                     mUid
             );
@@ -291,19 +290,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         }
     }
 
-    @Override
-    protected int getContentLayout() {
-        return R.layout.ac_photos;
-    }
-
     private void setPhotoAlbumControlVisibility(int state, boolean isAnimated) {
-        ActionBar actionbar = getSupportActionBar();
         if (state != View.VISIBLE) {
             mPhotoAlbumControlVisibility = View.GONE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            if (actionbar != null) {
-                actionbar.hide();
-            }
+            getToolbarViewModel().getVisibility().set(View.INVISIBLE);
             if (isAnimated) {
                 animateHidePhotoAlbumControlAction();
             } else {
@@ -312,9 +303,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         } else {
             mPhotoAlbumControlVisibility = View.VISIBLE;
             mOwnPhotosControlVisibility = mOwnPhotosControl.getVisibility();
-            if (actionbar != null) {
-                actionbar.show();
-            }
+            getToolbarViewModel().getVisibility().set(View.VISIBLE);
             if (isAnimated) {
                 animateShowPhotoAlbumControlAction();
             } else {
@@ -336,7 +325,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         // stub is needed, because sometimes(while gallery is waiting for user profile load)
         // ViewPager becomes visible without data
         // and its post init hangs app
-        mBinding.galleryAlbumStub.getViewStub().inflate();
+        getViewBinding().galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageSwitcherLooped) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
@@ -588,7 +577,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         if (mPhotoLinks != null) {
             int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            actionBarView.setArrowUpView(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE, mCurrentPosition + 1, photosLinksSize));
+            getToolbarViewModel().getTitle().set(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE,
+                    mCurrentPosition + 1, photosLinksSize));
         }
     }
 
@@ -605,8 +595,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mViewModel.setTrashSrc(R.drawable.ico_restore_photo_selector);
                 mViewModel.setAvatarVisibility(false);
                 mViewModel.setButtonText(R.string.album_photo_deleted);
-                //TODO узнать у ios об использовании строк, см. ниже
-//                mViewModel.setButtonText(R.string.edit_restore);
             } else {
                 mViewModel.setAvatarVisibility(true);
                 mViewModel.setTrashVisibility(true);
@@ -615,8 +603,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 mViewModel.setAvatarEnable(!isMainPhoto);
                 mViewModel.setTrashEnable(!isMainPhoto);
                 mViewModel.setButtonText(isMainPhoto ? R.string.album_main_photo : 0);
-                //TODO узнать у ios об использовании строк, см. ниже
-//                mViewModel.setButtonText(isMainPhoto ? R.string.your_avatar : R.string.on_avatar);
             }
         }
     }
@@ -638,9 +624,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     FeedGift feedGift = getFeedGiftFromIntent(data);
                     if (feedGift != null) {
-                        if (mViewModel != null) {
-                            mViewModel.showGift(feedGift.gift.link);
-                        }
                         Intent intent = new Intent(ADD_NEW_GIFT);
                         intent.putExtra(INTENT_GIFT, feedGift);
                         LocalBroadcastManager.getInstance(this)
@@ -723,5 +706,24 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity {
         animation.setDuration(ANIMATION_TIME);
         animation.setAnimationListener(mAnimationListener);
         mPhotoAlbumControl.startAnimation(animation);
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        PhotoSwitcherToolbarViewModel toolbarViewModel = new PhotoSwitcherToolbarViewModel(toolbar, this);
+        toolbarViewModel.getShadowVisibility().set(View.GONE);
+        return toolbarViewModel;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcPhotosBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_photos;
     }
 }

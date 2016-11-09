@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.databinding.ViewDataBinding;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -40,10 +41,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.topface.framework.imageloader.IPhoto;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -57,11 +58,9 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.debug.HockeySender;
-import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.viewModels.BaseViewModel;
 
-import org.acra.sender.ReportSenderException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -563,21 +562,6 @@ public class Utils {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
     }
 
-    public static void sendHockeyMessage(final String message) {
-        final Context context = App.getContext();
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                HockeySender hockeySender = new HockeySender();
-                try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
-                } catch (ReportSenderException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
-
     public static String getUnlockButtonText(int sec) {
         int minutes = (int) Math.ceil((float) sec / (float) DateUtils.MINUTE_IN_SECONDS);
         return String.format(App.getContext().getString(R.string.unlock_by_viewed_ad_video_button_text),
@@ -680,6 +664,10 @@ public class Utils {
     public static String prepareUrl(@NotNull String url) {
         return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId())
                 .replace(SECRET_KEY, Ssid.get());
+    }
+
+    public static Boolean isLollipop() {
+        return android.os.Build.VERSION.SDK_INT >= 21;
     }
 
 }

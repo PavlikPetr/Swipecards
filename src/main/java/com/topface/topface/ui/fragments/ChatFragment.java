@@ -76,10 +76,12 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
@@ -106,7 +108,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.LOCK_CHAT;
-import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.MUTUAL_SYMPATHY;
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.SHOW_RETRY;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
@@ -578,21 +579,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    protected String getTitle() {
-        return mUserNameAndAge;
-    }
-
-    @Override
-    protected String getDefaultTitle() {
-        return mUserNameAndAge;
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (!TextUtils.isEmpty(mMessage)) {
@@ -685,8 +671,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         });
 
         historyRequest.leave = isTakePhotoApplicable() ||
-                                mUserType == ChatStabsController.LOCK_CHAT ||
-                                mStubsController.isChatLocked();
+                mUserType == ChatStabsController.LOCK_CHAT ||
+                mStubsController.isChatLocked();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -740,7 +726,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
 
                 refreshActionBarTitles();
-                getTitleSetter().setOnline(data.user.online);
+                ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(mUserNameAndAge, TextUtils.isEmpty(mUserCity) ?
+                        Utils.EMPTY :
+                        mUserCity,
+                        null, data.user.online));
                 mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
@@ -865,13 +854,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    public void setOnline(boolean online) {
-        if (getTitleSetter() != null) {
-            getTitleSetter().setOnline(online);
-        }
-    }
-
-    @Override
     protected void showStubAvatar(int sex) {
         super.showStubAvatar(sex == Profile.TRAP ? mSex : sex);
     }
@@ -948,7 +930,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log("onResume ");
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(mUserNameAndAge, TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity));
         setSavedMessage(mMessage);
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard();
@@ -1295,7 +1277,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
             if (isTakePhotoApplicable()) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+                TakePhotoPopup.Companion.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             }
         }
     }

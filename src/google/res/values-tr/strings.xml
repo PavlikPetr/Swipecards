@@ -525,7 +525,6 @@
     <string name="with_vip_find_your_visitors">VIP-durumuyla sayfanızı kimin ziyaret ettiğini
         öğrenirsiniz
     </string>
-    <string name="on_avatar">Profil resmi olarak ayarla</string>
     <string name="your_avatar">Profil resminiz</string>
     <string name="avatar_set_successfully">Profil fotoğrafınız başarıyla yüklendi</string>
     <string name="incorrect_photo">Uygunsuz fotoğraf. Başka bir tane yüklemeyi deneyin.</string>
@@ -847,4 +846,12 @@
     <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
     <string name="buy_vip_free_admirations">Ücretsiz hayranlık gönder</string>
     <string name="buy_vip_know_guests">Profilini ziyaret edenleri gör</string>
+    <string name="vip_info_title">VIP-ayrıcalık</string>
+    <string name="chat_buy_vip_popular_male">%s çok popüler!</string>
+    <string name="chat_buy_vip_popular_female">%s çok popüler!</string>
+    <string name="buy_vip_to_chat_male">Onunla sohbete başlamak için VIP olmalısın.</string>
+    <string name="buy_vip_to_chat_female">Onunla sohbete başlamak için VIP olmalısın.</string>
+    <string name="chat_activate_vip">VIP ol</string>
+    <string name="chat_no_mutual_symphaty">Henüz karşılıklı beğeniniz yok</string>
+    <string name="chat_with_no_mutual_buy_vip">Karşılıklı beğeni olmadan sohbete başlamak için VIP olmalısınız</string>
 </resources>

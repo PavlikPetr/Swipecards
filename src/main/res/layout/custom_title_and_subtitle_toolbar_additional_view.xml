@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Widget.Topface.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:drawablePadding="@dimen/online_icon_padding"
+            android:text="@{viewModel.title}"
+            android:visibility="@{viewModel.titleVisibility}"
+            app:online="@{viewModel.isOnline}"/>
+
+        <TextView
+            style="@style/Widget.Topface.ActionBar.Subtitle"
+            android:text="@{viewModel.subTitle}"
+            android:visibility="@{viewModel.subTitleVisibility}"/>
+    </LinearLayout>
+</layout>

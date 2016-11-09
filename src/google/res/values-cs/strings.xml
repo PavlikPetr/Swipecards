@@ -523,7 +523,6 @@
     <string name="with_vip_find_your_visitors">Díky VIP-statusu zjistíte kdo prohlížel vaši
         stránku
     </string>
-    <string name="on_avatar">Na profilový obrázek</string>
     <string name="your_avatar">Váš profilový obrázek</string>
     <string name="avatar_set_successfully">Profilový obrázek je úspěšně nastaven</string>
     <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát  jinou.</string>
@@ -748,4 +747,5 @@
     <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a
         můžete začít příjemnou známost
     </string>
+    <string name="vip_info_title">VIP privilegia</string>
 </resources>

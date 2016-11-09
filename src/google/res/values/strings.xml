@@ -547,7 +547,6 @@
     <string name="with_vip_find_your_visitors">With VIP-status you can find out who visited your
         page
     </string>
-    <string name="on_avatar">Set as your profile picture</string>
     <string name="your_avatar">Profile picture</string>
     <string name="avatar_set_successfully">Your profile photo has been successfully set</string>
     <string name="incorrect_photo">Improper photo. Try to upload a different one.</string>
@@ -905,4 +904,12 @@
     <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
     <string name="buy_vip_free_admirations">Send Adorations for free</string>
     <string name="buy_vip_know_guests">Find out who viewed your profile</string>
+    <string name="vip_info_title">VIP Privileges</string>
+    <string name="chat_buy_vip_popular_male">%s is super popular!</string>
+    <string name="chat_buy_vip_popular_female">%s is super popular!</string>
+    <string name="buy_vip_to_chat_male">To start chatting with him, activate VIP-status</string>
+    <string name="buy_vip_to_chat_female">To start chatting with her, activate VIP-status</string>
+    <string name="chat_activate_vip">Activate VIP</string>
+    <string name="chat_no_mutual_symphaty">No mutual Like at the moment!</string>
+    <string name="chat_with_no_mutual_buy_vip">You can start chatting without a mutual Like, but to do so, you need to activate VIP-status</string>
 </resources>

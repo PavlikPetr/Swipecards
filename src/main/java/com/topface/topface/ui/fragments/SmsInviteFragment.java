@@ -206,11 +206,6 @@ public class SmsInviteFragment extends ContentListFragment {
         isInProgress = false;
     }
 
-    @Override
-    protected String getTitle() {
-        return getString(R.string.sms_invite_title);
-    }
-
     private class ContactsAdapter extends BaseAdapter {
 
         ArrayList<ContactsProvider.Contact> contacts;

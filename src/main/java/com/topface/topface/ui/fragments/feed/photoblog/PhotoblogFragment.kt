@@ -12,10 +12,15 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.LayoutEmptyPhotoblogBinding
+import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.extensions.getString
 
 /**
  * Фрагмент постановки в лидеры
@@ -80,7 +85,9 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_photoblog
 
-    override fun getTitle(): String? = getString(R.string.general_photoblog)
-
+    override fun onResume() {
+        super.onResume()
+        ToolbarManager.setToolbarSettings(ToolbarSettingsData(R.string.general_photoblog.getString()))
+    }
 }
 

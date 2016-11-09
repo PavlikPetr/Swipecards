@@ -354,7 +354,6 @@
         호감도를 구입하여 당신의 마음에 들어하는 상대와 대화를 할 수 있습니다.
     </string>
     <string name="with_vip_find_your_visitors">VIP 상태를 이용하면 누가 당신의 페이지에 왔었는지 알 수 있습니다.</string>
-    <string name="on_avatar">아바타로</string>
     <string name="your_avatar">당신의 아바타.</string>
     <string name="avatar_set_successfully">아바타가 성공적으로 설치되었습니다.</string>
     <string name="incorrect_photo">해당 사진이 옳지 않습니다. 다른 사진을 선택하여 주십시오.</string>
@@ -407,4 +406,5 @@
     <string name="restore">저장하기</string>
     <string name="admiration_sended">감탄사가 전송되었습니다.</string>
     <string name="novice_sympathy">당신이 \n 정말 호감이 있는 상대에게 \n 기분 좋은 만남을 이끌어내기 위해 호감도를 전달해보세요.</string>
+    <string name="vip_info_title">VIP특전</string>
 </resources>

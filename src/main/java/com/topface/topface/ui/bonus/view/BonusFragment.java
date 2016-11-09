@@ -18,6 +18,8 @@ import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -50,8 +52,9 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.general_bonus);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_bonus)));
     }
 
     @Nullable

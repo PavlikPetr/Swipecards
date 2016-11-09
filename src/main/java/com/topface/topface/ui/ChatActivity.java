@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -11,9 +12,17 @@ import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.state.EventBus;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -21,7 +30,7 @@ import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public class ChatActivity extends CheckAuthActivity<ChatFragment> {
+public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFrameBinding> {
 
     public static final int REQUEST_CHAT = 3;
     public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";
@@ -31,20 +40,31 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     EventBus mEventBus;
     private Subscription mTakePhotoSubscription;
 
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         App.get().inject(this);
-        mTakePhotoSubscription = mEventBus.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
-                .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
+        mTakePhotoSubscription = mEventBus.getObservable(TakePhotoActionHolder.class)
+                .filter(new Func1<TakePhotoActionHolder, Boolean>() {
                     @Override
-                    public Boolean call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {
+                    public Boolean call(TakePhotoActionHolder takePhotoActionHolder) {
                         return takePhotoActionHolder != null && takePhotoActionHolder.getAction() == TakePhotoPopup.ACTION_CANCEL;
                     }
                 })
-                .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
+                .subscribe(new Action1<TakePhotoActionHolder>() {
                     @Override
-                    public void call(TakePhotoPopup.TakePhotoActionHolder takePhotoActionHolder) {
+                    public void call(TakePhotoActionHolder takePhotoActionHolder) {
                         finishWithResult(Activity.RESULT_CANCELED);
                     }
                 }, new Action1<Throwable>() {
@@ -71,12 +91,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-    }
-
-    @Override
-    protected int getContentLayout() {
-        // the fragment frame layout _without_ background definition
-        return R.layout.ac_fragment_frame_no_background;
     }
 
     @Override
@@ -114,11 +128,37 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment> {
         return intent;
     }
 
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new CustomTitleSubTitleToolbarViewModel(toolbar, this);
+    }
+
     @Override
     public Intent getSupportParentActivityIntent() {
         Intent intent = super.getSupportParentActivityIntent();
         FeedScreensIntent.equipMessageAllIntent(intent);
         return intent;
+    }
+
+    @Override
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        CustomTitleSubTitleToolbarViewModel toolbarViewModel = (CustomTitleSubTitleToolbarViewModel) getToolbarViewModel();
+        toolbarViewModel.getExtraViewModel().getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+        toolbarViewModel.getExtraViewModel().getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+        if (settings.getTitle() != null) {
+            toolbarViewModel.getExtraViewModel().getTitle().set(settings.getTitle());
+        }
+        if (settings.getSubtitle() != null) {
+            toolbarViewModel.getExtraViewModel().getSubTitle().set(settings.getSubtitle());
+        }
+        if (settings.isOnline() != null) {
+            //noinspection ConstantConditions
+            toolbarViewModel.getExtraViewModel().isOnline().set(settings.isOnline());
+        }
+        if (settings.getIcon() != null) {
+            toolbarViewModel.getUpIcon().set(settings.getIcon());
+        }
     }
 
     @Override

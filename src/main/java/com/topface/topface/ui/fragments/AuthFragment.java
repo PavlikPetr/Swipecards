@@ -522,16 +522,17 @@ public class AuthFragment extends BaseAuthFragment {
         RxUtils.safeUnsubscribe(mAuthStateSubscription);
     }
 
-    @Override
-    protected String getTitle() {
-        /*
-        * ВНИМАНИЕ - данное решение - хак
-        * иначе, после выполнения здесь, в onDestroy(), actionBar.show();
-        * в следующем фрагменте может обрезаться title, причем не сразу,
-        * а только после подгрузки содержимого фида, например
-        * */
-        return getString(R.string.app_name) + "                          ";
-    }
+    //TODO SETTOOLBARSETTINGS
+//    @Override
+//    protected String getTitle() {
+//        /*
+//        * ВНИМАНИЕ - данное решение - хак
+//        * иначе, после выполнения здесь, в onDestroy(), actionBar.show();
+//        * в следующем фрагменте может обрезаться title, причем не сразу,
+//        * а только после подгрузки содержимого фида, например
+//        * */
+//        return getString(R.string.app_name) + "                          ";
+//    }
 
     private boolean isOtherServicesButtonAvailable() {
         return getMainScreenServicesAvailable() < getAllOtherServicesAvailableButtonsCount();

@@ -41,6 +41,7 @@ public class BaseViewModel<T extends ViewDataBinding> implements IStateSaver {
         return mContext;
     }
 
+    @Nullable
     public Bundle getArguments() {
         return mArguments;
     }

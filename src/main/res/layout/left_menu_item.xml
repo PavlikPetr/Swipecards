@@ -20,8 +20,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/new_bg_left_menu_item_selector"
         android:onClick="@{clickListener::onClick}"
-        app:selected="@{viewModel.isSelected}"
-        app:specialTag="@{viewModel.tag}">
+        app:selected="@{viewModel.isSelected}">
 
         <View
             style="@style/LeftMenuDivider"
@@ -41,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerVertical="true"
+                app:specialTag="@{viewModel.tag}"
                 android:layout_marginLeft="@dimen/left_menu_item_padding_left"
                 android:layout_toLeftOf="@id/leftMenuBadge">
 

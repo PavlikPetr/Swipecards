@@ -8,10 +8,14 @@ import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.edit.filter.view.FilterFragment;
 
-public class EditContainerActivity extends BaseFragmentActivity {
+import org.jetbrains.annotations.NotNull;
+
+public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameBinding> {
 
     public static final int INTENT_EDIT_FILTER = 201;
 
@@ -45,11 +49,6 @@ public class EditContainerActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected int getContentLayout() {
-        return R.layout.ac_fragment_frame;
-    }
-
-    @Override
     public void finish() {
         if (mFragment instanceof AbstractEditFragment) {
             ((AbstractEditFragment) mFragment).saveChanges(mFinishHandler);
@@ -63,4 +62,14 @@ public class EditContainerActivity extends BaseFragmentActivity {
         return false;
     }
 
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
 }

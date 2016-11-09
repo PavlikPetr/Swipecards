@@ -38,7 +38,7 @@ abstract public class WebViewFragment extends BaseFragment {
     }
 
     protected View getView(LayoutInflater inflater) {
-        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.web_view_fragment, null));
+        mBinding = DataBindingUtil.inflate(inflater,R.layout.web_view_fragment, null,false);
         mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding);
         mBinding.wvWebFrame.setWebChromeClient(mFullScreenWebChromeClient);
         mBinding.wvWebFrame.getSettings().setJavaScriptEnabled(true);

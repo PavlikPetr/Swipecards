@@ -11,7 +11,6 @@
     <dimen name="padding_left_for_online_icon">8dp</dimen>
 
     <dimen name="action_bar_title_size">20sp</dimen>
-    <dimen name="action_bar_subtitle_size">13sp</dimen>
 
     <dimen name="dating_album_height">432dp</dimen>
     <dimen name="dating_parent_item_title_size">16sp</dimen>
@@ -147,16 +146,13 @@
     <dimen name="filter_value_padding">8dp</dimen>
 
     <!--PhotoSwitcher-->
-    <dimen name="album_gift_margin_right">14dp</dimen>
     <dimen name="album_gift_margin_bottom">14dp</dimen>
-    <dimen name="album_gift_size">86dp</dimen>
 
     <!--PhotoBlog-->
     <dimen name="margin_item_photoblog">16dp</dimen>
     <dimen name="margin_button_photoblog">8dp</dimen>
 
     <!--Rounded images border size-->
-    <dimen name="album_gift_border_size">2dp</dimen>
     <dimen name="mutual_sympathy_border_size">1dp</dimen>
 
     <!--Mutual sympathy stub-->
@@ -168,6 +164,27 @@
     <dimen name="mutual_sympathy_icon_size">40dp</dimen>
 
     <dimen name="user_device_icon_padding_left">6dp</dimen>
+
+    <!--Toolbar sizes-->
+    <dimen name="toolbar_title_size">20sp</dimen>
+    <dimen name="toolbar_elevation">10dp</dimen>
+    <dimen name="toolbar_title_padding_left">15dp</dimen>
+    <dimen name="collapsing_scrim_size">100dp</dimen>
+    <dimen name="online_icon_padding">3dp</dimen>
+
+    <!--Popups-->
+    <dimen name="popup_central_picture_size">210dp</dimen>
+    <dimen name="popup_central_picture_margin">34dp</dimen>
+    <dimen name="popup_root_view_padding_top">56dp</dimen>
+    <dimen name="popup_root_view_padding_bottom">56dp</dimen>
+    <dimen name="popup_root_view_padding_left">10dp</dimen>
+    <dimen name="popup_root_view_padding_right">10dp</dimen>
+    <dimen name="popup_title_text">25sp</dimen>
+    <dimen name="popup_central_picture_background_circle">156dp</dimen>
+    <dimen name="popup_message_text">16sp</dimen>
+    <dimen name="popup_message_padding_bottom">20dp</dimen>
+    <dimen name="popup_message_side_padding">46dp</dimen>
+    <dimen name="popup_button_text">14sp</dimen>
 
     <dimen name="form_list_padding">30dp</dimen>
 

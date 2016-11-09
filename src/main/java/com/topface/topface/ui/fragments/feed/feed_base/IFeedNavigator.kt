@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
+import android.app.Activity
+import android.view.View
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.search.SearchUser
@@ -19,5 +21,5 @@ interface IFeedNavigator {
     fun showAddToLeader()
     fun showOwnProfile()
     fun showTakePhotoPopup()
-
+    fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity)
 }

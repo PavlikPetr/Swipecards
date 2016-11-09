@@ -1,39 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:id="@+id/rlWebViewContainer"
+    <data>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/web_view_background">
+        android:orientation="vertical">
 
-        <FrameLayout
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
+
+        <RelativeLayout
+            android:id="@+id/rlWebViewContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <WebView
-                android:id="@+id/wvWebFrame"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fadingEdge="none"
-                android:fadingEdgeLength="0dp"
-                android:requiresFadingEdge="none" />
+            android:layout_height="match_parent"
+            android:background="@color/web_view_background">
 
             <FrameLayout
-                android:id="@+id/fullscreen_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/black"
-                android:visibility="gone" />
-        </FrameLayout>
+                android:layout_height="match_parent">
 
-        <ProgressBar
-            android:id="@+id/prsWebLoading"
-            style="@style/TopFaceProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
+                <WebView
+                    android:id="@+id/wvWebFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fadingEdge="none"
+                    android:fadingEdgeLength="0dp"
+                    android:requiresFadingEdge="none"/>
 
-    </RelativeLayout>
+                <FrameLayout
+                    android:id="@+id/fullscreen_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/black"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
+            <ProgressBar
+                android:id="@+id/prsWebLoading"
+                style="@style/TopFaceProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+    </LinearLayout>
 </layout>

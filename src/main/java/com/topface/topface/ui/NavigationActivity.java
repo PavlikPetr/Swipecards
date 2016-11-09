@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +28,8 @@ import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.databinding.AcNavigationBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -41,8 +43,11 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CustomViewNotificationController;
 import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.NavigationManager;
@@ -53,7 +58,6 @@ import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
-import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.popups.PopupManager;
@@ -78,7 +82,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends ParentNavigationActivity<AcNavigationBinding> implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
@@ -122,23 +126,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
             intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
         }
         activity.startActivity(intent);
-    }
-
-    @Override
-    protected void initActionBarOptions(ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
-                            | ActionBar.DISPLAY_SHOW_TITLE
-                            | ActionBar.DISPLAY_SHOW_HOME
-                            | ActionBar.DISPLAY_HOME_AS_UP);
-            mNotificationController = new CustomViewNotificationController(actionBar);
-        }
-    }
-
-    @Override
-    protected void setActionBarView() {
-        actionBarView.setLeftMenuView();
     }
 
     @Override
@@ -248,6 +235,12 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }));
     }
 
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new NavigationToolbarViewModel(toolbar, this);
+    }
+
     private void initPopups() {
         Debug.log("PopupMANAGER init");
         PopupManager popupManager = PopupManager.INSTANCE;
@@ -266,7 +259,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 .addChosenAction(SelectPhotoStartAction.class, ChooseCityPopupAction.class)
                 .addAction(NotificationsDisableStartAction.class)
                 .addAction(PromoPopupStartAction.class)
-                .addAction(InvitePopupAction.class)
+                //TODO Отключаем до момента поддержки пермишинов на контакты
+                //.addAction(InvitePopupAction.class)
                 .addAction(RatePopupStartAction.class);
     }
 
@@ -277,11 +271,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             initPopups();
         }
-    }
-
-    @Override
-    protected int getContentLayoutId() {
-        return R.layout.ac_navigation;
     }
 
     private void initFullscreen() {
@@ -610,5 +599,33 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     @Override
     public void onUpClick() {
         toggleDrawerLayout();
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcNavigationBinding binding) {
+        return binding.navigationAppBar.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_navigation;
+    }
+
+    @Override
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        if (getToolbarViewModel() instanceof NavigationToolbarViewModel) {
+            CustomToolbarViewModel customViewModel = ((NavigationToolbarViewModel) getToolbarViewModel()).getExtraViewModel();
+            customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+            customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+            Boolean isOnline = settings.isOnline();
+            customViewModel.isOnline().set(isOnline != null && isOnline);
+            if (settings.getTitle() != null) {
+                customViewModel.getTitle().set(settings.getTitle());
+            }
+            if (settings.getSubtitle() != null) {
+                customViewModel.getSubTitle().set(settings.getSubtitle());
+            }
+        }
     }
 }

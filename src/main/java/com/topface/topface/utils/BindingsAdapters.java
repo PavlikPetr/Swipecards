@@ -9,9 +9,11 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -58,8 +60,8 @@ public class BindingsAdapters {
             }
         } else {
             try {
-                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
+//                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
+//                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
                 fab.hide();
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
@@ -227,11 +229,21 @@ public class BindingsAdapters {
         }
     }
 
+    @BindingAdapter("navigationIcon")
+    public static void setNavigationIcon(Toolbar view, @DrawableRes int resource) {
+        view.setNavigationIcon(resource);
+    }
+
     /*
     *Если надо через DB засетить тег для автоматизированного тестирования, то следует использовать этот атрибут
     */
     @BindingAdapter("specialTag")
     public static void setTag(View view, String tag) {
         view.setTag(tag);
+    }
+
+    @BindingAdapter("animationSrc")
+    public static void setAnimationSrc(View view, Animation resource) {
+        view.startAnimation(resource);
     }
 }

@@ -4,13 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.bonus.view.BonusActivity;
 import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;
 import com.topface.topface.utils.social.AuthToken;
 
-public class ExternalLinkActivity extends BaseFragmentActivity {
+import org.jetbrains.annotations.NotNull;
+
+public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBinding> {
 
     private boolean mIsNeedRestorePwd;
 
@@ -66,14 +71,8 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setHasContent(false);
         super.onCreate(savedInstanceState);
         new ExternalLinkExecuter(mListener).execute(this, getIntent());
-    }
-
-    @Override
-    protected int getContentLayout() {
-        return -1;
     }
 
     @Override
@@ -100,5 +99,16 @@ public class ExternalLinkActivity extends BaseFragmentActivity {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

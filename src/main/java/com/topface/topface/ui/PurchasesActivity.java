@@ -22,6 +22,8 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
@@ -33,10 +35,14 @@ import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
 import com.topface.topface.utils.RxUtils;
-import com.topface.topface.utils.actionbar.ActionBarView;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +60,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> implements TrialVipPopup.OnFragmentActionsListener {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> implements TrialVipPopup.OnFragmentActionsListener {
 
     /**
      * Constant keys for different fragments
@@ -64,7 +70,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
     // здесь настраивается вероятность, с которой будут отображаться экраны в случае "холостого" выхода
     // с экрана покупок
     private enum EXTRA_SCREEN {
-        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 70);
+        //TODO занулил вероятность показа SMS_INVITE_SCREEN пока не впилим роддержку пермишинов для смс и контактов
+        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 0);
 
         private int pos;
         private int probability;
@@ -83,6 +90,15 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         }
 
     }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        PurchaseToolbarViewModel toolbarViewModel = new PurchaseToolbarViewModel(toolbar, this);
+        toolbarViewModel.getTitle().set(getString(R.string.purchase_header_title));
+        return toolbarViewModel;
+    }
+
 
     @Inject
     static TopfaceAppState mAppState;
@@ -234,15 +250,11 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
     }
 
     @Override
-    protected void initActionBar(ActionBar actionBar) {
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBarView = new ActionBarView(actionBar, this);
-        actionBarView.setPurchasesView((String) getTitle());
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setIcon(android.R.color.transparent);
-        actionBar.setLogo(android.R.color.transparent);
+    protected void initActionBarOptions(@Nullable ActionBar actionBar) {
+        super.initActionBarOptions(actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayShowCustomEnabled(true);
+        }
     }
 
 
@@ -416,4 +428,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         return screensArray;
     }
 
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
 }

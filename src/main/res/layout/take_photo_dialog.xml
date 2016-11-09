@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="handlers"
-            type="com.topface.topface.ui.dialogs.TakePhotoPopup.Handlers"/>
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.take_photo.TakePhotoPopupViewModel"/>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
     </data>
 
     <LinearLayout
@@ -16,17 +21,10 @@
         android:background="@color/bg_white"
         android:orientation="vertical">
 
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/action_bar_color"
-            app:contentInsetStart="0dp">
-
-            <include layout="@layout/actionbar_container_title_view"/>
-
-        </android.support.v7.widget.Toolbar>
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -42,12 +40,11 @@
                 android:paddingTop="@dimen/take_photo_padding_40">
 
                 <View
-                    android:id="@+id/upload_photo_placeholder"
                     style="@style/LandscapePortraitImagesVisibility"
                     android:layout_width="@dimen/take_photo_placeholder_size"
                     android:layout_height="@dimen/take_photo_placeholder_size"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/upload_photo_male"/>
+                    android:background="@{viewModel.mainImage}"/>
 
                 <TextView
                     style="@style/TakePhotoText"
@@ -56,20 +53,18 @@
                     android:text="@string/take_photo_text_1"/>
 
                 <Button
-                    android:id="@+id/btn_take_photo"
                     style="@style/Widget.Topface.Button.Big.Blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:onClick="@{handlers::onTakeClick}"
+                    android:onClick="@{()->viewModel.takeCameraPhoto.invoke()}"
                     android:text="@string/profile_add_camera"/>
 
                 <Button
-                    android:id="@+id/btn_choose_photo"
                     style="@style/Widget.Topface.Button.Big.Blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{handlers::onChooseClick}"
+                    android:onClick="@{()->viewModel.takeAlbumPhoto.invoke()}"
                     android:text="@string/profile_add_album"/>
 
                 <TextView
