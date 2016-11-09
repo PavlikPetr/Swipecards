@@ -1,0 +1,12 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/text_white" />
+        </shape>
+    </item>
+    <item android:left="45px">
+        <shape>
+            <solid android:color="@color/dating_fab_small" />
+        </shape>
+    </item>
+</layer-list>

@@ -8,8 +8,8 @@
         <item name="colorAccent">@color/light_theme_color_accent</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
 
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
@@ -98,7 +98,6 @@
     <style name="Theme.Topface.Light" parent="@style/Theme.Topface">
         <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewStyle</item>
     </style>
-
 
     <style name="Theme.Topface.Navigation" parent="Theme.Topface">
         <item name="windowActionBarOverlay">true</item>
