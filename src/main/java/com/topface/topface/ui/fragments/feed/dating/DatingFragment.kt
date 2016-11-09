@@ -208,15 +208,14 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_dating_filter -> {
-                (activity as? CrashReportActivity)?.let { mNavigator.showFilter(it) }
-                return true
+    override fun onOptionsItemSelected(item: MenuItem?) =
+            when (item?.itemId) {
+                R.id.action_dating_filter -> {
+                    (activity as? CrashReportActivity)?.let { mNavigator.showFilter(it) }
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
             }
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
 
     override fun isScrimVisible(isVisible: Boolean) = mFilterItem?.let {
         it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
