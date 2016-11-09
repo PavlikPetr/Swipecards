@@ -28,6 +28,7 @@ import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
@@ -57,13 +58,13 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
-    private var mCurrentUser: SearchUser? = null
+    var mCurrentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
     private lateinit var mReceiver: BroadcastReceiver
 
-    private companion object {
-        const val CURRENT_USER = "current_user"
+    companion object {
+        const val CURRENT_USER = "current_user_dating_fragment_view_model"
         const val UPDATE_IN_PROCESS = "update_in_process"
         const val NEW_FILTER = "new_filter"
     }
@@ -135,6 +136,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                         //В связи с чем, все работает так как работает
                         if (currentUser != null && mCurrentUser !== currentUser) {
                             mDatingViewModelEvents.onDataReceived(currentUser)
+                            prepareFormsData(currentUser)
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                         }
@@ -148,6 +150,21 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
             })
         }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun prepareFormsData(user: SearchUser) = with((binding.formsList
+            .adapter as CompositeAdapter<IType>).data) {
+        clear()
+        if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
+        if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
+        addExpandableItem(GiftsModel(user.gifts, user.id))
+        val forms = mutableListOf <IType>().apply {
+            user.forms.forEach {
+                add(FormModel(Pair(it.title, it.value)))
+            }
+        }
+        addExpandableItem(ParentModel(context.getString(R.string.about), true, R.drawable.about), forms)
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -190,15 +207,16 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
     override fun onSavedInstanceState(state: Bundle): Unit = with(state) {
         putParcelable(CURRENT_USER, mCurrentUser)
-        getBoolean(UPDATE_IN_PROCESS, mUpdateInProcess)
-        getBoolean(NEW_FILTER, mNewFilter)
+        putBoolean(UPDATE_IN_PROCESS, mUpdateInProcess)
+        putBoolean(NEW_FILTER, mNewFilter)
     }
 
-    override fun onRestoreInstanceState(state: Bundle): Unit = with(state) {
-        mCurrentUser = getParcelable<SearchUser>(CURRENT_USER)
+    override fun onRestoreInstanceState(state: Bundle) = with(state) {
+        val currentUser = getParcelable<SearchUser>(CURRENT_USER)
         mUpdateInProcess = getBoolean(UPDATE_IN_PROCESS)
         mNewFilter = getBoolean(NEW_FILTER)
-
+        prepareFormsData(currentUser)
+        mCurrentUser = currentUser
     }
 
     override fun release() {

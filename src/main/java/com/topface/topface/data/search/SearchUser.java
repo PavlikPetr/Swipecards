@@ -4,10 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
+import com.topface.topface.utils.FormItem;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.LinkedList;
 
 public class SearchUser extends FeedUser implements SerializableToJson, Parcelable {
     /**
@@ -18,6 +23,8 @@ public class SearchUser extends FeedUser implements SerializableToJson, Parcelab
     // Flags
     public boolean skipped = false;
     public boolean rated = false;
+    public LinkedList<FormItem> forms = new LinkedList<>();
+    public Profile.Gifts gifts = new Profile.Gifts();
 
     //Для GSON
     @SuppressWarnings("unused")

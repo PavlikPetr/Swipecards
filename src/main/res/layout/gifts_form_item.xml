@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.form.GiftsItemViewModel"/>
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="22dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="20dp">
+
+        <ImageView
+            android:id="@+id/form_item_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="42dp"
+            android:src="@drawable/gifts"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/form_item_icon"
+            android:text="@string/gifts"
+            android:textColor="@color/black_forms_color"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/user_gifts_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/title"
+            android:gravity="end"
+            android:text="@{model.amount}"
+            android:textColor="@color/gray_forms_color"
+            android:textSize="14sp">
+        </TextView>
+
+        <ImageView
+            android:id="@+id/send_gift"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/form_item_icon"
+            android:layout_marginTop="12dp"
+            android:layout_toRightOf="@+id/form_item_icon"
+            android:onClick="@{() -> model.sendGift()}"
+            android:src="@drawable/bt_gift"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/gifts_list"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignTop="@+id/send_gift"
+            android:layout_toRightOf="@+id/send_gift"/>
+
+        <View
+            android:layout_width="25dp"
+            android:layout_height="48dp"
+            android:layout_alignTop="@+id/send_gift"
+            android:layout_toRightOf="@+id/send_gift"
+            android:background="@drawable/gift_item_gradient"/>
+    </RelativeLayout>
+
+</layout>
+
+
+
+

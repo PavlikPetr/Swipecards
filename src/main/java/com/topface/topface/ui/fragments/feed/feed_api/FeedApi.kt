@@ -31,6 +31,39 @@ import java.util.*
 class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
               private val mDeleteRequestFactory: IRequestFactory? = null, private val mFeedRequestFactory: IRequestFactory? = null) {
 
+    fun callGetGifts(userId: Int, from: Int, limit: Int = 15): Observable<Profile.Gifts> {
+        return Observable.create {
+            val request = FeedGiftsRequest(mContext)
+            request.uid = userId
+            request.from = from
+            request.limit = limit
+            mRequestClient.registerRequest(request)
+            request.callback(object : DataApiHandler<FeedListData<FeedGift>>() {
+                override fun success(data: FeedListData<FeedGift>?, response: IApiResponse?) {
+                    val gifts = Profile.Gifts()
+                    data?.let {
+                        it.items?.forEach {
+                            gifts.items.add(it.gift)
+                        }
+                        gifts.more = it.more
+                    }
+                    it.onNext(gifts)
+                }
+
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+
+                override fun parseResponse(response: ApiResponse?): FeedListData<FeedGift>? =
+                        response?.let { FeedListData(it.getJsonResult(), FeedGift::class.java) }
+
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+
+            }).exec()
+        }
+    }
+
     fun callAlbumRequest(currentSearchUser: SearchUser, loadedPosition: Int): Observable<AlbumPhotos> {
         return Observable.create {
             val request = AlbumRequest(mContext, currentSearchUser.id, loadedPosition, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW)
@@ -47,7 +80,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
      */
     fun callDatingUpdate(onlyOnline: Boolean, isNeedRefresh: Boolean): Observable<UsersList<SearchUser>> {
         return Observable.create {
-            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh)
+            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, true)
             mRequestClient.registerRequest(request)
             request.callback(object : DataApiHandler<UsersList<SearchUser>>() {
                 override fun parseResponse(response: ApiResponse): UsersList<SearchUser> = UsersList(response, SearchUser::class.java)

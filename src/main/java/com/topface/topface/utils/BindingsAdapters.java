@@ -4,18 +4,12 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
-import android.databinding.BindingMethod;
-import android.databinding.BindingMethods;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.AnimRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
@@ -29,7 +23,6 @@ import android.widget.ViewFlipper;
 import com.bumptech.glide.Glide;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
@@ -39,6 +32,16 @@ import com.topface.topface.ui.views.RangeSeekBar;
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("pxTextSize")
+    public static void setPxTextSize(TextView view, int size) {
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+    }
+
+    @BindingAdapter("textTypeface")
+    public static void setTextTypeface(TextView view, int typeface) {
+        view.setTypeface(null, typeface);
+    }
 
     @BindingAdapter("online")
     public static void setOnline(TextView view, boolean isOnline) {

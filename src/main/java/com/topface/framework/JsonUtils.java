@@ -8,9 +8,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.reflect.TypeToken;
+import com.topface.topface.App;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.data.search.SearchUser;
+import com.topface.topface.utils.FormInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -55,33 +61,47 @@ public class JsonUtils {
     public static String profileToJson(Profile profile) {
         Gson gson = new GsonBuilder().registerTypeAdapter(SparseArray.class
                 , new JsonSerializer<SparseArray<Profile.TopfaceNotifications>>() {
-            @Override
-            public JsonElement serialize(SparseArray<Profile.TopfaceNotifications> sparseArray, Type typeOfSrc, JsonSerializationContext context) {
-                ArrayList<Profile.TopfaceNotifications> list = new ArrayList<>();
-                for (int i = 0; i < sparseArray.size(); i++) {
-                    int key = sparseArray.keyAt(i);
-                    Profile.TopfaceNotifications notifications = sparseArray.get(key);
-                    list.add(notifications);
-                }
-                return context.serialize(list);
-            }
-        }).create();
+                    @Override
+                    public JsonElement serialize(SparseArray<Profile.TopfaceNotifications> sparseArray, Type typeOfSrc, JsonSerializationContext context) {
+                        ArrayList<Profile.TopfaceNotifications> list = new ArrayList<>();
+                        for (int i = 0; i < sparseArray.size(); i++) {
+                            int key = sparseArray.keyAt(i);
+                            Profile.TopfaceNotifications notifications = sparseArray.get(key);
+                            list.add(notifications);
+                        }
+                        return context.serialize(list);
+                    }
+                }).create();
         return gson.toJson(profile);
     }
 
     public static String optionsToJson(Options options) {
         Gson gson = new GsonBuilder().registerTypeAdapter(HashMap.class
                 , new JsonSerializer<HashMap<String, PageInfo>>() {
-            @Override
-            public JsonElement serialize(HashMap<String, PageInfo> hashMap, Type typeOfSrc, JsonSerializationContext context) {
+                    @Override
+                    public JsonElement serialize(HashMap<String, PageInfo> hashMap, Type typeOfSrc, JsonSerializationContext context) {
                 /*
                 Немножечко магии, чтоб при сериализации получался такой же json объект,
                 который присылает нам сервер.(Чтоб метод fillData в Options отработал как нужно)
                 */
-                Collection<PageInfo> list = hashMap.values();
-                return context.serialize(list);
-            }
-        }).create();
+                        Collection<PageInfo> list = hashMap.values();
+                        return context.serialize(list);
+                    }
+                }).create();
         return gson.toJson(options);
+    }
+
+    public static SearchUser searchUserFromJson(String json) {
+        SearchUser user = fromJson(json, SearchUser.class);
+        if (json != null) {
+            try {
+                JSONObject object = new JSONObject(json);
+                Profile.parseForm(new FormInfo(App.getContext(), user.sex, Profile.TYPE_USER_PROFILE),
+                        user.forms, object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return user;
     }
 }

@@ -254,6 +254,8 @@
     <color name="toolbar_gradient_start_color">#80000000</color>
     <color name="transparent">#00000000</color>
     <color name="album_gradient_start">#bd000000</color>
+    <color name="gray_forms_color">#737373</color>
+    <color name="black_forms_color">#000000</color>
 
     <!--Popups-->
     <color name="popup_background">@color/bg_white</color>

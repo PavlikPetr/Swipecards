@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +31,7 @@ import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
@@ -117,7 +121,26 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         if (stateSaverRegistrator is IStateSaverRegistrator) {
             stateSaverRegistrator.registerStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
+        initFormList()
         return mBinding.root
+    }
+
+    private fun initFormList() = with(mBinding.formsList) {
+        layoutManager = LinearLayoutManager(context)
+        adapter = CompositeAdapter<IType>().apply {
+            addAdapterItemDelegate(ChildItemDelegate.TYPE, ChildItemDelegate())
+            addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
+            addAdapterItemDelegate(GiftsItemDelegate.TYPE, GiftsItemDelegate(mApi))
+        }
+        addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+                if (layoutManager.getPosition(view) == 0) {
+                    outRect?.top = dimen(R.dimen.form_list_padding)
+                } else {
+                    outRect?.top = 0
+                }
+            }
+        })
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -168,12 +191,10 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
-    override fun onNewSearchUser(user: SearchUser) {
-        with(mDatingAlbumViewModel) {
-            albumData.set(user.photos)
-            currentUser = user
-        }
-        mDatingButtonsViewModel.currentUser = user
+    override fun onNewSearchUser(user: SearchUser) = with(mDatingAlbumViewModel) {
+        mDatingFragmentViewModel.prepareFormsData(user)
+        albumData.set(user.photos)
+        currentUser = user
     }
 
     override fun onUserShow(user: SearchUser) {

@@ -65,7 +65,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val PHOTOS_COUNTER_VISIBLE = "photos_counter_visible"
         const val NEED_ANIMATE_LOADER = "need_animate_loader"
         const val CURRENT_ITEM = "current_item"
-        const val CURRENT_USER = "current_user"
+        const val CURRENT_USER = "current_user_dating_album"
         const val LOADED_COUNT = "loaded_count"
         const val CAN_SEND_ALBUM_REQUEST = "can_send_album_request"
         const val NEED_MORE = "need_more"
@@ -73,7 +73,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     fun updatePhotosCounter(position: Int) {
         val user = currentUser
-        if (user != null) {
+        if (user != null && user.photos != null && user.photos.isNotEmpty()) {
             if (!isPhotosCounterVisible.get()) {
                 isPhotosCounterVisible.set(true)
             }
