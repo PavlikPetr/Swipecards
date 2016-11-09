@@ -20,6 +20,8 @@ import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
@@ -38,7 +40,7 @@ import org.jetbrains.anko.support.v4.dimen
  * Created by tiberal on 07.10.16.
  */
 class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
-        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IDatingAlbumView {
+        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IStartAdmirationPurchasePopup, IDatingAlbumView {
 
     override val anchorViewResId: Int
         get() = R.layout.dating_buttons_layout
@@ -59,7 +61,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private val mDatingButtonsViewModel by lazy {
         DatingButtonsViewModel(mAnchorBinding, mApi, mNavigator, mUserSearchList, mDatingButtonsEvents = this,
-                mDatingButtonsView = this, mEmptySearchVisibility = this)
+                mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
         DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mAlbumActionsListener = this)
@@ -81,7 +83,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         AlbumLoadController(AlbumLoadController.FOR_PREVIEW)
     }
     //~~~~~~~~~~~~~~~~~~~~~~~ конец ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
     companion object {
         const val USER_SEARCH_LIST = "user_search_list"
@@ -140,6 +141,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK &&
+                requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
+            mDatingButtonsViewModel.onActivityResult()
+        }
+
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
@@ -155,6 +161,10 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             mDatingAlbumViewModel.currentUser = user
         }
     }
+
+    override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
+        mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
+
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
