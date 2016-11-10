@@ -49,6 +49,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
 
     @Inject lateinit var mState: TopfaceAppState
+    var isPullToRefresh = false
     var isRefreshing = object : ObservableBoolean() {
         override fun set(value: Boolean) {
             super.set(value)
@@ -228,12 +229,15 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     protected open fun updateFeedsLoaded(data: FeedListData<T>?, updateBundle: Bundle) {
+        Debug.debug("getAppDayRequest", "updateFeedsLoaded ")
+        if (isDataFromCache || (mAdapter?.data?.isEmpty() ?: true && !(data?.items?.isEmpty() ?: true))) {
+            typeFeedFragment?.let { getAppDayRequest(it) }
+        }
         data?.let {
             if (isDataFromCache) {
                 mAdapter?.let { adapter ->
                     adapter.data.clear()
                     adapter.notifyDataSetChanged()
-                    typeFeedFragment?.let { getAppDayRequest(it) }
                 }
                 isDataFromCache = false
             }
@@ -260,9 +264,17 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     e?.let { Debug.log("App day banner error request: $it") } ?: Unit
 
             override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
+                Debug.debug("getAppDayRequest", "onNext ")
                 if (!imageArray.isEmpty()) {
-                    mAdapter?.setHeader(FixedViewInfo(bannerRes, imageArray))
-                    mAdapter?.notifyItemChange(0)
+                    mAdapter?.let {
+                        with(it) {
+                            setHeader(FixedViewInfo(bannerRes, imageArray))
+                            notifyItemInserted(0)
+                        }
+
+                        binding.feedList.layoutManager.scrollToPosition(0)
+                    }
+
                 }
 
             } ?: Unit
@@ -303,6 +315,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     override fun onRefresh() {
         isRefreshing.set(true)
+        isPullToRefresh = true
         loadTopFeeds()
     }
 
@@ -347,7 +360,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
                 removeOldDuplicates(it)
                 mAdapter?.addFirst(it.items)
-                binding.feedList.layoutManager.scrollToPosition(0)
+                if (isPullToRefresh) {
+                    binding.feedList.layoutManager.scrollToPosition(0)
+                    isPullToRefresh = false
+                }
             }
         }
     }
