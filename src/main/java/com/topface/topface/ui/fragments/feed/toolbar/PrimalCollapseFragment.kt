@@ -14,7 +14,6 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.ToolbarActivity
-import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsBehavior
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import org.jetbrains.anko.layoutInflater
 
@@ -48,11 +47,6 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         (mAppBarBinding.appbar.layoutParams as CoordinatorLayout.LayoutParams).height = size
     }
 
-    open fun addAnchorViewBehavior() {
-        (mAppBarBinding.anchorFrame.layoutParams as CoordinatorLayout.LayoutParams).behavior =
-                DatingButtonsBehavior<FrameLayout>()
-    }
-
     open fun bindModels() {
         mAppBarBinding.model = mAppBarModel
     }
@@ -61,7 +55,6 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bindModels()
         setupToolbar(toolbarSize)
-        addAnchorViewBehavior()
         with(mAppBarBinding) {
             anchorFrame.addView(mAnchorBinding.root)
             collapseFrame.addView(mCollapseBinding.root)

@@ -24,8 +24,9 @@ class PrimalCollapseViewModel(binding: AppBarBinding, val mScrimStateListener: I
         appBar?.let {
             val visiblePartSize = it.getHeight() + verticalOffset
             val isScrimsAreShown = visiblePartSize < binding.collapsingLayout.scrimVisibleHeightTrigger
+            val isCollapsed = visiblePartSize <= binding.toolbarInclude.root.height
             mScrimStateListener.isScrimVisible(isScrimsAreShown)
-            mScrimStateListener.isCollapsed(visiblePartSize <= binding.toolbarInclude.root.height)
+            mScrimStateListener.isCollapsed(isCollapsed)
             (binding.viewModel as? NavigationToolbarViewModel)?.let {
                 // делаем title видимым только когда началась анимация по сворачиванию collapsingToolbar
                 it.extraViewModel.titleVisibility.set(if (isScrimsAreShown) View.VISIBLE else View.GONE)

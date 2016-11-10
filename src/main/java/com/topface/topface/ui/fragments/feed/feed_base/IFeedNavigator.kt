@@ -23,5 +23,5 @@ interface IFeedNavigator {
     fun showOwnProfile()
     fun showTakePhotoPopup()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity)
-    fun showFilter(activityDelegate: IActivityDelegate)
+    fun showFilter()
 }

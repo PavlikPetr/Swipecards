@@ -45,7 +45,7 @@ public class BindingsAdapters {
 
     @BindingAdapter("online")
     public static void setOnline(TextView view, boolean isOnline) {
-        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.ico_online : 0, 0);
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.im_list_online : 0, 0);
     }
 
     @BindingAdapter("fabVisibility")

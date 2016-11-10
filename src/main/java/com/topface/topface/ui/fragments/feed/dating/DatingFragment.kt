@@ -56,7 +56,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private lateinit var mAddPhotoHelper: AddPhotoHelper
     private var mFilterItem: MenuItem? = null
-    private var mOptionMenuItem: MenuItem? = null
+//    private var mOptionMenuItem: MenuItem? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentDatingLayoutBinding>(context.layoutInflater, R.layout.fragment_dating_layout, null, false)
@@ -196,7 +196,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         mFilterItem = menu?.findItem(R.id.action_dating_filter)
-        mOptionMenuItem = menu?.findItem(R.id.action_dating_options)
+//        mOptionMenuItem = menu?.findItem(R.id.action_dating_options)
     }
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
@@ -207,23 +207,30 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         currentUser = user
     }
 
-    override fun onUserShow(user: SearchUser) {
-        ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+    override fun onResume() {
+        super.onResume()
+        mDatingAlbumViewModel.currentUser?.let { updateToolbar(it) }
     }
+
+    override fun onUserShow(user: SearchUser) = updateToolbar(user)
+
+    private fun updateToolbar(user: SearchUser) =
+            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
 
     override fun onOptionsItemSelected(item: MenuItem?) =
             when (item?.itemId) {
                 R.id.action_dating_filter -> {
-                    (activity as? CrashReportActivity)?.let { mNavigator.showFilter(it) }
+                    mNavigator.showFilter()
                     true
                 }
                 else -> super.onOptionsItemSelected(item)
             }
 
     override fun isScrimVisible(isVisible: Boolean) {
-        mOptionMenuItem?.let {
-            it.icon = if (isVisible) R.drawable.ic_cebab_gray.getDrawable() else R.drawable.ic_cebab_white.getDrawable()
-        }
+        if (isVisible) hideControls() else showControls()
+//        mOptionMenuItem?.let {
+//            it.icon = if (isVisible) R.drawable.ic_cebab_gray.getDrawable() else R.drawable.ic_cebab_white.getDrawable()
+//        }
         mFilterItem?.let {
             it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
         }

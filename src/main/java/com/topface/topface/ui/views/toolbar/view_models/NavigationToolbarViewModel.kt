@@ -36,6 +36,7 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
         App.get().inject(this)
         title.set("")
         subTitle.set("")
+        shadowVisibility.set(View.GONE)
         val additionalViewBinding = DataBindingUtil.inflate<CustomTitleAndSubtitleToolbarAdditionalViewBinding>(LayoutInflater.from(context),
                 R.layout.custom_title_and_subtitle_toolbar_additional_view, null, false)
         binding.toolbarCustomView.addView(additionalViewBinding.root)
@@ -67,7 +68,6 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
 
     private fun setCorrectStyle() {
         setUpIconStyle(mHasNotification)
-        shadowVisibility.set(if (isCollapsingToolbar) View.GONE else View.VISIBLE)
         background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background)
     }
 

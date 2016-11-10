@@ -67,6 +67,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private companion object {
         const val CURRENT_USER = "current_user_dating_buttons"
         const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
+        const val DATING_BUTTON_VISIBILITY = "dating_button_visibility"
     }
 
     init {
@@ -197,7 +198,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     fun onActivityResult() {
-            sendAdmiration()
+        sendAdmiration()
     }
 
     private inline fun sendSomething(func: (SearchUser) -> Unit) =
@@ -225,11 +226,13 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         currentUser = getParcelable<SearchUser>(CURRENT_USER)
         isDatingButtonsLocked.set(getBoolean(DATING_BUTTONS_LOCKED))
+        isDatingButtonsVisible.set(getInt(DATING_BUTTON_VISIBILITY))
     }
 
     override fun onSavedInstanceState(state: Bundle) = with(state) {
         putParcelable(CURRENT_USER, currentUser)
         putBoolean(DATING_BUTTONS_LOCKED, isDatingButtonsLocked.get())
+        putInt(DATING_BUTTON_VISIBILITY, isDatingButtonsVisible.get())
     }
 
     override fun release() {

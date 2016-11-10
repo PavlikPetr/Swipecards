@@ -111,9 +111,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showFilter(activityDelegate:IActivityDelegate) {
-        val intent = Intent(activityDelegate.getApplicationContext(),
+    override fun showFilter() {
+        val intent = Intent(mActivityDelegate.getApplicationContext(),
                 EditContainerActivity::class.java)
-        activityDelegate.startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER)
+        mActivityDelegate.startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER)
     }
 }
