@@ -28,6 +28,7 @@ import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.PreloadManager
@@ -49,12 +50,13 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                               private val mDatingViewModelEvents: IDatingViewModelEvents,
                               private val mDatingButtonsView: IDatingButtonsView,
                               private val mEmptySearchVisibility: IEmptySearchVisibility) :
-        BaseViewModel<FragmentDatingLayoutBinding>(binding), OnUsersListEventsListener<SearchUser> {
+        BaseViewModel<FragmentDatingLayoutBinding>(binding), OnUsersListEventsListener<SearchUser>, IAppBarState {
 
     @Inject lateinit var state: TopfaceAppState
 
     private var mProfileSubscription: Subscription
     private var mUpdateSubscription: Subscription? = null
+    private var mIsScimVisible: Boolean = false
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
@@ -67,6 +69,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         const val CURRENT_USER = "current_user_dating_fragment_view_model"
         const val UPDATE_IN_PROCESS = "update_in_process"
         const val NEW_FILTER = "new_filter"
+        const val DATING_BUTTON_VISIBILITY = "dating_button_visibility"
     }
 
     init {
@@ -236,5 +239,11 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         if (!mNewFilter) {
             update(false, true)
         }
+    }
+
+    override fun isScrimVisible(isVisible: Boolean) {
+    }
+
+    override fun isCollapsed(isCollapsed: Boolean) {
     }
 }

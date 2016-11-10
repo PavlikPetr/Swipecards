@@ -12,6 +12,7 @@ import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
@@ -55,6 +56,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private lateinit var mAddPhotoHelper: AddPhotoHelper
     private var mFilterItem: MenuItem? = null
+    private var mOptionMenuItem: MenuItem? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentDatingLayoutBinding>(context.layoutInflater, R.layout.fragment_dating_layout, null, false)
@@ -194,6 +196,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         mFilterItem = menu?.findItem(R.id.action_dating_filter)
+        mOptionMenuItem = menu?.findItem(R.id.action_dating_options)
     }
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
@@ -217,9 +220,20 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 else -> super.onOptionsItemSelected(item)
             }
 
-    override fun isScrimVisible(isVisible: Boolean) = mFilterItem?.let {
-        it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
-    } ?: Unit
+    override fun isScrimVisible(isVisible: Boolean) {
+        mOptionMenuItem?.let {
+            it.icon = if (isVisible) R.drawable.ic_cebab_gray.getDrawable() else R.drawable.ic_cebab_white.getDrawable()
+        }
+        mFilterItem?.let {
+            it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
+        }
+    }
+
+    override fun isCollapsed(isCollapsed: Boolean) {
+        if (isCollapsed) {
+            hideControls()
+        }
+    }
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)
 

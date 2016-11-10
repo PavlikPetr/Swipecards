@@ -1,6 +1,8 @@
 package com.topface.topface.ui.edit;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +34,9 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
         Intent intent = getIntent();
         switch (intent.getIntExtra(App.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_FILTER:
+                // хак чтобы тень под тулбаром была на том же фоне, что и фрагмент, при этом с возможностью свитчить
+                // для разных фрагментов
+                getViewBinding().getRoot().setBackgroundColor(getResources().getColor(R.color.gray_bg));
                 mFragment = new FilterFragment();
                 break;
             default:

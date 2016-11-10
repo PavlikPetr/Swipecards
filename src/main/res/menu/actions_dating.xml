@@ -7,4 +7,18 @@
         android:icon="@drawable/filter_gray"
         android:title="@string/filter_filter"
         appcompat:showAsAction="always" />
+    <item
+        android:id="@+id/action_dating_options"
+        android:icon="@drawable/ic_cebab_gray"
+        android:title="menu"
+        appcompat:showAsAction="always" >
+        <menu>
+            <item android:id="@+id/create_new"
+                  android:icon="@drawable/filter_gray"
+                  android:title="TEST1" />
+            <item android:id="@+id/open"
+                  android:title="TEST2" />
+        </menu>
+        </item>
+
 </menu>

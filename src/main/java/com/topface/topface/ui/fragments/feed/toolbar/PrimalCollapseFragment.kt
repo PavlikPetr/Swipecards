@@ -24,7 +24,7 @@ import org.jetbrains.anko.layoutInflater
  * @param V collapse binding class
  * Created by tiberal on 10.10.16.
  */
-abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataBinding> : BaseFragment(), IAppBarScrimState {
+abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataBinding> : BaseFragment(), IAppBarState {
 
     abstract val anchorViewResId: Int
     abstract val collapseViewResId: Int
