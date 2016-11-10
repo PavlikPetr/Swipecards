@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dating
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -22,6 +23,7 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -160,8 +162,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         mBalance?.let {
             val hasMoneyForAdmiration = it.money >= priceAdmiration
             when {
-                (it.premium || hasMoneyForAdmiration && !isShown) -> sendAdmiration()
-                (hasMoneyForAdmiration && !isShown) || (!hasMoneyForAdmiration) -> startAdmirationPurchasePopup()
+                (it.premium || hasMoneyForAdmiration && isShown) -> sendAdmiration()
                 else -> startAdmirationPurchasePopup()
             }
         }
@@ -169,7 +170,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     private fun startAdmirationPurchasePopup() {
         App.getUserConfig().setAdmirationPurchasePopupShown()
-        mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration)
+        mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration,
+                R.color.dating_fab_small, R.drawable.admiration)
     }
 
     fun sendAdmiration() = sendSomething {
@@ -196,8 +198,11 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         })
     }
 
-    fun onActivityResult() {
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK &&
+                requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
             sendAdmiration()
+        }
     }
 
     private inline fun sendSomething(func: (SearchUser) -> Unit) =
