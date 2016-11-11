@@ -24,6 +24,7 @@ interface IFeedNavigator {
     fun showTakePhotoPopup()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity)
     fun showEmptyDating()
+    fun closeEmptyDating()
     fun showFilter()
 
 }

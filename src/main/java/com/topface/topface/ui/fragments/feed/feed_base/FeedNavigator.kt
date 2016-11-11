@@ -22,7 +22,6 @@ import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
@@ -36,6 +35,7 @@ import javax.inject.Inject
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
 
     @Inject lateinit var mNavigationState: NavigationState
+    private var mEmptyDatingFragment = DatingEmptyFragment.newInstance()
 
     init {
         App.get().inject(this)
@@ -112,7 +112,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showEmptyDating() {
-        DatingEmptyFragment.newInstance().show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+        mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+    }
+
+    override fun closeEmptyDating() {
+        mEmptyDatingFragment.dialog?.cancel()
     }
 
     override fun showFilter() {

@@ -75,11 +75,14 @@ class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
         App.getAppConfig().putPermissionsState(permissions, grantResults)
     }
 
-    override fun initViews(root: View) = with(TakePhotoDialogBinding.bind(root)) {
-        viewModel = mViewModel
-        //TODO оставляю до нового тулбара
-        (root.findViewById(R.id.title) as TextView).setText(R.string.take_photo)
-        root.findViewById(R.id.title_clickable).setOnClickListener(this@TakePhotoPopup)
+    override fun initViews(root: View) {
+        mBinding = TakePhotoDialogBinding.bind(root)
+        with(mBinding) {
+            viewModel = mViewModel
+            //TODO оставляю до нового тулбара
+            (root.findViewById(R.id.title) as TextView).setText(R.string.take_photo)
+            root.findViewById(R.id.title_clickable).setOnClickListener(this@TakePhotoPopup)
+        }
     }
 
     @FuckingVoodooMagic(description = "рассылка ивентов о действиях с попапом добавления фото")

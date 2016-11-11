@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dating
 
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutEmptyDatingBinding
 import com.topface.topface.requests.ApiRequest
@@ -14,19 +15,17 @@ import java.util.*
 /**
  * Created by mbulgakov on 10.11.16.
  */
-class DatingEmptyFragment() : AbstractDialogFragment(), IRequestClient {
+class DatingEmptyFragment() : AbstractDialogFragment(), IDialogCloser {
 
     companion object {
         const val TAG = "empty_dating_fragment"
         fun newInstance() = DatingEmptyFragment()
     }
 
-    private val mRequests = LinkedList<ApiRequest>()
-
     private lateinit var mBinding: LayoutEmptyDatingBinding
 
     private val mApi by lazy {
-        FeedApi(context, this)
+        FeedApi(context, activity as IRequestClient)
     }
 
     private val mNavigator by lazy {
@@ -34,28 +33,20 @@ class DatingEmptyFragment() : AbstractDialogFragment(), IRequestClient {
     }
 
     private val mViewModel by lazy {
-        DatingEmptyFragmentViewModel(dialog, mBinding, mApi, mNavigator)
+        DatingEmptyFragmentViewModel(mBinding, mApi, mNavigator, this)
     }
 
     override fun initViews(root: View) {
         mBinding = LayoutEmptyDatingBinding.bind(root)
-        with(mBinding) {
-            setViewModel(mViewModel)
-        }
+        mBinding.setViewModel(mViewModel)
     }
 
     override fun isModalDialog() = false
 
     override fun getDialogLayoutRes() = R.layout.layout_empty_dating
 
-    override fun registerRequest(request: ApiRequest?) {
-        if (!mRequests.contains(request)) {
-            mRequests.add(request!!)
-        }
-    }
-
-    override fun cancelRequest(request: ApiRequest) {
-        request.cancelFromUi()
+    override fun closeIt() {
+        dialog.cancel()
     }
 
 }
