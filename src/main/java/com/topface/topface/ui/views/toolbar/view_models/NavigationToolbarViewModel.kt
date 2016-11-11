@@ -13,6 +13,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
@@ -34,8 +35,8 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
 
     init {
         App.get().inject(this)
-        title.set("")
-        subTitle.set("")
+        title.set(Utils.EMPTY)
+        subTitle.set(Utils.EMPTY)
         shadowVisibility.set(View.GONE)
         val additionalViewBinding = DataBindingUtil.inflate<CustomTitleAndSubtitleToolbarAdditionalViewBinding>(LayoutInflater.from(context),
                 R.layout.custom_title_and_subtitle_toolbar_additional_view, null, false)
@@ -69,8 +70,8 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
     private fun setCorrectStyle() {
         setUpIconStyle(mHasNotification)
         background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background)
-        if(isCollapsingToolbar){
-            subTitle.set("")
+        if (isCollapsingToolbar) {
+            subTitle.set(Utils.EMPTY)
         }
     }
 

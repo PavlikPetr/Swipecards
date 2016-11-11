@@ -247,13 +247,12 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     override fun hideDatingButtons() = isDatingButtonsVisible.set(View.INVISIBLE)
 
-    override fun isScrimVisible(isVisible: Boolean) {
-        if (isVisible) hideDatingButtons() else showDatingButtons()
-    }
+    override fun isScrimVisible(isVisible: Boolean) =
+            if (isVisible) hideDatingButtons() else showDatingButtons()
 
-    override fun isCollapsed(isCollapsed: Boolean) {
-        if (isCollapsed) {
-            hideDatingButtons()
-        }
-    }
+
+    override fun isCollapsed(isCollapsed: Boolean) =
+            if (isCollapsed) {
+                hideDatingButtons()
+            } else Unit
 }

@@ -7,6 +7,8 @@ package com.topface.topface.ui.fragments.feed.toolbar
 interface IAppBarState {
     // true когда начинается переход в scrim
     fun isScrimVisible(isVisible: Boolean)
+
     // true когда закончилось сворачивание CollapsingToolbar
-    fun isCollapsed(isCollapsed: Boolean)
+    fun isCollapsed(isCollapsed: Boolean) {
+    }
 }

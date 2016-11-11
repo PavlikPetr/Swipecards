@@ -43,7 +43,4 @@ class DatingOptionMenuManager(private val mNavigator: IFeedNavigator) : IAppBarS
             it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
         }
     }
-
-    override fun isCollapsed(isCollapsed: Boolean) {
-    }
 }

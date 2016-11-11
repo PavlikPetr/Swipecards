@@ -56,7 +56,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
     private var mProfileSubscription: Subscription
     private var mUpdateSubscription: Subscription? = null
-    private var mIsScimVisible: Boolean = false
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
