@@ -49,7 +49,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
 
     @Inject lateinit var mState: TopfaceAppState
-    var isPullToRefresh = false
     var isRefreshing = object : ObservableBoolean() {
         override fun set(value: Boolean) {
             super.set(value)
@@ -230,6 +229,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     protected open fun updateFeedsLoaded(data: FeedListData<T>?, updateBundle: Bundle) {
         Debug.debug("getAppDayRequest", "updateFeedsLoaded ")
+        if (mAdapter == null) return
         if (isDataFromCache || (mAdapter?.data?.isEmpty() ?: true && !(data?.items?.isEmpty() ?: true))) {
             typeFeedFragment?.let { getAppDayRequest(it) }
         }
@@ -264,17 +264,14 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     e?.let { Debug.log("App day banner error request: $it") } ?: Unit
 
             override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
-                Debug.debug("getAppDayRequest", "onNext ")
                 if (!imageArray.isEmpty()) {
                     mAdapter?.let {
                         with(it) {
                             setHeader(FixedViewInfo(bannerRes, imageArray))
                             notifyItemInserted(0)
                         }
-
                         binding.feedList.layoutManager.scrollToPosition(0)
                     }
-
                 }
 
             } ?: Unit
@@ -315,7 +312,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     override fun onRefresh() {
         isRefreshing.set(true)
-        isPullToRefresh = true
         loadTopFeeds()
     }
 
@@ -330,9 +326,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
-                        if (isRefreshing.get()) {
-                            isRefreshing.set(false)
-                        }
+
                     }
 
                     override fun onError(e: Throwable?) {
@@ -360,9 +354,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
                 removeOldDuplicates(it)
                 mAdapter?.addFirst(it.items)
-                if (isPullToRefresh) {
+                if (isRefreshing.get()) {
                     binding.feedList.layoutManager.scrollToPosition(0)
-                    isPullToRefresh = false
+                    isRefreshing.set(false)
                 }
             }
         }
