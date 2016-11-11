@@ -113,7 +113,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         if (stateSaverRegistrator is IStateSaverRegistrator) {
             stateSaverRegistrator.registerStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
-        showEmptySearchDialog()
         return mBinding.root
     }
 
