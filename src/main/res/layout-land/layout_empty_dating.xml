@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment"/>
+            type="com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragmentViewModel"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -73,6 +73,7 @@
                 <Button
                     android:id="@+id/btnChangeFilterDating"
                     style="@style/PopupGreenButton"
+                    android:onClick="@{() -> viewModel.onChangeDatingFilter()}"
                     android:text="@string/dating_empty_change_settings"/>
 
                 <Button
@@ -80,6 +81,7 @@
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onCleanDatingFilter()}"
                     android:text="@string/dating_empty_reset"/>
 
             </LinearLayout>

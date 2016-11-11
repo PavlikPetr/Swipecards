@@ -255,8 +255,8 @@
     <string name="filter_constitution_template">От %1$d до %2$d</string>
     <string name="filter_cities_all">По всем городам</string>
     <string name="dating_empty_nothing_found">Ничего не найдено!</string>
-    <string name="dating_empty_reset">СБРОСИТЬ</string>
-    <string name="dating_empty_change_settings">ИЗМЕНИТЬ</string>
+    <string name="dating_empty_reset">Сбросить</string>
+    <string name="dating_empty_change_settings">Изменить</string>
     <string name="dating_empty_try_to_change_settings_or_reset">Попробуйте сбросить или изменить
         параметры поиска
     </string>
