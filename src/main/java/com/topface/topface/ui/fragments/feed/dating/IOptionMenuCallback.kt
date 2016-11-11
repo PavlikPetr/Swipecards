@@ -6,5 +6,5 @@ import android.view.MenuItem
 
 interface IOptionMenuCallback {
     fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?)
-    fun onOptionsItemSelected(item: MenuItem?):Boolean
+    fun onOptionsItemSelected(item: MenuItem?): Boolean
 }

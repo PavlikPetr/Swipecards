@@ -171,8 +171,8 @@ class FabTransform(@ColorInt private val color: Int, @DrawableRes private val ic
         iconFade.interpolator = fastOutSlowInInterpolator
 
         // Work around issue with elevation shadows. At the end of the return transition the shared
-        // element's toolbar_shadow is drawn twice (by each activity) which is jarring. This workaround
-        // still causes the toolbar_shadow to snap, but it's better than seeing it double drawn.
+        // element's shadow is drawn twice (by each activity) which is jarring. This workaround
+        // still causes the shadow to snap, but it's better than seeing it double drawn.
         var elevation: Animator? = null
         if (!fromFab) {
             elevation = ObjectAnimator.ofFloat(view, View.TRANSLATION_Z, -view.elevation)
