@@ -14,7 +14,8 @@ import com.topface.topface.utils.extensions.isHasNotification
  * Model for interaction with collapsing toolbar
  * Created by tiberal on 18.10.16.
  */
-class PrimalCollapseViewModel(binding: AppBarBinding, val mScrimStateListener: IAppBarState) : BaseViewModel<AppBarBinding>(binding)
+class PrimalCollapseViewModel(binding: AppBarBinding,
+                              private val mScrimStateListener: IAppBarState) : BaseViewModel<AppBarBinding>(binding)
         , AppBarLayout.OnOffsetChangedListener {
 
     val anchorVisibility = ObservableInt(View.VISIBLE)
