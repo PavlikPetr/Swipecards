@@ -15,6 +15,7 @@ import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
+import com.topface.topface.utils.extensions.getDimen
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -79,6 +80,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     override fun onDestroyView() {
         super.onDestroyView()
         setCollapsingToolbarStyle(false)
+        mAppBarModel.shadowVisibility.set(View.VISIBLE)
         with(TypedValue()) {
             //устанавливаем стандартный размер тулбара
             if (activity.theme.resolveAttribute(android.R.attr.actionBarSize, this, true)) {

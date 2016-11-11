@@ -55,8 +55,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         get() = dimen(R.dimen.dating_album_height)
 
     private lateinit var mAddPhotoHelper: AddPhotoHelper
-    private var mFilterItem: MenuItem? = null
-//    private var mOptionMenuItem: MenuItem? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentDatingLayoutBinding>(context.layoutInflater, R.layout.fragment_dating_layout, null, false)
@@ -76,6 +74,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     private val mDatingFragmentViewModel by lazy {
         DatingFragmentViewModel(mBinding, mApi, mNavigator, mUserSearchList, mDatingViewModelEvents = this,
                 mDatingButtonsView = this, mEmptySearchVisibility = this)
+    }
+    private val mDatingOptionMenuManager by lazy {
+        DatingOptionMenuManager(mNavigator)
     }
 
     private val mApi by lazy {
@@ -191,12 +192,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
             mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
 
-    override fun getOptionsMenuRes() = R.menu.actions_dating
-
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        mFilterItem = menu?.findItem(R.id.action_dating_filter)
-//        mOptionMenuItem = menu?.findItem(R.id.action_dating_options)
+        mDatingOptionMenuManager.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
@@ -218,28 +216,15 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
 
     override fun onOptionsItemSelected(item: MenuItem?) =
-            when (item?.itemId) {
-                R.id.action_dating_filter -> {
-                    mNavigator.showFilter()
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
-            }
+            mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun isScrimVisible(isVisible: Boolean) {
-        if (isVisible) hideControls() else showControls()
-//        mOptionMenuItem?.let {
-//            it.icon = if (isVisible) R.drawable.ic_cebab_gray.getDrawable() else R.drawable.ic_cebab_white.getDrawable()
-//        }
-        mFilterItem?.let {
-            it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
-        }
+        mDatingOptionMenuManager.isScrimVisible(isVisible)
+        mDatingButtonsViewModel.isScrimVisible(isVisible)
     }
 
     override fun isCollapsed(isCollapsed: Boolean) {
-        if (isCollapsed) {
-            hideControls()
-        }
+        mDatingButtonsViewModel.isCollapsed(isCollapsed)
     }
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)

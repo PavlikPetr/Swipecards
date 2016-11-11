@@ -94,9 +94,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        PurchaseToolbarViewModel toolbarViewModel = new PurchaseToolbarViewModel(toolbar, this);
-        toolbarViewModel.getTitle().set(getString(R.string.purchase_header_title));
-        return toolbarViewModel;
+        return new PurchaseToolbarViewModel(toolbar, this);
     }
 
 

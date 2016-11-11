@@ -46,7 +46,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-    private boolean mNeedTitles = true;
     private Unbinder mUnbinder;
 
     @Override
@@ -63,9 +62,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
             }
         } catch (Exception ex) {
             Debug.error(ex);
-        }
-        if (savedInstanceState != null) {
-            mNeedTitles = savedInstanceState.getBoolean(STATE_NEED_TITLES, true);
         }
     }
 
@@ -115,7 +111,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_NEED_TITLES, mNeedTitles);
     }
 
     private void clearPreviousState() {
@@ -292,10 +287,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     }
 
     protected void restoreState(Bundle savedInstanceState) {
-    }
-
-    protected void setNeedTitles(boolean needTitles) {
-        mNeedTitles = needTitles;
     }
 
     @Override

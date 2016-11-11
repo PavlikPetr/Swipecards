@@ -26,6 +26,7 @@ import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IS
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
@@ -49,7 +50,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                              private val mDatingButtonsView: IDatingButtonsView,
                              private val mEmptySearchVisibility: IEmptySearchVisibility,
                              private val mStartAdmirationPurchasePopup: IStartAdmirationPurchasePopup) :
-        BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility {
+        BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility,
+        IAppBarState {
 
     var currentUser: SearchUser? = null
     private var mLikeSubscription: Subscription? = null
@@ -245,4 +247,13 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     override fun hideDatingButtons() = isDatingButtonsVisible.set(View.INVISIBLE)
 
+    override fun isScrimVisible(isVisible: Boolean) {
+        if (isVisible) hideDatingButtons() else showDatingButtons()
+    }
+
+    override fun isCollapsed(isCollapsed: Boolean) {
+        if (isCollapsed) {
+            hideDatingButtons()
+        }
+    }
 }

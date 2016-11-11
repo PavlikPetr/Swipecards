@@ -69,12 +69,18 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
     private fun setCorrectStyle() {
         setUpIconStyle(mHasNotification)
         background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background)
+//        setToolbarShadowVisibility(!isCollapsingToolbar)
+        if(isCollapsingToolbar){
+            subTitle.set("")
+        }
     }
 
     fun isCollapsingToolbarStyle(isCollapsing: Boolean) = apply {
         isCollapsingToolbar = isCollapsing
         setCorrectStyle()
     }
+
+//    fun setToolbarShadowVisibility(isVisible: Boolean) = shadowVisibility.set(if (isVisible) View.VISIBLE else View.INVISIBLE)
 
     private fun setUpIconStyle(isHasNotification: Boolean?) =
             upIcon.set(if (isHasNotification ?: false)

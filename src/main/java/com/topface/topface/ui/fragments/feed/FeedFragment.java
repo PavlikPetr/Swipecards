@@ -1126,11 +1126,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         CountersManager.getInstance(getActivity()).setLastRequestMethod(NULL_METHOD);
     }
 
-    @Override
-    public void setNeedTitles(boolean needTitles) {
-        super.setNeedTitles(needTitles);
-    }
-
     protected boolean whetherDeleteIfBlacklisted() {
         return true;
     }
