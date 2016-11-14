@@ -11,7 +11,7 @@ import com.topface.topface.utils.config.UserConfig;
 import org.jetbrains.annotations.NotNull;
 
 
-public class TrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {
+public class TrialVipPopup extends BaseTrialVipPopup {
 
     public static final String TAG = "TrialVipPopup";
     public static final String SKIP_SHOWING_CONDITION = "skip_showing_condition";
@@ -61,9 +61,7 @@ public class TrialVipPopup extends AbstractDialogFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.get_trial_vip_button:
-                if (mOnFragmentActionsListener != null) {
-                    mOnFragmentActionsListener.onSubscribeClick();
-                }
+                onSubscribeClick();
                 break;
             case R.id.iv_close:
                 getDialog().cancel();

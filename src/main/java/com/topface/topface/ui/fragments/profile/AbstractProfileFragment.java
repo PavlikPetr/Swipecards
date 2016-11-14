@@ -32,7 +32,7 @@ import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 import butterknife.BindView;
 
