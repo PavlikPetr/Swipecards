@@ -40,9 +40,4 @@ public class IntegrationWebViewFragment extends WebViewFragment {
         super.onResume();
         ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getArguments().getString(INTEGRATION_FRAGMENT_TITLE)));
     }
-
-    @Override
-    public boolean isNeedTitles() {
-        return true;
-    }
 }

@@ -11,15 +11,15 @@ import android.os.Message
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
+import com.topface.topface.ui.CrashReportActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
@@ -35,6 +35,7 @@ import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
+import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
@@ -73,6 +74,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     private val mDatingFragmentViewModel by lazy {
         DatingFragmentViewModel(mBinding, mApi, mNavigator, mUserSearchList, mDatingViewModelEvents = this,
                 mDatingButtonsView = this, mEmptySearchVisibility = this)
+    }
+    private val mDatingOptionMenuManager by lazy {
+        DatingOptionMenuManager(mNavigator)
     }
 
     private val mApi by lazy {
@@ -186,8 +190,12 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
-        mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
+            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        mDatingOptionMenuManager.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
@@ -197,10 +205,27 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         currentUser = user
     }
 
-    override fun onUserShow(user: SearchUser) {
-        ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+    override fun onResume() {
+        super.onResume()
+        mDatingAlbumViewModel.currentUser?.let { updateToolbar(it) }
     }
 
+    override fun onUserShow(user: SearchUser) = updateToolbar(user)
+
+    private fun updateToolbar(user: SearchUser) =
+            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+
+    override fun onOptionsItemSelected(item: MenuItem?) =
+            mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+
+    override fun isScrimVisible(isVisible: Boolean) {
+        mDatingOptionMenuManager.isScrimVisible(isVisible)
+        mDatingButtonsViewModel.isScrimVisible(isVisible)
+    }
+
+    override fun isCollapsed(isCollapsed: Boolean) {
+        mDatingButtonsViewModel.isCollapsed(isCollapsed)
+    }
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)
 

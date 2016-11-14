@@ -182,7 +182,6 @@ public class RegistrationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        setNeedTitles(true);
         View root = inflater.inflate(R.layout.topface_registration, null);
         bindView(root);
         initViews();

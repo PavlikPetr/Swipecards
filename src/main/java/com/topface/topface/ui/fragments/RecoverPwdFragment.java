@@ -38,7 +38,6 @@ public class RecoverPwdFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(true);
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
+import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
@@ -107,5 +108,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-
+    override fun showFilter() {
+        val intent = Intent(mActivityDelegate.getApplicationContext(),
+                EditContainerActivity::class.java)
+        mActivityDelegate.startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER)
+    }
 }

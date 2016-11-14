@@ -20,7 +20,6 @@ public class OwnGiftsFragment extends UpdatableGiftsFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(true);
     }
 
     @Override

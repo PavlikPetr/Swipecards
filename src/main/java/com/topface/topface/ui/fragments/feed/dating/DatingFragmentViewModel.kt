@@ -28,6 +28,7 @@ import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.PreloadManager
