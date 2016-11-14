@@ -21,8 +21,7 @@ class AuthStatistics {
         @JvmStatic fun sendFirstStartApp() = send(APP_FIRST_START_KEY, null)
 
         @JvmStatic fun sendFirstAuth(platform: String, authStatus: String) {
-            val slice = Slices()
-            with(slice) {
+            with(Slices()) {
                 putSlice(AuthStatistics.PLT_SLICE, platform)
                 putSlice(AuthStatistics.VAL_SLICE, authStatus)
                 send(FIRST_AUTH_KEY, this)
