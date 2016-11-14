@@ -99,6 +99,7 @@ public class Profile extends AbstractDataWithPhotos {
     public String notificationToken;
     @Inject
     transient TopfaceAppState mAppState;
+    public boolean hasEmptyFields = false;
 
     public Profile() {
         super();
@@ -162,12 +163,22 @@ public class Profile extends AbstractDataWithPhotos {
                 }.getType());
                 setFornItemListeners(profile.forms);
             } else {
-                parseForm(new FormInfo(App.getContext(), profile.sex, profile.getType()), profile.forms, resp);
+                parseForm(new FormInfo(App.getContext(), profile.sex, profile.getType()), profile.forms, resp, true);
             }
             parseNotifications(profile, resp);
+            hasEmptyFields = hasEmptyForms(forms);
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
+    }
+
+    private boolean hasEmptyForms(LinkedList<FormItem> forms){
+        for (FormItem form : forms) {
+            if (form.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setFornItemListeners(LinkedList<FormItem> forms) {
@@ -206,7 +217,8 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    public static void parseForm(FormInfo formInfo, LinkedList<FormItem> forms, JSONObject resp) throws JSONException {
+
+    public static void parseForm(FormInfo formInfo, LinkedList<FormItem> forms, JSONObject resp, boolean isNeedHeader) throws JSONException {
         if (!resp.isNull("form")) {
             JSONObject form = resp.getJSONObject("form");
 
@@ -236,8 +248,10 @@ public class Profile extends AbstractDataWithPhotos {
             forms.add(formItem);
 
             // 5 HEADER -= PHYSIQUE =-
-            headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 11 breast position 7
             formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
@@ -253,13 +267,15 @@ public class Profile extends AbstractDataWithPhotos {
             forms.add(formItem);
 
             // about status
-            String as = form.optString("status");
-            String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
-            formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
-                    FormItem.DATA, headerItem, ABOUT_STATUS);
-            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
-            formInfo.fillFormItem(formItem);
-            forms.add(formItem);
+            if (isNeedHeader) {
+                String as = form.optString("status");
+                String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
+                formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
+                        FormItem.DATA, headerItem, ABOUT_STATUS);
+                formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
+                formInfo.fillFormItem(formItem);
+                forms.add(formItem);
+            }
 
             // 7 height position 3
             int h = form.optInt("height");
@@ -320,8 +336,10 @@ public class Profile extends AbstractDataWithPhotos {
             forms.add(formItem);
 
             // 12 HEADER -= SOCIAL =-
-            headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 14 education position 8
             formItem = new FormItem(R.array.form_social_education, form.optInt("educationId"),
@@ -348,8 +366,10 @@ public class Profile extends AbstractDataWithPhotos {
             forms.add(formItem);
 
             // 19 HEADER -= HABITS =-
-            headerItem = new FormItem(R.string.form_habits, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_habits, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 20 smoking position 12
             formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smokingId"),
@@ -373,8 +393,10 @@ public class Profile extends AbstractDataWithPhotos {
             forms.add(formItem);
 
             // 24 HEADER -= DETAIL =-
-            headerItem = new FormItem(R.string.form_detail, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_detail, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 25 first_dating position 15
             String dd = form.optString("firstDating").trim();

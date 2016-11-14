@@ -43,6 +43,10 @@ public class Gift extends AbstractDataWithPhotos implements Parcelable {
         this.feedId = feedId;
     }
 
+    public static Gift constructFakeGift() {
+        return new Gift(1, 1, "", 1);
+    }
+
     @SuppressWarnings("deprecation")
     public static LinkedList<Gift> parse(ApiResponse response) {
         LinkedList<Gift> gifts = new LinkedList<>();

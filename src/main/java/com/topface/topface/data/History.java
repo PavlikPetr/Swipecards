@@ -20,7 +20,7 @@ public class History extends FeedDialog implements Parcelable {
     public String blockText;
     public String dialogTitle;
 
-    private String mJsonForParse;
+    public String mJsonForParse;
     /**
      * Форматированное время создания элемента. Форматируется на этапе парсинга данных и затем не изменяется
      */

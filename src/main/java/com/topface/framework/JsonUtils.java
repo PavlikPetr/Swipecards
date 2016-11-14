@@ -97,7 +97,7 @@ public class JsonUtils {
             try {
                 JSONObject object = new JSONObject(json);
                 Profile.parseForm(new FormInfo(App.getContext(), user.sex, Profile.TYPE_USER_PROFILE),
-                        user.forms, object);
+                        user.forms, object, false);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -6,12 +6,13 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.form.ChildItemViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.form.ChildItemViewModel"/>
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:background="@{model.background}"
                   android:orientation="horizontal"
                   android:paddingBottom="7dp"
                   android:paddingTop="7dp">
@@ -22,8 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="26dp"
+            android:layout_gravity="center"
             android:onClick="@{() -> model.sendInfoRequest()}"
-            android:src="@drawable/bt_question"
+            android:src="@{model.icon}"
             android:visibility="@{model.isRequestButtonVisible}"/>
 
         <LinearLayout

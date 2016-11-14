@@ -44,7 +44,18 @@ public class FormInfo {
                 case FormItem.DATA:
                     title = getFormTitle(formItem);
                     if (formItem.dataId != FormItem.NO_RESOURCE_ID) {
-                        data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);
+                        if (formItem.dataId == 0) {
+                            data = FormItem.EMPTY_FORM_VALUE;
+                            formItem.setIsEmpty(true);
+                        } else {
+                            data = getEntryById(getEntriesByTitleId(formItem.titleId),
+                                    getIdsByTitleId(formItem.titleId), formItem.dataId);
+                        }
+                    } else {
+                        if (data.isEmpty()) {
+                            data = FormItem.EMPTY_FORM_VALUE;
+                            formItem.setIsEmpty(true);
+                        }
                     }
                     break;
                 case FormItem.HEADER:

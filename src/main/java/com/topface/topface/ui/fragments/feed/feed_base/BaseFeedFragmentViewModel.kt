@@ -121,9 +121,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         mUpdaterSubscription = mAdapter?.let { adapter ->
             adapter.updaterObservable.distinct {
-                it?.let {
-                    it.getString(TO, Utils.EMPTY)
-                }
+                it?.getString(TO, Utils.EMPTY)
             }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
                 override fun onNext(updateBundle: Bundle?) {
                     updateBundle?.let {

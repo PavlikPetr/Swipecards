@@ -398,6 +398,8 @@ dependencies {
     compile('com.facebook.android:facebook-android-sdk:4.5.0') {
         exclude group: 'com.android.support'
     }
+    //Expandet FAB
+    compile 'net.i2p.android.ext:floatingactionbutton:1.10.1'
     //Animations: NineOldAndroids, ListViewAnimations
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
