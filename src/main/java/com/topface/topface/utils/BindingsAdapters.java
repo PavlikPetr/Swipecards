@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
@@ -26,6 +27,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -45,7 +47,7 @@ public class BindingsAdapters {
 
     @BindingAdapter("online")
     public static void setOnline(TextView view, boolean isOnline) {
-        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.ico_online : 0, 0);
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.im_list_online : 0, 0);
     }
 
     @BindingAdapter("fabVisibility")
@@ -231,7 +233,10 @@ public class BindingsAdapters {
 
     @BindingAdapter("navigationIcon")
     public static void setNavigationIcon(Toolbar view, @DrawableRes int resource) {
-        view.setNavigationIcon(resource);
+        Drawable drawable = ResourceExtensionKt.getDrawable(resource);
+        if(drawable!=null){
+            view.setNavigationIcon(drawable);
+        }
     }
 
     /*

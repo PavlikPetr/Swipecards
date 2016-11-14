@@ -10,8 +10,8 @@ import com.topface.topface.R
 import com.topface.topface.databinding.TakePhotoDialogBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
-import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.extensions.getString
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -84,10 +84,16 @@ class TakePhotoPopup : AbstractDialogFragment() {
         App.getAppConfig().putPermissionsState(permissions, grantResults)
     }
 
-    override fun initViews(root: View) = with(TakePhotoDialogBinding.bind(root)) {
-        viewModel = mViewModel
-        toolbarViewModel = mToolbarViewModel
-    }
+    override fun initViews(root: View) =
+            TakePhotoDialogBinding.bind(root).run {
+                with(this) {
+                    viewModel = mViewModel
+                    toolbarViewModel = mToolbarViewModel
+                    mToolbarViewModel.init()
+                }
+                mBinding = this
+            }
+
 
     private fun getPlc() = mArgs?.getString(EXTRA_PLC) ?: PLC_UNDEFINED
 

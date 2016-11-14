@@ -34,7 +34,6 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_topface_account, container, false);
         mLockerView = root.findViewById(R.id.llvLogoutLoading);
         mLockerView.setVisibility(View.GONE);
-        setNeedTitles(true);
         refreshActionBarTitles();
         Drawable icon = null;
         final AuthToken token = AuthToken.getInstance();

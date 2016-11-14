@@ -42,19 +42,8 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     }
 
     @Override
-    protected void setNeedTitles(boolean needTitles) {
-        super.setNeedTitles(getArguments().getBoolean(NEED_SHOW_TITLE));
-    }
-
-    @Override
     protected String getScreenName() {
         return PAGE_NAME;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_bonus)));
     }
 
     @Nullable
@@ -70,6 +59,14 @@ public class BonusFragment extends BaseFragment implements IBonusView {
         mPresenter.bindView(this);
         mPresenter.loadOfferwalls();
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getArguments().getBoolean(NEED_SHOW_TITLE)) {
+            ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_bonus)));
+        }
     }
 
     @Override

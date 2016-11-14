@@ -24,10 +24,11 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
-import com.topface.topface.ui.fragments.dating.form.*
+import com.topface.topface.ui.fragments.dating.form.FormModel
+import com.topface.topface.ui.fragments.dating.form.GiftsModel
+import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
@@ -45,7 +46,6 @@ import javax.inject.Inject
  * Created by tiberal on 12.10.16.
  */
 class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val mApi: FeedApi,
-                              private val mNavigator: FeedNavigator,
                               private val mUserSearchList: CachableSearchList<SearchUser>,
                               private val mDatingViewModelEvents: IDatingViewModelEvents,
                               private val mDatingButtonsView: IDatingButtonsView,

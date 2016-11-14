@@ -18,7 +18,7 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
                                     val mNavigation: IToolbarNavigation? = null) : BaseViewModel<ToolbarBinding>(binding) {
     val title = RxFieldObservable<String>(R.string.app_name.getString())
     val background = ObservableInt(R.color.toolbar_background)
-    val subTitle = RxFieldObservable<String>("")
+    val subTitle = RxFieldObservable<String>()
     val titleTextColor = ObservableInt(R.color.toolbar_title_color.getColor())
     val subTitleTextColor = ObservableInt(R.color.toolbar_subtitle_color.getColor())
     val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)

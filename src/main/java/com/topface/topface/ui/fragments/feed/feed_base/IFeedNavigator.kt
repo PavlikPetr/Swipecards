@@ -5,6 +5,7 @@ import android.view.View
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.utils.IActivityDelegate
 
 /**
  * Интерфейс навигации в  фидах
@@ -23,4 +24,5 @@ interface IFeedNavigator {
     fun showTakePhotoPopup()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity)
     fun showGiftsActivity(from: String, id: Int)
+    fun showFilter()
 }

@@ -11,9 +11,8 @@ import android.os.Message
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
+import android.view.*
 import android.view.View
-import android.view.ViewGroup
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
@@ -25,11 +24,13 @@ import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
-import com.topface.topface.ui.fragments.dating.form.*
+import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
+import com.topface.topface.ui.fragments.dating.form.GiftsItemDelegate
+import com.topface.topface.ui.fragments.dating.form.ParentItemDelegate
+import com.topface.topface.ui.fragments.dating.DatingOptionMenuManager
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
-import com.topface.topface.ui.fragments.form.*
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
@@ -74,8 +75,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mAlbumActionsListener = this)
     }
     private val mDatingFragmentViewModel by lazy {
-        DatingFragmentViewModel(mBinding, mApi, mNavigator, mUserSearchList, mDatingViewModelEvents = this,
+        DatingFragmentViewModel(mBinding, mApi, mUserSearchList, mDatingViewModelEvents = this,
                 mDatingButtonsView = this, mEmptySearchVisibility = this)
+    }
+    private val mDatingOptionMenuManager by lazy {
+        DatingOptionMenuManager(mNavigator)
     }
 
     private val mApi by lazy {
@@ -201,6 +205,10 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
             mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        mDatingOptionMenuManager.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
@@ -218,12 +226,25 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onResume() {
         super.onResume()
         Debug.log("GIFTS_BUGS dating resume current user id ${mDatingFragmentViewModel.currentUser?.id}")
+        mDatingAlbumViewModel.currentUser?.let { updateToolbar(it) }
     }
 
-    override fun onUserShow(user: SearchUser) {
-        ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+    override fun onUserShow(user: SearchUser) = updateToolbar(user)
+
+    private fun updateToolbar(user: SearchUser) =
+            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+
+    override fun onOptionsItemSelected(item: MenuItem?) =
+            mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+
+    override fun isScrimVisible(isVisible: Boolean) {
+        mDatingOptionMenuManager.isScrimVisible(isVisible)
+        mDatingButtonsViewModel.isScrimVisible(isVisible)
     }
 
+    override fun isCollapsed(isCollapsed: Boolean) {
+        mDatingButtonsViewModel.isCollapsed(isCollapsed)
+    }
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)
 

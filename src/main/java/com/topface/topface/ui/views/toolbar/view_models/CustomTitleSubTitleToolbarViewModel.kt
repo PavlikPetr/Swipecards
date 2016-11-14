@@ -7,6 +7,7 @@ import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalVi
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
 
@@ -20,8 +21,8 @@ class CustomTitleSubTitleToolbarViewModel @JvmOverloads constructor(binding: Too
     var extraViewModel: CustomToolbarViewModel
 
     init {
-        title.set("")
-        subTitle.set("")
+        title.set(Utils.EMPTY)
+        subTitle.set(Utils.EMPTY)
         val additionalViewBinding = DataBindingUtil.inflate<CustomTitleAndSubtitleToolbarAdditionalViewBinding>(LayoutInflater.from(context),
                 R.layout.custom_title_and_subtitle_toolbar_additional_view, null, false)
         extraViewModel = CustomToolbarViewModel(additionalViewBinding)

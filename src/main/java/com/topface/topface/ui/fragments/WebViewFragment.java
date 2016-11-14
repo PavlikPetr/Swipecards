@@ -21,15 +21,7 @@ abstract public class WebViewFragment extends BaseFragment {
     private WebViewFragmentBinding mBinding;
     private FullScreenWebChromeClient mFullScreenWebChromeClient;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(isNeedTitles());
-    }
-
     public abstract String getIntegrationUrl();
-
-    public abstract boolean isNeedTitles();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

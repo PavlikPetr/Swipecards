@@ -15,6 +15,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
+import com.topface.topface.databinding.AcPaymentWallBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.databinding.WebViewFragmentBinding;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -29,7 +30,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBinding> {
+public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBinding> {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
     public static final int ACTION_BUY = 100;
     public static final String PW_URL = "pw_url";
@@ -42,7 +43,6 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
     public static final double CENTS_AMOUNT = 100;
     private static final int RESULT_ERROR = 1;
     private String mSuccessUrl;
-    private View mProgressBar;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PaymentwallActivity.class);
@@ -59,6 +59,14 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
         return intent;
     }
 
+    private void initWebView(WebView webView, WebViewClient client) {
+        //noinspection AndroidLintSetJavaScriptEnabled
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setVerticalScrollbarOverlay(true);
+        webView.setVerticalFadingEdgeEnabled(true);
+        webView.setWebViewClient(client);
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String widgetUrl = getWidgetUrl();
@@ -68,38 +76,31 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
         }
         mSuccessUrl = getSuccessUrl(widgetUrl);
 
-        // Progress
-        mProgressBar = findViewById(R.id.prsWebLoading);
-
         // WebView
-        WebView webView = (WebView) findViewById(R.id.wvWebFrame);
-        //noinspection AndroidLintSetJavaScriptEnabled
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setVerticalScrollbarOverlay(true);
-        webView.setVerticalFadingEdgeEnabled(true);
-        webView.setWebViewClient(new PaymentwallClient(webView, widgetUrl, new PaymentwallClientInterface() {
-            @Override
-            public void onPageStarted(String url) {
-                if (TextUtils.equals(url, mSuccessUrl)) {
-                    fillResultAndClose("PW: buy is completed " + url);
-                } else {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                }
-            }
+        initWebView(getViewBinding().webViewBinding.wvWebFrame,
+                new PaymentwallClient(getViewBinding().webViewBinding.wvWebFrame, widgetUrl, new PaymentwallClientInterface() {
+                    @Override
+                    public void onPageStarted(String url) {
+                        if (TextUtils.equals(url, mSuccessUrl)) {
+                            fillResultAndClose("PW: buy is completed " + url);
+                        } else {
+                            getViewBinding().webViewBinding.prsWebLoading.setVisibility(View.VISIBLE);
+                        }
+                    }
 
-            @Override
-            public void onPageFinished(String url) {
-                if (TextUtils.equals(url, mSuccessUrl)) {
-                    fillResultAndClose("PW: finish buy is completed " + url);
-                }
-                mProgressBar.setVisibility(View.GONE);
-            }
+                    @Override
+                    public void onPageFinished(String url) {
+                        if (TextUtils.equals(url, mSuccessUrl)) {
+                            fillResultAndClose("PW: finish buy is completed " + url);
+                        }
+                        getViewBinding().webViewBinding.prsWebLoading.setVisibility(View.GONE);
+                    }
 
-            @Override
-            public void onReceivedError() {
-                onFatalError();
-            }
-        }));
+                    @Override
+                    public void onReceivedError() {
+                        onFatalError();
+                    }
+                }));
     }
 
     private void fillResultAndClose(String log) {
@@ -143,7 +144,7 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull WebViewFragmentBinding binding) {
+    public ToolbarBinding getToolbarBinding(@NotNull AcPaymentWallBinding binding) {
         return binding.toolbarInclude;
     }
 
@@ -155,7 +156,7 @@ public class PaymentwallActivity extends BaseFragmentActivity<WebViewFragmentBin
 
     @Override
     public int getLayout() {
-        return R.layout.web_view_fragment;
+        return R.layout.ac_payment_wall;
     }
 
     private static class PaymentwallClient extends WebViewClient {

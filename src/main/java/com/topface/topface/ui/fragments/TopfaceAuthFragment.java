@@ -120,7 +120,6 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        setNeedTitles(true);
         View root = inflater.inflate(R.layout.layout_topface_signin, null);
         ButterKnife.bind(this, root);
         initViews(root);

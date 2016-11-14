@@ -103,7 +103,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         getDataFromIntent(getArguments());
 
     }
