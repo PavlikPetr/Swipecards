@@ -22,11 +22,11 @@ class AuthStatistics {
 
         @JvmStatic fun sendFirstAuth(platform: String, authStatus: String) {
             val slice = Slices()
-            slice.apply {
+            with(slice) {
                 putSlice(AuthStatistics.PLT_SLICE, platform)
                 putSlice(AuthStatistics.VAL_SLICE, authStatus)
+                send(FIRST_AUTH_KEY, this)
             }
-            send(FIRST_AUTH_KEY, slice)
         }
 
         fun sendDeviceActivated() = send(DEVICE_ACTIVATED_KEY, null)
