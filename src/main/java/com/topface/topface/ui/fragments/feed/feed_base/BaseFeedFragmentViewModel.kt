@@ -228,12 +228,15 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     protected open fun updateFeedsLoaded(data: FeedListData<T>?, updateBundle: Bundle) {
+        if (mAdapter == null) return
+        if (isDataFromCache || (mAdapter?.data?.isEmpty() ?: true && !(data?.items?.isEmpty() ?: true))) {
+            typeFeedFragment?.let { getAppDayRequest(it) }
+        }
         data?.let {
             if (isDataFromCache) {
                 mAdapter?.let { adapter ->
                     adapter.data.clear()
                     adapter.notifyDataSetChanged()
-                    typeFeedFragment?.let { getAppDayRequest(it) }
                 }
                 isDataFromCache = false
             }
@@ -261,8 +264,13 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
             override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
                 if (!imageArray.isEmpty()) {
-                    mAdapter?.setHeader(FixedViewInfo(bannerRes, imageArray))
-                    mAdapter?.notifyItemChange(0)
+                    mAdapter?.let {
+                        with(it) {
+                            setHeader(FixedViewInfo(bannerRes, imageArray))
+                            notifyItemInserted(0)
+                        }
+                        binding.feedList.layoutManager.scrollToPosition(0)
+                    }
                 }
 
             } ?: Unit
@@ -317,9 +325,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
-                        if (isRefreshing.get()) {
-                            isRefreshing.set(false)
-                        }
+
                     }
 
                     override fun onError(e: Throwable?) {
@@ -347,7 +353,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
                 removeOldDuplicates(it)
                 mAdapter?.addFirst(it.items)
-                binding.feedList.layoutManager.scrollToPosition(0)
+                if (isRefreshing.get()) {
+                    binding.feedList.layoutManager.scrollToPosition(0)
+                    isRefreshing.set(false)
+                }
             }
         }
     }

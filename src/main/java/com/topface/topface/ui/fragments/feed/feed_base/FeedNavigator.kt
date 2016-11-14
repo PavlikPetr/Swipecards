@@ -2,10 +2,11 @@ package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.app.Activity
 import android.content.Intent
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.SendGiftAnswer
@@ -94,11 +95,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showTakePhotoPopup() = TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER)
             .show(mActivityDelegate.supportFragmentManager, TakePhotoPopup.TAG)
 
-    override fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity) {
+    override fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity, @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int) {
         val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
         intent.putExtra(AdmirationPurchasePopupActivity.CURRENT_USER, currentUser)
         if (Utils.isLollipop()) {
-            FabTransform.addExtras(intent, activity.getColor(R.color.dating_fab_small), R.drawable.admiration)
+            FabTransform.addExtras(intent, fabColorResId, fabIconResId)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
                     AdmirationPurchasePopupViewModel.TRANSITION_NAME)
             activity.startActivityForResult(intent, AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP, options.toBundle())

@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import com.topface.topface.R
-import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
