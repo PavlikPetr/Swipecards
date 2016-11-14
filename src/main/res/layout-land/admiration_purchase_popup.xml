@@ -28,7 +28,6 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.55"
@@ -74,7 +73,6 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.45"
@@ -114,10 +112,9 @@
                         android:src="@drawable/arrow_bottom"/>
 
                     <TextView
-                        android:width="107dp"
-                        android:layout_height="50dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:id="@+id/vip_button"
-                        android:textSize="14sp"
                         android:gravity="center"
                         style="@style/AdmirationPopupBuyVipButton"
                         android:layout_below="@+id/arrow_bottom"
