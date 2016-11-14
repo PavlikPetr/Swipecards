@@ -1,18 +1,15 @@
 package com.topface.topface.ui.fragments.feed.dating
 
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutEmptyDatingBinding
-import com.topface.topface.requests.ApiRequest
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.http.IRequestClient
-import java.util.*
 
-/**
+/**Фрагмент "ненайденных по фильтру" профайлов для экрана знакомств
  * Created by mbulgakov on 10.11.16.
  */
 class DatingEmptyFragment() : AbstractDialogFragment(), IDialogCloser {
@@ -45,8 +42,6 @@ class DatingEmptyFragment() : AbstractDialogFragment(), IDialogCloser {
 
     override fun getDialogLayoutRes() = R.layout.layout_empty_dating
 
-    override fun closeIt() {
-        dialog.cancel()
-    }
+    override fun closeIt() = dialog.cancel()
 
 }

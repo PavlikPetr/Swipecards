@@ -76,10 +76,8 @@ class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
     }
 
     override fun initViews(root: View) {
-        mBinding = TakePhotoDialogBinding.bind(root)
-        with(mBinding) {
+        mBinding = TakePhotoDialogBinding.bind(root).apply {
             viewModel = mViewModel
-            //TODO оставляю до нового тулбара
             (root.findViewById(R.id.title) as TextView).setText(R.string.take_photo)
             root.findViewById(R.id.title_clickable).setOnClickListener(this@TakePhotoPopup)
         }

@@ -35,7 +35,10 @@ import javax.inject.Inject
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
 
     @Inject lateinit var mNavigationState: NavigationState
-    private var mEmptyDatingFragment = DatingEmptyFragment.newInstance()
+
+    private val mEmptyDatingFragment by lazy {
+        DatingEmptyFragment.newInstance()
+    }
 
     init {
         App.get().inject(this)
