@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.dating.form.ParentItemViewModel"/>
+
+        <import type="android.graphics.Typeface"/>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> model.itemClick()}"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="31dp"
+            android:paddingTop="20dp">
+
+            <ImageView
+                android:id="@+id/form_item_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="42dp"
+                android:src="@{model.itemIcon}"/>
+
+            <TextView
+                android:id="@+id/single_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.titleText}"
+                android:textColor="@{model.titleTextColor}"
+                app:pxTextSize="@{model.titleTextSize}"
+                app:textTypeface="@{model.bold ? Typeface.BOLD : Typeface.NORMAL}">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/forms_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_gravity="bottom"
+            android:visibility="@{model.dividerVisibility}"
+            android:layout_marginLeft="72dp"
+            android:background="@color/forms_divider_color"/>
+
+    </FrameLayout>
+
+</layout>

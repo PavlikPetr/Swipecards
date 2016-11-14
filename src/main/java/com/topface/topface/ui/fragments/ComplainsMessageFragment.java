@@ -16,6 +16,8 @@ import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Utils;
 
 import butterknife.BindView;
@@ -103,8 +105,9 @@ public class ComplainsMessageFragment extends BaseFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.general_complain);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_complain)));
     }
 
     @Override

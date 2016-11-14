@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
 import com.topface.topface.ui.ComplainsMessageActivity;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 import butterknife.BindView;
 
@@ -135,8 +137,9 @@ public class ComplainsFragment extends BaseFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.general_complain);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_complain)));
     }
 
     @Override

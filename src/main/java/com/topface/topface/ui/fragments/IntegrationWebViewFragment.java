@@ -2,6 +2,9 @@ package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
 
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+
 /**
  * Created by ppetr on 10.01.16.
  * Фрагмент для загрузки и отображения web страницы интегратора
@@ -33,12 +36,8 @@ public class IntegrationWebViewFragment extends WebViewFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getArguments().getString(INTEGRATION_FRAGMENT_TITLE);
-    }
-
-    @Override
-    public boolean isNeedTitles() {
-        return true;
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getArguments().getString(INTEGRATION_FRAGMENT_TITLE)));
     }
 }

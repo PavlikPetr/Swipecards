@@ -17,7 +17,10 @@ import com.topface.topface.databinding.FilterFragmentBinding;
 import com.topface.topface.ui.edit.AbstractEditFragment;
 import com.topface.topface.ui.edit.filter.model.FilterData;
 import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 public class FilterFragment extends AbstractEditFragment {
 
@@ -103,8 +106,8 @@ public class FilterFragment extends AbstractEditFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.filter_screen_title);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.filter_screen_title)));
     }
-
 }

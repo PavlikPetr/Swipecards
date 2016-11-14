@@ -16,6 +16,8 @@ public class FormItem implements Parcelable {
 
     public int titleId = NO_RESOURCE_ID;
     public int dataId = NO_RESOURCE_ID;
+    public static final String EMPTY_FORM_VALUE = "-";
+    private boolean mIsEmpty;
 
     /**
      * Is form item value updating right now.
@@ -32,8 +34,19 @@ public class FormItem implements Parcelable {
     public static final int CITY = 9;
 
     public enum DATA_TYPE {
-        STATUS, CHARACTER, COMMUNICATION, BREAST, FITNESS, ABOUT_STATUS, HEIGHT, WEIGHT, HAIRS, EYES,
-        MARRIAGE, EDUCATION, FINANCES, RESIDENCE, CAR, SMOKING, ALCOHOL, RESTAURANTS, DATING, ARCHIEVEMENTS, UNDEFINED
+        STATUS(-1), CHARACTER(46), COMMUNICATION(47), BREAST(48), FITNESS(49), ABOUT_STATUS(50), HEIGHT(51),
+        WEIGHT(52), HAIRS(53), EYES(54), EDUCATION(55), FINANCES(56), RESIDENCE(57), CAR(58),
+        SMOKING(59), ALCOHOL(60), RESTAURANTS(61), DATING(62), ARCHIEVEMENTS(63), UNDEFINED(-666);
+
+        private int mType;
+
+        DATA_TYPE(int type) {
+            mType = type;
+        }
+
+        public int getType() {
+            return mType;
+        }
     }
 
     public static final int NO_RESOURCE_ID = -1;
@@ -108,6 +121,14 @@ public class FormItem implements Parcelable {
     }
 
     public FormItem() {
+    }
+
+    public void setIsEmpty(boolean mIsEmpty) {
+        this.mIsEmpty = mIsEmpty;
+    }
+
+    public boolean isEmpty() {
+        return mIsEmpty;
     }
 
     public void copy(FormItem formItem) {

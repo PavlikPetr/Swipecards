@@ -46,6 +46,8 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
@@ -165,7 +167,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRateController != null) {
+        if (mRateController != null) {
             mRateController.destroyController();
         }
     }
@@ -173,6 +175,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onResume() {
         super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(TextUtils.isEmpty(mUserNameAndAge) ?
+                getString(R.string.general_profile) :
+                mUserNameAndAge,
+                mUserCity));
         getUserProfile(mProfileId);
         if (App.from(getActivity()).getProfile().premium) {
             setIsChatAvailable(true);
@@ -200,24 +206,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         mGiftReceiver,
                         new IntentFilter(PhotoSwitcherActivity.ADD_NEW_GIFT)
                 );
-    }
-
-    @Override
-    protected String getDefaultTitle() {
-        return getString(R.string.general_profile);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return mUserCity;
-    }
-
-    @Override
-    protected String getTitle() {
-        if (TextUtils.isEmpty(mUserNameAndAge)) {
-            return getDefaultTitle();
-        }
-        return mUserNameAndAge;
     }
 
     @Override

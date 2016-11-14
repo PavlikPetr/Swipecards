@@ -2,6 +2,8 @@ package com.topface.topface.ui.dialogs;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -51,7 +51,7 @@ public class User extends Profile {
                 deleted = resp.optBoolean("deleted") || isEmpty();
                 bookmarked = resp.optBoolean("bookmarked");
                 isSympathySent = resp.optBoolean("isSympathySent");
-                if (App.from(App.getContext()).getProfile().isEditor()) {
+                if (App.from(App.getContext()).getProfile().isEditor() && resp.has("info")) {
                     socialInfo = UserSocialInfo.parse(resp.optString("info"));
                 }
             } else {

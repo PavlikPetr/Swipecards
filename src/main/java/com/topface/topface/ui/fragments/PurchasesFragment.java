@@ -12,8 +12,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.android.Slices;
@@ -71,8 +69,6 @@ public class PurchasesFragment extends BaseFragment {
             setResourceInfoText(null);
         }
     };
-    private TextView mCurCoins;
-    private TextView mCurLikes;
     private boolean mSkipBonus;
     private boolean mIsVip;
     private String mResourceInfoText;
@@ -81,7 +77,6 @@ public class PurchasesFragment extends BaseFragment {
         @Override
         public void call(BalanceData balanceData) {
             mBalanceData = balanceData;
-            updateBalanceCounters(balanceData);
         }
     };
     private Subscription mBalanceSubscription;
@@ -154,7 +149,6 @@ public class PurchasesFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         setResourceInfoText(mBalanceData.premium ? null : getInfoText());
-        updateBalanceCounters(mBalanceData);
     }
 
     @Override
@@ -224,7 +218,7 @@ public class PurchasesFragment extends BaseFragment {
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
-        initBalanceCounters(getSupportActionBar().getCustomView());
+//        initBalanceCounters(getSupportActionBar().getCustomView());
         setResourceInfoText();
         if (savedInstanceState != null) {
             int pos = savedInstanceState.getInt(LAST_PAGE, 0);
@@ -271,33 +265,6 @@ public class PurchasesFragment extends BaseFragment {
         return products;
     }
 
-    private void initBalanceCounters(View root) {
-        final LinearLayout containerView = (LinearLayout) root.findViewById(R.id.resources_layout);
-        containerView.setVisibility(View.VISIBLE);
-        containerView.post(new Runnable() {
-            @Override
-            public void run() {
-                int containerWidth = containerView.getMeasuredWidth();
-                if (mCurCoins != null && mCurLikes != null) {
-                    mCurCoins.setMaxWidth(containerWidth / 2);
-                    mCurLikes.setMaxWidth(containerWidth / 2);
-                }
-            }
-        });
-        mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
-        mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
-        mCurCoins.setSelected(true);
-        mCurLikes.setSelected(true);
-        updateBalanceCounters(mBalanceData);
-    }
-
-    private void updateBalanceCounters(BalanceData balance) {
-        if (mCurCoins != null && mCurLikes != null && balance != null) {
-            mCurCoins.setText(Integer.toString(balance.money));
-            mCurLikes.setText(Integer.toString(balance.likes));
-        }
-    }
-
     private String getInfoText() {
         String text;
         Bundle args = getArguments();
@@ -339,11 +306,6 @@ public class PurchasesFragment extends BaseFragment {
             text = getResources().getString(R.string.buying_default_message);
         }
         return text;
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.purchase_header_title);
     }
 
     public boolean isVipProducts() {

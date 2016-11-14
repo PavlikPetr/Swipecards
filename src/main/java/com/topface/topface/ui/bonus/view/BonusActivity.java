@@ -4,9 +4,14 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.SingleFragmentActivity;
 
-public class BonusActivity extends SingleFragmentActivity {
+import org.jetbrains.annotations.NotNull;
+
+public class BonusActivity extends SingleFragmentActivity<BonusFragment, AcFragmentFrameBinding> {
 
     @Override
     protected String getFragmentTag() {
@@ -14,11 +19,22 @@ public class BonusActivity extends SingleFragmentActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected BonusFragment createFragment() {
         return new BonusFragment().newInstance(true);
     }
 
     public static Intent createIntent() {
         return new Intent(App.getContext(), BonusActivity.class);
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }
