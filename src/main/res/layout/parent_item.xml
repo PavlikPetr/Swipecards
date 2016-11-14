@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.form.ParentItemViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.form.ParentItemViewModel"/>
 
         <import type="android.graphics.Typeface"/>
 

@@ -18,9 +18,9 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.IActivityDelegate

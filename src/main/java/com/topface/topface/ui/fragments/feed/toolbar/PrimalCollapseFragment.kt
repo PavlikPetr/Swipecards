@@ -13,7 +13,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.ToolbarActivity
-import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsBehavior
+import com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsBehavior
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import org.jetbrains.anko.layoutInflater
 

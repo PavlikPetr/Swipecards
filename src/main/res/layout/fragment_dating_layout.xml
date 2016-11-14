@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.dating.DatingButtonsViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
     </data>
 
     <FrameLayout

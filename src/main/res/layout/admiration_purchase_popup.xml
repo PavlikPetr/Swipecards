@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel"/>
 
         <variable
             name="toolbarViewModel"
@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:onClick="@{() -> viewModel.skip()}"
-        tools:context=".ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity">
+        tools:context=".ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity">
 
         <include
             android:id="@+id/toolbarInclude"

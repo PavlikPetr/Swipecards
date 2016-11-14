@@ -6,7 +6,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.form.ChildItemViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.form.ChildItemViewModel"/>
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
