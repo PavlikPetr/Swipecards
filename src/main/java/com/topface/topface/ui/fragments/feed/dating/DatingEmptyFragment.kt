@@ -9,8 +9,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.http.IRequestClient
 
-/**Фрагмент "ненайденных по фильтру" профайлов для экрана знакомств
- * Created by mbulgakov on 10.11.16.
+/**
+ * Фрагмент "ненайденных по фильтру" профайлов для экрана знакомств
  */
 class DatingEmptyFragment() : AbstractDialogFragment(), IDialogCloser {
 

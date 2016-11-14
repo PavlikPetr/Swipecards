@@ -114,18 +114,13 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showEmptyDating() {
-        mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
-    }
+    override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
 
     override fun closeEmptyDating() {
         mEmptyDatingFragment.dialog?.cancel()
     }
 
-    override fun showFilter() {
-        val intent = Intent(mActivityDelegate.getApplicationContext(),
-                EditContainerActivity::class.java)
-        mActivityDelegate.startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER)
-    }
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.getApplicationContext(),
+            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 
 }

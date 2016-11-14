@@ -12,10 +12,6 @@ import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
 
-
-/**
- * Created by mbulgakov on 07.11.16.
- */
 open class DatingEmptyFragmentViewModel(binding: LayoutEmptyDatingBinding,
                                         private val mApi: FeedApi,
                                         private val mNavigator: FeedNavigator,
