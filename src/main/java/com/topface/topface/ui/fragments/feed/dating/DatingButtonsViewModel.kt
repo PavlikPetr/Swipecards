@@ -23,6 +23,7 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
@@ -69,6 +70,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private companion object {
         const val CURRENT_USER = "current_user"
         const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
+        const val MAX_LIKE_AMOUNT = 4
     }
 
     init {
@@ -138,7 +140,11 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         if (!it.rated) {
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
-                override fun onCompleted() = RxUtils.safeUnsubscribe(mLikeSubscription)
+                override fun onCompleted() {
+                    RxUtils.safeUnsubscribe(mLikeSubscription)
+                    validateDeviceActivation()
+                }
+
                 override fun onError(e: Throwable?) {
                     it.rated = false
                     mDatingButtonsView.unlockControls()
@@ -153,6 +159,20 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }/* else {
             showNextUser()
         }*/
+    }
+
+    private fun validateDeviceActivation() {
+        val appConfig = App.getAppConfig()
+        var counter = appConfig.deviceActivationCounter
+        if (counter < MAX_LIKE_AMOUNT) {
+            appConfig.deviceActivationCounter = ++counter
+        } else {
+            if (!appConfig.isDeviceActivated) {
+                AuthStatistics.sendDeviceActivated()
+                appConfig.setDeviceActivated()
+            }
+        }
+        appConfig.saveConfig()
     }
 
     fun validateSendAdmiration() {

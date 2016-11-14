@@ -228,7 +228,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     protected open fun updateFeedsLoaded(data: FeedListData<T>?, updateBundle: Bundle) {
-        Debug.debug("getAppDayRequest", "updateFeedsLoaded ")
         if (mAdapter == null) return
         if (isDataFromCache || (mAdapter?.data?.isEmpty() ?: true && !(data?.items?.isEmpty() ?: true))) {
             typeFeedFragment?.let { getAppDayRequest(it) }

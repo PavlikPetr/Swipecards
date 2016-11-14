@@ -28,7 +28,6 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.55"
@@ -74,7 +73,6 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.45"

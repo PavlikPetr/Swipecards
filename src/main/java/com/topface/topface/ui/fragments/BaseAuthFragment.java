@@ -25,6 +25,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.AuthState;
+import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.external_libs.AdjustManager;
@@ -145,9 +146,12 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
                             .getResources().getString(R.string.appsflyer_registration), "");
+                    String authStatus = response.getJsonResult().getString("authStatus");
+                    sendFirstAuthUser(authRequest.getPlatform(), authStatus);
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }
+
                 mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
             }
 
@@ -161,6 +165,15 @@ public abstract class BaseAuthFragment extends BaseFragment {
             public void always(IApiResponse response) {
             }
         }).exec();
+    }
+
+    private void sendFirstAuthUser(String platform, String authStatus) {
+        AppConfig appConfig = App.getAppConfig();
+        if (appConfig.isFirstAuth()) {
+            AuthStatistics.Companion.sendFirstAuth(platform, authStatus);
+            appConfig.setFirstAuth();
+            appConfig.saveConfig();
+        }
     }
 
     protected void loadAllProfileData() {

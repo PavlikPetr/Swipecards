@@ -10,12 +10,10 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
-import com.topface.topface.data.FeedGeo;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
-import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
@@ -73,6 +71,11 @@ public class AppConfig extends AbstractConfig {
     private static final String PERMISSIONS_REQUEST_STATE = "permissions_request_state";
 
     private static final String DEFAULT_REFERRER_TRACK = "";
+    private static final String APP_FIRST_START = "mobile_app_first_start";
+    private static final String APP_FIRST_AUTH = "mobile_first_auth";
+    private static final String DEVICE_ACTIVATED = "mobile_device_activated";
+    private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
+
 
     public AppConfig(Context context) {
         super(context);
@@ -130,6 +133,14 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, REFERRER_TRACK, DEFAULT_REFERRER_TRACK);
         // храним статус пермишинов в приложении
         addField(settingsMap, PERMISSIONS_REQUEST_STATE, "");
+        // ключь, который устанавливается при первом открытии приложения для данной установки
+        addField(settingsMap, APP_FIRST_START, true);
+        // ключь, который устанавливается при первой успешной авторизации пользователя для данной установки
+        addField(settingsMap, APP_FIRST_AUTH, true);
+        // ключь, который устанавливается при первой успешной активации девайса
+        addField(settingsMap, DEVICE_ACTIVATED, false);
+        // ключь, который устанавливает количество отправленных симпатий
+        addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -536,4 +547,45 @@ public class AppConfig extends AbstractConfig {
         }
         setField(getSettingsMap(), PERMISSIONS_REQUEST_STATE, JsonUtils.toJson(currentPermissions));
     }
+
+    // проверка первого открытия приложения для данной установки
+    public boolean isFirstStartApp() {
+        return getBooleanField(getSettingsMap(), APP_FIRST_START);
+    }
+
+    // установка условия первого открытия
+    public void setFirstStartApp() {
+        setField(getSettingsMap(), APP_FIRST_START, false);
+    }
+
+    // проверка первой успешной авторизации для данной установки
+    public boolean isFirstAuth() {
+        return getBooleanField(getSettingsMap(), APP_FIRST_AUTH);
+    }
+
+    // установка первой успешной авторизации для данной установки
+    public void setFirstAuth() {
+        setField(getSettingsMap(), APP_FIRST_AUTH, false);
+    }
+
+    // проверка активации девайса
+    public boolean isDeviceActivated() {
+        return getBooleanField(getSettingsMap(), DEVICE_ACTIVATED);
+    }
+
+    // установка активации девайса
+    public void setDeviceActivated() {
+        setField(getSettingsMap(), DEVICE_ACTIVATED, true);
+    }
+
+    // установка количество отправленных лайков для данной установки
+    public void setDeviceActivationCounter(int counter) {
+        setField(getSettingsMap(), DEVICE_ACTIVATION_COUNTER, counter);
+    }
+
+    // получение ранее отпраленных лайков для данной установки
+    public int getDeviceActivationCounter() {
+        return getIntegerField(getSettingsMap(), DEVICE_ACTIVATION_COUNTER);
+    }
+
 }
