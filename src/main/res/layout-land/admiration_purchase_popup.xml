@@ -83,9 +83,8 @@
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="-12dp"
+                    android:layout_marginLeft="-14dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/admiration_popup_vip_ico"/>
 
@@ -113,7 +112,10 @@
                         android:src="@drawable/arrow_bottom"/>
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:id="@+id/vip_button"
+                        android:gravity="center"
                         style="@style/AdmirationPopupBuyVipButton"
                         android:layout_below="@+id/arrow_bottom"
                         android:layout_centerHorizontal="true"

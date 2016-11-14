@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.app.Activity
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.SendGiftAnswer
@@ -22,9 +24,9 @@ interface IFeedNavigator {
     fun showAddToLeader()
     fun showOwnProfile()
     fun showTakePhotoPopup()
-    fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity)
     fun showEmptyDating()
     fun closeEmptyDating()
     fun showFilter()
-
+    fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity,
+                                    @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int)
 }
