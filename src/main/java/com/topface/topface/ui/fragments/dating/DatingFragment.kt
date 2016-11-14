@@ -9,12 +9,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.view.LayoutInflater
 import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
@@ -25,12 +24,10 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
-import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
 import com.topface.topface.ui.fragments.dating.form.GiftsItemDelegate
 import com.topface.topface.ui.fragments.dating.form.ParentItemDelegate
-import com.topface.topface.ui.fragments.dating.DatingOptionMenuManager
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
@@ -185,10 +182,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
         govnocod.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK &&
-                requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
-            mDatingButtonsViewModel.onActivityResult()
-        }
+        mDatingButtonsViewModel.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)

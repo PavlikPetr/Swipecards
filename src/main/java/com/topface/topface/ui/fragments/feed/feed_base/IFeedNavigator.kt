@@ -25,12 +25,10 @@ interface IFeedNavigator {
     fun showAddToLeader()
     fun showOwnProfile()
     fun showTakePhotoPopup()
-    fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity)
     fun showGiftsActivity(from: String, id: Int)
     fun showFilter()
     fun showEmptyDating()
     fun closeEmptyDating()
-    fun showFilter()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity,
                                     @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int)
 }
