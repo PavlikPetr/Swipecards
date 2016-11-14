@@ -170,7 +170,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     private void sendFirstAuthUser(String platform, String authStatus) {
         AppConfig appConfig = App.getAppConfig();
         if (appConfig.isFirstAuth()) {
-            AuthStatistics.Companion.sendFirstAuth(platform, authStatus);
+            AuthStatistics.sendFirstAuth(platform, authStatus);
             appConfig.setFirstAuth();
             appConfig.saveConfig();
         }

@@ -141,7 +141,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
                 override fun onCompleted() {
-                    RxUtils.safeUnsubscribe(mLikeSubscription)
+                    mLikeSubscription.safeUnsubscribe()
                     validateDeviceActivation()
                 }
 

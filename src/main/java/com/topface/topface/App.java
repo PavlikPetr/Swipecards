@@ -556,7 +556,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     private void sentFirstStartApp(AppConfig config) {
         if (config.isFirstStartApp()) {
-            AuthStatistics.Companion.sendFirstStartApp();
+            AuthStatistics.sendFirstStartApp();
             config.setFirstStartApp();
         }
     }
