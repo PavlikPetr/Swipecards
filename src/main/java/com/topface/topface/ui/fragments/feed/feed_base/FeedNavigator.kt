@@ -18,6 +18,8 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
+import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.FabTransform
@@ -32,7 +34,12 @@ import javax.inject.Inject
  */
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
+
     @Inject lateinit var mNavigationState: NavigationState
+
+    private val mEmptyDatingFragment by lazy {
+        DatingEmptyFragment.newInstance()
+    }
 
     init {
         App.get().inject(this)
@@ -108,5 +115,13 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+
+    override fun closeEmptyDating() {
+        mEmptyDatingFragment.dialog?.cancel()
+    }
+
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.getApplicationContext(),
+            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 
 }

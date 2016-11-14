@@ -36,7 +36,6 @@ import org.jetbrains.anko.support.v4.dimen
  */
 class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
         , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IStartAdmirationPurchasePopup {
-
     override val anchorViewResId: Int
         get() = R.layout.dating_buttons_layout
     override val collapseViewResId: Int
@@ -78,6 +77,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         AlbumLoadController(AlbumLoadController.FOR_PREVIEW)
     }
     //~~~~~~~~~~~~~~~~~~~~~~~ конец ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
     companion object {
         const val USER_SEARCH_LIST = "user_search_list"
@@ -159,7 +159,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView,
                     activity, fabColorResId, fabIconResId)
 
-
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
     override fun onNewSearchUser(user: SearchUser) {
@@ -178,9 +177,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun unlockControls() = mDatingButtonsViewModel.isDatingButtonsLocked.set(true)
 
-    override fun showEmptySearchDialog() {
-    }
+    override fun showEmptySearchDialog() = mNavigator.showEmptyDating()
 
-    override fun hideEmptySearchDialog() {
-    }
+    override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
+
 }

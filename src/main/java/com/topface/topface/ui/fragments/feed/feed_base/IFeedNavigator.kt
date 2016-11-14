@@ -7,6 +7,7 @@ import android.view.View
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 
 /**
  * Интерфейс навигации в  фидах
@@ -23,6 +24,9 @@ interface IFeedNavigator {
     fun showAddToLeader()
     fun showOwnProfile()
     fun showTakePhotoPopup()
+    fun showEmptyDating()
+    fun closeEmptyDating()
+    fun showFilter()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity,
                                     @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int)
 }
