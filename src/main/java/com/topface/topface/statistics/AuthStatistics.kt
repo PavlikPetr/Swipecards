@@ -26,7 +26,6 @@ class AuthStatistics {
                     putSlice(AuthStatistics.VAL_SLICE, authStatus)
                 })
 
-
         fun sendDeviceActivated() = send(DEVICE_ACTIVATED_KEY, null)
     }
 }
