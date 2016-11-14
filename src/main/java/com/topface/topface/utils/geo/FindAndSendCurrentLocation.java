@@ -1,5 +1,6 @@
 package com.topface.topface.utils.geo;
 
+import android.Manifest;
 import android.location.Location;
 import android.os.Looper;
 
@@ -7,6 +8,7 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +35,9 @@ public class FindAndSendCurrentLocation {
 
     public FindAndSendCurrentLocation() {
         App.get().inject(this);
-        if (mAppState == null) {
+        if (mAppState == null ||
+                !PermissionsExtensionsKt.isGrantedPermissions(App.getContext(), Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
             return;
         }
         mGeoLocationManager = new GeoLocationManager();

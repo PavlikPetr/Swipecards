@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.app.ActionBar
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +15,20 @@ import com.topface.topface.R
 import com.topface.topface.data.Photos
 import com.topface.topface.databinding.AddToPhotoBlogHeaderLayoutBinding
 import com.topface.topface.databinding.AddToPhotoBlogLayoutBinding
+import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.ui.adapters.LoadingListAdapter
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.fragments.PurchasesFragment
+import com.topface.topface.ui.fragments.ToolbarActivity
+import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
+import com.topface.topface.ui.views.toolbar.*
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.actionbar.ActionBarView
 import com.topface.topface.utils.extensions.photosForPhotoBlog
 import com.topface.topface.viewModels.AddToPhotoBlogHeaderViewModel
 import com.topface.topface.viewModels.AddToPhotoBlogViewModel
@@ -33,14 +38,17 @@ import com.topface.topface.viewModels.AddToPhotoBlogViewModel
  * Created by tiberal on 25.07.16.
  */
 
-class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderViewModel.ILockerVisualisator
+class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBinding>(), AddToPhotoBlogHeaderViewModel.ILockerVisualisator
         , AddToPhotoBlogHeaderViewModel.IPurchasesFragmentVisualisator
         , AddToPhotoBlogHeaderViewModel.IPhotoHelperVisualisator, AddToPhotoBlogHeaderViewModel.IAdapterInteractor {
+
+    override fun getToolbarBinding(binding: AddToPhotoBlogLayoutBinding) = binding.toolbarInclude
+
+    override fun getLayout() = R.layout.add_to_photo_blog_layout
 
     lateinit private var mHeaderViewModel: AddToPhotoBlogHeaderViewModel
     lateinit private var mHeaderBinding: AddToPhotoBlogHeaderLayoutBinding
     lateinit private var mScreenViewModel: AddToPhotoBlogViewModel
-    lateinit private var mScreenBinding: AddToPhotoBlogLayoutBinding
 
     private val mAdapter by lazy {
         val profile = App.get().profile
@@ -62,9 +70,9 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         val GREETING_TEXT = "greeting_text"
     }
 
-    override fun showLocker() = mScreenBinding.locker.setVisibility(View.VISIBLE)
+    override fun showLocker() = viewBinding.locker.setVisibility(View.VISIBLE)
 
-    override fun hideLocker() = mScreenBinding.locker.setVisibility(View.GONE)
+    override fun hideLocker() = viewBinding.locker.setVisibility(View.GONE)
 
     override fun showPurchasesFragment(price: Int) {
         Debug.error("money price " + price)
@@ -72,9 +80,10 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
                 PurchasesFragment.TYPE_LEADERS, price, App.get().options.topfaceOfferwallRedirect))
     }
 
-    override fun showPhotoHelper() {
-        TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager, TakePhotoPopup.TAG)
-    }
+    override fun showPhotoHelper() =
+            TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER).show(supportFragmentManager,
+                    TakePhotoPopup.TAG)
+
 
     override fun getSelectedPhotoId() = mAdapter.selectedPhotoId
 
@@ -93,39 +102,29 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         return mHeaderBinding.root
     }
 
+    override fun generateToolbarViewModel(toolbar: ToolbarBinding) =
+            BackToolbarViewModel(toolbar,
+                    getToolbarTitle(), this@AddToPhotoBlogActivity)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initActionBar(supportActionBar)
-        mScreenBinding = DataBindingUtil.setContentView(this, R.layout.add_to_photo_blog_layout)
         savedInstanceState?.let {
             onRestoreState(it)
         }
         //https://youtrack.jetbrains.com/issue/KT-12402
-        initRecyclerView(mScreenBinding.userPhotosGrid)
-    }
-
-    fun initActionBar(actionBar: ActionBar?) {
-        actionBar?.let {
-            ActionBarView(it, this).setArrowUpView(getString(R.string.publish_photo)) { finish() }
-            with(it) {
-                setIcon(android.R.color.transparent)
-                setDisplayHomeAsUpEnabled(false)
-                setDisplayUseLogoEnabled(true)
-                setDisplayShowCustomEnabled(true)
-                setDisplayShowTitleEnabled(false)
-            }
-        }
+        initRecyclerView(viewBinding.userPhotosGrid)
     }
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
         with(recyclerView) {
-            layoutManager = GridLayoutManager(this@AddToPhotoBlogActivity, resources.getInteger(R.integer.add_to_leader_column_count))
+            layoutManager = GridLayoutManager(this@AddToPhotoBlogActivity,
+                    resources.getInteger(R.integer.add_to_leader_column_count))
             adapter = mAdapter
             post {
                 mAdapter.selectedPhotoPos = mSelectedPos
             }
         }
-        mScreenViewModel = AddToPhotoBlogViewModel(mScreenBinding, AddPhotoHelper(this))
+        mScreenViewModel = AddToPhotoBlogViewModel(viewBinding, AddPhotoHelper(this))
     }
 
 
@@ -138,10 +137,9 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         }
     }
 
-
     fun onRestoreState(savedInstanceState: Bundle) {
         mAdapter.selectedPhotoId = savedInstanceState.getInt(SELECTED_PHOTO_ID, LeadersRecyclerViewAdapter.DEFAULT_ID)
-        mScreenBinding.userPhotosGrid.post {
+        viewBinding.userPhotosGrid.post {
             mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, DEFAULT_SELECTED_POS)
         }
         mHeaderViewModel.inputText.set(savedInstanceState.getString(GREETING_TEXT, Utils.EMPTY))
@@ -162,9 +160,16 @@ class AddToPhotoBlogActivity : TrackedFragmentActivity(), AddToPhotoBlogHeaderVi
         mHeaderViewModel.release()
     }
 
+    private fun getToolbarTitle() = getString(R.string.publish_photo)
+
     override fun onResume() {
         super.onResume()
+        //TODO SETTOOLBARSETTINGS
+//        setToolbarSettings(ToolbarSettingsData(title = getToolbarTitle()))
         if (App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) showPhotoHelper()
     }
 
+    override fun onUpClick() {
+        finish()
+    }
 }

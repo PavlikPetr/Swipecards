@@ -10,7 +10,7 @@ import com.topface.topface.requests.SettingsRequest
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.dialogs.CitySearchPopup
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.utils.controllers.startactions.IStartAction
 import com.topface.topface.utils.controllers.startactions.OnNextActionListener
 import com.topface.topface.utils.popups.PopupManager

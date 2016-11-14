@@ -41,7 +41,7 @@ class StartActionFactory() : IStartActionFactory {
 
             NotificationsDisableStartAction::class.java -> NotificationsDisableStartAction(activity, PopupManager.AC_PRIORITY_HIGH, from)
             TrialVipPopupAction::class.java ->
-                if (activity is BaseFragmentActivity) {
+                if (activity is BaseFragmentActivity<*>) {
                     TrialVipPopupAction(activity, PopupManager.AC_PRIORITY_HIGH, from)
                 } else null
             SelectPhotoStartAction::class.java -> SelectPhotoStartAction(activity.supportFragmentManager, PopupManager.AC_PRIORITY_HIGH, from)

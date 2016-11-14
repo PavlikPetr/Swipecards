@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="handlers"
-            type="com.topface.topface.ui.fragments.profile.ProfilePhotoFragment.Handlers" />
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.profile.ProfilePhotoFragmentViewModel"/>
 
     </data>
 
@@ -32,7 +32,7 @@
                 android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
                 android:listSelector="@android:color/transparent"
                 android:padding="@dimen/add_to_leader_spacing_value"
-                android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
+                android:verticalSpacing="@dimen/add_to_leader_spacing_value"/>
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -51,8 +51,8 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
-                        android:onClick="@{handlers::addPhotoClick}"
-                        android:text="@string/profile_add_camera" />
+                        android:onClick="@{() -> viewModel.takeCameraPhoto.invoke()}"
+                        android:text="@string/profile_add_camera"/>
 
                     <Button
                         android:id="@+id/btnAddPhotoAlbum"
@@ -62,8 +62,8 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="14dp"
-                        android:onClick="@{handlers::addPhotoClick}"
-                        android:text="@string/profile_add_album" />
+                        android:onClick="@{() -> viewModel.onTakeAlbumPhotoClick()}"
+                        android:text="@string/profile_add_album"/>
 
                     <Button
                         android:id="@+id/btnCancel"
@@ -73,8 +73,8 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
-                        android:onClick="@{handlers::cancelClick}"
-                        android:text="@string/general_cancel" />
+                        android:onClick="@{() -> viewModel.onCancelClick()}"
+                        android:text="@string/general_cancel"/>
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </ViewFlipper>
@@ -82,7 +82,7 @@
         <com.topface.topface.ui.views.LockerView
             android:id="@+id/fppLocker"
             style="@style/LoadingLocker"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </layout>

@@ -4,13 +4,17 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.TypedValue;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,6 +27,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -30,9 +35,19 @@ import com.topface.topface.ui.views.RangeSeekBar;
  */
 public class BindingsAdapters {
 
+    @BindingAdapter("pxTextSize")
+    public static void setPxTextSize(TextView view, int size) {
+        view.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+    }
+
+    @BindingAdapter("textTypeface")
+    public static void setTextTypeface(TextView view, int typeface) {
+        view.setTypeface(null, typeface);
+    }
+
     @BindingAdapter("online")
     public static void setOnline(TextView view, boolean isOnline) {
-        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.ico_online : 0, 0);
+        view.setCompoundDrawablesWithIntrinsicBounds(0, 0, isOnline ? R.drawable.im_list_online : 0, 0);
     }
 
     @BindingAdapter("fabVisibility")
@@ -47,8 +62,8 @@ public class BindingsAdapters {
             }
         } else {
             try {
-                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
+//                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
+//                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
                 fab.hide();
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
@@ -216,11 +231,24 @@ public class BindingsAdapters {
         }
     }
 
+    @BindingAdapter("navigationIcon")
+    public static void setNavigationIcon(Toolbar view, @DrawableRes int resource) {
+        Drawable drawable = ResourceExtensionKt.getDrawable(resource);
+        if(drawable!=null){
+            view.setNavigationIcon(drawable);
+        }
+    }
+
     /*
     *Если надо через DB засетить тег для автоматизированного тестирования, то следует использовать этот атрибут
     */
     @BindingAdapter("specialTag")
     public static void setTag(View view, String tag) {
         view.setTag(tag);
+    }
+
+    @BindingAdapter("animationSrc")
+    public static void setAnimationSrc(View view, Animation resource) {
+        view.startAnimation(resource);
     }
 }

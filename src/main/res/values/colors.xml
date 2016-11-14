@@ -25,7 +25,7 @@
     <color name="bg_holo">#F1F1F1</color>
     <color name="bg_white">#FFFFFF</color>
     <color name="action_bar_color">#455A64</color>
-    <color name="action_mode_color">#37474F</color>
+    <color name="action_mode_color">#ffffff</color>
     <color name="bg_light_blue">#EAF8FF</color>
     <color name="blue_60_percent">#99AEE5FD</color>
     <color name="black_60_percent">#99000000</color>
@@ -232,12 +232,42 @@
     <color name="mutual_sympathy_stub_date">#aa000000</color>
     <color name="mutual_sympathy_stub_aditional_info">#61000000</color>
 
+    <!--Toolbar colors-->
+    <color name="toolbar_background">#ffffff</color>
+    <color name="toolbar_title_white">@color/bg_white</color>
+    <color name="toolbar_title_color">#000000</color>
+    <color name="toolbar_transparent_title_color">#00000000</color>
+    <color name="toolbar_subtitle_color">#737373</color>
+    <color name="toolbar_bottom_shadow_start_color">#14000000</color>
+    <color name="toolbar_bottom_shadow_center_color">#01000000</color>
+    <color name="toolbar_bottom_shadow_end_color">#00000000</color>
+    <color name="toolbar_top_shadow_start_color">#05000000</color>
+    <color name="toolbar_top_shadow_end_color">#00000000</color>
+
+    <!--Geo-->
+    <color name="unavailable_geo_animation_bigger_circle">#fbfbfb</color>
+    <color name="unavailable_geo_animation_smaller_circle">#f2f2f2</color>
+
     <color name="dating_fab_small">#f5f5f5</color>
     <color name="dating_fab_skip">#499aff</color>
     <color name="dating_fab_like">#fe63cd</color>
     <color name="toolbar_gradient_start_color">#80000000</color>
     <color name="transparent">#00000000</color>
     <color name="album_gradient_start">#bd000000</color>
-
+    <color name="gray_forms_color">#737373</color>
+    <color name="black_forms_color">#000000</color>
+    <color name="forms_divider_color">#dbdbdb</color>
+    <!--Popups-->
+    <color name="popup_background">@color/bg_white</color>
+    <color name="popup_title">#de000000</color>
+    <color name="popup_message">#de000000</color>
+    <color name="popup_green_button_text">#ffffff</color>
+    <!--цвет оверлея для попапа восхищения-->
+    <color name="overlay">#99323232</color>
+    <color name="buy_coins_button_bg">#2ad54a</color>
+    <color name="buy_vip_text_color">#2ad54a</color>
+    <color name="label1_text_color">#9a9999</color>
+    <color name="label2_text_color">#737373</color>
+    <color name="ask_moar_item_background">#f5f5f5</color>
 
 </resources>

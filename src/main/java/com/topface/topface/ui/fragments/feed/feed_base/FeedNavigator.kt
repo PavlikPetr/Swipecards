@@ -1,6 +1,12 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
+import android.support.v4.app.ActivityOptionsCompat
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
@@ -12,8 +18,14 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
+import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
+import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 import javax.inject.Inject
@@ -26,6 +38,10 @@ import javax.inject.Inject
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
 
     @Inject lateinit var mNavigationState: NavigationState
+
+    private val mEmptyDatingFragment by lazy {
+        DatingEmptyFragment.newInstance()
+    }
 
     init {
         App.get().inject(this)
@@ -87,4 +103,35 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
     override fun showTakePhotoPopup() = TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER)
             .show(mActivityDelegate.supportFragmentManager, TakePhotoPopup.TAG)
+
+    @SuppressLint("NewApi")
+    override fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity, @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int) {
+        val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
+        intent.putExtra(AdmirationPurchasePopupActivity.CURRENT_USER, currentUser)
+        if (Utils.isLollipop()) {
+            FabTransform.addExtras(intent, fabColorResId, fabIconResId)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
+                    AdmirationPurchasePopupViewModel.TRANSITION_NAME)
+            activity.startActivityForResult(intent, AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP, options.toBundle())
+        } else {
+            activity.startActivityForResult(intent, AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP)
+        }
+    }
+
+    override fun showGiftsActivity(from: String, id: Int) {
+        mActivityDelegate.startActivityForResult(
+                GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false),
+                GiftsActivity.INTENT_REQUEST_GIFT
+        )
+        EasyTracker.sendEvent(from, "SendGiftClick", "", 1L)
+    }
+
+    override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+
+    override fun closeEmptyDating() {
+        mEmptyDatingFragment.dialog?.cancel()
+    }
+
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.getApplicationContext(),
+            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 }

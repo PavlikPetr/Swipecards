@@ -21,15 +21,7 @@ abstract public class WebViewFragment extends BaseFragment {
     private WebViewFragmentBinding mBinding;
     private FullScreenWebChromeClient mFullScreenWebChromeClient;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(isNeedTitles());
-    }
-
     public abstract String getIntegrationUrl();
-
-    public abstract boolean isNeedTitles();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +30,7 @@ abstract public class WebViewFragment extends BaseFragment {
     }
 
     protected View getView(LayoutInflater inflater) {
-        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.web_view_fragment, null));
+        mBinding = DataBindingUtil.inflate(inflater,R.layout.web_view_fragment, null,false);
         mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding);
         mBinding.wvWebFrame.setWebChromeClient(mFullScreenWebChromeClient);
         mBinding.wvWebFrame.getSettings().setJavaScriptEnabled(true);

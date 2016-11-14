@@ -1,6 +1,5 @@
 package com.topface.topface.data;
 
-import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -84,7 +83,6 @@ public class Profile extends AbstractDataWithPhotos {
     public boolean email;
     public boolean emailGrabbed;
     public boolean emailConfirmed;
-    public int xstatus;
     public int photosCount;
     // Идентификатор заднего фона в профиле
     public int background;
@@ -101,6 +99,7 @@ public class Profile extends AbstractDataWithPhotos {
     public String notificationToken;
     @Inject
     transient TopfaceAppState mAppState;
+    public boolean hasEmptyFields = false;
 
     public Profile() {
         super();
@@ -139,7 +138,6 @@ public class Profile extends AbstractDataWithPhotos {
             profile.premium = resp.optBoolean("premium");
             profile.background = ProfileBackgrounds.DEFAULT_BACKGROUND_ID;
             profile.photosCount = resp.optInt("photosCount");
-            profile.xstatus = resp.optInt("xstatus");
 
             //Дада, это ужасный косяк, когда мы наследуемся подобным способом,
             //поправим потом, с новой системой парсинга запросво
@@ -165,12 +163,22 @@ public class Profile extends AbstractDataWithPhotos {
                 }.getType());
                 setFornItemListeners(profile.forms);
             } else {
-                parseForm(profile, resp, App.getContext());
+                parseForm(new FormInfo(App.getContext(), profile.sex, profile.getType()), profile.forms, resp, true);
             }
             parseNotifications(profile, resp);
+            hasEmptyFields = hasEmptyForms(forms);
         } catch (Exception e) {
             Debug.error("Profile Wrong response parsing: ", e);
         }
+    }
+
+    private boolean hasEmptyForms(LinkedList<FormItem> forms){
+        for (FormItem form : forms) {
+            if (form.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setFornItemListeners(LinkedList<FormItem> forms) {
@@ -209,11 +217,10 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    private static void parseForm(Profile profile, JSONObject resp, Context context) throws JSONException {
+
+    public static void parseForm(FormInfo formInfo, LinkedList<FormItem> forms, JSONObject resp, boolean isNeedHeader) throws JSONException {
         if (!resp.isNull("form")) {
             JSONObject form = resp.getJSONObject("form");
-
-            FormInfo formInfo = new FormInfo(context, profile.sex, profile.getType());
 
             FormItem headerItem;
             FormItem formItem;
@@ -223,48 +230,52 @@ public class Profile extends AbstractDataWithPhotos {
             formInfo.fillFormItem(headerItem);
 
             // 1.2 xstatus position -1
-            formItem = new FormItem(R.array.form_main_status, profile.xstatus,
+            formItem = new FormItem(R.array.form_main_status, form.optInt("xstatus"),
                     FormItem.DATA, headerItem, STATUS);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 2 character position 0
             formItem = new FormItem(R.array.form_main_character, form.optInt("characterId"),
                     FormItem.DATA, headerItem, CHARACTER);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 3 communication position 1
             formItem = new FormItem(R.array.form_main_communication,
                     form.optInt("communicationId"), FormItem.DATA, headerItem, COMMUNICATION);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 5 HEADER -= PHYSIQUE =-
-            headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_physique, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 11 breast position 7
             formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
                     FormItem.DATA, headerItem, BREAST);
             formItem.setOnlyForWomen(true);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitnessId"),
                     FormItem.DATA, headerItem, FITNESS);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // about status
-            String as = form.optString("status");
-            String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
-            formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
-                    FormItem.DATA, headerItem, ABOUT_STATUS);
-            formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
-            formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            if (isNeedHeader) {
+                String as = form.optString("status");
+                String aboutStatus = TextUtils.isEmpty(as.trim()) ? null : as;
+                formItem = new FormItem(R.array.form_main_about_status, aboutStatus,
+                        FormItem.DATA, headerItem, ABOUT_STATUS);
+                formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter(App.getAppOptions().getUserAboutMeMaxLength()));
+                formInfo.fillFormItem(formItem);
+                forms.add(formItem);
+            }
 
             // 7 height position 3
             int h = form.optInt("height");
@@ -287,7 +298,7 @@ public class Profile extends AbstractDataWithPhotos {
                 }
             });
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 8 weight position 4
             int w = form.optInt("weight");
@@ -310,63 +321,67 @@ public class Profile extends AbstractDataWithPhotos {
                 }
             });
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 9 hair position 5
             formItem = new FormItem(R.array.form_physique_hairs, form.optInt("hairId"),
                     FormItem.DATA, headerItem, HAIRS);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 10 eye position 6
             formItem = new FormItem(R.array.form_physique_eyes, form.optInt("eyeId"),
                     FormItem.DATA, headerItem, EYES);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 12 HEADER -= SOCIAL =-
-            headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_social, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 14 education position 8
             formItem = new FormItem(R.array.form_social_education, form.optInt("educationId"),
                     FormItem.DATA, headerItem, EDUCATION);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 15 finances position 9
             formItem = new FormItem(R.array.form_social_finances, form.optInt("financesId"),
                     FormItem.DATA, headerItem, FINANCES);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 16 residence position 10
             formItem = new FormItem(R.array.form_social_residence, form.optInt("residenceId"),
                     FormItem.DATA, headerItem, RESIDENCE);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 17 car vs car_id position 11
             formItem = new FormItem(R.array.form_social_car, form.optInt("carId"),
                     FormItem.DATA, headerItem, CAR);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 19 HEADER -= HABITS =-
-            headerItem = new FormItem(R.string.form_habits, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_habits, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 20 smoking position 12
             formItem = new FormItem(R.array.form_habits_smoking, form.optInt("smokingId"),
                     FormItem.DATA, headerItem, SMOKING);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 21 alcohol position 13
             formItem = new FormItem(R.array.form_habits_alcohol, form.optInt("alcoholId"),
                     FormItem.DATA, headerItem, ALCOHOL);
             formInfo.fillFormItem(formItem);
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 22 restaurants position 14
             String rest = form.optString("restaurants").trim();
@@ -375,11 +390,13 @@ public class Profile extends AbstractDataWithPhotos {
                     headerItem, RESTAURANTS);
             formInfo.fillFormItem(formItem);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 24 HEADER -= DETAIL =-
-            headerItem = new FormItem(R.string.form_detail, FormItem.HEADER);
-            formInfo.fillFormItem(headerItem);
+            if (isNeedHeader) {
+                headerItem = new FormItem(R.string.form_detail, FormItem.HEADER);
+                formInfo.fillFormItem(headerItem);
+            }
 
             // 25 first_dating position 15
             String dd = form.optString("firstDating").trim();
@@ -388,7 +405,7 @@ public class Profile extends AbstractDataWithPhotos {
                     FormItem.DATA, headerItem, DATING);
             formInfo.fillFormItem(formItem);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
-            profile.forms.add(formItem);
+            forms.add(formItem);
 
             // 26 achievements position 16
             String ach = form.optString("achievements").trim();
@@ -397,7 +414,7 @@ public class Profile extends AbstractDataWithPhotos {
                     FormItem.DATA, headerItem, ARCHIEVEMENTS);
             formInfo.fillFormItem(formItem);
             formItem.setTextLimitInterface(new FormItem.DefaultTextLimiter());
-            profile.forms.add(formItem);
+            forms.add(formItem);
         }
     }
 
@@ -418,7 +435,9 @@ public class Profile extends AbstractDataWithPhotos {
 
     private static void parseGifts(Profile profile, JSONObject resp) throws JSONException {
         JSONObject jsonGifts = resp.optJSONObject("gifts");
-        profile.gifts = JsonUtils.fromJson(jsonGifts.toString(), Gifts.class);
+        if (jsonGifts != null) {
+            profile.gifts = JsonUtils.fromJson(jsonGifts.toString(), Gifts.class);
+        }
     }
 
     public static String normilizeStatus(String status) {
@@ -515,13 +534,48 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    public static class Gifts {
+    public static class Gifts implements Parcelable {
         public boolean more;
         public int count;
         public ArrayList<Gift> items = new ArrayList<>();
 
+        public Gifts() {
+        }
+
+        public Gifts(Parcel source) {
+            more = source.readByte() == 1;
+            count = source.readInt();
+            items = source.readArrayList(Gift.class.getClassLoader());
+        }
+
         public ArrayList<Gift> getGifts() {
             return items;
+        }
+
+        public static final Parcelable.Creator<Gifts> CREATOR = new Creator<Gifts>() {
+            @Override
+            public Gifts createFromParcel(Parcel source) {
+                return new Gifts(source);
+            }
+
+            @Override
+            public Gifts[] newArray(int size) {
+                return new Gifts[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            if (dest != null) {
+                dest.writeByte((byte) (more ? 1 : 0));
+                dest.writeInt(count);
+                dest.writeList(items);
+            }
         }
     }
 

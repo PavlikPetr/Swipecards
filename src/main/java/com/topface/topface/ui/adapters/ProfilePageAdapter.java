@@ -4,16 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
-import com.topface.billing.MarketApiType;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
-import com.topface.topface.R;
-import com.topface.topface.data.PaymentWallProducts;
-import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.utils.BuyVipFragmentManager;
-import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.ListUtils;
 
 import java.util.ArrayList;
@@ -61,18 +53,19 @@ public class ProfilePageAdapter extends HackyFragmentStatePagerAdapter {
         try {
             String fragmentClassName = mFragmentsClasses.get(position);
             //create fragments
-            if (fragmentClassName.equals(BuyVipFragmentManager.getClassName())) {
-                //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
-                //то вместо покупок через GP показываем покупки через PaymentWall
-                if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !new GoogleMarketApiManager().isMarketApiAvailable()) {
-                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off));
-                } else {
-                    fragment = BuyVipFragmentManager.getVipInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off));
-                }
-            } else {
+            //TODO добавить обработку отсутствия сервисов при показе экрана покупок в профиле
+//            if (fragmentClassName.equals(BuyVipFragmentManager.getClassName())) {
+//                //Если это платежи через Google Play, но у нас не поддерживаются Google Play Services,
+//                //то вместо покупок через GP показываем покупки через PaymentWall
+//                if (BuildConfig.MARKET_API_TYPE == MarketApiType.GOOGLE_PLAY && !new GoogleMarketApiManager().isMarketApiAvailable()) {
+//                    fragment = VipPaymentWallBuyFragment.newInstance(false, "ProfileTab", PaymentWallProducts.TYPE.DIRECT, App.getContext().getString(R.string.vip_state_off));
+//                } else {
+//                    fragment = BuyVipFragmentManager.getVipInstance(false, "ProfileTab", App.getContext().getString(R.string.vip_state_off));
+//                }
+//            } else {
                 Class fragmentClass = Class.forName(fragmentClassName);
                 fragment = (Fragment) fragmentClass.newInstance();
-            }
+//            }
             mProfileUpdater.bindFragment(fragment);
             mProfileUpdater.update();
         } catch (Exception ex) {

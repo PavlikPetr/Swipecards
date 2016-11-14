@@ -31,6 +31,4 @@ class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>()
     }
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_visitors
-
-    override fun getTitle(): String = getString(R.string.general_visitors)
 }
