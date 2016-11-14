@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import org.jetbrains.anko.layoutInflater
 
 /**
- *
  * New behavior for adapter
  * @param T item binding
  * @param D item data

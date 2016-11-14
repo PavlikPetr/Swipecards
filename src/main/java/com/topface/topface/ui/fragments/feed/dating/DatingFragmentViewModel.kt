@@ -6,23 +6,21 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.RetryRequestReceiver
 import com.topface.topface.Ssid
 import com.topface.topface.data.DatingFilter
 import com.topface.topface.data.Profile
-import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.OnUsersListEventsListener
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.state.TopfaceAppState
-import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
@@ -58,7 +56,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
-    var mCurrentUser: SearchUser? = null
+    var currentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
     private lateinit var mReceiver: BroadcastReceiver
@@ -74,8 +72,8 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         //todo работаем по рофилю из кэша?
         mProfileSubscription = state.getObservable(Profile::class.java).subscribe {
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
-                if (mCurrentUser == null) {
-                    mCurrentUser = mUserSearchList.currentUser
+                if (currentUser == null) {
+                    currentUser = mUserSearchList.currentUser
                     mUserSearchList.setOnEmptyListListener(this)
                 } else {
                     //Сделано для того, чтобы не показывалось сообщение о том, что пользователи не найдены.
@@ -87,8 +85,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         }
         createAndRegisterBroadcasts()
     }
-
-    fun getCurrentUser() = mCurrentUser
 
     private fun createAndRegisterBroadcasts() {
         mReceiver = object : BroadcastReceiver() {
@@ -104,7 +100,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
                 mUserSearchList.clear()
-                mCurrentUser = null
+                currentUser = null
             }
 
             mUpdateInProcess = true
@@ -125,7 +121,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         //если список был пуст, то просто показываем нового пользователя
-                        val currentUser = mUserSearchList.currentUser
+                        val user = mUserSearchList.currentUser
                         //NOTE: Если в поиске никого нет, то мы показываем следующего юзера
                         //Но нужно учитывать, что такое происходит при смене фильтра не через приложение,
                         //Когда чистится поиск, если фильтр поменялся удаленно,
@@ -134,9 +130,10 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                         //<code>if (!isAddition && mCurrentUser != currentUser || mCurrentUser == null)</code>
                         //Но возникает странный эффект, когда в поиске написано одно, а у юзера другое,
                         //В связи с чем, все работает так как работает
-                        if (currentUser != null && mCurrentUser !== currentUser) {
-                            mDatingViewModelEvents.onDataReceived(currentUser)
-                            prepareFormsData(currentUser)
+                        if (user != null && currentUser !== user) {
+                            currentUser = user
+                            mDatingViewModelEvents.onDataReceived(user)
+                            prepareFormsData(user)
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                         }
@@ -158,10 +155,25 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         clear()
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
+        Debug.log("GIFTS_BUGS prepareFormsData gifts items ${user.gifts.items.count()} gifts ${user.gifts.count}")
         addExpandableItem(GiftsModel(user.gifts, user.id))
-        val forms = mutableListOf <IType>().apply {
-            user.forms.forEach {
-                add(FormModel(Pair(it.title, it.value)))
+        val forms: MutableList<IType>
+        if (App.get().profile.hasEmptyFields) {
+            //показываем заглушку, чтоб юзер заполнил свою анкету
+            forms = mutableListOf<IType>(FormModel(Pair(String.format(context.getString(R.string.fill_own_profile), user.firstName), ""),
+                    isEmptyItem = false))
+        } else {
+            forms = mutableListOf <IType>().apply {
+                var hasEmptyItem = false
+                user.forms.forEach {
+                    if (it.isEmpty && !hasEmptyItem) {
+                        hasEmptyItem = true
+                        //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
+                        add(0, FormModel(Pair(context.getString(R.string.ask_moar_info), Utils.EMPTY), currentUser?.id,
+                                it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
+                    }
+                    add(FormModel(Pair(it.title, it.value), isEmptyItem = it.isEmpty))
+                }
             }
         }
         addExpandableItem(ParentModel(context.getString(R.string.about), true, R.drawable.about), forms)
@@ -176,9 +188,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                 mNewFilter = true
                 FlurryManager.getInstance().sendFilterChangedEvent()
             }
-            // открываем чат с пользователем в случае успешной отправки подарка с экрана знакомств
-        } else if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-            mNavigator.showChat(mCurrentUser, data?.getParcelableExtra<Parcelable>(GiftsActivity.INTENT_SEND_GIFT_ANSWER) as SendGiftAnswer)
         }
     }
 
@@ -206,17 +215,19 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
     }
 
     override fun onSavedInstanceState(state: Bundle): Unit = with(state) {
-        putParcelable(CURRENT_USER, mCurrentUser)
+        putParcelable(CURRENT_USER, currentUser)
         putBoolean(UPDATE_IN_PROCESS, mUpdateInProcess)
         putBoolean(NEW_FILTER, mNewFilter)
+        Debug.log("GIFTS_BUGS saved dating v model gifts items ${currentUser?.gifts?.items?.count()} gifts ${currentUser?.gifts?.count}")
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
-        val currentUser = getParcelable<SearchUser>(CURRENT_USER)
         mUpdateInProcess = getBoolean(UPDATE_IN_PROCESS)
         mNewFilter = getBoolean(NEW_FILTER)
-        prepareFormsData(currentUser)
-        mCurrentUser = currentUser
+        currentUser = getParcelable<SearchUser>(CURRENT_USER)?.apply {
+            Debug.log("GIFTS_BUGS restore dating v model gifts items ${gifts.items.count()} gifts ${gifts.count}")
+            prepareFormsData(this)
+        }
     }
 
     override fun release() {

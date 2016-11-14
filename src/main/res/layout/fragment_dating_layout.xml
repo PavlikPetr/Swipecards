@@ -1,17 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.dating.DatingFragmentViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.dating.DatingButtonsViewModel"/>
     </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/forms_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/forms_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:fadingEdge="none"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/right_labels"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom|right"
+            fab:fab_addButtonColorNormal="@color/dating_fab_like"
+            fab:fab_addButtonPlusIconColor="@color/dating_fab_small"
+            fab:fab_labelsPosition="left">
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:foregroundGravity="fill"
+                android:onClick="@{() -> model.validateSendAdmiration()}"
+                android:scaleType="center"
+                android:src="@drawable/admiration"
+                fab:fab_colorNormal="@color/dating_fab_small"
+                fab:fab_size="mini"
+                />
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.showChat()}"
+                android:foregroundGravity="center"
+                android:scaleType="center"
+                android:src="@drawable/message"
+                fab:fab_colorNormal="@color/dating_fab_small"
+                fab:fab_size="mini"/>
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.skip()}"
+                android:scaleType="center"
+                android:foregroundGravity="center_horizontal"
+                android:src="@drawable/skip_fab"
+                fab:fab_colorNormal="@color/dating_fab_small"
+                fab:fab_size="mini"/>
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.sendLike()}"
+                android:scaleType="center"
+                android:foregroundGravity="clip_vertical"
+                android:src="@drawable/like_fab"
+                fab:fab_colorNormal="@color/dating_fab_small"
+                fab:fab_size="mini"/>
+
+        </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
+
+
+    </FrameLayout>
+
 
 </layout>

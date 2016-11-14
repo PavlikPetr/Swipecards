@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
@@ -22,16 +23,14 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
-import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
-import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
-import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
-import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.fragments.form.*
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
@@ -44,7 +43,8 @@ import org.jetbrains.anko.support.v4.dimen
  * Created by tiberal on 07.10.16.
  */
 class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
-        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility, IStartAdmirationPurchasePopup, IDatingAlbumView {
+        , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility,
+        IStartAdmirationPurchasePopup, IDatingAlbumView {
 
     override val anchorViewResId: Int
         get() = R.layout.dating_buttons_layout
@@ -95,7 +95,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun bindModels() {
         super.bindModels()
         mAnchorBinding.model = mDatingButtonsViewModel
-        mBinding.model = mDatingFragmentViewModel
+        mBinding.model = mDatingButtonsViewModel
         mCollapseBinding.model = mDatingAlbumViewModel
     }
 
@@ -125,12 +125,20 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         return mBinding.root
     }
 
+    //todo доработать составной адаптер прокидывать в делегат изменения стейта
+    val govnocod by lazy {
+        GiftsItemDelegate(mApi, mNavigator)
+    }
+    val govnocod1 by lazy {
+        ChildItemDelegate(mApi)
+    }
+
     private fun initFormList() = with(mBinding.formsList) {
         layoutManager = LinearLayoutManager(context)
         adapter = CompositeAdapter<IType>().apply {
-            addAdapterItemDelegate(ChildItemDelegate.TYPE, ChildItemDelegate())
+            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
             addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
-            addAdapterItemDelegate(GiftsItemDelegate.TYPE, GiftsItemDelegate(mApi))
+            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
         }
         addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
@@ -152,6 +160,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.onDestroyView()
         mDatingButtonsViewModel.release()
         mDatingFragmentViewModel.release()
+        govnocod.onDestroyView()
         mAddPhotoHelper.releaseHelper()
     }
 
@@ -164,11 +173,12 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
+        govnocod.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK &&
                 requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
             mDatingButtonsViewModel.onActivityResult()
         }
-
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
@@ -186,15 +196,25 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
-        mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
+            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
 
 
     override fun showTakePhoto() = mNavigator.showTakePhotoPopup()
 
-    override fun onNewSearchUser(user: SearchUser) = with(mDatingAlbumViewModel) {
-        mDatingFragmentViewModel.prepareFormsData(user)
-        albumData.set(user.photos)
-        currentUser = user
+    override fun onNewSearchUser(user: SearchUser) {
+        with(mDatingAlbumViewModel) {
+            albumData.set(user.photos)
+            currentUser = user
+        }
+        with(mDatingFragmentViewModel) {
+            currentUser = user
+            prepareFormsData(user)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Debug.log("GIFTS_BUGS dating resume current user id ${mDatingFragmentViewModel.currentUser?.id}")
     }
 
     override fun onUserShow(user: SearchUser) {

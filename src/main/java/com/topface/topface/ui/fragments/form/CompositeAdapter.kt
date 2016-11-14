@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 
 /**
- * Адаптре для анкеты юзера
+ * Адаптер позволяющий менять типы вьюх на лету, стоит только захотеть
  * Created by tiberal on 30.10.16.
  *
  * @param T тип данных адаптера

@@ -4,6 +4,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.ParentItemBinding
 
 /**
+ * Итем для анкеты отображающий группу каких то данных(статус, о себе, город)
  * Created by tiberal on 02.11.16.
  */
 class ParentItemDelegate : ExpandableItemDelegate<ParentItemBinding, ParentModel>() {
@@ -18,6 +19,6 @@ class ParentItemDelegate : ExpandableItemDelegate<ParentItemBinding, ParentModel
         get() = ParentItemBinding::class.java
 
     override fun bind(binding: ParentItemBinding, data: ExpandableItem<ParentModel>?, position: Int) =
-            data?.let { binding.model = ParentItemViewModel(it, expandableList, position) }
+            data?.let { binding.model = ParentItemViewModel(it, position) }
 
 }

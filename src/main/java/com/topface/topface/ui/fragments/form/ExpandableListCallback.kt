@@ -4,6 +4,7 @@ import android.support.v7.util.ListUpdateCallback
 import android.support.v7.widget.RecyclerView
 
 /**
+ * Обновлялка адаптера после добавления итемов
  * Created by tiberal on 31.10.16.
  */
 class ExpandableListCallback(private val mAdapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>) :

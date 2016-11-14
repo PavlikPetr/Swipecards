@@ -256,7 +256,7 @@
     <color name="album_gradient_start">#bd000000</color>
     <color name="gray_forms_color">#737373</color>
     <color name="black_forms_color">#000000</color>
-
+    <color name="forms_divider_color">#dbdbdb</color>
     <!--Popups-->
     <color name="popup_background">@color/bg_white</color>
     <color name="popup_title">#de000000</color>
@@ -268,4 +268,6 @@
     <color name="buy_vip_text_color">#2ad54a</color>
     <color name="label1_text_color">#9a9999</color>
     <color name="label2_text_color">#737373</color>
+    <color name="ask_moar_item_background">#f5f5f5</color>
+
 </resources>
