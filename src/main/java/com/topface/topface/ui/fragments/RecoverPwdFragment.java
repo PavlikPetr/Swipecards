@@ -18,6 +18,8 @@ import com.topface.topface.R;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestorePwdRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Utils;
 
 import java.util.Timer;
@@ -36,7 +38,6 @@ public class RecoverPwdFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(true);
     }
 
     @Override
@@ -172,7 +173,8 @@ public class RecoverPwdFragment extends BaseFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.recovering_password);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.recovering_password)));
     }
 }

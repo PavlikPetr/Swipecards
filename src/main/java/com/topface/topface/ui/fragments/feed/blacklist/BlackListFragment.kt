@@ -39,7 +39,5 @@ class BlackListFragment : BaseFeedFragment<BlackListItem, LayoutEmptyBlacklistBi
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_blacklist
 
-    override fun getTitle(): String = getString(R.string.black_list_title)
-
     override fun getActionModeMenu() = R.menu.feed_context_menu_blacklist
 }

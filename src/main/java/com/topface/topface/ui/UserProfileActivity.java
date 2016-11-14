@@ -2,16 +2,26 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.Photo;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 
-public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> {
+import org.jetbrains.annotations.NotNull;
+
+public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_USER_PROFILE = 6;
 
@@ -37,6 +47,40 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
         return intent;
     }
 
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new CustomTitleSubTitleToolbarViewModel(toolbar, this);
+    }
+
+    @Override
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        if (getToolbarViewModel() instanceof CustomTitleSubTitleToolbarViewModel) {
+            CustomToolbarViewModel customViewModel = ((CustomTitleSubTitleToolbarViewModel) getToolbarViewModel()).getExtraViewModel();
+            customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+            customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+            Boolean isOnline = settings.isOnline();
+            customViewModel.isOnline().set(isOnline != null && isOnline);
+            if (settings.getTitle() != null) {
+                customViewModel.getTitle().set(settings.getTitle());
+            }
+            if (settings.getSubtitle() != null) {
+                customViewModel.getSubTitle().set(settings.getSubtitle());
+            }
+        }
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
+
     @Override
     protected String getFragmentTag() {
         return UserProfileFragment.class.getSimpleName();
@@ -46,12 +90,6 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment> 
     protected UserProfileFragment createFragment() {
         return new UserProfileFragment();
     }
-
-    @Override
-    protected void setActionBarView() {
-        super.setActionBarView();
-    }
-
 
     @Override
     public void finish() {

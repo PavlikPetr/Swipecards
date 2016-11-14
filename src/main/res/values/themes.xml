@@ -2,14 +2,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Базовая тема приложения -->
-    <style name="Theme._Topface" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="Theme._Topface" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/light_theme_color_primary</item>
         <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
         <item name="colorAccent">@color/light_theme_color_accent</item>
         <item name="android:windowContentOverlay">@null</item>
-
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
 
         <!-- overflow menu settings -->
         <item name="android:itemTextAppearance">@style/PopupMenuTextApearance</item>
@@ -34,7 +31,7 @@
         <item name="android:dropDownItemStyle">@style/topfaceDropDownItemStyle</item>
         <item name="android:listPreferredItemHeight">32dp</item>
         <item name="android:checkboxStyle">@style/topfaceCheckbox</item>
-        <item name="android:windowBackground">@color/bg_holo</item>
+        <item name="android:windowBackground">@color/bg_white</item>
         <item name="android:progressBarStyle">@style/TopFaceProgressBar</item>
         <!-- Стилизованные кнопки -->
         <item name="blueButtonStyle">@style/BlueBonusButton</item>
@@ -46,7 +43,7 @@
         <item name="selectableItemBackground">@drawable/bg_semitransparent_black_selector</item>
         <!-- Action Mode (CAB)-->
         <item name="actionModeBackground">@color/action_mode_color</item>
-        <item name="actionModeCloseDrawable">@drawable/ic_check</item>
+        <item name="actionModeCloseDrawable">@drawable/check_gray</item>
         <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">true</item>
     </style>
 
@@ -175,8 +172,14 @@
         <item name="android:windowBackground">@color/album_background</item>
     </style>
 
+    <style name="Topface.Theme.Album" parent="Theme.Topface.Navigation">
+        <item name="android:windowBackground">@color/album_background</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <style name="Theme.Topface.Chat" parent="NoWindowAnimation">
-        <item name="android:windowBackground">@color/bg_white</item>
+        <item name="android:windowBackground">@color/bg_holo</item>
     </style>
 
     <style name="Theme.Topface.Gifts">
@@ -185,5 +188,16 @@
 
     <style name="FullyTranslucent" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:progressBarStyle">@style/InvisibleProgress</item>
+    </style>
+
+    <!-- Стиль для попапа восхищения -->
+    <style name="AdmirationPurchasePopupStyle" parent="Theme.Topface">
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowBackground">@color/overlay</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>

@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="model"
             type="com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseViewModel"/>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -19,15 +24,20 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:elevation="0dp"
+            app:elevation="0dp"
+            bind:targetApi="lollipop">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentScrim="@color/action_bar_color"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:collapsedTitleTextColor="@{@color/toolbar_transparent_title_color}"
+                app:contentScrim="@color/toolbar_background"
+                app:expandedTitleColor="@{@color/toolbar_transparent_title_color}"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:scrimVisibleHeightTrigger="@dimen/collapsing_scrim_size"
+                app:toolbarId="@+id/toolbar">
 
                 <FrameLayout
                     android:id="@+id/collapse_frame"
@@ -35,23 +45,29 @@
                     android:layout_height="wrap_content"
                     android:visibility="@{model.collapseVisibility}"/>
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/app_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@{model.background}"
-                    app:layout_collapseMode="pin"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                <include
+                    android:id="@+id/toolbarInclude"
+                    layout="@layout/toolbar"
+                    bind:viewModel="@{viewModel}"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
 
         </android.support.design.widget.AppBarLayout>
 
         <FrameLayout
-            android:id="@+id/fragment_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:id="@+id/fragment_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <include
+                layout="@layout/toolbar_shadow"
+                bind:visibility="@{model.shadowVisibility}"/>
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/anchor_frame"

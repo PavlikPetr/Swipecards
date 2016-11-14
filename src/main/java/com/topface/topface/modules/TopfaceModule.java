@@ -28,7 +28,6 @@ import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.PaymentwallActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
@@ -42,17 +41,20 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
-import com.topface.topface.ui.fragments.feed.dating.DatingButtonsViewModel;
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
+import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.dating.DatingFragmentViewModel;
+import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
@@ -104,7 +106,6 @@ import dagger.Provides;
                 PeopleNearbyFragment.class,
                 PromoKey71Dialog.class,
                 PromoKey81Dialog.class,
-                PaymentwallActivity.class,
                 CountersDataProvider.class,
                 FindAndSendCurrentLocation.class,
                 AdjustManager.class,
@@ -145,7 +146,10 @@ import dagger.Provides;
                 PromoExpressMessages.class,
                 DatingFragmentViewModel.class,
                 DatingButtonsViewModel.class,
-                AdmirationPurchasePopupViewModel.class
+                AdmirationPurchasePopupViewModel.class,
+                NavigationToolbarViewModel.class,
+                PurchaseToolbarViewModel.class,
+                OwnProfileFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

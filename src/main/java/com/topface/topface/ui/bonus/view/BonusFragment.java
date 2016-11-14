@@ -18,6 +18,8 @@ import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.bonus.presenter.IBonusPresenter;
 import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -40,18 +42,8 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     }
 
     @Override
-    protected void setNeedTitles(boolean needTitles) {
-        super.setNeedTitles(getArguments().getBoolean(NEED_SHOW_TITLE));
-    }
-
-    @Override
     protected String getScreenName() {
         return PAGE_NAME;
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.general_bonus);
     }
 
     @Nullable
@@ -67,6 +59,14 @@ public class BonusFragment extends BaseFragment implements IBonusView {
         mPresenter.bindView(this);
         mPresenter.loadOfferwalls();
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getArguments().getBoolean(NEED_SHOW_TITLE)) {
+            ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_bonus)));
+        }
     }
 
     @Override

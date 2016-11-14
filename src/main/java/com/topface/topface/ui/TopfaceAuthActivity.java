@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Activity for Topface authorization
  */
-public class TopfaceAuthActivity extends NoAuthActivity<TopfaceAuthFragment> {
+public class TopfaceAuthActivity extends NoAuthActivity<TopfaceAuthFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_TOPFACE_AUTH = 26;
 
@@ -47,5 +51,16 @@ public class TopfaceAuthActivity extends NoAuthActivity<TopfaceAuthFragment> {
             finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

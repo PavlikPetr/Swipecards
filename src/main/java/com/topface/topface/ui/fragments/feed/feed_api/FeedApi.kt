@@ -3,9 +3,7 @@ package com.topface.topface.ui.fragments.feed.feed_api
 import android.content.Context
 import android.os.Bundle
 import com.topface.framework.JsonUtils
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedListData
-import com.topface.topface.data.Rate
+import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
@@ -13,9 +11,8 @@ import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.requests.handlers.SimpleApiHandler
-import com.topface.topface.ui.fragments.feed.app_day.AppDay
-import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.ui.edit.filter.model.FilterData
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
@@ -30,6 +27,54 @@ import java.util.*
 
 class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
               private val mDeleteRequestFactory: IRequestFactory? = null, private val mFeedRequestFactory: IRequestFactory? = null) {
+
+    fun callStandartMessageRequest(userId: Int, messageId: Int, blockUnconfirmed: Boolean = App.get().options.blockUnconfirmed): Observable<IApiResponse> {
+        return Observable.create {
+            val request = StandardMessageSendRequest(mContext, userId, messageId, blockUnconfirmed)
+            mRequestClient.registerRequest(request)
+            request.callback(object : SimpleApiHandler() {
+                override fun success(response: IApiResponse) = it.onNext(response)
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }
+    }
+
+    fun callGetGifts(userId: Int, from: Int, limit: Int = 15): Observable<Profile.Gifts> {
+        return Observable.create {
+            val request = FeedGiftsRequest(mContext)
+            request.uid = userId
+            request.from = from
+            request.limit = limit
+            mRequestClient.registerRequest(request)
+            request.callback(object : DataApiHandler<FeedListData<FeedGift>>() {
+                override fun success(data: FeedListData<FeedGift>?, response: IApiResponse?) {
+                    val gifts = Profile.Gifts()
+                    data?.let {
+                        it.items?.forEach {
+                            gifts.items.add(it.gift)
+                        }
+                        gifts.more = it.more
+                    }
+                    it.onNext(gifts)
+                }
+
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+
+                override fun parseResponse(response: ApiResponse?): FeedListData<FeedGift>? =
+                        response?.let { FeedListData(it.getJsonResult(), FeedGift::class.java) }
+
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+
+            }).exec()
+        }
+    }
 
     fun callAlbumRequest(currentSearchUser: SearchUser, loadedPosition: Int): Observable<AlbumPhotos> {
         return Observable.create {
@@ -47,7 +92,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
      */
     fun callDatingUpdate(onlyOnline: Boolean, isNeedRefresh: Boolean): Observable<UsersList<SearchUser>> {
         return Observable.create {
-            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh)
+            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, true)
             mRequestClient.registerRequest(request)
             request.callback(object : DataApiHandler<UsersList<SearchUser>>() {
                 override fun parseResponse(response: ApiResponse): UsersList<SearchUser> = UsersList(response, SearchUser::class.java)

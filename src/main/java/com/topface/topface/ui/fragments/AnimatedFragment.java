@@ -45,12 +45,6 @@ public abstract class AnimatedFragment extends UserAvatarFragment {
 
     }
 
-    @Override
-    protected String getDefaultTitle() {
-        return null;
-    }
-
-
     public void requestExecuted() {
         stopWhiteScreenTimer();
     }

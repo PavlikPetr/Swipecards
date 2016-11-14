@@ -4,12 +4,16 @@ import android.content.Intent;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
-public class EditorProfileActionsActivity extends SingleFragmentActivity {
+public class EditorProfileActionsActivity extends SingleFragmentActivity<EditorProfileActionsFragment, AcFragmentFrameBinding> {
     public static final int INTENT_EDITOR_PROFILE_ACTIONS = 9;
 
     public static Intent createIntent(int profileId, IApiResponse response) {
@@ -32,5 +36,16 @@ public class EditorProfileActionsActivity extends SingleFragmentActivity {
     @Override
     protected EditorProfileActionsFragment createFragment() {
         return new EditorProfileActionsFragment();
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

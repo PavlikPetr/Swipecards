@@ -254,6 +254,12 @@
     <string name="filter_age_end_prefix">до %s</string>
     <string name="filter_constitution_template">От %1$d до %2$d</string>
     <string name="filter_cities_all">По всем городам</string>
+    <string name="dating_empty_nothing_found">Ничего не найдено!</string>
+    <string name="dating_empty_reset">Сбросить</string>
+    <string name="dating_empty_change_settings">Изменить</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Попробуйте сбросить или изменить
+        параметры поиска
+    </string>
 
     <!-- Buying -->
     <string name="purchase_header_title">Баланс:</string>
@@ -294,6 +300,8 @@
 
     <!-- Gifts -->
     <string name="gifts_title">Выберите подарок</string>
+
+    <string name="gifts">Подарки</string>
 
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
@@ -1128,6 +1136,10 @@
     <string name="chat_activate_vip">Активировать VIP</string>
     <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
     <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
+
+    <string name="about">О себе</string>
+    <string name="moar_info">Вы можете узнать недостающую информацию!</string>
+
     <string name="geo_switched_off_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию</string>
     <string name="turn_on_geo">Включить геопозицию</string>
     <string name="geo_show_settings_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию в настройках телефона</string>
@@ -1138,4 +1150,8 @@
     <string name="label1_text_admiration_purchase_popup">Получатель «восхищения» будет уведомлён и сразу его увидит</string>
     <string name="label2_text_admiration_purchase_popup">Отправляйте «восхищения» бесплатно!</string>
     <string name="buy_vip_button_text">получить vip</string>
+    <string name="send_first_gift">Подарите первый подарок!</string>
+    <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
+    <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
+
 </resources>
