@@ -2,6 +2,7 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 abstract public class BaseTrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {
 
-    protected @NotNull IOnFragmentFinishDelegate mOnFragmentFinishDelegate;
+    protected @Nullable IOnFragmentFinishDelegate mOnFragmentFinishDelegate;
     public static final String SKIP_SHOWING_CONDITION = "skip_showing_condition";
 
     public void setOnFragmentFinishDelegate(final @NotNull IOnFragmentFinishDelegate delegate) {

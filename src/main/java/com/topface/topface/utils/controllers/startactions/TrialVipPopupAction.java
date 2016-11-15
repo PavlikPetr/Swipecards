@@ -36,8 +36,11 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
             return;
         }
 
-        final int numberTrialVip = App.get().getOptions().trialVipExperiment.maxShowCount;
-        switch (numberTrialVip) {
+        chooseShowTrialVipPopup();
+    }
+
+    private void chooseShowTrialVipPopup() {
+        switch (App.get().getOptions().trialVipExperiment.maxShowCount) {
             case 1:
                 break;
             case 2:
