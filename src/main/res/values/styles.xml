@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget"></style>
 
@@ -1397,4 +1398,21 @@
         <item name="android:singleLine">true</item>
         <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="ExpandableFabItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">center</item>
+        <item name="fab_size">mini</item>
+        <item name="fab_colorNormal">@color/dating_fab_small</item>
+        <item name="fab_colorPressed">@color/dating_fab_small</item>
+    </style>
+
+    <style name="FabDating">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>

@@ -27,7 +27,6 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartA
 import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
 import com.topface.topface.ui.fragments.dating.form.GiftsItemDelegate
 import com.topface.topface.ui.fragments.dating.form.ParentItemDelegate
-import com.topface.topface.ui.fragments.dating.DatingOptionMenuManager
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
@@ -101,8 +100,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun bindModels() {
         super.bindModels()
-        mAnchorBinding.model = mDatingButtonsViewModel
-        mBinding.model = mDatingButtonsViewModel
+        mAnchorBinding.setModel(mDatingButtonsViewModel)
+        mBinding.setModel(mDatingButtonsViewModel)
         mCollapseBinding.model = mDatingAlbumViewModel
     }
 

@@ -28,12 +28,12 @@ import com.topface.topface.ui.fragments.dating.form.FormModel
 import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.BaseViewModel
@@ -163,7 +163,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
-            forms = mutableListOf<IType>(FormModel(Pair(String.format(context.getString(R.string.fill_own_profile), user.firstName), ""),
+            forms = mutableListOf<IType>(FormModel(Pair(String.format(R.string.fill_own_profile.getString(), user.firstName), ""),
                     isEmptyItem = false))
         } else {
             forms = mutableListOf <IType>().apply {

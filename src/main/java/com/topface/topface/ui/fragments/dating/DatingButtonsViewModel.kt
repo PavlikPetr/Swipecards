@@ -23,7 +23,6 @@ import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
-import com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
@@ -50,8 +49,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                              private val mDatingButtonsView: IDatingButtonsView,
                              private val mEmptySearchVisibility: IEmptySearchVisibility,
                              private val mStartAdmirationPurchasePopup: IStartAdmirationPurchasePopup) :
-        BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility,
-        IAppBarState {
+        BaseViewModel<DatingButtonsLayoutBinding>(binding), IAppBarState {
 
     var currentUser: SearchUser? = null
     private var mLikeSubscription: Subscription? = null
@@ -243,9 +241,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         arrayOf(mLikeSubscription, mSkipSubscription, mAdmirationSubscription, mBalanceDataSubscriptions).safeUnsubscribe()
     }
 
-    override fun showDatingButtons() = isDatingButtonsVisible.set(View.VISIBLE)
+    fun showDatingButtons() = isDatingButtonsVisible.set(View.VISIBLE)
 
-    override fun hideDatingButtons() = isDatingButtonsVisible.set(View.INVISIBLE)
+    fun hideDatingButtons() = isDatingButtonsVisible.set(View.INVISIBLE)
 
     override fun isScrimVisible(isVisible: Boolean) =
             if (isVisible) hideDatingButtons() else showDatingButtons()
