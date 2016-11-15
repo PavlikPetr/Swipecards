@@ -30,6 +30,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.ui.dialogs.NotificationEditDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
@@ -236,8 +238,9 @@ public class SettingsNotificationsFragment extends BaseFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.notifications);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.notifications)));
     }
 
     @SuppressWarnings("unused")

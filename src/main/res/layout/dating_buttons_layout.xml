@@ -8,10 +8,10 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.dating.DatingButtonsViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
     </data>
 
-    <com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
+    <com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout
         android:id="@+id/dating_buttons_root"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,6 +72,6 @@
             app:backgroundTint="@color/dating_fab_small"
             bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
 
-    </com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout>
+    </com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout>
 
 </layout>

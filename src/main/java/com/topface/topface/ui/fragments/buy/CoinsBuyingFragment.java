@@ -58,7 +58,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         getDataFromIntent(getArguments());
     }
 

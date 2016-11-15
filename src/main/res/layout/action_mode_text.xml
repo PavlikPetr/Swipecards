@@ -4,5 +4,5 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:gravity="center_vertical"
-    android:textColor="#FFFFFF"
+    android:textColor="@color/toolbar_title_color"
     android:textSize="20sp" />

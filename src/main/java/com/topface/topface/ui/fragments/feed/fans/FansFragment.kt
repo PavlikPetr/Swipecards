@@ -33,7 +33,5 @@ class FansFragment : BaseFeedFragment<FeedBookmark, LayoutEmptyFansBinding>() {
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_fans
 
-    override fun getTitle(): String = getString(R.string.general_visitors)
-
     override fun getActionModeMenu() = R.menu.feed_context_menu_fans
 }

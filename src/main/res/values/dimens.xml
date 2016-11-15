@@ -11,9 +11,12 @@
     <dimen name="padding_left_for_online_icon">8dp</dimen>
 
     <dimen name="action_bar_title_size">20sp</dimen>
-    <dimen name="action_bar_subtitle_size">13sp</dimen>
 
     <dimen name="dating_album_height">432dp</dimen>
+    <dimen name="dating_parent_item_title_size">16sp</dimen>
+    <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
+
+
 
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
@@ -166,6 +169,8 @@
     <dimen name="toolbar_title_size">20sp</dimen>
     <dimen name="toolbar_elevation">10dp</dimen>
     <dimen name="toolbar_title_padding_left">15dp</dimen>
+    <dimen name="collapsing_scrim_size">100dp</dimen>
+    <dimen name="online_icon_padding">3dp</dimen>
 
     <!--Popups-->
     <dimen name="popup_central_picture_size">210dp</dimen>
@@ -180,5 +185,7 @@
     <dimen name="popup_message_padding_bottom">20dp</dimen>
     <dimen name="popup_message_side_padding">46dp</dimen>
     <dimen name="popup_button_text">14sp</dimen>
+
+    <dimen name="form_list_padding">30dp</dimen>
 
 </resources>

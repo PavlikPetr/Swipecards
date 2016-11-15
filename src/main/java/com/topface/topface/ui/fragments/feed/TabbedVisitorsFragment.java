@@ -5,12 +5,15 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.ui.fragments.feed.fans.FansFragment;
 import com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.general_visitors);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_visitors)));
     }
 
     @Override

@@ -4,6 +4,6 @@
 
     <item
         android:id="@+id/delete_list_item"
-        android:icon="@drawable/ic_delete"
+        android:icon="@drawable/delete_gray"
         android:title="@string/general_delete_title" />
 </menu>

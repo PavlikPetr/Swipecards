@@ -13,7 +13,6 @@ public class ProfileInnerFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
     }
 
     @Override

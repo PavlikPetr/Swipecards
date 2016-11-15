@@ -60,7 +60,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
 
     @Override
     protected boolean isModalDialog() {
-        return true;
+        return false;
     }
 
     @Override

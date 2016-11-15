@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.support.v4.view.MenuItemCompat;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 
@@ -72,18 +74,19 @@ public abstract class UserAvatarFragment extends BaseFragment
 
     @Override
     public void setOnline(boolean online) {
-        if (mTitleSetter != null) {
-            mTitleSetter.setOnline(online);
+        Activity activity = getActivity();
+        if (activity instanceof ToolbarActivity) {
+            if (((ToolbarActivity) activity).getToolbarViewModel() instanceof NavigationToolbarViewModel) {
+                NavigationToolbarViewModel viewModel = (NavigationToolbarViewModel) ((ToolbarActivity) activity).getToolbarViewModel();
+                viewModel.getExtraViewModel().isOnline().set(online);
+            }
         }
     }
 
     @Override
     public void refreshActionBarTitles() {
         super.refreshActionBarTitles();
-        if (mTitleSetter != null) {
-            IUniversalUser user = getUniversalUser();
-            mTitleSetter.setOnline(user.isOnline());
-        }
+        setOnline(getUniversalUser().isOnline());
     }
 
 
@@ -106,7 +109,7 @@ public abstract class UserAvatarFragment extends BaseFragment
         }
     }
 
-    protected void showStubAvatar(int sex){
+    protected void showStubAvatar(int sex) {
         ((ImageViewRemote) MenuItemCompat.getActionView(mBarAvatar)
                 .findViewById(R.id.ivBarAvatar))
                 .setImageResource(sex == Profile.GIRL ?
@@ -166,18 +169,24 @@ public abstract class UserAvatarFragment extends BaseFragment
             );
         }
     }
-
-    @Override
-    protected String getTitle() {
-        IUniversalUser user = getUniversalUser();
-        return user.isEmpty() ? getDefaultTitle() : user.getNameAndAge();
-    }
-
-    protected abstract String getDefaultTitle();
-
-    @Override
-    protected String getSubtitle() {
-        IUniversalUser user = getUniversalUser();
-        return user.isEmpty() || TextUtils.isEmpty(user.getCity()) ? Utils.EMPTY : user.getCity();
-    }
+    //TODO SETTOOLBARSETTINGS
+//
+//    @Override
+//    protected String getTitle() {
+//        IUniversalUser user = getUniversalUser();
+//        return user.isEmpty() ? getDefaultTitle() : user.getNameAndAge();
+//    }
+//
+//    protected abstract String getDefaultTitle();
+//
+//    @Override
+//    protected String getSubtitle() {
+//        IUniversalUser user = getUniversalUser();
+//        return user.isEmpty() || TextUtils.isEmpty(user.getCity()) ? Utils.EMPTY : user.getCity();
+//    }
+//
+//    @Override
+//    protected Boolean isOnline() {
+//        return getUniversalUser().isOnline();
+//    }
 }

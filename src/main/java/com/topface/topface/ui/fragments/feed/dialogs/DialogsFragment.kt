@@ -53,6 +53,4 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
             data?.let { mViewModel.updatePreview(it) }
         }
     }
-
-    override fun getTitle(): String = getString(R.string.settings_messages)
 }

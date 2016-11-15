@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 public class SettingsFeedbackFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
@@ -31,8 +33,9 @@ public class SettingsFeedbackFragment extends BaseFragment implements AdapterVie
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.settings_feedback);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.settings_feedback)));
     }
 
     @Override

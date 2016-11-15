@@ -40,8 +40,6 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_mutual
 
-    override fun getTitle(): String? = getString(R.string.general_sympathies)
-
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && isAdded) {

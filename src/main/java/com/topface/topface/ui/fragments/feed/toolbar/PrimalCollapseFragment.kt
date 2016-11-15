@@ -8,11 +8,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsBehavior
+import com.topface.topface.ui.fragments.ToolbarActivity
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -21,7 +21,7 @@ import org.jetbrains.anko.layoutInflater
  * @param V collapse binding class
  * Created by tiberal on 10.10.16.
  */
-abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataBinding> : BaseFragment() {
+abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataBinding> : BaseFragment(), IAppBarState {
 
     abstract val anchorViewResId: Int
     abstract val collapseViewResId: Int
@@ -37,17 +37,12 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         DataBindingUtil.bind<AppBarBinding>(activity.findViewById(R.id.navigation_app_bar))
     }
 
-    private val mAppBarModel by lazy {
-        PrimalCollapseViewModel(mAppBarBinding)
+    val mAppBarModel by lazy {
+        PrimalCollapseViewModel(mAppBarBinding, this)
     }
 
     protected open fun setupToolbar(size: Int) {
         (mAppBarBinding.appbar.layoutParams as CoordinatorLayout.LayoutParams).height = size
-    }
-
-    open fun addAnchorViewBehavior() {
-        (mAppBarBinding.anchorFrame.layoutParams as CoordinatorLayout.LayoutParams).behavior =
-                DatingButtonsBehavior<FrameLayout>()
     }
 
     open fun bindModels() {
@@ -58,7 +53,6 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         bindModels()
         setupToolbar(toolbarSize)
-        addAnchorViewBehavior()
         with(mAppBarBinding) {
             anchorFrame.addView(mAnchorBinding.root)
             collapseFrame.addView(mCollapseBinding.root)
@@ -67,8 +61,23 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    private fun setCollapsingToolbarStyle(isCollapsed: Boolean) {
+        (activity as? ToolbarActivity<*>)?.let { activity ->
+            (activity.getToolbarViewModel() as? NavigationToolbarViewModel).let {
+                it?.isCollapsingToolbarStyle(isCollapsed)
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setCollapsingToolbarStyle(true)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        setCollapsingToolbarStyle(false)
+        mAppBarModel.shadowVisibility.set(View.VISIBLE)
         with(TypedValue()) {
             //устанавливаем стандартный размер тулбара
             if (activity.theme.resolveAttribute(android.R.attr.actionBarSize, this, true)) {
@@ -79,7 +88,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
             anchorFrame.removeView(mAnchorBinding.root)
             collapseFrame.removeView(mCollapseBinding.root)
             appbar.removeOnOffsetChangedListener(mAppBarModel)
-            appbar.setExpanded(true)
+            appbar.setExpanded(true, false)
         }
         mAppBarModel.release()
     }

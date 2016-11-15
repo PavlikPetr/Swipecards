@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.utils.popups.PopupManager;
 

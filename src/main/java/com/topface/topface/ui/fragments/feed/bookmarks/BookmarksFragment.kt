@@ -44,7 +44,5 @@ class BookmarksFragment : BaseFeedFragment<FeedBookmark, LayoutEmptyBookmarksBin
         mViewModel.onResume()
     }
 
-    override fun getTitle(): String = getString(R.string.settings_messages)
-
     override fun getActionModeMenu() = R.menu.feed_context_menu_blacklist
 }

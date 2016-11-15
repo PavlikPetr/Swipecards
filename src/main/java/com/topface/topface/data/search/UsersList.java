@@ -165,7 +165,8 @@ public class UsersList<T extends FeedUser> extends ArrayList<T> implements Seria
         if (users != null) {
             for (int i = 0; i < users.length(); i++) {
                 try {
-                    add(JsonUtils.fromJson(users.optJSONObject(i).toString(), mClass));
+                    //да, да если вдруг тут будет не search user то будет боль
+                    add((T) JsonUtils.searchUserFromJson(users.optJSONObject(i).toString()));
                 } catch (Exception e) {
                     Debug.error(e);
                 }
