@@ -12,8 +12,8 @@ import com.topface.topface.utils.config.FeedsCache
 class DeleteFeedRequestFactory(private val mContext: Context) : IRequestFactory {
 
     companion object {
-        val USER_ID_FOR_DELETE = "user_id_for_delete"
-        val FEED_TYPE = "feed_type"
+        const val USER_ID_FOR_DELETE = "user_id_for_delete"
+        const val FEED_TYPE = "feed_type"
     }
 
     override fun construct(arg: Bundle?) = arg?.let {

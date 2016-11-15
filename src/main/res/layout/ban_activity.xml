@@ -1,8 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ban_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
 
-</LinearLayout>
+    <data>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
+
+        <FrameLayout
+            android:id="@+id/ban_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</layout>

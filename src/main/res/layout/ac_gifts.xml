@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/giftGrid"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+    <data>
 
-    <RelativeLayout
-        android:id="@+id/lockScreen"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/giftGrid"
-        android:background="@color/bg_main"
-        android:visibility="gone" />
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+    </data>
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar"
+            bind:viewModel="@{toolbarViewModel}"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/giftGrid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <RelativeLayout
+                android:id="@+id/lockScreen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/giftGrid"
+                android:background="@color/bg_main"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

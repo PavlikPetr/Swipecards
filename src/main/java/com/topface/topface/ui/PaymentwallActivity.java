@@ -10,16 +10,19 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.BuyButtonData;
-import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.databinding.AcPaymentWallBinding;
+import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.WebViewFragmentBinding;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.Utils;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -27,12 +30,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.inject.Inject;
-
-import rx.Subscription;
-import rx.functions.Action1;
-
-public class PaymentwallActivity extends BaseFragmentActivity {
+public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBinding> {
     public static final String SUCCESS_URL_PATTERN = "success_url=([^&]+)";
     public static final int ACTION_BUY = 100;
     public static final String PW_URL = "pw_url";
@@ -45,13 +43,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
     public static final double CENTS_AMOUNT = 100;
     private static final int RESULT_ERROR = 1;
     private String mSuccessUrl;
-    private View mProgressBar;
-    private TextView mCurCoins;
-    private TextView mCurLikes;
-    @Inject
-    TopfaceAppState mAppState;
-    private BalanceData mBalance;
-    private Subscription mBalanceSubscription;
 
     public static Intent getIntent(Context context) {
         return new Intent(context, PaymentwallActivity.class);
@@ -68,57 +59,48 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         return intent;
     }
 
+    private void initWebView(WebView webView, WebViewClient client) {
+        //noinspection AndroidLintSetJavaScriptEnabled
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setVerticalScrollbarOverlay(true);
+        webView.setVerticalFadingEdgeEnabled(true);
+        webView.setWebViewClient(client);
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(this).inject(this);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
-            @Override
-            public void call(BalanceData balanceData) {
-                mBalance = balanceData;
-                updateBalanceCounters();
-            }
-        });
-        initBalanceCounters();
         String widgetUrl = getWidgetUrl();
         if (TextUtils.isEmpty(widgetUrl)) {
             onFatalError();
             return;
         }
         mSuccessUrl = getSuccessUrl(widgetUrl);
-        actionBarView.setActionBarTitle(R.string.purchase_header_title);
-
-        // Progress
-        mProgressBar = findViewById(R.id.prsWebLoading);
 
         // WebView
-        WebView webView = (WebView) findViewById(R.id.wvWebFrame);
-        //noinspection AndroidLintSetJavaScriptEnabled
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setVerticalScrollbarOverlay(true);
-        webView.setVerticalFadingEdgeEnabled(true);
-        webView.setWebViewClient(new PaymentwallClient(webView, widgetUrl, new PaymentwallClientInterface() {
-            @Override
-            public void onPageStarted(String url) {
-                if (TextUtils.equals(url, mSuccessUrl)) {
-                    fillResultAndClose("PW: buy is completed " + url);
-                } else {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                }
-            }
+        initWebView(getViewBinding().webViewBinding.wvWebFrame,
+                new PaymentwallClient(getViewBinding().webViewBinding.wvWebFrame, widgetUrl, new PaymentwallClientInterface() {
+                    @Override
+                    public void onPageStarted(String url) {
+                        if (TextUtils.equals(url, mSuccessUrl)) {
+                            fillResultAndClose("PW: buy is completed " + url);
+                        } else {
+                            getViewBinding().webViewBinding.prsWebLoading.setVisibility(View.VISIBLE);
+                        }
+                    }
 
-            @Override
-            public void onPageFinished(String url) {
-                if (TextUtils.equals(url, mSuccessUrl)) {
-                    fillResultAndClose("PW: finish buy is completed " + url);
-                }
-                mProgressBar.setVisibility(View.GONE);
-            }
+                    @Override
+                    public void onPageFinished(String url) {
+                        if (TextUtils.equals(url, mSuccessUrl)) {
+                            fillResultAndClose("PW: finish buy is completed " + url);
+                        }
+                        getViewBinding().webViewBinding.prsWebLoading.setVisibility(View.GONE);
+                    }
 
-            @Override
-            public void onReceivedError() {
-                onFatalError();
-            }
-        }));
+                    @Override
+                    public void onReceivedError() {
+                        onFatalError();
+                    }
+                }));
     }
 
     private void fillResultAndClose(String log) {
@@ -127,11 +109,6 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         intent.putExtra(PW_TRANSACTION_ID, "");
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    @Override
-    protected int getContentLayout() {
-        return R.layout.web_view_fragment;
     }
 
     private void onFatalError() {
@@ -157,20 +134,29 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         return result;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mBalanceSubscription != null) {
-            mBalanceSubscription.unsubscribe();
-        }
-    }
-
     private String getWidgetUrl() {
         String url = getIntent().getStringExtra(PW_URL);
         if (url == null) {
             url = App.from(this).getOptions().getPaymentwallLink();
         }
         return url;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarBinding getToolbarBinding(@NotNull AcPaymentWallBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+        return new PurchaseToolbarViewModel(toolbar, this);
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_payment_wall;
     }
 
     private static class PaymentwallClient extends WebViewClient {
@@ -226,42 +212,5 @@ public class PaymentwallActivity extends BaseFragmentActivity {
         void onPageFinished(String url);
 
         void onReceivedError();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateBalanceCounters();
-    }
-
-    private void initBalanceCounters() {
-        final LinearLayout containerView = (LinearLayout) findViewById(R.id.resources_layout);
-        containerView.setVisibility(View.VISIBLE);
-        containerView.post(new Runnable() {
-            @Override
-            public void run() {
-                int containerWidth = containerView.getMeasuredWidth();
-                if (mCurCoins != null && mCurLikes != null) {
-                    mCurCoins.setMaxWidth(containerWidth / 2);
-                    mCurLikes.setMaxWidth(containerWidth / 2);
-                }
-            }
-        });
-        mCurCoins = (TextView) findViewById(R.id.coins_textview);
-        mCurLikes = (TextView) findViewById(R.id.likes_textview);
-        mCurCoins.setSelected(true);
-        mCurLikes.setSelected(true);
-        updateBalanceCounters();
-    }
-
-    private void updateBalanceCounters() {
-        updateBalanceCounters(mBalance);
-    }
-
-    private void updateBalanceCounters(BalanceData balance) {
-        if (mCurCoins != null && mCurLikes != null && mBalance != null) {
-            mCurCoins.setText(String.valueOf(balance.money));
-            mCurLikes.setText(String.valueOf(balance.likes));
-        }
     }
 }

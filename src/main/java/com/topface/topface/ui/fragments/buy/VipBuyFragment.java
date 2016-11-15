@@ -103,7 +103,6 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         getDataFromIntent(getArguments());
 
     }
@@ -131,14 +130,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
         initViews(view);
-        initActionBar();
         return view;
-    }
-
-    private void initActionBar() {
-        if (getArguments() != null && getArguments().getBoolean(PurchasesConstants.ACTION_BAR_CONST, false)) {
-            setActionBarTitles(R.string.vip_buy_vip);
-        }
     }
 
     private void initViews(View root) {

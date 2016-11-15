@@ -28,7 +28,9 @@ import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.TabLayoutCreator;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -218,6 +220,13 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     @Override
     public void onResume() {
         super.onResume();
+        if(getActivity() instanceof ToolbarActivity){
+        ToolbarActivity activity = (ToolbarActivity) getActivity();
+            if (activity.getToolbarViewModel() instanceof NavigationToolbarViewModel) {
+                NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarViewModel();
+                vm.isCollapsingToolbarStyle(false);
+            }
+        }
         if (mRefresher != null) {
             mRefresher.refreshBanner();
         }

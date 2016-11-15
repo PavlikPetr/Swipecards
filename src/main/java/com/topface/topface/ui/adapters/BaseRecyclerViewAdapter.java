@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import rx.Observable;
 import rx.Subscriber;
 
+/**
+ * @param <T> item binding class
+ * @param <D> data class
+ */
 public abstract class BaseRecyclerViewAdapter<T extends ViewDataBinding, D> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ItemViewHolder> implements IAdapterDataInteractor<D> {
 
     public static final int EMPTY_POS = -1;

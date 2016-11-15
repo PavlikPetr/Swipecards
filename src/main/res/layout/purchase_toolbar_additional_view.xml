@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.views.toolbar.toolbar_custom_view.PurchaseCustomToolbarViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:paddingLeft="@dimen/toolbar_title_padding_left">
+
+        <TextView
+            style="@style/PurchaseToolbarAdditionalView"
+            android:drawableRight="@drawable/coins_gray"
+            android:paddingRight="5dp"
+            android:text="@{viewModel.coins}"/>
+
+        <TextView
+            style="@style/PurchaseToolbarAdditionalView"
+            android:drawableRight="@drawable/like_nav_bar_gray"
+            android:paddingLeft="6dp"
+            android:text="@{viewModel.likes}"/>
+    </LinearLayout>
+</layout>

@@ -25,6 +25,8 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.SessionConfig;
@@ -118,7 +120,6 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        setNeedTitles(true);
         View root = inflater.inflate(R.layout.layout_topface_signin, null);
         ButterKnife.bind(this, root);
         initViews(root);
@@ -137,13 +138,9 @@ public class TopfaceAuthFragment extends BaseAuthFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.entrance);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.entrance)));
         removeRedAlert();
         mPassword.setText("");
         mPassword.clearFocus();

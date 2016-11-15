@@ -38,6 +38,8 @@ import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.NoFilterFeedFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragmentPermissionsDispatcher;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.config.UserConfig;
@@ -291,20 +293,18 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 case (int) PermissionsExtensions.PERMISSION_DENIED:
                     emptyView.setDisplayedChild(2);
                     com.topface.topface.databinding.LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                    UnavailableGeoViewModel unavailableGeoViewModel = new UnavailableGeoViewModel(binding, new Function0<Unit>() {
+                    binding.setViewModel(new UnavailableGeoViewModel(binding, new Function0<Unit>() {
                         @Override
                         public Unit invoke() {
                             PeopleNearbyFragmentPermissionsDispatcher.geolocationManagerInitWithCheck(PeopleNearbyFragment.this);
                             return null;
                         }
-                    });
-                    binding.setViewModel(unavailableGeoViewModel);
+                    }));
                     break;
                 case (int) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN:
                     emptyView.setDisplayedChild(2);
                     binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
-                    DontAskGeoViewModel dontAskGeoViewModel = new DontAskGeoViewModel(binding);
-                    binding.setViewModel(dontAskGeoViewModel);
+                    binding.setViewModel(new DontAskGeoViewModel(binding));
                     break;
             }
         }
@@ -439,8 +439,9 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.people_nearby);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.people_nearby)));
     }
 
     @Override

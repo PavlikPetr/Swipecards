@@ -5,13 +5,14 @@ import android.app.Dialog
 import android.os.Bundle
 import android.support.annotation.IntDef
 import android.view.View
-import android.widget.TextView
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.TakePhotoDialogBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
-import com.topface.topface.utils.debug.FuckingVoodooMagic
+import com.topface.topface.ui.views.toolbar.IToolbarNavigation
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
+import com.topface.topface.utils.extensions.getString
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
@@ -20,7 +21,7 @@ import javax.inject.Inject
  * Выбираем фоточку, показывается если нет ни одной
  */
 @RuntimePermissions
-class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
+class TakePhotoPopup : AbstractDialogFragment() {
 
     companion object {
 
@@ -48,8 +49,16 @@ class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
         TakePhotoPopupViewModel(mBinding, {
             TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this)
         }, {
-            mEventBus.setData(TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, mArgs!!.getString(EXTRA_PLC)))
+            mEventBus.setData(TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, getPlc()))
             dialog.cancel()
+        })
+    }
+    private val mToolbarViewModel by lazy {
+        BackToolbarViewModel(mBinding.toolbarInclude, R.string.take_photo.getString(), object : IToolbarNavigation {
+            override fun onUpButtonClick() {
+                mEventBus.setData(TakePhotoActionHolder(ACTION_CANCEL, getPlc()))
+                dialog.cancel()
+            }
         })
     }
 
@@ -75,18 +84,18 @@ class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
         App.getAppConfig().putPermissionsState(permissions, grantResults)
     }
 
-    override fun initViews(root: View) = with(TakePhotoDialogBinding.bind(root)) {
-        viewModel = mViewModel
-        //TODO оставляю до нового тулбара
-        (root.findViewById(R.id.title) as TextView).setText(R.string.take_photo)
-        root.findViewById(R.id.title_clickable).setOnClickListener(this@TakePhotoPopup)
-    }
+    override fun initViews(root: View) =
+            TakePhotoDialogBinding.bind(root).run {
+                with(this) {
+                    viewModel = mViewModel
+                    toolbarViewModel = mToolbarViewModel
+                    mToolbarViewModel.init()
+                }
+                mBinding = this
+            }
 
-    @FuckingVoodooMagic(description = "рассылка ивентов о действиях с попапом добавления фото")
-    override fun onClick(v: View) {
-        mEventBus.setData(TakePhotoActionHolder(ACTION_CANCEL, mArgs?.getString(EXTRA_PLC) ?: PLC_UNDEFINED))
-        dialog.cancel()
-    }
+
+    private fun getPlc() = mArgs?.getString(EXTRA_PLC) ?: PLC_UNDEFINED
 
     override fun getDialogLayoutRes() = R.layout.take_photo_dialog
 
@@ -96,7 +105,13 @@ class TakePhotoPopup : AbstractDialogFragment(), View.OnClickListener {
 
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun takePhoto() {
-        mEventBus.setData(TakePhotoActionHolder(ACTION_CAMERA_CHOSEN, mArgs?.getString(EXTRA_PLC) ?: PLC_UNDEFINED))
+        mEventBus.setData(TakePhotoActionHolder(ACTION_CAMERA_CHOSEN, getPlc()))
         dialog.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mToolbarViewModel.release()
+        mViewModel.release()
     }
 }

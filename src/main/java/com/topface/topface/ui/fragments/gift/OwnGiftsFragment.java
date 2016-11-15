@@ -7,6 +7,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 /**
  * Fragment displaying your own gifts
@@ -18,7 +20,6 @@ public class OwnGiftsFragment extends UpdatableGiftsFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(true);
     }
 
     @Override
@@ -27,8 +28,9 @@ public class OwnGiftsFragment extends UpdatableGiftsFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return App.getContext().getString(R.string.profile_gifts);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.profile_gifts)));
     }
 
     @Override
