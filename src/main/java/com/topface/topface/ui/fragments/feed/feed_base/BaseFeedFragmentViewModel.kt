@@ -91,6 +91,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     private var mCountersSubscription: Subscription? = null
 
     private var isDataFromCache: Boolean = false
+    private var mIsAllDataloaded: Boolean = false
 
     companion object {
         val FROM = "from"
@@ -124,8 +125,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 it?.getString(TO, Utils.EMPTY)
             }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
                 override fun onNext(updateBundle: Bundle?) {
-                    updateBundle?.let {
-                        update(it)
+                    if (mIsAllDataloaded == false) {
+                        updateBundle?.let {
+                            update(it)
+                        }
                     }
                 }
             })
@@ -221,7 +224,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
-                    override fun onNext(data: FeedListData<T>?) = updateFeedsLoaded(data, updateBundle)
+                    override fun onNext(data: FeedListData<T>?) {
+                        if (data?.more == false) mIsAllDataloaded = true
+                        updateFeedsLoaded(data, updateBundle)
+                    }
                 })
     }
 
