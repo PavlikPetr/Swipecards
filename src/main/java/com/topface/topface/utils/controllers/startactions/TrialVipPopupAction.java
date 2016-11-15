@@ -36,13 +36,8 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
             return;
         }
 
-        chooseShowTrialVipPopup();
-    }
-
-    private void chooseShowTrialVipPopup() {
-        Options options = App.get().getOptions();
-        int number = options.trialVipExperiment.maxShowCount;
-        switch (number) {
+        final int numberTrialVip = App.get().getOptions().trialVipExperiment.maxShowCount;
+        switch (numberTrialVip) {
             case 1:
                 break;
             case 2:
@@ -51,7 +46,6 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
                 final TrialVipPopup popup = TrialVipPopup.newInstance(true);
                 popup.setOnFragmentFinishDelegate(this);
                 popup.show(mActivity.get().getSupportFragmentManager(), TrialVipPopup.TAG);
-                break;
         }
         UserConfig userConfig = App.getUserConfig();
         userConfig.setTrialLastTime(System.currentTimeMillis());

@@ -22,11 +22,6 @@ public class TrialVipPopup extends BaseTrialVipPopup {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     protected int getDialogStyleResId() {
         return R.style.Theme_Topface_NoActionBar_TrialVipPopup;
     }
@@ -52,10 +47,5 @@ public class TrialVipPopup extends BaseTrialVipPopup {
                 getDialog().cancel();
                 break;
         }
-    }
-
-    @Override
-    public void setOnFragmentFinishDelegate(final IOnFragmentFinishDelegate delegate) {
-        mOnFragmentFinishDelegate = delegate;
     }
 }

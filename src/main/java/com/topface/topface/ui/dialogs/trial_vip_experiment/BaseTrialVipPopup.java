@@ -13,19 +13,22 @@ import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.utils.config.UserConfig;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Базовый класс для триальных випов
  * Created by siberia87 on 15.11.16.
  */
 
-abstract public class BaseTrialVipPopup extends AbstractDialogFragment implements View.OnClickListener, IOnFragmentActionsListener {
+abstract public class BaseTrialVipPopup extends AbstractDialogFragment implements View.OnClickListener {
 
-    protected IOnFragmentFinishDelegate mOnFragmentFinishDelegate;
+    protected @NotNull IOnFragmentFinishDelegate mOnFragmentFinishDelegate;
     public static final String SKIP_SHOWING_CONDITION = "skip_showing_condition";
 
-    public abstract void setOnFragmentFinishDelegate(final IOnFragmentFinishDelegate delegate);
+    public void setOnFragmentFinishDelegate(final @NotNull IOnFragmentFinishDelegate delegate) {
+        mOnFragmentFinishDelegate = delegate;
+    }
 
-    @Override
     public void onVipTrialPurchaseStart() {
         Fragment f = getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
         final Fragment fragment = f == null ?
@@ -62,7 +65,6 @@ abstract public class BaseTrialVipPopup extends AbstractDialogFragment implement
         return false;
     }
 
-    @Override
     public void onFragmentFinish() {
         if (mOnFragmentFinishDelegate != null) {
             mOnFragmentFinishDelegate.closeFragmentByForm();
@@ -89,5 +91,4 @@ abstract public class BaseTrialVipPopup extends AbstractDialogFragment implement
         super.onCancel(dialog);
         onFragmentFinish();
     }
-
 }
