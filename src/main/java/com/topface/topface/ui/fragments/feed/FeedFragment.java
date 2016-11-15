@@ -471,13 +471,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        if (getActivity() instanceof ToolbarActivity) {
-            ToolbarActivity activity = (ToolbarActivity) getActivity();
-            if (activity.getToolbarViewModel() instanceof NavigationToolbarViewModel) {
-                NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarViewModel();
-                vm.isCollapsingToolbarStyle(false);
-            }
-        }
         removeBlackListUserFromFeed();
         FeedAdapter<T> adapter = getListAdapter();
         if (adapter.isNeedUpdate() || needUpdate) {

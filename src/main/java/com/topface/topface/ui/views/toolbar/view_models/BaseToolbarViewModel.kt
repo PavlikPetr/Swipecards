@@ -2,6 +2,7 @@ package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.ObservableInt
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
@@ -27,6 +28,9 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
 
     // увы, но колбэк будет работать только если установить его после setSupportActionBar
     fun init() {
+        title.filedObservable.subscribe {
+            Debug.error("TOOLBAR title = $it")
+        }
         mNavigation?.let { navigator ->
             binding.toolbar.setNavigationOnClickListener {
                 navigator.onUpButtonClick()
