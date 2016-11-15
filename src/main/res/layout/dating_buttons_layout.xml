@@ -11,67 +11,86 @@
             type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
     </data>
 
-    <com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout
+    <LinearLayout
         android:id="@+id/dating_buttons_root"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:datingButtonsVisibility="@{model}"
-        app:layout_behavior="com.topface.topface.ui.fragments.feed.dating.DatingButtonsBehavior">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/show_chat"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="24dp"
-            android:clickable="@{model.isDatingButtonsLocked}"
-            android:onClick="@{() -> model.showChat()}"
-            android:src="@drawable/message"
-            app:backgroundTint="@color/dating_fab_small"
-            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/skip"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="15dp"
-            android:clickable="@{model.isDatingButtonsLocked}"
-            android:onClick="@{() -> model.skip()}"
-            android:scaleType="center"
-            android:src="@drawable/dislike"
-            app:backgroundTint="@color/dating_fab_skip"
-            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/show_chat"
+                style="@style/FabDating"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.showChat()}"
+                android:src="@drawable/message"
+                app:backgroundTint="@color/dating_fab_small"
+                app:fabSize="mini"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/send_like"
-            android:layout_width="62dp"
-            android:layout_height="62dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginTop="15dp"
-            android:clickable="@{model.isDatingButtonsLocked}"
-            android:onClick="@{() -> model.sendLike()}"
-            android:scaleType="center"
-            android:src="@drawable/like"
-            app:backgroundTint="@color/dating_fab_like"
-            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        </FrameLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/send_admiration"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="15dp"
-            android:clickable="@{model.isDatingButtonsLocked}"
-            android:onClick="@{() -> model.validateSendAdmiration()}"
-            android:src="@drawable/admiration"
-            app:backgroundTint="@color/dating_fab_small"
-            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-    </com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/skip"
+                style="@style/FabDating"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.skip()}"
+                android:src="@drawable/dislike"
+                app:backgroundTint="@color/dating_fab_skip"
+                app:fabSize="normal"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/send_like"
+                style="@style/FabDating"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.sendLike()}"
+                android:src="@drawable/like"
+                app:backgroundTint="@color/dating_fab_like"
+                app:fabSize="normal"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/send_admiration"
+                style="@style/FabDating"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.validateSendAdmiration()}"
+                android:src="@drawable/admiration"
+                app:backgroundTint="@color/dating_fab_small"
+                app:fabSize="mini"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        </FrameLayout>
+
+
+    </LinearLayout>
 
 </layout>

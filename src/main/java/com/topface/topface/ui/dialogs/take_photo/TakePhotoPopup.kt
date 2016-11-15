@@ -84,15 +84,12 @@ class TakePhotoPopup : AbstractDialogFragment() {
         App.getAppConfig().putPermissionsState(permissions, grantResults)
     }
 
-    override fun initViews(root: View) =
-            TakePhotoDialogBinding.bind(root).run {
-                with(this) {
-                    viewModel = mViewModel
-                    toolbarViewModel = mToolbarViewModel
-                    mToolbarViewModel.init()
-                }
-                mBinding = this
-            }
+    override fun initViews(root: View) = with(TakePhotoDialogBinding.bind(root)) {
+        mBinding = this
+        viewModel = mViewModel
+        toolbarViewModel = mToolbarViewModel
+        mToolbarViewModel.init()
+    }
 
 
     private fun getPlc() = mArgs?.getString(EXTRA_PLC) ?: PLC_UNDEFINED

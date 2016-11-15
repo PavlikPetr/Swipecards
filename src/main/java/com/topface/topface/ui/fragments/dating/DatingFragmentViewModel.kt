@@ -28,12 +28,12 @@ import com.topface.topface.ui.fragments.dating.form.FormModel
 import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.BaseViewModel
@@ -163,7 +163,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
-            forms = mutableListOf<IType>(FormModel(Pair(String.format(context.getString(R.string.fill_own_profile), user.firstName), ""),
+            forms = mutableListOf<IType>(FormModel(Pair(String.format(R.string.fill_own_profile.getString(), user.firstName), ""),
                     isEmptyItem = false))
         } else {
             forms = mutableListOf <IType>().apply {
@@ -172,14 +172,14 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                     if (it.isEmpty && !hasEmptyItem) {
                         hasEmptyItem = true
                         //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
-                        add(0, FormModel(Pair(context.getString(R.string.ask_moar_info), Utils.EMPTY), currentUser?.id,
+                        add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
                     add(FormModel(Pair(it.title, it.value), isEmptyItem = it.isEmpty))
                 }
             }
         }
-        addExpandableItem(ParentModel(context.getString(R.string.about), true, R.drawable.about), forms)
+        addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

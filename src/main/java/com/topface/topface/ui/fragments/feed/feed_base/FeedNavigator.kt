@@ -118,12 +118,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showGiftsActivity(from: String, id: Int) {
+    override fun showGiftsActivity(id: Int) {
         mActivityDelegate.startActivityForResult(
                 GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false),
                 GiftsActivity.INTENT_REQUEST_GIFT
         )
-        EasyTracker.sendEvent(from, "SendGiftClick", "", 1L)
     }
 
     override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
@@ -132,6 +131,6 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mEmptyDatingFragment.dialog?.cancel()
     }
 
-    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.getApplicationContext(),
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
             EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 }

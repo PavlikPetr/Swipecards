@@ -101,8 +101,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun bindModels() {
         super.bindModels()
-        mAnchorBinding.model = mDatingButtonsViewModel
-        mBinding.model = mDatingButtonsViewModel
+        mAnchorBinding.setModel(mDatingButtonsViewModel)
+        mBinding.setModel(mDatingButtonsViewModel)
         mCollapseBinding.model = mDatingAlbumViewModel
     }
 

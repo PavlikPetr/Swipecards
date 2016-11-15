@@ -25,7 +25,7 @@ interface IFeedNavigator {
     fun showAddToLeader()
     fun showOwnProfile()
     fun showTakePhotoPopup()
-    fun showGiftsActivity(from: String, id: Int)
+    fun showGiftsActivity(id: Int)
     fun showFilter()
     fun showEmptyDating()
     fun closeEmptyDating()
