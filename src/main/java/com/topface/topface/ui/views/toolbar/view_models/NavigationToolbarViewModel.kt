@@ -46,10 +46,7 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
         binding.toolbarCustomView.addView(additionalViewBinding.root)
         extraViewModel = CustomToolbarViewModel(additionalViewBinding)
         additionalViewBinding.viewModel = extraViewModel
-        subscriptions.add(title.filedObservable.subscribe {
-            Debug.error("TOOLBAR title = $it")
-            extraViewModel.title.set(it)
-        })
+        subscriptions.add(title.filedObservable.subscribe { extraViewModel.title.set(it) })
         subscriptions.add(subTitle.filedObservable.subscribe { extraViewModel.subTitle.set(it) })
         subscriptions.add(mState.getObservable(CountersData::class.java)
                 .map {

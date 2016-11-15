@@ -8,13 +8,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
-import com.topface.topface.utils.extensions.getDimen
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -44,7 +42,6 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
     }
 
     protected open fun setupToolbar(size: Int) {
-        Debug.error("TOOLBAR size = $size")
         (mAppBarBinding.appbar.layoutParams as CoordinatorLayout.LayoutParams).height = size
     }
 
