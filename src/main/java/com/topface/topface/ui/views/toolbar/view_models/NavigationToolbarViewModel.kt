@@ -1,10 +1,8 @@
 package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableBoolean
 import android.view.LayoutInflater
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
