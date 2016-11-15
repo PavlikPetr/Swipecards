@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.dating.form
 import android.app.Activity
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
@@ -31,6 +32,7 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
     private var mViewModel: GiftsItemViewModel? = null
     private var mAdapter: FormGiftsAdapter? = null
     private var mGiftsModel: GiftsModel? = null
+    private var mGiftsList: RecyclerView? = null
 
     override val itemLayout: Int
         get() = R.layout.gifts_form_item
@@ -38,12 +40,13 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
         get() = GiftsFormItemBinding::class.java
 
     override fun bind(binding: GiftsFormItemBinding, data: ExpandableItem<GiftsModel>?, position: Int) {
-        binding.giftsList.layoutManager = LinearLayoutManager(binding.root.context.applicationContext
+        val giftsList = binding.giftsList
+        giftsList.layoutManager = LinearLayoutManager(binding.root.context.applicationContext
                 , LinearLayoutManager.HORIZONTAL, false)
         data?.data?.let { giftsModel ->
             mGiftsModel = giftsModel
             if (giftsModel.gifts != null) {
-                binding.giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.count > 0).apply {
+                giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.count > 0).apply {
                     mAdapter = this
                     addData(giftsModel.gifts.items)
                     mViewModel = GiftsItemViewModel(mApi, mNavigator, giftsModel.gifts, giftsModel.userId) {
@@ -64,6 +67,7 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                 }
             }
         }
+        mGiftsList = giftsList
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -82,10 +86,15 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                     mViewModel?.gifts = it
                 }
                 it.addFirst(gift)
+                mGiftsList?.scrollToPosition(0)
             }
         }
     }
 
-    fun onDestroyView() = mViewModel?.release()
+    fun onDestroyView() {
+        mViewModel?.release()
+        mGiftsList = null
+        mAdapter = null
+    }
 
 }
