@@ -172,14 +172,14 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                     if (it.isEmpty && !hasEmptyItem) {
                         hasEmptyItem = true
                         //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
-                        add(0, FormModel(Pair(context.getString(R.string.ask_moar_info), Utils.EMPTY), currentUser?.id,
+                        add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
                     add(FormModel(Pair(it.title, it.value), isEmptyItem = it.isEmpty))
                 }
             }
         }
-        addExpandableItem(ParentModel(context.getString(R.string.about), true, R.drawable.about), forms)
+        addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
