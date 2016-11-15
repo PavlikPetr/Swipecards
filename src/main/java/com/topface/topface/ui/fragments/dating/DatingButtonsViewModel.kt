@@ -166,9 +166,10 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
         mBalance?.let {
             val hasMoneyForAdmiration = it.money >= priceAdmiration
-            when {
-                (it.premium || hasMoneyForAdmiration && isShown) -> sendAdmiration()
-                else -> startAdmirationPurchasePopup()
+            if (it.premium || hasMoneyForAdmiration && isShown) {
+                sendAdmiration()
+            } else {
+                startAdmirationPurchasePopup()
             }
         }
     }
