@@ -96,7 +96,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         mProfileSubscription = mAppState.getObservable(Profile.class).subscribe(new RxUtils.ShortSubscription<Profile>() {
             @Override
             public void onNext(Profile profile) {
-                ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(profile.getNameAndAge(), profile.city.getName(), null, true));
+                ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(profile.getNameAndAge(), profile.city.name, null, true));
             }
         });
         mUpdateProfileReceiver = new BroadcastReceiver() {
