@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.os.Parcelable
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.*
@@ -22,7 +24,6 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
-import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
 import com.topface.topface.ui.fragments.dating.form.GiftsItemDelegate
@@ -181,10 +182,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
         govnocod.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK &&
-                requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
-            mDatingButtonsViewModel.onActivityResult()
-        }
+        mDatingButtonsViewModel.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
             mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
@@ -201,8 +199,10 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         }
     }
 
-    override fun startAnimateAdmirationPurchasePopup(transitionView: View) =
-            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView, activity)
+    override fun startAnimateAdmirationPurchasePopup(transitionView: View, @ColorInt fabColorResId: Int,
+                                                     @DrawableRes fabIconResId: Int) =
+            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView,
+                    activity, fabColorResId, fabIconResId)
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -253,9 +253,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun unlockControls() = mDatingButtonsViewModel.isDatingButtonsLocked.set(true)
 
-    override fun showEmptySearchDialog() {
-    }
+    override fun showEmptySearchDialog() = mNavigator.showEmptyDating()
 
-    override fun hideEmptySearchDialog() {
-    }
+    override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
 }

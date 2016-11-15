@@ -3,10 +3,11 @@ package com.topface.topface.ui.fragments.feed.feed_base
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.SendGiftAnswer
@@ -22,6 +23,7 @@ import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.IActivityDelegate
@@ -34,7 +36,12 @@ import javax.inject.Inject
  */
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
+
     @Inject lateinit var mNavigationState: NavigationState
+
+    private val mEmptyDatingFragment by lazy {
+        DatingEmptyFragment.newInstance()
+    }
 
     init {
         App.get().inject(this)
@@ -98,11 +105,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             .show(mActivityDelegate.supportFragmentManager, TakePhotoPopup.TAG)
 
     @SuppressLint("NewApi")
-    override fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity) {
+    override fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity, @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int) {
         val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
         intent.putExtra(AdmirationPurchasePopupActivity.CURRENT_USER, currentUser)
         if (Utils.isLollipop()) {
-            FabTransform.addExtras(intent, activity.getColor(R.color.dating_fab_small), R.drawable.admiration)
+            FabTransform.addExtras(intent, fabColorResId, fabIconResId)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
                     AdmirationPurchasePopupViewModel.TRANSITION_NAME)
             activity.startActivityForResult(intent, AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP, options.toBundle())
@@ -118,9 +125,12 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         )
     }
 
-    override fun showFilter() {
-        val intent = Intent(mActivityDelegate.applicationContext,
-                EditContainerActivity::class.java)
-        mActivityDelegate.startActivityForResult(intent, EditContainerActivity.INTENT_EDIT_FILTER)
+    override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+
+    override fun closeEmptyDating() {
+        mEmptyDatingFragment.dialog?.cancel()
     }
+
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
+            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 }
