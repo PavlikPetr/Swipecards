@@ -1,11 +1,14 @@
 package com.topface.topface.ui.fragments.dating
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
+import com.topface.framework.utils.Debug
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
@@ -13,6 +16,8 @@ import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.safeUnsubscribe
@@ -29,6 +34,7 @@ import java.util.*
 class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: FeedApi,
                            private val mController: AlbumLoadController,
                            private val mUserSearchList: CachableSearchList<SearchUser>,
+                           private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView) :
         BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
 
@@ -69,6 +75,24 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val LOADED_COUNT = "loaded_count"
         const val CAN_SEND_ALBUM_REQUEST = "can_send_album_request"
         const val NEED_MORE = "need_more"
+    }
+
+    fun onPhotoClick() {
+        val user = currentUser
+        if (user != null && user.photos != null && user.photos.isNotEmpty()) {
+            mNavigator.showAlbum(binding.datingAlbum.selectedPosition,
+                    user.id,
+                    user.photos.count(),
+                    user.photos)
+        }
+    }
+
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
+                resultCode == Activity.RESULT_OK &&
+                data != null) {
+            currentItem.set(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
+        }
     }
 
     fun updatePhotosCounter(position: Int) {
@@ -127,7 +151,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         putBoolean(ONLINE, isOnline.get())
         putBoolean(PHOTOS_COUNTER_VISIBLE, isPhotosCounterVisible.get())
         putBoolean(NEED_ANIMATE_LOADER, isNeedAnimateLoader.get())
-        putInt(CURRENT_ITEM, currentItem.get())
+        putInt(CURRENT_ITEM, binding.datingAlbum.selectedPosition)
         putParcelable(CURRENT_USER, currentUser)
         putInt(LOADED_COUNT, mLoadedCount)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
