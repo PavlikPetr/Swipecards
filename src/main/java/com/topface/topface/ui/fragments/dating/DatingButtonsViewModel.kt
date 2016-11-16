@@ -24,9 +24,9 @@ import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
-import com.topface.topface.ui.fragments.feed.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
-import com.topface.topface.ui.fragments.feed.dating.view_etc.DatingButtonsLayout
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
+import com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
