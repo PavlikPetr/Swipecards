@@ -45,4 +45,8 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
 
     }
 
+    override fun release() {
+        super.release()
+        profileSubscription.unsubscribe()
+    }
 }
