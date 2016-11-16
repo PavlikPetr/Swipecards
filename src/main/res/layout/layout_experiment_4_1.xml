@@ -33,7 +33,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             app:postProcessor="inscribedAvatar"
-            app:remoteSrcGlide="@{viewModel.userAvatar}"
+            app:remoteSrc="@{viewModel.userAvatar}"
             app:roundedImgBorderColor="@android:color/white"
             app:roundedImgBorderWidth="3dp"/>
         <ImageView
