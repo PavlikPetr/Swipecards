@@ -28,7 +28,7 @@
 
         <LinearLayout
             style="@style/LeftMenuHeader"
-            app:specialTag="@{viewModel.getTag}">
+            app:uiTestTag="@{viewModel.getTag}">
 
             <com.topface.topface.ui.views.ImageViewRemote
                 android:layout_width="@dimen/left_menu_avatar_width"

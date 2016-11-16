@@ -213,6 +213,10 @@
     <string name="filter_age_end_prefix">ai %s</string>
     <string name="filter_constitution_template">Da %1$d a %2$d</string>
     <string name="filter_cities_all">In tutte le città</string>
+    <string name="dating_empty_nothing_found">Non abbiamo trovato nulla!</string>
+    <string name="dating_empty_reset">Reset</string>
+    <string name="dating_empty_change_settings">Cambia</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Prova a resettare o modificare i tuoi parametri di ricerca</string>
     <string name="purchase_header_title">Credito:</string>
     <string name="buying_header_title">Acquisti</string>
     <plurals name="buying_gift_you_need_coins">
@@ -239,6 +243,7 @@
     </string>
     <string name="buying_money">Acquisto monete</string>
     <string name="gifts_title">Scegli regalo</string>
+    <string name="gifts">Regali</string>
     <string name="profile_header_title">Mio profilo</string>
     <string name="album_add_photo_title">Aggiungere foto</string>
     <string name="profile_add_album">Scegliere dagli esistenti</string>
@@ -925,4 +930,31 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="mutual_write_them_first">Scrivi a loro</string>
     <string name="mutual_no_mutuals">In questo momento non hai Like reciproci</string>
     <string name="mutual_module_title">RECIPROCAMENTE</string>
+    <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
+    <string name="buy_vip_dating_only">Solo appuntamento, puro e semplice.</string>
+    <string name="buy_vip_message">Non aspettare i Like, inizia subito una conversazione!</string>
+    <string name="buy_vip_write_tops">Scrivi ai profili Migliori senza restrizioni</string>
+    <string name="buy_vip_free_admirations">Invia gratis le Adorazioni</string>
+    <string name="buy_vip_know_guests">Scopri chi ha visto il tuo profilo</string>
+    <string name="vip_info_title">Privilegi di essere VIP</string>
+    <string name="chat_buy_vip_popular_male">%s è molto popolare!</string>
+    <string name="chat_buy_vip_popular_female">%s è molto popolare!</string>
+    <string name="buy_vip_to_chat_male">Per iniziare a chattare con lui, attiva lo stato di VIP</string>
+    <string name="buy_vip_to_chat_female">Per iniziare a chattare con lei, attiva lo stato di VIP</string>
+    <string name="chat_activate_vip">Attiva VIP</string>
+    <string name="chat_no_mutual_symphaty">Al momento no avete un Like reciproco!</string>
+    <string name="chat_with_no_mutual_buy_vip">Puoi iniziare a chattare senza un Like reciproco, ma per farlo devi attivare lo stato di VIP</string>
+    <string name="about">A proposito di te</string>
+    <string name="moar_info">Scopri maggiori informazioni!</string>
+    <string name="geo_switched_off_explanation">Per vedere chi c\'è nelle vicinanze, abilita i servizi di geolocalizzazione</string>
+    <string name="turn_on_geo">Abilitare i servizi di geolocalizzazione</string>
+    <string name="geo_show_settings_explanation">Per vedere chi c\'è nelle vicinanze, abilita i servizi di geolocalizzazione nelle impostazioni del telefono cellulare</string>
+    <string name="show_geo_settings">Apri impostazioni</string>
+    <string name="buy_vip_button_text_admiration_purchase_popup">Invia per %d Monete</string>
+    <string name="label1_text_admiration_purchase_popup">Il destinatario di \"Adorazioni\" otterrà una notifica e lo vedrà subito</string>
+    <string name="label2_text_admiration_purchase_popup">Invia \"Adorazioni\" gratis!</string>
+    <string name="buy_vip_button_text">Ottieni lo stato di VIP</string>
+    <string name="send_first_gift">Dona il primo regalo!</string>
+    <string name="ask_moar_info">Scopri nuove informazioni!</string>
+    <string name="fill_own_profile">Inseriscilo nel tuo profilo per vedere cosa %s scritto</string>
 </resources>

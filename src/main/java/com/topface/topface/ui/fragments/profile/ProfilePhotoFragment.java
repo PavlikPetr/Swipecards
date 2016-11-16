@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -42,7 +41,6 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
-import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
@@ -89,7 +87,6 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mBinding.vfFlipper.setDisplayedChild(1);
             } else if (itemPosition <= profile.photosCount) {
                 startActivity(PhotoSwitcherActivity.getPhotoSwitcherIntent(
-                        null,
                         itemPosition - 1,
                         profile.uid,
                         profile.photosCount,

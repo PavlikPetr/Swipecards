@@ -210,6 +210,10 @@
     <string name="filter_age_end_prefix">bis %s</string>
     <string name="filter_constitution_template">Von %1$d bis %2$d</string>
     <string name="filter_cities_all">Nach allen Städten</string>
+    <string name="dating_empty_nothing_found">Nichts wurde gefunden!</string>
+    <string name="dating_empty_reset">Wiederherstellen</string>
+    <string name="dating_empty_change_settings">Ändern</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Versuche, deine Suchparameter zu ändern oder neu zu laden</string>
     <string name="purchase_header_title">Konto:</string>
     <string name="buying_header_title">Käufe</string>
     <plurals name="buying_gift_you_need_coins">
@@ -236,6 +240,7 @@
     </string>
     <string name="buying_money">Coins kaufen</string>
     <string name="gifts_title">Wählen Sie ein Geschenk</string>
+    <string name="gifts">Geschenke</string>
     <string name="profile_header_title">Mein Profil</string>
     <string name="album_add_photo_title">Foto hinzufügen</string>
     <string name="profile_add_album">Wählen aus den vorhandenen</string>
@@ -866,4 +871,31 @@
     <string name="mutual_write_them_first">Schreibe die erste Nachricht</string>
     <string name="mutual_no_mutuals">Momentan hast du keine beidseitige Likes</string>
     <string name="mutual_module_title">BEIDSEITIG</string>
+    <string name="buy_vip_more_views">Erhalte 1,5 mal mehr Profilaufrufe</string>
+    <string name="buy_vip_dating_only">Reines Dating, klar und einfach</string>
+    <string name="buy_vip_message">Warte nicht auf Likes, sondern starte ein Gespräch!</string>
+    <string name="buy_vip_write_tops">Schreibe ohne Einschränkungen an Top Profile</string>
+    <string name="buy_vip_free_admirations">Verschicke gratis Verehrungen</string>
+    <string name="buy_vip_know_guests">Erfahre, wer dein Profil besucht hat</string>
+    <string name="vip_info_title">VIP-Privilegien</string>
+    <string name="chat_buy_vip_popular_male">%s ist super beliebt!</string>
+    <string name="chat_buy_vip_popular_female">%s ist super beliebt!</string>
+    <string name="buy_vip_to_chat_male">Starte einen Chat mit ihm, aktiviere den VIP-Status</string>
+    <string name="buy_vip_to_chat_female">Starte einen Chat mit ihr, aktiviere den VIP-Status</string>
+    <string name="chat_activate_vip">VIP aktivieren</string>
+    <string name="chat_no_mutual_symphaty">Momentan kein beidseitiges Like!</string>
+    <string name="chat_with_no_mutual_buy_vip">Du kannst ohne einen beidseitigen Like einen Chat starten, aber dafür musst du den VIP-Status aktivieren</string>
+    <string name="about">Über dich</string>
+    <string name="moar_info">Erfahre mehr Informationen!</string>
+    <string name="geo_switched_off_explanation">Um zu erfahren, wer in deiner Nähe ist, musst du die Standortermittlung aktivieren</string>
+    <string name="turn_on_geo">Standortermittlung erlauben</string>
+    <string name="geo_show_settings_explanation">Um zu sehen, wer in deiner Nähe ist, musst du den Standpunktermittlungsdienst deines Gerätes einschalten</string>
+    <string name="show_geo_settings">Einstellungen öffnen</string>
+    <string name="buy_vip_button_text_admiration_purchase_popup">Für %d Coins verschicken</string>
+    <string name="label1_text_admiration_purchase_popup">Der Empfänger von \"Zuneigungen\" wird eine Benachrichtigung erhalten und sie sofort sehen</string>
+    <string name="label2_text_admiration_purchase_popup">Verschicke \"Zuneigungen\" gratis!</string>
+    <string name="buy_vip_button_text">VIP holen</string>
+    <string name="send_first_gift">Gebe das erste Geschenk!</string>
+    <string name="ask_moar_info">Erfahre mehr Informationen!</string>
+    <string name="fill_own_profile">Ergänze dein Profil, um zu erfahren, was %s geschrieben hat</string>
 </resources>

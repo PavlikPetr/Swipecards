@@ -234,7 +234,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
         Profile profile = App.get().getProfile();
         if (profile.photo != null) {
             startActivity(PhotoSwitcherActivity.
-                    getPhotoSwitcherIntent(profile.gifts.getGifts(), profile.photo.position,
+                    getPhotoSwitcherIntent(profile.photo.position,
                             profile.uid, profile.photosCount,
                             profile.photos));
         } else {

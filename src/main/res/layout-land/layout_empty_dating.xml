@@ -9,58 +9,34 @@
     </data>
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/popup_background"
-        android:fadingEdge="none"
-        android:fillViewport="true">
+        style="@style/PopupScroll">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            style="@style/PopupRootContainer">
 
             <FrameLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1">
 
                 <RelativeLayout
-                    android:layout_width="@dimen/popup_central_picture_size"
-                    android:layout_height="@dimen/popup_central_picture_size"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/popup_central_picture_margin"
-                    android:layout_marginTop="@dimen/popup_central_picture_margin"
-                    android:layout_weight="1"
-                    android:background="@drawable/unavailable_geo_bigger_circle">
+                    style="@style/PopupCenterImageContainer">
 
                     <ImageView
                         style="@style/PopupAnimatedBackground"
                         app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:paddingLeft="26dp"
-                        android:paddingTop="20dp"
-                        android:src="@drawable/dating_empty"/>
+                        style="@style/PopupEmptyDatingCenterImage"/>
                 </RelativeLayout>
             </FrameLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingRight="26dp">
+                style="@style/PopupLandRightContainer">
 
                 <TextView
                     style="@style/PopupTitle"
-                    android:paddingBottom="23dp"
                     android:text="@string/dating_empty_nothing_found"/>
 
                 <TextView
@@ -78,9 +54,7 @@
 
                 <Button
                     android:id="@+id/btnClearFilterDating"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/PopupBorderlessdButton"
                     android:onClick="@{() -> viewModel.onCleanDatingFilter()}"
                     android:text="@string/dating_empty_reset"/>
 

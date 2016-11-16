@@ -72,7 +72,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
-        DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mAlbumActionsListener = this)
+        DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mNavigator, mAlbumActionsListener = this)
     }
     private val mDatingFragmentViewModel by lazy {
         DatingFragmentViewModel(mBinding, mApi, mUserSearchList, mDatingViewModelEvents = this,
@@ -181,6 +181,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
+        mDatingAlbumViewModel.onActivityResult(requestCode, resultCode, data)
         govnocod.onActivityResult(requestCode, resultCode, data)
         mDatingButtonsViewModel.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||

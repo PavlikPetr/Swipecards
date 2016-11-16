@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments;
 
 import android.app.Activity;
 import android.support.v4.view.MenuItemCompat;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +15,6 @@ import com.topface.topface.ui.IUserOnlineListener;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
-import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 
 /**
@@ -163,8 +161,8 @@ public abstract class UserAvatarFragment extends BaseFragment
         IUniversalUser user = getUniversalUser();
         if (user != null && !user.isEmpty()) {
             startActivity(
-                    PhotoSwitcherActivity.getPhotoSwitcherIntent(user.getGifts(),
-                            user.getPhoto() != null ? user.getPhoto().position : 0,
+                    PhotoSwitcherActivity.getPhotoSwitcherIntent(user.getPhoto() != null ?
+                                    user.getPhoto().position : 0,
                             user.getId(), user.getPhotosCount(), user.getPhotos())
             );
         }

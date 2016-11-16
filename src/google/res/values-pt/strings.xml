@@ -213,6 +213,10 @@
     <string name="filter_age_end_prefix">para %s</string>
     <string name="filter_constitution_template">De %1$d a %2$d</string>
     <string name="filter_cities_all">Todas as cidades</string>
+    <string name="dating_empty_nothing_found">Nada encontrado!</string>
+    <string name="dating_empty_reset">Restaurar</string>
+    <string name="dating_empty_change_settings">Alterar</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Tenta restaurar ou alterar os teus parâmetros de busca</string>
     <string name="purchase_header_title">Saldo:</string>
     <string name="buying_header_title">Compras</string>
     <plurals name="buying_gift_you_need_coins">
@@ -238,6 +242,7 @@
     <string name="buying_default_message">Pode enviar presentes e admirações com moedas</string>
     <string name="buying_money">Comprar moedas</string>
     <string name="gifts_title">Escolhe um presente</string>
+    <string name="gifts">Presentes</string>
     <string name="profile_header_title">O meu perfil</string>
     <string name="album_add_photo_title">Adicionar foto</string>
     <string name="profile_add_album">Escolher da biblioteca</string>
@@ -937,4 +942,17 @@
     <string name="chat_activate_vip">Ativar VIP</string>
     <string name="chat_no_mutual_symphaty">Sem Gosto mútuo de momento!</string>
     <string name="chat_with_no_mutual_buy_vip">Para começares a conversar sem um Gosto mútuo, precisas de ativar o estatuto VIP</string>
+    <string name="about">Sobre ti</string>
+    <string name="moar_info">Descobre mais informação!</string>
+    <string name="geo_switched_off_explanation">Para veres quem está perto, ativa os serviços de localização</string>
+    <string name="turn_on_geo">Ativar serviços de localização</string>
+    <string name="geo_show_settings_explanation">Para veres quem está perto, ativa os serviços de localização nas definições do teu dispositivo móvel</string>
+    <string name="show_geo_settings">Abrir definições</string>
+    <string name="buy_vip_button_text_admiration_purchase_popup">Enviar por %d Moedas</string>
+    <string name="label1_text_admiration_purchase_popup">A pessoa a quem enviares \"Adorações\" irá receber uma notificação imediatamente</string>
+    <string name="label2_text_admiration_purchase_popup">Envia \"Adorações\" gratuitamente!</string>
+    <string name="buy_vip_button_text">Adquire VIP</string>
+    <string name="send_first_gift">Envia o primeiro presente!</string>
+    <string name="ask_moar_info">Descobre mais informação!</string>
+    <string name="fill_own_profile">Preenche o teu perfil para veres o que %s escreveu</string>
 </resources>
