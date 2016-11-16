@@ -12,7 +12,8 @@ import com.topface.topface.utils.extensions.showAppSettings
  */
 class UnavailableGeoViewModel(binding: LayoutUnavailableGeoBinding, val showSystemPermissionPopup: () -> Unit) : UnavailableGeoBaseViewModel(binding,
         R.string.geo_switched_off_explanation.getString(),
-        R.string.turn_on_geo.getString()) {
+        R.string.turn_on_geo.getString(),
+        "UNAVAILABLE_GEO_PERMISSIONS") {
     override fun onButtonClick() {
         showSystemPermissionPopup.invoke()
     }
