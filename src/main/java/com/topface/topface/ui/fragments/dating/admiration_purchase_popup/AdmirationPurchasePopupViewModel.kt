@@ -33,6 +33,7 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
 
     companion object {
         const val TRANSITION_NAME = "admiration_purchase_popup"
+        const val RESULT_USER_BUY_VIP = 5
     }
 
     val buyCoinsButtonText = String.format(context.resources.getString(R.string.buy_vip_button_text_admiration_purchase_popup),
@@ -47,7 +48,7 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
     private val mVipBoughtBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false)) {
-                mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_OK)
+                mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(AdmirationPurchasePopupViewModel.RESULT_USER_BUY_VIP)
             }
         }
     }
