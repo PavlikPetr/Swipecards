@@ -9,6 +9,7 @@ import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
+import org.jetbrains.anko.imageResource
 import rx.Subscription
 import javax.inject.Inject
 
@@ -29,20 +30,15 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         profileSubscription = state.getObservable(Profile::class.java).subscribe { profile -> setUrlAvatar(profile) }
     }
 
+    fun setFakeAvatar(profile: Profile) = when {
+        (profile.sex == Profile.BOY) -> R.drawable.upload_photo_male
+        else -> R.drawable.upload_photo_female
+    }
+
+
     fun setUrlAvatar(profile: Profile) {
         val photoUrl = if (profile.photo != null) profile.photo.defaultLink else Utils.EMPTY
-        userAvatar.set(
-                if (TextUtils.isEmpty(photoUrl)) {
-                    Utils.getLocalResUrl(
-                            if (profile.sex == Profile.BOY) {
-                                R.drawable.upload_photo_male
-                            } else {
-                                R.drawable.upload_photo_female
-                            })
-                } else {
-                    photoUrl
-                })
-
+        userAvatar.set(if (TextUtils.isEmpty(photoUrl)) Utils.getLocalResUrl(setFakeAvatar(profile)) else photoUrl)
     }
 
     override fun release() {
