@@ -349,4 +349,5 @@ Sa oled müksanud.</string>
     <string name="delete_account_are_you_sure">Kas sa oled päris kindel?</string>
     <string name="delete">Ära kustutada</string>
     <string name="restore">Taastada</string>
+    <string name="vip_info_title">VIP-eelised</string>
 </resources>

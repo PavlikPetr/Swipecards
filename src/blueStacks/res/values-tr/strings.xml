@@ -821,4 +821,21 @@
   <string name="mutual_write_them_first">Onlara mesaj yaz</string>
   <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
   <string name="mutual_module_title">ORTAK</string>
+  <string name="buy_vip_more_views">1.5 kat daha fazla profil ziyareti al.</string>
+  <string name="buy_vip_dating_only">Sadece buluşmalar, açık ve net.</string>
+  <string name="buy_vip_message">Beğenileri bekleme, sohbete başla!</string>
+  <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
+  <string name="buy_vip_free_admirations">Ücretsiz hayranlık gönder</string>
+  <string name="buy_vip_know_guests">Profilini ziyaret edenleri gör</string>
+  <string name="vip_info_title">VIP-ayrıcalık</string>
+  <string name="chat_buy_vip_popular_male">%s çok popüler!</string>
+  <string name="chat_buy_vip_popular_female">%s çok popüler!</string>
+  <string name="buy_vip_to_chat_male">Onunla sohbete başlamak için VIP olmalısın.</string>
+  <string name="buy_vip_to_chat_female">Onunla sohbete başlamak için VIP olmalısın.</string>
+  <string name="chat_activate_vip">VIP ol</string>
+  <string name="chat_no_mutual_symphaty">Henüz karşılıklı beğeniniz yok</string>
+  <string name="chat_with_no_mutual_buy_vip">Karşılıklı beğeni olmadan sohbete başlamak için VIP olmalısınız</string>
+  <string name="chat_mutual_symphaty">Karşılıklı beğenme!</string>
+  <string name="chat_mutual_start_conversation">Sohbete başlayın!</string>
+  <string name="chat_send_message_button_title">Gönder</string>
 </resources>

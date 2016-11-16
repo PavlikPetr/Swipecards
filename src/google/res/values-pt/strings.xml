@@ -937,4 +937,7 @@
     <string name="chat_activate_vip">Ativar VIP</string>
     <string name="chat_no_mutual_symphaty">Sem Gosto mútuo de momento!</string>
     <string name="chat_with_no_mutual_buy_vip">Para começares a conversar sem um Gosto mútuo, precisas de ativar o estatuto VIP</string>
+    <string name="chat_mutual_symphaty">Gosto Mútuo!</string>
+    <string name="chat_mutual_start_conversation">Começa a conversar!</string>
+    <string name="chat_send_message_button_title">Enviar</string>
 </resources>

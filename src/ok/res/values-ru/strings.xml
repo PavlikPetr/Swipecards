@@ -254,6 +254,12 @@
     <string name="filter_age_end_prefix">до %s</string>
     <string name="filter_constitution_template">От %1$d до %2$d</string>
     <string name="filter_cities_all">По всем городам</string>
+    <string name="dating_empty_nothing_found">Ничего не найдено!</string>
+    <string name="dating_empty_reset">Сбросить</string>
+    <string name="dating_empty_change_settings">Изменить</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Попробуйте сбросить или изменить
+        параметры поиска
+    </string>
 
     <!-- Buying -->
     <string name="purchase_header_title">Баланс:</string>
@@ -294,6 +300,8 @@
 
     <!-- Gifts -->
     <string name="gifts_title">Выберите подарок</string>
+
+    <string name="gifts">Подарки</string>
 
     <!-- Profile  -->
     <string name="profile_header_title">Мой профиль</string>
@@ -966,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1112,4 +1120,41 @@
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
 
+    <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
+    <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
+    <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
+    <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
+    <string name="buy_vip_free_admirations">Отправляйте восхищения бесплатно</string>
+    <string name="buy_vip_know_guests">Узнайте, кто смотрел вашу анкету</string>
+
+    <string name="vip_info_title">VIP-привилегии</string>
+
+    <string name="chat_buy_vip_popular_male">%s очень популярен!</string>
+    <string name="chat_buy_vip_popular_female">%s очень популярна!</string>
+    <string name="buy_vip_to_chat_male">Чтобы начать общаться с ним, активируйте VIP-статус</string>
+    <string name="buy_vip_to_chat_female">Чтобы начать общаться с ней, активируйте VIP-статус</string>
+    <string name="chat_activate_vip">Активировать VIP</string>
+    <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
+    <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
+
+    <string name="about">О себе</string>
+    <string name="moar_info">Вы можете узнать недостающую информацию!</string>
+
+    <string name="geo_switched_off_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию</string>
+    <string name="turn_on_geo">Включить геопозицию</string>
+    <string name="geo_show_settings_explanation">Чтобы увидеть, кто находится около вас, включите геопозицию в настройках телефона</string>
+    <string name="show_geo_settings">Открыть настройку</string>
+
+    <!--строки попапа восхищений-->
+    <string name="buy_vip_button_text_admiration_purchase_popup">отправить за %d монеты</string>
+    <string name="label1_text_admiration_purchase_popup">Получатель «восхищения» будет уведомлён и сразу его увидит</string>
+    <string name="label2_text_admiration_purchase_popup">Отправляйте «восхищения» бесплатно!</string>
+    <string name="buy_vip_button_text">получить vip</string>
+    <string name="send_first_gift">Подарите первый подарок!</string>
+    <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
+    <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
+
+    <string name="chat_mutual_symphaty">Взаимная симпатия!</string>
+    <string name="chat_mutual_start_conversation">Начните общение!</string>
+    <string name="chat_send_message_button_title">Отпр.</string>
 </resources>
