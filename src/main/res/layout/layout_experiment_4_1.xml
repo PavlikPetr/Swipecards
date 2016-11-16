@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/left_user_img"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -18,7 +18,7 @@
             android:layout_marginTop="86dp"
             android:src="@drawable/left_user_img"
             app:animationSrc="@{@anim/move_to_left}"/>
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/right_user_img"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -33,10 +33,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             app:postProcessor="inscribedAvatar"
-            app:remoteSrc="@{viewModel.userAvatar}"
+            app:remoteSrcGlide="@{viewModel.userAvatar}"
             app:roundedImgBorderColor="@android:color/white"
             app:roundedImgBorderWidth="3dp"/>
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/circle_ico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_toEndOf="@+id/user_avatar"
             android:layout_toRightOf="@+id/user_avatar"
             android:src="@drawable/circle"/>
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/search_ico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             android:layout_toLeftOf="@+id/user_avatar"
             android:layout_toStartOf="@+id/user_avatar"
             android:src="@drawable/search"/>
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/eye"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -60,7 +60,7 @@
             android:layout_alignStart="@+id/left_user_img"
             android:layout_below="@+id/left_user_img"
             android:src="@drawable/eye"/>
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/profile_ico"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
