@@ -8,7 +8,6 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
-import com.topface.framework.utils.Debug
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
@@ -77,20 +76,16 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val NEED_MORE = "need_more"
     }
 
-    fun onPhotoClick() {
-        val user = currentUser
-        if (user != null && user.photos != null && user.photos.isNotEmpty()) {
+    fun onPhotoClick() = with(currentUser) {
+        if (this != null && photos != null && photos.isNotEmpty()) {
             mNavigator.showAlbum(binding.datingAlbum.selectedPosition,
-                    user.id,
-                    user.photos.count(),
-                    user.photos)
+                    id, photos.count(), photos)
         }
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
-                resultCode == Activity.RESULT_OK &&
-                data != null) {
+                resultCode == Activity.RESULT_OK && data != null) {
             currentItem.set(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
         }
     }
