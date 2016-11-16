@@ -9,7 +9,6 @@ import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
-import org.jetbrains.anko.imageResource
 import rx.Subscription
 import javax.inject.Inject
 
