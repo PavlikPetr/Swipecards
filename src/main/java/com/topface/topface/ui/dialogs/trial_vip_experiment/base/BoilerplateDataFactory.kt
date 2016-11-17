@@ -20,6 +20,10 @@ class BoilerplateDataFactory : IBoilerplateFactory<BoilerplateData> {
                 ExperimentsType.EXPERIMENT_4 -> BoilerplateData.create {
                 }
                 ExperimentsType.EXPERIMENT_5 -> BoilerplateData.create {
+                    title = R.string.free_vip
+                }
+                ExperimentsType.EXPERIMENT_6 -> BoilerplateData.create {
+                    title = R.string.free_vip
                 }
                 else -> BoilerplateData.create {
                 }
