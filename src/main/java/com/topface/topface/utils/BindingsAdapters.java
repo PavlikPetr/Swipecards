@@ -234,7 +234,7 @@ public class BindingsAdapters {
     @BindingAdapter("navigationIcon")
     public static void setNavigationIcon(Toolbar view, @DrawableRes int resource) {
         Drawable drawable = ResourceExtensionKt.getDrawable(resource);
-        if(drawable!=null){
+        if (drawable != null) {
             view.setNavigationIcon(drawable);
         }
     }
@@ -242,9 +242,11 @@ public class BindingsAdapters {
     /*
     *Если надо через DB засетить тег для автоматизированного тестирования, то следует использовать этот атрибут
     */
-    @BindingAdapter("specialTag")
+    @BindingAdapter("uiTestTag")
     public static void setTag(View view, String tag) {
-        view.setTag(tag);
+        if (Debug.isDebugLogsEnabled()) {
+            view.setTag(tag);
+        }
     }
 
     @BindingAdapter("animationSrc")

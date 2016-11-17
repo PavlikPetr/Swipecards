@@ -17,7 +17,6 @@
     <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
 
 
-
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
 
@@ -174,17 +173,16 @@
 
     <!--Popups-->
     <dimen name="popup_central_picture_size">210dp</dimen>
-    <dimen name="popup_central_picture_margin">34dp</dimen>
-    <dimen name="popup_root_view_padding_top">56dp</dimen>
-    <dimen name="popup_root_view_padding_bottom">56dp</dimen>
-    <dimen name="popup_root_view_padding_left">10dp</dimen>
-    <dimen name="popup_root_view_padding_right">10dp</dimen>
+    <dimen name="popup_central_picture_margin">24dp</dimen>
+    <dimen name="popup_root_view_padding_top">30dp</dimen>
+    <dimen name="popup_root_view_padding_bottom">30dp</dimen>
     <dimen name="popup_title_text">25sp</dimen>
     <dimen name="popup_central_picture_background_circle">156dp</dimen>
     <dimen name="popup_message_text">16sp</dimen>
-    <dimen name="popup_message_padding_bottom">20dp</dimen>
-    <dimen name="popup_message_side_padding">46dp</dimen>
+    <dimen name="popup_message_side_padding">30dp</dimen>
     <dimen name="popup_button_text">14sp</dimen>
+    <dimen name="popup_arrow_padding">16dp</dimen>
+    <dimen name="popup_land_right_part_padding_root">10dp</dimen>
 
     <dimen name="form_list_padding">30dp</dimen>
 

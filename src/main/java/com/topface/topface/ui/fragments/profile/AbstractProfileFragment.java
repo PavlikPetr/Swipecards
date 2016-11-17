@@ -165,20 +165,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     };
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (getActivity() instanceof ToolbarActivity) {
-            ToolbarActivity activity = (ToolbarActivity) getActivity();
-            if (activity != null) {
-                if (activity.getToolbarViewModel() instanceof NavigationToolbarViewModel) {
-                    NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarViewModel();
-                    vm.isCollapsingToolbarStyle(false);
-                }
-            }
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View root = inflater.inflate(R.layout.fragment_profile, null);

@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.profile.photoswitcher.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -19,12 +18,9 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
-import com.topface.topface.data.FeedGift;
-import com.topface.topface.data.Gift;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
-import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.User;
 import com.topface.topface.databinding.AcPhotosBinding;
 import com.topface.topface.databinding.ToolbarBinding;
@@ -38,7 +34,6 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
@@ -66,6 +61,7 @@ import javax.inject.Inject;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding> {
 
+    public static final int PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE = 87;
     public static final String ADD_NEW_GIFT = "add_new_gift";
     public static final String DEFAULT_UPDATE_PHOTOS_INTENT = "com.topface.topface.updatePhotos";
     public static final String INTENT_USER_ID = "user_id";
@@ -180,11 +176,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     private UserProfileLoader mUserProfileLoader;
     private PhotoSwitcherViewModel mViewModel;
 
-    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
-        return getPhotoSwitcherIntent(gifts, position, userId, photosCount, adapter.getPhotos());
+    public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, BasePhotoRecyclerViewAdapter adapter) {
+        return getPhotoSwitcherIntent(position, userId, photosCount, adapter.getPhotos());
     }
 
-    public static Intent getPhotoSwitcherIntent(ArrayList<Gift> gifts, int position, int userId, int photosCount, Photos photos) {
+    public static Intent getPhotoSwitcherIntent(int position, int userId, int photosCount, Photos photos) {
         Intent intent = new Intent(App.getContext(), PhotoSwitcherActivity.class);
         intent.putExtra(INTENT_USER_ID, userId);
         // если позиция невалидная смещаем до последней в "колоде" хуяк-хуяк и в продакшн
@@ -192,7 +188,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         intent.putExtra(INTENT_PHOTOS_COUNT, photosCount);
         intent.putExtra(INTENT_PHOTOS_FILLED, true);
         intent.putParcelableArrayListExtra(INTENT_PHOTOS, photos);
-        intent.putParcelableArrayListExtra(INTENT_GIFT, gifts);
         return intent;
     }
 
@@ -580,6 +575,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             getToolbarViewModel().getTitle().set(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE,
                     mCurrentPosition + 1, photosLinksSize));
         }
+        setResult(RESULT_OK, new Intent().putExtra(INTENT_ALBUM_POS, mCurrentPosition));
     }
 
     private void refreshButtonsState() {
@@ -614,40 +610,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             }
         }
         return false;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case GiftsActivity.INTENT_REQUEST_GIFT:
-                if (resultCode == Activity.RESULT_OK) {
-                    FeedGift feedGift = getFeedGiftFromIntent(data);
-                    if (feedGift != null) {
-                        Intent intent = new Intent(ADD_NEW_GIFT);
-                        intent.putExtra(INTENT_GIFT, feedGift);
-                        LocalBroadcastManager.getInstance(this)
-                                .sendBroadcast(intent);
-                    }
-                }
-                break;
-        }
-    }
-
-    private FeedGift getFeedGiftFromIntent(Intent data) {
-        FeedGift feedGift = null;
-        Bundle extras = data.getExtras();
-        if (extras != null) {
-            SendGiftAnswer sendGiftAnswer = extras.getParcelable(GiftsActivity.INTENT_SEND_GIFT_ANSWER);
-            if (sendGiftAnswer != null) {
-                feedGift = new FeedGift();
-                feedGift.gift = new Gift(
-                        Integer.parseInt(sendGiftAnswer.history.id),
-                        0,
-                        Gift.PROFILE, sendGiftAnswer.history.link);
-            }
-        }
-        return feedGift;
     }
 
     private void hidePhotoAlbumControlAction() {

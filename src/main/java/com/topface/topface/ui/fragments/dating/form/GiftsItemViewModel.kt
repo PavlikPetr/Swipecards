@@ -38,14 +38,15 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
                 override fun onError(e: Throwable?) {
                     Debug.log("GIFTS_BUGS loadGifts onError")
                     Utils.showErrorMessage()
-            }
+                }
+
                 override fun onCompleted() = unsubscribe()
 
             })
         }
     }
 
-    fun sendGift() = mNavigator.showGiftsActivity("Dating", userId)
+    fun sendGift() = mNavigator.showGiftsActivity(userId)
 
     fun release() = mLoadGiftsSubscription.safeUnsubscribe()
 

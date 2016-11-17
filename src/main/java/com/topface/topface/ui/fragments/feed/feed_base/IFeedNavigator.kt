@@ -5,10 +5,9 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.data.FeedItem
+import com.topface.topface.data.Photos
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.search.SearchUser
-import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 
 /**
  * Интерфейс навигации в  фидах
@@ -25,10 +24,12 @@ interface IFeedNavigator {
     fun showAddToLeader()
     fun showOwnProfile()
     fun showTakePhotoPopup()
-    fun showGiftsActivity(from: String, id: Int)
+    fun showGiftsActivity(id: Int)
     fun showFilter()
     fun showEmptyDating()
     fun closeEmptyDating()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity,
                                     @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int)
+
+    fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos)
 }
