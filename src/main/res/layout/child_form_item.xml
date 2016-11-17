@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{model.title}"
                 android:textColor="@color/black_forms_color"
+                android:layout_marginRight="40dp"
                 android:textSize="14sp"/>
 
             <TextView
@@ -48,6 +49,7 @@
                 android:layout_marginTop="6dp"
                 android:text="@{model.subTitle}"
                 android:textColor="@color/gray_forms_color"
+                android:layout_marginRight="40dp"
                 android:textSize="14sp"/>
 
         </LinearLayout>

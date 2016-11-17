@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget"></style>
 
@@ -1304,13 +1305,15 @@
         <item name="android:drawableLeft">@drawable/ic_arrow_down</item>
     </style>
 
-    <style name="PopupTitle">
+    <style name="PopupTitleBase">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/popup_title</item>
         <item name="android:textSize">@dimen/popup_title_text</item>
     </style>
+
+    <style name="PopupTitle" parent="PopupTitleBase"/>
 
     <style name="PopupAnimatedBackground">
         <item name="android:layout_width">wrap_content</item>
@@ -1324,7 +1327,6 @@
     <style name="PopupMessage">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/popup_message_padding_bottom</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingLeft">@dimen/popup_message_side_padding</item>
         <item name="android:paddingRight">@dimen/popup_message_side_padding</item>
@@ -1335,7 +1337,8 @@
     <style name="PopupArrow">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginBottom">@dimen/popup_arrow_padding</item>
+        <item name="android:layout_marginTop">@dimen/popup_arrow_padding</item>
         <item name="android:src">@drawable/arrow</item>
     </style>
 
@@ -1347,6 +1350,76 @@
         <item name="android:textSize">@dimen/popup_button_text</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="PopupBorderlessdButton" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:textColor">@color/popup_borderless_button_text</item>
+        <item name="android:textSize">@dimen/popup_button_text</item>
+    </style>
+
+    <style name="PopupCenterImageContainerBase">
+        <item name="android:layout_width">@dimen/popup_central_picture_size</item>
+        <item name="android:layout_height">@dimen/popup_central_picture_size</item>
+        <item name="android:background">@drawable/unavailable_geo_bigger_circle</item>
+    </style>
+
+    <style name="PopupCenterImageContainer" parent="PopupCenterImageContainerBase">
+        <item name="android:layout_marginBottom">@dimen/popup_central_picture_margin</item>
+        <item name="android:layout_marginTop">@dimen/popup_central_picture_margin</item>
+    </style>
+
+    <style name="PopupRootContainer" parent="PopupRootContainerBase">
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="PopupRootContainerBase">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingBottom">@dimen/popup_root_view_padding_bottom</item>
+        <item name="android:paddingTop">@dimen/popup_root_view_padding_top</item>
+    </style>
+
+    <style name="PopupScroll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/popup_background</item>
+        <item name="android:fadingEdge">none</item>
+    </style>
+
+    <style name="PopupLandRightContainer">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingLeft">@dimen/popup_land_right_part_padding_root</item>
+        <item name="android:paddingRight">@dimen/popup_land_right_part_padding_root</item>
+    </style>
+
+    <style name="PopupCenterImageBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="PopupUnavailableGeoCenterImage" parent="PopupCenterImageBase">
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:src">@drawable/geo_switched_off</item>
+    </style>
+
+    <style name="PopupEmptyDatingCenterImage" parent="PopupCenterImageBase">
+        <item name="android:paddingLeft">26dp</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:src">@drawable/dating_empty</item>
     </style>
 
     <style name="AdmirationPopupBuyVipButton">
@@ -1397,4 +1470,21 @@
         <item name="android:singleLine">true</item>
         <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="ExpandableFabItem">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">center</item>
+        <item name="fab_size">mini</item>
+        <item name="fab_colorNormal">@color/dating_fab_small</item>
+        <item name="fab_colorPressed">@color/dating_fab_small</item>
+    </style>
+
+    <style name="FabDating">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>
