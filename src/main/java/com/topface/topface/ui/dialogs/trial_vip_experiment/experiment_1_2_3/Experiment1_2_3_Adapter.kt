@@ -16,8 +16,10 @@ import org.jetbrains.anko.layoutInflater
 class Experiment1_2_3_Adapter(val context: Context) : PagerAdapter() {
 
     companion object {
-        private val IMAGES = intArrayOf(R.drawable.trial_vip_img_crown, R.drawable.trial_vip_img_crown, R.drawable.trial_vip_img_crown)
-        private val DESCRIPTIONS = intArrayOf(R.string.vip_buy_vip, R.string.vip_buy_vip, R.string.vip_buy_vip)
+        private val IMAGES = intArrayOf(R.drawable.trial_vip_img_crown, R.drawable.trial_vip_img_crown,
+                R.drawable.trial_vip_img_crown, R.drawable.trial_vip_img_crown, R.drawable.trial_vip_img_crown)
+        private val DESCRIPTIONS = intArrayOf(R.string.no_more_ad, R.string.i_see_u_face,
+                R.string.moar_womens, R.string.moar_messages, R.string.be_popular)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any =
