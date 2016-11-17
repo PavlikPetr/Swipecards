@@ -1,74 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="" type=""/>
+    </data>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:drawableLeft="@drawable/no_advertising_2"
-        android:drawablePadding="24dp"
-        android:drawableStart="@drawable/no_advertising_2"
-        android:gravity="center_vertical"
-        android:text="Никакой рекламы в приложении" android:textColor="#de000000"
-        android:textSize="14sp"/>
+    <LinearLayout
+        style="@style/MainContainerTrialVip"
+        android:background="@drawable/trial_vip_popup_bg">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:drawableLeft="@drawable/guest_2"
-        android:drawablePadding="35dp"
-        android:drawableStart="@drawable/guest_2"
-        android:gravity="center_vertical"
-        android:text="Узнайте своих гостей и поклонников в лицо"
-        android:textColor="#de000000"
-        android:textSize="14sp"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/no_advertising_2"
+            android:drawableStart="@drawable/no_advertising_2"
+            android:text="Никакой рекламы в приложении"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/guest_2"
+            android:drawableStart="@drawable/guest_2"
+            android:text="Узнайте своих гостей и поклонников в лицо"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/message_2"
+            android:drawableStart="@drawable/message_2"
+            android:text="Пишите любой девушке без взаимной симпатии"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/popular_2"
+            android:drawableStart="@drawable/popular_2"
+            android:text="Переписывайтесь с популярными пользователями"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/eye_2"
+            android:drawableStart="@drawable/eye_2"
+            android:text="Получайте в 1,5 раза больше просмотров"/>
+        <ImageView style="@style/PopupArrowTrialVip"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:drawableLeft="@drawable/message_2"
-        android:drawablePadding="26dp"
-        android:drawableStart="@drawable/message_2"
-        android:gravity="center_vertical"
-        android:text="Пишите любой девушке без взаимной симпатии"
-        android:textColor="#de000000"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:drawableLeft="@drawable/popular_2"
-        android:drawablePadding="27dp"
-        android:drawableStart="@drawable/popular_2"
-        android:text="Переписывайтесь с популярными пользователями"
-        android:textColor="#de000000"
-        android:textSize="14sp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:drawableLeft="@drawable/eye_2"
-        android:drawablePadding="24dp"
-        android:drawableStart="@drawable/eye_2"
-        android:gravity="center_vertical"
-        android:text="Получайте в 1,5 раза больше просмотров"
-        android:textColor="#de000000"
-        android:textSize="14sp"/>
-
-    <ImageView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center_horizontal"
-               android:layout_marginTop="32dp"
-               android:src="@drawable/arrow"/>
-
-</LinearLayout>
+    </LinearLayout>
+</layout>
