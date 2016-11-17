@@ -203,6 +203,11 @@
   <string name="filter_age_end_prefix">до %s</string>
   <string name="filter_constitution_template">Од %1$d до %2$d</string>
   <string name="filter_cities_all">По свим градовима</string>
+  <string name="dating_empty_nothing_found">Ништа није пронађено</string>
+  <string name="dating_empty_reset">Ресетовати</string>
+  <string name="dating_empty_change_settings">Изменити</string>
+  <string name="dating_empty_try_to_change_settings_or_reset">Пробајте да ресетујете или измените
+        параметре претраге</string>
   <string name="purchase_header_title">Стање:</string>
   <string name="buying_header_title">Куповине</string>
   <plurals name="buying_gift_you_need_coins">
@@ -233,6 +238,7 @@
   <string name="buying_default_message">Можете слати поклоне и дивљења за новчиће</string>
   <string name="buying_money">Купи новчиће</string>
   <string name="gifts_title">Одабери поклон</string>
+  <string name="gifts">Поклони</string>
   <string name="profile_header_title">Мој профил</string>
   <string name="album_add_photo_title">Додај фотографију</string>
   <string name="profile_add_album">Изабрати из постојећих</string>
@@ -865,6 +871,19 @@
   <string name="chat_activate_vip">Активирати VIP</string>
   <string name="chat_no_mutual_symphaty">Тренутно нема узајамних свиђања!</string>
   <string name="chat_with_no_mutual_buy_vip">Можете започети разговор без узајамног свиђања, али вам је за то потребно да активирате VIP статус</string>
+  <string name="about">О себи</string>
+  <string name="moar_info">Сазнајте више!</string>
+  <string name="geo_switched_off_explanation">Да бисте видели ко је у близини, укључите гоелокацију</string>
+  <string name="turn_on_geo">Укључити геолокацију</string>
+  <string name="geo_show_settings_explanation">Да бисте видели ко је у близини, укључите геолокацију у подешавањима телефона</string>
+  <string name="show_geo_settings">Отворити подешавања</string>
+  <string name="buy_vip_button_text_admiration_purchase_popup">послати за %d новчића</string>
+  <string name="label1_text_admiration_purchase_popup">Прималац \&quot;дивљења\&quot; ће добити обавештење и видети га одмах</string>
+  <string name="label2_text_admiration_purchase_popup">Шаљите \&quot;дивљења\&quot; бесплатно</string>
+  <string name="buy_vip_button_text">набавити vip</string>
+  <string name="send_first_gift">Пошаљите први поклон!</string>
+  <string name="ask_moar_info">Сазнајте више!</string>
+  <string name="fill_own_profile">Попуните свој профил да бисте видели шта је %s написала</string>
   <string name="chat_mutual_symphaty">Узајамно свиђање!</string>
   <string name="chat_mutual_start_conversation">Започните разговор!</string>
   <string name="chat_send_message_button_title">Посл.</string>
