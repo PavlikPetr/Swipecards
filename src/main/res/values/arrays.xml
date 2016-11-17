@@ -31,4 +31,68 @@
         <item>@drawable/fake_boy6</item>
         <item>@drawable/fake_boy7</item>
     </string-array>
+
+    <string-array name="fake_girl_avatars_without_blur">
+        <item>@drawable/girl_1</item>
+        <item>@drawable/girl_2</item>
+        <item>@drawable/girl_3</item>
+        <item>@drawable/girl_4</item>
+        <item>@drawable/girl_5</item>
+        <item>@drawable/girl_6</item>
+        <item>@drawable/girl_7</item>
+        <item>@drawable/girl_8</item>
+        <item>@drawable/girl_9</item>
+        <item>@drawable/girl_10</item>
+    </string-array>
+
+    <string-array name="fake_boy_avatars_without_blur">
+        <item>@drawable/man_1</item>
+        <item>@drawable/man_2</item>
+        <item>@drawable/man_3</item>
+        <item>@drawable/man_4</item>
+        <item>@drawable/man_5</item>
+        <item>@drawable/man_6</item>
+        <item>@drawable/man_7</item>
+        <item>@drawable/man_8</item>
+        <item>@drawable/man_9</item>
+        <item>@drawable/man_10</item>
+    </string-array>
+
+    <string-array name="fake_girl_avatars_with_blur">
+        <item>@drawable/girl_blur_1</item>
+        <item>@drawable/girl_blur_2</item>
+        <item>@drawable/girl_blur_3</item>
+        <item>@drawable/girl_blur_4</item>
+        <item>@drawable/girl_blur_5</item>
+        <item>@drawable/girl_blur_6</item>
+        <item>@drawable/girl_blur_7</item>
+        <item>@drawable/girl_blur_8</item>
+        <item>@drawable/girl_blur_9</item>
+        <item>@drawable/girl_blur_10</item>
+    </string-array>
+
+    <string-array name="fake_boy_avatars_with_blur">
+        <item>@drawable/man_blur_1</item>
+        <item>@drawable/man_blur_2</item>
+        <item>@drawable/man_blur_3</item>
+        <item>@drawable/man_blur_4</item>
+        <item>@drawable/man_blur_5</item>
+        <item>@drawable/man_blur_6</item>
+        <item>@drawable/man_blur_7</item>
+        <item>@drawable/man_blur_8</item>
+        <item>@drawable/man_blur_9</item>
+        <item>@drawable/man_blur_10</item>
+    </string-array>
+
+    <string-array name="imgs_between_fake_avatars_for_with_blur">
+        <item>@drawable/eye_closed</item>
+        <item>@drawable/eye4ex</item>
+        <item>@drawable/circle__for_experiment_popup</item>
+    </string-array>
+
+    <string-array name="imgs_between_fake_avatars_for_without_blur">
+        <item>@drawable/time</item>
+        <item>@drawable/pen</item>
+        <item>@drawable/circle__for_experiment_popup</item>
+    </string-array>
 </resources>

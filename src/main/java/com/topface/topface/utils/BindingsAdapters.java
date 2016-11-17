@@ -274,4 +274,10 @@ public class BindingsAdapters {
     public static void setAnimationSrc(View view, Animation resource) {
         view.startAnimation(resource);
     }
+
+    @BindingAdapter({"animationSrc", "bindStartOffSet"})
+    public static void setAnimationSrc(View view, Animation resource, Long bindStartOffSet) {
+        resource.setStartOffset(bindStartOffSet);
+        view.startAnimation(resource);
+    }
 }
