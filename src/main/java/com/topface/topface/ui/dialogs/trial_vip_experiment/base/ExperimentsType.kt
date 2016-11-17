@@ -22,5 +22,4 @@ object ExperimentsType {
     const val EXPERIMENT_5 = 5L
     const val EXPERIMENT_6 = 6L
 
-
 }
