@@ -43,4 +43,5 @@ public class ApplicationBase extends Application {
     public Object[] getDaggerModules() {
         return new Object[]{new TopfaceModule(), new FeedModule(getApplicationContext()), new DialogModule()};
     }
+
 }

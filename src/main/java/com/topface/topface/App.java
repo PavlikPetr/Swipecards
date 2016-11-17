@@ -58,6 +58,7 @@ import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.state.IStateDataUpdater;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.statistics.AppStateStatistics;
+import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.ui.external_libs.AdWords;
 import com.topface.topface.ui.external_libs.AdjustManager;
@@ -549,7 +550,15 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         String adId = TFCredentials.getAdId(mContext);
         AppConfig config = getAppConfig();
         config.setAdId(adId);
+        sentFirstStartApp(config);
         config.saveConfig();
+    }
+
+    private void sentFirstStartApp(AppConfig config) {
+        if (config.isFirstStartApp()) {
+            AuthStatistics.sendFirstStartApp();
+            config.setFirstStartApp();
+        }
     }
 
     private void sendUnauthorizedRequests() {
@@ -711,4 +720,5 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public boolean isUserOptionsObtainedFromServer() {
         return mUserOptionsObtainedFromServer;
     }
+
 }
