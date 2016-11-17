@@ -1149,7 +1149,7 @@
     <string name="buy_vip_button_text_admiration_purchase_popup">отправить за %d монеты</string>
     <string name="label1_text_admiration_purchase_popup">Получатель «восхищения» будет уведомлён и сразу его увидит</string>
     <string name="label2_text_admiration_purchase_popup">Отправляйте «восхищения» бесплатно!</string>
-    <string name="buy_vip_button_text">получить vip</string>
+    <string name="buy_vip_button_text">Получить vip</string>
     <string name="send_first_gift">Подарите первый подарок!</string>
     <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
     <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
@@ -1157,4 +1157,7 @@
     <string name="chat_mutual_symphaty">Взаимная симпатия!</string>
     <string name="chat_mutual_start_conversation">Начните общение!</string>
     <string name="chat_send_message_button_title">Отпр.</string>
+    <string name="seven_days_free">7 дней бесплатно</string>
+    <string name="free_vip">VIP-статус бесплатно</string>
+
 </resources>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@{viewModel.popupBackground}"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@{viewModel.titleBottomMargin}"
+                android:layout_marginTop="@{viewModel.titleTopMargin}"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/popup_title"
+                android:textSize="20sp"
+                tools:text="TITLE"
+                tools:textColor="#000000"
+                tools:textSize="20sp"/>
+
+            <FrameLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginBottom="@{viewModel.contentBottomMargin}"/>
+
+            <Button
+                android:id="@+id/get_vip_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@{viewModel.getVipBottomMargin}"
+                android:background="@{viewModel.getVipButtonBackground}"
+                android:minHeight="36dp"
+                android:minWidth="141dp"
+                android:onClick="@{() -> viewModel.getVip()}"
+                android:text="@{viewModel.buttonText}"
+                android:textAllCaps="true"
+                android:textColor="@color/bg_white"
+                tools:targetApi="ice_cream_sandwich"
+                tools:text="Получить VIP"/>
+
+            <TextView
+                android:id="@+id/button_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@{viewModel.descriptionBottomMargin}"
+                android:text="@{viewModel.description}"
+                android:textColor="@color/popup_message"
+                android:textSize="14sp"
+                tools:text="7 дней бесплатно"
+                tools:textColor="#FFFFFF"
+                tools:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

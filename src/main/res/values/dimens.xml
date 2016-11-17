@@ -17,7 +17,6 @@
     <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
 
 
-
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
 
@@ -187,5 +186,14 @@
     <dimen name="popup_button_text">14sp</dimen>
 
     <dimen name="form_list_padding">30dp</dimen>
+
+    <!-- Метрики для попапа экспериментов 1-2-3 -->
+
+    <dimen name="experiment_1_2_3_title_top_margin">97dp</dimen>
+    <dimen name="experiment_1_2_3_title_bottom_margin">35dp</dimen>
+    <dimen name="experiment_1_2_3_content_bottom_margin">40dp</dimen>
+    <dimen name="experiment_1_2_3_get_vip_bottom_margin">10dp</dimen>
+    <dimen name="experiment_1_2_3_description_bottom_margin">0dp</dimen>
+
 
 </resources>
