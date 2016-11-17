@@ -955,4 +955,7 @@
     <string name="send_first_gift">Envia o primeiro presente!</string>
     <string name="ask_moar_info">Descobre mais informação!</string>
     <string name="fill_own_profile">Preenche o teu perfil para veres o que %s escreveu</string>
+    <string name="chat_mutual_symphaty">Gosto Mútuo!</string>
+    <string name="chat_mutual_start_conversation">Começa a conversar!</string>
+    <string name="chat_send_message_button_title">Enviar</string>
 </resources>

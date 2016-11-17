@@ -962,4 +962,7 @@
     <string name="send_first_gift">Donnez le premier cadeau !</string>
     <string name="ask_moar_info">Découvrez plus d\'informations !</string>
     <string name="fill_own_profile">Remplissez votre profil pour savoir ce que %s a écrit</string>
+    <string name="chat_mutual_symphaty">J\'aime mutuel !</string>
+    <string name="chat_mutual_start_conversation">Commencez à tchater !</string>
+    <string name="chat_send_message_button_title">Envoyer.</string>
 </resources>

@@ -968,4 +968,7 @@
     <string name="send_first_gift">Пошаљите први поклон!</string>
     <string name="ask_moar_info">Сазнајте више!</string>
     <string name="fill_own_profile">Попуните свој профил да бисте видели шта је %s написала</string>
+    <string name="chat_mutual_symphaty">Узајамно свиђање!</string>
+    <string name="chat_mutual_start_conversation">Започните разговор!</string>
+    <string name="chat_send_message_button_title">Посл.</string>
 </resources>

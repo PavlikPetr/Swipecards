@@ -838,4 +838,7 @@
   <string name="send_first_gift">Gebe das erste Geschenk!</string>
   <string name="ask_moar_info">Erfahre mehr Informationen!</string>
   <string name="fill_own_profile">Ergänze dein Profil, um zu erfahren, was %s geschrieben hat</string>
+  <string name="chat_mutual_symphaty">Beidseitiges Like!</string>
+  <string name="chat_mutual_start_conversation">Starte einen Chat!</string>
+  <string name="chat_send_message_button_title">Verschicken.</string>
 </resources>

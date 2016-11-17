@@ -853,4 +853,7 @@
   <string name="send_first_gift">İlk hediyeyi gönder</string>
   <string name="ask_moar_info">Daha fazla bilgi edin!</string>
   <string name="fill_own_profile">Profilini tamamla ve %s kişisinin yazdıklarını görüntüle</string>
+  <string name="chat_mutual_symphaty">Karşılıklı beğenme!</string>
+  <string name="chat_mutual_start_conversation">Sohbete başlayın!</string>
+  <string name="chat_send_message_button_title">Gönder</string>
 </resources>

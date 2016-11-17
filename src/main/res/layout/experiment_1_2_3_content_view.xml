@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_ViewModel"/>
+    </data>
+
+    <!--viewpagerindicator не хочет с Linear-->
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/capabilities_icons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            app:adapter="@{viewModel.adapter}"/>
+
+        <com.topface.topface.ui.views.view_pager_indicator.CirclePageIndicator
+            android:id="@+id/indicator_circles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:extraSpacing="12dp"
+            android:layout_alignParentBottom="true"
+            app:fillColor="@color/trial_indicator_selected"
+            app:pageColor="@color/trial_indicator"
+            app:radius="5dp"/>
+
+    </RelativeLayout>
+
+</layout>

@@ -35,6 +35,10 @@ public class AuthRequest extends PrimalAuthRequest {
     private String mRefresh; // еще один токен для одноклассников
     private AppsFlyerData mAppsflyer; //ID пользователя в appsflyer
 
+    public String getPlatform() {
+        return mPlatform;
+    }
+
     private AuthRequest(Context context) {
         super(context);
         doNeedAlert(false);

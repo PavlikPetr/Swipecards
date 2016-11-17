@@ -930,4 +930,7 @@
     <string name="send_first_gift">Give the first gift!</string>
     <string name="ask_moar_info">Find out more information!</string>
     <string name="fill_own_profile">Fill in your profile to see what %s wrote</string>
+    <string name="chat_mutual_symphaty">Mutual Like!</string>
+    <string name="chat_mutual_start_conversation">Start chatting!</string>
+    <string name="chat_send_message_button_title">Send</string>
 </resources>
