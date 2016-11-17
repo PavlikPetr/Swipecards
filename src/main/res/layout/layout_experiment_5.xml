@@ -8,27 +8,27 @@
         style="@style/TextViewTrialVipPopup"
         android:drawableLeft="@drawable/no_advertising_2"
         android:drawableStart="@drawable/no_advertising_2"
-        android:text="Никакой рекламы в приложении"/>
+        android:text="@string/experiment5_banner_text1"/>
     <TextView
         style="@style/TextViewTrialVipPopup"
         android:drawableLeft="@drawable/guest_2"
         android:drawableStart="@drawable/guest_2"
-        android:text="Узнайте своих гостей и поклонников в лицо"/>
+        android:text="@string/experiment5_banner_text2"/>
     <TextView
         style="@style/TextViewTrialVipPopup"
         android:drawableLeft="@drawable/message_2"
         android:drawableStart="@drawable/message_2"
-        android:text="Пишите любой девушке без взаимной симпатии"/>
+        android:text="@string/experiment5_banner_text3"/>
     <TextView
         style="@style/TextViewTrialVipPopup"
         android:drawableLeft="@drawable/popular_2"
         android:drawableStart="@drawable/popular_2"
-        android:text="Переписывайтесь с популярными пользователями"/>
+        android:text="@string/experiment5_banner_text4"/>
     <TextView
         style="@style/TextViewTrialVipPopup"
         android:drawableLeft="@drawable/eye_2"
         android:drawableStart="@drawable/eye_2"
-        android:text="Получайте в 1,5 раза больше просмотров"/>
+        android:text="@string/experiment5_banner_text5"/>
     <ImageView style="@style/PopupArrowTrialVip"/>
 
 </LinearLayout>
