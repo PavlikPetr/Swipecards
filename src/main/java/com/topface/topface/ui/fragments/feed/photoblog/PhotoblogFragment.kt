@@ -12,8 +12,6 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.LayoutEmptyPhotoblogBinding
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
@@ -63,9 +61,6 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.refresh.isEnabled = false
-        super.onViewCreated(view, savedInstanceState)
-        val dialog = ExperimentBoilerplateFragment.newInstance(ExperimentsType.EXPERIMENT_1)
-        dialog.show(fragmentManager, "")
     }
 
     override fun onDestroy() {
