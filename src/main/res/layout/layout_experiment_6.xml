@@ -1,23 +1,26 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/MainContainerTrialVip"
-    android:background="@drawable/trial_vip_popup_bg">
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/MainContainerTrialVip">
 
-    <TextView
-        style="@style/TextViewTrialVipPopup"
-        android:drawableLeft="@drawable/message_3"
-        android:drawableStart="@drawable/message_3"
-        android:text="@string/experiment5_banner_text3"/>
-    <TextView
-        style="@style/TextViewTrialVipPopup"
-        android:drawableLeft="@drawable/eye_3"
-        android:drawableStart="@drawable/eye_3"
-        android:text="@string/experiment5_banner_text5"/>
-    <TextView
-        style="@style/TextViewTrialVipPopup"
-        android:drawableLeft="@drawable/guest_3"
-        android:drawableStart="@drawable/guest_3"
-        android:text="@string/experiment5_banner_text2"/>
-    <ImageView style="@style/PopupArrowTrialVip"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/message_3"
+            android:drawableStart="@drawable/message_3"
+            android:text="@string/moar_womens"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/eye_3"
+            android:drawableStart="@drawable/eye_3"
+            android:text="@string/be_popular"/>
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/guest_3"
+            android:drawableStart="@drawable/guest_3"
+            android:text="@string/i_see_u_face"/>
+        <ImageView style="@style/PopupArrowTrialVip"/>
 
-</LinearLayout>
+    </LinearLayout>
+</layout>
+

@@ -1154,12 +1154,6 @@
     <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
     <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
 
-    <string name="experiment5_banner_text1">Никакой рекламы в приложении</string>
-    <string name="experiment5_banner_text2">Узнайте своих гостей и поклонников в лицо</string>
-    <string name="experiment5_banner_text3">Пишите любой девушке без взаимной симпатии</string>
-    <string name="experiment5_banner_text4">Переписывайтесь с популярными пользователями</string>
-    <string name="experiment5_banner_text5">Получайте в 1,5 раза больше просмотров</string>
-
     <string name="chat_mutual_symphaty">Взаимная симпатия!</string>
     <string name="chat_mutual_start_conversation">Начните общение!</string>
     <string name="chat_send_message_button_title">Отпр.</string>
