@@ -1,39 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <variable name="" type=""/>
-    </data>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MainContainerTrialVip"
+    android:background="@drawable/trial_vip_popup_bg">
 
-    <LinearLayout
-        style="@style/MainContainerTrialVip"
-        android:background="@drawable/trial_vip_popup_bg">
+    <TextView
+        style="@style/TextViewTrialVipPopup"
+        android:drawableLeft="@drawable/no_advertising_2"
+        android:drawableStart="@drawable/no_advertising_2"
+        android:text="Никакой рекламы в приложении"/>
+    <TextView
+        style="@style/TextViewTrialVipPopup"
+        android:drawableLeft="@drawable/guest_2"
+        android:drawableStart="@drawable/guest_2"
+        android:text="Узнайте своих гостей и поклонников в лицо"/>
+    <TextView
+        style="@style/TextViewTrialVipPopup"
+        android:drawableLeft="@drawable/message_2"
+        android:drawableStart="@drawable/message_2"
+        android:text="Пишите любой девушке без взаимной симпатии"/>
+    <TextView
+        style="@style/TextViewTrialVipPopup"
+        android:drawableLeft="@drawable/popular_2"
+        android:drawableStart="@drawable/popular_2"
+        android:text="Переписывайтесь с популярными пользователями"/>
+    <TextView
+        style="@style/TextViewTrialVipPopup"
+        android:drawableLeft="@drawable/eye_2"
+        android:drawableStart="@drawable/eye_2"
+        android:text="Получайте в 1,5 раза больше просмотров"/>
+    <ImageView style="@style/PopupArrowTrialVip"/>
 
-        <TextView
-            style="@style/TextViewTrialVipPopup"
-            android:drawableLeft="@drawable/no_advertising_2"
-            android:drawableStart="@drawable/no_advertising_2"
-            android:text="Никакой рекламы в приложении"/>
-        <TextView
-            style="@style/TextViewTrialVipPopup"
-            android:drawableLeft="@drawable/guest_2"
-            android:drawableStart="@drawable/guest_2"
-            android:text="Узнайте своих гостей и поклонников в лицо"/>
-        <TextView
-            style="@style/TextViewTrialVipPopup"
-            android:drawableLeft="@drawable/message_2"
-            android:drawableStart="@drawable/message_2"
-            android:text="Пишите любой девушке без взаимной симпатии"/>
-        <TextView
-            style="@style/TextViewTrialVipPopup"
-            android:drawableLeft="@drawable/popular_2"
-            android:drawableStart="@drawable/popular_2"
-            android:text="Переписывайтесь с популярными пользователями"/>
-        <TextView
-            style="@style/TextViewTrialVipPopup"
-            android:drawableLeft="@drawable/eye_2"
-            android:drawableStart="@drawable/eye_2"
-            android:text="Получайте в 1,5 раза больше просмотров"/>
-        <ImageView style="@style/PopupArrowTrialVip"/>
-
-    </LinearLayout>
-</layout>
+</LinearLayout>
