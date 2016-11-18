@@ -2,6 +2,7 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import org.jetbrains.anko.dimen
@@ -26,11 +27,18 @@ class ExperimentBoilerplateViewModel(private val mPopupRunner: TransparentMarket
     val descriptionBottomMargin = ObservableInt(mContext.dimen(dialogMetrics.descriptionBottomMargin))
     val popupBackground = ObservableInt(dialogMetrics.popupBackground)
     val getVipButtonBackground = ObservableInt(dialogMetrics.getVipButtonBackground)
+    val specialOfferVisibility = ObservableInt(specialOfferVisibility(dialogMetrics.isSpecialOffer))
 
     val title = ObservableField<String>(mContext.getString(dialogData.title) ?: EMPTY)
     val buttonText = ObservableField<String>(mContext.getString(dialogData.buttonText) ?: EMPTY)
     val description = ObservableField<String>(mContext.getString(dialogData.description) ?: EMPTY)
 
-    fun getVip() = mPopupRunner.runMarketPopup()
+    private fun specialOfferVisibility(visibility: Boolean) = if (visibility) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+
+fun getVip() = mPopupRunner.runMarketPopup()
 
 }

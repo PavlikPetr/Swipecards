@@ -10,11 +10,12 @@ import com.topface.topface.R
 class BoilerplateDialogMetrics private constructor(val titleTopMargin: Int, val titleBottomMargin: Int,
                                                    val contentBottomMargin: Int, val getVipBottomMargin: Int,
                                                    val descriptionBottomMargin: Int, val popupBackground: Int,
-                                                   val getVipButtonBackground: Int) {
+                                                   val getVipButtonBackground: Int, val isSpecialOffer: Boolean) {
 
     private constructor(builder: Builder) : this(builder.titleTopMargin,
             builder.titleBottomMargin, builder.contentBottomMargin, builder.getVipBottomMargin,
-            builder.descriptionBottomMargin, builder.popupBackground, builder.getVipButtonBackground)
+            builder.descriptionBottomMargin, builder.popupBackground, builder.getVipButtonBackground,
+            builder.isSpecialOffer)
 
     /**
      * @param titleTopMargin - верхний отступ от титула
@@ -24,6 +25,7 @@ class BoilerplateDialogMetrics private constructor(val titleTopMargin: Int, val 
      * @param descriptionBottomMargin - нижний отступ от описания под кнопкой покупки
      * @param popupBackground - ресурс фона (по умолчанию R.color.bg_white)
      * @param getVipButtonBackground - ресурс фона (по умолчанию R.color.buy_coins_button_bg)
+     * @param isSpecialOffer - показываем бабл "СПАЦПРЕДЛОЖЕНИЕ"
      */
     companion object {
         fun create(init: Builder.() -> Unit) =
@@ -42,7 +44,8 @@ class BoilerplateDialogMetrics private constructor(val titleTopMargin: Int, val 
         var getVipBottomMargin = 0
         var descriptionBottomMargin = 0
         var popupBackground = R.color.bg_white
-        var getVipButtonBackground = R.color.buy_coins_button_bg
+        var getVipButtonBackground = R.drawable.green_button_bg
+        var isSpecialOffer = false
 
         fun build() = BoilerplateDialogMetrics(this)
 

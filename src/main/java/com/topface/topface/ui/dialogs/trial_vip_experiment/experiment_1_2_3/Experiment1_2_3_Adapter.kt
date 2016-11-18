@@ -10,7 +10,7 @@ import com.topface.topface.databinding.Experiment123ItemBinding
 import org.jetbrains.anko.layoutInflater
 
 /**
- * Адаптер для слийдера картинок в триал фип попапе
+ * Адаптер для слийдера картинок в триал вип попапе
  * Created by tiberal on 16.11.16.
  */
 class Experiment1_2_3_Adapter(val context: Context) : PagerAdapter() {
@@ -19,7 +19,7 @@ class Experiment1_2_3_Adapter(val context: Context) : PagerAdapter() {
         private val IMAGES = intArrayOf(R.drawable.no_advertising, R.drawable.guest_big,
                 R.drawable.message_big, R.drawable.popular_girl, R.drawable.views)
         private val DESCRIPTIONS = intArrayOf(R.string.no_more_ad, R.string.i_see_u_face,
-                R.string.moar_womens, R.string.moar_messages, R.string.be_popular)
+                R.string.buy_vip_write_anyone, R.string.moar_messages, R.string.buy_vip_more_views)
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any =
