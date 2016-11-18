@@ -5,8 +5,8 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.view.ViewGroup
 import com.topface.topface.R
-import com.topface.topface.databinding.Experiment123ContentViewBinding
-import com.topface.topface.databinding.Experiment4Binding
+import com.topface.topface.databinding.*
+import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithBlurViewModel
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithoutBlurViewModel
 import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_ViewModel
 import org.jetbrains.anko.layoutInflater
@@ -27,19 +27,28 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup) :
                         }
                     }
                 }
+            /*
+            ExperimentsType.EXPERIMENT_2 -> {
+            }
+            ExperimentsType.EXPERIMENT_3 -> {
+            }
+            ExperimentsType.EXPERIMENT_4_1 -> {
+            }*/
+                ExperimentsType.EXPERIMENT_4_2 -> {
+                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false).apply { viewModel = Experiment4WithoutBlurViewModel(this) }
+                }
+                ExperimentsType.EXPERIMENT_4_3 -> {
+                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false).apply { viewModel = Experiment4WithBlurViewModel(this) }
+                }
 
-//            ExperimentsType.EXPERIMENT_2 -> {
-//            }
-//            ExperimentsType.EXPERIMENT_3 -> {
-//            }
-//            ExperimentsType.EXPERIMENT_4 -> {
-//
-//
-//
-//            }
-//            ExperimentsType.EXPERIMENT_5 -> {
-//            }
-
+                ExperimentsType.EXPERIMENT_5 -> {
+                    DataBindingUtil.inflate<LayoutExperiment5Binding>(mContext.layoutInflater,
+                            R.layout.layout_experiment_5, parent, false)
+                }
+                ExperimentsType.EXPERIMENT_6 -> {
+                    DataBindingUtil.inflate<LayoutExperiment6Binding>(mContext.layoutInflater,
+                            R.layout.layout_experiment_6, parent, false)
+                }
                 else -> DataBindingUtil.inflate<ViewDataBinding>(mContext.layoutInflater,
                         R.layout.experiment_boilerplate_layout, null, false)
 
