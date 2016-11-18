@@ -2,7 +2,6 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment
 
 import android.databinding.ObservableField
 import android.text.TextUtils
-import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
@@ -29,6 +28,7 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     abstract val imageLeftTop: ObservableField<Int>
     abstract val imageRightBottom: ObservableField<Int>
 
+
     // продолжительность щадержки для анимации фэйковых аватаров
     val first = 0L
     val second = 100L
@@ -39,8 +39,10 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     init {
         setUrlAvatar(App.get().profile)
         App.get().inject(this)
-        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile -> setUrlAvatar(profile) }
         setAvatarsForFakes()
+        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile ->
+            setUrlAvatar(profile)
+        }
     }
 
     fun setFakeAvatar(profile: Profile) = if (profile.sex == Profile.BOY) R.drawable.upload_photo_male else R.drawable.upload_photo_female

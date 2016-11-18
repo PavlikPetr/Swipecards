@@ -11,8 +11,9 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/popup_root_view_padding_bottom"
-            android:paddingTop="@dimen/popup_root_view_padding_top">
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
             <FrameLayout android:layout_width="300dp"
                          android:layout_height="270dp">
 
@@ -36,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBottom="@+id/firstFakeAvatar"
                         android:layout_toLeftOf="@id/firstFakeAvatar"
-                        android:layout_marginRight="34dp"
+                        android:layout_marginRight="30dp"
                         android:src="@{viewModel.imageLeftTop}"/>
 
                     <ImageView

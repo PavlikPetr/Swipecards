@@ -22,6 +22,8 @@ class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
                 }
                 ExperimentsType.EXPERIMENT_3 -> BoilerplateDialogMetrics.create {
                 }
+                ExperimentsType.EXPERIMENT_4_1 -> BoilerplateDialogMetrics.create {
+                }
                 ExperimentsType.EXPERIMENT_4_2 -> BoilerplateDialogMetrics.create {
                     titleTopMargin = R.dimen.experiment_5_title_top_margin
                     titleBottomMargin = R.dimen.experiment_5_title_bottom_margin

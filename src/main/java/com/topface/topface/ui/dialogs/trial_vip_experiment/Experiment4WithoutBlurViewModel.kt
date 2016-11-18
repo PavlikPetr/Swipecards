@@ -14,7 +14,6 @@ import com.topface.topface.utils.extensions.getString
 class Experiment4WithoutBlurViewModel(binding: Experiment4Binding) : Experiment4BaseViewModel(binding) {
 
     companion object {
-        const val COUNT = 5
         private var mIsUserMale = if (App.get().profile.sex == Profile.BOY) true else false
         val girls = listOf(R.drawable.girl_1,
                 R.drawable.girl_2,
@@ -40,7 +39,7 @@ class Experiment4WithoutBlurViewModel(binding: Experiment4Binding) : Experiment4
     }
 
     override val fakeAvatars: ObservableField<List<Int>>
-        get() = ObservableField<List<Int>>(Utils.randomImageRes(COUNT, if (mIsUserMale) girls else boys))
+        get() = ObservableField<List<Int>>(Utils.randomImageRes(5, if (mIsUserMale) girls else boys))
     override val popupMessage: ObservableField<String>
         get() = ObservableField<String>(if (mIsUserMale) R.string.write_beautiful_girls_without_limits.getString() else R.string.write_beautiful_boys_without_limits.getString())
     override val imageUnderAvatar: ObservableField<Int>
@@ -49,7 +48,4 @@ class Experiment4WithoutBlurViewModel(binding: Experiment4Binding) : Experiment4
         get() = ObservableField<Int>(R.drawable.time)
     override val imageRightBottom: ObservableField<Int>
         get() = ObservableField<Int>(R.drawable.pen)
-
-
-
 }
