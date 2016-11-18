@@ -681,8 +681,8 @@ public class Utils {
                 }
                 indexSaver.add(randomIndex);
                 images.add(images.get(randomIndex));
-                indexSaver.clear();
             }
+            indexSaver.clear();
             return images;
         } else if (count < images.size()) {
             if (count > images.size() / 2) {
@@ -693,8 +693,8 @@ public class Utils {
                     }
                     indexSaver.add(randomIndex);
                     images.remove(randomIndex);
-                    indexSaver.clear();
                 }
+                indexSaver.clear();
                 return images;
             } else {
                 for (int i = 0; i < count; i++) {
@@ -704,8 +704,8 @@ public class Utils {
                     }
                     indexSaver.add(randomIndex);
                     result.add(images.get(randomIndex));
-                    indexSaver.clear();
                 }
+                indexSaver.clear();
             }
         }
 
@@ -720,25 +720,6 @@ public class Utils {
 
     public static Boolean isLollipop() {
         return android.os.Build.VERSION.SDK_INT >= 21;
-    }
-
-    public static ArrayList<Integer> getRandomArrayFromResourses(int countsYouNeed, int arrayId, int defaultValue) {
-        ArrayList<Integer> avatarsIdArray = new ArrayList<>();
-        int randomValue;
-        TypedArray imgs = App.getContext().getResources().obtainTypedArray(arrayId);
-        ArrayList<Integer> usersFakeArray = new ArrayList<>();
-        for (int i = 0; i < imgs.length(); i++) {
-            usersFakeArray.add(imgs.getResourceId(i, defaultValue));
-        }
-        for (int i = 0; i < countsYouNeed; i++) {
-            int iterCounter = 0;
-            do {
-                iterCounter++;
-                randomValue = new Random().nextInt(usersFakeArray.size() - 1);
-            } while (avatarsIdArray.contains(usersFakeArray.get(randomValue)) || iterCounter < 30);
-            avatarsIdArray.add(usersFakeArray.get(randomValue));
-        }
-        return avatarsIdArray;
     }
 
 }
