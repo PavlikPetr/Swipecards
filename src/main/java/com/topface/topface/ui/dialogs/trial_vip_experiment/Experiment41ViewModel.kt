@@ -21,8 +21,12 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         BaseViewModel<LayoutExperiment41Binding>(binding) {
 
     companion object {
-        const val photoCount = 2
+        const val PHOTO_COUNT = 2
     }
+
+    val girls = listOf(R.drawable.girl_1, R.drawable.girl_2, R.drawable.girl_3, R.drawable.girl_4, R.drawable.girl_5, R.drawable.girl_6, R.drawable.girl_7, R.drawable.girl_8, R.drawable.girl_9, R.drawable.girl_10)
+
+    val boys = listOf(R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9, R.drawable.man_10)
 
     val userAvatar: ObservableField<String> = ObservableField()
     val randomLeftPhoto: ObservableField<Int> = ObservableField()
@@ -35,11 +39,19 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         App.get().inject(this)
         profileSubscription = state.getObservable(Profile::class.java).subscribe { profile ->
             setUrlAvatar(profile)
-            var a = Utils.randomImageRes(profile.sex, photoCount)
-            with(a) {
-                while (this[0] == this[1]) {
-                    a = Utils.randomImageRes(profile.sex, photoCount)
-                }
+            setRandomPhoto(profile)
+
+        }
+    }
+
+    fun setRandomPhoto(profile: Profile) {
+        if (profile.sex == Profile.BOY) {
+            with(Utils.randomImageRes(PHOTO_COUNT, girls)) {
+                randomLeftPhoto.set(this[0])
+                randomRightPhoto.set(this[1])
+            }
+        } else {
+            with(Utils.randomImageRes(PHOTO_COUNT, boys)) {
                 randomLeftPhoto.set(this[0])
                 randomRightPhoto.set(this[1])
             }

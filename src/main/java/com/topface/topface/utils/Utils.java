@@ -663,14 +663,13 @@ public class Utils {
         }).exec();
     }
 
-    public static List<Integer> randomImageRes(int sex, int count) {
+    public static List<Integer> randomImageRes(int count, List<Integer> images) {
         List<Integer> result = new ArrayList<>();
-        List<Integer> girl = Arrays.asList(R.drawable.girl_1, R.drawable.girl_2, R.drawable.girl_3, R.drawable.girl_4,
-                R.drawable.girl_5, R.drawable.girl_6, R.drawable.girl_7, R.drawable.girl_8, R.drawable.girl_9, R.drawable.girl_10);
-        List<Integer> boys = Arrays.asList(R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4,
-                R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9, R.drawable.man_10);
+        int saver = images.size();
         while (count > 0) {
-            result.add(sex == Profile.BOY ? girl.get(new Random().nextInt(girl.size())) : boys.get(new Random().nextInt(boys.size())));
+            int randomIndex = new Random().nextInt(images.size());
+            result.add(images.get(randomIndex == saver ? new Random().nextInt(images.size()) : randomIndex));
+            saver = randomIndex;
             count--;
         }
 
