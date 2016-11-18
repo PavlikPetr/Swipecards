@@ -26,11 +26,10 @@ class FormGiftsAdapter(var hasGifts: Boolean) : BaseRecyclerViewAdapter<ViewData
 
     override fun bindData(binding: ViewDataBinding?, position: Int) {
         binding?.let {
-            if (hasGifts) {
-                //sorry
-                with((it as FormGiftItemBinding).formGiftItem) {
-                    setRemoteSrc(data[position].link)
-                }
+            //sorry
+            val itemBinding = it
+            if (hasGifts && itemBinding is FormGiftItemBinding) {
+                itemBinding.formGiftItem.setRemoteSrc(data[position].link)
             }
         }
     }

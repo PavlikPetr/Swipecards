@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 
@@ -28,13 +26,11 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
-import com.topface.topface.ui.dialogs.TrialVipPopup;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipPopup;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
-import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
@@ -60,7 +56,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> implements TrialVipPopup.OnFragmentActionsListener {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> {
 
     /**
      * Constant keys for different fragments
@@ -325,45 +321,12 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
                 && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
             mTrialVipPopup = TrialVipPopup.newInstance(true);
             mTrialVipPopup.setOnDismissListener(dismissListener);
-            mTrialVipPopup.setOnSubscribe(this);
+            mTrialVipPopup.onVipTrialPurchaseStart();
             mTrialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
             App.isNeedShowTrial = false;
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onSubscribeClick() {
-        Fragment f = mTrialVipPopup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-        final Fragment fragment = f == null ?
-                TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
-        fragment.setRetainInstance(true);
-        if (fragment instanceof ITransparentMarketFragmentRunner) {
-            ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                @Override
-                public void onPurchaseSuccess() {
-                    mTrialVipPopup.dismiss();
-                }
-
-                @Override
-                public void onPopupClosed() {
-
-                }
-            });
-            FragmentTransaction transaction = mTrialVipPopup.getActivity().getSupportFragmentManager().beginTransaction();
-            if (!fragment.isAdded()) {
-                transaction.add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-            } else {
-                transaction.remove(fragment)
-                        .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-            }
-        }
-    }
-
-    @Override
-    public void onFragmentFinish() {
-        Debug.log("TransparentMarketFragment Finish");
     }
 
     @Override

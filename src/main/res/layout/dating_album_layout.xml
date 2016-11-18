@@ -12,14 +12,15 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:background="@color/dating_fragment_background_color"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/dating_fragment_background_color">
 
         <com.topface.topface.ui.views.ImageSwitcher
             android:id="@+id/dating_album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:currentItemSmoothly="@{model.currentItem}"
+            android:onClick="@{()-> model.onPhotoClick()}"
+            app:currentItemImmediately="@{model.currentItem}"
             app:data="@{model.albumData}"
             app:needAnimateLoader="@{model.isNeedAnimateLoader}"
             app:onPageChangeListener="@{model}"
@@ -39,9 +40,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:drawablePadding="@dimen/online_icon_padding"
                 android:text="@{model.nameAgeOnline}"
                 android:textSize="24sp"
-                android:drawablePadding="@dimen/online_icon_padding"
                 app:online="@{model.isOnline}"/>
 
             <TextView

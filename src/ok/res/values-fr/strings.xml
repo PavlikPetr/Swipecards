@@ -213,6 +213,10 @@
     <string name="filter_age_end_prefix">jusqu\'à %s</string>
     <string name="filter_constitution_template">De %1$d à %2$d</string>
     <string name="filter_cities_all">Toutes les villes</string>
+    <string name="dating_empty_nothing_found">Rien de trouvé !</string>
+    <string name="dating_empty_reset">Réinitialiser</string>
+    <string name="dating_empty_change_settings">Modifier</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Essayez de réinitialiser ou de modifier vos paramètres de recherche</string>
     <string name="purchase_header_title">Solde :</string>
     <string name="buying_header_title">Achats</string>
     <plurals name="buying_gift_you_need_coins">
@@ -240,6 +244,7 @@
     </string>
     <string name="buying_money">Acheter des pièces</string>
     <string name="gifts_title">Choisir un cadeau</string>
+    <string name="gifts">Cadeaux</string>
     <string name="profile_header_title">Mon profil</string>
     <string name="album_add_photo_title">Ajouter une photo</string>
     <string name="profile_add_album">Choisir à partir des albums</string>
@@ -944,6 +949,19 @@
     <string name="chat_activate_vip">Activer le statut VIP</string>
     <string name="chat_no_mutual_symphaty">Aucune attraction mutuelle pour le moment !</string>
     <string name="chat_with_no_mutual_buy_vip">Vous pouvez commencer à tchatter sans attraction mutuelle, mais vous devez activer le statut VIP</string>
+    <string name="about">À votre sujet</string>
+    <string name="moar_info">Apprenez-en plus !</string>
+    <string name="geo_switched_off_explanation">Pour savoir qui se trouve à proximité, activez le service de géolocalisation</string>
+    <string name="turn_on_geo">Activer les services de géolocalisation</string>
+    <string name="geo_show_settings_explanation">Pour savoir qui se trouve à proximité, activez les services de géolocalisation dans les paramètres de votre téléphone mobile</string>
+    <string name="show_geo_settings">Ouvrir les paramètres</string>
+    <string name="buy_vip_button_text_admiration_purchase_popup">Envoyez %d jetons</string>
+    <string name="label1_text_admiration_purchase_popup">Le destinataire de \"Adorations\" recevra une notification et le verra immédiatement</string>
+    <string name="label2_text_admiration_purchase_popup">Envoyez \"Adorations\" gratuitement !</string>
+    <string name="buy_vip_button_text">Devenez VIP</string>
+    <string name="send_first_gift">Donnez le premier cadeau !</string>
+    <string name="ask_moar_info">Découvrez plus d\'informations !</string>
+    <string name="fill_own_profile">Remplissez votre profil pour savoir ce que %s a écrit</string>
     <string name="chat_mutual_symphaty">J\'aime mutuel !</string>
     <string name="chat_mutual_start_conversation">Commencez à tchater !</string>
     <string name="chat_send_message_button_title">Envoyer.</string>

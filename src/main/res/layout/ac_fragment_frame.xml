@@ -10,19 +10,19 @@
     </data>
 
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/loFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?actionBarSize"/>
 
         <include
             android:id="@+id/toolbarInclude"
             layout="@layout/toolbar"
             bind:viewModel="@{toolbarViewModel}"/>
-
-        <FrameLayout
-            android:id="@+id/loFrame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </LinearLayout>
+    </FrameLayout>
 </layout>

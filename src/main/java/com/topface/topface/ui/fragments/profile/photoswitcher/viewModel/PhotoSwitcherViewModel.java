@@ -2,27 +2,19 @@ package com.topface.topface.ui.fragments.profile.photoswitcher.viewModel;
 
 import android.content.Intent;
 import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.view.View;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Gift;
 import com.topface.topface.databinding.AcPhotosBinding;
-import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.viewModels.BaseViewModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-
-import static com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity.INTENT_GIFT;
 import static com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity.INTENT_USER_ID;
 
 public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
@@ -30,7 +22,6 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
     private final static int EMPTY_UID = -1;
 
     private IActivityDelegate mIActivityDelegate;
-    private int mUid;
     private View.OnClickListener mOnAvatarButtonClick;
     private View.OnClickListener mOnDeleteButtonClick;
 
@@ -54,7 +45,7 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
     }
 
     private void parseUid(Intent intent) {
-        mUid = EMPTY_UID;
+        int mUid = EMPTY_UID;
         if (intent != null && intent.hasExtra(INTENT_USER_ID)) {
             mUid = intent.getIntExtra(INTENT_USER_ID, EMPTY_UID);
         }
@@ -62,16 +53,6 @@ public class PhotoSwitcherViewModel extends BaseViewModel<AcPhotosBinding> {
             Debug.log(this, "Intent param is wrong");
             mIActivityDelegate.finish();
         }
-    }
-
-    private String extractUserGifts(@Nullable Intent intent) {
-        if (intent != null && intent.hasExtra(INTENT_GIFT)) {
-            ArrayList<Gift> array = intent.getExtras().getParcelableArrayList(INTENT_GIFT);
-            if (array != null && array.size() > 0) {
-                return array.get(0).link;
-            }
-        }
-        return null;
     }
 
     public void setButtonText(@StringRes int stringRes) {

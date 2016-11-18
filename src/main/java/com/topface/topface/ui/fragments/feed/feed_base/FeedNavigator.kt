@@ -10,6 +10,7 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
+import com.topface.topface.data.Photos
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
@@ -25,7 +26,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
-import com.topface.topface.utils.EasyTracker
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 import javax.inject.Inject
@@ -118,12 +119,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showGiftsActivity(from: String, id: Int) {
+    override fun showGiftsActivity(id: Int) {
         mActivityDelegate.startActivityForResult(
                 GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false),
                 GiftsActivity.INTENT_REQUEST_GIFT
         )
-        EasyTracker.sendEvent(from, "SendGiftClick", "", 1L)
     }
 
     override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
@@ -132,6 +132,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mEmptyDatingFragment.dialog?.cancel()
     }
 
-    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.getApplicationContext(),
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
             EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
+
+    override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
+            mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
+                    PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE)
+
 }

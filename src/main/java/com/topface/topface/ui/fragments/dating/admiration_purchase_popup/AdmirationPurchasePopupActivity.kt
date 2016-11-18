@@ -50,7 +50,11 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
     override fun hideAdmirationPurchasePopup(resultCode: Int) {
         setResult(resultCode)
         if (Utils.isLollipop()) {
-            finishAfterTransition()
+            if (resultCode == AdmirationPurchasePopupViewModel.RESULT_USER_BUY_VIP) {
+                finish()
+            } else {
+                finishAfterTransition()
+            }
         } else {
             finish()
         }

@@ -7,6 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.extensions.applySchedulers
 
 /**
  * VM итема формы
@@ -22,11 +23,13 @@ class ChildItemViewModel(private val mApi: FeedApi, private val data: FormModel)
 
     fun sendInfoRequest() {
         data.userId?.let {
-            mApi.callStandartMessageRequest(data.formType, it).subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
-                override fun onNext(type: IApiResponse?) {
-                    icon.set(R.drawable.ask_info_done)
-                }
-            })
+            mApi.callStandartMessageRequest(data.formType, it)
+                    .applySchedulers()
+                    .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
+                        override fun onNext(type: IApiResponse?) {
+                            icon.set(R.drawable.ask_info_done)
+                        }
+                    })
         }
     }
 

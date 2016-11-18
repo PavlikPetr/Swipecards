@@ -262,6 +262,7 @@
     <color name="popup_title">#de000000</color>
     <color name="popup_message">#de000000</color>
     <color name="popup_green_button_text">#ffffff</color>
+    <color name="popup_borderless_button_text">#3fd559</color>
     <!--цвет оверлея для попапа восхищения-->
     <color name="overlay">#99323232</color>
     <color name="buy_vip_text_color">#2ad54a</color>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -18,15 +17,13 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.dialogs.TrialVipPopup;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipPopup;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.ToolbarActivity;
-import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
@@ -118,40 +115,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
                     final TrialVipPopup popup = TrialVipPopup.newInstance(true);
-                    popup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
-                        @Override
-                        public void onSubscribeClick() {
-                            Fragment f = popup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-                            final Fragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
-                            fragment.setRetainInstance(true);
-                            if (fragment instanceof ITransparentMarketFragmentRunner) {
-                                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                                    @Override
-                                    public void onPurchaseSuccess() {
-                                        popup.dismiss();
-                                    }
-
-                                    @Override
-                                    public void onPopupClosed() {
-
-                                    }
-                                });
-                                FragmentTransaction transaction = popup.getActivity().getSupportFragmentManager().beginTransaction();
-                                if (!fragment.isAdded()) {
-                                    transaction.add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-                                } else {
-                                    transaction.remove(fragment)
-                                            .add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFragmentFinish() {
-
-                        }
-                    });
                     popup.show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
                     App.isNeedShowTrial = false;
                 }
@@ -163,20 +126,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
 
         }
     };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (getActivity() instanceof ToolbarActivity) {
-            ToolbarActivity activity = (ToolbarActivity) getActivity();
-            if (activity != null) {
-                if (activity.getToolbarViewModel() instanceof NavigationToolbarViewModel) {
-                    NavigationToolbarViewModel vm = (NavigationToolbarViewModel) activity.getToolbarViewModel();
-                    vm.isCollapsingToolbarStyle(false);
-                }
-            }
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

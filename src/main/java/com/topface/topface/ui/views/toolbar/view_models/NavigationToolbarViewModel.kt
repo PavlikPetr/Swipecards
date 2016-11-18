@@ -12,6 +12,7 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
+import com.topface.topface.utils.RxFieldObservable
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.safeUnsubscribe
@@ -27,9 +28,9 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
     : BaseToolbarViewModel(binding, mNavigation) {
     @Inject lateinit var mState: TopfaceAppState
     var extraViewModel: CustomToolbarViewModel
+    val isCollapsingToolbar = RxFieldObservable<Boolean>(false)
 
     private var mHasNotification: Boolean? = null
-    private var isCollapsingToolbar = false
     private val subscriptions = CompositeSubscription()
     private var ownProfile: Profile = App.get().profile
 
@@ -56,7 +57,7 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
                     override fun onNext(isHasNotif: Boolean?) {
                         super.onNext(isHasNotif)
                         mHasNotification = isHasNotif
-                        setUpIconStyle(mHasNotification)
+                        setUpIconStyle(isCollapsingToolbar.get(), mHasNotification)
                     }
                 }))
         subscriptions.add(mState.getObservable(Profile::class.java).subscribe(object : RxUtils.ShortSubscription<Profile>() {
@@ -64,27 +65,22 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
                 profile?.let { ownProfile = it }
             }
         }))
-        setCorrectStyle()
+        subscriptions.add(isCollapsingToolbar.filedObservable.subscribe { setCorrectStyle(it) })
     }
 
-    private fun setCorrectStyle() {
-        setUpIconStyle(mHasNotification)
-        background.set(if (isCollapsingToolbar) R.drawable.tool_bar_gradient else R.color.toolbar_background)
-        if (isCollapsingToolbar) {
+    private fun setCorrectStyle(isCollapsed: Boolean) {
+        setUpIconStyle(isCollapsed, mHasNotification)
+        background.set(if (isCollapsed) R.drawable.tool_bar_gradient else R.color.toolbar_background)
+        if (isCollapsed) {
             subTitle.set(Utils.EMPTY)
         }
     }
 
-    fun isCollapsingToolbarStyle(isCollapsing: Boolean) = apply {
-        isCollapsingToolbar = isCollapsing
-        setCorrectStyle()
-    }
-
-    private fun setUpIconStyle(isHasNotification: Boolean?) =
+    private fun setUpIconStyle(isCollapsed: Boolean, isHasNotification: Boolean?) =
             upIcon.set(if (isHasNotification ?: false)
-                if (isCollapsingToolbar) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
+                if (isCollapsed) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
             else
-                if (isCollapsingToolbar) R.drawable.menu_white else R.drawable.menu_gray)
+                if (isCollapsed) R.drawable.menu_white else R.drawable.menu_gray)
 
     override fun release() {
         super.release()

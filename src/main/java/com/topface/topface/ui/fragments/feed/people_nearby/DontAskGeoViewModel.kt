@@ -11,7 +11,8 @@ import com.topface.topface.utils.extensions.showAppSettings
  */
 class DontAskGeoViewModel(binding: LayoutUnavailableGeoBinding) : UnavailableGeoBaseViewModel(binding,
         App.getContext().getString(R.string.geo_show_settings_explanation),
-        App.getContext().getString(R.string.show_geo_settings)) {
+        App.getContext().getString(R.string.show_geo_settings),
+        "DONT_ASK_GEO_PERMISSIONS") {
     override fun onButtonClick() = App.getContext().showAppSettings()
 
 }

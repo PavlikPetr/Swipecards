@@ -23,9 +23,9 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
-import com.topface.topface.ui.fragments.dating.view_etc.DatingButtonsLayout
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
@@ -52,8 +52,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                              private val mDatingButtonsView: IDatingButtonsView,
                              private val mEmptySearchVisibility: IEmptySearchVisibility,
                              private val mStartAdmirationPurchasePopup: IStartAdmirationPurchasePopup) :
-        BaseViewModel<DatingButtonsLayoutBinding>(binding), DatingButtonsLayout.IDatingButtonsVisibility,
-        IAppBarState {
+        BaseViewModel<DatingButtonsLayoutBinding>(binding), IAppBarState {
 
     var currentUser: SearchUser? = null
     private var mLikeSubscription: Subscription? = null
@@ -72,6 +71,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         const val CURRENT_USER = "current_user_dating_buttons"
         const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
         const val DATING_BUTTON_VISIBILITY = "dating_button_visibility"
+        const val MAX_LIKE_AMOUNT = 4
     }
 
     init {
@@ -145,7 +145,11 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         if (!it.rated) {
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
-                override fun onCompleted() = RxUtils.safeUnsubscribe(mLikeSubscription)
+                override fun onCompleted() {
+                    mLikeSubscription.safeUnsubscribe()
+                    validateDeviceActivation()
+                }
+
                 override fun onError(e: Throwable?) {
                     it.rated = false
                     mDatingButtonsView.unlockControls()
@@ -162,15 +166,30 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }*/
     }
 
+    private fun validateDeviceActivation() {
+        val appConfig = App.getAppConfig()
+        var counter = appConfig.deviceActivationCounter
+        if (counter < MAX_LIKE_AMOUNT) {
+            appConfig.deviceActivationCounter = ++counter
+        } else {
+            if (!appConfig.isDeviceActivated) {
+                AuthStatistics.sendDeviceActivated()
+                appConfig.setDeviceActivated()
+            }
+        }
+        appConfig.saveConfig()
+    }
+
     fun validateSendAdmiration() {
         val priceAdmiration = App.get().options.priceAdmiration
         val isShown = App.getUserConfig().isAdmirationPurchasePopupShown
 
         mBalance?.let {
             val hasMoneyForAdmiration = it.money >= priceAdmiration
-            when {
-                (it.premium || hasMoneyForAdmiration && isShown) -> sendAdmiration()
-                else -> startAdmirationPurchasePopup()
+            if (it.premium || hasMoneyForAdmiration && isShown) {
+                sendAdmiration()
+            } else {
+                startAdmirationPurchasePopup()
             }
         }
     }
@@ -252,9 +271,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         arrayOf(mLikeSubscription, mSkipSubscription, mAdmirationSubscription, mBalanceDataSubscriptions).safeUnsubscribe()
     }
 
-    override fun showDatingButtons() = isDatingButtonsVisible.set(View.VISIBLE)
+    fun showDatingButtons() = isDatingButtonsVisible.set(View.VISIBLE)
 
-    override fun hideDatingButtons() = isDatingButtonsVisible.set(View.INVISIBLE)
+    fun hideDatingButtons() = isDatingButtonsVisible.set(View.INVISIBLE)
 
     override fun isScrimVisible(isVisible: Boolean) =
             if (isVisible) hideDatingButtons() else showDatingButtons()

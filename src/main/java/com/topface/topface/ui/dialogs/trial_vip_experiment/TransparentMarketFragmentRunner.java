@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.dialogs.TrialVipPopup;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 

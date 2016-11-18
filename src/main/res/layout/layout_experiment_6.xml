@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/MainContainerTrialVip">
+
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/message_3"
+            android:drawableStart="@drawable/message_3"
+            android:text="@string/buy_vip_write_anyone"/>
+
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/eye_3"
+            android:drawableStart="@drawable/eye_3"
+            android:text="@string/buy_vip_more_views"/>
+
+        <TextView
+            style="@style/TextViewTrialVipPopup"
+            android:drawableLeft="@drawable/guest_3"
+            android:drawableStart="@drawable/guest_3"
+            android:text="@string/i_see_u_face"/>
+
+        <ImageView style="@style/PopupArrowTrialVip"/>
+
+    </LinearLayout>
+</layout>
+

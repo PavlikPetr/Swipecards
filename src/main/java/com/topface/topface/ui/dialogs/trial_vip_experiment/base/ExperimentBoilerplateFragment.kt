@@ -19,7 +19,7 @@ import org.jetbrains.anko.layoutInflater
 class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmentRunner.IRunner {
 
     companion object {
-        @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long) =
+        @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long = ExperimentsType.EXPERIMENT_6) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = Bundle().apply {
                         putLong(EXPERIMENT_TYPE, type)
