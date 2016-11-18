@@ -667,12 +667,13 @@ public class Utils {
     public static List<Integer> randomImageRes(int count, List<Integer> images) {
         List<Integer> result = new ArrayList<>();
         Random random = new Random();
+        int randomIndex;
         List<Integer> indexSaver = new ArrayList<>();
         if (count == images.size()) {
             return images;
         } else if (count > images.size()) {
             for (int i = 0; i < count; i++) {
-                int randomIndex = random.nextInt(images.size());
+                randomIndex = random.nextInt(images.size());
                 while (indexSaver.contains(randomIndex)) {
                     randomIndex = random.nextInt(images.size());
                 }
@@ -682,7 +683,7 @@ public class Utils {
         } else if (count < images.size()) {
             if (count > images.size() / 2) {
                 for (int i = 0; i <= (images.size() - count); i++) {
-                    int randomIndex = random.nextInt(images.size());
+                    randomIndex = random.nextInt(images.size());
                     while (indexSaver.contains(randomIndex)) {
                         randomIndex = random.nextInt(images.size());
                     }
@@ -693,7 +694,7 @@ public class Utils {
                 return images;
             } else {
                 for (int i = 0; i <= count; i++) {
-                    int randomIndex = random.nextInt(images.size());
+                    randomIndex = random.nextInt(images.size());
                     while (indexSaver.contains(randomIndex)) {
                         randomIndex = random.nextInt(images.size());
                     }
