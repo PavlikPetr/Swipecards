@@ -44,6 +44,8 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.ImageSwitcher;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PhotoSwitcherToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
@@ -334,6 +336,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     protected void onResume() {
         super.onResume();
         // show control without animation
+        setCounter(mCurrentPosition);
         setPhotoAlbumControlVisibility(mPhotoAlbumControlVisibility, false);
         if (!getIntent().getBooleanExtra(INTENT_PHOTOS_FILLED, false)) {
             mUserProfileLoader.loadUserProfile(this);
@@ -572,8 +575,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         if (mPhotoLinks != null) {
             int photosLinksSize = mPhotoLinks.size();
             mCurrentPosition = position < photosLinksSize ? position : photosLinksSize - 1;
-            getToolbarViewModel().getTitle().set(String.format(App.getCurrentLocale(), PHOTO_COUNTER_TEMPLATE,
-                    mCurrentPosition + 1, photosLinksSize));
+            ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(String.format(App.getCurrentLocale(),
+                    PHOTO_COUNTER_TEMPLATE, mCurrentPosition + 1, photosLinksSize)));
         }
         setResult(RESULT_OK, new Intent().putExtra(INTENT_ALBUM_POS, mCurrentPosition));
     }
