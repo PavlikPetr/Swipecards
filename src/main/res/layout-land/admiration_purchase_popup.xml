@@ -15,6 +15,14 @@
             type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
     </data>
 
+    <HorizontalScrollView
+        android:id="@+id/hsv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:measureAllChildren="false"
+        android:scrollbars="none" >
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,10 +38,7 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="32dp"
-            android:layout_marginLeft="56dp"
-            android:layout_marginRight="56dp"
-            android:layout_marginTop="32dp"
+            android:padding="32dp"
             android:elevation="6dp"
             android:orientation="horizontal">
 
@@ -73,7 +78,7 @@
 
                 <TextView
                     android:id="@+id/label1"
-                    android:layout_width="220dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
@@ -88,7 +93,7 @@
                 android:layout_weight="0.45"
                 android:background="@drawable/admiration_popup_land_bg">
 
-                <com.topface.topface.ui.views.ImageViewRemote
+                <ImageView
                     android:id="@+id/vip"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
@@ -138,5 +143,6 @@
         </LinearLayout>
 
     </FrameLayout>
+    </HorizontalScrollView>
 
 </layout>
