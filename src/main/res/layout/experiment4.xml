@@ -20,29 +20,25 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/popup_root_view_padding_bottom"
             android:paddingTop="@dimen/popup_root_view_padding_top">
-
             <TextView
                 style="@style/PopupTitle"
                 android:text="@{viewModel.title}"/>
 
-
             <FrameLayout android:layout_width="300dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginTop="20dp">
+                         android:layout_marginTop="20dp" android:layout_height="270dp">
 
                 <RelativeLayout android:layout_width="match_parent"
-                                android:layout_height="50dp"
+                                android:layout_height="match_parent"
                                 android:layout_above="@+id/rlCentericons"
-                                android:layout_marginBottom="12dp"
                                 android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true">
                     <ImageView
                         android:id="@+id/firstFakeAvatar"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_alignParentTop="true"
+                        android:layout_above="@+id/IVForAvatar"
                         android:layout_centerHorizontal="true"
-                        android:src="@{viewModel.fakeAvatars.get(0)}"
+                        android:layout_marginBottom="12dp"
                         app:animationSrc="@{@anim/scale}"
                         app:bindStartOffSet="@{viewModel.first}"/>
                     <ImageView
@@ -54,14 +50,6 @@
                         android:layout_marginRight="34dp"
                         android:src="@{viewModel.imageLeftTop}"/>
 
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rlCentericons"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:layout_marginTop="62dp"
-                    android:layout_centerHorizontal="true">
                     <ImageView
                         android:id="@+id/fifthFakeAvatar"
                         android:layout_width="50dp"
@@ -70,7 +58,6 @@
                         android:layout_marginTop="5dp"
                         android:layout_toLeftOf="@+id/IVForAvatar"
                         android:layout_marginRight="6dp"
-                        android:src="@{viewModel.fakeAvatars.get(4)}"
                         app:animationSrc="@{@anim/scale}"
                         app:bindStartOffSet="@{viewModel.fifth}"
                     />
@@ -90,7 +77,6 @@
                         android:layout_alignTop="@+id/IVForAvatar"
                         android:layout_toRightOf="@+id/IVForAvatar"
                         android:layout_marginLeft="6dp"
-                        android:src="@{viewModel.fakeAvatars.get(1)}"
                         app:animationSrc="@{@anim/scale}"
                         app:bindStartOffSet="@{viewModel.second}"/>
 
@@ -107,30 +93,21 @@
                         android:id="@+id/IVForAvatar"
                         android:layout_width="140dp"
                         android:layout_height="140dp"
+                        android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_centerInParent="true"
                         app:postProcessor="inscribedAvatar"
                         app:remoteSrc="@{viewModel.avatar}"
                         app:roundedImgBorderColor="@android:color/white"
                         app:roundedImgBorderWidth="3dp"/>
 
-                </RelativeLayout>
-
-                <RelativeLayout android:layout_width="match_parent"
-                                android:layout_height="74dp"
-                                android:layout_below="@+id/rlCentericons"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentEnd="true"
-                                android:layout_marginTop="190dp">
                     <ImageView
                         android:id="@+id/fourthFakeAvatar"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_alignParentTop="true"
                         android:layout_marginRight="7dp"
-                        android:layout_alignBottom="@+id/IVBelowAvatar"
+                        android:layout_marginTop="8dp"
+                        android:layout_alignTop="@+id/IVBelowAvatar"
                         android:layout_toLeftOf="@+id/IVBelowAvatar"
-                        android:src="@{viewModel.fakeAvatars.get(3)}"
                         app:animationSrc="@{@anim/scale}"
                         app:bindStartOffSet="@{viewModel.fourth}"/>
                     <ImageView
@@ -138,17 +115,17 @@
                         android:layout_width="74dp"
                         android:layout_height="74dp"
                         android:src="@{viewModel.imageUnderAvatar}"
-                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="13dp"
                         android:layout_centerHorizontal="true"/>
                     <ImageView
                         android:id="@+id/thirdFakeAvatar"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignBottom="@+id/IVBelowAvatar"
+                        android:layout_alignTop="@+id/IVBelowAvatar"
+                        android:layout_marginTop="8dp"
                         android:layout_toRightOf="@+id/IVBelowAvatar"
                         android:layout_marginLeft="7dp"
-                        android:src="@{viewModel.fakeAvatars.get(2)}"
                         app:animationSrc="@{@anim/scale}"
                         app:bindStartOffSet="@{viewModel.third}"/>
                 </RelativeLayout>

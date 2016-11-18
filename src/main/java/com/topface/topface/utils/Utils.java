@@ -69,7 +69,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Pattern;
+
+import static com.topface.topface.R.drawable.fake_girl1;
 
 public class Utils {
     public static final long DAY = 86400000;
@@ -668,6 +671,25 @@ public class Utils {
 
     public static Boolean isLollipop() {
         return android.os.Build.VERSION.SDK_INT >= 21;
+    }
+
+    public static ArrayList<Integer> getRandomArrayFromResourses(int countsYouNeed, int arrayId, int defaultValue) {
+        ArrayList<Integer> avatarsIdArray = new ArrayList<>();
+        int randomValue;
+        TypedArray imgs = App.getContext().getResources().obtainTypedArray(arrayId);
+        ArrayList<Integer> usersFakeArray = new ArrayList<>();
+        for (int i = 0; i < imgs.length(); i++) {
+            usersFakeArray.add(imgs.getResourceId(i, defaultValue));
+        }
+        for (int i = 0; i < countsYouNeed; i++) {
+            int iterCounter = 0;
+            do {
+                iterCounter++;
+                randomValue = new Random().nextInt(usersFakeArray.size() - 1);
+            } while (avatarsIdArray.contains(usersFakeArray.get(randomValue)) || iterCounter < 30);
+            avatarsIdArray.add(usersFakeArray.get(randomValue));
+        }
+        return avatarsIdArray;
     }
 
 }
