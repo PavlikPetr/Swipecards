@@ -16,7 +16,7 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="86dp"
-            android:src="@drawable/left_user_img"
+            android:src="@{viewModel.randomLeftPhoto}"
             app:animationSrc="@{@anim/move_to_left}"/>
         <ImageView
             android:id="@+id/right_user_img"
@@ -24,7 +24,7 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="86dp"
-            android:src="@drawable/right_user_img"
+            android:src="@{viewModel.randomRightPhoto}"
             app:animationSrc="@{@anim/move_to_right}"/>
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/user_avatar"
