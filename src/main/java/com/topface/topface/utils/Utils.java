@@ -663,13 +663,14 @@ public class Utils {
         }).exec();
     }
 
+    @NotNull
     public static List<Integer> randomImageRes(int count, List<Integer> images) {
         List<Integer> result = new ArrayList<>();
-        int saver = images.size();
+        List<Integer> indexSaver = new ArrayList<>();
         while (count > 0) {
             int randomIndex = new Random().nextInt(images.size());
-            result.add(images.get(randomIndex == saver ? new Random().nextInt(images.size()) : randomIndex));
-            saver = randomIndex;
+            result.add(images.get(indexSaver.contains(randomIndex) ? new Random().nextInt(images.size()) : randomIndex));
+            indexSaver.add(randomIndex);
             count--;
         }
 
