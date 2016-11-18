@@ -19,7 +19,6 @@ class Experiment4WithBlurViewModel(binding: Experiment4Binding) : Experiment4Bas
 
     init {
         popupMessage.set(R.string.know_your_guests_by_sight.getString())
-        title.set(R.string.know_your_guests.getString())
         imageLeftTop.set(R.drawable.eye4ex)
         fakeAvatars.set(getFakeAvatars())
         imageRightBottom.set(R.drawable.eye_closed)

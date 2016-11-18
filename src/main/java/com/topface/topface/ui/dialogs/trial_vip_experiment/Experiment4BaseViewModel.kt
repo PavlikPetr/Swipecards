@@ -31,6 +31,7 @@ open class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewModel
     var imageLeftTop = ObservableField<Int>()
     var imageRightBottom = ObservableField<Int>()
 
+
     // продолжительность щадержки для анимации фэйковых аватаров
     val first = 0L
     val second = 100L
@@ -41,8 +42,10 @@ open class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewModel
     init {
         setUrlAvatar(App.get().profile)
         App.get().inject(this)
-        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile -> setUrlAvatar(profile) }
-        setFakes()
+        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile ->
+            setUrlAvatar(profile)
+
+        }
     }
 
     fun setFakeAvatar(profile: Profile) = if (profile.sex == Profile.BOY) R.drawable.upload_photo_male else R.drawable.upload_photo_female
@@ -52,13 +55,15 @@ open class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewModel
         avatar.set(if (TextUtils.isEmpty(photoUrl)) Utils.getLocalResUrl(setFakeAvatar(profile)) else photoUrl)
     }
 
-    fun setFakes() {
-        binding.firstFakeAvatar.setImageResource(fakeAvatars.get().get(0))
-        binding.secondFakeAvatar.setImageResource(fakeAvatars.get().get(1))
-        binding.thirdFakeAvatar.setImageResource(fakeAvatars.get().get(2))
-        binding.fourthFakeAvatar.setImageResource(fakeAvatars.get().get(3))
-        binding.fifthFakeAvatar.setImageResource(fakeAvatars.get().get(4))
-    }
+
+//
+//    fun setFakes() {
+//        binding.firstFakeAvatar.setImageResource(fakeAvatars.get().get(0))
+//        binding.secondFakeAvatar.setImageResource(fakeAvatars.get().get(1))
+//        binding.thirdFakeAvatar.setImageResource(fakeAvatars.get().get(2))
+//        binding.fourthFakeAvatar.setImageResource(fakeAvatars.get().get(3))
+//        binding.fifthFakeAvatar.setImageResource(fakeAvatars.get().get(4))
+//    }
 
     override fun release() {
         profileSubscription.safeUnsubscribe()

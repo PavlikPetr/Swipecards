@@ -20,8 +20,11 @@ class BoilerplateDataFactory : IBoilerplateFactory<BoilerplateData> {
                 }
                 ExperimentsType.EXPERIMENT_3 -> BoilerplateData.create {
                 }
-                ExperimentsType.EXPERIMENT_4 -> BoilerplateData.create {
+                ExperimentsType.EXPERIMENT_4_2 -> BoilerplateData.create {
                     title = if (App.get().profile.sex == Profile.BOY) R.string.write_any_girl else R.string.write_any_boy
+                }
+                ExperimentsType.EXPERIMENT_4_3 -> BoilerplateData.create {
+                    title = R.string.know_your_guests
                 }
                 ExperimentsType.EXPERIMENT_5 -> BoilerplateData.create {
                     title = R.string.free_vip

@@ -17,7 +17,6 @@ class Experiment4WithoutBlurViewModel(binding: Experiment4Binding) : Experiment4
 
     init {
         popupMessage.set(if (mIsUserMale) R.string.write_beautiful_girls_without_limits.getString() else R.string.write_beautiful_boys_without_limits.getString())
-        title.set(if (mIsUserMale) R.string.write_any_girl.getString() else R.string.write_any_boy.getString())
         fakeAvatars.set(getFakeAvatars())
         imageLeftTop.set(R.drawable.time)
         imageRightBottom.set(R.drawable.pen)
