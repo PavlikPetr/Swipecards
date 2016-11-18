@@ -666,12 +666,42 @@ public class Utils {
     @NotNull
     public static List<Integer> randomImageRes(int count, List<Integer> images) {
         List<Integer> result = new ArrayList<>();
+        Random random = new Random();
         List<Integer> indexSaver = new ArrayList<>();
-        while (count > 0) {
-            int randomIndex = new Random().nextInt(images.size());
-            result.add(images.get(indexSaver.contains(randomIndex) ? new Random().nextInt(images.size()) : randomIndex));
-            indexSaver.add(randomIndex);
-            count--;
+        if (count == images.size()) {
+            return images;
+        } else if (count > images.size()) {
+            for (int i = 0; i < count; i++) {
+                int randomIndex = random.nextInt(images.size());
+                while (indexSaver.contains(randomIndex)) {
+                    randomIndex = random.nextInt(images.size());
+                }
+                result.add(images.get(randomIndex));
+                indexSaver.clear();
+            }
+        } else if (count < images.size()) {
+            if (count > images.size() / 2) {
+                for (int i = 0; i <= (images.size() - count); i++) {
+                    int randomIndex = random.nextInt(images.size());
+                    while (indexSaver.contains(randomIndex)) {
+                        randomIndex = random.nextInt(images.size());
+                    }
+                    indexSaver.add(randomIndex);
+                    images.remove(randomIndex);
+                    indexSaver.clear();
+                }
+                return images;
+            } else {
+                for (int i = 0; i <= count; i++) {
+                    int randomIndex = random.nextInt(images.size());
+                    while (indexSaver.contains(randomIndex)) {
+                        randomIndex = random.nextInt(images.size());
+                    }
+                    indexSaver.add(randomIndex);
+                    result.add(images.get(randomIndex));
+                    indexSaver.clear();
+                }
+            }
         }
 
         return result;
