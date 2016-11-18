@@ -1486,5 +1486,4 @@
         <item name="android:scaleType">center</item>
         <item name="android:layout_gravity">center</item>
     </style>
-
 </resources>
