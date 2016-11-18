@@ -684,7 +684,7 @@ public class Utils {
             return images;
         } else if (count < images.size()) {
             if (count > images.size() / 2) {
-                for (int i = 0; i <= images.size() - count; i++) {
+                for (int i = 0; i < images.size() - count; i++) {
                     randomIndex = random.nextInt(images.size());
                     while (indexSaver.contains(randomIndex)) {
                         randomIndex = random.nextInt(images.size());
@@ -695,7 +695,7 @@ public class Utils {
                 }
                 return images;
             } else {
-                for (int i = 0; i <= count; i++) {
+                for (int i = 0; i < count; i++) {
                     randomIndex = random.nextInt(images.size());
                     while (indexSaver.contains(randomIndex)) {
                         randomIndex = random.nextInt(images.size());
