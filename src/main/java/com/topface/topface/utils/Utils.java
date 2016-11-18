@@ -672,17 +672,19 @@ public class Utils {
         if (count == images.size()) {
             return images;
         } else if (count > images.size()) {
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count - images.size(); i++) {
                 randomIndex = random.nextInt(images.size());
                 while (indexSaver.contains(randomIndex)) {
                     randomIndex = random.nextInt(images.size());
                 }
-                result.add(images.get(randomIndex));
+                indexSaver.add(randomIndex);
+                images.add(images.get(randomIndex));
                 indexSaver.clear();
             }
+            return images;
         } else if (count < images.size()) {
             if (count > images.size() / 2) {
-                for (int i = 0; i <= (images.size() - count); i++) {
+                for (int i = 0; i <= images.size() - count; i++) {
                     randomIndex = random.nextInt(images.size());
                     while (indexSaver.contains(randomIndex)) {
                         randomIndex = random.nextInt(images.size());

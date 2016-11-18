@@ -40,21 +40,13 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         profileSubscription = state.getObservable(Profile::class.java).subscribe { profile ->
             setUrlAvatar(profile)
             setRandomPhoto(profile)
-
         }
     }
 
     fun setRandomPhoto(profile: Profile) {
-        if (profile.sex == Profile.BOY) {
-            with(Utils.randomImageRes(PHOTO_COUNT, girls)) {
-                randomLeftPhoto.set(this[0])
-                randomRightPhoto.set(this[1])
-            }
-        } else {
-            with(Utils.randomImageRes(PHOTO_COUNT, boys)) {
-                randomLeftPhoto.set(this[0])
-                randomRightPhoto.set(this[1])
-            }
+        with(Utils.randomImageRes(PHOTO_COUNT, if (profile.sex == Profile.BOY) girls else boys)) {
+            randomLeftPhoto.set(this[0])
+            randomRightPhoto.set(this[1])
         }
     }
 
