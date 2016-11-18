@@ -15,19 +15,34 @@ class Experiment4WithoutBlurViewModel(binding: Experiment4Binding) : Experiment4
 
     private var mIsUserMale = if (App.get().profile.sex == Profile.BOY) true else false
 
+    val girls = listOf(R.drawable.girl_1,
+            R.drawable.girl_2,
+            R.drawable.girl_3,
+            R.drawable.girl_4,
+            R.drawable.girl_5,
+            R.drawable.girl_6,
+            R.drawable.girl_7,
+            R.drawable.girl_8,
+            R.drawable.girl_9,
+            R.drawable.girl_10)
+
+    val boys = listOf(R.drawable.man_1,
+            R.drawable.man_2,
+            R.drawable.man_3,
+            R.drawable.man_4,
+            R.drawable.man_5,
+            R.drawable.man_6,
+            R.drawable.man_7,
+            R.drawable.man_8,
+            R.drawable.man_9,
+            R.drawable.man_10)
+
     init {
         popupMessage.set(if (mIsUserMale) R.string.write_beautiful_girls_without_limits.getString() else R.string.write_beautiful_boys_without_limits.getString())
         title.set(if (mIsUserMale) R.string.write_any_girl.getString() else R.string.write_any_boy.getString())
-        fakeAvatars.set(getFakeAvatars())
         imageLeftTop.set(R.drawable.time)
+        fakeAvatars.set(Utils.randomImageRes(5, if (mIsUserMale) girls else boys))
         imageRightBottom.set(R.drawable.pen)
         imageUnderAvatar.set(R.drawable.message_icon_red)
     }
-
-    fun getFakeAvatars(): ArrayList<Int>? {
-        return Utils.getRandomArrayFromResourses(5,
-                if (mIsUserMale) R.array.fake_girl_avatars_without_blur else R.array.fake_boy_avatars_without_blur,
-                if (mIsUserMale) R.drawable.man_1 else R.drawable.girl_1)
-    }
-
 }

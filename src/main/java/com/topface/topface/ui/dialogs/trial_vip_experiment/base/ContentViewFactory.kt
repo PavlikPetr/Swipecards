@@ -35,10 +35,12 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup) :
             ExperimentsType.EXPERIMENT_4_1 -> {
             }*/
                 ExperimentsType.EXPERIMENT_4_2 -> {
-                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false).apply { viewModel = Experiment4WithoutBlurViewModel(this) }
+                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
+                            .apply { viewModel = Experiment4WithoutBlurViewModel(this) }
                 }
                 ExperimentsType.EXPERIMENT_4_3 -> {
-                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false).apply { viewModel = Experiment4WithBlurViewModel(this) }
+                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
+                            .apply { viewModel = Experiment4WithBlurViewModel(this) }
                 }
 
                 ExperimentsType.EXPERIMENT_5 -> {

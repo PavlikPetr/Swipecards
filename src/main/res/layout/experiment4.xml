@@ -5,13 +5,6 @@
         <variable name="viewModel"
                   type="com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4BaseViewModel"/>
     </data>
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/popup_background"
-        android:fadingEdge="none"
-        android:fillViewport="true">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,12 +13,8 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/popup_root_view_padding_bottom"
             android:paddingTop="@dimen/popup_root_view_padding_top">
-            <TextView
-                style="@style/PopupTitle"
-                android:text="@{viewModel.title}"/>
-
             <FrameLayout android:layout_width="300dp"
-                         android:layout_marginTop="20dp" android:layout_height="270dp">
+                         android:layout_height="270dp">
 
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -40,6 +29,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="12dp"
                         app:animationSrc="@{@anim/scale}"
+                        android:src="@{viewModel.fakeAvatars.get(0)}"
                         app:bindStartOffSet="@{viewModel.first}"/>
                     <ImageView
                         android:id="@+id/IVLeftTop"
@@ -59,6 +49,7 @@
                         android:layout_toLeftOf="@+id/IVForAvatar"
                         android:layout_marginRight="6dp"
                         app:animationSrc="@{@anim/scale}"
+                        android:src="@{viewModel.fakeAvatars.get(4)}"
                         app:bindStartOffSet="@{viewModel.fifth}"
                     />
                     <ImageView
@@ -78,6 +69,7 @@
                         android:layout_toRightOf="@+id/IVForAvatar"
                         android:layout_marginLeft="6dp"
                         app:animationSrc="@{@anim/scale}"
+                        android:src="@{viewModel.fakeAvatars.get(1)}"
                         app:bindStartOffSet="@{viewModel.second}"/>
 
                     <ImageView
@@ -109,6 +101,7 @@
                         android:layout_alignTop="@+id/IVBelowAvatar"
                         android:layout_toLeftOf="@+id/IVBelowAvatar"
                         app:animationSrc="@{@anim/scale}"
+                        android:src="@{viewModel.fakeAvatars.get(3)}"
                         app:bindStartOffSet="@{viewModel.fourth}"/>
                     <ImageView
                         android:id="@+id/IVBelowAvatar"
@@ -127,16 +120,14 @@
                         android:layout_toRightOf="@+id/IVBelowAvatar"
                         android:layout_marginLeft="7dp"
                         app:animationSrc="@{@anim/scale}"
+                        android:src="@{viewModel.fakeAvatars.get(2)}"
                         app:bindStartOffSet="@{viewModel.third}"/>
                 </RelativeLayout>
-
             </FrameLayout>
 
             <TextView
                 style="@style/PopupMessage"
                 android:layout_marginTop="20dp"
                 android:text="@{viewModel.popupMessage}"/>
-
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
 </layout>

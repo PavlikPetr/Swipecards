@@ -23,6 +23,7 @@ import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
@@ -129,6 +130,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             stateSaverRegistrator.registerStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
         initFormList()
+        ExperimentBoilerplateFragment.newInstance(43).show(fragmentManager, "FEEEEEEEEEEEEEEEEEE")
         return mBinding.root
     }
 
