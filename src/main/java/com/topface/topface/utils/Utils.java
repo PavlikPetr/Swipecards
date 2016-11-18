@@ -679,8 +679,8 @@ public class Utils {
                 }
                 indexSaver.add(randomIndex);
                 images.add(images.get(randomIndex));
-                indexSaver.clear();
             }
+            indexSaver.clear();
             return images;
         } else if (count < images.size()) {
             if (count > images.size() / 2) {
@@ -691,8 +691,8 @@ public class Utils {
                     }
                     indexSaver.add(randomIndex);
                     images.remove(randomIndex);
-                    indexSaver.clear();
                 }
+                indexSaver.clear();
                 return images;
             } else {
                 for (int i = 0; i < count; i++) {
@@ -702,8 +702,8 @@ public class Utils {
                     }
                     indexSaver.add(randomIndex);
                     result.add(images.get(randomIndex));
-                    indexSaver.clear();
                 }
+                indexSaver.clear();
             }
         }
 
