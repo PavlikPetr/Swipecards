@@ -12,6 +12,11 @@ class BoilerplateDataFactory : IBoilerplateFactory<BoilerplateData> {
 
     override fun construct(@ExperimentsType.ExperimentsType type: Long) =
             when (type) {
+                ExperimentsType.EXPERIMENT_0 -> BoilerplateData.create {
+                    buttonText = R.string.trial_vip_button_text
+                    title = 0
+                    description = 0
+                }
                 ExperimentsType.EXPERIMENT_1, EXPERIMENT_2, EXPERIMENT_3 -> BoilerplateData.create {
                     title = R.string.free_vip
                 }

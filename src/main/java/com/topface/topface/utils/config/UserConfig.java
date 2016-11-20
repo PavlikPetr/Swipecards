@@ -92,6 +92,8 @@ public class UserConfig extends AbstractConfig {
     private static final String BANNER_SETTINGS = "banner_settings";
     private static final String LOCALE_CHANGE = "locale_change";
     private static final String ADMIRATION_PURCHASE_POPUP_SHOWN = "admiration_popup_purchase_shown";
+    private static final String SYMPATHES_COUNT = "symphates_count";
+    private static final String TRIAL_SHOWS_IN_USER_PROFILE = "trial_shows_in_user_profile";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -211,8 +213,11 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, BANNER_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
         //флаг смены локализации
         addField(settingsMap, LOCALE_CHANGE, false);
-
         addField(settingsMap, ADMIRATION_PURCHASE_POPUP_SHOWN, false);
+        //Колличество симпатия показанных за день
+        addField(settingsMap, SYMPATHES_COUNT, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //Колличество симпатия показанных за день
+        addField(settingsMap, TRIAL_SHOWS_IN_USER_PROFILE, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
     }
 
     @Override
@@ -343,6 +348,24 @@ public class UserConfig extends AbstractConfig {
 
     public Boolean isAdmirationPurchasePopupShown() {
         return getBooleanField(getSettingsMap(), ADMIRATION_PURCHASE_POPUP_SHOWN);
+    }
+
+    public void setShowsInUserProfile() {
+        mConfigExtension.setDailyConfigField(TRIAL_SHOWS_IN_USER_PROFILE, 0);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getShowsInUserProfile() {
+        return mConfigExtension.getDailyConfigField(TRIAL_SHOWS_IN_USER_PROFILE, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
+    }
+
+    public void setSympathyCount() {
+        mConfigExtension.setDailyConfigField(SYMPATHES_COUNT, 0);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getSympathyCount() {
+        return mConfigExtension.getDailyConfigField(SYMPATHES_COUNT, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
     }
 
     /**

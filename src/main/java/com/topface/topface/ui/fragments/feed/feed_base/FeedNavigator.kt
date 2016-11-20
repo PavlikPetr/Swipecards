@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.feed_base
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
@@ -20,6 +21,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
@@ -138,5 +140,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
                     PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE)
+
+    override fun showTrialPopup(type: Long, args: Bundle) {
+        ExperimentBoilerplateFragment.newInstance(type, args = args)
+                .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
+    }
 
 }

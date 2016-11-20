@@ -11,6 +11,12 @@ class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
 
     override fun construct(@ExperimentsType.ExperimentsType type: Long) =
             when (type) {
+                ExperimentsType.EXPERIMENT_0 -> BoilerplateDialogMetrics.create {
+                    popupBackground = R.drawable.trial_vip_background
+                    getVipButtonBackground = R.drawable.btn_blue_selector
+                    contentBottomMargin = R.dimen.toolbar_title_padding_left
+                    initStandardMetrics(this)
+                }
                 ExperimentsType.EXPERIMENT_1, ExperimentsType.EXPERIMENT_3 -> BoilerplateDialogMetrics.create {
                     initStandardMetrics(this)
                 }
