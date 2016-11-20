@@ -16,7 +16,7 @@ import rx.Subscription
 import java.util.concurrent.TimeUnit
 
 /**
- * Провила показа попапов триала
+ * Правила показа попапов триала
  * Created by tiberal on 18.11.16.
  */
 object TrialExperimentsRules {
@@ -52,7 +52,6 @@ object TrialExperimentsRules {
     }
 
     private fun showTrialFromUserProfile(type: Long, navigator: IFeedNavigator) {
-        //менять порядок в триалах
         val count = mConfig.getShowsInUserProfile<Int>()
         Debug.log("FUCKING_EXP trial_shows_count = $count")
         if (count.configFieldInfo.amount <= SHOWS_IN_USER_PROFILE) {
