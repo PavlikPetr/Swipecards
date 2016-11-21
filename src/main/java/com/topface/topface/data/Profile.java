@@ -174,10 +174,8 @@ public class Profile extends AbstractDataWithPhotos {
 
     private boolean hasEmptyForms(LinkedList<FormItem> forms) {
         for (FormItem form : forms) {
-            if (form.isEmpty()) {
-                if (!(sex == Profile.BOY && form.dataType == FormItem.DATA_TYPE.BREAST)) {
-                    return true;
-                }
+            if (form.isEmpty() && !(sex == Profile.BOY && form.dataType == FormItem.DATA_TYPE.BREAST)) {
+                return true;
             }
         }
         return false;
