@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/vip"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/label2_margin_top"
+                    android:layout_marginTop="@dimen/admiration_popup_label2_margin_top"
                     android:gravity="center"/>
 
                 <ImageView

@@ -202,6 +202,6 @@
 
     <dimen name="admiration_image_width">130dp</dimen>
     <dimen name="admiration_image_height">130dp</dimen>
-    <dimen name="label1_margin_top">12dp</dimen>
+    <dimen name="admiration_popup_label1_margin_top">12dp</dimen>
 
 </resources>

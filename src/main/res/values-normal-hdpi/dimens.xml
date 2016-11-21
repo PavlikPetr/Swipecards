@@ -13,7 +13,7 @@
     <dimen name="admiration_avatar_margin_top">-16dp</dimen>
 
 
-    <dimen name="label2_margin_top">6dp</dimen>
+    <dimen name="admiration_popup_label2_margin_top">6dp</dimen>
     <dimen name="arrow_bottom_margin_top">16dp</dimen>
     <dimen name="vip_button_margin_top">4dp</dimen>
 

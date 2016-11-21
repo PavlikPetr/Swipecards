@@ -1505,7 +1505,7 @@
         <item name="android:layout_alignRight">@+id/coins_button</item>
         <item name="android:layout_alignLeft">@+id/coins_button</item>
         <item name="android:layout_width">200dp</item>
-        <item name="android:layout_marginTop">@dimen/label1_margin_top</item>
+        <item name="android:layout_marginTop">@dimen/admiration_popup_label1_margin_top</item>
     </style>
 
     <style name="AdmirationPopupLabel2Style">
