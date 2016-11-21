@@ -51,7 +51,7 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         val imgs = App.getContext().resources.obtainTypedArray(
                 if (profile.sex === Profile.GIRL) R.array.fake_boys_without_blur else R.array.fake_girls_without_blur)
         return with(arrayListOf<Int>()) {
-            (0..imgs.indexCount - 1).forEach {
+            (0..imgs.length() - 1).forEach {
                 this@with.add(imgs.getResourceId(it,
                         if (profile.dating.sex === Profile.GIRL) R.drawable.girl_1 else R.drawable.man_1))
             }
