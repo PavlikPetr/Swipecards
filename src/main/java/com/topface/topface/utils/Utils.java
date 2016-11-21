@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
@@ -67,8 +68,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -658,6 +661,53 @@ public class Utils {
                 }
             }
         }).exec();
+    }
+
+    @NotNull
+    public static List<Integer> randomImageRes(int count, List<Integer> images) {
+        List<Integer> result = new ArrayList<>();
+        Random random = new Random();
+        int randomIndex;
+        List<Integer> indexSaver = new ArrayList<>();
+        if (count == images.size()) {
+            return images;
+        } else if (count > images.size()) {
+            for (int i = 0; i < count - images.size(); i++) {
+                randomIndex = random.nextInt(images.size());
+                while (indexSaver.contains(randomIndex)) {
+                    randomIndex = random.nextInt(images.size());
+                }
+                indexSaver.add(randomIndex);
+                images.add(images.get(randomIndex));
+                indexSaver.clear();
+            }
+            return images;
+        } else if (count < images.size()) {
+            if (count > images.size() / 2) {
+                for (int i = 0; i < images.size() - count; i++) {
+                    randomIndex = random.nextInt(images.size());
+                    while (indexSaver.contains(randomIndex)) {
+                        randomIndex = random.nextInt(images.size());
+                    }
+                    indexSaver.add(randomIndex);
+                    images.remove(randomIndex);
+                    indexSaver.clear();
+                }
+                return images;
+            } else {
+                for (int i = 0; i < count; i++) {
+                    randomIndex = random.nextInt(images.size());
+                    while (indexSaver.contains(randomIndex)) {
+                        randomIndex = random.nextInt(images.size());
+                    }
+                    indexSaver.add(randomIndex);
+                    result.add(images.get(randomIndex));
+                    indexSaver.clear();
+                }
+            }
+        }
+
+        return result;
     }
 
     @NotNull

@@ -8,6 +8,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject
@@ -19,20 +20,40 @@ import javax.inject.Inject
 class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         BaseViewModel<LayoutExperiment41Binding>(binding) {
 
-    val userAvatar: ObservableField<String> = ObservableField(Utils.getLocalResUrl(R.drawable.upload_photo_female))
+    companion object {
+        const val PHOTO_COUNT = 2
+    }
+
+    val girls = listOf(R.drawable.girl_1, R.drawable.girl_2, R.drawable.girl_3, R.drawable.girl_4, R.drawable.girl_5, R.drawable.girl_6, R.drawable.girl_7, R.drawable.girl_8, R.drawable.girl_9, R.drawable.girl_10)
+
+    val boys = listOf(R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9, R.drawable.man_10)
+
+    val userAvatar: ObservableField<String> = ObservableField()
+    val randomLeftPhoto: ObservableField<Int> = ObservableField()
+    val randomRightPhoto: ObservableField<Int> = ObservableField()
     var profileSubscription: Subscription
     @Inject lateinit var state: TopfaceAppState
 
     init {
         setUrlAvatar(App.get().profile)
         App.get().inject(this)
-        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile -> setUrlAvatar(profile) }
+        profileSubscription = state.getObservable(Profile::class.java).subscribe {
+            setUrlAvatar(it)
+            setRandomPhoto(it)
+        }
     }
 
-    fun setFakeAvatar(profile: Profile) = when {
-        (profile.sex == Profile.BOY) -> R.drawable.upload_photo_male
-        else -> R.drawable.upload_photo_female
-    }
+    fun setRandomPhoto(profile: Profile) =
+            with(Utils.randomImageRes(PHOTO_COUNT, if (profile.sex == Profile.BOY) girls else boys)) {
+                randomLeftPhoto.set(this[0])
+                randomRightPhoto.set(this[1])
+            }
+
+
+    fun setFakeAvatar(profile: Profile) = if (profile.sex == Profile.BOY)
+        R.drawable.upload_photo_male
+    else
+        R.drawable.upload_photo_female
 
 
     fun setUrlAvatar(profile: Profile) {
@@ -42,6 +63,7 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
 
     override fun release() {
         super.release()
-        profileSubscription.unsubscribe()
+        profileSubscription.safeUnsubscribe()
     }
+
 }

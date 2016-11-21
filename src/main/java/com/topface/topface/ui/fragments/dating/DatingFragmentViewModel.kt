@@ -207,9 +207,11 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
             override fun onCompleted() {
                 mNewFilter = false
+                mDatingButtonsView.lockControls()
             }
 
             override fun onError(e: Throwable?) {
+                mDatingButtonsView.lockControls()
                 mNewFilter = false
                 mEmptySearchVisibility.showEmptySearchDialog()
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
