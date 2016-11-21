@@ -24,6 +24,7 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
 import com.topface.topface.ui.fragments.dating.form.GiftsItemDelegate
@@ -35,9 +36,11 @@ import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
@@ -226,13 +229,20 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onResume() {
         super.onResume()
         Debug.log("GIFTS_BUGS dating resume current user id ${mDatingFragmentViewModel.currentUser?.id}")
-        mDatingAlbumViewModel.currentUser?.let { updateToolbar(it) }
+        operateWithToolbar({ this.isCollapsStyle.set(true) })
+        updateToolbar(mDatingAlbumViewModel.currentUser)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        operateWithToolbar({ this.isCollapsStyle.set(false) })
     }
 
     override fun onUserShow(user: SearchUser) = updateToolbar(user)
 
-    private fun updateToolbar(user: SearchUser) =
-            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+    private fun updateToolbar(user: SearchUser?) =
+            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user?.nameAndAge ?: Utils.EMPTY,
+                    isOnline = user?.online ?: false))
 
     override fun onOptionsItemSelected(item: MenuItem?) =
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -240,10 +250,18 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun isScrimVisible(isVisible: Boolean) {
         mDatingOptionMenuManager.isScrimVisible(isVisible)
         mDatingButtonsViewModel.isScrimVisible(isVisible)
+        operateWithToolbar({ this.isScrimVisible(isVisible) })
     }
 
     override fun isCollapsed(isCollapsed: Boolean) {
         mDatingButtonsViewModel.isCollapsed(isCollapsed)
+        operateWithToolbar({ this.isCollapsed(isCollapsed) })
+    }
+
+    private fun operateWithToolbar(block: NavigationToolbarViewModel.() -> Unit) {
+        (activity as? ToolbarActivity<*>)?.let {
+            (it.getToolbarViewModel() as? NavigationToolbarViewModel)?.run(block)
+        }
     }
 
     override fun showControls() = mDatingButtonsViewModel.isDatingButtonsVisible.set(View.VISIBLE)

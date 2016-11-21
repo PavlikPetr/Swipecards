@@ -47,7 +47,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds" tools:ignore="NewApi">true</item>
     </style>
 
-    <style name="Theme.Topface" parent="Theme._Topface"></style>
+    <style name="Theme.Topface" parent="Theme._Topface"/>
 
     <!-- transparent activity theme -->
     <style name="Theme.Transparent" parent="Topface.Theme.TransparentActionBarActivity">

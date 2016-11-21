@@ -5,7 +5,6 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -19,13 +18,9 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.ui.adapters.LoadingListAdapter
-import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.fragments.PurchasesFragment
-import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
-import com.topface.topface.ui.views.toolbar.*
-import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.Utils
@@ -104,7 +99,7 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
 
     override fun generateToolbarViewModel(toolbar: ToolbarBinding) =
             BackToolbarViewModel(toolbar,
-                    getToolbarTitle(), this@AddToPhotoBlogActivity)
+                    getString(R.string.publish_photo), this@AddToPhotoBlogActivity)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -160,12 +155,8 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
         mHeaderViewModel.release()
     }
 
-    private fun getToolbarTitle() = getString(R.string.publish_photo)
-
     override fun onResume() {
         super.onResume()
-        //TODO SETTOOLBARSETTINGS
-//        setToolbarSettings(ToolbarSettingsData(title = getToolbarTitle()))
         if (App.getConfig().userConfig.isUserAvatarAvailable && App.get().profile.photo == null) showPhotoHelper()
     }
 

@@ -32,7 +32,6 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ToolbarManager.registerSettingsListener(this)
         viewBinding = DataBindingUtil.setContentView<T>(this, getLayout())
         setContentView(viewBinding.root)
         toolbarBinding = getToolbarBinding(viewBinding)
@@ -41,6 +40,11 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         initActionBarOptions(supportActionBar)
         // увы, но колбэк будет работать только если установить его после setSupportActionBar
         mToolbarBaseViewModel?.init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ToolbarManager.registerSettingsListener(this)
     }
 
     fun setToolBarVisibility(isVisible: Boolean) {
@@ -109,9 +113,13 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         setToolbarSettings(settings)
     }
 
+    override fun onPause() {
+        super.onPause()
+        ToolbarManager.unregisterSettingsListener(this)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        ToolbarManager.unregisterSettingsListener(this)
         mToolbarBaseViewModel?.release()
     }
 }

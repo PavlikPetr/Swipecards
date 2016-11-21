@@ -60,7 +60,7 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
 
     @Override
     protected boolean isModalDialog() {
-        return false;
+        return true;
     }
 
     @Override
@@ -72,6 +72,13 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
         // Send statistics onBackPressed or on tap outside the dialog
+        saveRatingPopupStatus(0);
+        RatePopupStatistics.sendRatePopupClose();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
         RatePopupStatistics.sendRatePopupClose();
     }
 
@@ -84,14 +91,14 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
             case R.id.btnAskLater:
                 RatePopupStatistics.sendRatePopupClickButtonLater();
                 saveRatingPopupStatus(System.currentTimeMillis());
-                getDialog().cancel();
+                getDialog().dismiss();
                 break;
             case R.id.btnNoThanx:
                 // Используем label: Cancel, как в iOS
                 RatePopupStatistics.sendRatePopupClickButtonClose();
                 saveRatingPopupStatus(0);
                 sendRateRequest(AppRateRequest.NO_RATE);
-                getDialog().cancel();
+                getDialog().dismiss();
                 break;
         }
     }
