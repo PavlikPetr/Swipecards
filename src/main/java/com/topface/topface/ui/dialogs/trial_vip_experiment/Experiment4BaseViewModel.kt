@@ -2,7 +2,6 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment
 
 import android.databinding.ObservableField
 import android.text.TextUtils
-import android.widget.ImageView
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
@@ -13,8 +12,6 @@ import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject
-import android.databinding.BindingAdapter
-import com.topface.topface.utils.BindingsAdapters.setImageResource
 
 
 /**

@@ -46,20 +46,17 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     private val mType by lazy {
         arguments.getLong(EXPERIMENT_TYPE)
     }
-    private val mSubType by lazy {
-        arguments.getLong(EXPERIMENT_SUBTYPE)
-    }
 
     private val mDialogMetricsFactory by lazy {
-        MetricsFactory().construct(mType, mSubType)
+        MetricsFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
     }
 
     private val mDialogDataFactory by lazy {
-        BoilerplateDataFactory().construct(mType, mSubType)
+        BoilerplateDataFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
     }
 
     private val mContentBinding by lazy {
-        ContentViewFactory(context.applicationContext, mBinding.content,arguments).construct(mType, mSubType)
+        ContentViewFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
     }
 
     private val mBinding by lazy {

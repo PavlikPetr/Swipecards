@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment
 
-import android.content.res.Resources
 import android.content.res.TypedArray
 import android.databinding.ObservableField
 import com.topface.topface.App

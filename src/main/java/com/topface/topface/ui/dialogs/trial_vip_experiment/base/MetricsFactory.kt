@@ -1,15 +1,19 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
+import android.content.Context
+import android.os.Bundle
+import android.view.ViewGroup
 import com.topface.topface.R
 
 /**
  * Фабрика метрик, для разных типов попопов триал эксперимента
  * Created by tiberal on  16.11.16.
  */
-class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
+class MetricsFactory(private val mContext: Context, val parent: ViewGroup,
+                     val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMetrics> {
 
 
-    override fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long) =
+    override fun construct(@ExperimentsType.ExperimentsType type: Long) =
             when (type) {
                 ExperimentsType.EXPERIMENT_0 -> BoilerplateDialogMetrics.create {
                     popupBackground = R.drawable.trial_vip_background

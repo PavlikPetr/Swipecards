@@ -5,5 +5,5 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment.base
  * Created by tiberal on 16.11.16.
  */
 interface IBoilerplateFactory<out T> {
-    fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long): T
+    fun construct(@ExperimentsType.ExperimentsType type: Long): T
 }

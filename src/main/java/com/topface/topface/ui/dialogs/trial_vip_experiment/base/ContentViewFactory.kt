@@ -15,6 +15,7 @@ import com.topface.topface.databinding.LayoutExperiment6Binding
 import com.topface.topface.databinding.OldTrialContentBinding
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_2
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_3
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_SUBTYPE
 import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter
 import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_ViewModel
 import org.jetbrains.anko.layoutInflater
@@ -26,7 +27,7 @@ import org.jetbrains.anko.layoutInflater
 class ContentViewFactory(private val mContext: Context, val parent: ViewGroup,
                          val args: Bundle) : IBoilerplateFactory<ViewDataBinding> {
 
-    override fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentsType.ExperimentsType subType: Long): ViewDataBinding =
+    override fun construct(@ExperimentsType.ExperimentsType type: Long): ViewDataBinding =
             when (type) {
                 ExperimentsType.EXPERIMENT_0 -> {
                     DataBindingUtil.inflate<OldTrialContentBinding>(mContext.layoutInflater,
@@ -47,7 +48,7 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup,
             ExperimentsType.EXPERIMENT_3 -> {
             }
            */
-                ExperimentsType.EXPERIMENT_4 -> subTypeChooser(subType)
+                ExperimentsType.EXPERIMENT_4 -> subTypeChooser(args.getLong(EXPERIMENT_SUBTYPE))
 
                 ExperimentsType.EXPERIMENT_5 -> {
                     DataBindingUtil.inflate<LayoutExperiment5Binding>(mContext.layoutInflater,
