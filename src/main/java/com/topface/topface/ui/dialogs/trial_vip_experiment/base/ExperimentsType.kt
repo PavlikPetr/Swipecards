@@ -12,7 +12,7 @@ object ExperimentsType {
     const val EXPERIMENT_TYPE = "experiment_type"
 
     @Retention(AnnotationRetention.SOURCE)
-    @IntDef(EXPERIMENT_1, EXPERIMENT_2, EXPERIMENT_3, EXPERIMENT_4, EXPERIMENT_4, EXPERIMENT_4, EXPERIMENT_5, EXPERIMENT_6)
+    @IntDef(EXPERIMENT_1, EXPERIMENT_2, EXPERIMENT_3, EXPERIMENT_4, EXPERIMENT_5, EXPERIMENT_6)
     annotation class ExperimentsType
 
     const val EXPERIMENT_1 = 1L
