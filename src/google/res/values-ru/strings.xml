@@ -1152,7 +1152,7 @@
     <string name="buy_vip_button_text">получить vip</string>
     <string name="send_first_gift">Подарите первый подарок!</string>
     <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
-    <string name="fill_own_profile_boy">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
+    <string name="fill_own_profile_boy">Заполните анкету у себя в профиле, чтобы посмотреть, что написал %s</string>
     <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
 
 </resources>
