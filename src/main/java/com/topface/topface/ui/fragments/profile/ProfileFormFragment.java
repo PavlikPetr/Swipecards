@@ -92,7 +92,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             mIsProfileWasUpdated = false;
                             new ParallelApiRequest(App.getContext())
                                     .addRequest(request)
-                                    .addReqauest(App.getProfileRequest())
+                                    .addRequest(App.getProfileRequest())
                                     .exec();
                         } else {
                             mIsProfileWasUpdated = true;
