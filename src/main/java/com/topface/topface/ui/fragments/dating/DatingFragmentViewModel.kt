@@ -178,7 +178,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                         add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
-                    add(FormModel(Pair(it.title, it.value), isEmptyItem = it.isEmpty))
+                    add(FormModel(Pair(it.title, it.value), user.id, it.dataType.type, isEmptyItem = it.isEmpty))
                 }
             }
         }
