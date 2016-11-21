@@ -16,7 +16,7 @@ import org.jetbrains.anko.layoutInflater
  */
 class ContentViewFactory(private val mContext: Context, val parent: ViewGroup) : IBoilerplateFactory<ViewDataBinding> {
 
-    override fun construct(@ExperimentsType.ExperimentsType type: Long): ViewDataBinding =
+    override fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long): ViewDataBinding =
             when (type) {
                 ExperimentsType.EXPERIMENT_1 -> {
                     DataBindingUtil.inflate<Experiment123ContentViewBinding>(mContext.layoutInflater,
@@ -32,16 +32,8 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup) :
             }
             ExperimentsType.EXPERIMENT_3 -> {
             }
-            ExperimentsType.EXPERIMENT_4_1 -> {
-            }*/
-                ExperimentsType.EXPERIMENT_4_2 -> {
-                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
-                            .apply { viewModel = Experiment4WithoutBlurViewModel(this) }
-                }
-                ExperimentsType.EXPERIMENT_4_3 -> {
-                    DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
-                            .apply { viewModel = Experiment4WithBlurViewModel(this) }
-                }
+           */
+                ExperimentsType.EXPERIMENT_4 -> subTypeChooser(subType)
 
                 ExperimentsType.EXPERIMENT_5 -> {
                     DataBindingUtil.inflate<LayoutExperiment5Binding>(mContext.layoutInflater,
@@ -56,4 +48,18 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup) :
 
             }
 
+    fun subTypeChooser(subType: Long): ViewDataBinding {
+        when (subType) {
+            ExperimentSubType.SubType4_2 -> {
+                return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
+                        .apply { viewModel = Experiment4WithoutBlurViewModel(this) }
+            }
+            ExperimentSubType.SubType4_3 -> {
+                return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
+                        .apply { viewModel = Experiment4WithBlurViewModel(this) }
+            }
+            else -> return DataBindingUtil.inflate<ViewDataBinding>(mContext.layoutInflater,
+                    R.layout.experiment_boilerplate_layout, null, false)
+        }
+    }
 }

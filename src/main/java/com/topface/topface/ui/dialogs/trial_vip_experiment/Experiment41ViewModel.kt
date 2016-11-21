@@ -2,6 +2,7 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment
 
 import android.databinding.ObservableField
 import android.text.TextUtils
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
@@ -10,7 +11,6 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -54,7 +54,6 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         (profile.sex == Profile.BOY) -> R.drawable.upload_photo_male
         else -> R.drawable.upload_photo_female
     }
-
 
     fun setUrlAvatar(profile: Profile) {
         val photoUrl = if (profile.photo != null) profile.photo.defaultLink else Utils.EMPTY

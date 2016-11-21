@@ -74,8 +74,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-import static com.topface.topface.R.drawable.fake_girl1;
-
 public class Utils {
     public static final long DAY = 86400000;
     public static final long WEEK_IN_SECONDS = 604800;

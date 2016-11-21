@@ -2,6 +2,7 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment
 
 import android.databinding.ObservableField
 import android.text.TextUtils
+import android.widget.ImageView
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
@@ -12,6 +13,9 @@ import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject
+import android.databinding.BindingAdapter
+import com.topface.topface.utils.BindingsAdapters.setImageResource
+
 
 /**
  * Базовая ВьюМодел для экспериментов4 (2-3)
@@ -28,8 +32,7 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     abstract val imageLeftTop: ObservableField<Int>
     abstract val imageRightBottom: ObservableField<Int>
 
-
-    // продолжительность щадержки для анимации фэйковых аватаров
+    // продолжительность задержки для анимации фэйковых аватаров
     val first = 0L
     val second = 100L
     val third = 200L
@@ -64,4 +67,5 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
         profileSubscription.safeUnsubscribe()
         super.release()
     }
+
 }

@@ -14,23 +14,16 @@
             android:paddingBottom="10dp"
             android:paddingTop="10dp">
 
-            <FrameLayout android:layout_width="300dp"
-                         android:layout_height="270dp">
-
-                <RelativeLayout android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_above="@+id/rlCentericons"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentEnd="true">
+            <RelativeLayout android:layout_width="300dp"
+                            android:layout_height="300dp">
                     <ImageView
                         android:id="@+id/firstFakeAvatar"
-                        android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_above="@+id/IVForAvatar"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="12dp"
                         app:animationSrc="@{@anim/scale}"
-                        app:bindStartOffSet="@{viewModel.first}"/>
+                        app:bindStartOffSet="@{viewModel.first}" android:layout_width="50dp"/>
                     <ImageView
                         android:id="@+id/IVLeftTop"
                         android:layout_width="wrap_content"
@@ -119,7 +112,6 @@
                         app:animationSrc="@{@anim/scale}"
                         app:bindStartOffSet="@{viewModel.third}"/>
                 </RelativeLayout>
-            </FrameLayout>
 
             <TextView
                 style="@style/PopupMessage"

@@ -10,7 +10,7 @@ import com.topface.topface.data.Profile
  */
 class BoilerplateDataFactory : IBoilerplateFactory<BoilerplateData> {
 
-    override fun construct(@ExperimentsType.ExperimentsType type: Long) =
+    override fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long): BoilerplateData =
             when (type) {
                 ExperimentsType.EXPERIMENT_1 -> BoilerplateData.create {
                     title = R.string.free_vip
@@ -19,12 +19,8 @@ class BoilerplateDataFactory : IBoilerplateFactory<BoilerplateData> {
                 }
                 ExperimentsType.EXPERIMENT_3 -> BoilerplateData.create {
                 }
-                ExperimentsType.EXPERIMENT_4_2 -> BoilerplateData.create {
-                    title = if (App.get().profile.sex == Profile.BOY) R.string.write_any_girl else R.string.write_any_boy
-                }
-                ExperimentsType.EXPERIMENT_4_3 -> BoilerplateData.create {
-                    title = R.string.know_your_guests
-                }
+                ExperimentsType.EXPERIMENT_4 -> subTypeChooser(subType)
+
                 ExperimentsType.EXPERIMENT_5 -> BoilerplateData.create {
                     title = R.string.free_vip
                 }
@@ -33,5 +29,21 @@ class BoilerplateDataFactory : IBoilerplateFactory<BoilerplateData> {
                 }
                 else -> BoilerplateData.create {
                 }
+
             }
+
+    fun subTypeChooser(subType: Long) =
+            when (subType) {
+                ExperimentSubType.SubType4_1 -> BoilerplateData.create {
+                }
+                ExperimentSubType.SubType4_2 -> BoilerplateData.create {
+                    title = if (App.get().profile.sex == Profile.BOY) R.string.write_any_girl else R.string.write_any_boy
+                }
+                ExperimentSubType.SubType4_3 -> BoilerplateData.create {
+                    title = R.string.know_your_guests
+                }
+                else -> BoilerplateData.create {
+                }
+            }
+
 }

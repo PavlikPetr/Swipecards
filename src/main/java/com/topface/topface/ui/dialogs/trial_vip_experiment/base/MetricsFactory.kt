@@ -9,7 +9,7 @@ import com.topface.topface.R
 class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
 
 
-    override fun construct(@ExperimentsType.ExperimentsType type: Long) =
+    override fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long) =
             when (type) {
                 ExperimentsType.EXPERIMENT_1 -> BoilerplateDialogMetrics.create {
                     titleTopMargin = R.dimen.experiment_1_2_3_title_top_margin
@@ -22,16 +22,7 @@ class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
                 }
                 ExperimentsType.EXPERIMENT_3 -> BoilerplateDialogMetrics.create {
                 }
-                ExperimentsType.EXPERIMENT_4_1 -> BoilerplateDialogMetrics.create {
-                }
-                ExperimentsType.EXPERIMENT_4_2 -> BoilerplateDialogMetrics.create {
-                    titleTopMargin = R.dimen.experiment_5_title_top_margin
-                    titleBottomMargin = R.dimen.experiment_5_title_bottom_margin
-                    contentBottomMargin = R.dimen.experiment_5_content_bottom_margin
-                    getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
-                    descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
-                }
-                ExperimentsType.EXPERIMENT_4_3 -> BoilerplateDialogMetrics.create {
+                ExperimentsType.EXPERIMENT_4 -> BoilerplateDialogMetrics.create {
                     titleTopMargin = R.dimen.experiment_5_title_top_margin
                     titleBottomMargin = R.dimen.experiment_5_title_bottom_margin
                     contentBottomMargin = R.dimen.experiment_5_content_bottom_margin

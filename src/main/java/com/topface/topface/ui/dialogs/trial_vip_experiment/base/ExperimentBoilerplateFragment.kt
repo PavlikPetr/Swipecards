@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentSubType.EXPERIMENT_SUBTYPE
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
 import org.jetbrains.anko.layoutInflater
 
@@ -19,10 +20,11 @@ import org.jetbrains.anko.layoutInflater
 class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmentRunner.IRunner {
 
     companion object {
-        @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long) =
+        @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = Bundle().apply {
                         putLong(EXPERIMENT_TYPE, type)
+                        putLong(EXPERIMENT_SUBTYPE, subType)
                     }
                     this
                 }
@@ -31,17 +33,20 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     private val mType by lazy {
         arguments.getLong(EXPERIMENT_TYPE)
     }
+    private val mSubType by lazy {
+        arguments.getLong(EXPERIMENT_SUBTYPE)
+    }
 
     private val mDialogMetricsFactory by lazy {
-        MetricsFactory().construct(mType)
+        MetricsFactory().construct(mType, mSubType)
     }
 
     private val mDialogDataFactory by lazy {
-        BoilerplateDataFactory().construct(mType)
+        BoilerplateDataFactory().construct(mType, mSubType)
     }
 
     private val mContentBinding by lazy {
-        ContentViewFactory(context.applicationContext, mBinding.content).construct(mType)
+        ContentViewFactory(context.applicationContext, mBinding.content).construct(mType, mSubType)
     }
 
     private val mBinding by lazy {
