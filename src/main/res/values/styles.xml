@@ -77,13 +77,15 @@
         <item name="background">@color/action_bar_color</item>
     </style>
 
-    <style name="Widget.Topface.TransparentActionBar" parent="@style/Widget.AppCompat.Light.ActionBar">
+    <style name="Widget.Topface.TransparentActionBar"
+           parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="contentInsetStart">0dp</item>
         <item name="background">@android:color/transparent</item>
         <item name="icon">@android:color/transparent</item>
     </style>
 
-    <style name="Widget.Topface.ActionBar.Title" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="Widget.Topface.ActionBar.Title"
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:ellipsize">end</item>
@@ -91,7 +93,8 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="Widget.Topface.ActionBar.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+    <style name="Widget.Topface.ActionBar.Subtitle"
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textColor">@color/toolbar_subtitle_color</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -747,7 +750,8 @@
         <item name="android:cursorVisible">true</item>
     </style>
 
-    <style name="PopupMenuTextApearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+    <style name="PopupMenuTextApearance"
+           parent="@android:style/TextAppearance.Widget.IconMenu.Item">
         <item name="android:textColor">@drawable/top_menu_text_color</item>
         <item name="android:textSize">16sp</item>
     </style>
@@ -1453,9 +1457,8 @@
         <item name="textAllCaps">true</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">@dimen/vip_button_margin_top</item>
         <item name="android:padding">16dp</item>
-        <item name="android:background">@color/dating_fab_small</item>
         <item name="android:text">@string/buy_vip_button_text</item>
         <item name="android:textColor">@color/buy_vip_text_color</item>
         <item name="android:textSize">14sp</item>
@@ -1464,23 +1467,51 @@
     <style name="AdmirationPopupBuyCoinsButton">
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
-        <item name="android:layout_width">220dp</item>
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_width">@dimen/coins_button_width</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/buy_coins_button_bg</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/coins_button_text_size</item>
+        <item name="android:padding">-2dp</item>
+        <item name="android:layout_marginTop">@dimen/coins_button_margin_top</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="AdmirationImageStyle">
+        <item name="android:layout_width">@dimen/admiration_image_width</item>
+        <item name="android:layout_height">@dimen/admiration_image_height</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:src">@drawable/admiration_popup_heart_ico</item>
+        <item name="android:layout_marginTop">@dimen/admiration_image_margin_top</item>
     </style>
 
     <style name="AdmirationPopupUserAvatar">
-        <item name="android:layout_width">60dp</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_width">@dimen/admiration_avatar_width</item>
+        <item name="android:layout_height">@dimen/admiration_avatar_width</item>
+        <item name="android:layout_marginTop">@dimen/admiration_avatar_margin_top</item>
         <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_below">@+id/admiration</item>
+    </style>
+
+    <style name="AdmirationPopupLabel1Style">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/label1_text_admiration_purchase_popup</item>
+        <item name="android:textColor">@color/label1_text_color</item>
+        <item name="android:textSize">@dimen/main_label_text_size</item>
+        <item name="android:layout_alignEnd">@+id/coins_button</item>
+        <item name="android:layout_alignStart">@+id/coins_button</item>
+        <item name="android:layout_alignRight">@+id/coins_button</item>
+        <item name="android:layout_alignLeft">@+id/coins_button</item>
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_marginTop">@dimen/label1_margin_top</item>
     </style>
 
     <style name="AdmirationPopupLabel2Style">
         <item name="android:text">@string/label2_text_admiration_purchase_popup</item>
         <item name="android:textColor">@color/label2_text_color</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">@dimen/main_label_text_size</item>
         <item name="android:gravity">center</item>
     </style>
 

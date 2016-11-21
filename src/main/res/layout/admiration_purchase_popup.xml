@@ -36,28 +36,22 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="32dp"
                 android:background="@color/text_white"
                 android:clickable="true"
                 android:elevation="6dp">
 
                 <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/admiration"
-                    android:layout_width="@dimen/admiration_image_width"
-                    android:layout_height="@dimen/admiration_image_height"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="24dp"
-                    android:src="@drawable/admiration_popup_heart_ico"
+                    style="@style/AdmirationImageStyle"
                     app:postProcessor="inscribedAvatar"/>
 
                 <com.topface.topface.ui.views.ImageViewRemote
                     android:id="@+id/user_face"
                     style="@style/AdmirationPopupUserAvatar"
-                    android:layout_below="@+id/admiration"
-                    android:layout_marginTop="-32dp"
                     app:postProcessor="inscribedAvatar"
                     app:roundedImgBorderColor="@android:color/white"
                     app:roundedImgBorderWidth="3dp"
@@ -67,24 +61,14 @@
                     android:id="@+id/coins_button"
                     style="@style/AdmirationPopupBuyCoinsButton"
                     android:layout_below="@+id/user_face"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
                     android:onClick="@{() -> viewModel.buyCoins()}"
                     android:text="@{viewModel.buyCoinsButtonText}"/>
 
                 <TextView
+                    style="@style/AdmirationPopupLabel1Style"
                     android:id="@+id/label1"
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/coins_button"
-                    android:layout_alignStart="@+id/coins_button"
                     android:layout_below="@+id/coins_button"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:text="@string/label1_text_admiration_purchase_popup"
-                    android:textColor="@color/label1_text_color"
-                    android:textSize="13sp"/>
+                    android:layout_centerHorizontal="true"/>
 
                 <View
                     android:id="@+id/gray_view"
@@ -109,11 +93,9 @@
                     style="@style/AdmirationPopupLabel2Style"
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/coins_button"
-                    android:layout_alignStart="@+id/coins_button"
                     android:layout_below="@+id/vip"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="@dimen/label2_margin_top"
                     android:gravity="center"/>
 
                 <ImageView
@@ -122,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/label2"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="@dimen/arrow_bottom_margin_top"
                     android:src="@drawable/arrow_bottom"/>
 
                 <TextView
@@ -134,6 +116,6 @@
             </RelativeLayout>
 
         </FrameLayout>
-
     </android.support.v4.widget.NestedScrollView>
+
 </layout>
