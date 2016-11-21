@@ -48,6 +48,8 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     private FragmentManager mFragmentManager;
 
+    private boolean mIsProfileWasUpdated;
+
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
             new Integer[]{FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
 
@@ -87,11 +89,13 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             }
                         });
                         if (isSettingsRequest) {
+                            mIsProfileWasUpdated = false;
                             new ParallelApiRequest(App.getContext())
                                     .addRequest(request)
-                                    .addRequest(App.getProfileRequest())
+                                    .addReqauest(App.getProfileRequest())
                                     .exec();
                         } else {
+                            mIsProfileWasUpdated = true;
                             request.exec();
                         }
                     }
@@ -187,6 +191,9 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mIsProfileWasUpdated) {
+            App.getProfileRequest().exec();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 

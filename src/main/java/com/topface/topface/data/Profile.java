@@ -161,7 +161,7 @@ public class Profile extends AbstractDataWithPhotos {
             if (isFromCache) {
                 profile.forms = JsonUtils.fromJson(resp.getJSONArray("form").toString(), new TypeToken<LinkedList<FormItem>>() {
                 }.getType());
-                setFornItemListeners(profile.forms);
+                setFormItemListeners(profile.forms);
             } else {
                 parseForm(new FormInfo(App.getContext(), profile.sex, profile.getType()), profile.forms, resp, true);
             }
@@ -181,7 +181,7 @@ public class Profile extends AbstractDataWithPhotos {
         return false;
     }
 
-    private void setFornItemListeners(LinkedList<FormItem> forms) {
+    private void setFormItemListeners(LinkedList<FormItem> forms) {
         if (!forms.isEmpty()) {
             for (FormItem formItem : forms) {
                 switch (formItem.titleId) {
