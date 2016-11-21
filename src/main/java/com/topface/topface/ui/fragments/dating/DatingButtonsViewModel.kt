@@ -24,6 +24,7 @@ import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -143,6 +144,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     fun sendLike() = sendSomething {
         if (!it.rated) {
+            tryShowTrialPopup(navigator = mNavigator)
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
                 override fun onCompleted() {
