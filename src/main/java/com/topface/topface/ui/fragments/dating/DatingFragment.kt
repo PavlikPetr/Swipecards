@@ -130,7 +130,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             stateSaverRegistrator.registerStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
         initFormList()
-        ExperimentBoilerplateFragment.newInstance(4L, 42L).show(fragmentManager, "W!!!!!!!!!!!!!!!!!")
         return mBinding.root
     }
 

@@ -22,7 +22,7 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     @Inject lateinit var state: TopfaceAppState
     val profileSubscription: Subscription
 
-    val avatar: ObservableField<String> = ObservableField(Utils.getLocalResUrl(R.drawable.upload_photo_female))
+    val avatar: ObservableField<String> = ObservableField()
     abstract val popupMessage: ObservableField<String>
     abstract val fakeAvatars: ObservableField<List<Int>>
     abstract val imageUnderAvatar: ObservableField<Int>
