@@ -204,3 +204,5 @@
   **[] $VALUES;
   public *;
 }
+
+-keep class com.xxx.A$* { *; }

@@ -110,6 +110,7 @@
 # Legacy
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
+-dontnote org.apache.http.**
 -dontwarn android.net.http.**
 
 # Google Play Services library
