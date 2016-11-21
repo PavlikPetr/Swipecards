@@ -1516,6 +1516,7 @@
     </style>
 
     <style name="PurchaseToolbarAdditionalView">
+
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">2dp</item>
