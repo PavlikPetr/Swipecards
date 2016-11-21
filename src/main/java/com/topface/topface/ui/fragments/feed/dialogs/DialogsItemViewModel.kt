@@ -26,6 +26,9 @@ class DialogsItemViewModel(binding: FeedItemDialogBinding,
         val OVER_99_MESSAGES = "99+"
     }
 
+    override val feed_type: String
+        get() = "Dialog"
+
     val counterVisibility = ObservableInt(View.GONE)
     val dialogTextColor: Int
         get() {

@@ -14,6 +14,9 @@ class PhotoblogItemViewModel(binding: FeedPhotoblogItemBinding, item: FeedPhotoB
                              isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedPhotoblogItemBinding, FeedPhotoBlog>(binding, item, mNavigator, isActionModeEnabled) {
 
+    override val feed_type: String
+        get() = "Photoblog"
+
     override val text: String?
         get() = item.user.status
 

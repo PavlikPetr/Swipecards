@@ -7,6 +7,7 @@ import com.topface.topface.databinding.FeedItemCityAgeNameBinding
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.mutual.MutualItemViewModel
 
 
 class MutualFeedAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter<FeedItemCityAgeNameBinding, FeedMutual>() {
@@ -15,8 +16,7 @@ class MutualFeedAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapte
         super.bindData(binding, position)
         binding?.let { bind ->
             getDataItem(position)?.let { item ->
-                bind.model = BaseFeedItemViewModel(bind, item, mNavigator, { isActionModeEnabled })
-                bind.city = item.user.city
+                bind.model = MutualItemViewModel(bind, item, mNavigator, { isActionModeEnabled })
             }
         }
     }
