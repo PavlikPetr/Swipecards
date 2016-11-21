@@ -11,16 +11,18 @@ class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
 
     override fun construct(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long) =
             when (type) {
-                ExperimentsType.EXPERIMENT_1 -> BoilerplateDialogMetrics.create {
-                    titleTopMargin = R.dimen.experiment_1_2_3_title_top_margin
-                    titleBottomMargin = R.dimen.experiment_1_2_3_title_bottom_margin
-                    contentBottomMargin = R.dimen.experiment_1_2_3_content_bottom_margin
-                    getVipBottomMargin = R.dimen.experiment_1_2_3_get_vip_bottom_margin
-                    descriptionBottomMargin = R.dimen.experiment_1_2_3_description_bottom_margin
+                ExperimentsType.EXPERIMENT_0 -> BoilerplateDialogMetrics.create {
+                    popupBackground = R.drawable.trial_vip_background
+                    getVipButtonBackground = R.drawable.btn_blue_selector
+                    contentBottomMargin = R.dimen.toolbar_title_padding_left
+                    initStandardMetrics(this)
+                }
+                ExperimentsType.EXPERIMENT_1, ExperimentsType.EXPERIMENT_3 -> BoilerplateDialogMetrics.create {
+                    initStandardMetrics(this)
                 }
                 ExperimentsType.EXPERIMENT_2 -> BoilerplateDialogMetrics.create {
-                }
-                ExperimentsType.EXPERIMENT_3 -> BoilerplateDialogMetrics.create {
+                    isSpecialOffer = true
+                    initStandardMetrics(this)
                 }
                 ExperimentsType.EXPERIMENT_4 -> BoilerplateDialogMetrics.create {
                     titleTopMargin = R.dimen.experiment_5_title_top_margin
@@ -40,5 +42,15 @@ class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
                 else -> BoilerplateDialogMetrics.create {
                 }
             }
+
+
+    private fun initStandardMetrics(builder: BoilerplateDialogMetrics.Builder): BoilerplateDialogMetrics.Builder {
+        builder.titleTopMargin = R.dimen.experiment_1_2_3_title_top_margin
+        builder.titleBottomMargin = R.dimen.experiment_1_2_3_title_bottom_margin
+        builder.contentBottomMargin = R.dimen.experiment_1_2_3_content_bottom_margin
+        builder.getVipBottomMargin = R.dimen.experiment_1_2_3_get_vip_bottom_margin
+        builder.descriptionBottomMargin = R.dimen.experiment_1_2_3_description_bottom_margin
+        return builder
+    }
 
 }

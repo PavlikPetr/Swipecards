@@ -1,15 +1,18 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
+import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
+import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentSubType.EXPERIMENT_SUBTYPE
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_SUBTYPE
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
 import org.jetbrains.anko.layoutInflater
 
@@ -19,12 +22,22 @@ import org.jetbrains.anko.layoutInflater
  */
 class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmentRunner.IRunner {
 
+    var cancelListener: DialogInterface.OnCancelListener? = null
+    var dismissListener: DialogInterface.OnDismissListener? = null
+    var onFragmentFinishDelegate: IOnFragmentFinishDelegate? = null
+
     companion object {
-        @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long, @ExperimentSubType.ExperimentsSubType subType: Long) =
+        const val TAG = "TrialVipPopup"
+        const val SKIP_SHOWING_CONDITION = "skip_showing_condition"
+        @JvmOverloads @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long =
+                                                 App.get().options.trialVipExperiment.androidTrialPopupExp,
+                                                 @ExperimentsType.ExperimentsType subType: Long = 0L,
+                                                 skipShowingCondition: Boolean = false, args: Bundle = Bundle()) =
                 with(ExperimentBoilerplateFragment()) {
-                    arguments = Bundle().apply {
+                    arguments = args.apply {
                         putLong(EXPERIMENT_TYPE, type)
                         putLong(EXPERIMENT_SUBTYPE, subType)
+                        putBoolean(SKIP_SHOWING_CONDITION, skipShowingCondition)
                     }
                     this
                 }
@@ -46,7 +59,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mContentBinding by lazy {
-        ContentViewFactory(context.applicationContext, mBinding.content).construct(mType, mSubType)
+        ContentViewFactory(context.applicationContext, mBinding.content,arguments).construct(mType, mSubType)
     }
 
     private val mBinding by lazy {
@@ -77,6 +90,36 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.content.addView(mContentBinding.root)
+    }
+
+    private fun incrPopupShowCounter() = with(App.getUserConfig()) {
+        setTrialVipPopupCounter(trialVipCounter + 1)
+        saveConfig()
+    }
+
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
+        cancelListener?.onCancel(dialog)
+        if (onFragmentFinishDelegate != null) {
+            onFragmentFinishDelegate!!.closeFragmentByForm()
+        }
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        super.onDismiss(dialog)
+        dismissListener?.onDismiss(dialog)
+        with(arguments) {
+            if (this != null && !getBoolean(SKIP_SHOWING_CONDITION)) {
+                incrPopupShowCounter()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        cancelListener = null
+        dismissListener = null
+        onFragmentFinishDelegate = null
+        super.onDestroy()
     }
 
     override fun runMarketPopup() = mMarketFragmentRunner.startTransparentMarketFragment { dismiss() }

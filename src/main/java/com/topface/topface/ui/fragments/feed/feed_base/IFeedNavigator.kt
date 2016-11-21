@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.app.Activity
+import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
@@ -32,4 +33,6 @@ interface IFeedNavigator {
                                     @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int)
 
     fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos)
+    //todo придумать свой навигатор для попапов
+    fun showTrialPopup(type: Long, args: Bundle)
 }

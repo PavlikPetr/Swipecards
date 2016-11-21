@@ -26,7 +26,7 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
-import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipPopup;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
@@ -106,7 +106,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     private boolean mIsOfferwallsReady;
     private Subscription mEventBusSubscriber;
 
-    private TrialVipPopup mTrialVipPopup;
+    private ExperimentBoilerplateFragment mTrialVipPopup;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -319,10 +319,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         if (getIntent().getIntExtra(App.INTENT_REQUEST_KEY, -1) == INTENT_BUY_VIP && App.isNeedShowTrial
                 && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                 && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-            mTrialVipPopup = TrialVipPopup.newInstance(true);
-            mTrialVipPopup.setOnDismissListener(dismissListener);
-            mTrialVipPopup.onVipTrialPurchaseStart();
-            mTrialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
+            mTrialVipPopup = ExperimentBoilerplateFragment.newInstance();
+            mTrialVipPopup.setDismissListener(dismissListener);
+            mTrialVipPopup.show(getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
             App.isNeedShowTrial = false;
             return true;
         }

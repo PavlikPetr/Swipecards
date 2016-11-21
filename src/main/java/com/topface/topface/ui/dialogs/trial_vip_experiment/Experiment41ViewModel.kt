@@ -9,6 +9,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject
@@ -37,23 +38,23 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
     init {
         setUrlAvatar(App.get().profile)
         App.get().inject(this)
-        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile ->
-            setUrlAvatar(profile)
-            setRandomPhoto(profile)
+        profileSubscription = state.getObservable(Profile::class.java).subscribe {
+            setUrlAvatar(it)
+            setRandomPhoto(it)
         }
     }
 
-    fun setRandomPhoto(profile: Profile) {
-        with(Utils.randomImageRes(PHOTO_COUNT, if (profile.sex == Profile.BOY) girls else boys)) {
-            randomLeftPhoto.set(this[0])
-            randomRightPhoto.set(this[1])
-        }
-    }
+    fun setRandomPhoto(profile: Profile) =
+            with(Utils.randomImageRes(PHOTO_COUNT, if (profile.sex == Profile.BOY) girls else boys)) {
+                randomLeftPhoto.set(this[0])
+                randomRightPhoto.set(this[1])
+            }
 
-    fun setFakeAvatar(profile: Profile) = when {
-        (profile.sex == Profile.BOY) -> R.drawable.upload_photo_male
-        else -> R.drawable.upload_photo_female
-    }
+
+    fun setFakeAvatar(profile: Profile) = if (profile.sex == Profile.BOY)
+        R.drawable.upload_photo_male
+    else
+        R.drawable.upload_photo_female
 
     fun setUrlAvatar(profile: Profile) {
         val photoUrl = if (profile.photo != null) profile.photo.defaultLink else Utils.EMPTY
@@ -62,7 +63,7 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
 
     override fun release() {
         super.release()
-        profileSubscription.unsubscribe()
+        profileSubscription.safeUnsubscribe()
     }
 
 }
