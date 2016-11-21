@@ -126,9 +126,7 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
             else
                 if (isCollapsed) R.drawable.menu_white else R.drawable.menu_gray)
 
-    override fun isScrimVisible(isVisible: Boolean) {
-        isScrimVisible.set(isVisible)
-    }
+    override fun isScrimVisible(isVisible: Boolean) = isScrimVisible.set(isVisible)
 
     override fun release() {
         super.release()

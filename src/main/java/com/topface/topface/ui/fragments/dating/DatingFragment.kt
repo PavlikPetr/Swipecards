@@ -40,6 +40,7 @@ import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewMod
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
@@ -229,7 +230,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.onResume()
         Debug.log("GIFTS_BUGS dating resume current user id ${mDatingFragmentViewModel.currentUser?.id}")
         operateWithToolbar({ this.isCollapsStyle.set(true) })
-        mDatingAlbumViewModel.currentUser?.let { updateToolbar(it) }
+        updateToolbar(mDatingAlbumViewModel.currentUser)
     }
 
     override fun onDestroy() {
@@ -239,8 +240,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onUserShow(user: SearchUser) = updateToolbar(user)
 
-    private fun updateToolbar(user: SearchUser) =
-            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user.nameAndAge, isOnline = user.online))
+    private fun updateToolbar(user: SearchUser?) =
+            ToolbarManager.setToolbarSettings(ToolbarSettingsData(title = user?.nameAndAge ?: Utils.EMPTY,
+                    isOnline = user?.online ?: false))
 
     override fun onOptionsItemSelected(item: MenuItem?) =
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -258,9 +260,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private fun operateWithToolbar(block: NavigationToolbarViewModel.() -> Unit) {
         (activity as? ToolbarActivity<*>)?.let {
-            (it.getToolbarViewModel() as? NavigationToolbarViewModel).let {
-                it?.run(block)
-            }
+            (it.getToolbarViewModel() as? NavigationToolbarViewModel)?.run(block)
         }
     }
 
