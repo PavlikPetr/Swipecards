@@ -163,9 +163,12 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
-            forms = mutableListOf<IType>(FormModel(Pair(String.format(R.string.fill_own_profile.getString(), user.firstName), ""),
+            forms = mutableListOf<IType>(FormModel(
+                    Pair(String.format(if (user.sex == Profile.BOY) R.string.fill_own_profile_boy.getString()
+                    else R.string.fill_own_profile.getString(), user.firstName), ""),
                     isEmptyItem = false))
         } else {
+
             forms = mutableListOf <IType>().apply {
                 var hasEmptyItem = false
                 user.forms.forEach {
