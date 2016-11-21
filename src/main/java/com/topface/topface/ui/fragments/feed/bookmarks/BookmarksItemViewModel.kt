@@ -8,6 +8,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 class BookmarksItemViewModel(binding: FeedBookmarksItemBinding, item: FeedBookmark, mNavigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedBookmarksItemBinding, FeedBookmark>(binding, item, mNavigator, isActionModeEnabled) {
 
+    override val feed_type: String
+        get() = "Bookmark"
+
     override val text: String?
         get() = item.user.city.name
 

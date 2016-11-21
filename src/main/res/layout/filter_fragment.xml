@@ -40,6 +40,7 @@
                     android:text="@string/filter_select_sex_title" />
 
                 <CheckBox
+                    android:id="@+id/sex_male"
                     style="@style/FilterCheckBox"
                     android:layout_marginRight="20dp"
                     android:checked="@{viewModel.isMaleSelected}"
@@ -48,6 +49,7 @@
                     android:text="@string/filter_select_sex_male" />
 
                 <CheckBox
+                    android:id="@+id/sex_female"
                     style="@style/FilterCheckBox"
                     android:checked="@{!viewModel.isMaleSelected}"
                     android:enabled="@{viewModel.isEnabled}"
@@ -90,6 +92,7 @@
                 <FrameLayout style="@style/FilterDivider" />
 
                 <TextView
+                    android:id="@+id/choose_city"
                     style="@style/FilterItemTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/filter_item_height"
@@ -116,6 +119,7 @@
                 android:orientation="vertical">
 
                 <CheckBox
+                    android:id="@+id/online_only"
                     style="@style/FilterSwitch"
                     android:checked="@{viewModel.onlineOnly}"
                     android:enabled="@{viewModel.isEnabled}"
@@ -125,6 +129,7 @@
                 <FrameLayout style="@style/FilterDivider" />
 
                 <CheckBox
+                    android:id="@+id/pretty_only"
                     style="@style/FilterSwitch"
                     android:checked="@{viewModel.prettyOnly}"
                     android:enabled="@{viewModel.isEnabled}"

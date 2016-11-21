@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding
 import android.text.Html
 import android.text.TextUtils
 import android.view.View
+import com.smaato.soma.internal.utilities.StringFormatter
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
@@ -11,6 +12,8 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData
 import com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder
+import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
+import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
 
 /**
@@ -21,6 +24,8 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
                                                                         private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
     val AGE_TEMPLATE = ", %d"
     val DOTS = "&#8230;"
+    val TAG_TEMPLATE = "%s_%d_%s"
+    open val feed_type: String = "UNDEFINED"
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
     open val text: String? = null
@@ -31,6 +36,8 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
             nameAndAge = getNameAndAge(it)
         }
     }
+
+    fun getTag() = String.format(App.getCurrentLocale(), TAG_TEMPLATE, item.id, item.getUserId(), feed_type)
 
     open fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(
             if (TextUtils.isEmpty(feedUser.firstName))

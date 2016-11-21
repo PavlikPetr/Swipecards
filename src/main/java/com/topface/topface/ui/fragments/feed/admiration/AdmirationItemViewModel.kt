@@ -18,6 +18,9 @@ class AdmirationItemViewModel(binding: FeedItemHeartBinding, item: FeedLike, nav
         BaseSymphatiesItemViewModel<FeedItemHeartBinding>(binding, item, navigator, mApi,
                 mHandleDuplicates, isActionModeEnabled) {
 
+    override val feed_type: String
+        get() = "Admiration"
+
     override fun getClickListenerForMultiselectHandle() = arrayOf<View.OnClickListener>(binding.clickListener)
 
     override fun getReadItemRequest() = ReadAdmirationRequest(context, listOf(item.id.toInt()))

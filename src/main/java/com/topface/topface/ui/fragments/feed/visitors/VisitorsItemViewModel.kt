@@ -9,6 +9,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 class VisitorsItemViewModel(binding: FeedItemSimpleTimeBinding, item: Visitor, navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<FeedItemSimpleTimeBinding, Visitor>(binding, item, navigator, isActionModeEnabled) {
 
+    override val feed_type: String
+        get() = "Visitors"
+
     var time: String = item.createdRelative
 
     override val text: String?
