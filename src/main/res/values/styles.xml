@@ -1470,7 +1470,7 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_width">@dimen/coins_button_width</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/buy_coins_button_bg</item>
+        <item name="android:background">@color/buy_vip_text_color</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/coins_button_text_size</item>
         <item name="android:padding">-2dp</item>
