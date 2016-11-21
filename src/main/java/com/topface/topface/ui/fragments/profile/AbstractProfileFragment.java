@@ -17,15 +17,13 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipPopup;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
-import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
 
@@ -114,8 +112,10 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 Profile profile = App.get().getProfile();
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-                    final TrialVipPopup popup = TrialVipPopup.newInstance(true);
-                    popup.show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
+
+                    final ExperimentBoilerplateFragment popup =
+                            new ExperimentBoilerplateFragment();
+                    popup.show(getActivity().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
                     App.isNeedShowTrial = false;
                 }
             }

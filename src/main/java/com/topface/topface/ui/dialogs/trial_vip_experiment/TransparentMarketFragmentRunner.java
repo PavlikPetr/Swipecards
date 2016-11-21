@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 
@@ -33,7 +34,7 @@ public class TransparentMarketFragmentRunner {
         }
         Fragment f = mActivity.get().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
         final Fragment fragment = f == null ?
-                TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
+                TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, ExperimentBoilerplateFragment.TAG) : f;
         fragment.setRetainInstance(true);
         if (fragment instanceof ITransparentMarketFragmentRunner) {
             ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {

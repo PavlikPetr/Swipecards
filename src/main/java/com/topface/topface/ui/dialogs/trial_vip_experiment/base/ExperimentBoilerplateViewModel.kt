@@ -2,9 +2,10 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import com.topface.topface.App
+import android.view.View
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
-import org.jetbrains.anko.dimen
+import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.extensions.getString
 
 /**
  * VM для шаблона попапов экспериментов.
@@ -13,23 +14,24 @@ import org.jetbrains.anko.dimen
 class ExperimentBoilerplateViewModel(private val mPopupRunner: TransparentMarketFragmentRunner.IRunner,
                                      dialogMetrics: BoilerplateDialogMetrics, dialogData: BoilerplateData) {
 
-    private companion object {
-        const val EMPTY = ""
-    }
-
-    private val mContext = App.getContext()
-
-    val titleTopMargin = ObservableInt(mContext.dimen(dialogMetrics.titleTopMargin))
-    val titleBottomMargin = ObservableInt(mContext.dimen(dialogMetrics.titleBottomMargin))
-    val contentBottomMargin = ObservableInt(mContext.dimen(dialogMetrics.contentBottomMargin))
-    val getVipBottomMargin = ObservableInt(mContext.dimen(dialogMetrics.getVipBottomMargin))
-    val descriptionBottomMargin = ObservableInt(mContext.dimen(dialogMetrics.descriptionBottomMargin))
+    val titleTopMargin = ObservableInt(dialogMetrics.titleTopMargin.getDimen().toInt())
+    val titleBottomMargin = ObservableInt(dialogMetrics.titleBottomMargin.getDimen().toInt())
+    val contentBottomMargin = ObservableInt(dialogMetrics.contentBottomMargin.getDimen().toInt())
+    val getVipBottomMargin = ObservableInt(dialogMetrics.getVipBottomMargin.getDimen().toInt())
+    val descriptionBottomMargin = ObservableInt(dialogMetrics.descriptionBottomMargin.getDimen().toInt())
     val popupBackground = ObservableInt(dialogMetrics.popupBackground)
     val getVipButtonBackground = ObservableInt(dialogMetrics.getVipButtonBackground)
+    val specialOfferVisibility = ObservableInt(specialOfferVisibility(dialogMetrics.isSpecialOffer))
 
-    val title = ObservableField<String>(mContext.getString(dialogData.title) ?: EMPTY)
-    val buttonText = ObservableField<String>(mContext.getString(dialogData.buttonText) ?: EMPTY)
-    val description = ObservableField<String>(mContext.getString(dialogData.description) ?: EMPTY)
+    val title = ObservableField<String>(dialogData.title.getString())
+    val buttonText = ObservableField<String>(dialogData.buttonText.getString())
+    val description = ObservableField<String>(dialogData.description.getString())
+
+    private fun specialOfferVisibility(visibility: Boolean) = if (visibility) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
 
     fun getVip() = mPopupRunner.runMarketPopup()
 
