@@ -24,9 +24,9 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         const val PHOTO_COUNT = 2
     }
 
-    val girls = listOf(R.drawable.girl_1, R.drawable.girl_2, R.drawable.girl_3, R.drawable.girl_4, R.drawable.girl_5, R.drawable.girl_6, R.drawable.girl_7, R.drawable.girl_8, R.drawable.girl_9, R.drawable.girl_10)
+    val girls = listOf(R.drawable.ic_search)
 
-    val boys = listOf(R.drawable.man_1, R.drawable.man_2, R.drawable.man_3, R.drawable.man_4, R.drawable.man_5, R.drawable.man_6, R.drawable.man_7, R.drawable.man_8, R.drawable.man_9, R.drawable.man_10)
+    val boys = listOf(R.drawable.ic_ab_app)
 
     val userAvatar: ObservableField<String> = ObservableField()
     val randomLeftPhoto: ObservableField<Int> = ObservableField()

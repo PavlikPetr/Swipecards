@@ -173,6 +173,7 @@ public class PromoExpressMessages extends PromoDialog {
             } while (avatarsIdArray.contains(usersFakeArray.get(randomValue)) || iterCounter < 30);
             avatarsIdArray.add(usersFakeArray.get(randomValue));
         }
+        imgs.recycle();
         return avatarsIdArray;
     }
 
