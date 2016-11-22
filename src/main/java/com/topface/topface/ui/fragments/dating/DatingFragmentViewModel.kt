@@ -114,6 +114,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                 }
 
                 override fun onError(e: Throwable?) {
+                    mDatingButtonsView.unlockControls()
                     e?.printStackTrace()
                 }
 
@@ -163,9 +164,12 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
-            forms = mutableListOf<IType>(FormModel(Pair(String.format(R.string.fill_own_profile.getString(), user.firstName), ""),
+            forms = mutableListOf<IType>(FormModel(
+                    Pair(String.format(if (user.sex == Profile.BOY) R.string.fill_own_profile_boy.getString()
+                    else R.string.fill_own_profile.getString(), user.firstName), Utils.EMPTY),
                     isEmptyItem = false))
         } else {
+
             forms = mutableListOf <IType>().apply {
                 var hasEmptyItem = false
                 user.forms.forEach {
@@ -175,7 +179,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                         add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
-                    add(FormModel(Pair(it.title, it.value), isEmptyItem = it.isEmpty))
+                    add(FormModel(Pair(it.title, it.value), user.id, it.dataType.type, isEmptyItem = it.isEmpty))
                 }
             }
         }
@@ -243,7 +247,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
     override fun onEmptyList(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {
-            mDatingButtonsView.lockControls()
             update(false, false)
         }
     }

@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.databinding.ViewDataBinding;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -42,7 +41,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.topface.framework.imageloader.IPhoto;
@@ -60,7 +58,6 @@ import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.viewModels.BaseViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -463,7 +460,6 @@ public class Utils {
             }
         }
     }
-
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void enableLayoutChangingTransition(ViewGroup viewGroup) {

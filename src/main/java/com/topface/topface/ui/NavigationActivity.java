@@ -21,7 +21,6 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
@@ -43,12 +42,11 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
-import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.Utils;
@@ -98,8 +96,6 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
     private boolean mIsPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
-    @SuppressWarnings("deprecation")
-    private IActionbarNotifier mNotificationController;
     @Inject
     TopfaceAppState mAppState;
     @Inject
@@ -146,14 +142,6 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
-            @Override
-            public void call(CountersData countersData) {
-                if (mNotificationController != null) {
-                    mNotificationController.refreshNotificator(countersData.getDialogs(), countersData.getMutual());
-                }
-            }
-        }));
         mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
             @Override
             public void call(AdjustAttributeData adjustAttributionData) {
@@ -615,16 +603,21 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
     @Override
     public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
         if (getToolbarViewModel() instanceof NavigationToolbarViewModel) {
-            CustomToolbarViewModel customViewModel = ((NavigationToolbarViewModel) getToolbarViewModel()).getExtraViewModel();
-            customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
-            customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
-            Boolean isOnline = settings.isOnline();
-            customViewModel.isOnline().set(isOnline != null && isOnline);
-            if (settings.getTitle() != null) {
-                customViewModel.getTitle().set(settings.getTitle());
-            }
-            if (settings.getSubtitle() != null) {
-                customViewModel.getSubTitle().set(settings.getSubtitle());
+            NavigationToolbarViewModel toolbarViewModel = (NavigationToolbarViewModel) getToolbarViewModel();
+            CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
+            if (customViewModel != null) {
+                if (toolbarViewModel.isScrimVisible().get()) {
+                    customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+                    customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+                }
+                Boolean isOnline = settings.isOnline();
+                customViewModel.isOnline().set(isOnline != null && isOnline);
+                if (settings.getTitle() != null) {
+                    customViewModel.getTitle().set(settings.getTitle());
+                }
+                if (settings.getSubtitle() != null) {
+                    customViewModel.getSubTitle().set(settings.getSubtitle());
+                }
             }
         }
     }

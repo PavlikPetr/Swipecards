@@ -15,12 +15,14 @@
         android:paddingLeft="@dimen/toolbar_title_padding_left">
 
         <TextView
+            android:id="@+id/coins_textview"
             style="@style/PurchaseToolbarAdditionalView"
             android:drawableRight="@drawable/coins_gray"
             android:paddingRight="5dp"
             android:text="@{viewModel.coins}"/>
 
         <TextView
+            android:id="@+id/likes_textview"
             style="@style/PurchaseToolbarAdditionalView"
             android:drawableRight="@drawable/like_nav_bar_gray"
             android:paddingLeft="6dp"

@@ -68,11 +68,13 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     private val mUpdateActionsReceiver: BroadcastReceiver
 
-    private companion object {
-        const val CURRENT_USER = "current_user_dating_buttons"
-        const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
-        const val DATING_BUTTON_VISIBILITY = "dating_button_visibility"
-        const val MAX_LIKE_AMOUNT = 4
+    companion object {
+        private const val CURRENT_USER = "current_user_dating_buttons"
+        private const val DATING_BUTTONS_LOCKED = "dating_buttons_locked"
+        private const val DATING_BUTTON_VISIBILITY = "dating_button_visibility"
+        private const val MAX_LIKE_AMOUNT = 4
+        const val BUTTON_FROM_ANCHOR = 0
+        const val BUTTON_FROM_DATING_FRAGMENT = 1
     }
 
     init {
@@ -182,7 +184,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         appConfig.saveConfig()
     }
 
-    fun validateSendAdmiration() {
+    fun validateSendAdmiration(viewID: Int) {
         val priceAdmiration = App.get().options.priceAdmiration
         val isShown = App.getUserConfig().isAdmirationPurchasePopupShown
 
@@ -191,14 +193,14 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
             if (it.premium || hasMoneyForAdmiration && isShown) {
                 sendAdmiration()
             } else {
-                startAdmirationPurchasePopup()
+                startAdmirationPurchasePopup(viewID)
             }
         }
     }
 
-    private fun startAdmirationPurchasePopup() {
+    private fun startAdmirationPurchasePopup(viewID: Int) {
         App.getUserConfig().setAdmirationPurchasePopupShown()
-        mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(binding.sendAdmiration,
+        mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(viewID,
                 R.color.dating_fab_small, R.drawable.admiration)
     }
 

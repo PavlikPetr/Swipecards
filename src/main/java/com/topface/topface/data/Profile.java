@@ -172,9 +172,9 @@ public class Profile extends AbstractDataWithPhotos {
         }
     }
 
-    private boolean hasEmptyForms(LinkedList<FormItem> forms){
+    private boolean hasEmptyForms(LinkedList<FormItem> forms) {
         for (FormItem form : forms) {
-            if (form.isEmpty()) {
+            if (form.isEmpty() && !(sex == Profile.BOY && form.dataType == FormItem.DATA_TYPE.BREAST)) {
                 return true;
             }
         }
@@ -279,7 +279,8 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 7 height position 3
             int h = form.optInt("height");
-            String height = (h == 0) ? null : Integer.toString(form.optInt("height"));
+            String templateHeight = App.getContext().getString(R.string.unit_height);
+            String height = (h == 0) ? null : String.format(templateHeight, h);
             formItem = new FormItem(R.array.form_main_height, height, FormItem.DATA, headerItem, HEIGHT);
             formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
                 @Override
@@ -302,7 +303,8 @@ public class Profile extends AbstractDataWithPhotos {
 
             // 8 weight position 4
             int w = form.optInt("weight");
-            String weight = w == 0 ? null : Integer.toString(form.optInt("weight"));
+            String templateWeight = App.getContext().getString(R.string.unit_weight);
+            String weight = w == 0 ? null : String.format(templateWeight, w);
             formItem = new FormItem(R.array.form_main_weight, weight, FormItem.DATA, headerItem, WEIGHT);
             formItem.setValueLimitInterface(new FormItem.ValueLimitInterface() {
                 @Override

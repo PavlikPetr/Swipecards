@@ -13,6 +13,9 @@ import com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData
 class BlackListItemViewModel(binding: BlackListItemBinding, item: BlackListItem, mNavigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) :
         BaseFeedItemViewModel<BlackListItemBinding, BlackListItem>(binding, item, mNavigator, isActionModeEnabled) {
 
+    override val feed_type: String
+        get() = "BlackList"
+
     override fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(
             if (TextUtils.isEmpty(feedUser.firstName))
                 Html.fromHtml(DOTS).toString()

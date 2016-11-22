@@ -32,9 +32,10 @@
             fab:fab_labelsPosition="left">
 
             <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                android:id="@+id/send_admiration"
                 style="@style/ExpandableFabItem"
                 android:clickable="@{model.isDatingButtonsLocked}"
-                android:onClick="@{() -> model.validateSendAdmiration()}"
+                android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_DATING_FRAGMENT)}"
                 android:src="@drawable/admiration"/>
 
             <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
