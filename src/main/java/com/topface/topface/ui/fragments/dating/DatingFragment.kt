@@ -82,6 +82,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this)
     }
     private val mDatingOptionMenuManager by lazy {
+        //todo срет логами, починить
         DatingOptionMenuManager(mNavigator)
     }
 
