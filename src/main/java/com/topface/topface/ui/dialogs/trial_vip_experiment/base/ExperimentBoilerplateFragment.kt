@@ -139,5 +139,4 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
         TrialVipExperimentStatistics.sendPurchaseCompleted()
         dismiss()
     }
-
 }

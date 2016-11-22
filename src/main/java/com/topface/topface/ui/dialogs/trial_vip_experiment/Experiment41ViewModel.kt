@@ -12,6 +12,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.ListUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDrawableList
+import com.topface.topface.utils.extensions.getDrawableListFromArrayId
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
@@ -47,9 +48,9 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
     private fun setRandomPhoto(profile: Profile) =
             with(Utils.randomImageRes(PHOTO_COUNT,
                     if (profile.sex == Profile.BOY)
-                        R.array.fake_girls_without_blur.getDrawableList(R.drawable.girl_1)
+                        R.array.fake_girls_without_blur.getDrawableListFromArrayId(R.drawable.girl_1)
                     else
-                        R.array.fake_boys_without_blur.getDrawableList(R.drawable.man_1))) {
+                        R.array.fake_boys_without_blur.getDrawableListFromArrayId(R.drawable.man_1))) {
                 randomLeftPhoto.set(this[0])
                 randomRightPhoto.set(this[1])
             }
