@@ -36,11 +36,11 @@ class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>()
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_visitors
 
-    override fun showTrial() {
-        if (App.getUserConfig().canShowInVisitors() && isAdded) {
+    override fun showTrial() = App.get().options.trialVipExperiment.androidTrialPopupExp.run {
+        if (App.getUserConfig().canShowInVisitors(this) && isAdded) {
             val popup = ExperimentBoilerplateFragment
-                    .newInstance(type = ExperimentsType.EXPERIMENT_1, skipShowingCondition = true)
-            popup.onFragmentFinishDelegate = this
+                    .newInstance(type = this, skipShowingCondition = true)
+            popup.onFragmentFinishDelegate = this@VisitorsFragment
             popup.show(activity.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
         }
     }

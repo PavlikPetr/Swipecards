@@ -360,12 +360,12 @@ public class UserConfig extends AbstractConfig {
         mConfigExtension.setDailyConfigField(TRIAL_SHOWS_IN_VISITORS, 0);
     }
 
-    public boolean canShowInVisitors() {
+    public boolean canShowInVisitors(long trialType) {
         boolean canShow = false;
         DailyConfigExtension.DailyConfigField configField = mConfigExtension.getDailyConfigField(TRIAL_SHOWS_IN_VISITORS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
         }.getType());
         if (configField != null) {
-            canShow = configField.getConfigFieldInfo().getAmount() == 1;
+            canShow = configField.getConfigFieldInfo().getAmount() == 1 && (trialType == 3 || trialType == 4);
             setShowsInVisitors();
         }
         return canShow;

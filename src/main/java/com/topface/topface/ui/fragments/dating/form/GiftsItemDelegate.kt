@@ -10,6 +10,7 @@ import com.topface.topface.R
 import com.topface.topface.data.Gift
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.databinding.GiftsFormItemBinding
+import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
@@ -17,6 +18,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.ExpandableItem
 import com.topface.topface.ui.new_adapter.ExpandableItemDelegate
 import com.topface.topface.utils.Utils
+import java.util.*
 
 
 /**
@@ -71,23 +73,36 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-            mAdapter?.let {
-                if (!it.hasGifts) {
-                    //выпиливаем итем с повеливающий ченить подарить
-                    it.clearData()
-                    it.hasGifts = true
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
+                val gifts = ArrayList<Gift>().apply {
+                    val answer = data?.getParcelableExtra<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
+                    add(JsonUtils.fromJson(answer?.history?.mJsonForParse, Gift::class.java))
                 }
-                val answer = data?.getParcelableExtra<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
-                val gift = JsonUtils.fromJson(answer?.history?.mJsonForParse, Gift::class.java)
-                mGiftsModel?.gifts?.let {
-                    it.items?.add(0, gift)
-                    it.count++
-                    mViewModel?.gifts = it
-                }
-                it.addFirst(gift)
-                mGiftsList?.scrollToPosition(0)
+                handleGifts(gifts)
             }
+            if (requestCode == ChatActivity.REQUEST_CHAT) {
+                data?.getParcelableArrayListExtra<Gift>(ChatActivity.DISPATCHED_GIFTS)?.let {
+                    handleGifts(it)
+                }
+            }
+        }
+    }
+
+    private fun handleGifts(gifts: ArrayList<Gift>) {
+        mAdapter?.let {
+            if (!it.hasGifts) {
+                //выпиливаем итем с повеливающий ченить подарить
+                it.clearData()
+                it.hasGifts = true
+            }
+            mGiftsModel?.gifts?.let {
+                it.items?.addAll(0, gifts)
+                it.count++
+                mViewModel?.gifts = it
+            }
+            it.addFirst(gifts)
+            mGiftsList?.scrollToPosition(0)
         }
     }
 
