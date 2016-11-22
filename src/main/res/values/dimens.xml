@@ -200,4 +200,8 @@
     <dimen name="experiment_5_get_vip_bottom_margin">10dp</dimen>
     <dimen name="experiment_5_description_bottom_margin">32dp</dimen>
 
+    <dimen name="admiration_image_width">130dp</dimen>
+    <dimen name="admiration_image_height">130dp</dimen>
+    <dimen name="admiration_popup_label1_margin_top">12dp</dimen>
+
 </resources>
