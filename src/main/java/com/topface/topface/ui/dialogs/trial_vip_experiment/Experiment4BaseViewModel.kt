@@ -56,11 +56,12 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     }
 
     fun setAvatarsForFakes() {
-        binding.firstFakeAvatar.setImageResource(fakeAvatars.get(0))
-        binding.secondFakeAvatar.setImageResource(fakeAvatars.get(1))
-        binding.thirdFakeAvatar.setImageResource(fakeAvatars.get(2))
-        binding.fourthFakeAvatar.setImageResource(fakeAvatars.get(3))
-        binding.fifthFakeAvatar.setImageResource(fakeAvatars.get(4))
+        val avat = fakeAvatars
+        binding.firstFakeAvatar.setImageResource(avat.get(0))
+        binding.secondFakeAvatar.setImageResource(avat.get(1))
+        binding.thirdFakeAvatar.setImageResource(avat.get(2))
+        binding.fourthFakeAvatar.setImageResource(avat.get(3))
+        binding.fifthFakeAvatar.setImageResource(avat.get(4))
     }
 
     override fun release() {
