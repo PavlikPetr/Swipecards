@@ -17,7 +17,7 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.
 class BoilerplateDataFactory(private val mContext: Context, val parent: ViewGroup,
                              val args: Bundle) : IBoilerplateFactory<BoilerplateData> {
 
-    override fun construct(@ExperimentsType.ExperimentsType type: Long): BoilerplateData =
+    override fun construct(@ExperimentsType.ExperimentsType type: Long) =
             when (type) {
                 ExperimentsType.EXPERIMENT_0 -> BoilerplateData.create {
                     buttonText = R.string.trial_vip_button_text
@@ -40,16 +40,18 @@ class BoilerplateDataFactory(private val mContext: Context, val parent: ViewGrou
 
     fun subTypeChooser(subType: Long) =
             when (subType) {
-                ExperimentsType.SubType4_1 -> BoilerplateData.create {
+                ExperimentsType.SUBTYPE_4_1 -> BoilerplateData.create {
                 }
-                ExperimentsType.SubType4_2 -> BoilerplateData.create {
+                ExperimentsType.SUBTYPE_4_2 -> BoilerplateData.create {
                     title = if (App.get().profile.sex == Profile.BOY) R.string.write_any_girl else R.string.write_any_boy
                 }
-                ExperimentsType.SubType4_3 -> BoilerplateData.create {
+                ExperimentsType.SUBTYPE_4_3 -> BoilerplateData.create {
                     title = R.string.know_your_guests
                 }
                 else -> BoilerplateData.create {
+                    title = R.string.know_your_guests
                 }
+
             }
 
 }

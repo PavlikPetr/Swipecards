@@ -61,11 +61,11 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup,
 
     fun subTypeChooser(subType: Long): ViewDataBinding {
         when (subType) {
-            ExperimentsType.SubType4_2 -> {
+            ExperimentsType.SUBTYPE_4_2 -> {
                 return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
                         .apply { viewModel = Experiment4WithoutBlurViewModel(this) }
             }
-            ExperimentsType.SubType4_3 -> {
+            ExperimentsType.SUBTYPE_4_3 -> {
                 return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
                         .apply { viewModel = Experiment4WithBlurViewModel(this) }
             }

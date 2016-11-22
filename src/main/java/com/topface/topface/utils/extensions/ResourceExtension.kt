@@ -76,6 +76,12 @@ fun Int.isHasNotification(): Boolean {
     }
 }
 
+/**
+ * The method to convert an array of resources to List<Int>.
+ * method's parameter is defaultValue(Int) of ID resource.
+ * Method creates an array(TypedArray) for ID of array Resource and convert to List<Int>
+ */
+
 fun Int.fromObtainToInt(@DrawableRes defRes: Int): List<Int> {
     val arr: TypedArray
     try {

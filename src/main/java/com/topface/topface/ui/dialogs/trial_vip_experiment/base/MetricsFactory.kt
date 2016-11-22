@@ -9,8 +9,7 @@ import com.topface.topface.R
  * Фабрика метрик, для разных типов попопов триал эксперимента
  * Created by tiberal on  16.11.16.
  */
-class MetricsFactory(private val mContext: Context, val parent: ViewGroup,
-                     val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMetrics> {
+class MetricsFactory(val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMetrics> {
 
 
     override fun construct(@ExperimentsType.ExperimentsType type: Long) =

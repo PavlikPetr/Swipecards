@@ -19,6 +19,16 @@ import javax.inject.Inject
  */
 abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewModel<Experiment4Binding>(binding) {
 
+
+    companion object {
+        // продолжительность задержки для анимации фэйковых аватаров
+        const val FIRST: Long = 0L
+        const val SECOND: Long = 100L
+        const val THIRD: Long = 200L
+        const val FOURTH: Long = 300L
+        const val FIFTH: Long = 400L
+    }
+
     @Inject lateinit var state: TopfaceAppState
     val profileSubscription: Subscription
 
@@ -28,13 +38,6 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     abstract val imageUnderAvatar: ObservableField<Int>
     abstract val imageLeftTop: ObservableField<Int>
     abstract val imageRightBottom: ObservableField<Int>
-
-    // продолжительность задержки для анимации фэйковых аватаров
-    val first = 0L
-    val second = 100L
-    val third = 200L
-    val fourth = 300L
-    val fifth = 400L
 
     init {
         setUrlAvatar(App.get().profile)

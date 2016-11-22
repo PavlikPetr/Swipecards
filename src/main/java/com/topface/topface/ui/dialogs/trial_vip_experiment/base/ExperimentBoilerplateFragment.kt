@@ -31,7 +31,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
         const val SKIP_SHOWING_CONDITION = "skip_showing_condition"
         @JvmOverloads @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long =
                                                  App.get().options.trialVipExperiment.androidTrialPopupExp,
-                                                 @ExperimentsType.ExperimentsType subType: Long = 0L,
+                                                 @ExperimentsType.ExperimentsSubType subType: Long = 0L,
                                                  skipShowingCondition: Boolean = false, args: Bundle = Bundle()) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = args.apply {
@@ -48,7 +48,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mDialogMetricsFactory by lazy {
-        MetricsFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
+        MetricsFactory(arguments).construct(mType)
     }
 
     private val mDialogDataFactory by lazy {

@@ -46,7 +46,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
                 break;
             default:
                 final ExperimentBoilerplateFragment popup = ExperimentBoilerplateFragment
-                        .newInstance(App.get().getOptions().trialVipExperiment.androidTrialPopupExp, 0L, true);
+                        .newInstance(App.get().getOptions().trialVipExperiment.androidTrialPopupExp, ExperimentsType.SUBTYPE_NONE, true);
                 popup.setOnFragmentFinishDelegate(this);
                 popup.show(mActivity.get().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
         }

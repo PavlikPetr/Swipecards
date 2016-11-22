@@ -23,7 +23,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="12dp"
                         app:animationSrc="@{@anim/scale}"
-                        app:bindStartOffSet="@{viewModel.first}" android:layout_width="50dp"/>
+                        app:bindStartOffSet="@{viewModel.FIRST}" android:layout_width="50dp"/>
                     <ImageView
                         android:id="@+id/IVLeftTop"
                         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                         android:layout_toLeftOf="@+id/IVForAvatar"
                         android:layout_marginRight="6dp"
                         app:animationSrc="@{@anim/scale}"
-                        app:bindStartOffSet="@{viewModel.fifth}"
+                        app:bindStartOffSet="@{viewModel.FIFTH}"
                     />
                     <ImageView
                         android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
                         android:layout_toRightOf="@+id/IVForAvatar"
                         android:layout_marginLeft="6dp"
                         app:animationSrc="@{@anim/scale}"
-                        app:bindStartOffSet="@{viewModel.second}"/>
+                        app:bindStartOffSet="@{viewModel.SECOND}"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                         android:layout_alignTop="@+id/IVBelowAvatar"
                         android:layout_toLeftOf="@+id/IVBelowAvatar"
                         app:animationSrc="@{@anim/scale}"
-                        app:bindStartOffSet="@{viewModel.fourth}"/>
+                        app:bindStartOffSet="@{viewModel.FOURTH}"/>
                     <ImageView
                         android:id="@+id/IVBelowAvatar"
                         android:layout_width="74dp"
@@ -110,7 +110,7 @@
                         android:layout_toRightOf="@+id/IVBelowAvatar"
                         android:layout_marginLeft="7dp"
                         app:animationSrc="@{@anim/scale}"
-                        app:bindStartOffSet="@{viewModel.third}"/>
+                        app:bindStartOffSet="@{viewModel.THIRD}"/>
                 </RelativeLayout>
 
             <TextView

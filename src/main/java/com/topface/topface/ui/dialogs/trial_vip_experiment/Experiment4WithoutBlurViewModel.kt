@@ -10,7 +10,7 @@ import com.topface.topface.utils.extensions.fromObtainToInt
 import com.topface.topface.utils.extensions.getString
 
 /**
- * ВьюМодел для незаблёренного, чистого как слеза - эксперимента4(3)
+ * ВьюМодел для незаблёренного, чистого,как слеза, эксперимента4(3)
  */
 class Experiment4WithoutBlurViewModel(binding: Experiment4Binding) : Experiment4BaseViewModel(binding) {
 
