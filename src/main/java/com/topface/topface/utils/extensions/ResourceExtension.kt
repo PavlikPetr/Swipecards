@@ -1,14 +1,15 @@
 package com.topface.topface.utils.extensions
 
 import android.content.res.Resources
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
 import android.support.annotation.DrawableRes
 import com.topface.topface.App
 import com.topface.topface.R
+import java.util.*
 
 /**
  * Created by petrp on 09.10.2016.
@@ -73,4 +74,25 @@ fun Int.isHasNotification(): Boolean {
         R.drawable.menu_white_notification, R.drawable.menu_gray_notification -> true
         else -> false
     }
+}
+
+/**
+ * Method creates an array(TypedArray) for ID of array Resource and convert to List<Int>
+ * @param defRes - defaultValue(Int) of ID resource.
+ * @return List<Int> of Id resources
+ */
+
+fun Int.getDrawableListFromArrayId(@DrawableRes defRes: Int): List<Int> {
+    val arr: TypedArray
+    try {
+        arr = App.getContext().resources.obtainTypedArray(this)
+    } catch(e: Resources.NotFoundException) {
+        return listOf(defRes)
+    }
+    val usersFakeArray = ArrayList<Int>()
+    for (i in 0..arr.length() - 1) {
+        usersFakeArray.add(arr.getResourceId(i, defRes))
+    }
+    arr.recycle()
+    return usersFakeArray
 }
