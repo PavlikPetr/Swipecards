@@ -24,10 +24,18 @@ class TrialVipExperimentStatistics {
                     putSlice(TRIAL_TYPE, App.get().getOptions().trialVipExperiment.androidTrialPopupExp.toString())
                 })
 
-        @JvmStatic @JvmOverloads fun sendPopupShow(showCount: Int = getShowCountFromConfig()) = send(TRIAL_VIP_POPUP_SHOW, showCount)
-        @JvmStatic @JvmOverloads fun sendPopupClose(showCount: Int = getShowCountFromConfig()) = send(TRIAL_VIP_POPUP_CLOSE, showCount)
-        @JvmStatic @JvmOverloads fun sendPurchaseButtonPressed(showCount: Int = getShowCountFromConfig()) = send(TRIAL_VIP_POPUP_PURCHASE_BUTTON_PRESSED, showCount)
-        @JvmStatic @JvmOverloads fun sendPurchaseCompleted(showCount: Int = getShowCountFromConfig()) = send(TRIAL_VIP_POPUP_PURCHASE_COMPLETED, showCount)
+        @JvmStatic @JvmOverloads fun sendPopupShow(showCount: Int = getShowCountFromConfig()) =
+                send(TRIAL_VIP_POPUP_SHOW, showCount)
+
+        @JvmStatic @JvmOverloads fun sendPopupClose(showCount: Int = getShowCountFromConfig()) =
+                send(TRIAL_VIP_POPUP_CLOSE, showCount)
+
+        @JvmStatic @JvmOverloads fun sendPurchaseButtonPressed(showCount: Int = getShowCountFromConfig()) =
+                send(TRIAL_VIP_POPUP_PURCHASE_BUTTON_PRESSED, showCount)
+
+        @JvmStatic @JvmOverloads fun sendPurchaseCompleted(showCount: Int = getShowCountFromConfig()) =
+                send(TRIAL_VIP_POPUP_PURCHASE_COMPLETED, showCount)
+
         private fun getShowCountFromConfig() = App.getUserConfig().trialVipShowCounter
     }
 }

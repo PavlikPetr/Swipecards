@@ -372,7 +372,7 @@ public class UserConfig extends AbstractConfig {
     }
 
     /**
-     * save the number of impressions trial vip popup
+     * save the number of impressions trial vip popup inside popup queue
      *
      * @param count times trial vip popup showing
      */
@@ -381,7 +381,7 @@ public class UserConfig extends AbstractConfig {
     }
 
     /**
-     * get the number of impressions trial vip popup
+     * get the number of impressions trial vip popup inside popup queue
      *
      * @return count
      */
