@@ -114,6 +114,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                 }
 
                 override fun onError(e: Throwable?) {
+                    mDatingButtonsView.unlockControls()
                     e?.printStackTrace()
                 }
 
@@ -246,7 +247,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
     override fun onEmptyList(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {
-            mDatingButtonsView.lockControls()
             update(false, false)
         }
     }

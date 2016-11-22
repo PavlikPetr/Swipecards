@@ -9,6 +9,6 @@ import android.view.View
  * Created by siberia87 on 01.11.16.
  */
 interface IStartAdmirationPurchasePopup {
-    fun startAnimateAdmirationPurchasePopup(transitionView: View, @ColorInt fabColorResId: Int,
+    fun startAnimateAdmirationPurchasePopup(viewID: Int, @ColorInt fabColorResId: Int,
                                             @DrawableRes fabIconResId: Int)
 }

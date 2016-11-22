@@ -82,6 +82,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this)
     }
     private val mDatingOptionMenuManager by lazy {
+        //todo срет логами, починить
         DatingOptionMenuManager(mNavigator)
     }
 
@@ -203,10 +204,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         }
     }
 
-    override fun startAnimateAdmirationPurchasePopup(transitionView: View, @ColorInt fabColorResId: Int,
+    override fun startAnimateAdmirationPurchasePopup(viewID: Int, @ColorInt fabColorResId: Int,
                                                      @DrawableRes fabIconResId: Int) =
-            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser, transitionView,
-                    activity, fabColorResId, fabIconResId)
+            mNavigator.showAdmirationPurchasePopup(mDatingAlbumViewModel.currentUser,
+                    if (viewID == DatingButtonsViewModel.BUTTON_FROM_ANCHOR) mAnchorBinding.sendAdmiration
+                    else mBinding.sendAdmiration, activity, fabColorResId, fabIconResId)
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
