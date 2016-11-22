@@ -12,6 +12,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
+import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
 import org.jetbrains.anko.layoutInflater
 
@@ -72,6 +73,15 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            with(App.getUserConfig()) {
+                val showCounter = trialVipShowCounter + 1
+                TrialVipExperimentStatistics.sendPopupShow(showCounter)
+                setTrialVipPopupShowCounter(showCounter)
+                saveConfig()
+            }
+
+        }
         setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar)
     }
 
@@ -87,16 +97,15 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private fun incrPopupShowCounter() = with(App.getUserConfig()) {
-        setTrialVipPopupCounter(trialVipCounter + 1)
+        setQueueTrialVipPopupCounter(queueTrialVipCounter + 1)
         saveConfig()
     }
 
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
+        TrialVipExperimentStatistics.sendPopupClose()
         cancelListener?.onCancel(dialog)
-        if (onFragmentFinishDelegate != null) {
-            onFragmentFinishDelegate!!.closeFragmentByForm()
-        }
+        onFragmentFinishDelegate?.closeFragmentByForm()
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
@@ -116,6 +125,9 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
         super.onDestroy()
     }
 
-    override fun runMarketPopup() = mMarketFragmentRunner.startTransparentMarketFragment { dismiss() }
+    override fun runMarketPopup() = mMarketFragmentRunner.startTransparentMarketFragment {
+        TrialVipExperimentStatistics.sendPurchaseCompleted()
+        dismiss()
+    }
 
 }

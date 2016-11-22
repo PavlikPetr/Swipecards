@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
+import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 
@@ -33,6 +34,8 @@ class ExperimentBoilerplateViewModel(private val mPopupRunner: TransparentMarket
         View.GONE
     }
 
-    fun getVip() = mPopupRunner.runMarketPopup()
-
+    fun getVip() {
+        TrialVipExperimentStatistics.sendPurchaseButtonPressed()
+        mPopupRunner.runMarketPopup()
+    }
 }

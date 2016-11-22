@@ -32,26 +32,33 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
 
     @Override
     public void callOnUi() {
-        if (mActivity == null || mActivity.get() == null) {
+        if (mActivity != null && mActivity.get() != null) {
             chooseShowTrialVipPopup();
         }
     }
 
     private void chooseShowTrialVipPopup() {
-        switch (App.get().getOptions().trialVipExperiment.maxShowCount) {
-            case 1:
-                break;
-            case 2:
-                break;
-            default:
-                final ExperimentBoilerplateFragment popup = ExperimentBoilerplateFragment
-                        .newInstance(App.get().getOptions().trialVipExperiment.androidTrialPopupExp, true);
-                popup.setOnFragmentFinishDelegate(this);
-                popup.show(mActivity.get().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
-        }
+        ExperimentBoilerplateFragment popup = ExperimentBoilerplateFragment
+                .newInstance(getTrialVipType(), true);
+        popup.setOnFragmentFinishDelegate(this);
+        popup.show(mActivity.get().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
         UserConfig userConfig = App.getUserConfig();
         userConfig.setTrialLastTime(System.currentTimeMillis());
         userConfig.saveConfig();
+    }
+
+    /**
+     * Get customized trial vip popup type
+     *
+     * @return experiment number
+     */
+    public static long getTrialVipType() {
+        long typeFromServer = App.get().getOptions().trialVipExperiment.androidTrialPopupExp;
+        // если сервер прислал 4-й эксперимент, то для очереди и после выхода с экрана покупок показать вью из 1-го
+        if (typeFromServer == 4) {
+            return 1;
+        }
+        return typeFromServer;
     }
 
     @Override
@@ -60,11 +67,11 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
         Profile profile = App.get().getProfile();
         Options options = App.get().getOptions();
         if (DateUtils.isDayBeforeToday(userConfig.getTrialLastTime())) {
-            userConfig.setTrialVipPopupCounter(UserConfig.DEFAULT_SHOW_COUNT);
+            userConfig.setQueueTrialVipPopupCounter(UserConfig.DEFAULT_SHOW_COUNT);
             userConfig.saveConfig();
         }
         return !profile.paid && !profile.premium &&
-                userConfig.getTrialVipCounter() < options.getMaxShowCountTrialVipPopup() &&
+                userConfig.getQueueTrialVipCounter() < options.getMaxShowCountTrialVipPopup() &&
                 options.trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
     }
 
