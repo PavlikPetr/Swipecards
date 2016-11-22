@@ -219,7 +219,6 @@ public class Options extends AbstractData {
             priceAdmiration = response.optInt("admirationPrice");
             isAutoreplyAllow = response.optBoolean("allowAutoreply", true);
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
-            trialVipExperiment.enabled = true;
             forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
