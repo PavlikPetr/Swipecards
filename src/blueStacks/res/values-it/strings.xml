@@ -840,7 +840,6 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="mutual_write_them_first">Scrivi a loro</string>
   <string name="mutual_no_mutuals">In questo momento non hai Like reciproci</string>
   <string name="mutual_module_title">RECIPROCAMENTE</string>
-  <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
   <string name="buy_vip_dating_only">Solo appuntamento, puro e semplice.</string>
   <string name="buy_vip_message">Non aspettare i Like, inizia subito una conversazione!</string>
   <string name="buy_vip_write_tops">Scrivi ai profili Migliori senza restrizioni</string>
@@ -870,4 +869,9 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="chat_mutual_symphaty">Like reciproco!</string>
   <string name="chat_mutual_start_conversation">Inizia a chattare!</string>
   <string name="chat_send_message_button_title">Invia</string>
+  <string name="seven_days_free">7 giorni gratis</string>
+  <string name="no_more_ad">Nessun ads in-app</string>
+  <string name="i_see_u_face">Scopri chi ha visitato la tua pagina e chi sono i tuoi Fan</string>
+  <string name="moar_messages">Chatta con gli utenti popolari</string>
+  <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
 </resources>

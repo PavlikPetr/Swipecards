@@ -857,7 +857,6 @@
   <string name="mutual_write_them_first">Пишите им</string>
   <string name="mutual_no_mutuals">Још увек немате узајамна свиђања</string>
   <string name="mutual_module_title">УЗАЈАМНО</string>
-  <string name="buy_vip_more_views">Добијте 1,5 пута више прегледа Вашег профила</string>
   <string name="buy_vip_dating_only">Само упознавања, ништа више</string>
   <string name="buy_vip_message">Не чекајте да добијете свиђање, започните разговор одмах</string>
   <string name="buy_vip_write_tops">Пишите популарнима без ограничења</string>
@@ -887,4 +886,9 @@
   <string name="chat_mutual_symphaty">Узајамно свиђање!</string>
   <string name="chat_mutual_start_conversation">Започните разговор!</string>
   <string name="chat_send_message_button_title">Посл.</string>
+  <string name="seven_days_free">7 дана бесплатно</string>
+  <string name="no_more_ad">Без реклама у апликацији</string>
+  <string name="i_see_u_face">Сазнајте ко је посетио Вашу страницу и видите ко су Ваши обожаватељи</string>
+  <string name="moar_messages">Ћаскајте са популарним корисницима</string>
+  <string name="buy_vip_more_views">Добијте 1,5 пута више прегледа Вашег профила</string>
 </resources>

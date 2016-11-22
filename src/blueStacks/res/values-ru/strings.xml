@@ -891,7 +891,6 @@
   <string name="mutual_write_them_first">Напишите им</string>
   <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
   <string name="mutual_module_title">ВЗАИМНО</string>
-  <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
   <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
   <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
   <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
@@ -914,11 +913,25 @@
   <string name="buy_vip_button_text_admiration_purchase_popup">отправить за %d монеты</string>
   <string name="label1_text_admiration_purchase_popup">Получатель «восхищения» будет уведомлён и сразу его увидит</string>
   <string name="label2_text_admiration_purchase_popup">Отправляйте «восхищения» бесплатно!</string>
-  <string name="buy_vip_button_text">получить vip</string>
+  <string name="buy_vip_button_text">Получить vip</string>
   <string name="send_first_gift">Подарите первый подарок!</string>
   <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
   <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
   <string name="chat_mutual_symphaty">Взаимная симпатия!</string>
   <string name="chat_mutual_start_conversation">Начните общение!</string>
   <string name="chat_send_message_button_title">Отпр.</string>
+  <string name="know_your_guests_by_sight">Узнай своих гостей и поклонников в лицо</string>
+  <string name="know_your_guests">Узнай своих гостей!</string>
+  <string name="write_any_girl">Пиши любой девушке!</string>
+  <string name="write_any_boy">Пиши любому парню!</string>
+  <string name="write_beautiful_girls_without_limits">Пиши красивым девушкам без ограничений</string>
+  <string name="write_beautiful_boys_without_limits">Пиши красивым парням без ограничений</string>
+  <string name="seven_days_free">7 дней бесплатно</string>
+  <string name="free_vip">VIP-статус бесплатно!</string>
+  <string name="no_more_ad">Никакой рекламы в приложении</string>
+  <string name="i_see_u_face">Узнайте своих гостей и поклонников в лицо</string>
+  <string name="buy_vip_write_anyone">Пишите любой девушке без взаимной симпатии</string>
+  <string name="moar_messages">Переписывайтесь с популярными пользователями</string>
+  <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
+  <string name="special_offer">Спецпредложение</string>
 </resources>

@@ -844,7 +844,6 @@
   <string name="mutual_write_them_first">Écrivez-leur</string>
   <string name="mutual_no_mutuals">Vous n\'avez pour le moment aucun J\'aime mutuel</string>
   <string name="mutual_module_title">MUTUEL</string>
-  <string name="buy_vip_more_views">Obtenez 1,5 fois plus de vues sur votre profil</string>
   <string name="buy_vip_dating_only">Juste une rencontre, pure et simple.</string>
   <string name="buy_vip_message">N\'attendez pas vos J\'aime, commencez une conversation !</string>
   <string name="buy_vip_write_tops">Ecrivez aux meilleurs profils sans restriction</string>
@@ -874,4 +873,9 @@
   <string name="chat_mutual_symphaty">J\'aime mutuel !</string>
   <string name="chat_mutual_start_conversation">Commencez à tchater !</string>
   <string name="chat_send_message_button_title">Envoyer.</string>
+  <string name="seven_days_free">7 jours gratuits</string>
+  <string name="no_more_ad">Aucune publicité dans l\'application</string>
+  <string name="i_see_u_face">Découvrez qui a consulté votre page et découvrez qui sont vos fans</string>
+  <string name="moar_messages">Tchatez avec des utilisateurs populaires</string>
+  <string name="buy_vip_more_views">Obtenez 1,5 fois plus de vues sur votre profil</string>
 </resources>

@@ -811,7 +811,6 @@
   <string name="mutual_write_them_first">Schreibe die erste Nachricht</string>
   <string name="mutual_no_mutuals">Momentan hast du keine beidseitige Likes</string>
   <string name="mutual_module_title">BEIDSEITIG</string>
-  <string name="buy_vip_more_views">Erhalte 1,5 mal mehr Profilaufrufe</string>
   <string name="buy_vip_dating_only">Reines Dating, klar und einfach</string>
   <string name="buy_vip_message">Warte nicht auf Likes, sondern starte ein Gespräch!</string>
   <string name="buy_vip_write_tops">Schreibe ohne Einschränkungen an Top Profile</string>
@@ -841,4 +840,9 @@
   <string name="chat_mutual_symphaty">Beidseitiges Like!</string>
   <string name="chat_mutual_start_conversation">Starte einen Chat!</string>
   <string name="chat_send_message_button_title">Verschicken.</string>
+  <string name="seven_days_free">7 Tage gratis</string>
+  <string name="no_more_ad">Keine Werbung in der App</string>
+  <string name="i_see_u_face">Erfahre, wer deine Seite besucht hat, und wer deine Fans sind</string>
+  <string name="moar_messages">Chatte mit beliebten Nutzern</string>
+  <string name="buy_vip_more_views">Erhalte 1,5 mal mehr Profilaufrufe</string>
 </resources>

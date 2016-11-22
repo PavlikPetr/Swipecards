@@ -827,7 +827,6 @@
   <string name="mutual_write_them_first">Write to them</string>
   <string name="mutual_no_mutuals">Right now you have no mutual Likes</string>
   <string name="mutual_module_title">MUTUAL</string>
-  <string name="buy_vip_more_views">Get x1.5 more profile views</string>
   <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
   <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>
   <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
@@ -857,4 +856,9 @@
   <string name="chat_mutual_symphaty">Mutual Like!</string>
   <string name="chat_mutual_start_conversation">Start chatting!</string>
   <string name="chat_send_message_button_title">Send</string>
+  <string name="seven_days_free">7 days free</string>
+  <string name="no_more_ad">No in-app ads</string>
+  <string name="i_see_u_face">Find out who visited your page</string>
+  <string name="moar_messages">Chat with popular users</string>
+  <string name="buy_vip_more_views">Get x1.5 more profile views</string>
 </resources>

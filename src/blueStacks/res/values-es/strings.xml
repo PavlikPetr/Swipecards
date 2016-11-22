@@ -844,7 +844,6 @@
   <string name="mutual_write_them_first">Escríbeles</string>
   <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
   <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
-  <string name="buy_vip_more_views">Recibe 1,5 más de visitas en tu perfil</string>
   <string name="buy_vip_dating_only">Solo citas, así de simple.</string>
   <string name="buy_vip_message">No esperes a que lleguen las simpatías, ¡empieza una conversación!</string>
   <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
@@ -874,4 +873,9 @@
   <string name="chat_mutual_symphaty">¡Simpatía mutua!</string>
   <string name="chat_mutual_start_conversation">¡Empieza a chatear!</string>
   <string name="chat_send_message_button_title">Enviar</string>
+  <string name="seven_days_free">7 días gratis</string>
+  <string name="no_more_ad">Sin publicidad en la app</string>
+  <string name="i_see_u_face">Descubre quién ha visitado tu página y quiénes son tos fans</string>
+  <string name="moar_messages">Chatea con usuarios populares</string>
+  <string name="buy_vip_more_views">Recibe 1,5 más de visitas en tu perfil</string>
 </resources>

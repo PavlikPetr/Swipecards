@@ -840,7 +840,6 @@
   <string name="mutual_write_them_first">Escreve-lhes uma mensagem</string>
   <string name="mutual_no_mutuals">De momento não têm Gostos mútuos</string>
   <string name="mutual_module_title">MÚTUO</string>
-  <string name="buy_vip_more_views">Ganha 1.5x mais visualizações de perfil</string>
   <string name="buy_vip_dating_only">Apenas namorar, pura e simplesmente</string>
   <string name="buy_vip_message">Não fiques à espera de receber Gostos, começa uma conversa!</string>
   <string name="buy_vip_write_tops">Envia mensagens a perfis do TOP sem restrições</string>
@@ -870,4 +869,9 @@
   <string name="chat_mutual_symphaty">Gosto Mútuo!</string>
   <string name="chat_mutual_start_conversation">Começa a conversar!</string>
   <string name="chat_send_message_button_title">Enviar</string>
+  <string name="seven_days_free">7 dias grátis</string>
+  <string name="no_more_ad">Sem anúncios na app</string>
+  <string name="i_see_u_face">Descobre quem visitou o teu perfil e vê quem são os teus Fãs</string>
+  <string name="moar_messages">Conversa com utilizadores populares</string>
+  <string name="buy_vip_more_views">Ganha 1.5x mais visualizações de perfil</string>
 </resources>
