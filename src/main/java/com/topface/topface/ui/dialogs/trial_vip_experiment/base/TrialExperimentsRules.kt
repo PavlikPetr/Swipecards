@@ -30,7 +30,7 @@ object TrialExperimentsRules {
 
     fun Any.tryShowTrialPopup(type: Long = App.get().options.trialVipExperiment.androidTrialPopupExp, navigator: IFeedNavigator) {
         when (type) {
-            ExperimentsType.EXPERIMENT_3 -> {
+            ExperimentsType.EXPERIMENT_3, ExperimentsType.EXPERIMENT_4 -> {
                 when (this@tryShowTrialPopup) {
                     is DatingButtonsViewModel -> showTrialAfterSympathy(type, navigator)
                     is UserProfileFragment -> showTrialFromUserProfile(type, navigator)
