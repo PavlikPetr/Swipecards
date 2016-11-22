@@ -94,9 +94,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
         cancelListener?.onCancel(dialog)
-        if (onFragmentFinishDelegate != null) {
-            onFragmentFinishDelegate!!.closeFragmentByForm()
-        }
+        onFragmentFinishDelegate?.closeFragmentByForm()
     }
 
     override fun onDismiss(dialog: DialogInterface?) {

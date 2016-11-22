@@ -94,6 +94,7 @@ public class UserConfig extends AbstractConfig {
     private static final String ADMIRATION_PURCHASE_POPUP_SHOWN = "admiration_popup_purchase_shown";
     private static final String SYMPATHES_COUNT = "symphates_count";
     private static final String TRIAL_SHOWS_IN_USER_PROFILE = "trial_shows_in_user_profile";
+    private static final String TRIAL_SHOWS_IN_VISITORS = "trial_shows_in_visitors";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -216,8 +217,10 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, ADMIRATION_PURCHASE_POPUP_SHOWN, false);
         //Колличество симпатия показанных за день
         addField(settingsMap, SYMPATHES_COUNT, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
-        //Колличество симпатия показанных за день
+        //Колличество показов триала в профиле юзера
         addField(settingsMap, TRIAL_SHOWS_IN_USER_PROFILE, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //Колличество показов триала в гостях
+        addField(settingsMap, TRIAL_SHOWS_IN_VISITORS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
     }
 
     @Override
@@ -348,6 +351,21 @@ public class UserConfig extends AbstractConfig {
 
     public Boolean isAdmirationPurchasePopupShown() {
         return getBooleanField(getSettingsMap(), ADMIRATION_PURCHASE_POPUP_SHOWN);
+    }
+
+    private void setShowsInVisitors() {
+        mConfigExtension.setDailyConfigField(TRIAL_SHOWS_IN_VISITORS, 0);
+    }
+
+    public boolean canShowInVisitors() {
+        boolean canShow = false;
+        DailyConfigExtension.DailyConfigField configField = mConfigExtension.getDailyConfigField(TRIAL_SHOWS_IN_VISITORS, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
+        if (configField != null) {
+            canShow = configField.getConfigFieldInfo().getAmount() == 1;
+            setShowsInVisitors();
+        }
+        return canShow;
     }
 
     public void setShowsInUserProfile() {
