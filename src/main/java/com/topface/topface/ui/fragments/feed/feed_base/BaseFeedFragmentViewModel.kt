@@ -329,7 +329,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
-
+                        if (isRefreshing.get()) {
+                            isRefreshing.set(false)
+                        }
                     }
 
                     override fun onError(e: Throwable?) {
