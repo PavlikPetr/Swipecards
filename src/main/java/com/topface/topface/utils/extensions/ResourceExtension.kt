@@ -4,7 +4,6 @@ import android.content.res.Resources
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
 import android.support.annotation.DrawableRes
@@ -77,12 +76,18 @@ fun Int.isHasNotification(): Boolean {
     }
 }
 
-fun Int.getDrawableList(@DrawableRes defRes: Int): List<Int> {
+/**
+ * Method creates an array(TypedArray) for ID of array Resource and convert to List<Int>
+ * @param defRes - defaultValue(Int) of ID resource.
+ * @return List<Int> of Id resources
+ */
+
+fun Int.getDrawableListFromArrayId(@DrawableRes defRes: Int): List<Int> {
     val arr: TypedArray
     try {
         arr = App.getContext().resources.obtainTypedArray(this)
     } catch(e: Resources.NotFoundException) {
-        return listOf()
+        return listOf(defRes)
     }
     val usersFakeArray = ArrayList<Int>()
     for (i in 0..arr.length() - 1) {

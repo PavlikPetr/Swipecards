@@ -6,6 +6,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.config.UserConfig;
@@ -39,7 +40,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
 
     private void chooseShowTrialVipPopup() {
         ExperimentBoilerplateFragment popup = ExperimentBoilerplateFragment
-                .newInstance(getTrialVipType(), true);
+                .newInstance(getTrialVipType(),ExperimentsType.SUBTYPE_NONE, true);
         popup.setOnFragmentFinishDelegate(this);
         popup.show(mActivity.get().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
         UserConfig userConfig = App.getUserConfig();

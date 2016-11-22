@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.feed_di;
 
 import android.content.Context;
 
-import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment41ViewModel;
 import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment;
 import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.admiration.AdmirationLockScreenViewModel;
@@ -47,7 +46,6 @@ import dagger.Provides;
                 VisitorsFragmentViewModel.class,
                 DialogsFragmentViewModel.class,
                 BaseLockScreenViewModel.class,
-                Experiment41ViewModel.class
         })
 public class FeedModule {
 

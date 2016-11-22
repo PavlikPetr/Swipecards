@@ -1,12 +1,15 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
+import android.content.Context
+import android.os.Bundle
+import android.view.ViewGroup
 import com.topface.topface.R
 
 /**
  * Фабрика метрик, для разных типов попопов триал эксперимента
  * Created by tiberal on  16.11.16.
  */
-class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
+class MetricsFactory(val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMetrics> {
 
 
     override fun construct(@ExperimentsType.ExperimentsType type: Long) =
@@ -25,6 +28,11 @@ class MetricsFactory : IBoilerplateFactory<BoilerplateDialogMetrics> {
                     initStandardMetrics(this)
                 }
                 ExperimentsType.EXPERIMENT_4 -> BoilerplateDialogMetrics.create {
+                    titleTopMargin = R.dimen.experiment_5_title_top_margin
+                    titleBottomMargin = R.dimen.experiment_5_title_bottom_margin
+                    contentBottomMargin = R.dimen.experiment_5_content_bottom_margin
+                    getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
+                    descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
                 }
                 ExperimentsType.EXPERIMENT_5, ExperimentsType.EXPERIMENT_6 -> BoilerplateDialogMetrics.create {
                     titleTopMargin = R.dimen.experiment_5_title_top_margin

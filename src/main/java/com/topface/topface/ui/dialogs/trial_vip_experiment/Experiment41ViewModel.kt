@@ -3,6 +3,7 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment
 import android.databinding.ObservableField
 import android.support.annotation.DrawableRes
 import android.text.TextUtils
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile

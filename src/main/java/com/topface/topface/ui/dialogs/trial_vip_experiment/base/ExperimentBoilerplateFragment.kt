@@ -13,6 +13,7 @@ import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_SUBTYPE
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
 import org.jetbrains.anko.layoutInflater
 
@@ -25,16 +26,19 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     var cancelListener: DialogInterface.OnCancelListener? = null
     var dismissListener: DialogInterface.OnDismissListener? = null
     var onFragmentFinishDelegate: IOnFragmentFinishDelegate? = null
+    private var mArgs: Bundle? = null
 
     companion object {
         const val TAG = "TrialVipPopup"
         const val SKIP_SHOWING_CONDITION = "skip_showing_condition"
         @JvmOverloads @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long =
                                                  App.get().options.trialVipExperiment.androidTrialPopupExp,
+                                                 @ExperimentsType.ExperimentsSubType subType: Long = 0L,
                                                  skipShowingCondition: Boolean = false, args: Bundle = Bundle()) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = args.apply {
                         putLong(EXPERIMENT_TYPE, type)
+                        putLong(EXPERIMENT_SUBTYPE, subType)
                         putBoolean(SKIP_SHOWING_CONDITION, skipShowingCondition)
                     }
                     this
@@ -42,19 +46,19 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mType by lazy {
-        arguments.getLong(EXPERIMENT_TYPE)
+        mArgs?.getLong(EXPERIMENT_TYPE)
     }
 
     private val mDialogMetricsFactory by lazy {
-        MetricsFactory().construct(mType)
+        mArgs?.let { mType?.let { it1 -> MetricsFactory(it).construct(it1) } }
     }
 
     private val mDialogDataFactory by lazy {
-        BoilerplateDataFactory().construct(mType)
+        mArgs?.let { mType?.let { it1 -> BoilerplateDataFactory(context.applicationContext, mBinding.content, it).construct(it1) } }
     }
 
     private val mContentBinding by lazy {
-        ContentViewFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
+        mArgs?.let { mType?.let { it1 -> ContentViewFactory(context.applicationContext, mBinding.content, it).construct(it1) } }
     }
 
     private val mBinding by lazy {
@@ -63,8 +67,12 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mBoilerplateViewModel by lazy {
-        ExperimentBoilerplateViewModel(mPopupRunner = this, dialogMetrics = mDialogMetricsFactory,
-                dialogData = mDialogDataFactory)
+        mDialogMetricsFactory?.let {
+            mDialogDataFactory?.let { it1 ->
+                ExperimentBoilerplateViewModel(mPopupRunner = this, dialogMetrics = it,
+                        dialogData = it1)
+            }
+        }
     }
 
     private val mMarketFragmentRunner by lazy {
@@ -83,6 +91,8 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
 
         }
         setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar)
+        mArgs = arguments
+        mArgs = if (mArgs == null) savedInstanceState else mArgs
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -93,7 +103,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.content.addView(mContentBinding.root)
+        mBinding.content.addView(mContentBinding?.root)
     }
 
     private fun incrPopupShowCounter() = with(App.getUserConfig()) {
