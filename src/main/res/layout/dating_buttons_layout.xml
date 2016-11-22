@@ -83,7 +83,7 @@
                 android:id="@+id/send_admiration"
                 style="@style/FabDating"
                 android:clickable="@{model.isDatingButtonsLocked}"
-                android:onClick="@{() -> model.validateSendAdmiration()}"
+                android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
                 android:src="@drawable/admiration"
                 app:backgroundTint="@color/dating_fab_small"
                 app:fabSize="mini"
