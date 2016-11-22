@@ -219,6 +219,7 @@ public class Options extends AbstractData {
             priceAdmiration = response.optInt("admirationPrice");
             isAutoreplyAllow = response.optBoolean("allowAutoreply", true);
             trialVipExperiment = JsonUtils.optFromJson(response.optString("experimentTrialVip"), TrialVipExperiment.class, new TrialVipExperiment());
+            trialVipExperiment.enabled = true;
             forceSmsInviteRedirect = JsonUtils.optFromJson(response.optString("forceSmsInviteRedirect"), ForceSmsInviteRedirect.class, new ForceSmsInviteRedirect());
             // по умолчанию превью в диалогах всегда отображаем
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
@@ -753,10 +754,23 @@ public class Options extends AbstractData {
     }
 
     public class TrialVipExperiment {
-        public long androidTrialPopupExp;
+        private long androidTrialPopupExp;
         public boolean enabled = false;
         public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
         public int maxShowCount = TRIAL_VIP_MAX_SHOW_COUNT;
+
+        public long getAndroidTrialPopupExp() {
+            if (App.get().getProfile().isEditor()) {
+                long typeFromConfig = App.getAppConfig().getTrialVipPopupType();
+                if (typeFromConfig == -1) {
+                    return androidTrialPopupExp;
+                } else {
+                    return typeFromConfig;
+                }
+            } else {
+                return androidTrialPopupExp;
+            }
+        }
     }
 
     public int getMaxShowCountTrialVipPopup() {

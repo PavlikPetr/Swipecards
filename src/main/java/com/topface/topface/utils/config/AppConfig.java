@@ -75,6 +75,7 @@ public class AppConfig extends AbstractConfig {
     private static final String APP_FIRST_AUTH = "mobile_first_auth";
     private static final String DEVICE_ACTIVATED = "mobile_device_activated";
     private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
+    private static final String TRIAL_VIP_POPUP_TYPE = "trial_vip_popup_type";
 
 
     public AppConfig(Context context) {
@@ -141,6 +142,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DEVICE_ACTIVATED, false);
         // ключ, который устанавливает количество отправленных симпатий
         addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
+        // храним последний выбранный тип попапа триального вип
+        addField(settingsMap, TRIAL_VIP_POPUP_TYPE, -1L);
     }
 
     protected SharedPreferences getPreferences() {
@@ -588,4 +591,13 @@ public class AppConfig extends AbstractConfig {
         return getIntegerField(getSettingsMap(), DEVICE_ACTIVATION_COUNTER);
     }
 
+    // установка количество отправленных лайков для данной установки
+    public void setTrialVipPopupType(long type) {
+        setField(getSettingsMap(), TRIAL_VIP_POPUP_TYPE, type);
+    }
+
+    // получение ранее отпраленных лайков для данной установки
+    public long getTrialVipPopupType() {
+        return getLongField(getSettingsMap(), TRIAL_VIP_POPUP_TYPE);
+    }
 }

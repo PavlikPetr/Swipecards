@@ -54,7 +54,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
      * @return experiment number
      */
     public static long getTrialVipType() {
-        long typeFromServer = App.get().getOptions().trialVipExperiment.androidTrialPopupExp;
+        long typeFromServer = App.get().getOptions().trialVipExperiment.getAndroidTrialPopupExp();
         // если сервер прислал 4-й эксперимент, то для очереди и после выхода с экрана покупок показать вью из 1-го
         if (typeFromServer == 4 || typeFromServer == 3) {
             return 1;
