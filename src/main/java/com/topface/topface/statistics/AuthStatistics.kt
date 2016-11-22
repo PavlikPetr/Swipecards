@@ -12,7 +12,7 @@ class AuthStatistics {
         private const val APP_FIRST_START_KEY = "mobile_app_first_start"
         private const val FIRST_AUTH_KEY = "mobile_first_auth"
         private const val DEVICE_ACTIVATED_KEY = "mobile_device_activated"
-        private const val PLT_SLICE = "plc"
+        private const val PLT_SLICE = "plt"
         private const val VAL_SLICE = "val"
 
         private fun send(command: String, slices: Slices?) =
