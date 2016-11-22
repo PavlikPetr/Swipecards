@@ -47,6 +47,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.IUniversalUser;
@@ -128,7 +129,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
     public static final String CONFIRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
-    private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
@@ -138,6 +138,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
     public static final String SEX = "sex";
+    private static final String HISTORY_LAST_ITEM = "history_last_item";
 
     private int deleteItemsCount = 0;
     private int mUserId;
@@ -262,6 +263,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mBackgroundController.startAnimation();
         }
     };
+    private ArrayList<Gift> mDispatchedGifts = new ArrayList<>();
+    private History mLastDispatchedHistoryItem;
 
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
@@ -463,6 +466,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
+                mDispatchedGifts = savedInstanceState.getParcelableArrayList(ChatActivity.DISPATCHED_GIFTS);
+                mLastDispatchedHistoryItem = savedInstanceState.getParcelable(HISTORY_LAST_ITEM);
                 mAdapter.setData(historyData);
                 mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
@@ -588,6 +593,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         outState.putParcelableArrayList(HISTORY_CHAT, mHistoryFeedList);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
+        outState.putParcelableArrayList(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+        outState.putParcelable(HISTORY_LAST_ITEM, mLastDispatchedHistoryItem);
         if (mUser != null) {
             try {
                 outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
@@ -795,10 +802,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mStubsController != null) {
             mStubsController.checkMessage(history);
         }
-        Intent intent = new Intent();
-        intent.putExtra(ChatActivity.LAST_MESSAGE, history);
-        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
-        getActivity().setResult(Activity.RESULT_OK, intent);
+        mLastDispatchedHistoryItem = history;
     }
 
     private void removeOutdatedItems(HistoryListData data) {
@@ -961,6 +965,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @FuckingVoodooMagic(description = "принудительно скрываем клаву(вдруг на home нажмем), и " +
             "убиреем листенер, т.к. в этом случае не нужно учитывать изменение состояния")
     public void onPause() {
+        if (isAdded() && (mLastDispatchedHistoryItem != null || mDispatchedGifts != null)) {
+            Intent intent = new Intent();
+            intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+            intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+            intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+            getActivity().setResult(Activity.RESULT_OK, intent);
+        }
         mRootLayout.setKeyboardListener(null);
         Utils.hideSoftKeyboard(App.getContext(), mEditBox);
         super.onPause();
@@ -985,6 +996,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                                 mStubsController.giftSent();
                             }
                             onNewMessageAdded(sendGiftAnswer.history);
+                            if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
+                                mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift.class));
+                            }
                         }
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
