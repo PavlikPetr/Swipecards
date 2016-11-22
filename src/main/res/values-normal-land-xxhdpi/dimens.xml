@@ -1,0 +1,8 @@
+<resources>
+    <dimen name="admiration_image_width">110dp</dimen>
+    <dimen name="admiration_image_height">110dp</dimen>
+    <dimen name="coins_button_margin_top">4dp</dimen>
+    <dimen name="admiration_image_margin_top">16dp</dimen>
+    <dimen name="main_label_text_size">13sp</dimen>
+    <dimen name="vip_icon_margin_left">-2dp</dimen>
+</resources>

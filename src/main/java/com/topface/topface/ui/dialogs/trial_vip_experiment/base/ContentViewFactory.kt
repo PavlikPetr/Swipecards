@@ -6,12 +6,16 @@ import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.view.ViewGroup
 import com.topface.topface.R
+import com.topface.topface.databinding.*
+import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithBlurViewModel
+import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithoutBlurViewModel
 import com.topface.topface.databinding.Experiment123ContentViewBinding
 import com.topface.topface.databinding.LayoutExperiment5Binding
 import com.topface.topface.databinding.LayoutExperiment6Binding
 import com.topface.topface.databinding.OldTrialContentBinding
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_2
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_3
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_SUBTYPE
 import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter
 import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_ViewModel
 import org.jetbrains.anko.layoutInflater
@@ -39,8 +43,13 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup,
                     }
                 }
             /*
-            ExperimentsType.EXPERIMENT_4 -> {
-            }*/
+            ExperimentsType.EXPERIMENT_2 -> {
+            }
+            ExperimentsType.EXPERIMENT_3 -> {
+            }
+           */
+                ExperimentsType.EXPERIMENT_4 -> subTypeChooser(args.getLong(EXPERIMENT_SUBTYPE))
+
                 ExperimentsType.EXPERIMENT_5 -> {
                     DataBindingUtil.inflate<LayoutExperiment5Binding>(mContext.layoutInflater,
                             R.layout.layout_experiment_5, parent, false)
@@ -50,4 +59,18 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup,
 
             }
 
+    fun subTypeChooser(subType: Long): ViewDataBinding {
+        when (subType) {
+            ExperimentsType.SUBTYPE_4_2 -> {
+                return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
+                        .apply { viewModel = Experiment4WithoutBlurViewModel(this) }
+            }
+            ExperimentsType.SUBTYPE_4_3 -> {
+                return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
+                        .apply { viewModel = Experiment4WithBlurViewModel(this) }
+            }
+            else -> return DataBindingUtil.inflate<ViewDataBinding>(mContext.layoutInflater,
+                    R.layout.experiment_boilerplate_layout, null, false)
+        }
+    }
 }
