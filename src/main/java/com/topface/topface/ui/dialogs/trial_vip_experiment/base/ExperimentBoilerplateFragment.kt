@@ -25,6 +25,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     var cancelListener: DialogInterface.OnCancelListener? = null
     var dismissListener: DialogInterface.OnDismissListener? = null
     var onFragmentFinishDelegate: IOnFragmentFinishDelegate? = null
+    private var mArgs: Bundle? = null
 
     companion object {
         const val TAG = "TrialVipPopup"
@@ -44,19 +45,19 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mType by lazy {
-        arguments.getLong(EXPERIMENT_TYPE)
+        mArgs?.getLong(EXPERIMENT_TYPE)
     }
 
     private val mDialogMetricsFactory by lazy {
-        MetricsFactory(arguments).construct(mType)
+        mArgs?.let { mType?.let { it1 -> MetricsFactory(it).construct(it1) } }
     }
 
     private val mDialogDataFactory by lazy {
-        BoilerplateDataFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
+        mArgs?.let { mType?.let { it1 -> BoilerplateDataFactory(context.applicationContext, mBinding.content, it).construct(it1) } }
     }
 
     private val mContentBinding by lazy {
-        ContentViewFactory(context.applicationContext, mBinding.content, arguments).construct(mType)
+        mArgs?.let { mType?.let { it1 -> ContentViewFactory(context.applicationContext, mBinding.content, it).construct(it1) } }
     }
 
     private val mBinding by lazy {
@@ -65,8 +66,12 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mBoilerplateViewModel by lazy {
-        ExperimentBoilerplateViewModel(mPopupRunner = this, dialogMetrics = mDialogMetricsFactory,
-                dialogData = mDialogDataFactory)
+        mDialogMetricsFactory?.let {
+            mDialogDataFactory?.let { it1 ->
+                ExperimentBoilerplateViewModel(mPopupRunner = this, dialogMetrics = it,
+                        dialogData = it1)
+            }
+        }
     }
 
     private val mMarketFragmentRunner by lazy {
@@ -76,6 +81,8 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar)
+        mArgs = arguments
+        mArgs = if (mArgs == null) savedInstanceState else mArgs
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -86,7 +93,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBinding.content.addView(mContentBinding.root)
+        mBinding.content.addView(mContentBinding?.root)
     }
 
     private fun incrPopupShowCounter() = with(App.getUserConfig()) {

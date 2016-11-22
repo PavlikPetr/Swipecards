@@ -34,7 +34,7 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
 
     val avatar: ObservableField<String> = ObservableField()
     abstract val popupMessage: ObservableField<String>
-    abstract val fakeAvatars: ObservableField<List<Int>>
+    abstract val fakeAvatars: List<Int>
     abstract val imageUnderAvatar: ObservableField<Int>
     abstract val imageLeftTop: ObservableField<Int>
     abstract val imageRightBottom: ObservableField<Int>
@@ -56,11 +56,11 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
     }
 
     fun setAvatarsForFakes() {
-        binding.firstFakeAvatar.setImageResource(fakeAvatars.get().get(0))
-        binding.secondFakeAvatar.setImageResource(fakeAvatars.get().get(1))
-        binding.thirdFakeAvatar.setImageResource(fakeAvatars.get().get(2))
-        binding.fourthFakeAvatar.setImageResource(fakeAvatars.get().get(3))
-        binding.fifthFakeAvatar.setImageResource(fakeAvatars.get().get(4))
+        binding.firstFakeAvatar.setImageResource(fakeAvatars.get(0))
+        binding.secondFakeAvatar.setImageResource(fakeAvatars.get(1))
+        binding.thirdFakeAvatar.setImageResource(fakeAvatars.get(2))
+        binding.fourthFakeAvatar.setImageResource(fakeAvatars.get(3))
+        binding.fifthFakeAvatar.setImageResource(fakeAvatars.get(4))
     }
 
     override fun release() {
