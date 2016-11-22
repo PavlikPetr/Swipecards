@@ -95,4 +95,6 @@
         <item>@drawable/pen</item>
         <item>@drawable/circle__for_experiment_popup</item>
     </string-array>
+
+
 </resources>

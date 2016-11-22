@@ -11,5 +11,6 @@
 
     <dimen name="dating_album_height">256dp</dimen>
 
+    <dimen name="admiration_popup_label1_margin_top">8dp</dimen>
 
 </resources>

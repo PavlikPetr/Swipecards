@@ -4,7 +4,7 @@
             <solid android:color="@color/text_white" />
         </shape>
     </item>
-    <item android:left="45px">
+    <item android:left="30dp">
         <shape>
             <solid android:color="@color/dating_fab_small" />
         </shape>
