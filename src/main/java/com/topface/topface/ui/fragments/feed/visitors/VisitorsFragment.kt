@@ -39,7 +39,7 @@ class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>()
     override fun showTrial() {
         if (App.getUserConfig().canShowInVisitors() && isAdded) {
             val popup = ExperimentBoilerplateFragment
-                    .newInstance(ExperimentsType.EXPERIMENT_1, true)
+                    .newInstance(type = ExperimentsType.EXPERIMENT_1, skipShowingCondition = true)
             popup.onFragmentFinishDelegate = this
             popup.show(activity.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
         }
