@@ -1,17 +1,13 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment
 
 import android.databinding.ObservableField
-import android.support.annotation.DrawableRes
 import android.text.TextUtils
-import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
-import com.topface.topface.utils.ListUtils
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.getDrawableList
 import com.topface.topface.utils.extensions.getDrawableListFromArrayId
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
