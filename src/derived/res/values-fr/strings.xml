@@ -747,8 +747,6 @@
     </string>
     <string name="dialog">Conversations</string>
     <string name="reply">Répondre</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Vous avez choisi le nombre maximum d\'utilisateurs.</string>
     <string name="logout_if_email_already_registred">Il existe déjà un utilisateur avec cet e-mail.
         Si ceci est votre e-mail, vous devez vous déconnecter de ce compte et vous connecter sur le

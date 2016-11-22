@@ -740,8 +740,6 @@
     </string>
     <string name="dialog">Conversa</string>
     <string name="reply">Responder</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Selecionaste o número máximo de utilizadores.</string>
     <string name="logout_if_email_already_registred">Já existe um utilizador com este e-mail. Se
         este for o teu e-mail, tens de terminar sessão na tua conta atual e iniciar sessão na conta

@@ -715,8 +715,6 @@
     </string>
     <string name="dialog">Korrespondens</string>
     <string name="reply">Svara</string>
-    <string name="measurement_unit_weight">vikt</string>
-    <string name="measurement_unit_height">längd</string>
     <string name="maximum_number_of_users">Maximalt antal användare valt</string>
     <string name="logout_if_email_already_registred">Det finns redan en användare med denna
         e-postadressen. Om detta är din e-post, så måste du logga ut ifrån detta kontot och sedan

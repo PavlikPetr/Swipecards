@@ -723,8 +723,8 @@
         подождите</string>
   <string name="dialog">Переписка</string>
   <string name="reply">Ответить</string>
-  <string name="measurement_unit_weight">кг</string>
-  <string name="measurement_unit_height">см</string>
+  <string name="unit_weight">%d кг</string>
+  <string name="unit_height">%d см</string>
   <string name="maximum_number_of_users">Выбрано максимальное количество пользователей.</string>
   <string name="logout_if_email_already_registred">Пользователь с таким e-mail уже существует.
         Если это ваш e-mail, то вам необходимо выйти из текущего аккаунта и зайти в аккаунт %s</string>
@@ -916,6 +916,7 @@
   <string name="buy_vip_button_text">Получить vip</string>
   <string name="send_first_gift">Подарите первый подарок!</string>
   <string name="ask_moar_info">Вы можете узнать недостающую информацию!</string>
+  <string name="fill_own_profile_boy">Заполните анкету у себя в профиле, чтобы посмотреть, что написал %s</string>
   <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
   <string name="chat_mutual_symphaty">Взаимная симпатия!</string>
   <string name="chat_mutual_start_conversation">Начните общение!</string>

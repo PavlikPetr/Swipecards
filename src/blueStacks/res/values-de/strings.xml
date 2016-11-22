@@ -662,8 +662,6 @@
         Sie</string>
   <string name="dialog">Dialog</string>
   <string name="reply">Antworten</string>
-  <string name="measurement_unit_weight">kg</string>
-  <string name="measurement_unit_height">cm</string>
   <string name="maximum_number_of_users">Du hast das Maximum an Usern ausgewählt</string>
   <string name="logout_if_email_already_registred">Es gibt bereits einen User mit dieser Email. Wenn das deine Email ist, musst du dich aus deinem jetzigen Konto ausloggen und in %s Konto einloggen.</string>
   <string name="recover_password_instructions">Dir wurde eine Email geschickt mit Anweisungen zur Wiederherstellung des Passworts.</string>

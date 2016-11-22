@@ -678,8 +678,6 @@
         lütfen bekleyin</string>
     <string name="dialog">Sohbet</string>
     <string name="reply">Cevap ver</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">sm</string>
     <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçtiniz</string>
     <string name="logout_if_email_already_registred">Bu email adresini kullanan bir kullanıcı bulunuyor. 
         Bu sizin mail adresinizse, mevcut hesabınızdan çıkış yapıp %s hesabına giriş yapınız.</string>

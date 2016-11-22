@@ -603,8 +603,6 @@
         περιμένετε</string>
   <string name="dialog">Μηνύματα</string>
   <string name="reply">Απαντήστε</string>
-  <string name="measurement_unit_weight">kg</string>
-  <string name="measurement_unit_height">cm</string>
   <string name="email_changing">Αλλαγή e-mail</string>
   <string name="google_service_disabled_button">Ενεργοποίηση</string>
   <string name="google_service_missing_button">Εγκαταστήστε</string>

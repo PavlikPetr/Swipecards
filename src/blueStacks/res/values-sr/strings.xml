@@ -687,8 +687,6 @@
   <string name="billing_item_already_owned">Ваша куповина се обрађује, молимо сачекајте.</string>
   <string name="dialog">Преписка</string>
   <string name="reply">Одговори</string>
-  <string name="measurement_unit_weight">кг</string>
-  <string name="measurement_unit_height">цм</string>
   <string name="maximum_number_of_users">Изабрали сте максималан број корисника.</string>
   <string name="logout_if_email_already_registred">Већ постоји корисник са овом адресом е-поште.
         Ако је ово Ваш адреса, морате се одјавити са тренутног налога и пријавити се на %s налог.</string>
