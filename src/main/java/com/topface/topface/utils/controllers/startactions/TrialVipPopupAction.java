@@ -40,7 +40,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
 
     private void chooseShowTrialVipPopup() {
         ExperimentBoilerplateFragment popup = ExperimentBoilerplateFragment
-                .newInstance(getTrialVipType(), ExperimentsType.SUBTYPE_NONE, true);
+                .newInstance(getTrialVipType(), true);
         popup.setOnFragmentFinishDelegate(this);
         popup.show(mActivity.get().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
         UserConfig userConfig = App.getUserConfig();

@@ -22,6 +22,7 @@ class Experiment1_2_3_Adapter(val context: Context, val type: Int) : PagerAdapte
         const val MODE = "mode"
         const val GUESTS_FIRST = 1
         const val VIEWS_FIRST = 2
+        const val MESSAGE_FIRST = 3
     }
 
     init {
@@ -41,6 +42,12 @@ class Experiment1_2_3_Adapter(val context: Context, val type: Int) : PagerAdapte
                         R.drawable.message_big, R.drawable.popular_girl)
                 mDescriptions = intArrayOf(R.string.buy_vip_more_views, R.string.no_more_ad, R.string.i_see_u_face,
                         R.string.buy_vip_write_anyone, R.string.moar_messages)
+            }
+            MESSAGE_FIRST -> {
+                mImages = intArrayOf(R.drawable.message_big, R.drawable.no_advertising, R.drawable.guest_big,
+                        R.drawable.popular_girl, R.drawable.views)
+                mDescriptions = intArrayOf(R.string.buy_vip_write_anyone, R.string.no_more_ad, R.string.i_see_u_face,
+                        R.string.moar_messages, R.string.buy_vip_more_views)
             }
             else -> {
                 mImages = intArrayOf(R.drawable.no_advertising, R.drawable.guest_big,

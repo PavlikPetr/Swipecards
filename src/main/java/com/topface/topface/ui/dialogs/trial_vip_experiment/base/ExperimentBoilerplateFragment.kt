@@ -33,12 +33,10 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
         const val SKIP_SHOWING_CONDITION = "skip_showing_condition"
         @JvmOverloads @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long =
                                                  App.get().options.trialVipExperiment.androidTrialPopupExp,
-                                                 @ExperimentsType.ExperimentsSubType subType: Long = 0L,
                                                  skipShowingCondition: Boolean = false, args: Bundle = Bundle()) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = args.apply {
                         putLong(EXPERIMENT_TYPE, type)
-                        putLong(EXPERIMENT_SUBTYPE, subType)
                         putBoolean(SKIP_SHOWING_CONDITION, skipShowingCondition)
                     }
                     this

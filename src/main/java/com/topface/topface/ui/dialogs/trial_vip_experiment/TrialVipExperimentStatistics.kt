@@ -20,7 +20,7 @@ object TrialVipExperimentStatistics {
     private fun send(command: String, showCount: Int) =
             StatisticsTracker.getInstance().sendEvent(command, 1, with(Slices()) {
                 putSlice(SHOW_COUNT, showCount.toString())
-                putSlice(TRIAL_TYPE, App.get().getOptions().trialVipExperiment.androidTrialPopupExp.toString())
+                putSlice(TRIAL_TYPE, App.get().options.trialVipExperiment.androidTrialPopupExp.toString())
             })
 
     @JvmStatic @JvmOverloads fun sendPopupShow(showCount: Int = getShowCountFromConfig()) =
