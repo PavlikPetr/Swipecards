@@ -46,6 +46,8 @@ import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
+import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment;
+import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
@@ -155,7 +157,9 @@ import dagger.Provides;
                 OwnProfileFragment.class,
                 Experiment4BaseViewModel.class,
                 Experiment4WithBlurViewModel.class,
-                Experiment4WithoutBlurViewModel.class
+                Experiment4WithoutBlurViewModel.class,
+                DatingEmptyFragmentViewModel.class,
+                DatingEmptyFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
