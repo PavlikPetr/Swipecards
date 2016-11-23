@@ -5,7 +5,9 @@ import android.databinding.DataBindingUtil
 import android.support.v4.view.PagerAdapter
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.data.Profile
 import com.topface.topface.databinding.Experiment123ItemBinding
 import org.jetbrains.anko.layoutInflater
 
@@ -33,31 +35,41 @@ class Experiment1_2_3_Adapter(val context: Context, val type: Int) : PagerAdapte
         when (type) {
             GUESTS_FIRST -> {
                 mImages = intArrayOf(R.drawable.guest_big, R.drawable.no_advertising,
-                        R.drawable.message_big, R.drawable.popular_girl, R.drawable.views)
+                        R.drawable.message_big, getPopularPersonIcon(), R.drawable.views)
                 mDescriptions = intArrayOf(R.string.i_see_u_face, R.string.no_more_ad,
-                        R.string.buy_vip_write_anyone, R.string.moar_messages, R.string.buy_vip_more_views)
+                        getPopularPersonDescription(), R.string.moar_messages, R.string.buy_vip_more_views)
             }
             VIEWS_FIRST -> {
                 mImages = intArrayOf(R.drawable.views, R.drawable.no_advertising, R.drawable.guest_big,
-                        R.drawable.message_big, R.drawable.popular_girl)
+                        R.drawable.message_big, getPopularPersonIcon())
                 mDescriptions = intArrayOf(R.string.buy_vip_more_views, R.string.no_more_ad, R.string.i_see_u_face,
-                        R.string.buy_vip_write_anyone, R.string.moar_messages)
+                        getPopularPersonDescription(), R.string.moar_messages)
             }
             MESSAGE_FIRST -> {
                 mImages = intArrayOf(R.drawable.message_big, R.drawable.no_advertising, R.drawable.guest_big,
-                        R.drawable.popular_girl, R.drawable.views)
-                mDescriptions = intArrayOf(R.string.buy_vip_write_anyone, R.string.no_more_ad, R.string.i_see_u_face,
+                        getPopularPersonIcon(), R.drawable.views)
+                mDescriptions = intArrayOf(getPopularPersonDescription(), R.string.no_more_ad, R.string.i_see_u_face,
                         R.string.moar_messages, R.string.buy_vip_more_views)
             }
             else -> {
                 mImages = intArrayOf(R.drawable.no_advertising, R.drawable.guest_big,
-                        R.drawable.message_big, R.drawable.popular_girl, R.drawable.views)
+                        R.drawable.message_big, getPopularPersonIcon(), R.drawable.views)
                 mDescriptions = intArrayOf(R.string.no_more_ad, R.string.i_see_u_face,
-                        R.string.buy_vip_write_anyone, R.string.moar_messages, R.string.buy_vip_more_views)
+                        getPopularPersonDescription(), R.string.moar_messages, R.string.buy_vip_more_views)
             }
         }
 
     }
+
+    private fun getPopularPersonIcon() = if (App.get().profile.sex == Profile.BOY)
+        R.drawable.favorite_boy
+    else
+        R.drawable.popular_girl
+
+    private fun getPopularPersonDescription() = if (App.get().profile.sex == Profile.BOY)
+        R.string.buy_vip_write_anyone_boy
+    else
+        R.string.buy_vip_write_anyone
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any =
             with(DataBindingUtil.inflate<Experiment123ItemBinding>(context.layoutInflater,

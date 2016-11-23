@@ -82,11 +82,9 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
                 setTrialVipPopupShowCounter(showCounter)
                 saveConfig()
             }
-
         }
         setStyle(STYLE_NO_FRAME, R.style.Theme_Topface_NoActionBar)
-        mArgs = arguments
-        mArgs = if (savedInstanceState == null) arguments else savedInstanceState
+        mArgs = savedInstanceState ?: arguments
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
