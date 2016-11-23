@@ -13,7 +13,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical">
 
         <android.support.v4.view.ViewPager
@@ -25,12 +26,16 @@
 
         <com.topface.topface.ui.views.view_pager_indicator.CirclePageIndicator
             android:id="@+id/indicator_circles"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="12dp"
-            app:extraSpacing="12dp"
+            android:layout_gravity="center|bottom"
+            app:centered="true"
+            app:extraSpacing="7dp"
+            app:strokeWidth="0dp"
+            app:strokeColor="@color/trial_indicator"
             app:fillColor="@color/trial_indicator_selected"
             app:pageColor="@color/trial_indicator"
-            app:radius="5dp"/>
+            app:radius="4dp"/>
 
     </LinearLayout>
 

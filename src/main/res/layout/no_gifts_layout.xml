@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="@string/send_first_gift"
-            android:textColor="@color/gray_forms_color"/>
+            android:textColor="@color/u_must_send_gift"/>
 
     </LinearLayout>
 
