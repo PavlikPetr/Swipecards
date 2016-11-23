@@ -25,6 +25,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.Register;
@@ -33,12 +35,15 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegisterRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.STAuthMails;
 
 import java.util.Calendar;
@@ -208,6 +213,16 @@ public class RegistrationFragment extends BaseFragment {
         mEdEmail.setText(getArguments().getString(RecoverPwdFragment.ARG_EMAIL));
     }
 
+    // метод, который шлет статистику
+    private void sendFirstAuthUser(String platform, String authStatus) {
+        AppConfig appConfig = App.getAppConfig();
+        if (appConfig.isFirstAuth()) {
+            AuthStatistics.sendFirstAuth(platform, authStatus);
+            appConfig.setFirstAuth();
+            appConfig.saveConfig();
+        }
+    }
+
     private void sendRegistrationRequest() {
         final String emailLogin = Utils.getText(mEdEmail).trim();
         final String name = Utils.getText(mEdName).trim();
@@ -220,18 +235,18 @@ public class RegistrationFragment extends BaseFragment {
             showButtons();
             setEditing(true);
         } else {
-            RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(), emailLogin, password, name,
+            final RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(), emailLogin, password, name,
                     DateUtils.getSeconds(mBirthday), mSex);
             registerRequest(request);
             request.callback(new DataApiHandler<Register>() {
-
                 @Override
                 protected void success(Register data, IApiResponse response) {
                     Intent intent = new Intent();
+                    Debug.log("RegisterRequest1", "data = " + data.toString());
                     intent.putExtra(INTENT_LOGIN, emailLogin);
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
-
+                    sendFirstAuthUser("st","created");
                     //Запоминаем email после регистрации, что бы помочь при логине
                     STAuthMails.addEmail(emailLogin);
 

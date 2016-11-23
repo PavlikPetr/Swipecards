@@ -147,7 +147,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
                             .getResources().getString(R.string.appsflyer_registration), "");
                     String authStatus = response.getJsonResult().getString("authStatus");
-                    sendFirstAuthUser(authRequest.getPlatform(), authStatus);
+                        sendFirstAuthUser(authRequest.getPlatform(), authStatus);
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }
