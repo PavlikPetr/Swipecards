@@ -937,7 +937,7 @@
   <string name="moar_messages">Переписывайтесь с популярными пользователями</string>
   <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
   <string name="special_offer">Спецпредложение</string>
-  <string name="description_experiment4_view1">С VIP-статусом %s и %s тебя увидят!</string>
+  <string name="description_experiment4_view1">С VIP-статусом %1$s и %2$s тебя увидят!</string>
   <string name="fake_male_name_1">Костя</string>
   <string name="fake_male_name_2">Паша</string>
   <string name="fake_male_name_3">Петя</string>
