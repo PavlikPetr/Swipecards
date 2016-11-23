@@ -105,7 +105,7 @@
                     android:layout_below="@+id/label2"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/arrow_bottom_margin_top"
-                    android:src="@drawable/arrow_bottom"/>
+                    android:src="@drawable/arrow"/>
 
                 <TextView
                     android:id="@+id/vip_button"

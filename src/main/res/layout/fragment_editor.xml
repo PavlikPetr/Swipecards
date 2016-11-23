@@ -204,6 +204,24 @@
                 android:id="@+id/debugConnectionEnabled" />
         </LinearLayout>
 
+        <LinearLayout
+            android:paddingTop="10dp"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/trial_vip_type_text"
+                android:paddingRight="10dp"/>
+            <Spinner
+                android:id="@+id/trialType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

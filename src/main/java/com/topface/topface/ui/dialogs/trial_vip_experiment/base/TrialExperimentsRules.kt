@@ -3,7 +3,13 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 import android.os.Bundle
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
-import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_3
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_4
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.SUBTYPE_4_1
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.SUBTYPE_4_2
+import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter.Companion.MESSAGE_FIRST
+import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter.Companion.VIEWS_FIRST
+import com.topface.topface.ui.dialogs.trial_vip_experiment.getBundle
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.UserProfileFragment
@@ -30,7 +36,7 @@ object TrialExperimentsRules {
 
     fun Any.tryShowTrialPopup(type: Long = App.get().options.trialVipExperiment.androidTrialPopupExp, navigator: IFeedNavigator) {
         when (type) {
-            ExperimentsType.EXPERIMENT_3 -> {
+            EXPERIMENT_3, EXPERIMENT_4 -> {
                 when (this@tryShowTrialPopup) {
                     is DatingButtonsViewModel -> showTrialAfterSympathy(type, navigator)
                     is UserProfileFragment -> showTrialFromUserProfile(type, navigator)
@@ -46,7 +52,7 @@ object TrialExperimentsRules {
         val count = mConfig.getSympathyCount<Int>()
         Debug.log("FUCKING_EXP count symp = $count")
         if (count.configFieldInfo.amount == SYMPATHY_COUNT) {
-            startTrialPopup(type, navigator, createArgsForExperiment3(Experiment1_2_3_Adapter.VIEWS_FIRST))
+            startTrialPopup(type, navigator, type.getBundle(VIEWS_FIRST, SUBTYPE_4_2))
         }
         mConfig.setSympathyCount()
     }
@@ -54,13 +60,13 @@ object TrialExperimentsRules {
     private fun showTrialFromUserProfile(type: Long, navigator: IFeedNavigator) {
         val count = mConfig.getShowsInUserProfile<Int>()
         Debug.log("FUCKING_EXP trial_shows_count = $count")
-        if (count.configFieldInfo.amount <= SHOWS_IN_USER_PROFILE) {
+        if (true) {
             mShowInUserProfileSubscription = Observable.interval(1, PROFILE_INTERVAL, TimeUnit.SECONDS)
                     .applySchedulers()
                     .subscribe(object : RxUtils.ShortSubscription<Long>() {
                         override fun onNext(time: Long?) {
-                            if (time != null && time >= PROFILE_INTERVAL) {
-                                startTrialPopup(type, navigator, createArgsForExperiment3(Experiment1_2_3_Adapter.GUESTS_FIRST))
+                            if (true) {
+                                startTrialPopup(type, navigator, type.getBundle(MESSAGE_FIRST, SUBTYPE_4_1))
                                 unsubscribe()
                             }
                         }
@@ -68,11 +74,6 @@ object TrialExperimentsRules {
         }
         mConfig.setShowsInUserProfile()
     }
-
-    private fun createArgsForExperiment3(mode: Int) = Bundle().apply {
-        this.putInt(Experiment1_2_3_Adapter.MODE, mode)
-    }
-
 
     private fun startTrialPopup(type: Long, navigator: IFeedNavigator, args: Bundle = Bundle()) {
         Debug.log("FUCKING_EXP popup started")

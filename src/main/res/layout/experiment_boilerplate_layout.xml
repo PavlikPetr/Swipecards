@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -47,6 +48,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -55,7 +57,6 @@
                     android:layout_height="36dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@{viewModel.getVipBottomMargin}"
-                    android:layout_marginTop="30dp"
                     android:background="@{viewModel.getVipButtonBackground}"
                     android:gravity="center"
                     android:minWidth="141dp"
@@ -64,6 +65,7 @@
                     android:textAllCaps="true"
                     android:textColor="@color/bg_white"
                     android:textSize="14sp"
+                    app:textAllCaps="true"
                     tools:targetApi="ice_cream_sandwich"
                     tools:text="Получить VIP"/>
 

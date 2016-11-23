@@ -962,9 +962,18 @@
     <string name="chat_mutual_symphaty">J\'aime mutuel !</string>
     <string name="chat_mutual_start_conversation">Commencez à tchater !</string>
     <string name="chat_send_message_button_title">Envoyer.</string>
+    <string name="know_your_guests_by_sight">Découvrez vos visteurs et vos fans en voyant leurs visages</string>
+    <string name="know_your_guests">Découvrez vos visiteurs !</string>
+    <string name="write_any_girl">Écrivez à n\'importe quelle fille !</string>
+    <string name="write_any_boy">Écrivez à n\'importe quel gars !</string>
+    <string name="write_beautiful_girls_without_limits">Écrivez à des filles chaudes sans limites !</string>
+    <string name="write_beautiful_boys_without_limits">Écrivez à des gars chauds sans limites !</string>
     <string name="seven_days_free">7 jours gratuits</string>
+    <string name="free_vip">Statut VIP gratuit</string>
     <string name="no_more_ad">Aucune publicité dans l\'application</string>
     <string name="i_see_u_face">Découvrez qui a consulté votre page et découvrez qui sont vos fans</string>
+    <string name="buy_vip_write_anyone">Ecrivez à n\'importe quelle fille même sans attraction mutuelle</string>
     <string name="moar_messages">Tchatez avec des utilisateurs populaires</string>
     <string name="buy_vip_more_views">Obtenez 1,5 fois plus de vues sur votre profil</string>
+    <string name="special_offer">Offre spéciale</string>
 </resources>

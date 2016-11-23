@@ -32,9 +32,11 @@ import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment41ViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4BaseViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithBlurViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithoutBlurViewModel;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment5and6ViewModel;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
@@ -159,7 +161,8 @@ import dagger.Provides;
                 Experiment4WithBlurViewModel.class,
                 Experiment4WithoutBlurViewModel.class,
                 DatingEmptyFragmentViewModel.class,
-                DatingEmptyFragment.class
+                DatingEmptyFragment.class,
+                Experiment41ViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

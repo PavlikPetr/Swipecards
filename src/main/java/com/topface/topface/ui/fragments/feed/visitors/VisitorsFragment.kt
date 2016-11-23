@@ -10,6 +10,10 @@ import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.SUBTYPE_4_3
+import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter
+import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter.Companion.GUESTS_FIRST
+import com.topface.topface.ui.dialogs.trial_vip_experiment.getBundle
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 
@@ -36,11 +40,11 @@ class VisitorsFragment : BaseFeedFragment<Visitor, LayoutEmptyVisitorsBinding>()
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_visitors
 
-    override fun showTrial() {
-        if (App.getUserConfig().canShowInVisitors() && isAdded) {
+    override fun showTrial() = App.get().options.trialVipExperiment.androidTrialPopupExp.run {
+        if (App.getUserConfig().canShowInVisitors(this) && isAdded) {
             val popup = ExperimentBoilerplateFragment
-                    .newInstance(type = ExperimentsType.EXPERIMENT_1, skipShowingCondition = true)
-            popup.onFragmentFinishDelegate = this
+                    .newInstance(type = this, skipShowingCondition = true, args = this.getBundle(GUESTS_FIRST, SUBTYPE_4_3))
+            popup.onFragmentFinishDelegate = this@VisitorsFragment
             popup.show(activity.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
         }
     }

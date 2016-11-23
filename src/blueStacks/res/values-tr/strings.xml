@@ -332,9 +332,9 @@
   <string name="settings_melody">Bildirim sesi</string>
   <string name="settings_loading_photo">Fotoğraf önizleme</string>
   <string name="edit_refresh_status">Durumu güncelle</string>
-  <string name="ban_title">Tebrikler! Engellendiniz.</string>
-  <string name="ban_title_forever">Tebrikler! Hayat boyu engellendiniz!</string>
-  <string name="ban_title_until">Tebrikler!  %s tarihine kadar engellendiniz.</string>
+  <string name="ban_title">Engellendiniz.</string>
+  <string name="ban_title_forever">Hayat boyu engellendiniz!</string>
+  <string name="ban_title_until">%s tarihine kadar engellendiniz.</string>
   <string name="ban_complain">Engellemeyi şikayet et</string>
   <string name="general_ready">Hazır</string>
   <string name="buying_store_ok">Satın alma başarıyla tamamlanmıştır.</string>
@@ -657,8 +657,7 @@
   <string name="feedback_subject_ban">Hatalı banlanma durumunu şikayet et</string>
   <string name="settings_led">LED bildirim</string>
   <string name="open_market_error">Uygulama sayfası açılamıyor</string>
-  <string name="billing_item_already_owned">Satın alma işleminiz şu an işleniyor,
-        lütfen bekleyin</string>
+  <string name="billing_item_already_owned">Satın alma işleminiz şu an işleniyor, lütfen bekleyin</string>
   <string name="dialog">Sohbet</string>
   <string name="reply">Cevap ver</string>
   <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçtiniz</string>
@@ -853,9 +852,18 @@
   <string name="chat_mutual_symphaty">Karşılıklı beğenme!</string>
   <string name="chat_mutual_start_conversation">Sohbete başlayın!</string>
   <string name="chat_send_message_button_title">Gönder</string>
+  <string name="know_your_guests_by_sight">Ziyaretçilerinin ve hayranlarının yüzlerini gör</string>
+  <string name="know_your_guests">Ziyaretçilerini gör</string>
+  <string name="write_any_girl">Her kadına mesaj yaz!</string>
+  <string name="write_any_boy">Her erkeğe mesaj yaz!</string>
+  <string name="write_beautiful_girls_without_limits">Limit olmadan güzel kadınlara mesaj yaz</string>
+  <string name="write_beautiful_boys_without_limits">Limit olmadan yakışıklı erkeklere mesaj yaz</string>
   <string name="seven_days_free">7 günlük ücretsiz</string>
+  <string name="free_vip">Ücretsiz VIP</string>
   <string name="no_more_ad">Uygulama içi reklamlar olmadan</string>
   <string name="i_see_u_face">Hayranlarını ve sayfanı ziyaret edenleri gör</string>
+  <string name="buy_vip_write_anyone">Karşılıklı beğeni olmadan her kadına mesaj yaz</string>
   <string name="moar_messages">Popüler kullanıcılar ile sohbet et</string>
   <string name="buy_vip_more_views">1.5 kat daha fazla profil ziyareti al.</string>
+  <string name="special_offer">Özel teklif</string>
 </resources>

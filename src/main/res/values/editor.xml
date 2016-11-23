@@ -71,5 +71,16 @@
     </string-array>
 
     <string name="options_parsing_error">Ошибка парсинга опций, срочно сообщите разработчику</string>
+    <string name="trial_vip_type_text">Тип Trial-Vip</string>
+    <string-array name="trial_vip_types">
+        <item>//-//</item>
+        <item>default</item>
+        <item>Эксперимент 1</item>
+        <item>Эксперимент 2</item>
+        <item>Эксперимент 3</item>
+        <item>Эксперимент 4</item>
+        <item>Эксперимент 5</item>
+        <item>Эксперимент 6</item>
+    </string-array>
 
 </resources>
