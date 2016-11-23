@@ -143,7 +143,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
     override fun showTrialPopup(type: Long, args: Bundle) {
         ExperimentBoilerplateFragment.newInstance(type, args = args)
-                .show(mActivityDelegate., ExperimentBoilerplateFragment.TAG)
+                .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
 }
