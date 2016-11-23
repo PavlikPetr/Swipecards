@@ -40,6 +40,7 @@ public class AppConfig extends AbstractConfig {
      * Это обязательно делать, если вы например поменяли URL API или версию API
      */
     public static final int APP_CONFIG_VERSION = 1;
+    public static final long TRIAL_VIP_UNDEFINED = -1L;
 
     public static final String BASE_CONFIG_SETTINGS = "base_config_settings";
     public static final String DATA_API_URL = "data_api_url";
@@ -143,7 +144,7 @@ public class AppConfig extends AbstractConfig {
         // ключ, который устанавливает количество отправленных симпатий
         addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
         // храним последний выбранный тип попапа триального вип
-        addField(settingsMap, TRIAL_VIP_POPUP_TYPE, -1L);
+        addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
     }
 
     protected SharedPreferences getPreferences() {
