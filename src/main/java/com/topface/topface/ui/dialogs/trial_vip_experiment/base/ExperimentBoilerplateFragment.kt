@@ -3,6 +3,7 @@ package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.annotation.IdRes
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,6 @@ import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_SUBTYPE
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
 import org.jetbrains.anko.layoutInflater
 
@@ -31,13 +31,16 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     companion object {
         const val TAG = "TrialVipPopup"
         const val SKIP_SHOWING_CONDITION = "skip_showing_condition"
+        const val FRAGMENT_CONTAINER_ID = "fragment_container_id"
         @JvmOverloads @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long =
                                                  App.get().options.trialVipExperiment.androidTrialPopupExp,
+                                                 @IdRes fragmentContainerId: Int = R.id.fragment_content,
                                                  skipShowingCondition: Boolean = false, args: Bundle = Bundle()) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = args.apply {
                         putLong(EXPERIMENT_TYPE, type)
                         putBoolean(SKIP_SHOWING_CONDITION, skipShowingCondition)
+                        putInt(FRAGMENT_CONTAINER_ID, fragmentContainerId)
                     }
                     this
                 }
@@ -70,7 +73,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     private val mMarketFragmentRunner by lazy {
-        TransparentMarketFragmentRunner(activity)
+        TransparentMarketFragmentRunner(activity, mArgs.getInt(FRAGMENT_CONTAINER_ID))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

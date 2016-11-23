@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment;
 
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -9,6 +10,8 @@ import com.topface.topface.R;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 
@@ -23,9 +26,16 @@ import kotlin.jvm.functions.Function0;
 public class TransparentMarketFragmentRunner {
 
     private WeakReference<FragmentActivity> mActivity;
+    //Контейнер, в который нужно впирдолить попап покупок
+    private int mFragmentContainer = R.id.fragment_content;
 
     public TransparentMarketFragmentRunner(FragmentActivity activity) {
         mActivity = new WeakReference<>(activity);
+    }
+
+    public TransparentMarketFragmentRunner(@Nullable FragmentActivity activity, @IdRes int res) {
+        this(activity);
+        mFragmentContainer = res;
     }
 
     public void startTransparentMarketFragment(final Function0<Unit> function) {
@@ -49,10 +59,10 @@ public class TransparentMarketFragmentRunner {
             });
             FragmentTransaction transaction = mActivity.get().getSupportFragmentManager().beginTransaction();
             if (!fragment.isAdded()) {
-                transaction.add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                transaction.add(mFragmentContainer, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
             } else {
                 transaction.remove(fragment)
-                        .add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
+                        .add(mFragmentContainer, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
             }
         }
     }

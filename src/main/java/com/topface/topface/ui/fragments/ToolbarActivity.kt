@@ -1,23 +1,21 @@
 package com.topface.topface.ui.fragments
 
-import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.ActionBar
-import android.util.AttributeSet
 import android.view.View
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.CrashReportActivity
-import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
-import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.utils.IToolbarSettings
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 
 /**
  * Created by ppavlik on 14.10.16.
@@ -52,15 +50,15 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     open fun setToolbarSettings(settings: ToolbarSettingsData) {
-        getToolbarViewModel().let { toolbarViewModel ->
+        with(getToolbarViewModel()) {
             settings.title?.let {
-                toolbarViewModel.title.set(it)
+                this.title.set(it)
             }
             settings.subtitle?.let {
-                toolbarViewModel.subTitle.set(it)
+                this.subTitle.set(it)
             }
             settings.icon?.let {
-                toolbarViewModel.upIcon.set(it)
+                this.upIcon.set(it)
             }
         }
     }
