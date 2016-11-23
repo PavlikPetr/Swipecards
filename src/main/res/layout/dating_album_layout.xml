@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -23,8 +22,7 @@
             app:currentItemImmediately="@{model.currentItem}"
             app:data="@{model.albumData}"
             app:needAnimateLoader="@{model.isNeedAnimateLoader}"
-            app:onPageChangeListener="@{model}"
-            />
+            app:onPageChangeListener="@{model}"/>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -51,12 +49,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
                 android:drawableLeft="@drawable/foto"
+                android:drawablePadding="8dp"
                 android:text="@{model.photosCounter}"
                 android:textSize="14sp"
                 android:visibility="@{model.isPhotosCounterVisible}"/>
-
         </FrameLayout>
-
     </FrameLayout>
-
 </layout>
