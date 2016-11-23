@@ -34,15 +34,21 @@ class MetricsFactory(val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMe
                     getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
                     descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
                 }
-                ExperimentsType.EXPERIMENT_5, ExperimentsType.EXPERIMENT_6 -> BoilerplateDialogMetrics.create {
+                ExperimentsType.EXPERIMENT_5 -> BoilerplateDialogMetrics.create {
                     titleTopMargin = R.dimen.experiment_5_title_top_margin
                     titleBottomMargin = R.dimen.experiment_5_title_bottom_margin
                     contentBottomMargin = R.dimen.experiment_5_content_bottom_margin
                     getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
                     descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
-                    popupBackground = R.drawable.trial_vip_popup_bg
+
                 }
                 else -> BoilerplateDialogMetrics.create {
+                    titleTopMargin = R.dimen.experiment_6_title_top_margin
+                    titleBottomMargin = R.dimen.experiment_6_title_bottom_margin
+                    contentBottomMargin = R.dimen.experiment_6_content_bottom_margin
+                    getVipBottomMargin = R.dimen.experiment_6_get_vip_bottom_margin
+                    descriptionBottomMargin = R.dimen.experiment_6_description_bottom_margin
+                    popupBackground = R.drawable.trial_vip_popup_bg
                 }
             }
 

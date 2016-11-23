@@ -30,7 +30,7 @@
             android:drawableStart="@drawable/guest_3"
             android:text="@string/i_see_u_face"/>
 
-        <ImageView style="@style/PopupArrowTrialVip"/>
+        <ImageView style="@style/PopupArrowTrialVip.High"/>
 
     </LinearLayout>
 </layout>
