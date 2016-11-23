@@ -40,6 +40,7 @@
             style="@style/TextViewTrialVipPopup"
             android:drawableLeft="@drawable/eye_2"
             android:drawableStart="@drawable/eye_2"
+
             android:text="@string/buy_vip_more_views"/>
 
         <ImageView style="@style/PopupArrowTrialVip"/>

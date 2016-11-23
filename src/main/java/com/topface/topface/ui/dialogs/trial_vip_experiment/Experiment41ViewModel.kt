@@ -9,6 +9,7 @@ import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDrawableListFromArrayId
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
@@ -32,7 +33,7 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
     val randomLeftPhoto: ObservableField<Int> = ObservableField()
     val randomRightPhoto: ObservableField<Int> = ObservableField()
     val vipBannerText: ObservableField<String> = ObservableField()
-     var profileSubscription: Subscription
+    var profileSubscription: Subscription
     @Inject lateinit var state: TopfaceAppState
 
     init {
@@ -51,9 +52,8 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
                         R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_female_name_1)
                     else
                         R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_male_name_1))) {
-                val res = context.resources
-                vipBannerText.set(String.format(res.getString(R.string.description_experiment4_view1), res.getString(this[0]),
-                        res.getString(this[1])))
+                vipBannerText.set(String.format(R.string.description_experiment4_view1.getString(), this[0].getString(),
+                        this[1].getString()))
             }
 
     private fun setRandomUserAvatar(profile: Profile) =
@@ -86,5 +86,4 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         super.release()
         profileSubscription.safeUnsubscribe()
     }
-
 }
