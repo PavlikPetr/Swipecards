@@ -14,6 +14,7 @@ class AuthStatistics {
         private const val DEVICE_ACTIVATED_KEY = "mobile_device_activated"
         private const val PLT_SLICE = "plt"
         private const val VAL_SLICE = "val"
+        const val DEFAULT_AUTH_STATUS = "created"
 
         private fun send(command: String, slices: Slices?) =
                 StatisticsTracker.getInstance().sendEvent(command, 1, slices)

@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@id/title"
-            android:paddingRight="20dp"
+            android:paddingRight="16dp"
             android:gravity="end"
             android:text="@{model.amount}"
             android:textColor="@color/gray_forms_color"
