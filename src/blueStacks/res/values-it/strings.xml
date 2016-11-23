@@ -867,9 +867,18 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="chat_mutual_symphaty">Like reciproco!</string>
   <string name="chat_mutual_start_conversation">Inizia a chattare!</string>
   <string name="chat_send_message_button_title">Invia</string>
+  <string name="know_your_guests_by_sight">Scopri i tuoi ospiti e i tuoi fan, vedendo i loro volti</string>
+  <string name="know_your_guests">Scopri i tuoi ospiti!</string>
+  <string name="write_any_girl">Scrivi a qualsiasi ragazza!</string>
+  <string name="write_any_boy">Scrivi a qualsiasi ragazzo!</string>
+  <string name="write_beautiful_girls_without_limits">Scrivi alle ragazze hot senza limiti!</string>
+  <string name="write_beautiful_boys_without_limits">Scrivi ai ragazzi hot senza limiti!</string>
   <string name="seven_days_free">7 giorni gratis</string>
+  <string name="free_vip">Stato VIP gratuito</string>
   <string name="no_more_ad">Nessun ads in-app</string>
   <string name="i_see_u_face">Scopri chi ha visitato la tua pagina e chi sono i tuoi Fan</string>
+  <string name="buy_vip_write_anyone">Scrivi a qualsiasi ragazza, anche senza il Like reciproco</string>
   <string name="moar_messages">Chatta con gli utenti popolari</string>
   <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
+  <string name="special_offer">Offerta speciale</string>
 </resources>

@@ -930,9 +930,18 @@
     <string name="chat_mutual_symphaty">Mutual Like!</string>
     <string name="chat_mutual_start_conversation">Start chatting!</string>
     <string name="chat_send_message_button_title">Send</string>
+    <string name="know_your_guests_by_sight">Find out your guests and Fans by seeing their faces</string>
+    <string name="know_your_guests">Find out your guests!</string>
+    <string name="write_any_girl">Write to any girl!</string>
+    <string name="write_any_boy">Write to any guy!</string>
+    <string name="write_beautiful_girls_without_limits">Write to hot girls without limits!</string>
+    <string name="write_beautiful_boys_without_limits">Write to hot guys without limits!</string>
     <string name="seven_days_free">7 days free</string>
+    <string name="free_vip">Free VIP-status!</string>
     <string name="no_more_ad">No in-app ads</string>
     <string name="i_see_u_face">Find out who visited your page</string>
+    <string name="buy_vip_write_anyone">Write to any girl even without a mutual Like</string>
     <string name="moar_messages">Chat with popular users</string>
     <string name="buy_vip_more_views">Get x1.5 more profile views</string>
+    <string name="special_offer">Special offer</string>
 </resources>
