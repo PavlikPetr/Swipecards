@@ -28,9 +28,9 @@ class MetricsFactory(val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMe
                     initStandardMetrics(this)
                 }
                 ExperimentsType.EXPERIMENT_4 -> BoilerplateDialogMetrics.create {
-                    titleTopMargin = R.dimen.experiment_5_title_top_margin
-                    titleBottomMargin = R.dimen.experiment_5_title_bottom_margin
-                    contentBottomMargin = R.dimen.experiment_5_content_bottom_margin
+                    titleTopMargin = R.dimen.experiment_4_title_top_margin
+                    titleBottomMargin = R.dimen.experiment_4_title_bottom_margin
+                    contentBottomMargin = R.dimen.experiment_4_content_bottom_margin
                     getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
                     descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
                 }
