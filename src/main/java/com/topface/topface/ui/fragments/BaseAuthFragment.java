@@ -33,7 +33,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -147,7 +146,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
                             .getResources().getString(R.string.appsflyer_registration), "");
                     String authStatus = response.getJsonResult().getString("authStatus");
-                        sendFirstAuthUser(authRequest.getPlatform(), authStatus);
+                    sendFirstAuthUser(authRequest.getPlatform(), authStatus);
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }

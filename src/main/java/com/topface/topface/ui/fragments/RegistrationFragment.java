@@ -25,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Profile;
@@ -235,18 +234,17 @@ public class RegistrationFragment extends BaseFragment {
             showButtons();
             setEditing(true);
         } else {
-            final RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(), emailLogin, password, name,
+            RegisterRequest request = new RegisterRequest(getActivity().getApplicationContext(), emailLogin, password, name,
                     DateUtils.getSeconds(mBirthday), mSex);
             registerRequest(request);
             request.callback(new DataApiHandler<Register>() {
                 @Override
                 protected void success(Register data, IApiResponse response) {
                     Intent intent = new Intent();
-                    Debug.log("RegisterRequest1", "data = " + data.toString());
                     intent.putExtra(INTENT_LOGIN, emailLogin);
                     intent.putExtra(INTENT_PASSWORD, password);
                     intent.putExtra(INTENT_USER_ID, data.getUserId());
-                    sendFirstAuthUser("st","created");
+                    sendFirstAuthUser(AuthToken.SN_TOPFACE, AuthStatistics.DEFAULT_AUTH_STATUS);
                     //Запоминаем email после регистрации, что бы помочь при логине
                     STAuthMails.addEmail(emailLogin);
 
