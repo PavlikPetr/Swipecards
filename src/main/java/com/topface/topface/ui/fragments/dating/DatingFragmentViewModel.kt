@@ -169,7 +169,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                     else R.string.fill_own_profile.getString(), user.firstName), Utils.EMPTY),
                     isEmptyItem = false))
         } else {
-
             forms = mutableListOf <IType>().apply {
                 var hasEmptyItem = false
                 user.forms.forEach {
