@@ -13,6 +13,7 @@ import com.topface.topface.databinding.Experiment123ContentViewBinding
 import com.topface.topface.databinding.LayoutExperiment5Binding
 import com.topface.topface.databinding.LayoutExperiment6Binding
 import com.topface.topface.databinding.OldTrialContentBinding
+import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment41ViewModel
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_2
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_3
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_SUBTYPE
@@ -61,6 +62,10 @@ class ContentViewFactory(private val mContext: Context, val parent: ViewGroup,
 
     fun subTypeChooser(subType: Long): ViewDataBinding {
         when (subType) {
+            ExperimentsType.SUBTYPE_4_1 -> {
+                return DataBindingUtil.inflate<LayoutExperiment41Binding>(mContext.layoutInflater, R.layout.layout_experiment_4_1, parent, false)
+                        .apply { viewModel = Experiment41ViewModel(this) }
+            }
             ExperimentsType.SUBTYPE_4_2 -> {
                 return DataBindingUtil.inflate<Experiment4Binding>(mContext.layoutInflater, R.layout.experiment4, parent, false)
                         .apply { viewModel = Experiment4WithoutBlurViewModel(this) }
