@@ -12,6 +12,7 @@ import com.topface.topface.utils.extensions.getDrawableListFromArrayId
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
+import java.util.*
 import javax.inject.Inject
 
 
@@ -22,19 +23,16 @@ import javax.inject.Inject
 class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         BaseViewModel<LayoutExperiment41Binding>(binding) {
 
-    companion object {
-        const val PHOTO_COUNT = 2
+    private companion object {
+        const val RANDOM_PHOTO_COUNT = 2
+        const val RANDOM_NAME_COUNT = 2
     }
-
-    private val boysName = arrayListOf(R.string.fake_male_name_1, R.string.fake_male_name_2, R.string.fake_male_name_3, R.string.fake_male_name_4, R.string.fake_male_name_5, R.string.fake_male_name_6, R.string.fake_male_name_7, R.string.fake_male_name_8, R.string.fake_male_name_9, R.string.fake_male_name_10)
-
-    private val girlsName = arrayListOf(R.string.fake_female_name_1, R.string.fake_female_name_2, R.string.fake_female_name_3, R.string.fake_female_name_4, R.string.fake_female_name_5, R.string.fake_female_name_6, R.string.fake_female_name_7, R.string.fake_female_name_8, R.string.fake_female_name_9, R.string.fake_female_name_10)
 
     val userAvatar: ObservableField<String> = ObservableField()
     val randomLeftPhoto: ObservableField<Int> = ObservableField()
     val randomRightPhoto: ObservableField<Int> = ObservableField()
     val vipBannerText: ObservableField<String> = ObservableField()
-    var profileSubscription: Subscription
+     var profileSubscription: Subscription
     @Inject lateinit var state: TopfaceAppState
 
     init {
@@ -42,18 +40,24 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         App.get().inject(this)
         profileSubscription = state.getObservable(Profile::class.java).subscribe {
             setUrlAvatar(it)
-            setRandomPhoto(it)
-
-            with(Utils.randomImageRes(2, if (App.get().profile.sex == Profile.BOY) girlsName else boysName)) {
-                vipBannerText.set(String.format(context.resources.getString(R.string.description_experiment4_view1), context.resources.getString(this[0]), context.resources.getString(this[1])))
-            }
-
+            setRandomUserAvatar(it)
+            setRandomUserName(it)
         }
-
     }
 
-    private fun setRandomPhoto(profile: Profile) =
-            with(Utils.randomImageRes(PHOTO_COUNT,
+    private fun setRandomUserName(profile: Profile) =
+            with(Utils.chooseRandomResourceID(RANDOM_NAME_COUNT,
+                    if (profile.sex == Profile.BOY)
+                        R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_female_name_1)
+                    else
+                        R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_male_name_1))) {
+                val res = context.resources
+                vipBannerText.set(String.format(res.getString(R.string.description_experiment4_view1), res.getString(this[0]),
+                        res.getString(this[1])))
+            }
+
+    private fun setRandomUserAvatar(profile: Profile) =
+            with(Utils.chooseRandomResourceID(RANDOM_PHOTO_COUNT,
                     if (profile.sex == Profile.BOY)
                         R.array.fake_girls_without_blur.getDrawableListFromArrayId(R.drawable.girl_1)
                     else
