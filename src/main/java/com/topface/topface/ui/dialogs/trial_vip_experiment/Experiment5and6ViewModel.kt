@@ -21,23 +21,8 @@ import javax.inject.Inject
  * Created by ppavlik on 23.11.16.
  */
 class Experiment5and6ViewModel() {
-
-    val sendForFree: ObservableField<String> = ObservableField()
-    var profileSubscription: Subscription
-    @Inject lateinit var state: TopfaceAppState
-
-    init {
-        App.get().inject(this)
-        setDependsOnSexText(App.get().profile)
-        profileSubscription = state.getObservable(Profile::class.java).subscribe {
-            setDependsOnSexText(it)
-        }
-    }
-
-    private fun setDependsOnSexText(profile: Profile) =
-            sendForFree.set(
-                    if (profile.sex == Profile.BOY)
-                        R.string.buy_vip_write_anyone.getString()
-                    else
-                        R.string.buy_vip_write_anyone_boy.getString())
+    val sendForFree: ObservableField<String> = ObservableField(if (App.get().profile.sex == Profile.BOY)
+        R.string.buy_vip_write_anyone.getString()
+    else
+        R.string.buy_vip_write_anyone_boy.getString())
 }

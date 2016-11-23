@@ -158,8 +158,7 @@ import dagger.Provides;
                 Experiment4BaseViewModel.class,
                 Experiment4WithBlurViewModel.class,
                 Experiment4WithoutBlurViewModel.class,
-                Experiment41ViewModel.class,
-                Experiment5and6ViewModel.class
+                Experiment41ViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
