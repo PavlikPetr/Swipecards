@@ -42,7 +42,6 @@ class BoilerplateDataFactory(private val mContext: Context, val parent: ViewGrou
             when (subType) {
                 ExperimentsType.SUBTYPE_4_1 -> BoilerplateData.create {
                     title = R.string.get_more_visitors
-                    description = R.string.description_experiment4_view1
                 }
                 ExperimentsType.SUBTYPE_4_2 -> BoilerplateData.create {
                     title = if (App.get().profile.sex == Profile.BOY) R.string.write_any_girl else R.string.write_any_boy
