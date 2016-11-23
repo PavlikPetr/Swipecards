@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment5and6ViewModel"/>
+    </data>
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/MainContainerTrialVip">
@@ -9,7 +16,7 @@
             style="@style/TextViewTrialVipPopup"
             android:drawableLeft="@drawable/message_3"
             android:drawableStart="@drawable/message_3"
-            android:text="@string/buy_vip_write_anyone"/>
+            android:text="@{viewModel.sendForFree}"/>
 
         <TextView
             style="@style/TextViewTrialVipPopup"

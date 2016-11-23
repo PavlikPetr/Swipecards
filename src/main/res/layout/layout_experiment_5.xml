@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment5and6ViewModel"/>
+    </data>
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/MainContainerTrialVip">
@@ -9,26 +17,31 @@
             android:drawableLeft="@drawable/no_advertising_2"
             android:drawableStart="@drawable/no_advertising_2"
             android:text="@string/no_more_ad"/>
+
         <TextView
             style="@style/TextViewTrialVipPopup"
             android:drawableLeft="@drawable/guest_2"
             android:drawableStart="@drawable/guest_2"
             android:text="@string/i_see_u_face"/>
+
         <TextView
             style="@style/TextViewTrialVipPopup"
             android:drawableLeft="@drawable/message_2"
             android:drawableStart="@drawable/message_2"
-            android:text="@string/buy_vip_write_anyone"/>
+            android:text="@{viewModel.sendForFree}"/>
+
         <TextView
             style="@style/TextViewTrialVipPopup"
             android:drawableLeft="@drawable/popular_2"
             android:drawableStart="@drawable/popular_2"
             android:text="@string/moar_messages"/>
+
         <TextView
             style="@style/TextViewTrialVipPopup"
             android:drawableLeft="@drawable/eye_2"
             android:drawableStart="@drawable/eye_2"
             android:text="@string/buy_vip_more_views"/>
+
         <ImageView style="@style/PopupArrowTrialVip"/>
 
     </LinearLayout>
