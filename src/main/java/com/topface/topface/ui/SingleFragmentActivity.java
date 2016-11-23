@@ -57,7 +57,7 @@ public abstract class SingleFragmentActivity<T extends Fragment, V extends ViewD
     protected abstract String getFragmentTag();
 
     protected int getContainerId() {
-        return R.id.loFrame;
+        return R.id.fragment_content;
     }
 
     protected void setArguments() {
