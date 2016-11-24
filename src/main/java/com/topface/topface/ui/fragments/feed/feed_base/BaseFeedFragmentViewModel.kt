@@ -442,12 +442,8 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     override fun release() {
         super.release()
-        RxUtils.safeUnsubscribe(mUpdaterSubscription)
-        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
-        RxUtils.safeUnsubscribe(mDeleteSubscription)
-        RxUtils.safeUnsubscribe(mBlackListSubscription)
-        RxUtils.safeUnsubscribe(mCountersSubscription)
-        RxUtils.safeUnsubscribe(mAppDayRequestSubscription)
+        arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
+                mBlackListSubscription, mCountersSubscription, mAppDayRequestSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             mAdapter?.let { adapter ->
                 if (!adapter.data.isEmpty()) {
