@@ -193,11 +193,8 @@ class FabTransform(@ColorInt private val color: Int, @DrawableRes private val ic
                 }
             })
         }
-        
-
         return transition
     }
-
 
     private fun captureValues(transitionValues: TransitionValues) {
         val view = transitionValues.view
