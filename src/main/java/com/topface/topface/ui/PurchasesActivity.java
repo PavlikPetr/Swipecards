@@ -321,7 +321,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
                 && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                 && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
             //noinspection WrongConstant
-            mTrialVipPopup = ExperimentBoilerplateFragment.newInstance(TrialVipPopupAction.getTrialVipType(),R.id.loFrame);
+            mTrialVipPopup = ExperimentBoilerplateFragment.newInstance(TrialVipPopupAction.getTrialVipType());
             mTrialVipPopup.setDismissListener(dismissListener);
             mTrialVipPopup.show(getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
             App.isNeedShowTrial = false;
