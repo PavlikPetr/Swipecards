@@ -245,7 +245,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
     }
 
     override fun onEmptyList(usersList: UsersList<SearchUser>?) {
-        if (!mNewFilter) update(false, false) else update(true, false)
+        update(mNewFilter, false)
     }
 
     override fun onPreload(usersList: UsersList<SearchUser>?) {
