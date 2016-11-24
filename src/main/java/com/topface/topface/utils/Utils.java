@@ -660,7 +660,7 @@ public class Utils {
     }
 
     @NotNull
-    public static List<Integer> randomImageRes(int count, List<Integer> images) {
+    public static List<Integer> chooseRandomResourceID(int count, List<Integer> images) {
         List<Integer> result = new ArrayList<>();
         Random random = new Random();
         int randomIndex;

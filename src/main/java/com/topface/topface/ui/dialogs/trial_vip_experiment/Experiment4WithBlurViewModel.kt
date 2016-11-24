@@ -20,7 +20,7 @@ class Experiment4WithBlurViewModel(binding: Experiment4Binding) : Experiment4Bas
     }
 
     override val fakeAvatars: List<Int>
-        get() = Utils.randomImageRes(5, if (mIsUserMale) R.array.fake_girls_with_blur.getDrawableListFromArrayId(R.drawable.girl_blur_2)
+        get() = Utils.chooseRandomResourceID(5, if (mIsUserMale) R.array.fake_girls_with_blur.getDrawableListFromArrayId(R.drawable.girl_blur_2)
         else R.array.fake_boys_with_blur.getDrawableListFromArrayId(R.drawable.man_blur_5))
     override val popupMessage: ObservableField<String>
         get() = ObservableField<String>(R.string.know_your_guests_by_sight.getString())

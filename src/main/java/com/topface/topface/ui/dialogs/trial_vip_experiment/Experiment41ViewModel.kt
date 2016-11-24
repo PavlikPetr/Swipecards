@@ -9,9 +9,11 @@ import com.topface.topface.databinding.LayoutExperiment41Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDrawableListFromArrayId
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
+import java.util.*
 import javax.inject.Inject
 
 
@@ -22,13 +24,15 @@ import javax.inject.Inject
 class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         BaseViewModel<LayoutExperiment41Binding>(binding) {
 
-    companion object {
-        const val PHOTO_COUNT = 2
+    private companion object {
+        const val RANDOM_PHOTO_COUNT = 2
+        const val RANDOM_NAME_COUNT = 2
     }
 
     val userAvatar: ObservableField<String> = ObservableField()
     val randomLeftPhoto: ObservableField<Int> = ObservableField()
     val randomRightPhoto: ObservableField<Int> = ObservableField()
+    val vipBannerText: ObservableField<String> = ObservableField()
     var profileSubscription: Subscription
     @Inject lateinit var state: TopfaceAppState
 
@@ -37,12 +41,23 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         App.get().inject(this)
         profileSubscription = state.getObservable(Profile::class.java).subscribe {
             setUrlAvatar(it)
-            setRandomPhoto(it)
+            setRandomUserAvatar(it)
+            setRandomUserName(it)
         }
     }
 
-    private fun setRandomPhoto(profile: Profile) =
-            with(Utils.randomImageRes(PHOTO_COUNT,
+    private fun setRandomUserName(profile: Profile) =
+            with(Utils.chooseRandomResourceID(RANDOM_NAME_COUNT,
+                    if (profile.sex == Profile.BOY)
+                        R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_female_name_1)
+                    else
+                        R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_male_name_1))) {
+                vipBannerText.set(String.format(R.string.description_experiment4_view1.getString(), this[0].getString(),
+                        this[1].getString()))
+            }
+
+    private fun setRandomUserAvatar(profile: Profile) =
+            with(Utils.chooseRandomResourceID(RANDOM_PHOTO_COUNT,
                     if (profile.sex == Profile.BOY)
                         R.array.fake_girls_without_blur.getDrawableListFromArrayId(R.drawable.girl_1)
                     else
@@ -71,5 +86,4 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
         super.release()
         profileSubscription.safeUnsubscribe()
     }
-
 }

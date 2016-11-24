@@ -1179,5 +1179,27 @@
     <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
 
     <string name="special_offer">Спецпредложение</string>
-
+    <string name="description_experiment4_view1">С VIP-статусом %1$s и %2$s тебя увидят!</string>
+    <!--Фэйковые мужские имена-->
+    <string name="fake_male_name_1">Костя</string>
+    <string name="fake_male_name_2">Паша</string>
+    <string name="fake_male_name_3">Петя</string>
+    <string name="fake_male_name_4">Максим</string>
+    <string name="fake_male_name_5">Даня</string>
+    <string name="fake_male_name_6">Алексей</string>
+    <string name="fake_male_name_7">Андрей</string>
+    <string name="fake_male_name_8">Вова</string>
+    <string name="fake_male_name_9">Олег</string>
+    <string name="fake_male_name_10">Игорь</string>
+    <!--Фэйковые женские имена-->
+    <string name="fake_female_name_1">Наташа</string>
+    <string name="fake_female_name_2">Света</string>
+    <string name="fake_female_name_3">Лена</string>
+    <string name="fake_female_name_4">Маргарита</string>
+    <string name="fake_female_name_5">Василиса</string>
+    <string name="fake_female_name_6">Аня</string>
+    <string name="fake_female_name_7">Оля</string>
+    <string name="fake_female_name_8">Настя</string>
+    <string name="fake_female_name_9">Алена</string>
+    <string name="fake_female_name_10">Маша</string>
 </resources>

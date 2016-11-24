@@ -26,6 +26,7 @@ import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
+import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
@@ -46,7 +47,7 @@ import javax.inject.Inject
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) :
-        BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
+        BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     @Inject lateinit var mState: TopfaceAppState
     var isRefreshing = object : ObservableBoolean() {
@@ -92,6 +93,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     private var isDataFromCache: Boolean = false
     private var mIsAllDataLoaded: Boolean = false
+    private var mStateManager = RunningStateManager()
 
     companion object {
         val FROM = "from"
@@ -148,6 +150,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     }
                 })
         createAndRegisterBroadcasts()
+        mStateManager.registerAppChangeStateListener(this)
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -440,6 +443,19 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
+                LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+            }
+
+    override fun onAppForeground(timeOnStart: Long) {
+                gcmTypeUpdateAction?.let {
+                        LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
+                    }
+                for (type in gcmType) {
+                        GCMUtils.cancelNotification(context, type)
+                    }
+            }
+
     override fun release() {
         super.release()
         arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
@@ -453,5 +469,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+        mStateManager.unregisterAppChangeStateListener(this)
     }
 }

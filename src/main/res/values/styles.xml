@@ -1349,16 +1349,20 @@
 
     <style name="PopupArrowTrialVip" parent="PopupArrow">
         <item name="android:layout_marginBottom">0dp</item>
-        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_marginTop">9dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
+    <style name="PopupArrowTrialVip.High">
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:src">@drawable/arrow_high</item>
+    </style>
 
     <style name="TextViewTrialVipPopup">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">24dp</item>
-        <item name="android:drawablePadding">24dp</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:drawablePadding">18dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">#de000000</item>
         <item name="android:textSize">14sp</item>

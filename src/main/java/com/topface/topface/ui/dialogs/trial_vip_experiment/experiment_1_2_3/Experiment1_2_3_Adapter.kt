@@ -67,9 +67,9 @@ class Experiment1_2_3_Adapter(val context: Context, val type: Int) : PagerAdapte
         R.drawable.popular_girl
 
     private fun getPopularPersonDescription() = if (App.get().profile.sex == Profile.BOY)
-        R.string.buy_vip_write_anyone_boy
-    else
         R.string.buy_vip_write_anyone
+    else
+        R.string.buy_vip_write_anyone_boy
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any =
             with(DataBindingUtil.inflate<Experiment123ItemBinding>(context.layoutInflater,

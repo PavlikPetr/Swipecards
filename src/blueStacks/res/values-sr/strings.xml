@@ -884,9 +884,18 @@
   <string name="chat_mutual_symphaty">Узајамно свиђање!</string>
   <string name="chat_mutual_start_conversation">Започните разговор!</string>
   <string name="chat_send_message_button_title">Посл.</string>
+  <string name="know_your_guests_by_sight">Сазнајте ко су Ваши гости и обожаваоци тако што ћете им видети лица</string>
+  <string name="know_your_guests">Сазнајте ко посећује Вашу страницу</string>
+  <string name="write_any_girl">Пишите било којој девојци!</string>
+  <string name="write_any_boy">Пишите било којем момку!</string>
+  <string name="write_beautiful_girls_without_limits">Пиши лепим девојкама без ограничења</string>
+  <string name="write_beautiful_boys_without_limits">Пиши лепим момцима без ограничења</string>
   <string name="seven_days_free">7 дана бесплатно</string>
+  <string name="free_vip">VIP-статус бесплатно!</string>
   <string name="no_more_ad">Без реклама у апликацији</string>
   <string name="i_see_u_face">Сазнајте ко је посетио Вашу страницу и видите ко су Ваши обожаватељи</string>
+  <string name="buy_vip_write_anyone">Пишите било којој девојци без узајамног свиђања</string>
   <string name="moar_messages">Ћаскајте са популарним корисницима</string>
   <string name="buy_vip_more_views">Добијте 1,5 пута више прегледа Вашег профила</string>
+  <string name="special_offer">Специјална понуда</string>
 </resources>
