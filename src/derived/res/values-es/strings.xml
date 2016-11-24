@@ -747,6 +747,8 @@
     </string>
     <string name="dialog">Correspondencia</string>
     <string name="reply">Responder</string>
+    <string name="unit_weight">%d kg</string>
+    <string name="unit_height">%d cm</string>
     <string name="maximum_number_of_users">Se ha seleccionado la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu
         e-mail, tienes que salir de esta cuenta y entrar en la %s
@@ -953,6 +955,7 @@
     <string name="buy_vip_button_text">Hazte VIP</string>
     <string name="send_first_gift">¡Envía el primer regalo!</string>
     <string name="ask_moar_info">¡Descubre más información!</string>
+    <string name="fill_own_profile_boy">Rellena tu perfil para ver lo que te ha escrito %s</string>
     <string name="fill_own_profile">Rellena tu perfil para ver lo que ha escrito %s</string>
     <string name="chat_mutual_symphaty">¡Simpatía mutua!</string>
     <string name="chat_mutual_start_conversation">¡Empieza a chatear!</string>
@@ -961,6 +964,7 @@
     <string name="know_your_guests">¡Encuentra a tus invitados!</string>
     <string name="write_any_girl">¡Escribe a cualquier chica!</string>
     <string name="write_any_boy">¡Escribe a cualquier chico!</string>
+    <string name="get_more_visitors">¡Consigue más visitas de perfil!</string>
     <string name="write_beautiful_girls_without_limits">¡Escribe a chicas guapas sin límites!</string>
     <string name="write_beautiful_boys_without_limits">¡Escribe a chicos guapos sin límites!</string>
     <string name="seven_days_free">7 días gratis</string>
@@ -968,7 +972,29 @@
     <string name="no_more_ad">Sin publicidad en la app</string>
     <string name="i_see_u_face">Descubre quién ha visitado tu página y quiénes son tos fans</string>
     <string name="buy_vip_write_anyone">Escribe a cualquier chica sin simpatía mutua</string>
+    <string name="buy_vip_write_anyone_boy">Escribe a cualquier chico, incluso sin simpatía mutua</string>
     <string name="moar_messages">Chatea con usuarios populares</string>
     <string name="buy_vip_more_views">Recibe 1,5 más de visitas en tu perfil</string>
     <string name="special_offer">Oferta especial</string>
+    <string name="description_experiment4_view1">¡Con el estatus VIP, %1$s y %2$s te verán!</string>
+    <string name="fake_male_name_1">Conor</string>
+    <string name="fake_male_name_2">Pablo</string>
+    <string name="fake_male_name_3">Pedro</string>
+    <string name="fake_male_name_4">Max</string>
+    <string name="fake_male_name_5">Dani</string>
+    <string name="fake_male_name_6">Álex</string>
+    <string name="fake_male_name_7">Andrés</string>
+    <string name="fake_male_name_8">Guille</string>
+    <string name="fake_male_name_9">Goyo</string>
+    <string name="fake_male_name_10">Gerardo</string>
+    <string name="fake_female_name_1">Natalia</string>
+    <string name="fake_female_name_2">Clara</string>
+    <string name="fake_female_name_3">Carolina</string>
+    <string name="fake_female_name_4">Marga</string>
+    <string name="fake_female_name_5">Winona</string>
+    <string name="fake_female_name_6">Ana</string>
+    <string name="fake_female_name_7">Gracia</string>
+    <string name="fake_female_name_8">Anastasia</string>
+    <string name="fake_female_name_9">Elena</string>
+    <string name="fake_female_name_10">María</string>
 </resources>

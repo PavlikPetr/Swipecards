@@ -660,6 +660,8 @@
   <string name="billing_item_already_owned">Satın alma işleminiz şu an işleniyor, lütfen bekleyin</string>
   <string name="dialog">Sohbet</string>
   <string name="reply">Cevap ver</string>
+  <string name="unit_weight">%d kg</string>
+  <string name="unit_height">%d cm</string>
   <string name="maximum_number_of_users">Maksimum kullanıcı sayısını seçtiniz</string>
   <string name="logout_if_email_already_registred">Bu email adresini kullanan bir kullanıcı bulunuyor. 
         Bu sizin mail adresinizse, mevcut hesabınızdan çıkış yapıp %s hesabına giriş yapınız.</string>
@@ -848,6 +850,7 @@
   <string name="buy_vip_button_text">VIP ol</string>
   <string name="send_first_gift">İlk hediyeyi gönder</string>
   <string name="ask_moar_info">Daha fazla bilgi edin!</string>
+  <string name="fill_own_profile_boy">Profilini tamamla ve %s ne yazmış gör</string>
   <string name="fill_own_profile">Profilini tamamla ve %s kişisinin yazdıklarını görüntüle</string>
   <string name="chat_mutual_symphaty">Karşılıklı beğenme!</string>
   <string name="chat_mutual_start_conversation">Sohbete başlayın!</string>
@@ -856,6 +859,7 @@
   <string name="know_your_guests">Ziyaretçilerini gör</string>
   <string name="write_any_girl">Her kadına mesaj yaz!</string>
   <string name="write_any_boy">Her erkeğe mesaj yaz!</string>
+  <string name="get_more_visitors">Daha fazla profil görüntülenmesine sahip ol</string>
   <string name="write_beautiful_girls_without_limits">Limit olmadan güzel kadınlara mesaj yaz</string>
   <string name="write_beautiful_boys_without_limits">Limit olmadan yakışıklı erkeklere mesaj yaz</string>
   <string name="seven_days_free">7 günlük ücretsiz</string>
@@ -863,7 +867,29 @@
   <string name="no_more_ad">Uygulama içi reklamlar olmadan</string>
   <string name="i_see_u_face">Hayranlarını ve sayfanı ziyaret edenleri gör</string>
   <string name="buy_vip_write_anyone">Karşılıklı beğeni olmadan her kadına mesaj yaz</string>
+  <string name="buy_vip_write_anyone_boy">Karşılıklı beğeni olmadan her erkeğe mesaj yaz</string>
   <string name="moar_messages">Popüler kullanıcılar ile sohbet et</string>
   <string name="buy_vip_more_views">1.5 kat daha fazla profil ziyareti al.</string>
   <string name="special_offer">Özel teklif</string>
+  <string name="description_experiment4_view1">VIP ile %1$s ve %2$s seni görebilecek!</string>
+  <string name="fake_male_name_1">Kemal</string>
+  <string name="fake_male_name_2">Rasim</string>
+  <string name="fake_male_name_3">Tarık</string>
+  <string name="fake_male_name_4">Mustafa</string>
+  <string name="fake_male_name_5">Deniz</string>
+  <string name="fake_male_name_6">Ahmet</string>
+  <string name="fake_male_name_7">Atakan</string>
+  <string name="fake_male_name_8">Veysel</string>
+  <string name="fake_male_name_9">Ömer</string>
+  <string name="fake_male_name_10">İrfan</string>
+  <string name="fake_female_name_1">Nehir</string>
+  <string name="fake_female_name_2">Sıla</string>
+  <string name="fake_female_name_3">Deniz</string>
+  <string name="fake_female_name_4">Melis</string>
+  <string name="fake_female_name_5">Büşra</string>
+  <string name="fake_female_name_6">Aslı</string>
+  <string name="fake_female_name_7">Özge</string>
+  <string name="fake_female_name_8">Hatice</string>
+  <string name="fake_female_name_9">Ayşe</string>
+  <string name="fake_female_name_10">Merve</string>
 </resources>

@@ -740,6 +740,8 @@
     </string>
     <string name="dialog">Conversa</string>
     <string name="reply">Responder</string>
+    <string name="unit_weight">%d kg</string>
+    <string name="unit_height">%d cm</string>
     <string name="maximum_number_of_users">Selecionaste o número máximo de utilizadores.</string>
     <string name="logout_if_email_already_registred">Já existe um utilizador com este e-mail. Se
         este for o teu e-mail, tens de terminar sessão na tua conta atual e iniciar sessão na conta
@@ -951,6 +953,7 @@
     <string name="buy_vip_button_text">Adquire VIP</string>
     <string name="send_first_gift">Envia o primeiro presente!</string>
     <string name="ask_moar_info">Descobre mais informação!</string>
+    <string name="fill_own_profile_boy">Preenche o teu perfil para veres o que %s escreveu</string>
     <string name="fill_own_profile">Preenche o teu perfil para veres o que %s escreveu</string>
     <string name="chat_mutual_symphaty">Gosto Mútuo!</string>
     <string name="chat_mutual_start_conversation">Começa a conversar!</string>
@@ -959,14 +962,37 @@
     <string name="know_your_guests">Descobre quem te visitou!</string>
     <string name="write_any_girl">Envia mensagens a qualquer mulher!</string>
     <string name="write_any_boy">Envia mensagens a qualquer homem!</string>
+    <string name="get_more_visitors">Obtém mais visualizações de perfil!</string>
     <string name="write_beautiful_girls_without_limits">Envia mensagens a mulheres atraentes sem limites!</string>
     <string name="write_beautiful_boys_without_limits">Envia mensagens a homens atraentes sem limites!</string>
     <string name="seven_days_free">7 dias grátis</string>
     <string name="free_vip">Estatuto VIP grátis!</string>
     <string name="no_more_ad">Sem anúncios na app</string>
     <string name="i_see_u_face">Descobre quem visitou o teu perfil e vê quem são os teus Fãs</string>
-    <string name="buy_vip_write_anyone">Envia uma mensagem a qualquer mulher mesmo sem Gosto mútuo</string>
+    <string name="buy_vip_write_anyone">Envia mensagens a qualquer mulher mesmo sem Gosto mútuo</string>
+    <string name="buy_vip_write_anyone_boy">Envia mensagens a qualquer homem mesmo sem Gosto mútuo</string>
     <string name="moar_messages">Conversa com utilizadores populares</string>
     <string name="buy_vip_more_views">Ganha 1.5x mais visualizações de perfil</string>
     <string name="special_offer">Oferta especial</string>
+    <string name="description_experiment4_view1">Com estatuto VIP, %1$s e %2$s vão ver o teu perfil!</string>
+    <string name="fake_male_name_1">Carlos</string>
+    <string name="fake_male_name_2">Paulo</string>
+    <string name="fake_male_name_3">Pedro</string>
+    <string name="fake_male_name_4">Mário</string>
+    <string name="fake_male_name_5">Daniel</string>
+    <string name="fake_male_name_6">Alexandre</string>
+    <string name="fake_male_name_7">André</string>
+    <string name="fake_male_name_8">Gil</string>
+    <string name="fake_male_name_9">Gonçalo</string>
+    <string name="fake_male_name_10">José</string>
+    <string name="fake_female_name_1">Natacha</string>
+    <string name="fake_female_name_2">Clara</string>
+    <string name="fake_female_name_3">Carolina</string>
+    <string name="fake_female_name_4">Margarida</string>
+    <string name="fake_female_name_5">Vitória</string>
+    <string name="fake_female_name_6">Ana</string>
+    <string name="fake_female_name_7">Isabel</string>
+    <string name="fake_female_name_8">Amanda</string>
+    <string name="fake_female_name_9">Helena</string>
+    <string name="fake_female_name_10">Maria</string>
 </resources>
