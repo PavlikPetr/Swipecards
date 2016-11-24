@@ -45,6 +45,7 @@ open class DatingEmptyFragmentViewModel(binding: LayoutEmptyDatingBinding,
                     profile.dating = filter
                     state.setData(profile)
                 }
+                DatingFilter.setOnlyOnlineField(false)
                 iDialogCloser.closeIt()
             }
         })
