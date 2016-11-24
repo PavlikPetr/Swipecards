@@ -201,7 +201,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private fun startAdmirationPurchasePopup(viewID: Int) {
         App.getUserConfig().setAdmirationPurchasePopupShown()
         mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(viewID,
-                R.color.dating_fab_small, R.drawable.admiration)
+                R.color.black, R.drawable.admiration)
     }
 
     fun sendAdmiration() = sendSomething {

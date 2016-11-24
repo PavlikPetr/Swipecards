@@ -51,7 +51,7 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
                     if (profile.sex == Profile.BOY)
                         R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_female_name_1)
                     else
-                        R.array.fake_girls_name.getDrawableListFromArrayId(R.string.fake_male_name_1))) {
+                        R.array.fake_boys_name.getDrawableListFromArrayId(R.string.fake_male_name_1))) {
                 vipBannerText.set(String.format(R.string.description_experiment4_view1.getString(), this[0].getString(),
                         this[1].getString()))
             }

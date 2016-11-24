@@ -28,8 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingLeft="80dp"
-            android:paddingRight="80dp"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
             android:text="@{viewModel.second}"
             android:textColor="@color/popup_title"
             android:textSize="16sp"/>

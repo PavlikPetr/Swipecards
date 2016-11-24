@@ -60,15 +60,14 @@ object TrialExperimentsRules {
     private fun showTrialFromUserProfile(type: Long, navigator: IFeedNavigator) {
         val count = mConfig.getShowsInUserProfile<Int>()
         Debug.log("FUCKING_EXP trial_shows_count = $count")
-        if (true) {
-            mShowInUserProfileSubscription = Observable.interval(1, PROFILE_INTERVAL, TimeUnit.SECONDS)
+        if (count.configFieldInfo.amount <= SHOWS_IN_USER_PROFILE) {
+            mShowInUserProfileSubscription = Observable.interval(0, PROFILE_INTERVAL, TimeUnit.SECONDS)
+                    .skip(1)
                     .applySchedulers()
                     .subscribe(object : RxUtils.ShortSubscription<Long>() {
                         override fun onNext(time: Long?) {
-                            if (true) {
-                                startTrialPopup(type, navigator, type.getBundle(MESSAGE_FIRST, SUBTYPE_4_1))
-                                unsubscribe()
-                            }
+                            startTrialPopup(type, navigator, type.getBundle(MESSAGE_FIRST, SUBTYPE_4_1))
+                            unsubscribe()
                         }
                     })
         }
