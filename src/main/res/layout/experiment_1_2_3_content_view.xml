@@ -12,7 +12,7 @@
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
@@ -31,11 +31,11 @@
             android:layout_gravity="center|bottom"
             app:centered="true"
             app:extraSpacing="7dp"
-            app:strokeWidth="0dp"
-            app:strokeColor="@color/trial_indicator"
             app:fillColor="@color/trial_indicator_selected"
             app:pageColor="@color/trial_indicator"
-            app:radius="4dp"/>
+            app:radius="4dp"
+            app:strokeColor="@color/trial_indicator"
+            app:strokeWidth="0dp"/>
 
     </LinearLayout>
 
