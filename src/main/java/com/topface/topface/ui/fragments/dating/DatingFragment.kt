@@ -219,8 +219,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onNewSearchUser(user: SearchUser) {
         with(mDatingAlbumViewModel) {
-            albumData.set(user.photos)
-            currentUser = user
+            setUser(user)
         }
         with(mDatingFragmentViewModel) {
             currentUser = user
