@@ -8,12 +8,12 @@ import com.topface.topface.R
  */
 
 class BoilerplateDialogMetrics private constructor(val titleTopMargin: Int, val titleBottomMargin: Int,
-                                                   val contentBottomMargin: Int, val getVipBottomMargin: Int,
+                                                   val contentBottomMargin: Int, val getVipBottomMargin: Int, val getVipTopMargin: Int,
                                                    val descriptionBottomMargin: Int, val popupBackground: Int,
                                                    val getVipButtonBackground: Int, val isSpecialOffer: Boolean) {
 
     private constructor(builder: Builder) : this(builder.titleTopMargin,
-            builder.titleBottomMargin, builder.contentBottomMargin, builder.getVipBottomMargin,
+            builder.titleBottomMargin, builder.contentBottomMargin, builder.getVipBottomMargin, builder.getVipTopMargin,
             builder.descriptionBottomMargin, builder.popupBackground, builder.getVipButtonBackground,
             builder.isSpecialOffer)
 
@@ -42,6 +42,7 @@ class BoilerplateDialogMetrics private constructor(val titleTopMargin: Int, val 
         var titleBottomMargin = 0
         var contentBottomMargin = 0
         var getVipBottomMargin = 0
+        var getVipTopMargin = 0
         var descriptionBottomMargin = 0
         var popupBackground = R.color.bg_white
         var getVipButtonBackground = R.drawable.green_button_bg
