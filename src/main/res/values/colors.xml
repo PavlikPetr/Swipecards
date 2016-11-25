@@ -274,4 +274,7 @@
     <color name="trial_indicator_selected">#ff63ce</color>
     <color name="trial_indicator">#e0e8ec</color>
 
+    <!--dialogsEmpty-->
+    <color name="empty_dialogs_title">#de000000</color>
+    <color name="empty_dialogs_message">#737373</color>
 </resources>
