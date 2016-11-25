@@ -1173,7 +1173,8 @@
     <!--Строки для попапа восхищения с view pager-->
     <string name="no_more_ad">Никакой рекламы в приложении</string>
     <string name="i_see_u_face">Узнайте своих гостей и поклонников в лицо</string>
-    <string name="buy_vip_write_anyone">Пишите кому угодно без взаимной симпатии</string>
+    <string name="buy_vip_write_anyone">Пишите любой девушке без взаимной симпатии</string>
+    <string name="buy_vip_write_anyone_without_mutual">Пишите кому угодно без взаимной симпатии</string>
     <string name="moar_messages">Переписывайтесь с популярными пользователями</string>
     <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
 
