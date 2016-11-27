@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:documentation="documentation.topface">
+        xmlns:documentation="http://schemas.android.com/tools">
 
     <data>
 
@@ -28,7 +28,6 @@
             android:textSize="16sp"/>
 
         <EditText
-            documentation:info="id для ui тестирования"
             android:id="@+id/leaderComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,7 +37,8 @@
             android:maxLength="@{handlers.getMaxLength}"
             android:text="@={handlers.inputText}"
             android:textColorHint="@color/dark_hint_text"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            documentation:info="id для ui тестирования"/>
 
         <LinearLayout
             android:id="@+id/buttons_container"
