@@ -105,7 +105,6 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                 mUserSearchList.clear()
                 currentUser = null
             }
-
             mUpdateInProcess = true
             mUpdateSubscription = mApi.callDatingUpdate(onlyOnline, isNeedRefresh).subscribe(object : Observer<UsersList<SearchUser>> {
                 override fun onCompleted() {
