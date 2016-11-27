@@ -128,9 +128,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         )
     }
 
-    override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+    override fun showEmptyDating(onCancelFunction: (() -> Unit)?) = with(mEmptyDatingFragment) {
+        if (onCancelFunction != null) {
+            setOnCancelListener { onCancelFunction() }
+        }
+        show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+    }
 
     override fun closeEmptyDating() {
+        mEmptyDatingFragment.setOnCancelListener(null)
         mEmptyDatingFragment.dialog?.cancel()
     }
 
