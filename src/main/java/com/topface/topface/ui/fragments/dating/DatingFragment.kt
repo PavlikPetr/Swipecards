@@ -273,7 +273,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun unlockControls() = mDatingButtonsViewModel.isDatingButtonsLocked.set(true)
 
-    override fun showEmptySearchDialog() = mNavigator.showEmptyDating()
+    override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mDatingFragmentViewModel.update(false, false) }
 
     override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
 }
