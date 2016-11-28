@@ -28,6 +28,10 @@ class ChildItemViewModel(private val mApi: FeedApi, private val data: FormModel)
                 setIcon(R.drawable.ask_info_done)
                 mApi.callStandartMessageRequest(data.formType, it)
                         .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
+                            override fun onNext(type: IApiResponse?) {
+                                data.onRequestSended?.invoke()
+                            }
+
                             override fun onError(e: Throwable?) {
                                 Utils.showErrorMessage()
                                 setIcon(R.drawable.bt_question)

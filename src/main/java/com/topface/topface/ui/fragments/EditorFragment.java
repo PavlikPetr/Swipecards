@@ -58,7 +58,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  * Фрагмент админки. Доступен только для редакторов.
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
-    public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
+    public static final String API_STAGE_TF = "https://api-%s.dev.stage.tf/";
     public static final String API_SCRUFFY_STAGE_TF = "wss://api-%s.stage.tf/scruffy/";
     private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private Spinner mApiUrl;
