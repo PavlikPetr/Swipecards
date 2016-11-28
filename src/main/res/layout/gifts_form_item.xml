@@ -46,7 +46,7 @@
             android:textSize="14sp">
         </TextView>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/send_gift"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -55,7 +55,7 @@
             android:layout_marginTop="12dp"
             android:layout_toRightOf="@+id/form_item_icon"
             android:onClick="@{() -> model.sendGift()}"
-            android:src="@drawable/bt_gift"/>
+            style="@style/FormsSendGiftButton"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/gifts_list"
