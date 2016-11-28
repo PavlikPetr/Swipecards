@@ -21,12 +21,16 @@ class DatingEmptyFragment() : AbstractDialogFragment(), IDialogCloser {
 
     private lateinit var mBinding: LayoutEmptyDatingBinding
 
+    private val mApi by lazy {
+        FeedApi(context, activity as IRequestClient)
+    }
+
     private val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
     }
 
     private val mViewModel by lazy {
-        DatingEmptyFragmentViewModel(mBinding, mNavigator, this)
+        DatingEmptyFragmentViewModel(mBinding, mApi, mNavigator, this)
     }
 
     override fun initViews(root: View) {
