@@ -1575,4 +1575,27 @@
         <item name="android:layout_height">56dp</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
+    <style name="DialogsNewName">
+        <item name="android:textColor">@color/dialogs_name</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="DialogsNewMessage">
+        <item name="android:textSize">14sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="NewDialogTime">
+        <item name="android:textColor">#b9b9b9</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">none</item>
+    </style>
 </resources>

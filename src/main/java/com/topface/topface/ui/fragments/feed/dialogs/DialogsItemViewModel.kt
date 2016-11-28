@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.databinding.ObservableInt
+import android.graphics.Typeface
 import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
@@ -30,16 +31,27 @@ class DialogsItemViewModel(binding: FeedItemDialogBinding,
         get() = "Dialog"
 
     val counterVisibility = ObservableInt(View.GONE)
+
     val dialogTextColor: Int
         get() {
             return if (item.unread && App.get().options.hidePreviewDialog) {
-                context.resources.getColor(R.color.hidden_dialog_preview_text_color)
+                context.resources.getColor(R.color.message_unread)
             } else {
-                context.resources.getColor(R.color.list_text_gray)
+                context.resources.getColor(R.color.message_was_read)
             }
         }
+
+    val dialogMessageStyle: Int
+        get() {
+            return if (item.unread) Typeface.BOLD else Typeface.ITALIC
+        }
+
     val dialogMessageCounter: String
         get() = prepareMessageCounter()
+
+    val textHuexst: String
+        get() = if (item.user.firstName == "Аня") "Дорый день! Идите нахуй!" else "Добрый вечер!"
+
     val dialogMessageIcon: Int
         get() = prepareDialogMessageIcon()
     val dialogTime: String

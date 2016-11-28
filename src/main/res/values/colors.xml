@@ -274,4 +274,10 @@
     <color name="trial_indicator_selected">#ff63ce</color>
     <color name="trial_indicator">#e0e8ec</color>
 
+    <!--Dialogs new version-->
+
+    <color name="dialogs_name">#1e1e1e</color>
+    <color name="message_unread">#1e1e1e</color>
+    <color name="message_was_read">#737373</color>
+
 </resources>
