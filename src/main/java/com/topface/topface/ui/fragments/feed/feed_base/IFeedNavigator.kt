@@ -27,7 +27,7 @@ interface IFeedNavigator {
     fun showTakePhotoPopup()
     fun showGiftsActivity(id: Int)
     fun showFilter()
-    fun showEmptyDating(onCancelFunction: (() -> Unit)? = null)
+    fun showEmptyDating()
     fun closeEmptyDating()
     fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity,
                                     @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int)
