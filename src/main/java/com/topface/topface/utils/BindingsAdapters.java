@@ -7,7 +7,6 @@ import android.databinding.BindingAdapter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -51,23 +50,18 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("fabVisibility")
-    public static void setFabVisibility(FloatingActionButton fab, int visible) {
-        if (visible == View.VISIBLE) {
-            try {
-                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_show));
-                fab.show();
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
+    public static void setFabVisibility(View view, int visible) {
+        com.topface.topface.utils.AnimationUtils.cancelViewAnivation(view);
+        try {
+            if (visible == View.VISIBLE) {
+                view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fab_show));
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fab_hide));
+                view.setVisibility(View.INVISIBLE);
             }
-        } else {
-            try {
-//                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-//                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
-                fab.hide();
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
-            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
     }
 
