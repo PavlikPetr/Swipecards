@@ -18,6 +18,7 @@ public class FormItem implements Parcelable {
     public int dataId = NO_RESOURCE_ID;
     public static final String EMPTY_FORM_VALUE = "-";
     private boolean mIsEmpty;
+    public boolean standartRequestWasSended = false;
 
     /**
      * Is form item value updating right now.
@@ -160,6 +161,7 @@ public class FormItem implements Parcelable {
         dest.writeParcelable(header, flags);
         dest.writeByte((byte) (mOnlyForWomen ? 1 : 0));
         dest.writeByte((byte) (mIsCanBeEmpty ? 1 : 0));
+        dest.writeByte((byte) (standartRequestWasSended ? 1 : 0));
     }
 
     @Override
@@ -205,6 +207,7 @@ public class FormItem implements Parcelable {
                     result.header = in.readParcelable(FormItem.class.getClassLoader());
                     result.mOnlyForWomen = in.readByte() != 0;
                     result.mIsCanBeEmpty = in.readByte() != 0;
+                    result.standartRequestWasSended = in.readByte() != 0;
                     return result;
                 }
 
