@@ -2,13 +2,9 @@ package com.topface.topface.utils.controllers.startactions;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Options;
-import com.topface.topface.data.Profile;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
-import com.topface.topface.utils.DateUtils;
-import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.popups.PopupManager;
 
@@ -33,7 +29,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
 
     @Override
     public void callOnUi() {
-        if (mActivity != null && mActivity.get() != null) {
+        if (mActivity != null && mActivity.get() != null && mActivity.get().isRunning()) {
             chooseShowTrialVipPopup();
         }
     }
@@ -65,6 +61,8 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
 
     @Override
     public boolean isApplicable() {
+        return true;
+        /*
         UserConfig userConfig = App.getUserConfig();
         Profile profile = App.get().getProfile();
         Options options = App.get().getOptions();
@@ -74,7 +72,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
         }
         return !profile.paid && !profile.premium &&
                 userConfig.getQueueTrialVipCounter() < options.getMaxShowCountTrialVipPopup() &&
-                options.trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();
+                options.trialVipExperiment.enabled && new GoogleMarketApiManager().isMarketApiAvailable();*/
     }
 
     @Override
