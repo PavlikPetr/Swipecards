@@ -48,10 +48,6 @@ class DialogsItemViewModel(binding: FeedItemDialogBinding,
 
     val dialogMessageCounter: String
         get() = prepareMessageCounter()
-
-    val textHuexst: String
-        get() = if (item.user.firstName == "Аня") "Дорый день! Идите нахуй!" else "Добрый вечер!"
-
     val dialogMessageIcon: Int
         get() = prepareDialogMessageIcon()
     val dialogTime: String

@@ -28,10 +28,8 @@
         app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
-            app:uiTestTag="@{model.getTag()}"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <include
                 android:id="@+id/avatar_frame"
@@ -48,7 +46,7 @@
             android:paddingRight="16dp">
 
             <LinearLayout
-                android:id="@+id/ifp_name_container"
+                android:id="@+id/wrapper_for_name_and_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -60,21 +58,20 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/ifp_name"
-                        style="@style/DialogsNewName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/ifp_name"
+                        style="@style/DialogsNewName"
                         android:layout_marginRight="45dp"
                         android:text="@{model.name}"/>
 
                 </LinearLayout>
-
-
+                
                 <TextView
-                    android:id="@+id/time"
-                    style="@style/NewDialogTime"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:id="@+id/time"
+                    style="@style/NewDialogTime"
                     android:text="@{model.dialogTime}"/>
 
             </LinearLayout>
@@ -95,15 +92,15 @@
                     app:textTypeface="@{model.dialogMessageStyle}"
                     android:text="@{model.text}"
                     android:textColor="@{model.dialogTextColor}"
+                    android:drawablePadding="6dp"
                     app:setCompoundDrawablesWithIntrinsicBounds="@{model.dialogMessageIcon}"/>
 
                 <ImageView
                     android:id="@+id/onlineFlag"
-                    android:src="@drawable/fake_boy1"
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
-                    android:visibility="@{model.counterVisibility}"
-                    />
+                    android:src="@drawable/new_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{model.counterVisibility}"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

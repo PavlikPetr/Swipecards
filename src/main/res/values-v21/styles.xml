@@ -201,4 +201,8 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="dialogRiple">
+        <item name="android:background">@drawable/dialog_items_selector_ripple</item>
+    </style>
+
 </resources>

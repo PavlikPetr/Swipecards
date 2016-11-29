@@ -5,23 +5,29 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
+import com.topface.topface.data.Profile
 import com.topface.topface.databinding.FeedItemDialogNewBinding
-import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder
 import com.topface.topface.utils.Utils
 
 /**
- * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА   TODO Выплить BaseFeedItemViewModel!!!!!!!!!!!!      посмотреть, если что-то нужно... а если нет, то к хуям его
+ * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА   TODO Выпилить параметры от BaseFeedItemViewModel!!!!! они оставлены для того, чтобы не говнять старый DialogsAdapter и смочь проверить
  */
 class DialogItemNew(binding: FeedItemDialogNewBinding,
-                    item: FeedDialog,
+                    val item: FeedDialog,
                     navigator: IFeedNavigator,
-                    isActionModeEnabled: () -> Boolean) :
-        BaseFeedItemViewModel<FeedItemDialogNewBinding, FeedDialog>(binding, item, navigator, isActionModeEnabled) {
+                    isActionModeEnabled: () -> Boolean) {
 
+    var avatarHolder: AvatarHolder? = null   // todo нужно для аватарок. Когда Серега допилит аватарки, то наверно будет иначе, главное не забыть, что это еБиндинг и что переменная имеется в разметке
 
-    override val feed_type: String
-        get() = "Dialog"
+    init {
+        item.user?.let {
+            avatarHolder = AvatarHolder(it.photo, getStubResourсe())
+        }
+    }
+
+    val context = App.getContext()
 
     val counterVisibility: Int
         get() {
@@ -47,17 +53,20 @@ class DialogItemNew(binding: FeedItemDialogNewBinding,
             return if (item.unread) Typeface.BOLD else Typeface.NORMAL
         }
 
-    //    val textHuexst: String
-//        get() = if (item.user.firstName == "Аня") "Дорый день! Идите нахуй!" else "Добрый вечер!"
-//todo проверочка такая
     val dialogMessageIcon: Int
         get() = if (item.target == FeedDialog.OUTPUT_USER_MESSAGE) R.drawable.arrow_dialogues else 0
 
     val dialogTime: String
         get() = item.createdRelative
 
-    override val text: String
+    val text: String
         get() = prepareDialogText()
+
+
+    private fun getStubResourсe() = if (item.user.sex == Profile.BOY)
+        R.drawable.feed_banned_male_avatar
+    else
+        R.drawable.feed_banned_female_avatar
 
 
     private fun prepareDialogText(): String {
@@ -66,30 +75,9 @@ class DialogItemNew(binding: FeedItemDialogNewBinding,
             text = context.getString(R.string.user_is_deleted)
         } else if (item.user.banned) {
             text = context.getString(R.string.user_is_banned)
-        } else {
-            when (item.type) {
-                FeedDialog.LIKE -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) {
-                    text = context.getString(R.string.chat_like_in)
-                } else {
-                    text = context.getString(R.string.chat_like_out)
-                }
-                FeedDialog.SYMPHATHY -> {
-                    text = context.getString(R.string.mutual_sympathy)
-                }
-                FeedDialog.GIFT -> {
-                    text = if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE)
-                        context.getString(R.string.chat_gift_in)
-                    else
-                        context.getString(R.string.chat_gift_out)
-                }
-                FeedDialog.MESSAGE_AUTO_REPLY -> text = Utils.EMPTY
-            }
-        }
-        if (item.unread && App.get().options.hidePreviewDialog) {
-            text = Utils.getQuantityString(R.plurals.notification_many_messages,
-                    item.unreadCounter, item.unreadCounter)
-        }
-        return if (text.equals(Utils.EMPTY)) item.text else text
+        } else text = item.text
+
+        return text
     }
 
 }
