@@ -1,7 +1,9 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
+import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
@@ -16,58 +18,32 @@ import com.topface.topface.utils.Utils
  */
 class DialogItemNew(binding: FeedItemDialogNewBinding,
                     val item: FeedDialog,
-                    navigator: IFeedNavigator,
+                    val navigator: IFeedNavigator,
                     isActionModeEnabled: () -> Boolean) {
 
     var avatarHolder: AvatarHolder? = null   // todo нужно для аватарок. Когда Серега допилит аватарки, то наверно будет иначе, главное не забыть, что это еБиндинг и что переменная имеется в разметке
 
     init {
-        item.user?.let {
-            avatarHolder = AvatarHolder(it.photo, getStubResourсe())
-        }
+        avatarHolder = AvatarHolder(item.user.photo, getStubResourсe())
     }
 
     val context = App.getContext()
 
-    val counterVisibility: Int
-        get() {
-            return if (item.unread) View.VISIBLE else View.GONE
-        }
+    val counterVisibility: ObservableField<Int> = ObservableField(if (item.unread) View.VISIBLE else View.GONE)
 
-    val name: String
-        get() {
-            return item.user.firstName
-        }
+    val name: ObservableField<String> = ObservableField(item.user.firstName)
 
-    val dialogTextColor: Int
-        get() {
-            return if (item.unread) {
-                context.resources.getColor(R.color.message_unread)
-            } else {
-                context.resources.getColor(R.color.message_was_read)
-            }
-        }
+    val dialogTextColor: ObservableField<Int> = ObservableField(if (item.unread) context.resources.getColor(R.color.message_unread) else context.resources.getColor(R.color.message_was_read))
 
-    val dialogMessageStyle: Int
-        get() {
-            return if (item.unread) Typeface.BOLD else Typeface.NORMAL
-        }
+    val dialogMessageStyle: ObservableField<Int> = ObservableField(if (item.unread) Typeface.BOLD else Typeface.NORMAL)
 
-    val dialogMessageIcon: Int
-        get() = if (item.target == FeedDialog.OUTPUT_USER_MESSAGE) R.drawable.arrow_dialogues else 0
+    val dialogMessageIcon: ObservableField<Int> = ObservableField(if (item.target == FeedDialog.OUTPUT_USER_MESSAGE) R.drawable.arrow_dialogues else 0)
 
-    val dialogTime: String
-        get() = item.createdRelative
+    val dialogTime: ObservableField<String> = ObservableField(item.createdRelative)
 
-    val text: String
-        get() = prepareDialogText()
+    val text: ObservableField<String> = ObservableField(prepareDialogText())
 
-
-    private fun getStubResourсe() = if (item.user.sex == Profile.BOY)
-        R.drawable.feed_banned_male_avatar
-    else
-        R.drawable.feed_banned_female_avatar
-
+    private fun getStubResourсe() = if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar
 
     private fun prepareDialogText(): String {
         var text: String = Utils.EMPTY
@@ -76,8 +52,11 @@ class DialogItemNew(binding: FeedItemDialogNewBinding,
         } else if (item.user.banned) {
             text = context.getString(R.string.user_is_banned)
         } else text = item.text
-
         return text
+    }
+
+    fun onClick(view: View) {
+        navigator.showChat(item)
     }
 
 }

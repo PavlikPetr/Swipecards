@@ -14,16 +14,13 @@
             name="longClickListener"
             type="android.view.View.OnLongClickListener"/>
 
-        <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener"/>
     </data>
 
     <LinearLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{clickListener::onClick}"
+        android:onClick="@{model::onClick}"
         android:orientation="horizontal"
         app:onLongItemClick="@{longClickListener}">
 
@@ -66,7 +63,7 @@
                         android:text="@{model.name}"/>
 
                 </LinearLayout>
-                
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
