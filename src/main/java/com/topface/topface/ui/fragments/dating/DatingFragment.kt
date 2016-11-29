@@ -123,7 +123,13 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
-            mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
+            try {
+                //todo переосмыслить кэш фидов, дабы убрать эти страдания
+                mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
+            } catch (e: ClassCastException) {
+                Debug.log("cast fail after saved state")
+                mUserSearchList = CachableSearchList<SearchUser>(SearchUser::class.java)
+            }
         } else {
             mUserSearchList = CachableSearchList<SearchUser>(SearchUser::class.java)
         }

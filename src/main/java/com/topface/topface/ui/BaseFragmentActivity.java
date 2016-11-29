@@ -466,7 +466,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
-    @SuppressWarnings("unused")
     public boolean isRunning() {
         return mRunning;
     }
