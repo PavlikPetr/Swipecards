@@ -23,14 +23,19 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -316,4 +321,38 @@ public class BindingsAdapters {
         resource.setStartOffset(bindStartOffSet);
         view.startAnimation(resource);
     }
+
+
+    @SuppressWarnings("unchecked")
+    @BindingAdapter({"glideTransformationPhoto", "typeTransformation"})
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type) {
+        int size = Math.max(imageView.getLayoutParams().height, imageView.getLayoutParams().width);
+        if (size > 0) {
+            //noinspection SuspiciousNameCombination
+            Glide.with(imageView.getContext())
+                    .load(photo.getSuitableLink(imageView.getLayoutParams().height, imageView.getLayoutParams().width))
+                    .placeholder(App.get().getProfile().sex == Profile.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        } else {
+            Glide.with(imageView.getContext())
+                    .load(photo.getDefaultLink())
+                    .placeholder(App.get().getProfile().sex == Profile.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
+    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
+        Glide.with(imageView.getContext())
+                .load(imgUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                .into(imageView);
+    }
+
 }
