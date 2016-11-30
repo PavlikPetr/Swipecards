@@ -33,7 +33,7 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
 
     @Override
     public void callOnUi() {
-        if (mActivity != null && mActivity.get() != null) {
+        if (mActivity != null && mActivity.get() != null && mActivity.get().isRunning()) {
             chooseShowTrialVipPopup();
         }
     }

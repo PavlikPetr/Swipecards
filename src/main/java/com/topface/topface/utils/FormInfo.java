@@ -52,7 +52,7 @@ public class FormInfo {
                                     getIdsByTitleId(formItem.titleId), formItem.dataId);
                         }
                     } else {
-                        if (data.isEmpty()) {
+                        if (data.isEmpty() || data.equals(FormItem.EMPTY_FORM_VALUE)) {
                             data = FormItem.EMPTY_FORM_VALUE;
                             formItem.setIsEmpty(true);
                         }

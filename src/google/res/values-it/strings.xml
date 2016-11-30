@@ -971,8 +971,8 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="free_vip">Stato VIP gratuito</string>
     <string name="no_more_ad">Nessun ads in-app</string>
     <string name="i_see_u_face">Scopri chi ha visitato la tua pagina e chi sono i tuoi Fan</string>
-    <string name="buy_vip_write_anyone">Scrivi a qualsiasi ragazza, anche senza il Like reciproco</string>
-    <string name="buy_vip_write_anyone_boy">Scrivi a qualsiasi ragazzo, anche senza Like reciproco</string>
+    <string name="buy_vip_write_anyone">Scrivi a qualsiasi ragazza, anche senza un Like reciproco</string>
+    <string name="buy_vip_write_anyone_boy">Scrivi a qualsiasi ragazzo, anche senza un Like reciproco</string>
     <string name="moar_messages">Chatta con gli utenti popolari</string>
     <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
     <string name="special_offer">Offerta speciale</string>
