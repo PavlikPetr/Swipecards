@@ -18,11 +18,11 @@ abstract class BaseGlideTransformation(val mContext: Context) : Transformation<B
     protected val mBitmapPool: BitmapPool by lazy {
         Glide.get(mContext).bitmapPool
     }
-    val mMainBitmap by lazy {
+    internal val mMainBitmap by lazy {
         val minSize = Math.min(mRemoteBitmap.width, mRemoteBitmap.height)
         mBitmapPool.get(minSize, minSize, Bitmap.Config.ARGB_8888) ?: Bitmap.createBitmap(minSize, minSize, Bitmap.Config.ARGB_8888)
     }
-    val mCanvas by lazy {
+    internal val mCanvas by lazy {
         Canvas(mMainBitmap)
     }
 
