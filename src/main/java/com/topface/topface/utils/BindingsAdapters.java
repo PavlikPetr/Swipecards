@@ -21,12 +21,16 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.glide_utils.CropCircleTransformation;
+import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
+import com.topface.topface.utils.glide_utils.GlideTransformationType;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -274,4 +278,14 @@ public class BindingsAdapters {
         resource.setStartOffset(bindStartOffSet);
         view.startAnimation(resource);
     }
+
+    @BindingAdapter({"remoteSrcGlideTransformation", "typeTransformation"})
+    public static void setImageWithTransformation(ImageView imageView, String imgUrl, Long type) {
+        Glide.with(imageView.getContext())
+                .load(imgUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                .into(imageView);
+    }
+
 }
