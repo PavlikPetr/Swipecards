@@ -40,12 +40,6 @@ class DialogsItemViewModel(binding: FeedItemDialogBinding,
                 context.resources.getColor(R.color.message_was_read)
             }
         }
-
-    val dialogMessageStyle: Int
-        get() {
-            return if (item.unread) Typeface.BOLD else Typeface.ITALIC
-        }
-
     val dialogMessageCounter: String
         get() = prepareMessageCounter()
     val dialogMessageIcon: Int
