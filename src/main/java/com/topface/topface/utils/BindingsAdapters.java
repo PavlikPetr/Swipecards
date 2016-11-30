@@ -293,7 +293,6 @@ public class BindingsAdapters {
         String suitableLink = photo.getSuitableLink(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
         String defaultLink = photo.getDefaultLink();
 
-
         if (suitableLink != null && size > 0) {
             Glide.with(imageView.getContext())
                     .load(suitableLink)
