@@ -327,7 +327,7 @@ public class RegistrationFragment extends BaseFragment {
     }
 
     private void removeRedAlert() {
-        if (mRedAlertView.getVisibility() == View.VISIBLE) {
+        if (mRedAlertView != null && mRedAlertView.getVisibility() == View.VISIBLE) {
             if (isAdded()) {
                 mRedAlertView.setAnimation(AnimationUtils.loadAnimation(getActivity(),
                         android.R.anim.fade_out));

@@ -49,8 +49,7 @@ class TakePhotoPopup : AbstractDialogFragment() {
         TakePhotoPopupViewModel(mBinding, {
             TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this)
         }, {
-            mEventBus.setData(TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, getPlc()))
-            dialog.cancel()
+            TakePhotoPopupPermissionsDispatcher.takeExternalPhotoWithCheck(this)
         })
     }
     private val mToolbarViewModel by lazy {
@@ -103,6 +102,12 @@ class TakePhotoPopup : AbstractDialogFragment() {
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     fun takePhoto() {
         mEventBus.setData(TakePhotoActionHolder(ACTION_CAMERA_CHOSEN, getPlc()))
+        dialog.cancel()
+    }
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun takeExternalPhoto() {
+        mEventBus.setData(TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, getPlc()))
         dialog.cancel()
     }
 
