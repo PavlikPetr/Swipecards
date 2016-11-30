@@ -25,6 +25,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
@@ -279,8 +280,17 @@ public class BindingsAdapters {
         view.startAnimation(resource);
     }
 
-    @BindingAdapter({"remoteSrcGlideTransformation", "typeTransformation"})
-    public static void setImageWithTransformation(ImageView imageView, String imgUrl, Long type) {
+    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "sizeString"})
+    public static void setImageByPhotoWithTransformation(ImageView imageView, Photo photo, Long type, String sizeString) {
+        Glide.with(imageView.getContext())
+                .load(photo.getSuitableLink(sizeString))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                .into(imageView);
+    }
+
+    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
+    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
         Glide.with(imageView.getContext())
                 .load(imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
