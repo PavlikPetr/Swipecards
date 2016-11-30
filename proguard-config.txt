@@ -1,3 +1,6 @@
+-dontwarn **
+-dontnote **
+
 # https://code.google.com/p/android/issues/detail?id=78377#c183
 -keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
 -dontoptimize

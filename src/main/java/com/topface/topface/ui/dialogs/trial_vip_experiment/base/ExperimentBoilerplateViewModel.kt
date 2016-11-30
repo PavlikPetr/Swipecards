@@ -19,6 +19,7 @@ class ExperimentBoilerplateViewModel(private val mPopupRunner: TransparentMarket
     val titleBottomMargin = ObservableInt(dialogMetrics.titleBottomMargin.getDimen().toInt())
     val contentBottomMargin = ObservableInt(dialogMetrics.contentBottomMargin.getDimen().toInt())
     val getVipBottomMargin = ObservableInt(dialogMetrics.getVipBottomMargin.getDimen().toInt())
+    val getVipTopMargin = ObservableInt(dialogMetrics.getVipTopMargin.getDimen().toInt())
     val descriptionBottomMargin = ObservableInt(dialogMetrics.descriptionBottomMargin.getDimen().toInt())
     val popupBackground = ObservableInt(dialogMetrics.popupBackground)
     val getVipButtonBackground = ObservableInt(dialogMetrics.getVipButtonBackground)
