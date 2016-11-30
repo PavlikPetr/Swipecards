@@ -8,7 +8,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.dialogs.DialogItemNew"/>
+            type="com.topface.topface.ui.fragments.feed.dialogs.DialogItemNewViewModel"/>
     </data>
 
     <LinearLayout

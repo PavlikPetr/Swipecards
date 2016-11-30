@@ -7,7 +7,6 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.Profile
-import com.topface.topface.databinding.FeedItemDialogNewBinding
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.glide_utils.GlideTransformationType
@@ -15,7 +14,7 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА
  */
-class DialogItemNew(binding: FeedItemDialogNewBinding, val item: FeedDialog, val navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) {
+class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator) {
 
     val context = App.getContext()
 
@@ -31,15 +30,13 @@ class DialogItemNew(binding: FeedItemDialogNewBinding, val item: FeedDialog, val
 
     private fun getStubResourсe() = if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar
 
-    private fun prepareDialogText(): String {
-        var text: String = Utils.EMPTY
-        when {
-            item.user.deleted -> text = context.getString(R.string.user_is_deleted)
-            item.user.banned -> text = context.getString(R.string.user_is_banned)
-            else -> text = item.text
-        }
-        return text
-    }
+    private fun prepareDialogText() =
+            when {
+                item.user.deleted -> context.getString(R.string.user_is_deleted)
+                item.user.banned -> context.getString(R.string.user_is_banned)
+                else -> Utils.EMPTY
+            }
+
 
     fun onClick() = navigator.showChat(item)
 

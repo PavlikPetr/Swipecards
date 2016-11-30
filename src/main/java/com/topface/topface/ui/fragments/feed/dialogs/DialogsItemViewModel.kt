@@ -31,13 +31,12 @@ class DialogsItemViewModel(binding: FeedItemDialogBinding,
         get() = "Dialog"
 
     val counterVisibility = ObservableInt(View.GONE)
-
     val dialogTextColor: Int
         get() {
             return if (item.unread && App.get().options.hidePreviewDialog) {
-                context.resources.getColor(R.color.message_unread)
+                context.resources.getColor(R.color.hidden_dialog_preview_text_color)
             } else {
-                context.resources.getColor(R.color.message_was_read)
+                context.resources.getColor(R.color.list_text_gray)
             }
         }
     val dialogMessageCounter: String
