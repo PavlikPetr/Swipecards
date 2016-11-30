@@ -33,7 +33,7 @@ class AdmirationTransformation(mContext: Context) : BaseGlideTransformation(mCon
 
         /*Тут круги доя восхищений снизу*/
         var admirationCircleBottom = BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_bottom)
-        admirationCircleBottom = Bitmap.createScaledBitmap(admirationCircleBottom,  mMainBitmap.width, mMainBitmap.height, true)
+        admirationCircleBottom = Bitmap.createScaledBitmap(admirationCircleBottom, mMainBitmap.width, mMainBitmap.height, true)
         mCanvas.drawBitmap(admirationCircleBottom, 0f, 0f, null)
         admirationCircleBottom.recycle()
 
