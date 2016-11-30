@@ -280,6 +280,8 @@ public class BindingsAdapters {
         view.startAnimation(resource);
     }
 
+
+    @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationPhoto", "typeTransformation"})
     public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type) {
         int size = Math.max(imageView.getLayoutParams().height, imageView.getLayoutParams().width);
@@ -288,7 +290,6 @@ public class BindingsAdapters {
             Glide.with(imageView.getContext())
                     .load(photo.getSuitableLink(imageView.getLayoutParams().height, imageView.getLayoutParams().width))
                     .placeholder(App.get().getProfile().sex == Profile.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)
-                    .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
                     .into(imageView);
@@ -296,13 +297,13 @@ public class BindingsAdapters {
             Glide.with(imageView.getContext())
                     .load(photo.getDefaultLink())
                     .placeholder(App.get().getProfile().sex == Profile.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)
-                    .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
                     .into(imageView);
         }
     }
 
+    @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
     public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
         Glide.with(imageView.getContext())
