@@ -284,9 +284,15 @@ public class BindingsAdapters {
     @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
     public static void setPhotoWithTransformation(ImageView imageView, Photo photo, long type, int placeholderRes) {
+        if (photo == null) {
+            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+            return;
+        }
+
         int size = Math.max(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
         String suitableLink = photo.getSuitableLink(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
         String defaultLink = photo.getDefaultLink();
+
 
         if (suitableLink != null && size > 0) {
             Glide.with(imageView.getContext())
