@@ -280,11 +280,10 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter({"remoteSrcGlideTransformation", "typeTransformation"})
-    public static void setImageWithTransformation(ImageView imageView, String imgUrl, GlideTransformationType type) {
+    public static void setImageWithTransformation(ImageView imageView, String imgUrl, Long type) {
         Glide.with(imageView.getContext())
                 .load(imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
                 .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
                 .into(imageView);
     }

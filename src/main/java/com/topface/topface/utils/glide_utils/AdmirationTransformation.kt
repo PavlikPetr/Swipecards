@@ -22,6 +22,7 @@ class AdmirationTransformation(mContext: Context) : BaseGlideTransformation(mCon
         mCanvas.drawBitmap(admirationCircleTop, 0f, 0f, null)
         admirationCircleTop.recycle()
 
+        // этот super вызывается, чтобы верхние круги восхищений оказались под аватаркой
         super.transform(resource, outWidth, outHeight)
 
         /*Тут рисуется сердечко.*/
