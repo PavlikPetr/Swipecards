@@ -1598,4 +1598,8 @@
         <item name="android:lines">1</item>
         <item name="android:ellipsize">none</item>
     </style>
+
+    <style name="NewDating">
+        <item name="android:background">@drawable/new_dialog_items_selector_ripple</item>
+    </style>
 </resources>

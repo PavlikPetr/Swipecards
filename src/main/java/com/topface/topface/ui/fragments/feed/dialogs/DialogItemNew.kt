@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.dialogs
 import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
@@ -55,8 +54,12 @@ class DialogItemNew(binding: FeedItemDialogNewBinding,
         return text
     }
 
-    fun onClick(view: View) {
+    fun onClick() {
         navigator.showChat(item)
+    }
+
+    fun onLongClick() {
+        // открытие опшнМеню с удалением и черным списком
     }
 
 }
