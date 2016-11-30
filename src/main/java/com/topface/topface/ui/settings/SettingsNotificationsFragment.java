@@ -101,8 +101,10 @@ public class SettingsNotificationsFragment extends BaseFragment {
             // Send empty vibro notification to demonstrate
             if (isChecked) {
                 UserNotificationManager.getInstance().showSimpleNotification(
-                        new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
-                                DEFAULT_VIBRATE).build()
+                        new NotificationCompat.Builder(getActivity())
+                                .setSmallIcon(R.drawable.ic_stat_notify)
+                                .setDefaults(Notification.DEFAULT_VIBRATE)
+                                .build()
                 );
             }
         }
