@@ -186,7 +186,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
         addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()

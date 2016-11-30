@@ -4,10 +4,12 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
+import android.databinding.ObservableList;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
@@ -24,8 +26,10 @@ import com.bumptech.glide.Glide;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 /**
@@ -33,6 +37,44 @@ import com.topface.topface.utils.extensions.ResourceExtensionKt;
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("bindDataToCompositeAdapter")
+    public static void bindDataToCompositeAdapter(RecyclerView recyclerView, SingleObservableArrayList<?> observableArrayList) {
+        if (!observableArrayList.isListenerAdded() && recyclerView.getAdapter() instanceof CompositeAdapter) {
+            final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
+            observableArrayList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<?>>() {
+                @Override
+                public void onChanged(ObservableList<?> objects) {
+                    Debug.log("EPTA onChanged" + objects.size());
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onItemRangeChanged(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeChanged" + objects.size());
+                    adapter.notifyItemRangeChanged(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeInserted" + objects.size());
+                    adapter.notifyItemRangeInserted(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeMoved(ObservableList<?> objects, int fromPosition, int toPosition, int itemCount) {
+                    Debug.log("EPTA onItemRangeMoved" + objects.size());
+                    adapter.notifyItemMoved(fromPosition, toPosition);
+                }
+
+                @Override
+                public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeRemoved" + objects.size());
+                    adapter.notifyItemRangeRemoved(positionStart, itemCount);
+                }
+            });
+        }
+    }
 
     @BindingAdapter("pxTextSize")
     public static void setPxTextSize(TextView view, int size) {

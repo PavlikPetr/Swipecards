@@ -14,7 +14,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,7 +28,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
-import com.topface.topface.utils.IStateSaver;
+import com.topface.topface.utils.ILifeCycle;
 import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
@@ -80,7 +79,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     };
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
-    private ArrayList<IStateSaver> stateSavers = new ArrayList<>();
+    private ArrayList<ILifeCycle> stateSavers = new ArrayList<>();
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -102,12 +101,12 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     }
 
     @Override
-    public void registerStateDelegate(@NotNull IStateSaver... stateSaver) {
+    public void registerLifeCycleDelegate(@NotNull ILifeCycle... stateSaver) {
         stateSavers.addAll(Arrays.asList(stateSaver));
     }
 
     @Override
-    public void unregisterStateDelegate(@NotNull IStateSaver... stateSaver) {
+    public void unregisterLifeCycleDelegate(@NotNull ILifeCycle... stateSaver) {
         stateSavers.removeAll(Arrays.asList(stateSaver));
     }
 
@@ -115,7 +114,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGoogleAuthStarted = savedInstanceState.getBoolean(GOOGLE_AUTH_STARTED);
-        for (IStateSaver saver : stateSavers) {
+        for (ILifeCycle saver : stateSavers) {
             saver.onRestoreInstanceState(savedInstanceState);
         }
     }
@@ -123,7 +122,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        for (IStateSaver saver : stateSavers) {
+        for (ILifeCycle saver : stateSavers) {
             saver.onSavedInstanceState(outState);
         }
         if (mGoogleAuthStarted) {
