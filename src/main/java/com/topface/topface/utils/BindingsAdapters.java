@@ -282,24 +282,28 @@ public class BindingsAdapters {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationPhoto", "typeTransformation"})
-    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type) {
-        int size = Math.max(imageView.getLayoutParams().height, imageView.getLayoutParams().width);
-        if (size > 0) {
-            //noinspection SuspiciousNameCombination
+    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, long type, int placeholderRes) {
+        int size = Math.max(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+        String suitableLink = photo.getSuitableLink(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+        String defaultLink = photo.getDefaultLink();
+
+        if (suitableLink != null && size > 0) {
             Glide.with(imageView.getContext())
-                    .load(photo.getSuitableLink(imageView.getLayoutParams().height, imageView.getLayoutParams().width))
-                    .placeholder(App.get().getProfile().sex == Profile.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)
+                    .load(suitableLink)
+                    .placeholder(placeholderRes)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        } else if (defaultLink != null) {
+            Glide.with(imageView.getContext())
+                    .load(defaultLink)
+                    .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
                     .into(imageView);
         } else {
-            Glide.with(imageView.getContext())
-                    .load(photo.getDefaultLink())
-                    .placeholder(App.get().getProfile().sex == Profile.BOY ? R.drawable.feed_banned_male_avatar : R.drawable.feed_banned_female_avatar)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
-                    .into(imageView);
+            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
         }
     }
 
