@@ -20,6 +20,7 @@
     <string name="buying_store_connect">Zamawiam iTunes Store</string>
     <string name="buying_store_purchase">Kupuję w iTunes Store</string>
     <string name="buying_tf_ack_sending">Wysyłam informację o zakupie w Topface</string>
+    <string name="autorefill">Automatyczne uzupełnianie</string>
     <string name="leaders_select_photo">Wybierz efektowne zdjęcie</string>
     <string name="general_bookmarks_is_deleted">Użytkownik został usunięty z ulubionych</string>
     <string name="general_blacklist_is_deleted">Użytkownik został usunięty z czarnej listy</string>
@@ -27,6 +28,8 @@
     <string name="general_bookmarks_add_short">Do ulubionych</string>
     <string name="general_complaint">Poskarżyć się</string>
     <string name="general_type_complain">Temat skargi</string>
+    <string name="address_book_access_error">Ta aplikacja nie ma dostępu do swoich kontaktów. Możesz 
+         zezwolić na dostęp w Ustawieniach Prywatności swojego urządzenia.</string>
     <string name="profile_deleted_user">Użytkownik został usunięty</string>
     <string name="filter_main_parameters">Interesują mnie</string>
     <string name="dating_prev_button_ext">Poprzedni</string>
@@ -114,6 +117,8 @@
     <string name="general_visitors">Goście</string>
     <string name="general_profile">Profil</string>
     <string name="general_settings">Ustawienia</string>
+    <string name="auth_btn_vk">Vkontakte</string>
+    <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Spróbuj ponownie</string>
     <string name="dating_header_girls">Kobiety od %1$d do %2$d</string>
     <string name="dating_header_guys">Mężczyźni od %1$d do %2$d</string>
@@ -140,6 +145,7 @@
     <string name="buying_money">Zakup monet</string>
     <string name="gifts_title">Wybierz prezent</string>
     <string name="profile_header_title">Mój profil</string>
+    <string name="album_add_photo_title">Dodaj zdjęcie</string>
     <string name="profile_add_album">Wybierz z istniejących</string>
     <string name="profile_add_camera">Zrób zdjęcie</string>
     <string name="profile_photo">Zdjęcie</string>
@@ -227,6 +233,7 @@
     <string name="settings_melody">Melodia powiadomienia</string>
     <string name="edit_refresh_status">Odnów status</string>
     <string name="ban_title">Gratulacje! Zostałeś/-aś zablokowany/-a</string>
+    <string name="ban_complain">Odrzuć zakaz</string>
     <string name="general_ready">Gotowe</string>
     <string name="buying_store_ok">Zakup przebiegł pomyślnie</string>
     <string name="vip_privileges">VIP-przywileje</string>
@@ -262,6 +269,8 @@
     </string>
     <string name="general_block">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
+    <string name="ban_flood_detected">Robisz żądania do serwera zbyt często. Poczekaj                                                                                                                                                                                                           
+          kilka chwil zanim zaczniesz kontynuować.</string>
     <string name="virus_chat_btn">Zdobądź sympatie</string>
     <string name="profile_ask_sent">Prośba została wysłana</string>
     <string name="virus_error">Za dobę Twój znajomy może wysłać sympatie tylko 1 raz! Spróbuj
@@ -314,6 +323,7 @@
     <string name="photo_for_avatar">Zdjęcie jest gotowe do zapisywania się w profilu! To Twoje
         pierwsze zdjęcie i ono będzie wykorzystywane jako zdjęcie profilowe
     </string>
+    <string name="add_photo_before">Najpierw musisz dodać zdjęcie</string>
     <string name="send_confirmation_email">Wysłać potwierdzenie na e-mail</string>
     <string name="change_password">Zmień hasło</string>
     <string name="password_changing">Zmiana hasła</string>
@@ -400,9 +410,8 @@
     <string name="buy_status_and_watch_your_fans">Kup VIP-status a dowiedz się, kto dodał Cię do
         ulubionych
     </string>
-    <string name="add_bookmarks_to_be_connected">Dodawaj nowych znajomych do tego rozdziału a nie
-        stracisz z nimi kontaktu
-    </string>
+    <string name="add_bookmarks_to_be_connected">W tej sekcji możesz dodawać swoich znajomych, a nie
+        stracisz z nimi kontaktu.</string>
     <string name="nobody_chat_with_you_sympathies_will_help">Nikt jeszcze do Ciebie nie napisał.
         Sympatie pomogą w poszukiwaniu rozmówcy
     </string>
@@ -466,8 +475,24 @@
         <item quantity="one">Podobasz się %d osobie</item>
     </plurals>
     <string name="or">lub</string>
+    <string name="add_to_favorite_block_not_vip">Tylko użytkownicy VIP mogą dodawać Ulubionych z ekranu
+        Randki</string>
+    <string name="admiration_sended">Adoracja została wysłana.</string>
+    <string name="auth_btn_ok">Odnoklassniki</string>
+    <string name="auth_btn_tf">Konto Topface</string>
+    <string name="add_leader_hint">Twoje powitanie…</string>
+    <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
         zacząć miłą znajomość
     </string>
+    <string name="access_to_location_popup_title">Ustalenie położenia geograficznego nie jest możliwe.</string>
+    <string name="access_to_location_popup_description">Niestety, nie jest możliwe ustalenie położenia geograficznego dla Twojej lokalizacji. Aby kontynuować, zezwól na jego dostep.</string>
+    <string name="access_to_location_popup_access_button">Zezwól na dostęp</string>
+    <string name="app_of_the_day_ad_badge">Dodaj</string>
+    <string name="album_photo_deleted">Usunięto zdjęcie</string>
+    <string name="album_main_photo">Główne zdjęcie profilowe</string>
+    <string name="add_photo_feed_header_description">Opublikuj swoje zdjęcie z powitaniem, a tysiące ludzi Cię zobaczy. Zostań zauważony/-na i zacznij poznawać nowych ludzi!</string>
     <string name="vip_info_title">VIP-przywileje</string>
+    <string name="about">O Tobie</string>
+    <string name="ask_moar_info">Uzyskaj więcej informacji!</string>
 </resources>
