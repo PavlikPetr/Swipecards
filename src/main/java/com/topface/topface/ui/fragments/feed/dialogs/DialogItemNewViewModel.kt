@@ -2,11 +2,15 @@ package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.databinding.ObservableField
 import android.graphics.Typeface
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
+import com.topface.topface.databinding.FeedItemDialogNewBinding
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.glide_utils.GlideTransformationType
@@ -14,7 +18,8 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА
  */
-class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator) {
+class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDialog, val navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) : View.OnLongClickListener {
+
 
     val context = App.getContext()
 
@@ -58,8 +63,38 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     fun onClick() = navigator.showChat(item)
 
-    fun onLongClick() {
-        // открытие опшнМеню с удалением и черным списком
+
+    override fun onLongClick(v: View?): Boolean {
+        val menu = PopupMenu(context, v)
+        menu.inflate(R.menu.new_menu_black_and_delete)
+        menu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+
+            override fun onMenuItemClick(p0: MenuItem?): Boolean {
+                when (p0?.getItemId()) {
+                    R.id.delete_item -> {
+                        Debug.error("!!!!!!!!!!!!!DELETE")
+                        return true
+                    }
+                    R.id.go_to_blacklist -> {
+                        Debug.error("!!!!!!!!!!!!BLACKLIST")
+                        return true
+                    }
+                    else -> return false
+                }
+            }
+        })
+
+        menu.setOnDismissListener(
+                object : PopupMenu.OnDismissListener {
+
+                    override fun onDismiss(p0: PopupMenu?) {
+                        Debug.error("!!!!!!!!!!!!!!!!ЗАкрыть к хуям")
+                    }
+                })
+        menu.show()
+        return true
     }
 
+
 }
+
