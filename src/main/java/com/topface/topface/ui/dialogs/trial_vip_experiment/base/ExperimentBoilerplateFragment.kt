@@ -135,8 +135,12 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
         super.onDestroy()
     }
 
-    override fun runMarketPopup() = mMarketFragmentRunner.startTransparentMarketFragment {
-        TrialVipExperimentStatistics.sendPurchaseCompleted()
-        dismiss()
+    override fun runMarketPopup() {
+        if (isAdded) {
+            mMarketFragmentRunner.startTransparentMarketFragment {
+                TrialVipExperimentStatistics.sendPurchaseCompleted()
+                dismiss()
+            }
+        }
     }
 }
