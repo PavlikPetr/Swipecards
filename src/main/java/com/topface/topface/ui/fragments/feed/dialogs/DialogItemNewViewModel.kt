@@ -6,10 +6,9 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
-import com.topface.topface.data.Profile
 import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.glide_utils.GlideTransformationType
 
 /**
@@ -30,8 +29,6 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     val dialogTime: ObservableField<String> = ObservableField(item.createdRelative)
     val text: ObservableField<String> = ObservableField(prepareDialogText())
 
-    private fun getStubResourсe() = if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar
-
     private fun prepareMessageIcon() =
             when (item.type) {
                 FeedDialog.DEFAULT, FeedDialog.MESSAGE, FeedDialog.MESSAGE_WISH,
@@ -46,17 +43,17 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     private fun prepareDialogText() =
             when {
-                item.user.deleted -> context.getString(R.string.user_is_deleted)
-                item.user.banned -> context.getString(R.string.user_is_banned)
+                item.user.deleted -> R.string.user_is_deleted.getString()
+                item.user.banned -> R.string.user_is_banned.getString()
                 else -> pripareDialogsByType()
             }
 
     private fun pripareDialogsByType() =
             when (item.type) {
-                FeedDialog.LIKE -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) context.getString(R.string.chat_like_in) else context.getString(R.string.chat_like_out)
-                FeedDialog.SYMPHATHY -> context.getString(R.string.mutual_sympathy)
-                FeedDialog.GIFT -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) context.getString(R.string.chat_gift_in) else context.getString(R.string.chat_gift_out)
-                else -> Utils.EMPTY
+                FeedDialog.LIKE -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) R.string.chat_like_in.getString() else R.string.chat_like_out.getString()
+                FeedDialog.SYMPHATHY -> R.string.mutual_sympathy.getString()
+                FeedDialog.GIFT -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) R.string.chat_gift_in.getString() else R.string.chat_gift_out.getString()
+                else -> item.text
             }
 
     fun onClick() = navigator.showChat(item)
