@@ -20,7 +20,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
 
-    var mData: MutableList<Any> = mutableListOf()
+    var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
     init {
@@ -43,11 +43,11 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
                     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                         val subscriber = mUpdateSubscriber
                         if (subscriber != null) {
-                            if (!mData.isEmpty()) {
+                            if (!data.isEmpty()) {
                                 val firstVisibleItem = it.findFirstCompletelyVisibleItemPosition()
                                 val lastVisibleItem = it.findLastVisibleItemPosition()
                                 val visibleItemCount = lastVisibleItem - firstVisibleItem
-                                if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= mData.size - 1) {
+                                if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= data.size - 1) {
                                     subscriber.onNext(updaterEmitObject())
                                 }
                             } else {
@@ -63,7 +63,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     }
 
     override fun onBindViewHolder(holder: ViewHolder<ViewDataBinding>?, position: Int) {
-        components[typeProvider.getType(mData[position].javaClass)]?.onBindViewHolder(holder, mData[position], position)
+        components[typeProvider.getType(data[position].javaClass)]?.onBindViewHolder(holder, data[position], position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<ViewDataBinding>? {
@@ -77,8 +77,8 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
         }
     }
 
-    override fun getItemViewType(position: Int) = typeProvider.getType(mData[position].javaClass)
+    override fun getItemViewType(position: Int) = typeProvider.getType(data[position].javaClass)
 
-    override fun getItemCount() = mData.count()
+    override fun getItemCount() = data.count()
 
 }

@@ -28,9 +28,9 @@ import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
@@ -51,6 +51,7 @@ public class BindingsAdapters {
                 @Override
                 public void onChanged(ObservableList<?> objects) {
                     Debug.log("EPTA onChanged" + objects.size());
+                    adapter.getData().add(objects);
                     adapter.notifyDataSetChanged();
                 }
 
@@ -63,6 +64,7 @@ public class BindingsAdapters {
                 @Override
                 public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeInserted" + objects.size());
+                    adapter.getData().addAll(objects.subList(positionStart, objects.size() - 1));
                     adapter.notifyItemRangeInserted(positionStart, itemCount);
                 }
 

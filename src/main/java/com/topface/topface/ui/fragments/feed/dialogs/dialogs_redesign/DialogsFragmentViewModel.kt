@@ -47,17 +47,28 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
         })
     }
 
+    private fun handleUnreadState(data: FeedListData<FeedDialog>, isPullToRef: Boolean) {
+        if (!data.items.isEmpty()) {
+            if (!mUnreadState.wasFromInited || isPullToRef) {
+                mUnreadState.from = data.items.first.unread
+                mUnreadState.wasFromInited = true
+            }
+            mUnreadState.to = data.items.last.unread
+        }
+    }
+
+    //todo проверить, что оправляется именно последний ид фида
     private fun update(updateBundle: Bundle = Bundle()) {
         mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java,
                 constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY))).
                 subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedDialog>>() {
                     override fun onCompleted() = mCallUpdateSubscription.safeUnsubscribe()
                     override fun onNext(data: FeedListData<FeedDialog>?) {
-                        if (data?.more == false) {
-                            mIsAllDataLoaded = true
-                        }
                         data?.let {
                             this@DialogsFragmentViewModel.data.addAll(it.items)
+                            handleUnreadState(it, false)
+                            //todo c сервера после второй загрузки приходит false
+                            mIsAllDataLoaded = !data.more
                         }
                     }
                 })
@@ -81,7 +92,9 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
                     }
 
                     override fun onNext(data: FeedListData<FeedDialog>?) {
-                        //topFeedsLoaded(data, requestBundle)
+                        if (data != null && data.items.isNotEmpty()) {
+                            this@DialogsFragmentViewModel.data.observableList.addAll(0, data.items)
+                        }
                     }
 
                 })
@@ -96,7 +109,7 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
                 putBoolean(BaseFeedFragmentViewModel.PULL_TO_REF_FLAG, isPullToRef)
                 putString(BaseFeedFragmentViewModel.FROM, from)
                 putString(BaseFeedFragmentViewModel.TO, to)
-                //    putBoolean(BaseFeedFragmentViewModel.HISTORY_LOAD_FLAG, hasData())
+                putBoolean(BaseFeedFragmentViewModel.HISTORY_LOAD_FLAG, !data.observableList.isEmpty())
             }
 
     fun release() {

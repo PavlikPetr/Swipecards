@@ -42,10 +42,10 @@ class DialogsFragment : BaseFragment() {
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mDialogTypeProvider) {
             Bundle().apply {
-                val last = mAdapter.mData.findLastFeedItem()
+                val last = mAdapter.data.findLastFeedItem()
                 putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
             }
-        }
+        }.addAdapterComponent(DialogItemComponent(mNavigator))
     }
     private val mViewModel: DialogsFragmentViewModel by lazy {
         DialogsFragmentViewModel(mNavigator, mApi) { mAdapter.updateObservable }
