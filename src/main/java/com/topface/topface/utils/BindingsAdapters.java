@@ -21,12 +21,17 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
+import com.topface.topface.data.Profile;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -274,4 +279,45 @@ public class BindingsAdapters {
         resource.setStartOffset(bindStartOffSet);
         view.startAnimation(resource);
     }
+
+
+    @SuppressWarnings("unchecked")
+    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, long type, int placeholderRes) {
+        if (photo == null) {
+            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+            return;
+        }
+        int size = Math.max(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+        String suitableLink = photo.getSuitableLink(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+        String defaultLink = photo.getDefaultLink();
+        if (suitableLink != null && size > 0) {
+            Glide.with(imageView.getContext())
+                    .load(suitableLink)
+                    .placeholder(placeholderRes)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        } else if (defaultLink != null) {
+            Glide.with(imageView.getContext())
+                    .load(defaultLink)
+                    .placeholder(placeholderRes)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        } else {
+            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
+    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
+        Glide.with(imageView.getContext())
+                .load(imgUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                .into(imageView);
+    }
+
 }

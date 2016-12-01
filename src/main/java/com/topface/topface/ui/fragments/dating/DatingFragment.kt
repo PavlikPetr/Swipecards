@@ -123,7 +123,13 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         if (savedInstanceState != null) {
-            mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
+            try {
+                //todo переосмыслить кэш фидов, дабы убрать эти страдания
+                mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
+            } catch (e: ClassCastException) {
+                Debug.log("cast fail after saved state")
+                mUserSearchList = CachableSearchList<SearchUser>(SearchUser::class.java)
+            }
         } else {
             mUserSearchList = CachableSearchList<SearchUser>(SearchUser::class.java)
         }
@@ -219,8 +225,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onNewSearchUser(user: SearchUser) {
         with(mDatingAlbumViewModel) {
-            albumData.set(user.photos)
-            currentUser = user
+            setUser(user)
         }
         with(mDatingFragmentViewModel) {
             currentUser = user
@@ -274,7 +279,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun unlockControls() = mDatingButtonsViewModel.isDatingButtonsLocked.set(true)
 
-    override fun showEmptySearchDialog() = mNavigator.showEmptyDating()
+    override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mDatingFragmentViewModel.update(false, false) }
 
     override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
 }

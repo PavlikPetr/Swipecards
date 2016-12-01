@@ -1,8 +1,6 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
-import android.content.Context
 import android.os.Bundle
-import android.view.ViewGroup
 import com.topface.topface.R
 
 /**
@@ -25,6 +23,7 @@ class MetricsFactory(val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMe
                 }
                 ExperimentsType.EXPERIMENT_2 -> BoilerplateDialogMetrics.create {
                     isSpecialOffer = true
+                    getVipTopMargin = R.dimen.experiment_2_get_vip_top_margin
                     initStandardMetrics(this)
                 }
                 ExperimentsType.EXPERIMENT_4 -> BoilerplateDialogMetrics.create {

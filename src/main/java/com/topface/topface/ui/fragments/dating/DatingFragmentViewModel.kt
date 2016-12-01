@@ -167,7 +167,7 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
             forms = mutableListOf<IType>(FormModel(
                     Pair(String.format(if (user.sex == Profile.BOY) R.string.fill_own_profile_boy.getString()
                     else R.string.fill_own_profile.getString(), user.firstName), Utils.EMPTY),
-                    isEmptyItem = false))
+                    isEmptyItem = false, iconRes = R.drawable.bt_question))
         } else {
             forms = mutableListOf <IType>().apply {
                 var hasEmptyItem = false
@@ -178,7 +178,8 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
                         add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
-                    add(FormModel(Pair(it.title, it.value), user.id, it.dataType.type, isEmptyItem = it.isEmpty))
+                    val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
+                    add(FormModel(Pair(it.title, it.value), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
                 }
             }
         }

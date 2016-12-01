@@ -1590,4 +1590,31 @@
         <item name="android:textColor">@color/popup_message</item>
         <item name="android:textSize">@dimen/popup_message_text</item>
     </style>
+
+    <style name="DialogsNewName">
+        <item name="android:textColor">@color/dialogs_name</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="DialogsNewMessage">
+        <item name="android:textSize">14sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="NewDialogTime">
+        <item name="android:textColor">#b9b9b9</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="NewDating">
+        <item name="android:background">@drawable/new_dialog_items_selector_ripple</item>
+    </style>
 </resources>
