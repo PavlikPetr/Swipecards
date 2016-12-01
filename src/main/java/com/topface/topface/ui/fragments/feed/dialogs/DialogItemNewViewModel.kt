@@ -7,6 +7,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.Profile
+import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.glide_utils.GlideTransformationType
@@ -20,6 +21,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     val userPhoto = ObservableField(item.user.photo)
     val type = ObservableField(if (item.user.online) GlideTransformationType.ONLINE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
+    val placeholderRes = ObservableField(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
     val counterVisibility: ObservableField<Int> = ObservableField(if (item.unread) View.VISIBLE else View.GONE)
     val name: ObservableField<String> = ObservableField(item.user.firstName)
     val dialogTextColor: ObservableField<Int> = ObservableField(if (item.unread) context.resources.getColor(R.color.message_unread) else context.resources.getColor(R.color.message_was_read))
