@@ -30,60 +30,32 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     private fun getStubResourсe() = if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar
 
-    private fun prepareMessageIcon(): Int {
-        var image = 0
-        when (item.type) {
-            FeedDialog.DEFAULT, FeedDialog.MESSAGE, FeedDialog.MESSAGE_WISH,
-            FeedDialog.MESSAGE_SEXUALITY, FeedDialog.MESSAGE_WINK,
-            FeedDialog.RATE, FeedDialog.PROMOTION,
-            FeedDialog.PHOTO -> image = if (item.target == FeedDialog.OUTPUT_USER_MESSAGE)
-                R.drawable.arrow_dialogues
-            else
-                0
-            FeedDialog.LIKE -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) {
-            } else {
-                image = R.drawable.arrow_dialogues
-            }
-            FeedDialog.SYMPHATHY -> {
-                image = R.drawable.dialogues_sympathy
-            }
-            FeedDialog.GIFT -> {
-                image = R.drawable.dialogues_gift
-            }
-        }
-        return if (image == 0 && item.target == FeedDialog.OUTPUT_USER_MESSAGE)
-            R.drawable.arrow_dialogues
-        else
-            image
-    }
-
-    private fun prepareDialogText(): String {
-        var text: String = Utils.EMPTY
-        if (item.user.deleted) {
-            text = context.getString(R.string.user_is_deleted)
-        } else if (item.user.banned) {
-            text = context.getString(R.string.user_is_banned)
-        } else {
+    private fun prepareMessageIcon() =
             when (item.type) {
-                FeedDialog.LIKE -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) {
-                    text = context.getString(R.string.chat_like_in)
-                } else {
-                    text = context.getString(R.string.chat_like_out)
-                }
-                FeedDialog.SYMPHATHY -> {
-                    text = context.getString(R.string.mutual_sympathy)
-                }
-                FeedDialog.GIFT -> {
-                    text = if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE)
-                        context.getString(R.string.chat_gift_in)
-                    else
-                        context.getString(R.string.chat_gift_out)
-                }
-                FeedDialog.MESSAGE_AUTO_REPLY -> text = Utils.EMPTY
+                FeedDialog.DEFAULT, FeedDialog.MESSAGE, FeedDialog.MESSAGE_WISH,
+                FeedDialog.MESSAGE_SEXUALITY, FeedDialog.MESSAGE_WINK,
+                FeedDialog.RATE, FeedDialog.PROMOTION,
+                FeedDialog.PHOTO -> if (item.target == FeedDialog.OUTPUT_USER_MESSAGE) R.drawable.arrow_dialogues else 0
+                FeedDialog.LIKE -> if (item.target != FeedDialog.INPUT_FRIEND_MESSAGE) R.drawable.arrow_dialogues else 0
+                FeedDialog.SYMPHATHY -> R.drawable.dialogues_sympathy
+                FeedDialog.GIFT -> R.drawable.dialogues_gift
+                else -> if (item.target == FeedDialog.OUTPUT_USER_MESSAGE) R.drawable.arrow_dialogues else 0
             }
-        }
-        return if (text.equals(Utils.EMPTY)) item.text else text
-    }
+
+    private fun prepareDialogText() =
+            when {
+                item.user.deleted -> context.getString(R.string.user_is_deleted)
+                item.user.banned -> context.getString(R.string.user_is_banned)
+                else -> pripareDialogsByType()
+            }
+
+    private fun pripareDialogsByType() =
+            when (item.type) {
+                FeedDialog.LIKE -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) context.getString(R.string.chat_like_in) else context.getString(R.string.chat_like_out)
+                FeedDialog.SYMPHATHY -> context.getString(R.string.mutual_sympathy)
+                FeedDialog.GIFT -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) context.getString(R.string.chat_gift_in) else context.getString(R.string.chat_gift_out)
+                else -> Utils.EMPTY
+            }
 
     fun onClick() = navigator.showChat(item)
 
