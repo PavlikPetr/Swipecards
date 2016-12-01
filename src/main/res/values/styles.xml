@@ -1456,6 +1456,11 @@
         <item name="android:src">@drawable/dating_empty</item>
     </style>
 
+    <style name="EmptyDialogCenterImage" parent="PopupCenterImageBase">
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
     <style name="AdmirationPopupBuyVipButton">
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
@@ -1574,6 +1579,16 @@
         <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="EmptyDialogView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/popup_message_side_padding</item>
+        <item name="android:paddingRight">@dimen/popup_message_side_padding</item>
+        <item name="android:textColor">@color/popup_message</item>
+        <item name="android:textSize">@dimen/popup_message_text</item>
     </style>
 
     <style name="DialogsNewName">

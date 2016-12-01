@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.databinding.ObservableInt
-import android.graphics.Typeface
 import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ImageCenter"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/arrow_up_dialog"/>
+
+    <ImageView
+        android:id="@+id/ImageCenter"
+        android:layout_width="70dp"
+        android:layout_height="65dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="27dp"
+        android:src="@drawable/pic_no_chats"/>
+
+    <TextView
+        android:id="@+id/dialogEmptyTitle"
+        style="@style/EmptyDialogView"
+        android:layout_below="@+id/ImageCenter"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/dialog_empty_title"/>
+
+    <TextView
+        style="@style/EmptyDialogView"
+        android:layout_below="@+id/dialogEmptyTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/write_those_with_who_you_have_mutual_sympathy"
+        android:textColor="@color/empty_dialogs_message"/>
+
+</LinearLayout>

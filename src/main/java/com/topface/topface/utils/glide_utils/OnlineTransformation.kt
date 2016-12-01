@@ -14,7 +14,7 @@ import com.topface.topface.R
  * Этот transformation может рисовать значок онлайн на аватарке
  * Created by siberia87 on 30.11.16.
  */
-class OnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext){
+class OnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
         super.transform(resource, outWidth, outHeight)
