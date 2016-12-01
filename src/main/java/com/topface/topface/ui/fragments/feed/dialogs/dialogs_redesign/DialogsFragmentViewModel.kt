@@ -4,12 +4,14 @@ import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import com.topface.topface.data.FeedDialog
+import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedListData
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
+import com.topface.topface.ui.fragments.feed.feed_utils.isEmpty
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
@@ -31,7 +33,7 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
     private var mIsAllDataLoaded: Boolean = false
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
 
-    val data = SingleObservableArrayList<FeedDialog>()
+    val data = SingleObservableArrayList<FeedItem>()
 
     init {
         updater().distinct {
@@ -65,10 +67,13 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
                     override fun onCompleted() = mCallUpdateSubscription.safeUnsubscribe()
                     override fun onNext(data: FeedListData<FeedDialog>?) {
                         data?.let {
-                            this@DialogsFragmentViewModel.data.addAll(it.items)
-                            handleUnreadState(it, false)
-                            //todo c сервера после второй загрузки приходит false
-                            mIsAllDataLoaded = !data.more
+                            if (it.items.isEmpty()) {
+                                this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsItem())
+                            } else {
+                                this@DialogsFragmentViewModel.data.addAll(it.items)
+                                handleUnreadState(it, false)
+                                mIsAllDataLoaded = !data.more
+                            }
                         }
                     }
                 })
@@ -91,9 +96,10 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
                         }
                     }
 
-                    override fun onNext(data: FeedListData<FeedDialog>?) {
-                        if (data != null && data.items.isNotEmpty()) {
-                            this@DialogsFragmentViewModel.data.observableList.addAll(0, data.items)
+                    override fun onNext(data: FeedListData<FeedDialog>?) = with(this@DialogsFragmentViewModel.data.observableList) {
+                        if (data != null && data.items.isNotEmpty() && count() == 1 && this[0].isEmpty()) {
+                            removeAt(0)
+                            addAll(0, data.items)
                         }
                     }
 

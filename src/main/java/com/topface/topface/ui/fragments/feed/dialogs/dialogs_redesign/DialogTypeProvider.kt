@@ -12,6 +12,9 @@ class DialogTypeProvider : ITypeProvider {
         if (java == FeedDialog::class.java) {
             return 1
         }
+        if (java == EmptyDialogsItem::class.java) {
+            return 2
+        }
         return 0
     }
 }

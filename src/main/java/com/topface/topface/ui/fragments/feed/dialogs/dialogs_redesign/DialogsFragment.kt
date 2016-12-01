@@ -45,7 +45,9 @@ class DialogsFragment : BaseFragment() {
                 val last = mAdapter.data.findLastFeedItem()
                 putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
             }
-        }.addAdapterComponent(DialogItemComponent(mNavigator))
+        }
+                .addAdapterComponent(DialogItemComponent(mNavigator))
+                .addAdapterComponent(EmptyDialogsComponent())
     }
     private val mViewModel: DialogsFragmentViewModel by lazy {
         DialogsFragmentViewModel(mNavigator, mApi) { mAdapter.updateObservable }

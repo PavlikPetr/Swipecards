@@ -27,7 +27,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     val dialogTime: ObservableField<String> = ObservableField(item.createdRelative)
     val text: ObservableField<String> = ObservableField(prepareDialogText())
 
-    private fun getStubResourсe() = if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar
+    fun getStubResourсe() = if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar
 
     private fun prepareDialogText() =
             when {

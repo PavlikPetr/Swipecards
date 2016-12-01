@@ -37,6 +37,8 @@ fun List<Any>.findLastFeedItem(): FeedItem? {
     return null
 }
 
+fun <T : FeedItem> T.isEmpty() = id == null
+
 fun <T : FeedItem> List<T>.getLastItem(): T? {
     var item: T? = null
     if (!isEmpty()) {

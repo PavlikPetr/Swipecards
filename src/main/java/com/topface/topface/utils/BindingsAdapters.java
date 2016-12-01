@@ -26,10 +26,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
-import com.topface.topface.data.Profile;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
@@ -44,7 +42,7 @@ import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 public class BindingsAdapters {
 
     @BindingAdapter("bindDataToCompositeAdapter")
-    public static void bindDataToCompositeAdapter(RecyclerView recyclerView, SingleObservableArrayList<?> observableArrayList) {
+    public static void bindDataToCompositeAdapter(final RecyclerView recyclerView, SingleObservableArrayList<?> observableArrayList) {
         if (!observableArrayList.isListenerAdded() && recyclerView.getAdapter() instanceof CompositeAdapter) {
             final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
             observableArrayList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<?>>() {
@@ -64,8 +62,11 @@ public class BindingsAdapters {
                 @Override
                 public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeInserted" + objects.size());
-                    adapter.getData().addAll(objects.subList(positionStart, objects.size() - 1));
+                    adapter.getData().addAll(objects.subList(positionStart, objects.size()));
                     adapter.notifyItemRangeInserted(positionStart, itemCount);
+                    if (positionStart == 0) {
+                        recyclerView.getLayoutManager().scrollToPosition(0);
+                    }
                 }
 
                 @Override
@@ -77,6 +78,7 @@ public class BindingsAdapters {
                 @Override
                 public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeRemoved" + objects.size());
+                    adapter.getData().removeAll(adapter.getData().subList(positionStart, itemCount));
                     adapter.notifyItemRangeRemoved(positionStart, itemCount);
                 }
             });
