@@ -22,12 +22,12 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_margin="16dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="16dp"
                 app:glideTransformationPhoto="@{model.userPhoto}"
                 app:typeTransformation="@{model.type}"
-                app:placeholderRes="@{model.getStubResourсe()}"/>
+                app:placeholderRes="@{model.placeholderRes}"/>
 
         </FrameLayout>
 
