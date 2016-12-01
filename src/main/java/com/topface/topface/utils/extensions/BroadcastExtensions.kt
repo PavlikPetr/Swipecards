@@ -17,8 +17,6 @@ fun BroadcastReceiver.unregisterReceiver(c: Context) =
 fun Array<BroadcastReceiver>.unregisterReceiver(c: Context) =
         forEach { it.unregisterReceiver(c) }
 
-fun BroadcastReceiver.registerReceiver(c: Context, receiver: BroadcastReceiver, intentFilter: IntentFilter) =
-        LocalBroadcastManager.getInstance(c).registerReceiver(receiver, intentFilter)
+fun BroadcastReceiver.registerReceiver(c: Context, intentFilter: IntentFilter) =
+        LocalBroadcastManager.getInstance(c).registerReceiver(this, intentFilter)
 
-fun Map<IntentFilter, BroadcastReceiver>.registerReceivers(c: Context) =
-        forEach { it.value.registerReceiver(c, it.value, it.key) }
