@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.dialogs
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.text.TextUtils
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.utils.extensions.registerReceivers
@@ -25,22 +26,22 @@ class FeedPushHandler(val mDelegate: IFeedPushHandlerDelegate, val mContext: Con
     }
 
     private fun createAndRegisterBroadcasts() {
-        mFeedDialogsReceiver = object : BroadcastReceiver() {
+        val mFeedDialogsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mDelegate.updateFeedDialogs()
             }
         }
-        mFeedMutualReceiver = object : BroadcastReceiver() {
+        val mFeedMutualReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mDelegate.updateFeedMutual()
             }
         }
-        mFeedAdmirationReceiver = object : BroadcastReceiver() {
+        val mFeedAdmirationReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mDelegate.updateFeedAdmiration()
             }
         }
-        mReadItemReceiver = object : BroadcastReceiver() {
+        val mReadItemReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val itemId = intent.getStringExtra(ChatFragment.INTENT_ITEM_ID)
                 val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, 0)
@@ -53,19 +54,22 @@ class FeedPushHandler(val mDelegate: IFeedPushHandlerDelegate, val mContext: Con
                 }
             }
         }
-        with(mutableMapOf<String, BroadcastReceiver>()) {
-            put(GCMUtils.GCM_DIALOGS_UPDATE, mFeedDialogsReceiver)
-            put(GCMUtils.GCM_MUTUAL_UPDATE, mFeedMutualReceiver)
-            put(GCMUtils.GCM_ADMIRATION_UPDATE, mFeedAdmirationReceiver)
+        with(mutableMapOf<IntentFilter, BroadcastReceiver>()) {
+            put(IntentFilter(GCMUtils.GCM_DIALOGS_UPDATE), mFeedDialogsReceiver)
+            put(IntentFilter(GCMUtils.GCM_MUTUAL_UPDATE), mFeedMutualReceiver)
+            put(IntentFilter(GCMUtils.GCM_ADMIRATION_UPDATE), mFeedAdmirationReceiver)
+            put(IntentFilter(ChatFragment.MAKE_ITEM_READ).apply {
+                addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
+            }, mReadItemReceiver)
             this@with
         }.apply {
             registerReceivers(mContext)
         }
     }
 
-    fun release() {
-        arrayOf(mFeedDialogsReceiver, mFeedMutualReceiver, mFeedAdmirationReceiver, mReadItemReceiver)
-                .unregisterReceiver(mContext)
-    }
+    fun release() =
+            arrayOf(mFeedDialogsReceiver, mFeedMutualReceiver, mFeedAdmirationReceiver, mReadItemReceiver)
+                    .unregisterReceiver(mContext)
+
 
 }

@@ -4,8 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
-import com.topface.topface.utils.gcmutils.GCMUtils
-import kotlin.jvm.internal.iterator
+
 
 /**
  * Экстеншены для Broadcast
@@ -18,8 +17,8 @@ fun BroadcastReceiver.unregisterReceiver(c: Context) =
 fun Array<BroadcastReceiver>.unregisterReceiver(c: Context) =
         forEach { it.unregisterReceiver(c) }
 
-fun BroadcastReceiver.registerReceiver(c: Context, receiver: BroadcastReceiver, action: String) =
-        LocalBroadcastManager.getInstance(c).registerReceiver(receiver, IntentFilter(action))
+fun BroadcastReceiver.registerReceiver(c: Context, receiver: BroadcastReceiver, intentFilter: IntentFilter) =
+        LocalBroadcastManager.getInstance(c).registerReceiver(receiver, intentFilter)
 
-fun Map<String, BroadcastReceiver>.registerReceivers(c: Context) =
+fun Map<IntentFilter, BroadcastReceiver>.registerReceivers(c: Context) =
         forEach { it.value.registerReceiver(c, it.value, it.key) }
