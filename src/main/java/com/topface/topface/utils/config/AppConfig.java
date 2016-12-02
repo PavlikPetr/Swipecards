@@ -77,7 +77,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DEVICE_ACTIVATED = "mobile_device_activated";
     private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
     private static final String TRIAL_VIP_POPUP_TYPE = "trial_vip_popup_type";
-
+    private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
 
     public AppConfig(Context context) {
         super(context);
@@ -143,6 +143,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DEVICE_ACTIVATED, false);
         // ключ, который устанавливает количество отправленных симпатий
         addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
+        // ключ, который устанавливает статус первого просмотра экрана логина
+        addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, true);
         // храним последний выбранный тип попапа триального вип
         addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
     }
@@ -601,4 +603,15 @@ public class AppConfig extends AbstractConfig {
     public long getTrialVipPopupType() {
         return getLongField(getSettingsMap(), TRIAL_VIP_POPUP_TYPE);
     }
+
+    /* Тут устанавливаю статус первого просмотра экрана логина (просмотрен) */
+    public void setFirstViewLoginScreen() {
+        setField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN, false);
+    }
+
+    /* Получение статуса первого просмотра экрана логина */
+    public boolean isFirstViewLoginScreen() {
+        return getBooleanField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN);
+    }
+
 }
