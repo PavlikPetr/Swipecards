@@ -100,6 +100,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
+        mDatingButtonsView.hideControls()
+        mDatingButtonsView.showProgressBar()
         if (!mUpdateInProcess && mUserSearchList.isEnded) {
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
@@ -107,10 +109,11 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 mUserSearchList.clear()
                 currentUser = null
             }
-
             mUpdateInProcess = true
             mUpdateSubscription = mApi.callDatingUpdate(onlyOnline, isNeedRefresh).subscribe(object : Observer<UsersList<SearchUser>> {
                 override fun onCompleted() {
+                    mDatingButtonsView.hideProgressBar()
+                    mDatingButtonsView.showControls()
                     mUpdateInProcess = false
                     mUpdateSubscription.safeUnsubscribe()
                 }
@@ -140,9 +143,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             currentUser = user
                             mDatingViewModelEvents.onDataReceived(user)
                             prepareFormsData(user)
+                            mDatingButtonsView.hideProgressBar()
+                            mDatingButtonsView.showControls()
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                         }
+                        mDatingButtonsView.hideProgressBar()
+                        mDatingButtonsView.showControls()
                         mDatingButtonsView.unlockControls()
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
@@ -247,9 +254,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         arrayOf(mProfileSubscription, mUpdateSubscription).safeUnsubscribe()
     }
 
-    override fun onEmptyList(usersList: UsersList<SearchUser>?) {
-        update(mNewFilter, false)
-    }
+    override fun onEmptyList(usersList: UsersList<SearchUser>?) = update(mNewFilter, false)
+
 
     override fun onPreload(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {

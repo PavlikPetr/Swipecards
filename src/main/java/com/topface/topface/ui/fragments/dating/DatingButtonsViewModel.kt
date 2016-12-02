@@ -59,7 +59,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private var mLikeSubscription: Subscription? = null
     private var mSkipSubscription: Subscription? = null
     private var mAdmirationSubscription: Subscription? = null
-    val isDatingButtonsVisible = ObservableInt(View.VISIBLE)
+    val isDatingButtonsVisible = ObservableInt(View.INVISIBLE)
+    val isDatingProgressBarVisible = ObservableInt(View.VISIBLE)
     val isDatingButtonsLocked = ObservableBoolean(false)
 
     @Inject lateinit internal var mAppState: TopfaceAppState
