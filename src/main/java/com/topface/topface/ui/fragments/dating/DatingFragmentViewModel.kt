@@ -99,24 +99,32 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 .registerReceiver(mReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
     }
 
+    fun startProgress(from: String) {
+        mDatingButtonsView.hideControls()
+        mDatingButtonsView.showProgressBar()
+        Debug.log("start hui: $from")
+    }
+
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         if (!mUpdateInProcess && mUserSearchList.isEnded) {
+            startProgress("update searchPosition${mUserSearchList.searchPosition} size ${mUserSearchList.size}")
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
                 mUserSearchList.clear()
                 currentUser = null
             }
-
             mUpdateInProcess = true
             mUpdateSubscription = mApi.callDatingUpdate(onlyOnline, isNeedRefresh).subscribe(object : Observer<UsersList<SearchUser>> {
                 override fun onCompleted() {
+                    finishProgress("onCompleted")
                     mUpdateInProcess = false
                     mUpdateSubscription.safeUnsubscribe()
                 }
 
                 override fun onError(e: Throwable?) {
                     mDatingButtonsView.unlockControls()
+                    Debug.log("error hui ${e?.message}")
                     e?.printStackTrace()
                 }
 
@@ -140,6 +148,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             currentUser = user
                             mDatingViewModelEvents.onDataReceived(user)
                             prepareFormsData(user)
+                            finishProgress("onNext:update")
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                         }
@@ -155,10 +164,17 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         }
     }
 
+    fun finishProgress(from: String) {
+        mDatingButtonsView.showControls()
+        mDatingButtonsView.hideProgressBar()
+        Debug.log("finish hui: $from")
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser) = with((binding.formsList
             .adapter as CompositeAdapter<IType>).data) {
         clear()
+        finishProgress("prepareFormsData")
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
         Debug.log("GIFTS_BUGS prepareFormsData gifts items ${user.gifts.items.count()} gifts ${user.gifts.count}")
@@ -248,11 +264,14 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     override fun onEmptyList(usersList: UsersList<SearchUser>?) {
+        Debug.log("onEmptyList hui")
         update(mNewFilter, false)
     }
 
+
     override fun onPreload(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {
+            Debug.log("hui onPreload")
             update(false, true)
         }
     }

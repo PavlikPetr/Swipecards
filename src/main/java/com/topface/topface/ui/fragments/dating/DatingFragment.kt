@@ -241,16 +241,18 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onOptionsItemSelected(item: MenuItem?) =
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
-    override fun isScrimVisible(isVisible: Boolean) {
-        mDatingOptionMenuManager.isScrimVisible(isVisible)
-        mDatingButtonsViewModel.isScrimVisible(isVisible)
-        operateWithToolbar({ this.isScrimVisible(isVisible) })
-    }
+    override fun isScrimVisible(isVisible: Boolean) =
+            if (mDatingFragmentViewModel.currentUser != null) {
+                mDatingButtonsViewModel.isScrimVisible(isVisible)
+                mDatingOptionMenuManager.isScrimVisible(isVisible)
+                operateWithToolbar { this.isScrimVisible(isVisible) }
+            } else Unit
 
-    override fun isCollapsed(isCollapsed: Boolean) {
-        mDatingButtonsViewModel.isCollapsed(isCollapsed)
-        operateWithToolbar({ this.isCollapsed(isCollapsed) })
-    }
+    override fun isCollapsed(isCollapsed: Boolean) =
+            if (mDatingFragmentViewModel.currentUser != null) {
+                mDatingButtonsViewModel.isCollapsed(isCollapsed)
+                operateWithToolbar({ this.isCollapsed(isCollapsed) })
+            } else Unit
 
     private fun operateWithToolbar(block: NavigationToolbarViewModel.() -> Unit) {
         (activity as? ToolbarActivity<*>)?.let {
@@ -269,4 +271,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mDatingFragmentViewModel.update(false, false) }
 
     override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
+
+    override fun showProgressBar() = mDatingButtonsViewModel.isDatingProgressBarVisible.set(View.VISIBLE)
+
+    override fun hideProgressBar() = mDatingButtonsViewModel.isDatingProgressBarVisible.set(View.GONE)
 }
