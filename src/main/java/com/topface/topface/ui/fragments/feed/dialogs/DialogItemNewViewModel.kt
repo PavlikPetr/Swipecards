@@ -66,17 +66,17 @@ class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDi
 
     override fun onLongClick(v: View?): Boolean {
         val menu = PopupMenu(context, v)
-        menu.inflate(R.menu.new_menu_black_and_delete)
+//        menu.inflate(R.menu.new_menu_black_and_delete)   todo инфлэйтим меню
         menu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
 
             override fun onMenuItemClick(p0: MenuItem?): Boolean {
                 when (p0?.getItemId()) {
                     R.id.delete_item -> {
-                        Debug.error("!!!!!!!!!!!!!DELETE")
+                        Debug.error("!!!!!!!!!!!!!DELETE!!!!!!!!!!!!!")
                         return true
                     }
                     R.id.go_to_blacklist -> {
-                        Debug.error("!!!!!!!!!!!!BLACKLIST")
+                        Debug.error("!!!!!!!!!!!!BLACKLIST!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                         return true
                     }
                     else -> return false
@@ -88,7 +88,7 @@ class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDi
                 object : PopupMenu.OnDismissListener {
 
                     override fun onDismiss(p0: PopupMenu?) {
-                        Debug.error("!!!!!!!!!!!!!!!!ЗАкрыть к хуям")
+                        Debug.error("!!!!!!!!!!!!!!!!_________ЗАКРЫТЬ К ХУЯМ__________!!!!!!!!!!!!!!")
                     }
                 })
         menu.show()
