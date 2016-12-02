@@ -99,10 +99,15 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 .registerReceiver(mReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
     }
 
-    fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
+    fun startProgress(from: String) {
         mDatingButtonsView.hideControls()
         mDatingButtonsView.showProgressBar()
+        Debug.log("start hui: $from")
+    }
+
+    fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         if (!mUpdateInProcess && mUserSearchList.isEnded) {
+            startProgress("update searchPosition${mUserSearchList.searchPosition} size ${mUserSearchList.size}")
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
@@ -112,14 +117,14 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             mUpdateInProcess = true
             mUpdateSubscription = mApi.callDatingUpdate(onlyOnline, isNeedRefresh).subscribe(object : Observer<UsersList<SearchUser>> {
                 override fun onCompleted() {
-                    mDatingButtonsView.hideProgressBar()
-                    mDatingButtonsView.showControls()
+                    finishProgress("onCompleted")
                     mUpdateInProcess = false
                     mUpdateSubscription.safeUnsubscribe()
                 }
 
                 override fun onError(e: Throwable?) {
                     mDatingButtonsView.unlockControls()
+                    Debug.log("error hui ${e?.message}")
                     e?.printStackTrace()
                 }
 
@@ -143,13 +148,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             currentUser = user
                             mDatingViewModelEvents.onDataReceived(user)
                             prepareFormsData(user)
-                            mDatingButtonsView.hideProgressBar()
-                            mDatingButtonsView.showControls()
+                            finishProgress("onNext:update")
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                         }
-                        mDatingButtonsView.hideProgressBar()
-                        mDatingButtonsView.showControls()
                         mDatingButtonsView.unlockControls()
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
@@ -162,10 +164,17 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         }
     }
 
+    fun finishProgress(from: String) {
+        mDatingButtonsView.showControls()
+        mDatingButtonsView.hideProgressBar()
+        Debug.log("finish hui: $from")
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser) = with((binding.formsList
             .adapter as CompositeAdapter<IType>).data) {
         clear()
+        finishProgress("prepareFormsData")
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
         Debug.log("GIFTS_BUGS prepareFormsData gifts items ${user.gifts.items.count()} gifts ${user.gifts.count}")
@@ -254,11 +263,15 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         arrayOf(mProfileSubscription, mUpdateSubscription).safeUnsubscribe()
     }
 
-    override fun onEmptyList(usersList: UsersList<SearchUser>?) = update(mNewFilter, false)
+    override fun onEmptyList(usersList: UsersList<SearchUser>?) {
+        Debug.log("onEmptyList hui")
+        update(mNewFilter, false)
+    }
 
 
     override fun onPreload(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {
+            Debug.log("hui onPreload")
             update(false, true)
         }
     }

@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.os.Debug
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.widget.Toast
@@ -59,7 +60,12 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private var mLikeSubscription: Subscription? = null
     private var mSkipSubscription: Subscription? = null
     private var mAdmirationSubscription: Subscription? = null
-    val isDatingButtonsVisible = ObservableInt(View.INVISIBLE)
+    val isDatingButtonsVisible = object : ObservableInt(View.INVISIBLE) {
+        override fun set(value: Int) {
+            super.set(value)
+            com.topface.framework.utils.Debug.log("isDatingButtonsVisible hui ${value}")
+        }
+    }
     val isDatingProgressBarVisible = ObservableInt(View.VISIBLE)
     val isDatingButtonsLocked = ObservableBoolean(false)
 

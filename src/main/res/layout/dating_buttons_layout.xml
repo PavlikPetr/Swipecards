@@ -60,7 +60,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <android.support.design.widget.FloatingActionButton
             <ProgressBar style="@style/Widget.AppCompat.ProgressBar"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
@@ -74,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <ImageButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/send_like"
                 style="@style/FabDating"
                 android:layout_marginBottom="15dp"
