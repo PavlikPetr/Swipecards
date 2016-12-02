@@ -120,27 +120,20 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     fun skip() = currentUser?.let {
         if (!it.skipped && !it.rated) {
-            if (App.isOnline()) {
-                showNextUser()
-                mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {
-                    override fun onCompleted() = mSkipSubscription.safeUnsubscribe()
-                    override fun onError(e: Throwable?) = e?.printStackTrace() ?: Unit
-                    override fun onNext(t: IApiResponse?) {
-                        for (user in mUserSearchList) {
-                            if (user.id == it.id) {
-                                user.skipped = true
-                                return
-                            }
+            showNextUser()
+            mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {
+                override fun onCompleted() = mSkipSubscription.safeUnsubscribe()
+                override fun onError(e: Throwable?) = e?.printStackTrace() ?: Unit
+                override fun onNext(t: IApiResponse?) {
+                    for (user in mUserSearchList) {
+                        if (user.id == it.id) {
+                            user.skipped = true
+                            return
                         }
-                        mDatingButtonsView.unlockControls()
                     }
-                })
-            } else {
-                if (mUserSearchList.isCurrentUserLast) {
-                    //todo чтос делать с диалогм, если запрос не дошел
-                    // showRetryDialog()
+                    mDatingButtonsView.unlockControls()
                 }
-            }
+            })
         }
     }
 
@@ -235,7 +228,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }
     }
 
-    private inline fun sendSomething(func: (SearchUser) -> Unit) =
+    private inline fun sendSomething(func: (SearchUser) -> Unit) {
+        if (App.isOnline()) {
             if (!isNeedTakePhoto()) {
                 currentUser?.let {
                     showNextUser()
@@ -244,6 +238,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
             } else {
                 mDatingButtonsEvents.showTakePhoto()
             }
+        }
+    }
 
     private fun getMutualId(user: SearchUser) = if (user.isMutualPossible)
         SendLikeRequest.DEFAULT_MUTUAL
