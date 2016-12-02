@@ -45,7 +45,7 @@ import javax.inject.Inject
 /** Бизнеслогика для дейтинга
  * Created by tiberal on 12.10.16.
  */
-class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val mApi: FeedApi,
+class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, private val mApi: FeedApi,
                               private val mUserSearchList: CachableSearchList<SearchUser>,
                               private val mDatingViewModelEvents: IDatingViewModelEvents,
                               private val mDatingButtonsView: IDatingButtonsView,
@@ -72,17 +72,19 @@ class DatingFragmentViewModel(binding: FragmentDatingLayoutBinding, private val 
 
     init {
         App.get().inject(this)
-        //todo работаем по рофилю из кэша?
         mProfileSubscription = state.getObservable(Profile::class.java).subscribe {
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
-                    currentUser = mUserSearchList.currentUser
-                    mUserSearchList.setOnEmptyListListener(this)
-                } else {
-                    //Сделано для того, чтобы не показывалось сообщение о том, что пользователи не найдены.
-                    //Иначе при старте приложения, пока список пользователей не запросился показывается сообщение об ошибки
-                    mUserSearchList.setOnEmptyListListener(this)
+                    mUserSearchList.currentUser?.let {
+                        currentUser = it
+                        mDatingViewModelEvents.onDataReceived(it)
+                        binding.root.post {
+                            prepareFormsData(it)
+                            mDatingButtonsView.unlockControls()
+                        }
+                    }
                 }
+                mUserSearchList.setOnEmptyListListener(this)
                 mUserSearchList.updateSignatureAndUpdate()
             }
         }
