@@ -7,8 +7,6 @@ package com.topface.topface.ui.fragments.dating
 interface IDatingButtonsView {
     fun showControls()
     fun hideControls()
-    fun showProgressBar()
-    fun hideProgressBar()
     fun lockControls()
     fun unlockControls()
 }

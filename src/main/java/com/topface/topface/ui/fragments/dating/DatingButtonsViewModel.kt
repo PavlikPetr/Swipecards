@@ -8,10 +8,10 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
-import android.os.Debug
-import android.support.v4.content.LocalBroadcastManager
+§import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.widget.Toast
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.RetryRequestReceiver
@@ -26,6 +26,7 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
+import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -57,17 +58,33 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         BaseViewModel<DatingButtonsLayoutBinding>(binding), IAppBarState {
 
     var currentUser: SearchUser? = null
+        set(value) {
+            Debug.log("LOADER_INTEGRATION user setter")
+            if (lockDatingButtonsVisibility) {
+                lockDatingButtonsVisibility = false
+                isDatingProgressBarVisible.set(View.GONE)
+                isDatingButtonsVisible.set(View.VISIBLE)
+            }
+            field = value
+        }
     private var mLikeSubscription: Subscription? = null
     private var mSkipSubscription: Subscription? = null
     private var mAdmirationSubscription: Subscription? = null
     val isDatingButtonsVisible = object : ObservableInt(View.INVISIBLE) {
         override fun set(value: Int) {
-            super.set(value)
-            com.topface.framework.utils.Debug.log("isDatingButtonsVisible hui ${value}")
+            if (!lockDatingButtonsVisibility) {
+                super.set(value)
+            }
         }
     }
     val isDatingProgressBarVisible = ObservableInt(View.VISIBLE)
     val isDatingButtonsLocked = ObservableBoolean(false)
+
+    /*
+       isDatingButtonsVisible  неистово срет вызовами, по этому не можем ипользовать эту переменную
+       для определения состояния кнопок. И поэтому пояаилось это.
+     */
+    private var lockDatingButtonsVisibility = true
 
     @Inject lateinit internal var mAppState: TopfaceAppState
     private val mBalanceDataSubscriptions = CompositeSubscription()
@@ -141,6 +158,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                     mDatingButtonsView.unlockControls()
                 }
             })
+        } else {
+            showNextUser()
         }
     }
 
@@ -165,9 +184,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                     mDatingButtonsView.unlockControls()
                 }
             })
-        }/* else {
+        } else {
             showNextUser()
-        }*/
+        }
     }
 
     private fun validateDeviceActivation() {
@@ -233,9 +252,12 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                 requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
             sendAdmiration()
         }
+        if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+            showProgress()
+        }
     }
 
-    private inline fun sendSomething(func: (SearchUser) -> Unit) {
+    private fun sendSomething(func: (SearchUser) -> Unit) {
         if (App.isOnline()) {
             if (!isNeedTakePhoto()) {
                 currentUser?.let {
@@ -253,11 +275,31 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     else
         SendLikeRequest.DEFAULT_NO_MUTUAL
 
-    private fun showNextUser() = mUserSearchList.nextUser()?.let {
-        mEmptySearchVisibility.hideEmptySearchDialog()
-        mDatingButtonsView.unlockControls()
-        mDatingButtonsEvents.onNewSearchUser(it)
-        currentUser = it
+    private fun showNextUser() {
+        if (mUserSearchList.searchPosition == mUserSearchList.size - 1) {
+            showProgress()
+            return
+        } else {
+            hideProgress()
+        }
+        mUserSearchList.nextUser()?.let {
+            mEmptySearchVisibility.hideEmptySearchDialog()
+            mDatingButtonsView.unlockControls()
+            mDatingButtonsEvents.onNewSearchUser(it)
+            currentUser = it
+        }
+    }
+
+    private fun showProgress() {
+        isDatingProgressBarVisible.set(View.VISIBLE)
+        isDatingButtonsVisible.set(View.INVISIBLE)
+        lockDatingButtonsVisibility = true
+    }
+
+    private fun hideProgress() {
+        lockDatingButtonsVisibility = false
+        isDatingProgressBarVisible.set(View.GONE)
+        isDatingButtonsVisible.set(View.VISIBLE)
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
