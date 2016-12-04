@@ -271,8 +271,4 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mDatingFragmentViewModel.update(false, false) }
 
     override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
-
-    override fun showProgressBar() = mDatingButtonsViewModel.isDatingProgressBarVisible.set(View.VISIBLE)
-
-    override fun hideProgressBar() = mDatingButtonsViewModel.isDatingProgressBarVisible.set(View.GONE)
 }

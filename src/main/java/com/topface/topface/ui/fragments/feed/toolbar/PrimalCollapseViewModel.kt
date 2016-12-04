@@ -20,7 +20,7 @@ class PrimalCollapseViewModel(binding: AppBarBinding,
 
     override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
         appBar?.let {
-            val visiblePartSize = it.getHeight() + verticalOffset
+            val visiblePartSize = it.height + verticalOffset
             val isScrimsAreShown = visiblePartSize < binding.collapsingLayout.scrimVisibleHeightTrigger
             val isCollapsed = visiblePartSize <= binding.toolbarInclude.root.height
             mScrimStateListener.isScrimVisible(isScrimsAreShown)

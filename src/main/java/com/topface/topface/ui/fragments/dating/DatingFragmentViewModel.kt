@@ -99,15 +99,9 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 .registerReceiver(mReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
     }
 
-    fun startProgress(from: String) {
-        mDatingButtonsView.hideControls()
-        mDatingButtonsView.showProgressBar()
-        Debug.log("start hui: $from")
-    }
-
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
+        Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess && mUserSearchList.isEnded) {
-            startProgress("update searchPosition${mUserSearchList.searchPosition} size ${mUserSearchList.size}")
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
@@ -117,38 +111,30 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             mUpdateInProcess = true
             mUpdateSubscription = mApi.callDatingUpdate(onlyOnline, isNeedRefresh).subscribe(object : Observer<UsersList<SearchUser>> {
                 override fun onCompleted() {
-                    finishProgress("onCompleted")
                     mUpdateInProcess = false
+                    Debug.log("LOADER_INTEGRATION onCompleted $mUpdateInProcess")
                     mUpdateSubscription.safeUnsubscribe()
                 }
 
                 override fun onError(e: Throwable?) {
+                    Debug.log("LOADER_INTEGRATION onError ${e?.message}")
+                    mUpdateInProcess = false
                     mDatingButtonsView.unlockControls()
-                    Debug.log("error hui ${e?.message}")
                     e?.printStackTrace()
                 }
 
                 override fun onNext(usersList: UsersList<SearchUser>?) {
+                    Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
-                        UsersList.log("load success. Loaded " + usersList.size + " users")
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
-                        //если список был пуст, то просто показываем нового пользователя
-                        val user = mUserSearchList.currentUser
-                        //NOTE: Если в поиске никого нет, то мы показываем следующего юзера
-                        //Но нужно учитывать, что такое происходит при смене фильтра не через приложение,
-                        //Когда чистится поиск, если фильтр поменялся удаленно,
-                        //из-за чего происходит автоматический переход на следующего юзера
-                        //От этого эффекта можно избавиться, если заменить на такое условие:
-                        //<code>if (!isAddition && mCurrentUser != currentUser || mCurrentUser == null)</code>
-                        //Но возникает странный эффект, когда в поиске написано одно, а у юзера другое,
-                        //В связи с чем, все работает так как работает
+                        val user = mUserSearchList.nextUser()
                         if (user != null && currentUser !== user) {
                             currentUser = user
+                            Debug.log("LOADER_INTEGRATION onNext onDataReceived")
                             mDatingViewModelEvents.onDataReceived(user)
                             prepareFormsData(user)
-                            finishProgress("onNext:update")
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                         }
@@ -164,20 +150,12 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         }
     }
 
-    fun finishProgress(from: String) {
-        mDatingButtonsView.showControls()
-        mDatingButtonsView.hideProgressBar()
-        Debug.log("finish hui: $from")
-    }
-
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser) = with((binding.formsList
             .adapter as CompositeAdapter<IType>).data) {
         clear()
-        finishProgress("prepareFormsData")
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
-        Debug.log("GIFTS_BUGS prepareFormsData gifts items ${user.gifts.items.count()} gifts ${user.gifts.count}")
         addExpandableItem(GiftsModel(user.gifts, user.id))
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
@@ -214,6 +192,12 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 FlurryManager.getInstance().sendFilterChangedEvent()
             }
         }
+        if (resultCode == Activity.RESULT_CANCELED
+                && requestCode == EditContainerActivity.INTENT_EDIT_FILTER
+                && mUserSearchList.isEnded && !mUpdateInProcess) {
+            Debug.log("LOADER_INTEGRATION after filter need update")
+            update(false, false)
+        }
     }
 
     private fun sendFilterRequest(filter: FilterData) {
@@ -245,33 +229,28 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         putParcelable(CURRENT_USER, currentUser)
         putBoolean(UPDATE_IN_PROCESS, mUpdateInProcess)
         putBoolean(NEW_FILTER, mNewFilter)
-        Debug.log("GIFTS_BUGS saved dating v model gifts items ${currentUser?.gifts?.items?.count()} gifts ${currentUser?.gifts?.count}")
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         mUpdateInProcess = getBoolean(UPDATE_IN_PROCESS)
         mNewFilter = getBoolean(NEW_FILTER)
         currentUser = getParcelable<SearchUser>(CURRENT_USER)?.apply {
-            Debug.log("GIFTS_BUGS restore dating v model gifts items ${gifts.items.count()} gifts ${gifts.count}")
             prepareFormsData(this)
         }
     }
 
     override fun release() {
         super.release()
+        Debug.log("LOADER_INTEGRATION fragment model release")
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mReceiver)
         arrayOf(mProfileSubscription, mUpdateSubscription).safeUnsubscribe()
     }
 
-    override fun onEmptyList(usersList: UsersList<SearchUser>?) {
-        Debug.log("onEmptyList hui")
-        update(mNewFilter, false)
-    }
+    override fun onEmptyList(usersList: UsersList<SearchUser>?) = update(mNewFilter, false)
 
 
     override fun onPreload(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {
-            Debug.log("hui onPreload")
             update(false, true)
         }
     }
