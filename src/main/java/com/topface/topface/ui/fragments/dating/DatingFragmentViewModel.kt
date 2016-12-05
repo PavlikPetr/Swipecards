@@ -25,7 +25,6 @@ import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.dating.form.FormModel
-import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -102,7 +101,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         Debug.log("LOADER_INTEGRATION start update")
-        if (!mUpdateInProcess && mUserSearchList.isEnded) {
+        if (!mUpdateInProcess) {
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
@@ -127,10 +126,11 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 override fun onNext(usersList: UsersList<SearchUser>?) {
                     Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
+                        val isNeedShowNext = mUserSearchList.isEnded
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
-                        val user = mUserSearchList.nextUser()
+                        val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
                             currentUser = user
                             Debug.log("LOADER_INTEGRATION onNext onDataReceived")
@@ -157,7 +157,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         clear()
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
-        addExpandableItem(GiftsModel(user.gifts, user.id))
+        //addExpandableItem(GiftsModel(user.gifts, user.id))
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
@@ -195,13 +195,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         }
         /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
         По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
-        if(mUserSearchList.isEnded && !mUpdateInProcess){
+        if (mUserSearchList.isEnded && !mUpdateInProcess) {
             if (resultCode == Activity.RESULT_CANCELED
                     && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
                 Debug.log("LOADER_INTEGRATION after filter need update")
                 update(false, false)
             }
-            if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE ) {
+            if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE) {
                 Debug.log("LOADER_INTEGRATION after album")
                 update(false, false)
             }

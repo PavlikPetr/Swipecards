@@ -124,9 +124,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     //todo доработать составной адаптер прокидывать в делегат изменения стейта
-    val govnocod by lazy {
+    /*val govnocod by lazy {
         GiftsItemDelegate(mApi, mNavigator)
-    }
+    }*/
     val govnocod1 by lazy {
         ChildItemDelegate(mApi)
     }
@@ -136,7 +136,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         adapter = CompositeAdapter<IType>().apply {
             addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
             addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
-            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
+            //addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
         }
         addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
@@ -154,7 +154,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         mDatingButtonsViewModel.release()
         mDatingFragmentViewModel.release()
         mDatingAlbumViewModel.release()
-        govnocod.onDestroyView()
+        //govnocod.onDestroyView()
         mAddPhotoHelper.releaseHelper()
     }
 
@@ -169,7 +169,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
         mDatingAlbumViewModel.onActivityResult(requestCode, resultCode, data)
-        govnocod.onActivityResult(requestCode, resultCode, data)
+        //govnocod.onActivityResult(requestCode, resultCode, data)
         mDatingButtonsViewModel.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
