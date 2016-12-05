@@ -8,7 +8,7 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
-§import android.support.v4.content.LocalBroadcastManager
+import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.widget.Toast
 import com.topface.framework.utils.Debug
