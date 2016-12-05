@@ -75,6 +75,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     private val mMarketFragmentRunner by lazy {
         TransparentMarketFragmentRunner(activity, mArgs.getInt(FRAGMENT_CONTAINER_ID))
     }
+    private var mTimeForTransaction = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +94,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putAll(mArgs)
+        mTimeForTransaction = false
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -136,7 +138,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     override fun runMarketPopup() {
-        if (isAdded) {
+        if (isAdded && mTimeForTransaction) {
             mMarketFragmentRunner.startTransparentMarketFragment {
                 TrialVipExperimentStatistics.sendPurchaseCompleted()
                 dismiss()
