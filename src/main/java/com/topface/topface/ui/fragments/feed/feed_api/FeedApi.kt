@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.feed_api
 import android.content.Context
 import android.os.Bundle
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
@@ -93,7 +92,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
      */
     fun callDatingUpdate(onlyOnline: Boolean, isNeedRefresh: Boolean): Observable<UsersList<SearchUser>> {
         return Observable.create {
-            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, true)
+            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, false)
             mRequestClient.registerRequest(request)
             request.callback(object : DataApiHandler<UsersList<SearchUser>>() {
                 override fun parseResponse(response: ApiResponse): UsersList<SearchUser> = UsersList(response, SearchUser::class.java)
