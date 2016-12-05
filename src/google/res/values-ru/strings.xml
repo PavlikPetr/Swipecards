@@ -1181,4 +1181,25 @@
     <string name="special_offer">Спецпредложение</string>
     <string name="buy_vip_button_title">Получить VIP</string>
 
+    <string name="unlock_symphaty_coins_one">Стоимость услуги: %d монета</string>
+    <string name="unlock_symphaty_coins_many">Стоимость услуги: %d монет</string>
+    <string name="unlock_symphaty_coins_few">Стоимость услуги: %d монеты</string>
+    <string name="unlock_symphaty_coins_other">Стоимость услуги: %d монет</string>
+
+    <string name="unlock_symphaty_hours_one">Услуга действует: %d час</string>
+    <string name="unlock_symphaty_hours_many">Услуга действует: %d часов</string>
+    <string name="unlock_symphaty_hours_few">Услуга действует: %d часа</string>
+    <string name="unlock_symphaty_hours_other">Услуга действует: %d часов</string>
+
+    <string name="unlock_symphaty_women_one">%d девушка отправила вам симпатию!</string>
+    <string name="unlock_symphaty_women_many">%d девушкек отправили вам симпатии!</string>
+    <string name="unlock_symphaty_women_few">%d девушки отправили вам симпатии!</string>
+    <string name="unlock_symphaty_women_other">%d девушкек отправили вам симпатии!</string>
+    
+    <string name="unlock_symphaty_men_one">%d мужчина отправил вам симпатию!</string>
+    <string name="unlock_symphaty_men_many">%d мужчин отправили вам симпатии!</string>
+    <string name="unlock_symphaty_men_few">%d мужчин отправили вам симпатии!</string>
+    <string name="unlock_symphaty_men_other">%d мужчин отправили вам симпатии!</string>
+    
+    <string name="unlock_symphaty_get_access">Получить доступ</string>
 </resources>
