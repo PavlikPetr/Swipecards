@@ -122,12 +122,11 @@ object PopupManager {
         }
     }
 
-    fun isSequenceComplete(name: String): Boolean =
+    fun isSequenceComplete(name: String) =
             if (mSequences.containsKey(name)) {
                 mSequences[name]?.let {
-                    return@let it.isSequenceComplete
-                }
-                false
+                    return it.isSequenceComplete
+                } ?: false
             } else {
                 false
             }
