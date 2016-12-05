@@ -38,8 +38,10 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
+import rx.Scheduler
 import rx.Subscriber
 import rx.Subscription
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -167,7 +169,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         if (!it.rated) {
             tryShowTrialPopup(navigator = mNavigator)
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
-                    getMutualId(it), SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
+                    getMutualId(it), SendLikeRequest.FROM_SEARCH)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(object : Subscriber<Rate>() {
                 override fun onCompleted() {
                     mLikeSubscription.safeUnsubscribe()
                     validateDeviceActivation()
