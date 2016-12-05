@@ -23,6 +23,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
@@ -220,7 +221,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = new TabbedDialogsFragment();
+                fragment = new DialogsFragment();//TabbedDialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();

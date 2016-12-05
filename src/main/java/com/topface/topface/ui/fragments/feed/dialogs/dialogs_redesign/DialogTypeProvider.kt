@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import com.topface.topface.data.FeedDialog
+import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 
 /**
@@ -12,8 +13,17 @@ class DialogTypeProvider : ITypeProvider {
         if (java == FeedDialog::class.java) {
             return 1
         }
-        if (java == EmptyDialogsItem::class.java) {
+        if (java == EmptyDialogsStubItem::class.java) {
             return 2
+        }
+        if (java == DialogContactsStubItem::class.java) {
+            return 3
+        }
+        if (java == DialogContactsItem::class.java) {
+            return 4
+        }
+        if (java == UForeverAloneStubItem::class.java) {
+            return 5
         }
         return 0
     }

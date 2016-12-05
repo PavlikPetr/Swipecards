@@ -64,11 +64,15 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
         mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java,
                 constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY))).
                 subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedDialog>>() {
-                    override fun onCompleted() = mCallUpdateSubscription.safeUnsubscribe()
+                    override fun onCompleted() {
+                        mCallUpdateSubscription.safeUnsubscribe()
+                    }
+
                     override fun onNext(data: FeedListData<FeedDialog>?) {
                         data?.let {
+                            addContactsItem()
                             if (it.items.isEmpty()) {
-                                this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsItem())
+                                this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsStubItem())
                             } else {
                                 this@DialogsFragmentViewModel.data.addAll(it.items)
                                 handleUnreadState(it, false)
@@ -77,6 +81,12 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
                         }
                     }
                 })
+    }
+
+    private fun addContactsItem() {
+        if (data.observableList.isEmpty() && this@DialogsFragmentViewModel.data.observableList.isEmpty()) {
+            data.observableList.add(DialogContactsStubItem())
+        }
     }
 
     fun loadTopFeeds() {

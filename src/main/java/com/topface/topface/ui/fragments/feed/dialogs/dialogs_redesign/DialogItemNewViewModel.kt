@@ -7,9 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getColor
-import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.glide_utils.GlideTransformationType
 

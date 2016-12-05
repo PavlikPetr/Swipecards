@@ -54,12 +54,6 @@ public class BindingsAdapters {
                 }
 
                 @Override
-                public void onItemRangeChanged(ObservableList<?> objects, int positionStart, int itemCount) {
-                    Debug.log("EPTA onItemRangeChanged" + objects.size());
-                    adapter.notifyItemRangeChanged(positionStart, itemCount);
-                }
-
-                @Override
                 public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeInserted" + objects.size());
                     adapter.getData().addAll(objects.subList(positionStart, objects.size()));
@@ -70,16 +64,20 @@ public class BindingsAdapters {
                 }
 
                 @Override
-                public void onItemRangeMoved(ObservableList<?> objects, int fromPosition, int toPosition, int itemCount) {
-                    Debug.log("EPTA onItemRangeMoved" + objects.size());
-                    adapter.notifyItemMoved(fromPosition, toPosition);
-                }
-
-                @Override
                 public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeRemoved" + objects.size());
                     adapter.getData().removeAll(adapter.getData().subList(positionStart, itemCount));
                     adapter.notifyItemRangeRemoved(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeMoved(ObservableList<?> objects, int fromPosition, int toPosition, int itemCount) {
+                    Debug.log("EPTA onItemRangeMoved" + objects.size());
+                }
+
+                @Override
+                public void onItemRangeChanged(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeChanged" + objects.size());
                 }
             });
         }

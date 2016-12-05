@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.ContactsItemComponent
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.DialogItemComponent
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.EmptyDialogsComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -48,6 +51,7 @@ class DialogsFragment : BaseFragment() {
         }
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
+                .addAdapterComponent(ContactsItemComponent(mNavigator))
     }
     private val mViewModel: DialogsFragmentViewModel by lazy {
         DialogsFragmentViewModel(mNavigator, mApi) { mAdapter.updateObservable }
