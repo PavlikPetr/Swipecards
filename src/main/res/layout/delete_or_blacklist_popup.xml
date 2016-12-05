@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:bind="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -50,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:textColor="#000000"
-                    android:text="Добавить в черный список"/>
+                    android:text="@string/popup_add_to_black_list"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -85,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:textColor="#000000"
-                    android:text="Удалить диалог"/>
+                    android:text="@string/popup_delete_dialog"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
