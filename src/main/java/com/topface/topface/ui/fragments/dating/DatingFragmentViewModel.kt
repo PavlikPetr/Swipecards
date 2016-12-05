@@ -28,6 +28,7 @@ import com.topface.topface.ui.fragments.dating.form.FormModel
 import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
@@ -192,11 +193,19 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 FlurryManager.getInstance().sendFilterChangedEvent()
             }
         }
-        if (resultCode == Activity.RESULT_CANCELED
-                && requestCode == EditContainerActivity.INTENT_EDIT_FILTER
-                && mUserSearchList.isEnded && !mUpdateInProcess) {
-            Debug.log("LOADER_INTEGRATION after filter need update")
-            update(false, false)
+        /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
+        По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
+        if(mUserSearchList.isEnded && !mUpdateInProcess){
+            if (resultCode == Activity.RESULT_CANCELED
+                    && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+                Debug.log("LOADER_INTEGRATION after filter need update")
+                update(false, false)
+            }
+            if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE ) {
+                Debug.log("LOADER_INTEGRATION after album")
+                update(false, false)
+            }
+
         }
     }
 
