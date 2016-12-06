@@ -54,8 +54,10 @@ class DialogsFragment : BaseFragment() {
                 .addAdapterComponent(EmptyDialogsComponent())
                 .addAdapterComponent(ContactsItemComponent(mNavigator, context.applicationContext), activity as IStateSaverRegistrator)
     }
-    private val mViewModel: DialogsFragmentViewModel by lazy {
-        DialogsFragmentViewModel(mNavigator, mApi) { mAdapter.updateObservable }
+    private val mViewModel by lazy {
+        DialogsFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
+            (activity as IStateSaverRegistrator).registerLifeCycleDelegate(this)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

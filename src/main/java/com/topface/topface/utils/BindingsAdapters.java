@@ -82,6 +82,9 @@ public class BindingsAdapters {
                 @Override
                 public void onItemRangeChanged(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeChanged" + objects.size());
+                    if (itemCount == 1) {
+                        adapter.notifyItemChanged(positionStart);
+                    }
                 }
             });
         }
