@@ -25,6 +25,7 @@ import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.dating.form.FormModel
+import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -157,7 +158,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         clear()
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
-        //addExpandableItem(GiftsModel(user.gifts, user.id))
+        addExpandableItem(GiftsModel(user.gifts, user.id))
         val forms: MutableList<IType>
         if (App.get().profile.hasEmptyFields) {
             //показываем заглушку, чтоб юзер заполнил свою анкету

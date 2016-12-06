@@ -92,7 +92,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
      */
     fun callDatingUpdate(onlyOnline: Boolean, isNeedRefresh: Boolean): Observable<UsersList<SearchUser>> {
         return Observable.create {
-            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, false)
+            val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, true)
             mRequestClient.registerRequest(request)
             request.callback(object : DataApiHandler<UsersList<SearchUser>>() {
                 override fun parseResponse(response: ApiResponse): UsersList<SearchUser> = UsersList(response, SearchUser::class.java)
