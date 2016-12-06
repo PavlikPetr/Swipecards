@@ -18,6 +18,10 @@
         <item name="android:paddingBottom">@dimen/popup_central_picture_margin</item>
     </style>
 
+    <style name="DialoguesEmptyPopupTitle" parent="PopupTitleBase">
+        <item name="android:paddingBottom">@dimen/experiment_4_content_bottom_margin</item>
+    </style>
+
     <style name="PopupCenterImageContainer" parent="PopupCenterImageContainerBase">
         <item name="android:layout_gravity">center</item>
     </style>
