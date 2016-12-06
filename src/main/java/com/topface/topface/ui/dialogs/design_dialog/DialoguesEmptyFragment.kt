@@ -14,10 +14,6 @@ import com.topface.topface.utils.IActivityDelegate
  */
 class DialoguesEmptyFragment() : AbstractDialogFragment() {
 
-    companion object {
-        fun newInstance() = DialoguesEmptyFragment()
-    }
-
     private lateinit var mBinding: LayoutEmptyDialoguesBinding
 
     private val mNavigator by lazy {
@@ -25,7 +21,7 @@ class DialoguesEmptyFragment() : AbstractDialogFragment() {
     }
 
     private val mViewModel by lazy {
-        DialoguesEmptyFragmentViewModel(mBinding, mNavigator)
+        DialoguesEmptyFragmentViewModel(mNavigator)
     }
 
     override fun initViews(root: View) {
