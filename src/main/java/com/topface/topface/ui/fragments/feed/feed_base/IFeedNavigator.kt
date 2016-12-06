@@ -6,6 +6,7 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.data.FeedItem
+import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Photos
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.search.SearchUser
@@ -20,7 +21,7 @@ interface IFeedNavigator {
     fun showPurchaseVip()
     fun <T : FeedItem> showProfile(item: T?)
     fun <T : FeedItem> showChat(item: T?)
-    fun showChat(user: SearchUser?, answer: SendGiftAnswer?)
+    fun showChat(user: FeedUser?, answer: SendGiftAnswer?)
     fun showDating()
     fun showAddToLeader()
     fun showOwnProfile()

@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments.feed.feed_utils
 
 import com.topface.topface.data.FeedItem
+import com.topface.topface.utils.extensions.toLongSafe
+import org.jetbrains.anko.collections.forEachReversedByIndex
 import java.util.*
 
 /** Ништяки для фидов
@@ -23,6 +25,19 @@ fun <T : FeedItem> List<T>.getFirstItem(): T? {
     }
     return item
 }
+
+fun List<Any>.findLastFeedItem(): FeedItem? {
+    if (!isEmpty()) {
+        forEachReversedByIndex {
+            if (it is FeedItem && !it.isLoaderOrRetrier && it.id.toLongSafe() > 0) {
+                return it
+            }
+        }
+    }
+    return null
+}
+
+fun <T : FeedItem> T.isEmpty() = id == null
 
 fun <T : FeedItem> List<T>.getLastItem(): T? {
     var item: T? = null

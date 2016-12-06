@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel"/>
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="22dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="16dp"
+            android:drawableLeft="@drawable/heart"
+            android:text="@string/mutually"
+            android:textAllCaps="true"
+            android:textColor="@color/dating_fab_like"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+id/title"
+            android:background="@drawable/dialog_mutual_counter_background"
+            android:gravity="center_horizontal"
+            android:minHeight="20dp"
+            android:minWidth="20dp"
+            android:text="@{model.amount}"
+            android:textAllCaps="true"
+            android:textColor="@color/bg_white"
+            android:textSize="14sp"
+            android:visibility="@{model.counterVisibility}"/>
+
+        <TextView
+            android:id="@+id/command"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/title"
+            android:gravity="end"
+            android:paddingRight="16dp"
+            android:text="@string/write_them"
+            android:textColor="@color/dialogs_name"
+            android:textSize="14sp"
+            android:visibility="@{model.commandVisibility}">
+        </TextView>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/gifts_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/title"
+            android:fadeScrollbars="false"
+            android:fadingEdge="none"
+            app:bindDataToCompositeAdapter="@{model.data}"/>
+
+        <View
+            android:id="@+id/forms_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_below="@+id/gifts_list"
+            android:background="@color/forms_divider_color"/>
+    </RelativeLayout>
+
+</layout>
+
+
+
+

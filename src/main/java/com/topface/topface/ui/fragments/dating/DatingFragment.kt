@@ -136,7 +136,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.onCreateView(inflater, container, savedInstanceState)
         val stateSaverRegistrator = activity
         if (stateSaverRegistrator is IStateSaverRegistrator) {
-            stateSaverRegistrator.registerStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
+            stateSaverRegistrator.registerLifeCycleDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
         initFormList()
         return mBinding.root
@@ -185,7 +185,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.onDetach()
         val stateSaverRegistrator = activity
         if (stateSaverRegistrator is IStateSaverRegistrator) {
-            stateSaverRegistrator.unregisterStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
+            stateSaverRegistrator.unregisterLifeCycleDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
     }
 

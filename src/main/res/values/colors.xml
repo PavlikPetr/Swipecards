@@ -285,4 +285,6 @@
     <color name="dialogs_name">#1e1e1e</color>
     <color name="message_unread">#1e1e1e</color>
     <color name="message_was_read">#737373</color>
+    <color name="mutual_counter_bg">#4c99ff</color>
+
 </resources>

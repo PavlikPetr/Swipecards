@@ -8,9 +8,9 @@ package com.topface.topface.utils.extensions
 /**
  * Если провал, то -1
  */
-fun String.toIntSafe(): Int {
+fun String?.toIntSafe(): Int {
     try {
-        return toInt()
+        return this?.toInt() ?: -1
     } catch (e: NumberFormatException) {
         return -1
     }
@@ -19,9 +19,9 @@ fun String.toIntSafe(): Int {
 /**
  * Если провал, то -1
  */
-fun String.toLongSafe(): Long {
+fun String?.toLongSafe(): Long {
     try {
-        return toLong()
+        return this?.toLong() ?: -1
     } catch (e: NumberFormatException) {
         return -1
     }
@@ -30,9 +30,9 @@ fun String.toLongSafe(): Long {
 /**
  * Если провал, то -1
  */
-fun String.toByteSafe(): Byte {
+fun String?.toByteSafe(): Byte {
     try {
-        return toByte()
+        return this?.toByte() ?: -1
     } catch (e: NumberFormatException) {
         return -1
     }

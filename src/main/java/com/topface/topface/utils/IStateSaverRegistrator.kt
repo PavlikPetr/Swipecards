@@ -5,6 +5,13 @@ package com.topface.topface.utils
  * Created by tiberal on 21.10.16.
  */
 interface IStateSaverRegistrator {
-    fun registerStateDelegate(vararg stateSaver: IStateSaver)
-    fun unregisterStateDelegate(vararg stateSaver: IStateSaver)
+    fun registerLifeCycleDelegate(vararg stateSaver: ILifeCycle)
+    fun unregisterLifeCycleDelegate(vararg stateSaver: ILifeCycle)
+}
+
+fun <T> Any.registerLifeCycleDelegate(someAny: T): T {
+    if (someAny is ILifeCycle && this is IStateSaverRegistrator) {
+        registerLifeCycleDelegate(someAny)
+    }
+    return someAny
 }

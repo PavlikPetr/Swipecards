@@ -9,10 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Photos
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.NavigationState
@@ -81,7 +78,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from dating
      */
-    override fun showChat(user: SearchUser?, answer: SendGiftAnswer?) {
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
         user?.let {
             showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
         }

@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
-import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -39,7 +38,6 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
@@ -516,17 +514,7 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
-        boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
-                getSupportFragmentManager(),
-                requestCode,
-                resultCode,
-                data,
-                OwnProfileFragment.class
-        );
-        if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
     }
 
