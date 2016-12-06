@@ -7,23 +7,23 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.dialogs.DialogItemNewViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel"/>
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="24dp"
+        android:orientation="vertical"
         android:paddingLeft="8dp"
-        android:orientation="vertical">
+        android:paddingRight="24dp">
 
         <LinearLayout
+            android:id="@+id/add_to_black_new"
             style="@style/NewDating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> model.onClick()}"
             android:orientation="horizontal"
-            app:onLongItemClick="@{model.onLongClick}">
+            android:onClick="@{() -> model.addToBlackList()}">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -47,20 +47,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:text="@string/popup_add_to_black_list"
                     android:textColor="#000000"
-                    android:text="@string/popup_add_to_black_list"/>
+                    android:textSize="15sp"/>
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
+
+            android:id="@+id/delete_dialogs_new"
             style="@style/NewDating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> model.onClick()}"
             android:orientation="horizontal"
-            app:onLongItemClick="@{model.onLongClick}">
+            android:onClick="@{() -> model.deleteDialog()}">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -82,9 +83,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
+                    android:text="@string/popup_delete_dialog"
                     android:textColor="#000000"
-                    android:text="@string/popup_delete_dialog"/>
+                    android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

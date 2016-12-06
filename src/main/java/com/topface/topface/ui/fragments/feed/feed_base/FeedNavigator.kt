@@ -9,10 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Photos
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.NavigationState
@@ -27,6 +24,8 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
+import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -150,6 +149,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showTrialPopup(type: Long, args: Bundle) {
         ExperimentBoilerplateFragment.newInstance(type, args = args)
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
+    }
+
+    override fun showDialogpopupMenu(item: FeedDialog) {
+        DialogMenuFragment.newInstance(item).show(mActivityDelegate.supportFragmentManager, "DIALOG_POPUP_MENU")
     }
 
 }

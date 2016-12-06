@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
+import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.Photos
 import com.topface.topface.data.SendGiftAnswer
@@ -35,4 +36,6 @@ interface IFeedNavigator {
     fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos)
     //todo придумать свой навигатор для попапов
     fun showTrialPopup(type: Long, args: Bundle)
+
+    fun showDialogpopupMenu(item: FeedDialog)
 }

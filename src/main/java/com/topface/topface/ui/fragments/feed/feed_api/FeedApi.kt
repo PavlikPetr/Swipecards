@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.feed_api
 import android.content.Context
 import android.os.Bundle
 import com.topface.framework.JsonUtils
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
@@ -225,6 +226,9 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             arg.putStringArrayList(DeleteFeedRequestFactory.USER_ID_FOR_DELETE, ids)
             arg.putSerializable(DeleteFeedRequestFactory.FEED_TYPE, feedsType)
             val deleteFeedsRequest = mDeleteRequestFactory?.construct(arg)
+            Debug.error("!!!!!!!!!!!!!!!!!!!!USER FOR DELETE- " + feedsType.text)
+            Debug.error("!!!!!!!!!!!!!!!!!!!!ArrayOfFeeds- " + ids.size + "; id - " + ids.get(0))
+
             if (deleteFeedsRequest != null) {
                 deleteFeedsRequest.callback(object : SimpleApiHandler() {
                     override fun success(response: IApiResponse) = it.onNext(true)

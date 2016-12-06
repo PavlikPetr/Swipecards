@@ -140,7 +140,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String SEX = "sex";
     private static final String HISTORY_LAST_ITEM = "history_last_item";
     public static final String SEND_MESSAGE = "send_message";
-    private  Boolean isSendMessage = false;
+    private Boolean isSendMessage = false;
 
     private int deleteItemsCount = 0;
     private int mUserId;

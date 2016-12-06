@@ -1,11 +1,9 @@
 package com.topface.topface.ui.fragments.feed.dialogs
 
+import android.app.FragmentManager
 import android.databinding.ObservableField
 import android.graphics.Typeface
-import android.view.MenuItem
 import android.view.View
-import android.widget.PopupMenu
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
@@ -65,33 +63,7 @@ class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDi
 
 
     override fun onLongClick(v: View?): Boolean {
-        val menu = PopupMenu(context, v)
-//        menu.inflate(R.menu.new_menu_black_and_delete)   todo инфлэйтим меню
-        menu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
-
-            override fun onMenuItemClick(p0: MenuItem?): Boolean {
-                when (p0?.getItemId()) {
-                    R.id.delete_item -> {
-                        Debug.error("!!!!!!!!!!!!!DELETE!!!!!!!!!!!!!")
-                        return true
-                    }
-                    R.id.go_to_blacklist -> {
-                        Debug.error("!!!!!!!!!!!!BLACKLIST!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                        return true
-                    }
-                    else -> return false
-                }
-            }
-        })
-
-        menu.setOnDismissListener(
-                object : PopupMenu.OnDismissListener {
-
-                    override fun onDismiss(p0: PopupMenu?) {
-                        Debug.error("!!!!!!!!!!!!!!!!_________ЗАКРЫТЬ К ХУЯМ__________!!!!!!!!!!!!!!")
-                    }
-                })
-        menu.show()
+        navigator.showDialogpopupMenu(item)
         return true
     }
 
