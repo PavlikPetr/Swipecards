@@ -1,23 +1,26 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
+import android.content.Context
+import android.content.Intent
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
 import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
-import com.topface.topface.requests.ApiResponse
-import com.topface.topface.requests.DataApiHandler
-import com.topface.topface.requests.IApiResponse
-import com.topface.topface.requests.MutualBandGetListRequest
+import com.topface.topface.requests.*
 import com.topface.topface.requests.response.DialogContacts
+import com.topface.topface.requests.response.DialogContactsItem
+import com.topface.topface.ui.ChatActivity
+import com.topface.topface.ui.fragments.ChatFragment
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 
 /**
  * Моедь итема хедера
  * Created by tiberal on 01.12.16.
  */
-class DialogContactsItemViewModel() {
+class DialogContactsItemViewModel(private val mContext: Context) : ILifeCycle {
 
     val data = SingleObservableArrayList<Any>()
     val amount = ObservableField<String>()
@@ -32,6 +35,13 @@ class DialogContactsItemViewModel() {
     init {
         testRequest()
     }
+
+    private fun getAmount(counter: Byte) =
+            if (counter == MAX_COUNTER) {
+                OVER_ONE_HUNDRED
+            } else {
+                counter.toString()
+            }
 
     fun testRequest() {
         MutualBandGetListRequest(App.getContext(), 10).callback(object : DataApiHandler<DialogContacts>() {
@@ -75,13 +85,36 @@ class DialogContactsItemViewModel() {
         }
     }
 
-    private fun getAmount(counter: Byte) =
-            if (counter == MAX_COUNTER) {
-                OVER_ONE_HUNDRED
-            } else {
-                counter.toString()
-            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        data?.let {
+            if (requestCode == ChatActivity.REQUEST_CHAT
+                    && data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
+                val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
+                if (removeItemUserId(userId)) {
+                    sendReadRequest(userId)
+                }
 
+            }
+        }
+    }
+
+    private fun removeItemUserId(userId: Int): Boolean {
+        data.observableList.forEach {
+            if (it is DialogContactsItem && it.user.id == userId) {
+                data.observableList.remove(it)
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun sendReadRequest(userId: Int) {
+        if (true) {
+            MutualReadRequest(mContext, userId).exec()
+        } else {
+            ReadLikeRequest(mContext, userId).exec()
+        }
+    }
 
     fun release() {
         data.removeListener()

@@ -18,6 +18,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.findLastFeedItem
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.IStateSaverRegistrator
 import com.topface.topface.utils.Utils
 import org.jetbrains.anko.layoutInflater
 
@@ -51,7 +52,7 @@ class DialogsFragment : BaseFragment() {
         }
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
-                .addAdapterComponent(ContactsItemComponent(mNavigator))
+                .addAdapterComponent(ContactsItemComponent(mNavigator, context.applicationContext), activity as IStateSaverRegistrator)
     }
     private val mViewModel: DialogsFragmentViewModel by lazy {
         DialogsFragmentViewModel(mNavigator, mApi) { mAdapter.updateObservable }

@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.topface.framework.utils.Debug
+import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.IStateSaverRegistrator
 import rx.Observable
 import rx.Subscriber
 
@@ -31,6 +33,14 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     }
 
     inline fun <reified D : Any> addAdapterComponent(component: AdapterComponent<*, D>): CompositeAdapter {
+        components.put(typeProvider.getType(D::class.java), component)
+        return this
+    }
+
+    inline fun <reified D : Any> addAdapterComponent(component: AdapterComponent<*, D>, registrator: IStateSaverRegistrator): CompositeAdapter {
+        if (component is ILifeCycle) {
+            registrator.registerLifeCycleDelegate(component)
+        }
         components.put(typeProvider.getType(D::class.java), component)
         return this
     }

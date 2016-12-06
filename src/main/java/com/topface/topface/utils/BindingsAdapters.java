@@ -66,7 +66,11 @@ public class BindingsAdapters {
                 @Override
                 public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeRemoved" + objects.size());
-                    adapter.getData().removeAll(adapter.getData().subList(positionStart, itemCount));
+                    if (positionStart == itemCount) {
+                        adapter.getData().remove(positionStart);
+                    } else {
+                        adapter.getData().removeAll(adapter.getData().subList(positionStart, itemCount));
+                    }
                     adapter.notifyItemRangeRemoved(positionStart, itemCount);
                 }
 

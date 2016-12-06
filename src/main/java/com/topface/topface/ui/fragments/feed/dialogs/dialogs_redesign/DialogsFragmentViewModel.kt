@@ -10,7 +10,7 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
+import com.topface.topface.ui.fragments.feed.feed_utils.getFirstItem
 import com.topface.topface.ui.fragments.feed.feed_utils.isEmpty
 import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
@@ -90,7 +90,7 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
     }
 
     fun loadTopFeeds() {
-        val from = data.observableList.getFirst()?.id ?: Utils.EMPTY
+        val from = data.observableList.getFirstItem()?.id ?: return
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
         mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<FeedDialog>>() {
@@ -107,8 +107,14 @@ class DialogsFragmentViewModel(private val mNavigator: IFeedNavigator, private v
                     }
 
                     override fun onNext(data: FeedListData<FeedDialog>?) = with(this@DialogsFragmentViewModel.data.observableList) {
-                        if (data != null && data.items.isNotEmpty() && count() == 1 && this[0].isEmpty()) {
-                            removeAt(0)
+                        if (data != null && data.items.isNotEmpty()) {
+                            /*
+                             Первый итем для контактов, второй для заглушки(если нет диалогов)
+                             */
+                            if (count() == 2 && this[1].isEmpty()) {
+                                //удаляем заглушку
+                                removeAt(1)
+                            }
                             addAll(0, data.items)
                         }
                     }

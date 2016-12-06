@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
@@ -26,6 +28,7 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.ILifeCycle;
@@ -350,16 +353,29 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
-            mGoogleAuthStarted = true;
+        for (ILifeCycle saver : stateSavers) {
+            saver.onActivityResult(requestCode, resultCode, data);
         }
-
-        //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
-        //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
-        //и ответ возвращать тоже в активити.
-        Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if (authFragment != null) {
-            authFragment.onActivityResult(requestCode, resultCode, data);
+        //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
+        boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
+                getSupportFragmentManager(),
+                requestCode,
+                resultCode,
+                data,
+                OwnProfileFragment.class
+        );
+        if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
+            if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
+                mGoogleAuthStarted = true;
+            }
+            //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
+            //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
+            //и ответ возвращать тоже в активити.
+            Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
+            if (authFragment != null) {
+                authFragment.onActivityResult(requestCode, resultCode, data);
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 

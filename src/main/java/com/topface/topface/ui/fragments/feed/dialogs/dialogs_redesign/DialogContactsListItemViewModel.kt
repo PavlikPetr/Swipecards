@@ -11,7 +11,8 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
  * VM итема хедера в диалогах
  * Created by tiberal on 04.12.16.
  */
-class DialogContactsListItemViewModel(private val mNavigator: IFeedNavigator, private val mItem: DialogContactsItem) {
+class DialogContactsListItemViewModel(private val mNavigator: IFeedNavigator
+                                      , private val mItem: DialogContactsItem) {
     val userPhoto = ObservableField(mItem.user.photo)
     val type = ObservableField(getTransformType())
     val placeholderRes = ObservableField(if (mItem.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
