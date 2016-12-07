@@ -931,6 +931,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         Intent intent = new Intent();
         intent.putExtra(SEND_MESSAGE, isSendMessage);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
         getActivity().setResult(Activity.RESULT_CANCELED, intent);
         getActivity().finish();
     }
@@ -1085,11 +1087,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             protected void success(History data, IApiResponse response) {
                 isSendMessage = true;
-                //на тот случай, если закрыли по up сетим результат сразу
-                Intent intent = new Intent();
-                intent.putExtra(ChatFragment.SEND_MESSAGE, isSendMessage);
-                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-                getActivity().setResult(Activity.RESULT_CANCELED, intent);
                 if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                     // в момент успешной отправки сообщения, проверяем состоялся ли полноценный диалог
@@ -1101,6 +1098,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                 scrollListToTheEnd();
+                //на тот случай, если закрыли по up сетим результат сразу
+                Intent intent = new Intent();
+                intent.putExtra(ChatFragment.SEND_MESSAGE, isSendMessage);
+                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+                intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+                getActivity().setResult(Activity.RESULT_CANCELED, intent);
             }
 
             @Override

@@ -12,7 +12,7 @@ import com.topface.topface.data.FeedUser
  * @param  more {Boolean}признак наличие большего количества взаимных симпатий
  * @param  items {Array}массив экземпляров элементов ленты
  */
-data class DialogContacts(val counter: Byte, val more: Boolean, val items: MutableList<DialogContactsItem>)
+data class DialogContacts(var counter: Byte = 0, var more: Boolean = false, val items: MutableList<DialogContactsItem> = mutableListOf())
 
 /**
  * @param type {Number} идентификатор типа элемента ленты

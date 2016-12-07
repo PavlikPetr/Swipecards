@@ -56,17 +56,22 @@ public class BindingsAdapters {
                 @Override
                 public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeInserted" + objects.size());
-                    adapter.getData().addAll(objects.subList(positionStart, objects.size()));
-                    adapter.notifyItemRangeInserted(positionStart, itemCount);
-                    if (positionStart == 0) {
-                        recyclerView.getLayoutManager().scrollToPosition(0);
+                    if (itemCount == 1) {
+                        adapter.getData().add(positionStart, objects.get(positionStart));
+                        adapter.notifyItemInserted(positionStart);
+                    } else {
+                        adapter.getData().addAll(objects.subList(positionStart, objects.size()));
+                        adapter.notifyItemRangeInserted(positionStart, itemCount);
+                        if (positionStart == 0) {
+                            recyclerView.getLayoutManager().scrollToPosition(0);
+                        }
                     }
                 }
 
                 @Override
                 public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
                     Debug.log("EPTA onItemRangeRemoved" + objects.size());
-                    if (positionStart == itemCount) {
+                    if (itemCount == 1) {
                         adapter.getData().remove(positionStart);
                     } else {
                         adapter.getData().removeAll(adapter.getData().subList(positionStart, itemCount));

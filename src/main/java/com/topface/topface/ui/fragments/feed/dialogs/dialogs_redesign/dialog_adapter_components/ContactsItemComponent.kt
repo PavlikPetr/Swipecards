@@ -24,19 +24,22 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         get() = R.layout.dialog_contacts_item
     override val bindingClass: Class<DialogContactsItemBinding>
         get() = DialogContactsItemBinding::class.java
-    private val model by lazy {
-        DialogContactsItemViewModel(mContext)
-    }
+    private lateinit var model: DialogContactsItemViewModel
+    private lateinit var mAdapter: CompositeAdapter
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
-        with(binding.giftsList) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
-                    .addAdapterComponent(ContactsListItemComponent(mNavigator))
-                    .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))
-                    .addAdapterComponent(UForeverAloneContactsListItemComponent(mNavigator))
+        data?.let {
+            with(binding.giftsList) {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
+                        .addAdapterComponent(ContactsListItemComponent(mNavigator))
+                        .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))
+                        .addAdapterComponent(UForeverAloneContactsListItemComponent(mNavigator))
+                adapter = mAdapter
+            }
+            model = DialogContactsItemViewModel(mContext, it, mAdapter.updateObservable)
+            binding.model = model
         }
-        binding.model = model
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) =
