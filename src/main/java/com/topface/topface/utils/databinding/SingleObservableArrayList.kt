@@ -12,11 +12,13 @@ class SingleObservableArrayList<T> {
 
     val observableList = ObservableArrayList<T>()
     var listener: ObservableList.OnListChangedCallback<out ObservableList<*>>? = null
+    var onCallbackBinded: IOnListChangedCallbackBinded? = null
 
     fun addOnListChangedCallback(listener: ObservableList.OnListChangedCallback<out ObservableList<*>>?) {
         if (this.listener == null) {
             observableList.addOnListChangedCallback(listener)
             this.listener = listener
+            onCallbackBinded?.onCallbackBinded()
         } else {
             Debug.log("SingleObservableArrayList observable already have listener")
         }
@@ -37,4 +39,8 @@ class SingleObservableArrayList<T> {
         observableList.addAll(items)
     }
 
+}
+
+interface IOnListChangedCallbackBinded {
+    fun onCallbackBinded()
 }
