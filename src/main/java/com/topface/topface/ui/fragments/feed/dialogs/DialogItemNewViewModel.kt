@@ -18,9 +18,9 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
  */
 class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDialog, val navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) : View.OnLongClickListener {
 
-
     val context = App.getContext()
 
+    var isVisibleItem = ObservableField(View.VISIBLE)
     val userPhoto = ObservableField(item.user.photo)
     val type = ObservableField(if (item.user.online) GlideTransformationType.ONLINE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
     val placeholderRes = ObservableField(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
@@ -61,12 +61,10 @@ class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDi
 
     fun onClick() = navigator.showChat(item)
 
-
     override fun onLongClick(v: View?): Boolean {
         navigator.showDialogpopupMenu(item)
         return true
     }
-
 
 }
 

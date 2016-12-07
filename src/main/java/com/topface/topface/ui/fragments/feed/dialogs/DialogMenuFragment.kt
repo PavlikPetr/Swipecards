@@ -6,8 +6,8 @@ import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.DeleteOrBlacklistPopupBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import com.topface.topface.ui.fragments.feed.dating.IDialogCloser
+import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.utils.http.IRequestClient
 
 /**
@@ -21,12 +21,12 @@ class DialogMenuFragment(val item: FeedDialog) : AbstractDialogFragment(), IDial
 
     private lateinit var mBinding: DeleteOrBlacklistPopupBinding
 
-    private val mFeedRequestFactory by lazy {
-        FeedRequestFactory(context)
+    private val mDeleteFeedRequestFactory by lazy {
+        DeleteFeedRequestFactory(context)
     }
 
     private val mApi by lazy {
-        FeedApi(context, activity as IRequestClient, mFeedRequestFactory)
+        FeedApi(context, activity as IRequestClient, mDeleteFeedRequestFactory)
     }
 
     private val mViewModel by lazy {
@@ -38,9 +38,7 @@ class DialogMenuFragment(val item: FeedDialog) : AbstractDialogFragment(), IDial
         mBinding.setModel(mViewModel)
     }
 
-    override fun isModalDialog(): Boolean {
-        return true
-    }
+    override fun isModalDialog() = true
 
     override fun getDialogLayoutRes() = R.layout.delete_or_blacklist_popup
 
