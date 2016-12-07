@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
-import android.app.FragmentManager
 import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View
@@ -8,7 +7,6 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
-import com.topface.topface.databinding.FeedItemDialogNewBinding
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getString
@@ -17,7 +15,7 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА
  */
-class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDialog, val navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) : View.OnLongClickListener {
+class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator) : View.OnLongClickListener {
 
     val context = App.getContext()
 

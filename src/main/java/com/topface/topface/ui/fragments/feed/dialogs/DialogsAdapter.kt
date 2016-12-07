@@ -7,22 +7,21 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.databinding.FeedItemDialogBinding
-import com.topface.topface.databinding.FeedItemDialogNewBinding
 import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
 import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 
 class DialogsAdapter(private val mNavigator: IFeedNavigator, private val contextTemp: Context) :
-        BaseFeedAdapter<FeedItemDialogNewBinding, FeedDialog>() {
+        BaseFeedAdapter<FeedItemDialogBinding, FeedDialog>() {
 
-    override fun getItemLayout() = R.layout.feed_item_dialog_new
+    override fun getItemLayout() = R.layout.feed_item_dialog
 
-    override fun bindData(binding: FeedItemDialogNewBinding?, position: Int) {
+    override fun bindData(binding: FeedItemDialogBinding?, position: Int) {
         super.bindData(binding, position)
         binding?.let { bind ->
             getDataItem(position)?.let {
-                binding.model = DialogItemNewViewModel(bind, it, mNavigator) { isActionModeEnabled }
+                binding.model = DialogsItemViewModel(bind, it, mNavigator) { isActionModeEnabled }
             }
         }
     }
