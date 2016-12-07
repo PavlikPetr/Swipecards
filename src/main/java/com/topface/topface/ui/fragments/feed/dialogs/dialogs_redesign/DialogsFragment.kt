@@ -66,6 +66,11 @@ class DialogsFragment : BaseFragment() {
         return mBinding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.release()
+    }
+
     private fun initList() = with(mBinding.dialogsList) {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
