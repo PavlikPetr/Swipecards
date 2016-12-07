@@ -4,6 +4,7 @@ import android.app.FragmentManager
 import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
@@ -18,12 +19,8 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
  */
 class DialogItemNewViewModel(binding: FeedItemDialogNewBinding, val item: FeedDialog, val navigator: IFeedNavigator, isActionModeEnabled: () -> Boolean) : View.OnLongClickListener {
 
-<<<<<<< HEAD:src/main/java/com/topface/topface/ui/fragments/feed/dialogs/DialogItemNewViewModel.kt
     val context = App.getContext()
 
-    var isVisibleItem = ObservableField(View.VISIBLE)
-=======
->>>>>>> 21c64d6b9c0e2bd3587830d54f1495d0450ba08b:src/main/java/com/topface/topface/ui/fragments/feed/dialogs/dialogs_redesign/DialogItemNewViewModel.kt
     val userPhoto = ObservableField(item.user.photo)
     val type = ObservableField(if (item.user.online) GlideTransformationType.ONLINE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
     val placeholderRes = ObservableField(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
