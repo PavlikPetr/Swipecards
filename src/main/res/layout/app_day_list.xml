@@ -6,6 +6,10 @@
         <variable
             name="viewModel"
             type="com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel"/>
+
+        <variable
+            name="viewModelRedesign"
+            type="com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayViewModel"/>
     </data>
 
     <FrameLayout
@@ -18,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:visibility="@{viewModel.isProgressBarVisible}"/>
+            android:visibility="@{viewModel != null ? viewModel.isProgressBarVisible :   viewModelRedesign.isProgressBarVisible }"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/banner_list"

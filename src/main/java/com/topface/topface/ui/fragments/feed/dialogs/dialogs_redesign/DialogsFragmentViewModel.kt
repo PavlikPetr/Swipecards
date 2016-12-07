@@ -113,7 +113,9 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                             mEventBus.setData(DialogItemsEvent(data.items.isNotEmpty()))
                             if (it.items.isEmpty()) {
                                 this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsStubItem())
+                                this@DialogsFragmentViewModel.data.observableList.add(AppDayStubItem())
                             } else {
+                                this@DialogsFragmentViewModel.data.observableList.add(AppDayStubItem())
                                 this@DialogsFragmentViewModel.data.addAll(it.items)
                                 handleUnreadState(it, false)
                                 mIsAllDataLoaded = !data.more

@@ -25,6 +25,9 @@ class DialogTypeProvider : ITypeProvider {
         if (java == UForeverAloneStubItem::class.java) {
             return 5
         }
+        if (java == AppDayStubItem::class.java) {
+            return 6
+        }
         return 0
     }
 }
