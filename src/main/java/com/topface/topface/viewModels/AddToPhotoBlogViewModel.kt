@@ -115,7 +115,7 @@ class AddToPhotoBlogViewModel(binding: AddToPhotoBlogLayoutBinding, private val 
         }).exec()
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mPhotoHelper.processActivityResult(requestCode, resultCode, data)
     }
 

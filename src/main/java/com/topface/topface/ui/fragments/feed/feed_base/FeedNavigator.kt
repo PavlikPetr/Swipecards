@@ -80,7 +80,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from dating
      */
-    override fun showChat(user: SearchUser?, answer: SendGiftAnswer?) {
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
         user?.let {
             showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
         }

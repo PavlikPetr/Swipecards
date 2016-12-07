@@ -928,7 +928,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void finish() {
-        getActivity().setResult(Activity.RESULT_CANCELED);
+        Intent intent = new Intent();
+        intent.putExtra(SEND_MESSAGE, isSendMessage);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_CANCELED, intent);
         getActivity().finish();
     }
 
@@ -973,6 +976,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
             intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
             intent.putExtra(SEND_MESSAGE, isSendMessage);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
             getActivity().setResult(Activity.RESULT_OK, intent);
         }
         mRootLayout.setKeyboardListener(null);
@@ -1081,6 +1085,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             protected void success(History data, IApiResponse response) {
                 isSendMessage = true;
+                //на тот случай, если закрыли по up сетим результат сразу
+                Intent intent = new Intent();
+                intent.putExtra(ChatFragment.SEND_MESSAGE, isSendMessage);
+                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                getActivity().setResult(Activity.RESULT_CANCELED, intent);
                 if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                     // в момент успешной отправки сообщения, проверяем состоялся ли полноценный диалог

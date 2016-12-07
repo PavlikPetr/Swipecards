@@ -15,6 +15,8 @@ import kotlin.reflect.KProperty
  * Created by tiberal on 01.08.16.
  */
 
+fun ViewDataBinding.appContext() = root.context.applicationContext!!
+
 fun <V : ViewDataBinding> Context.inflateBinding(@LayoutRes res: Int): V {
     return DataBindingUtil.inflate<V>((this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater),
             res, null, false)

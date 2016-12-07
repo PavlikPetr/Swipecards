@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/ImageCenter"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/arrow_up_dialog"/>
+<layout>
 
-    <ImageView
-        android:id="@+id/ImageCenter"
-        android:layout_width="70dp"
-        android:layout_height="65dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="27dp"
-        android:src="@drawable/pic_no_chats"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_horizontal"
+                  android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/dialogEmptyTitle"
-        style="@style/EmptyDialogView"
-        android:layout_below="@+id/ImageCenter"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/dialog_empty_title"/>
+        <ImageView
+            android:layout_marginTop="28dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_up_dialog"/>
 
-    <TextView
-        style="@style/EmptyDialogView"
-        android:layout_below="@+id/dialogEmptyTitle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="@string/write_those_with_who_you_have_mutual_sympathy"
-        android:textColor="@color/empty_dialogs_message"/>
+        <ImageView
+            android:id="@+id/ImageCenter"
+            android:layout_width="70dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="27dp"
+            android:src="@drawable/pic_no_chats"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/dialogEmptyTitle"
+            style="@style/EmptyDialogView"
+            android:layout_marginTop="20dp"
+            android:text="@string/dialog_empty_title"/>
+
+        <TextView
+            style="@style/EmptyDialogView"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="66dp"
+            android:text="@string/write_those_with_who_you_have_mutual_sympathy"
+            android:textColor="@color/empty_dialogs_message"/>
+
+    </LinearLayout>
+
+</layout>

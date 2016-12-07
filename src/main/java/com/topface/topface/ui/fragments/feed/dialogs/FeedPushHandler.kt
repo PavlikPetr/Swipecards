@@ -14,21 +14,21 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * Класс реализующий поддержку/обработку пушей ADMIRATION, MUTUAL и DIALOGS
  * Created by siberia87 on 01.12.16.
  */
-class FeedPushHandler(val mDelegate: IFeedPushHandlerDelegate, val mContext: Context) {
+class FeedPushHandler(private val mListener: IFeedPushHandlerListener, val mContext: Context) {
 
     private var mFeedDialogsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mDelegate.updateFeedDialogs()
+            mListener.updateFeedDialogs()
         }
     }
     private var mFeedMutualReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mDelegate.updateFeedMutual()
+            mListener.updateFeedMutual()
         }
     }
     private var mFeedAdmirationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mDelegate.updateFeedAdmiration()
+            mListener.updateFeedAdmiration()
         }
     }
     private var mReadItemReceiver = object : BroadcastReceiver() {
@@ -37,10 +37,10 @@ class FeedPushHandler(val mDelegate: IFeedPushHandlerDelegate, val mContext: Con
             val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, 0)
             if (userId == 0) {
                 if (!TextUtils.isEmpty(itemId)) {
-                    mDelegate.makeItemReadWithFeedId(itemId)
+                    mListener.makeItemReadWithFeedId(itemId)
                 }
             } else {
-                mDelegate.makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0))
+                mListener.makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0))
             }
         }
     }
