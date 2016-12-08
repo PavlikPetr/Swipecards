@@ -6,10 +6,12 @@ import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
+import com.topface.topface.App
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.History
 import com.topface.topface.requests.FeedRequest
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
@@ -27,6 +29,7 @@ import com.topface.topface.utils.extensions.safeUnsubscribe
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
+import javax.inject.Inject
 
 /**
  * VM for new and improved dialogs
@@ -37,6 +40,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     : SwipeRefreshLayout.OnRefreshListener, ILifeCycle, IFeedPushHandlerListener {
 
     var isRefreshing = ObservableBoolean()
+    var isEnable = ObservableBoolean(true)
 
     private var mCallUpdateSubscription: Subscription? = null
     private var mIsAllDataLoaded: Boolean = false
@@ -44,9 +48,14 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private val mPushHandler = FeedPushHandler(this, context)
     private var isTopFeedsLoading = false
 
+    @Inject lateinit var mEventBus: EventBus
+
     val data = SingleObservableArrayList<FeedDialog>()
 
+    private var mContentAvailableSubscription: Subscription
+
     init {
+        App.get().inject(this)
         updater().distinct {
             it?.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)
         }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
@@ -58,6 +67,18 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 }
             }
         })
+        mContentAvailableSubscription = Observable.zip(mEventBus.getObservable(DialogContactsEvent::class.java),
+                (mEventBus.getObservable(DialogItemsEvent::class.java))) { item1, item2 ->
+            item1.hasContacts || item2.hasDialogItems
+        }.first().filter { !it }.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
+            override fun onNext(type: Boolean?) {
+                data.observableList.clear()
+                isEnable.set(false)
+                data.observableList.add(EmptyDialogsFragmentStubItem())
+            }
+        })
+
+
     }
 
     private fun handleUnreadState(data: FeedListData<FeedDialog>, isPullToRef: Boolean) {
@@ -82,6 +103,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                     override fun onNext(data: FeedListData<FeedDialog>?) {
                         data?.let {
                             addContactsItem()
+                            mEventBus.setData(DialogItemsEvent(data.items.isNotEmpty()))
                             if (it.items.isEmpty()) {
                                 this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsStubItem())
                             } else {
@@ -208,6 +230,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     fun release() {
         mCallUpdateSubscription.safeUnsubscribe()
+        mContentAvailableSubscription.safeUnsubscribe()
         mPushHandler.release()
         data.removeListener()
     }
@@ -217,16 +240,8 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         loadTopFeeds()
     }
 
-    override fun updateFeedDialogs() {
-        loadTopFeeds()
-    }
+    override fun updateFeedDialogs() = loadTopFeeds()
 
-    override fun updateFeedMutual() {
-
-    }
-
-    override fun updateFeedAdmiration() {
-    }
 
     override fun makeItemReadWithFeedId(itemId: String) {
         var itemForRead: FeedDialog

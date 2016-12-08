@@ -12,7 +12,13 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource
  * Базовый transformation. Умеет загруглять аватарку
  * Created by siberia87 on 30.11.16.
  */
-abstract class BaseGlideTransformation(val mContext: Context) : Transformation<Bitmap> {
+abstract class BaseGlideTransformation(context: Context) : Transformation<Bitmap> {
+
+    protected val mContext: Context
+
+    init {
+        mContext = context.applicationContext
+    }
 
     protected lateinit var mRemoteBitmap: Bitmap
     protected val mBitmapPool: BitmapPool by lazy {
@@ -49,4 +55,5 @@ abstract class BaseGlideTransformation(val mContext: Context) : Transformation<B
 
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
+
 }

@@ -9,6 +9,10 @@ import com.topface.topface.requests.response.DialogContacts
  */
 
 /**
+ * Пустой итем для отображения общей загушки(нет ни контактов, ни диалогов)
+ */
+class EmptyDialogsFragmentStubItem() : FeedDialog()
+/**
  * Пустой итем для отображения заглушки "Нет диалогов"
  */
 class EmptyDialogsStubItem() : FeedDialog()
@@ -27,3 +31,13 @@ class GoDatingContactsStubItem()
  * Пустой итем для отображения заглушки "Взаимных нет, вообще нет. Дуй знакомиться" в контактах
  */
 class UForeverAloneStubItem()
+
+/**
+ * Ивент о загрузке контактов есть/нет
+ */
+data class DialogContactsEvent(var hasContacts: Boolean)
+
+/**
+ * Ивент о загрузке диалогов есть/нет
+ */
+data class DialogItemsEvent(var hasDialogItems: Boolean)
