@@ -9,6 +9,7 @@ import com.topface.topface.databinding.DialogContactsItemBinding
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsStubItem
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogTypeProvider
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -18,13 +19,13 @@ import com.topface.topface.utils.ILifeCycle
  * Компонент хедера диалогов с симпатиями/восхищениями. Начинает новую переписку.
  * Created by tiberal on 01.12.16.
  */
-class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val mContext: Context)
+class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val mContext: Context, private val mApi: FeedApi)
     : AdapterComponent<DialogContactsItemBinding, DialogContactsStubItem>(), ILifeCycle {
     override val itemLayout: Int
         get() = R.layout.dialog_contacts_item
     override val bindingClass: Class<DialogContactsItemBinding>
         get() = DialogContactsItemBinding::class.java
-    private lateinit var model: DialogContactsItemViewModel
+    private var mModel: DialogContactsItemViewModel? = null
     private lateinit var mAdapter: CompositeAdapter
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
@@ -37,12 +38,17 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
                         .addAdapterComponent(UForeverAloneContactsListItemComponent(mNavigator))
                 adapter = mAdapter
             }
-            model = DialogContactsItemViewModel(mContext, it, mAdapter.updateObservable)
-            binding.model = model
+            mModel = DialogContactsItemViewModel(mContext, it, mApi, mAdapter.updateObservable)
+            binding.model = mModel
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) =
-            model.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mModel?.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun release() {
+        mModel?.release()
+    }
 
 }

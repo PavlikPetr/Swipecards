@@ -11,6 +11,7 @@ import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.requests.handlers.SimpleApiHandler
+import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.utils.Utils
@@ -293,12 +294,32 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }).exec()
     }
 
+    fun callMutualBandGetList(limit: Int = 10, from: Int? = null, to: Int? = null): Observable<DialogContacts> {
+        return Observable.create {
+            val request = MutualBandGetListRequest(mContext, limit, from, to)
+            request.callback(object : DataApiHandler<DialogContacts>() {
+                override fun success(data: DialogContacts?, response: IApiResponse?) = it.onNext(data)
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Exception(codeError.toString()))
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+
+                override fun parseResponse(response: ApiResponse?) = response?.jsonResult?.toString()?.run {
+                    JsonUtils.fromJson<DialogContacts>(this, DialogContacts::class.java)
+                }
+            })
+            mRequestClient.registerRequest(request)
+            request.exec()
+        }
+    }
+
     private fun getFeedIntIds(list: List<FeedItem>): ArrayList<Int> {
         val ids = ArrayList<Int>()
         list.filter {
             !it.isLoaderOrRetrier
         }.forEach {
-            ids.add(it.user.id.toInt())
+            ids.add(it.user.id)
         }
         return ids
     }
