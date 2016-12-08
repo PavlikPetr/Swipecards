@@ -15,3 +15,19 @@ fun <T> Any.registerLifeCycleDelegate(someAny: T): T {
     }
     return someAny
 }
+
+fun <T> Any.unregisterLifeCycleDelegate(someAny: T) {
+    if (someAny is ILifeCycle && this is IStateSaverRegistrator) {
+        unregisterLifeCycleDelegate(someAny)
+    }
+}
+
+fun <T> Any.unregisterLifeCycleDelegate(someAnyList: Collection<T>) {
+    if (this is IStateSaverRegistrator) {
+        someAnyList.forEach {
+            if (it is ILifeCycle) {
+                this.unregisterLifeCycleDelegate(it)
+            }
+        }
+    }
+}

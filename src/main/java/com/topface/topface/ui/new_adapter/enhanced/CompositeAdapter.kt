@@ -37,14 +37,6 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
         return this
     }
 
-    inline fun <reified D : Any> addAdapterComponent(component: AdapterComponent<*, D>, registrator: IStateSaverRegistrator): CompositeAdapter {
-        if (component is ILifeCycle) {
-            registrator.registerLifeCycleDelegate(component)
-        }
-        components.put(typeProvider.getType(D::class.java), component)
-        return this
-    }
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
         recyclerView?.layoutManager?.let {
@@ -90,5 +82,9 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     override fun getItemViewType(position: Int) = typeProvider.getType(data[position].javaClass)
 
     override fun getItemCount() = data.count()
+
+    fun releaseComponents(){
+        components.values.forEach(AdapterComponent<*, *>::release)
+    }
 
 }

@@ -36,7 +36,6 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment41ViewModel
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4BaseViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithBlurViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithoutBlurViewModel;
-import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment5and6ViewModel;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
@@ -46,15 +45,17 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
+import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
 import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment;
 import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragmentViewModel;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
@@ -162,7 +163,9 @@ import dagger.Provides;
                 Experiment4WithoutBlurViewModel.class,
                 DatingEmptyFragmentViewModel.class,
                 DatingEmptyFragment.class,
-                Experiment41ViewModel.class
+                Experiment41ViewModel.class,
+                DialogContactsItemViewModel.class,
+                DialogsFragmentViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

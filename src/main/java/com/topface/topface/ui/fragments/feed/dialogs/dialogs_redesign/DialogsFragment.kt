@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -12,14 +13,18 @@ import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.ContactsItemComponent
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.DialogItemComponent
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.EmptyDialogsComponent
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.EmptyDialogsFragmentComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.findLastFeedItem
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.IStateSaverRegistrator
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -52,11 +57,12 @@ class DialogsFragment : BaseFragment() {
         }
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
-                .addAdapterComponent(ContactsItemComponent(mNavigator, context.applicationContext), activity as IStateSaverRegistrator)
+                .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))
+                .addAdapterComponent(activity.registerLifeCycleDelegate(ContactsItemComponent(mNavigator, context.applicationContext, mApi)))
     }
     private val mViewModel by lazy {
         DialogsFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
-            (activity as IStateSaverRegistrator).registerLifeCycleDelegate(this)
+            activity.registerLifeCycleDelegate(this)
         }
     }
 
@@ -66,9 +72,25 @@ class DialogsFragment : BaseFragment() {
         return mBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.settings_messages)))
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity.unregisterLifeCycleDelegate(mAdapter.components.values)
+        activity.unregisterLifeCycleDelegate(this)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel.release()
+        mAdapter.releaseComponents()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun initList() = with(mBinding.dialogsList) {
