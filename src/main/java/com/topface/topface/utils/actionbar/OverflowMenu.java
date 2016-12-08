@@ -463,7 +463,7 @@ public class OverflowMenu {
 
     private void addToFavorite() {
         Boolean isBookmarked = isBookmarked();
-        Integer userId = getUserId();
+        final Integer userId = getUserId();
         if (isBookmarked == null || userId == null || mContext == null) {
             return;
         }
@@ -499,7 +499,9 @@ public class OverflowMenu {
                         super.success(response);
                         showBookmarkToast(true);
                         LocalBroadcastManager.getInstance(mContext).
-                                sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+                                sendBroadcast(new Intent(BlackListAndBookmarkHandler
+                                        .getValuedActionsUpdateIntent(BlackListAndBookmarkHandler
+                                                        .ActionTypes.BOOKMARK, false, getUserId())));
                     }
 
                     @Override
