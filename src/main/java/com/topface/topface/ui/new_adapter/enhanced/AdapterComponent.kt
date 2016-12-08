@@ -17,5 +17,6 @@ abstract class AdapterComponent<T : ViewDataBinding, in D> {
         bind(bindingClass.cast(holder?.binding), data as D, position)
     }
 
-    open fun release(){}
+    open fun release() {
+    }
 }

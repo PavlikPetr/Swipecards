@@ -12,6 +12,7 @@ import com.topface.topface.requests.response.DialogContacts
  * Пустой итем для отображения общей загушки(нет ни контактов, ни диалогов)
  */
 class EmptyDialogsFragmentStubItem() : FeedDialog()
+
 /**
  * Пустой итем для отображения заглушки "Нет диалогов"
  */

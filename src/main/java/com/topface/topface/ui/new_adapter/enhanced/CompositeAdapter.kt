@@ -83,7 +83,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun getItemCount() = data.count()
 
-    fun releaseComponents(){
+    fun releaseComponents() {
         components.values.forEach(AdapterComponent<*, *>::release)
     }
 
