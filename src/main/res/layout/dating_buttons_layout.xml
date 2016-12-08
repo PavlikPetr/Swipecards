@@ -53,6 +53,19 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/loader_bg"
+                android:theme="@style/CircularProgress"
+                android:visibility="@{model.isDatingProgressBarVisible}"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 

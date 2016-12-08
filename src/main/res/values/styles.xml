@@ -1627,4 +1627,8 @@
     <style name="NewDating">
         <item name="android:background">@drawable/new_dialog_items_selector_ripple</item>
     </style>
+
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/dating_fab_skip</item>
+    </style>
 </resources>
