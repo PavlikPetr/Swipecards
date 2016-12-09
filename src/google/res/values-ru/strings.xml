@@ -1192,14 +1192,18 @@
     <string name="unlock_symphaty_hours_other">Услуга действует: %d часов</string>
 
     <string name="unlock_symphaty_women_one">%d девушка отправила вам симпатию!</string>
-    <string name="unlock_symphaty_women_many">%d девушкек отправили вам симпатии!</string>
+    <string name="unlock_symphaty_women_many">%d девушек отправили вам симпатии!</string>
     <string name="unlock_symphaty_women_few">%d девушки отправили вам симпатии!</string>
-    <string name="unlock_symphaty_women_other">%d девушкек отправили вам симпатии!</string>
+    <string name="unlock_symphaty_women_other">%d девушек отправили вам симпатии!</string>
     
     <string name="unlock_symphaty_men_one">%d мужчина отправил вам симпатию!</string>
     <string name="unlock_symphaty_men_many">%d мужчин отправили вам симпатии!</string>
-    <string name="unlock_symphaty_men_few">%d мужчин отправили вам симпатии!</string>
+    <string name="unlock_symphaty_men_few">%d мужчины отправили вам симпатии!</string>
     <string name="unlock_symphaty_men_other">%d мужчин отправили вам симпатии!</string>
     
+    <string name="unlock_symphaty_title">Вы не можете просматривать тех, кто отправил вам симпатии</string>
+    
     <string name="unlock_symphaty_get_access">Получить доступ</string>
+    
+    <string name="send_gift_start_dialog">Отправь подарок и начни диалог сейчас!</string>
 </resources>
