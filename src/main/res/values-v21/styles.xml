@@ -201,8 +201,4 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="NewDating">
-        <item name="android:background">@drawable/new_dialog_items_selector_ripple</item>
-    </style>
-
 </resources>
