@@ -80,7 +80,7 @@ class DialogsFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(mAdapter.components.values)
-        activity.unregisterLifeCycleDelegate(this)
+        activity.unregisterLifeCycleDelegate(mViewModel)
     }
 
     override fun onDestroyView() {

@@ -453,6 +453,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     override fun release() {
+        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(context)
         super.release()
         arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
                 mBlackListSubscription, mCountersSubscription, mAppDayRequestSubscription).safeUnsubscribe()
@@ -463,7 +464,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 }
             }
         }
-        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(context)
         mStateManager.unregisterAppChangeStateListener(this)
     }
 }

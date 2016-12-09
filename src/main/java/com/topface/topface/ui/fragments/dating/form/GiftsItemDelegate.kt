@@ -48,9 +48,8 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
         data?.data?.let { giftsModel ->
             mGiftsModel = giftsModel
             if (giftsModel.gifts != null) {
-                giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.count > 0).apply {
+                giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.more).apply {
                     mAdapter = this
-                    addData(giftsModel.gifts.items)
                     mViewModel = GiftsItemViewModel(mApi, mNavigator, giftsModel.gifts, giftsModel.userId) {
                         //добавляем подарочки в search user, чтобы не загружать их заново после поворота
                         giftsModel.gifts.items.addAll(it.items)
@@ -60,9 +59,11 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                     updaterObservable.distinct {
                         it?.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)
                     }.subscribe {
-                        if (giftsModel.gifts.items.isNotEmpty()) {
-                            Debug.log("GIFTS_BUGS loadGifts ${data.data?.userId}")
-                            mViewModel?.loadGifts(this.data.count(), this.data.last().feedId)
+                        if (giftsModel.gifts.more) {
+                            Debug.log("GIFTS_BUGS loadGifts ${data.data?.userId} want ${giftsModel.gifts.count}")
+                            var lastGiftId = -1
+                            if (this.data.isNotEmpty()) lastGiftId = this.data.last().feedId
+                            mViewModel?.loadGifts(lastGiftId)
                         }
                     }
                     binding.model = mViewModel
@@ -90,6 +91,7 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
     }
 
     private fun handleGifts(gifts: ArrayList<Gift>) {
+        if (gifts.isEmpty()) return
         mAdapter?.let {
             if (!it.hasGifts) {
                 //выпиливаем итем с повеливающий ченить подарить

@@ -17,18 +17,18 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * Класс реализующий поддержку/обработку пушей ADMIRATION, MUTUAL и DIALOGS
  * Created by siberia87 on 01.12.16.
  */
-class FeedPushHandler(private val mListener: IFeedPushHandlerListener, val mContext: Context) {
+class FeedPushHandler(private var mListener: IFeedPushHandlerListener?, val mContext: Context) {
 
     private var mFeedDialogsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mListener.updateFeedDialogs()
+            mListener?.updateFeedDialogs()
         }
     }
     private var mBlackListAddReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.hasExtra(OverflowMenu.USER_ID_FOR_REMOVE)) {
                 val userId = intent.getIntExtra(OverflowMenu.USER_ID_FOR_REMOVE, -1)
-                mListener.userAddToBlackList(userId)
+                mListener?.userAddToBlackList(userId)
             }
         }
     }
@@ -38,18 +38,18 @@ class FeedPushHandler(private val mListener: IFeedPushHandlerListener, val mCont
             if (type == BlackListAndBookmarkHandler.ActionTypes.BOOKMARK &&
                     intent.hasExtra(BlackListAndBookmarkHandler.FEED_ID)) {
                 val userId = intent.getIntExtra(BlackListAndBookmarkHandler.FEED_ID, -1)
-                mListener.userAddToBookmarks(userId)
+                mListener?.userAddToBookmarks(userId)
             }
         }
     }
     private var mFeedMutualReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mListener.updateFeedMutual()
+            mListener?.updateFeedMutual()
         }
     }
     private var mFeedAdmirationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            mListener.updateFeedAdmiration()
+            mListener?.updateFeedAdmiration()
         }
     }
     private var mReadItemReceiver = object : BroadcastReceiver() {
@@ -58,10 +58,10 @@ class FeedPushHandler(private val mListener: IFeedPushHandlerListener, val mCont
             val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, 0)
             if (userId == 0) {
                 if (!TextUtils.isEmpty(itemId)) {
-                    mListener.makeItemReadWithFeedId(itemId)
+                    mListener?.makeItemReadWithFeedId(itemId)
                 }
             } else {
-                mListener.makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0))
+                mListener?.makeItemReadUserId(userId, intent.getIntExtra(ChatFragment.LOADED_MESSAGES, 0))
             }
         }
     }
@@ -77,8 +77,10 @@ class FeedPushHandler(private val mListener: IFeedPushHandlerListener, val mCont
         })
     }
 
-    fun release() =
-            arrayOf(mFeedDialogsReceiver, mFeedMutualReceiver, mFeedAdmirationReceiver,
-                    mReadItemReceiver, mBlackListAddReceiver, mAddToBookmarksReceiver)
-                    .unregisterReceiver(mContext)
+    fun release() {
+        arrayOf(mFeedDialogsReceiver, mFeedMutualReceiver, mFeedAdmirationReceiver,
+                mReadItemReceiver, mBlackListAddReceiver, mAddToBookmarksReceiver)
+                .unregisterReceiver(mContext)
+        mListener = null
+    }
 }

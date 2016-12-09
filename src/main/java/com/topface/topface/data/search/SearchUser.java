@@ -8,7 +8,6 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.utils.FormItem;
 
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 

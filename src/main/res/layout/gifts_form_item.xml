@@ -42,6 +42,7 @@
             android:paddingRight="16dp"
             android:gravity="end"
             android:text="@{model.amount}"
+            android:visibility="gone"
             android:textColor="@color/gray_forms_color"
             android:textSize="14sp">
         </TextView>
