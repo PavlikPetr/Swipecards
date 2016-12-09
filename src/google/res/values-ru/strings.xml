@@ -1202,4 +1202,8 @@
     <string name="unlock_symphaty_men_other">%d мужчин отправили вам симпатии!</string>
     
     <string name="unlock_symphaty_get_access">Получить доступ</string>
+
+    <string name="likes_empty_title">У вас пока нет симпатий.\nСимпатии помогут познакомиться</string>
+    <string name="likes_start_dating_button">Начать знакомиться</string>
+
 </resources>
