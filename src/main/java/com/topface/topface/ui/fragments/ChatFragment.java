@@ -1012,6 +1012,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                     }
+                    Intent intent = new Intent();
+                    intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+                    intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+                    intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+                    intent.putExtra(SEND_MESSAGE, isSendMessage);
+                    intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
                 }
                 break;
             case PurchasesActivity.INTENT_BUY_VIP:
@@ -1030,13 +1037,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
                 break;
         }
-        Intent intent = new Intent();
-        intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
-        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
-        intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
-        intent.putExtra(SEND_MESSAGE, isSendMessage);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-        getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
     private void scrollListToTheEnd() {
