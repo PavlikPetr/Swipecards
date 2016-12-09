@@ -28,26 +28,26 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
     fun loadGifts(lastGiftId: Int) {
         mLoadGiftsSubscription = mApi.callGetGifts(userId, lastGiftId)
                 .subscribe(object : Subscriber<Profile.Gifts>() {
-            override fun onNext(data: Profile.Gifts?) {
-                Debug.log("GIFTS_BUGS loadGifts onNext ${data?.items?.count()}")
-                data?.let {
-                    update(it)
-                    // говно со счетчиками и веб подарками на сервере
-                    // ответ на этот запрос приносит обновленные поля more и count
-                    // изначально может прийти more == true и count == 1, но это будет от веб-подарка
-                    gifts.more = it.more
-                    gifts.count = it.count
+                    override fun onNext(data: Profile.Gifts?) {
+                        Debug.log("GIFTS_BUGS loadGifts onNext ${data?.items?.count()}")
+                        data?.let {
+                            update(it)
+                            // говно со счетчиками и веб подарками на сервере
+                            // ответ на этот запрос приносит обновленные поля more и count
+                            // изначально может прийти more == true и count == 1, но это будет от веб-подарка
+                            gifts.more = it.more
+                            gifts.count = it.count
                 }
-            }
+                    }
 
-            override fun onError(e: Throwable?) {
-                Debug.log("GIFTS_BUGS loadGifts onError")
-                Utils.showErrorMessage()
-            }
+                    override fun onError(e: Throwable?) {
+                        Debug.log("GIFTS_BUGS loadGifts onError")
+                        Utils.showErrorMessage()
+                    }
 
-            override fun onCompleted() = unsubscribe()
+                    override fun onCompleted() = unsubscribe()
 
-        })
+                })
     }
 
     fun sendGift() = mNavigator.showGiftsActivity(userId)
