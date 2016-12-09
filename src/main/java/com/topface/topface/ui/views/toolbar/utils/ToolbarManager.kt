@@ -1,7 +1,7 @@
 package com.topface.topface.ui.views.toolbar.utils
 
 /**
- * Менеджер для работы с тулбаром, в него сетятся настройки, а он разсылает их подписчикам
+ * Менеджер для работы с тулбаром, в него сетятся настройки, а он раcсылает их подписчикам
  * Created by ppavlik on 09.11.16.
  */
 object ToolbarManager {

@@ -53,10 +53,11 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     val data = SingleObservableArrayList<FeedDialog>()
 
     private var mContentAvailableSubscription: Subscription
+    private var mUpdaterSubscription: Subscription
 
     init {
         App.get().inject(this)
-        updater().distinct {
+        mUpdaterSubscription = updater().distinct {
             it?.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)
         }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
             override fun onNext(updateBundle: Bundle?) {
@@ -153,7 +154,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 removeAt(1)
                             }
                             data.items.forEach { topDialog ->
-                                val iterator = this@DialogsFragmentViewModel.data.observableList.iterator()
+                                val iterator = this@DialogsFragmentViewModel.data.observableList.listIterator()
                                 while (iterator.hasNext()) {
                                     val item = iterator.next()
                                     if (item.user != null && item.user.id == topDialog.user.id) {
@@ -161,8 +162,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                     }
                                 }
                             }
-
-
                             if (data.items.isNotEmpty()) {
                                 addAll(1, data.items)
                             }
@@ -229,8 +228,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     }
 
     fun release() {
-        mCallUpdateSubscription.safeUnsubscribe()
-        mContentAvailableSubscription.safeUnsubscribe()
+        arrayOf(mCallUpdateSubscription, mContentAvailableSubscription, mUpdaterSubscription).safeUnsubscribe()
         mPushHandler.release()
         data.removeListener()
     }
