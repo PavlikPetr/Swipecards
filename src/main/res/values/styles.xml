@@ -1556,6 +1556,7 @@
     </style>
 
     <style name="FormsSendGiftButton">
+        <item name="android:background">@null</item>
         <item name="android:src">@drawable/forms_send_gift_selector</item>
     </style>
 
@@ -1576,7 +1577,7 @@
     </style>
 
     <style name="DatingBig">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:background">@null</item>
         <item name="android:clickable">true</item>
         <item name="android:layout_width">74dp</item>
         <item name="android:layout_height">74dp</item>
@@ -1584,7 +1585,7 @@
     </style>
 
     <style name="DatingSmall">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:background">@null</item>
         <item name="android:clickable">true</item>
         <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
@@ -1636,4 +1637,7 @@
         <item name="android:textColor">@color/list_text_black</item>
     </style>
 
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/dating_fab_skip</item>
+    </style>
 </resources>

@@ -19,8 +19,10 @@ import com.topface.topface.requests.LogoutRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -81,6 +83,7 @@ public class SettingsAccountFragment extends BaseFragment implements OnClickList
                             @Override
                             public void success(IApiResponse response) {
                                 new AuthorizationManager().logout(getActivity());
+                                new FeedNavigator((IActivityDelegate) getActivity()).showDating();
                             }
 
                             @Override

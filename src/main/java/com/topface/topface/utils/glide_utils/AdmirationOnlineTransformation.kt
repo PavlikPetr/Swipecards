@@ -15,23 +15,26 @@ import com.topface.topface.R
  */
 class AdmirationOnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
 
-    val mAdmirationTransformation = AdmirationTransformation(mContext)
-
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
+        val mAdmirationTransformation = AdmirationTransformation(mContext)
         mAdmirationTransformation.transform(resource, outWidth, outHeight)
-        val bitmap = Bitmap.createBitmap(mAdmirationTransformation.mMainBitmap.width, mAdmirationTransformation.mMainBitmap.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        canvas.drawBitmap(mAdmirationTransformation.mMainBitmap, 0f, 0f, null)
-
-        /*Тут рисуется значок онлайн с обводкой*/
-        var online = BitmapFactory.decodeResource(mContext.resources, R.drawable.online_big)
-        online = Bitmap.createScaledBitmap(online, mAdmirationTransformation.mMainBitmap.width, mAdmirationTransformation.mMainBitmap.height, true)
-        canvas.drawBitmap(online, 0f, 0f, null)
-        online.recycle()
-
+        val workBitmap = mAdmirationTransformation.mMainBitmap
+        val width = workBitmap.width
+        val height = workBitmap.height
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        Canvas(bitmap).apply {
+            drawBitmap(workBitmap, 0f, 0f, null)
+            drawOnline(this, width, height)
+        }
         return BitmapResource.obtain(bitmap, mBitmapPool)
     }
 
-    override fun getId() = "AdmirationOnlineTransformation"
+    fun drawOnline(canvas: Canvas, width: Int, height: Int): Bitmap? =
+            BitmapFactory.decodeResource(mContext.resources, R.drawable.online_small).apply {
+                val online = Bitmap.createScaledBitmap(this, width, height, true)
+                canvas.drawBitmap(online, 0f, 0f, null)
+                online.recycle()
+            }
 
+    override fun getId() = "AdmirationOnlineTransformation"
 }

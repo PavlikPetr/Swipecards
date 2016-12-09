@@ -15,7 +15,6 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.transport.Headers;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.IApiTransport;
-import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.utils.http.ConnectionManager;
 import com.topface.topface.utils.http.HttpUtils;
 
@@ -265,14 +264,15 @@ public abstract class ApiRequest implements IApiRequest {
     }
 
     protected IApiTransport getTransport() {
-        switch (App.getApiTransport()) {
+        return getDefaultTransport();
+        /*switch (App.getApiTransport()) {
             case HttpApiTransport.TRANSPORT_NAME:
                 return getDefaultTransport();
             case ScruffyApiTransport.TRANSPORT_NAME:
                 return new ScruffyApiTransport();
             default:
                 return getDefaultTransport();
-        }
+        }*/
     }
 
     protected IApiTransport getDefaultTransport() {

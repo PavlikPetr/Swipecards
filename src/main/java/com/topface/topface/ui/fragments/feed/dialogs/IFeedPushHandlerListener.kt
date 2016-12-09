@@ -14,6 +14,12 @@ interface IFeedPushHandlerListener {
     fun updateFeedAdmiration() {
     }
 
+    fun userAddToBlackList(userId: Int) {
+    }
+
+    fun userAddToBookmarks(userId: Int) {
+    }
+
     fun makeItemReadWithFeedId(itemId: String) {
     }
 

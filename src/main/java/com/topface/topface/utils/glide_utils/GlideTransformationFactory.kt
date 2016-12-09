@@ -13,7 +13,7 @@ class GlideTransformationFactory(val mContext: Context) {
         GlideTransformationType.CROP_CIRCLE_TYPE -> CropCircleTransformation(mContext)
         GlideTransformationType.ONLINE_TYPE -> OnlineTransformation(mContext)
         GlideTransformationType.ADMIRATION_TYPE -> AdmirationTransformation(mContext)
-        GlideTransformationType.ADMIRATION_OLINE_TYPE -> AdmirationOnlineTransformation(mContext)
+        GlideTransformationType.ADMIRATION_ONLINE_TYPE -> AdmirationOnlineTransformation(mContext)
         else -> CropCircleTransformation(mContext)
     }
 }

@@ -17,7 +17,7 @@ import rx.Subscription
 class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFeedNavigator, gifts: Profile.Gifts,
                          private val userId: Int, val update: (Profile.Gifts) -> Unit) {
 
-    val amount = ObservableField<String>(if (gifts.items.isNotEmpty()) gifts.count.toString() else Utils.EMPTY)
+    val amount = ObservableField<String>(if (gifts.more) gifts.count.toString() else Utils.EMPTY)
     var gifts: Profile.Gifts = gifts
         set(value) {
             amount.set(value.count.toString())
@@ -25,25 +25,29 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
         }
     private var mLoadGiftsSubscription: Subscription? = null
 
-    fun loadGifts(loadedCount: Int, lastGiftId: Int) {
-        if (loadedCount < gifts.count) {
-            mLoadGiftsSubscription = mApi.callGetGifts(userId, lastGiftId).subscribe(object : Subscriber<Profile.Gifts>() {
-                override fun onNext(data: Profile.Gifts?) {
-                    Debug.log("GIFTS_BUGS loadGifts onNext ${data?.items?.count()}")
-                    data?.let {
-                        update(it)
-                    }
+    fun loadGifts(lastGiftId: Int) {
+        mLoadGiftsSubscription = mApi.callGetGifts(userId, lastGiftId)
+                .subscribe(object : Subscriber<Profile.Gifts>() {
+            override fun onNext(data: Profile.Gifts?) {
+                Debug.log("GIFTS_BUGS loadGifts onNext ${data?.items?.count()}")
+                data?.let {
+                    update(it)
+                    // говно со счетчиками и веб подарками на сервере
+                    // ответ на этот запрос приносит обновленные поля more и count
+                    // изначально может прийти more == true и count == 1, но это будет от веб-подарка
+                    gifts.more = it.more
+                    gifts.count = it.count
                 }
+            }
 
-                override fun onError(e: Throwable?) {
-                    Debug.log("GIFTS_BUGS loadGifts onError")
-                    Utils.showErrorMessage()
-                }
+            override fun onError(e: Throwable?) {
+                Debug.log("GIFTS_BUGS loadGifts onError")
+                Utils.showErrorMessage()
+            }
 
-                override fun onCompleted() = unsubscribe()
+            override fun onCompleted() = unsubscribe()
 
-            })
-        }
+        })
     }
 
     fun sendGift() = mNavigator.showGiftsActivity(userId)

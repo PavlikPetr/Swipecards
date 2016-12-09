@@ -15,30 +15,38 @@ class AdmirationTransformation(mContext: Context) : BaseGlideTransformation(mCon
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
         super.transform(resource, outWidth, outHeight)
-
-        /*Тут верхние круги восхищений.*/
-        var admirationCircleTop = BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_top)
-        admirationCircleTop = Bitmap.createScaledBitmap(admirationCircleTop, mMainBitmap.width, mMainBitmap.height, true)
-        mCanvas.drawBitmap(admirationCircleTop, 0f, 0f, null)
-        admirationCircleTop.recycle()
-
+        drawTopCircleAdmiration()
         // этот super вызывается, чтобы верхние круги восхищений оказались под аватаркой
         super.transform(resource, outWidth, outHeight)
-
-        /*Тут рисуется сердечко.*/
-        var admiration = BitmapFactory.decodeResource(mContext.resources, R.drawable.admiration_big_81)
-        admiration = Bitmap.createScaledBitmap(admiration, mMainBitmap.width, mMainBitmap.height, true)
-        mCanvas.drawBitmap(admiration, 0f, 0f, null)
-        admiration.recycle()
-
-        /*Тут круги доя восхищений снизу*/
-        var admirationCircleBottom = BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_bottom)
-        admirationCircleBottom = Bitmap.createScaledBitmap(admirationCircleBottom, mMainBitmap.width, mMainBitmap.height, true)
-        mCanvas.drawBitmap(admirationCircleBottom, 0f, 0f, null)
-        admirationCircleBottom.recycle()
+        drawHeardAdmiration()
+        drawBottomCircleAdmiration()
 
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
+
+    /*Тут верхние круги восхищений.*/
+    private fun drawTopCircleAdmiration() =
+            BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_top).apply {
+                val admirationCircleTop = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+                mCanvas.drawBitmap(admirationCircleTop, 0f, 0f, null)
+                admirationCircleTop.recycle()
+            }
+
+    /*Тут круги для восхищений снизу*/
+    private fun drawBottomCircleAdmiration() =
+            BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_bottom).apply {
+                val admirationCircleBottom = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+                mCanvas.drawBitmap(admirationCircleBottom, 0f, 0f, null)
+                admirationCircleBottom.recycle()
+            }
+
+    /*Тут рисуется сердечко.*/
+    private fun drawHeardAdmiration() =
+            BitmapFactory.decodeResource(mContext.resources, R.drawable.admiration_big_81).apply {
+                val heart = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+                mCanvas.drawBitmap(heart, 0f, 0f, null)
+                heart.recycle()
+            }
 
     override fun getId() = "AdmirationTransformation"
 }
