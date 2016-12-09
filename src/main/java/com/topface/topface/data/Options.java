@@ -26,6 +26,7 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -181,6 +182,8 @@ public class Options extends AbstractData {
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
     @Inject
     transient TopfaceAppState mAppState;
+    @Inject
+    transient WeakStorage mWeakStorage;
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
@@ -196,6 +199,11 @@ public class Options extends AbstractData {
      * настройки для оферволов на экране Бонус
      */
     public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
+
+    /**
+     * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
+     */
+    private boolean dialogRedesignEnabled;
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -369,6 +377,10 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
 
+            dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+            // store "design version" of feeds if need
+            mWeakStorage.setProfileDialogRedesignEnabled(dialogRedesignEnabled);
+
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
@@ -433,6 +445,10 @@ public class Options extends AbstractData {
 
     public String getPaymentwallLink() {
         return paymentwall;
+    }
+
+    public boolean getDialogRedesignEnabled() {
+        return dialogRedesignEnabled;
     }
 
     public boolean containsBannerType(String bannerType) {
