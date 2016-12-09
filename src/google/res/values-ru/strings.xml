@@ -1206,4 +1206,6 @@
     <string name="unlock_symphaty_get_access">Получить доступ</string>
     
     <string name="send_gift_start_dialog">Отправь подарок и начни диалог сейчас!</string>
+    <string name="likes_start_dating_button">Начать знакомиться</string>
+    <string name="likes_empty_title">У вас пока нет симпатий.\nСимпатии помогут познакомиться</string>
 </resources>
