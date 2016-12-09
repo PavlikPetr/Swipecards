@@ -29,7 +29,7 @@
 
         <TextView
             style="@style/EmptyDialogView"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="6dp"
             android:layout_marginBottom="66dp"
             android:text="@string/write_those_with_who_you_have_mutual_sympathy"
             android:textColor="@color/empty_dialogs_message"/>

@@ -10,88 +10,99 @@
             type="com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel"/>
     </data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="8dp"
-        android:paddingRight="24dp">
-
         <LinearLayout
-            android:id="@+id/add_to_black_new"
-            style="@style/NewDating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:onClick="@{() -> model.addToBlackList()}">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="11dp"
-                    android:layout_marginRight="11dp"
-                    app:glideTransformationPhoto="@{model.userPhoto}"
-                    app:placeholderRes="@{model.placeholderRes}"
-                    app:typeTransformation="@{model.type}"/>
-
-            </FrameLayout>
+            android:windowIsFloating="true"
+            android:windowIsTranslucent="true"
+            android:colorBackground="#ffffff"
+            android:textColor="@color/list_text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="118dp"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:background="@drawable/menu_popup_top"
+                android:id="@+id/add_to_black_new"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> model.addToBlackList()}"
+                android:orientation="horizontal">
 
-                <TextView
+                <FrameLayout
+
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/popup_add_to_black_list"
-                    android:textColor="#000000"
-                    android:textSize="15sp"/>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="17dp"
+                        app:glideTransformationPhoto="@{model.userPhoto}"
+                        app:placeholderRes="@{model.placeholderRes}"
+                        app:typeTransformation="@{model.type}"/>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/popup_add_to_black_list"
+                        android:textColor="#000000"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:id="@+id/delete_dialogs_new"
-            style="@style/NewDating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:onClick="@{() -> model.deleteDialog()}">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="11dp"
-                    android:layout_marginRight="11dp"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/delete_gray"/>
-
-            </FrameLayout>
 
             <LinearLayout
+                android:background="@drawable/menu_popup_bottom"
+                android:id="@+id/delete_dialogs_new"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> model.deleteDialog()}"
+                android:orientation="horizontal">
 
-                <TextView
+                <FrameLayout
+                    android:background="@drawable/menu_popup_bottom"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/popup_delete_dialog"
-                    android:textColor="#000000"
-                    android:textSize="15sp"/>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@drawable/menu_popup_bottom"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/delete_gray"/>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:background="@drawable/menu_popup_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="7dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:background="@drawable/menu_popup_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/popup_delete_dialog"
+                        android:textColor="#000000"
+                        android:textSize="15sp"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 </layout>
