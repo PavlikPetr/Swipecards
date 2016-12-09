@@ -1626,7 +1626,7 @@
     </style>
 
     <style name="NewDating">
-        <item name="android:background">@drawable/new_dialog_items_selector_ripple</item>
+        <item name="android:background">@drawable/new_dialog_items_selector</item>
     </style>
 
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
