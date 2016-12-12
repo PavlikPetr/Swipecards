@@ -47,6 +47,7 @@ import com.topface.topface.databinding.FragmentAuthBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.AuthState;
+import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
@@ -57,6 +58,7 @@ import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
@@ -493,6 +495,8 @@ public class AuthFragment extends BaseAuthFragment {
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
         }
+
+        sendFirstViewLoginScreen();
     }
 
     @Override
@@ -533,6 +537,15 @@ public class AuthFragment extends BaseAuthFragment {
 //        * */
 //        return getString(R.string.app_name) + "                          ";
 //    }
+
+    private void sendFirstViewLoginScreen() {
+        AppConfig appConfig = App.getAppConfig();
+        if (appConfig.isFirstViewLoginScreen()) {
+            AuthStatistics.sendFirstViewLoginPage();
+            appConfig.setFirstViewLoginScreen();
+            appConfig.saveConfig();
+        }
+    }
 
     private boolean isOtherServicesButtonAvailable() {
         return getMainScreenServicesAvailable() < getAllOtherServicesAvailableButtonsCount();
