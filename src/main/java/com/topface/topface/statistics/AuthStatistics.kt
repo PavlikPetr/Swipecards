@@ -12,7 +12,7 @@ class AuthStatistics {
         private const val APP_FIRST_START_KEY = "mobile_app_first_start"
         private const val FIRST_AUTH_KEY = "mobile_first_auth"
         private const val DEVICE_ACTIVATED_KEY = "mobile_device_activated"
-        private const val FIRST_VIEW_LOGIN_PAGE = "mobile_auth_page_view "
+        private const val FIRST_VIEW_LOGIN_PAGE = "mobile_auth_page_view"
         private const val PLT_SLICE = "plt"
         private const val VAL_SLICE = "val"
         const val DEFAULT_AUTH_STATUS = "created"

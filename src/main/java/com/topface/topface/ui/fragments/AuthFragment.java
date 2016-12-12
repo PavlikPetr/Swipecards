@@ -495,9 +495,8 @@ public class AuthFragment extends BaseAuthFragment {
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
         }
-        AppConfig appConfig = App.getAppConfig();
-        sendFirstViewLoginScreen(appConfig);
-        appConfig.saveConfig();
+
+        sendFirstViewLoginScreen();
     }
 
     @Override
@@ -539,10 +538,12 @@ public class AuthFragment extends BaseAuthFragment {
 //        return getString(R.string.app_name) + "                          ";
 //    }
 
-    private void sendFirstViewLoginScreen(AppConfig config) {
-        if (config.isFirstViewLoginScreen()) {
+    private void sendFirstViewLoginScreen() {
+        AppConfig appConfig = App.getAppConfig();
+        if (appConfig.isFirstViewLoginScreen()) {
             AuthStatistics.sendFirstViewLoginPage();
-            config.setFirstViewLoginScreen();
+            appConfig.setFirstViewLoginScreen();
+            appConfig.saveConfig();
         }
     }
 
