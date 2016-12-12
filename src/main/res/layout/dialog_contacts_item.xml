@@ -22,6 +22,7 @@
             android:layout_marginBottom="21dp"
             android:layout_marginLeft="16dp"
             android:drawableLeft="@drawable/heart"
+            android:drawablePadding="6dp"
             android:text="@string/mutually"
             android:textAllCaps="true"
             android:textColor="@color/dating_fab_like"

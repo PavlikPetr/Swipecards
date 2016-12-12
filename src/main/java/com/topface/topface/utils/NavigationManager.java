@@ -24,11 +24,9 @@ import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragment;
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -125,10 +123,6 @@ public class NavigationManager {
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != leftMenuSettingsData.getUniqueKey()) {
             final String fragmnetName = newFragment.getClass().getName();
             FragmentTransaction transaction = fm.beginTransaction();
-            //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-            if (App.getAppConfig().isHardwareAccelerated()) {
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
             if (oldFragment != newFragment && newFragment.isAdded()) {
                 transaction.remove(newFragment);
                 Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);

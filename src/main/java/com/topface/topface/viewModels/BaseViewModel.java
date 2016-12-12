@@ -61,4 +61,9 @@ public class BaseViewModel<T extends ViewDataBinding> implements ILifeCycle {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
     }
+
+    @Override
+    public void onResume() {
+
+    }
 }

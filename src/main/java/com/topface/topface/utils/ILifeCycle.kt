@@ -11,4 +11,5 @@ interface ILifeCycle {
     fun onSavedInstanceState(state: Bundle){}
     fun onRestoreInstanceState(state: Bundle){}
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){}
+    fun onResume(){}
 }

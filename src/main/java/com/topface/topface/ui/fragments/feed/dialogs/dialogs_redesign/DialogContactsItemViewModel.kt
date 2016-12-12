@@ -152,9 +152,10 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     }
 
     private fun removeItemByUserId(userId: Int): Boolean {
-        data.observableList.forEach {
-            if (it is DialogContactsItem && it.user.id == userId) {
-                data.observableList.remove(it)
+        data.observableList.forEachIndexed { position, item ->
+            if (item is DialogContactsItem && item.user.id == userId) {
+                data.observableList.remove(item)
+                mContactsStubItem.dialogContacts.items.remove(item)
                 return true
             }
         }
