@@ -237,6 +237,9 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onResume() {
         super.onResume();
+        for (ILifeCycle saver : stateSavers) {
+            saver.onResume();
+        }
         if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
             App.mOpenIabHelperManager.freeHelper();
             App.mOpenIabHelperManager.init(App.getContext());

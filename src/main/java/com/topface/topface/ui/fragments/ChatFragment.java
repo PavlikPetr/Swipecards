@@ -994,6 +994,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
+                    isSendMessage = true;
                     scrollListToTheEnd();
                     Bundle extras = data.getExtras();
                     if (extras != null) {
