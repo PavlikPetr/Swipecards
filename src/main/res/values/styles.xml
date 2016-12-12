@@ -1444,6 +1444,14 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 
+    <style name="PopupEmptyDialoguesCenterImage" parent="PopupCenterImageBase">
+        <item name="android:src">@drawable/pic_no_dialogues</item>
+    </style>
+
+    <style name="PopupEmptyDialoguesLandRightContainer" parent="PopupLandRightContainer">
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+    </style>
+
     <style name="PopupUnavailableGeoCenterImage" parent="PopupCenterImageBase">
         <item name="android:paddingLeft">20dp</item>
         <item name="android:paddingTop">2dp</item>
@@ -1454,6 +1462,11 @@
         <item name="android:paddingLeft">26dp</item>
         <item name="android:paddingTop">20dp</item>
         <item name="android:src">@drawable/dating_empty</item>
+    </style>
+
+    <style name="EmptyDialogCenterImage" parent="PopupCenterImageBase">
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingTop">4dp</item>
     </style>
 
     <style name="AdmirationPopupBuyVipButton">
@@ -1542,10 +1555,81 @@
         <item name="fab_colorPressed">@color/dating_fab_small</item>
     </style>
 
-    <style name="FabDating">
+    <style name="FormsSendGiftButton">
+        <item name="android:background">@null</item>
+        <item name="android:src">@drawable/forms_send_gift_selector</item>
+    </style>
+
+    <style name="DatingMessage" parent="DatingSmall">
+        <item name="android:src">@drawable/dating_send_message_selector</item>
+    </style>
+
+    <style name="DatingSkip" parent="DatingBig">
+        <item name="android:src">@drawable/dating_skip_selector</item>
+    </style>
+
+    <style name="DatingLike" parent="DatingBig">
+        <item name="android:src">@drawable/dating_like_selector</item>
+    </style>
+
+    <style name="DatingAdmiration" parent="DatingSmall">
+        <item name="android:src">@drawable/dating_admiration_selector</item>
+    </style>
+
+    <style name="DatingBig">
+        <item name="android:background">@null</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">74dp</item>
+        <item name="android:layout_height">74dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="DatingSmall">
+        <item name="android:background">@null</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="EmptyDialogView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:scaleType">center</item>
-        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/popup_message_side_padding</item>
+        <item name="android:paddingRight">@dimen/popup_message_side_padding</item>
+        <item name="android:textColor">@color/popup_message</item>
+        <item name="android:textSize">@dimen/popup_message_text</item>
+    </style>
+
+    <style name="DialogsNewName">
+        <item name="android:textColor">@color/dialogs_name</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="DialogsNewMessage">
+        <item name="android:textSize">14sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="NewDialogTime">
+        <item name="android:textColor">#b9b9b9</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lines">1</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="NewDating">
+        <item name="android:background">@drawable/new_dialog_items_selector</item>
+    </style>
+
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/dating_fab_skip</item>
     </style>
 </resources>

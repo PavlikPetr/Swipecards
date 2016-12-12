@@ -26,6 +26,7 @@ import rx.Observer
 import rx.Subscription
 import java.util.*
 
+
 /**
  * Моделька для альбома в дейтинге
  * Created by tiberal on 11.10.16.
@@ -79,11 +80,11 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     fun onPhotoClick() = with(currentUser) {
         if (this != null && photos != null && photos.isNotEmpty()) {
             mNavigator.showAlbum(binding.datingAlbum.selectedPosition,
-                    id, photos.count(), photos)
+                    id, photosCount, photos)
         }
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && data != null) {
             currentItem.set(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
@@ -96,7 +97,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
             if (!isPhotosCounterVisible.get()) {
                 isPhotosCounterVisible.set(true)
             }
-            photosCounter.set("${position + 1}/${user.photos.count()}")
+            photosCounter.set("${position + 1}/${user.photosCount}")
         } else {
             isPhotosCounterVisible.set(false)
         }
@@ -190,6 +191,18 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    }
+
+    fun setUser(user: SearchUser?) = user?.let {
+        currentUser = user.apply {
+            mLoadedCount = photos.realPhotosCount
+            albumData.set(photos)
+            mNeedMore = photosCount > mLoadedCount
+            val rest = photosCount - photos.count()
+            for (i in 0..rest - 1) {
+                photos.add(Photo.createFakePhoto())
+            }
+        }
     }
 
 }

@@ -193,6 +193,9 @@
     <dimen name="experiment_1_2_3_get_vip_bottom_margin">10dp</dimen>
     <dimen name="experiment_1_2_3_description_bottom_margin">10dp</dimen>
 
+    <!-- Доп метрика для попапа эксперимента 2 -->
+    <dimen name="experiment_2_get_vip_top_margin">30dp</dimen>
+
     <!-- Метрики для попапа экспериментов 5 -->
     <dimen name="experiment_5_title_top_margin">31dp</dimen>
     <dimen name="experiment_5_title_bottom_margin">3dp</dimen>

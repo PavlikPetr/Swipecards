@@ -12,8 +12,8 @@ import com.topface.topface.ui.new_adapter.IType
  */
 
 data class FormModel(var data: Pair<String, String>? = null, var userId: Int? = null, var formType: Int = -1,
-                     val isEmptyItem: Boolean, @DrawableRes var iconRes: Int = R.drawable.bt_question,
-                     @ColorRes var formItemBackground: Int = R.color.transparent) : IType {
+                     val isEmptyItem: Boolean, @DrawableRes var iconRes: Int,
+                     @ColorRes var formItemBackground: Int = R.color.transparent, var onRequestSended: (() -> Unit)? = null) : IType {
     override fun getType() = 0
 }
 

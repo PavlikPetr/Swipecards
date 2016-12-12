@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:bind="http://schemas.android.com/tools">
 
     <data>
@@ -19,56 +18,52 @@
         android:orientation="horizontal">
 
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/show_chat"
-            style="@style/FabDating"
+            style="@style/DatingMessage"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="24dp"
             android:clickable="@{model.isDatingButtonsLocked}"
             android:onClick="@{() -> model.showChat()}"
-            android:src="@drawable/message"
-            app:backgroundTint="@color/dating_fab_small"
-            app:fabSize="mini"
             bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
 
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/skip"
-            style="@style/FabDating"
+            style="@style/DatingSkip"
             android:layout_marginBottom="15dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="15dp"
             android:clickable="@{model.isDatingButtonsLocked}"
             android:onClick="@{() -> model.skip()}"
-            android:src="@drawable/dislike"
-            app:backgroundTint="@color/dating_fab_skip"
-            app:fabSize="normal"
             bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loader_bg"
+            android:theme="@style/CircularProgress"
+            android:visibility="@{model.isDatingProgressBarVisible}"/>
+
+        <ImageButton
             android:id="@+id/send_like"
-            style="@style/FabDating"
+            style="@style/DatingLike"
             android:layout_marginBottom="15dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="24dp"
             android:layout_marginTop="15dp"
             android:clickable="@{model.isDatingButtonsLocked}"
             android:onClick="@{() -> model.sendLike()}"
-            android:src="@drawable/like"
-            app:backgroundTint="@color/dating_fab_like"
-            app:fabSize="normal"
             bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:id="@+id/send_admiration"
-            style="@style/FabDating"
+            style="@style/DatingAdmiration"
             android:layout_marginRight="15dp"
             android:clickable="@{model.isDatingButtonsLocked}"
             android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
-            android:src="@drawable/admiration"
-            app:backgroundTint="@color/dating_fab_small"
-            app:fabSize="mini"
             bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
-
 
     </LinearLayout>
 

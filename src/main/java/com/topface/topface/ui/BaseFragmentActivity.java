@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +15,12 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
@@ -27,9 +28,10 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.GoogleMarketApiManager;
-import com.topface.topface.utils.IStateSaver;
+import com.topface.topface.utils.ILifeCycle;
 import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
@@ -80,7 +82,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     };
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
-    private ArrayList<IStateSaver> stateSavers = new ArrayList<>();
+    private ArrayList<ILifeCycle> stateSavers = new ArrayList<>();
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -102,12 +104,12 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     }
 
     @Override
-    public void registerStateDelegate(@NotNull IStateSaver... stateSaver) {
+    public void registerLifeCycleDelegate(@NotNull ILifeCycle... stateSaver) {
         stateSavers.addAll(Arrays.asList(stateSaver));
     }
 
     @Override
-    public void unregisterStateDelegate(@NotNull IStateSaver... stateSaver) {
+    public void unregisterLifeCycleDelegate(@NotNull ILifeCycle... stateSaver) {
         stateSavers.removeAll(Arrays.asList(stateSaver));
     }
 
@@ -115,7 +117,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGoogleAuthStarted = savedInstanceState.getBoolean(GOOGLE_AUTH_STARTED);
-        for (IStateSaver saver : stateSavers) {
+        for (ILifeCycle saver : stateSavers) {
             saver.onRestoreInstanceState(savedInstanceState);
         }
     }
@@ -123,7 +125,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        for (IStateSaver saver : stateSavers) {
+        for (ILifeCycle saver : stateSavers) {
             saver.onSavedInstanceState(outState);
         }
         if (mGoogleAuthStarted) {
@@ -351,16 +353,29 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
-            mGoogleAuthStarted = true;
+        for (ILifeCycle saver : stateSavers) {
+            saver.onActivityResult(requestCode, resultCode, data);
         }
-
-        //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
-        //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
-        //и ответ возвращать тоже в активити.
-        Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if (authFragment != null) {
-            authFragment.onActivityResult(requestCode, resultCode, data);
+        //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
+        boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
+                getSupportFragmentManager(),
+                requestCode,
+                resultCode,
+                data,
+                OwnProfileFragment.class
+        );
+        if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
+            if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
+                mGoogleAuthStarted = true;
+            }
+            //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
+            //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
+            //и ответ возвращать тоже в активити.
+            Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
+            if (authFragment != null) {
+                authFragment.onActivityResult(requestCode, resultCode, data);
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -466,7 +481,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
-    @SuppressWarnings("unused")
     public boolean isRunning() {
         return mRunning;
     }

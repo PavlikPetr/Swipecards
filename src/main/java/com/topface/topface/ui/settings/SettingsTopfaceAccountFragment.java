@@ -31,9 +31,11 @@ import com.topface.topface.ui.SimpleEmailConfirmationListener;
 import com.topface.topface.ui.analytics.TrackedDialogFragment;
 import com.topface.topface.ui.dialogs.DeleteAccountDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -339,6 +341,7 @@ public class SettingsTopfaceAccountFragment extends BaseFragment {
             @Override
             public void success(IApiResponse response) {
                 new AuthorizationManager().logout(getActivity());
+                new FeedNavigator((IActivityDelegate) getActivity()).showDating();
             }
 
             @Override

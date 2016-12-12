@@ -42,34 +42,36 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(viewBinding.root)
-//      используется метод setViewModel() поскольку при работе с пропертей viewModel возникает ошибка: Unresolved reference
+        // Используется метод setViewModel() поскольку при работе с пропертей viewModel возникает ошибка: Unresolved reference
         viewBinding.setViewModel(mAdmirationPurchasePopupViewModel)
 
-        window.enterTransition.addListener(object : Transition.TransitionListener {
-            override fun onTransitionEnd(p0: Transition?) {
-                isEndTransition = !isEndTransition
-            }
-
-            override fun onTransitionResume(p0: Transition?) {
-            }
-
-            override fun onTransitionPause(p0: Transition?) {
-            }
-
-            override fun onTransitionCancel(p0: Transition?) {
-            }
-
-            override fun onTransitionStart(p0: Transition?) {
-            }
-
-        })
         if (Utils.isLollipop()) {
             FabTransform.setup(this, viewBinding.container)
+            // Жду пока закончится анимация и после меняю значение флага, иначе апа будет валиться.
+            window.enterTransition.addListener(object : Transition.TransitionListener {
+                override fun onTransitionEnd(p0: Transition?) {
+                    isEndTransition = !isEndTransition
+                }
+
+                override fun onTransitionResume(p0: Transition?) {
+                }
+
+                override fun onTransitionPause(p0: Transition?) {
+                }
+
+                override fun onTransitionCancel(p0: Transition?) {
+                }
+
+                override fun onTransitionStart(p0: Transition?) {
+                }
+
+            })
         }
     }
 
     override fun hideAdmirationPurchasePopup(resultCode: Int) {
-        if (!isEndTransition) return
+        // Сие славное условие значит, что клики по кнопке восхищения будут игнорироваться, пока не закончится анимация
+        if (Utils.isLollipop() && !isEndTransition) return
         setResult(resultCode)
         if (Utils.isLollipop()) {
             if (resultCode == AdmirationPurchasePopupViewModel.RESULT_USER_BUY_VIP) {
@@ -83,7 +85,9 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
     }
 
     override fun onBackPressed() {
-        if (!isEndTransition) return
+        // Да-да, вот так грубо пропускаем super только, когда по значениею флага isEndTransition убедимся,
+        // что анимация открытия попапа закончилась.
+        if (Utils.isLollipop() && !isEndTransition) return
         super.onBackPressed()
     }
 
