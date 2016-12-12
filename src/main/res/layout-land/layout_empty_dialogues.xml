@@ -48,7 +48,7 @@
                     android:id="@+id/btn_start_dating"
                     style="@style/PopupGreenButton"
                     android:onClick="@{() -> viewModel.startDating()}"
-                    android:text="@string/start_dating_button"/>
+                    android:text="@string/start_dating"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

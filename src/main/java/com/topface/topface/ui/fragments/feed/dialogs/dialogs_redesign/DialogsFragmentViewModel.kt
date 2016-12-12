@@ -29,6 +29,7 @@ import com.topface.topface.utils.extensions.safeUnsubscribe
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 /**
@@ -46,7 +47,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private var mIsAllDataLoaded: Boolean = false
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
     private val mPushHandler = FeedPushHandler(this, context)
-    private var isTopFeedsLoading = false
+    private var isTopFeedsLoading = AtomicBoolean(false)
 
     @Inject lateinit var mEventBus: EventBus
 
@@ -82,6 +83,12 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     }
 
+    override fun onResume() {
+        if (mCallUpdateSubscription?.isUnsubscribed ?: true && data.observableList.isEmpty()) {
+            update()
+        }
+    }
+
     private fun handleUnreadState(data: FeedListData<FeedDialog>, isPullToRef: Boolean) {
         if (!data.items.isEmpty()) {
             if (!mUnreadState.wasFromInited || isPullToRef) {
@@ -92,7 +99,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         }
     }
 
-    //todo проверить, что оправляется именно последний ид фида
     private fun update(updateBundle: Bundle = Bundle()) {
         mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java,
                 constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY))).
@@ -124,21 +130,22 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     }
 
     fun loadTopFeeds() {
-        if (isTopFeedsLoading) return
-        isTopFeedsLoading = true
+        if (isTopFeedsLoading.get()) return
+        isTopFeedsLoading.set(true)
         val from = data.observableList.getFirstItem()?.id ?: return
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
         mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<FeedDialog>>() {
                     override fun onCompleted() {
-                        isTopFeedsLoading = false
+                        mCallUpdateSubscription.safeUnsubscribe()
+                        isTopFeedsLoading.set(false)
                         if (isRefreshing.get()) {
                             isRefreshing.set(false)
                         }
                     }
 
                     override fun onError(e: Throwable?) {
-                        isTopFeedsLoading = false
+                        isTopFeedsLoading.set(false)
                         if (isRefreshing.get()) {
                             isRefreshing.set(false)
                         }

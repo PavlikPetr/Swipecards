@@ -62,8 +62,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     var currentUser: SearchUser? = null
         set(value) {
             Debug.log("LOADER_INTEGRATION user setter")
-            if (lockDatingButtonsVisibility) {
-                lockDatingButtonsVisibility = false
+            if (mLockDatingButtonsVisibility) {
+                mLockDatingButtonsVisibility = false
                 isDatingProgressBarVisible.set(View.GONE)
                 isDatingButtonsVisible.set(View.VISIBLE)
             }
@@ -74,7 +74,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private var mAdmirationSubscription: Subscription? = null
     val isDatingButtonsVisible = object : ObservableInt(View.INVISIBLE) {
         override fun set(value: Int) {
-            if (!lockDatingButtonsVisibility) {
+            if (!mLockDatingButtonsVisibility) {
                 super.set(value)
             }
         }
@@ -86,7 +86,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
        isDatingButtonsVisible  неистово срет вызовами, по этому не можем ипользовать эту переменную
        для определения состояния кнопок. И поэтому пояаилось это.
      */
-    private var lockDatingButtonsVisibility = true
+    private var mLockDatingButtonsVisibility = true
 
     @Inject lateinit internal var mAppState: TopfaceAppState
     private val mBalanceDataSubscriptions = CompositeSubscription()
@@ -297,11 +297,11 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private fun showProgress() {
         isDatingProgressBarVisible.set(View.VISIBLE)
         isDatingButtonsVisible.set(View.INVISIBLE)
-        lockDatingButtonsVisibility = true
+        mLockDatingButtonsVisibility = true
     }
 
     private fun hideProgress() {
-        lockDatingButtonsVisibility = false
+        mLockDatingButtonsVisibility = false
         isDatingProgressBarVisible.set(View.GONE)
         isDatingButtonsVisible.set(View.VISIBLE)
     }

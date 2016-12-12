@@ -8,12 +8,8 @@ import android.os.Bundle
  * Created by tiberal on 21.10.16.
  */
 interface ILifeCycle {
-    fun onSavedInstanceState(state: Bundle) {
-    }
-
-    fun onRestoreInstanceState(state: Bundle) {
-    }
-
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    }
+    fun onSavedInstanceState(state: Bundle){}
+    fun onRestoreInstanceState(state: Bundle){}
+    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){}
+    fun onResume(){}
 }

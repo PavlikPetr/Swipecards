@@ -48,7 +48,7 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
                         if (!value && ids != null) {
                             var deletedUsers = listOf<FeedBookmark>()
                             ids.forEach { id ->
-                                mAdapter?.data?.forEach forEachData@{
+                                mAdapter?.data?.forEach forEachData@ {
                                     if (it.user.id == id) {
                                         deletedUsers = deletedUsers.plus(it)
                                         return@forEachData
@@ -79,7 +79,7 @@ class BookmarksFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IF
         LocalBroadcastManager.getInstance(context).unregisterReceiver(mBookmarkedReceiver)
     }
 
-    fun onResume() {
+    override fun onResume() {
         if (mIsNeedToUpdate) {
             loadTopFeeds()
             mIsNeedToUpdate = false

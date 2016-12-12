@@ -1205,7 +1205,6 @@
 
     <!--Dialogs-redesign-->
     <string name="dialog_empty_title">У вас нет диалогов</string>
-    <string name="start_dating_button">Начать знакомиться</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Напиши тем, с кем у тебя взаимная симпатия</string>
     <string name="popup_add_to_black_list">Добавить в черный список</string>
     <string name="popup_delete_dialog">Удалить диалог</string>
@@ -1213,6 +1212,6 @@
     <string name="write_them">Напишите им</string>
     <string name="go_dating">Начать \nзнакомиться</string>
     <string name="start_dating">Начать знакомиться</string>
-    <string name="no_mutual">У вас нет взаимных симпатий.</string>
+    <string name="no_mutual">У вас нет взаимных симпатий</string>
 
 </resources>

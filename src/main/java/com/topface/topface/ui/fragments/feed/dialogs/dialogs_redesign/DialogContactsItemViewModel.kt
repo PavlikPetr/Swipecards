@@ -155,6 +155,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         data.observableList.forEach {
             if (it is DialogContactsItem && it.user.id == userId) {
                 data.observableList.remove(it)
+                mContactsStubItem.dialogContacts.items.remove(it)
                 return true
             }
         }
