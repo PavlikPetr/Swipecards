@@ -28,6 +28,7 @@ import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.popups.PopupManager;
 
@@ -55,6 +56,8 @@ public class AuthorizationManager {
     TopfaceAppState mAppState;
     @Inject
     AuthState mAuthState;
+    @Inject
+    WeakStorage mWeakStorage;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -151,6 +154,8 @@ public class AuthorizationManager {
         mAppState.destroyObservable(Options.class);
         CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
+        // reset "design verions" in weak storage, couse each user has its own
+        mWeakStorage.resetProfileDialogRedesignEnabled();
         NavigationActivity.isPhotoAsked = false;
         PopupManager.INSTANCE.clear();
         NavigationActivity.hasNewOptionsOrProfile = false;
