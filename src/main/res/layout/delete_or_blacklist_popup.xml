@@ -16,24 +16,22 @@
             android:colorBackground="#ffffff"
             android:textColor="@color/list_text_black"
             android:layout_width="wrap_content"
-            android:layout_height="118dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:background="@drawable/menu_popup_top"
                 android:id="@+id/add_to_black_new"
-                android:layout_width="match_parent"
+                android:layout_width="296dp"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> model.addToBlackList()}"
                 android:orientation="horizontal">
 
                 <FrameLayout
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <ImageView
-
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginBottom="7dp"
@@ -49,15 +47,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="24dp"
+
                     android:layout_marginTop="6dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/popup_add_to_black_list"
                         android:textColor="#000000"
+                        android:layout_marginRight="24dp"
                         android:textSize="15sp"/>
                 </LinearLayout>
 
@@ -72,12 +71,10 @@
                 android:orientation="horizontal">
 
                 <FrameLayout
-                    android:background="@drawable/menu_popup_bottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:background="@drawable/menu_popup_bottom"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginBottom="16dp"
@@ -89,14 +86,12 @@
                 </FrameLayout>
 
                 <LinearLayout
-                    android:background="@drawable/menu_popup_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="7dp"
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:background="@drawable/menu_popup_bottom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/popup_delete_dialog"
