@@ -84,6 +84,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             mDatingButtonsView.unlockControls()
                         }
                     }
+                } else if (it.uid == App.get().profile.uid && currentUser != null) {
+                    binding.root.post {
+                        prepareFormsData()
+                    }
                 }
                 mUserSearchList.setOnEmptyListListener(this)
                 mUserSearchList.updateSignatureAndUpdate()
@@ -151,6 +155,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             })
         }
     }
+
+    fun prepareFormsData() = currentUser?.let { prepareFormsData(it) }
 
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser) = with((binding.formsList
