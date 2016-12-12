@@ -152,7 +152,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showDialogpopupMenu(item: FeedDialog) {
-        DialogMenuFragment.newInstance(item).show(mActivityDelegate.supportFragmentManager, "DIALOG_POPUP_MENU")
+        DialogMenuFragment(item).show(mActivityDelegate.supportFragmentManager, "DIALOG_POPUP_MENU")
     }
 
 }

@@ -4,14 +4,11 @@ import android.databinding.ObservableField
 import android.widget.Toast
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
-import com.topface.topface.data.FeedItem
 import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
-import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.utils.glide_utils.GlideTransformationType
 import rx.Subscriber
@@ -36,17 +33,15 @@ class DialogsMenuPopupViewModel(private val item: FeedDialog,
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
             }
 
-            override fun onCompleted() {
-                mDeleteDialogsSubscriber.safeUnsubscribe()
-            }
+            override fun onCompleted() = mDeleteDialogsSubscriber.safeUnsubscribe()
 
             override fun onNext(t: Boolean?) {
 
+                mDeleteDialogsSubscriber.safeUnsubscribe()
             }
 
         })
         iDialogCloser.closeIt()
-        mDeleteDialogsSubscriber.safeUnsubscribe()
     }
 
     fun addToBlackList() {
@@ -55,16 +50,15 @@ class DialogsMenuPopupViewModel(private val item: FeedDialog,
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
             }
 
-            override fun onCompleted() {
-                mDeleteDialogsSubscriber.safeUnsubscribe()
-            }
+            override fun onCompleted() = mDeleteDialogsSubscriber.safeUnsubscribe()
 
             override fun onNext(t: Boolean?) {
 
+                mDeleteDialogsSubscriber.safeUnsubscribe()
             }
         })
         iDialogCloser.closeIt()
-        mDeleteDialogsSubscriber.safeUnsubscribe()
+
     }
 
 
