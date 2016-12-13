@@ -84,7 +84,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             mDatingButtonsView.unlockControls()
                         }
                     }
-                } else if (it.uid == App.get().profile.uid && currentUser != null) {
+                } else {
                     binding.root.post {
                         prepareFormsData()
                     }
