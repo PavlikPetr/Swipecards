@@ -155,6 +155,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         data.observableList.forEach {
             if (it is DialogContactsItem && it.user.id == userId) {
                 data.observableList.remove(it)
+                mContactsStubItem.dialogContacts.items.remove(it)
                 return true
             }
         }
@@ -177,6 +178,10 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     override fun updateFeedMutual() = loadTop()
 
     override fun updateFeedAdmiration() = loadTop()
+
+    override fun userAddToBlackList(userId: Int) {
+        removeItemByUserId(userId)
+    }
 
     private fun loadTop() {
         val item = data.observableList.first()

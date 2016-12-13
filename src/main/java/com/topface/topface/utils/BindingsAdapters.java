@@ -35,6 +35,8 @@ import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 
+import java.util.List;
+
 /**
  * Сюда складывать все BindingAdapter
  * Created by tiberal on 18.01.16.
@@ -55,12 +57,14 @@ public class BindingsAdapters {
 
                 @Override
                 public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
-                    Debug.log("EPTA onItemRangeInserted" + objects.size());
+                    Debug.log("EPTA onItemRangeInserted" + " to pos " + positionStart + " count " + itemCount + " size " + objects.size());
                     if (itemCount == 1) {
                         adapter.getData().add(positionStart, objects.get(positionStart));
                         adapter.notifyItemInserted(positionStart);
                     } else {
-                        adapter.getData().addAll(objects.subList(positionStart, objects.size()));
+                        List<?> data = objects.subList(positionStart, objects.size());
+                        Debug.log("EPTA onItemRangeInserted " + " sublist size " + data.size());
+                        adapter.getData().addAll(positionStart, data);
                         adapter.notifyItemRangeInserted(positionStart, itemCount);
                         if (positionStart == 0) {
                             recyclerView.getLayoutManager().scrollToPosition(0);

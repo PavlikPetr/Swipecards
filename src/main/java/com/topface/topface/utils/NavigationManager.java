@@ -24,14 +24,14 @@ import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragment;
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.utils.config.WeakStorage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -60,6 +60,8 @@ public class NavigationManager {
     LifeCycleState mLifeCycleState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    WeakStorage mWeakStorage;
     private ISimpleCallback iNeedCloseMenuCallback;
     private Subscription mDrawerLayoutStateSubscription;
     private IActivityDelegate mActivityDelegate;
@@ -123,12 +125,8 @@ public class NavigationManager {
         }
 
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != leftMenuSettingsData.getUniqueKey()) {
-            final String fragmnetName = newFragment.getClass().getName();
+            final String fragmentName = newFragment.getClass().getName();
             FragmentTransaction transaction = fm.beginTransaction();
-            //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-            if (App.getAppConfig().isHardwareAccelerated()) {
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
             if (oldFragment != newFragment && newFragment.isAdded()) {
                 transaction.remove(newFragment);
                 Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
@@ -147,7 +145,7 @@ public class NavigationManager {
                         @Override
                         public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
                             return fragmentLifreCycleData.getState() == FragmentLifreCycleData.CREATE_VIEW
-                                    && fragmnetName.equals(fragmentLifreCycleData.getClassName());
+                                    && fragmentName.equals(fragmentLifreCycleData.getClassName());
                         }
                     })
                     .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -222,7 +220,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = new DialogsFragment();//TabbedDialogsFragment();
+                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ? new DialogsFragment() : new TabbedDialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();

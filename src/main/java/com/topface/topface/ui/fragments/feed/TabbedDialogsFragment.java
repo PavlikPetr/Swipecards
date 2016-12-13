@@ -4,7 +4,7 @@ import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.ui.fragments.feed.bookmarks.BookmarksFragment;
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 

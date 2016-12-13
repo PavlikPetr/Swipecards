@@ -48,6 +48,7 @@ import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment;
 import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel;
@@ -129,6 +130,7 @@ import dagger.Provides;
                 OptionsAndProfileProvider.class,
                 MenuFragment.class,
                 NavigationManager.class,
+                TabbedLikesFragment.class,
                 FragmentLifeCycleReporter.class,
                 ActivityLifeCycleReporter.class,
                 LifeCycleReporter.class,

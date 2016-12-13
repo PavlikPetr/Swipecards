@@ -15,9 +15,14 @@ import com.topface.topface.ui.fragments.feed.mutual.MutualFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+import com.topface.topface.utils.config.WeakStorage;
+
+import javax.inject.Inject;
 
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
+    @Inject
+    WeakStorage mWeakStorage;
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(LikesFragment.class.getName(), countersData.getLikes());
@@ -36,14 +41,17 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
     @Override
     protected void addPages() {
         addBodyPage(LikesFragment.class.getName(), getString(R.string.general_likes), mCountersData.getLikes());
-        addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.getMutual());
-        if (!App.from(getActivity()).getOptions().isHideAdmirations) {
-            addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.getAdmirations());
+        if (!mWeakStorage.getProfileDialogRedesignEnabled()) {
+            addBodyPage(MutualFragment.class.getName(), getString(R.string.general_mutual), mCountersData.getMutual());
+            if (!App.from(getActivity()).getOptions().isHideAdmirations) {
+                addBodyPage(AdmirationFragment.class.getName(), getString(R.string.general_admirations), mCountersData.getAdmirations());
+            }
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        App.get().inject(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
