@@ -455,7 +455,8 @@
   <string name="general_photo_deleted">Your photo was deleted because it violated one of our photo
         rules.</string>
   <string name="general_change">Change</string>
-  <string name="user_does_not_have_gifts">This user does not have any gifts yet, give the first one and you\'ll
+  <string name="user_does_not_have_gifts">This user does not have any gifts yet, give the first one
+    and you\'ll
         stand out!</string>
   <string name="status_is_empty">You status is empty</string>
   <string name="you_dont_have_gifts_yet">You do not have any gifts yet</string>
@@ -547,7 +548,8 @@
         available</string>
   <string name="black_list_add_short">To the Blacklist</string>
   <string name="confirm_email_for_dating">We are against Spam. Please confirm your email so that
-        you can date people on Spark!</string>
+    you can date people on Spark!
+  </string>
   <string name="confirm_email_for_dating_title">We are against Spam</string>
   <string name="confirm_email_for_dating_desc">Confirm your email address to be able to date
         people on Spark!</string>
@@ -743,7 +745,9 @@
   <string name="settings_check_vip_alert">Your request to check VIP-status has been sent.</string>
   <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!</string>
-  <string name="go_dating_message">Start dating and here will appear the names of those users who visited your profile.</string>
+  <string name="go_dating_message">Start dating and here will appear the names of those users who
+    visited your profile.
+  </string>
   <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
   <string name="sidebar_vk_profile">VK Profile</string>
   <string name="title_vk_profile">VK Profile</string>

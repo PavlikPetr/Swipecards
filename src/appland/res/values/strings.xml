@@ -486,8 +486,10 @@
         rules.
     </string>
     <string name="general_change">Change</string>
-    <string name="user_does_not_have_gifts">This user does not have any gifts yet, give the first one and you\'ll
-        stand out!</string>
+    <string name="user_does_not_have_gifts">This user does not have any gifts yet, give the first
+        one and you\'ll
+        stand out!
+    </string>
     <string name="status_is_empty">You status is empty</string>
     <string name="you_dont_have_gifts_yet">You do not have any gifts yet</string>
     <string name="buy_sympathies">Purchase likes</string>
@@ -592,10 +594,12 @@
     </string>
     <string name="black_list_add_short">To the Blacklist</string>
     <string name="confirm_email_for_dating">We are against Spam. Please confirm your email so that
-        you can date people on Topface!</string>
+        you can date people on Topface!
+    </string>
     <string name="confirm_email_for_dating_title">We are against Spam</string>
     <string name="confirm_email_for_dating_desc">Confirm your email address to be able to date
-        people on Topface!</string>
+        people on Topface!
+    </string>
     <string name="send_confirm_link">Send a link for confirmation</string>
     <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
     <string name="general_exit">Exit</string>
@@ -768,7 +772,8 @@
     </string>
     <string name="google_service_disabled_button">Enable</string>
     <string name="google_service_missing_title">You do not have Google Play installed. You need to
-        install it to receive Notifications.</string>
+        install it to receive Notifications.
+    </string>
     <string name="google_service_missing_button">Install</string>
     <string name="google_service_version_update_required_title">Your version of Google Play is
         outdated. For Notifications to work correctly, please update Google Play.
@@ -815,7 +820,9 @@
     <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!
     </string>
-    <string name="go_dating_message">Start dating and here will appear the names of those users who visited your profile.</string>
+    <string name="go_dating_message">Start dating and here will appear the names of those users who
+        visited your profile.
+    </string>
     <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
     <string name="sidebar_vk_profile">VK Profile</string>
     <string name="title_vk_profile">VK Profile</string>
