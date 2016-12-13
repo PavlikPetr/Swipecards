@@ -24,6 +24,7 @@ import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragment;
+import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
