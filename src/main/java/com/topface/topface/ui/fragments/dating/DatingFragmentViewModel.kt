@@ -86,7 +86,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                     }
                 } else {
                     binding.root.post {
-                        prepareFormsData()
+                        currentUser?.let { prepareFormsData(it) }
                     }
                 }
                 mUserSearchList.setOnEmptyListListener(this)
@@ -155,8 +155,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             })
         }
     }
-
-    fun prepareFormsData() = currentUser?.let { prepareFormsData(it) }
 
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser) = with((binding.formsList
