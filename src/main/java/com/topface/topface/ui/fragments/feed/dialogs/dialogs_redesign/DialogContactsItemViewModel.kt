@@ -179,6 +179,10 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
 
     override fun updateFeedAdmiration() = loadTop()
 
+    override fun userAddToBlackList(userId: Int) {
+        removeItemByUserId(userId)
+    }
+
     private fun loadTop() {
         val item = data.observableList.first()
         if (data.observableList.isNotEmpty() && item is DialogContactsItem) {
