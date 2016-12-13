@@ -486,11 +486,10 @@
         rules.
     </string>
     <string name="general_change">Change</string>
-    <string name="user_does_not_have_gifts">This user has no gifts, give the first one and you\'ll
-        stand out!
-    </string>
+    <string name="user_does_not_have_gifts">This user does not have any gifts yet, give the first one and you\'ll
+        stand out!</string>
     <string name="status_is_empty">You status is empty</string>
-    <string name="you_dont_have_gifts_yet">You don\'t have any gifts yet.</string>
+    <string name="you_dont_have_gifts_yet">You do not have any gifts yet</string>
     <string name="buy_sympathies">Purchase likes</string>
     <string name="upload_photos">Upload photos</string>
     <string name="user_baned">User has been banned.</string>
@@ -580,7 +579,7 @@
     <string name="complain_type_swearing_profile">The fields \"status\", \"about yourself\" contain
         offensive language, links to social networks
     </string>
-    <string name="complain_type_fake_data">Name, sex, age, or photo don\'t match</string>
+    <string name="complain_type_fake_data">Name, sex, age, or photo do not match</string>
     <string name="complain_description">Tell us the details regarding the cause for complaint.</string>
     <string name="general_complain_sended">Your complaint has been submitted, thank you for your
         help!
@@ -593,17 +592,15 @@
     </string>
     <string name="black_list_add_short">To the Blacklist</string>
     <string name="confirm_email_for_dating">We are against Spam. Please confirm your email so that
-        you can meet people on Topface!
-    </string>
+        you can date people on Topface!</string>
     <string name="confirm_email_for_dating_title">We are against Spam</string>
-    <string name="confirm_email_for_dating_desc">Confirm your email address to be able to meet
-        people on Topface!
-    </string>
+    <string name="confirm_email_for_dating_desc">Confirm your email address to be able to date
+        people on Topface!</string>
     <string name="send_confirm_link">Send a link for confirmation</string>
     <string name="complain_type_swearing_msg">Offensive behavior, improper language, threats</string>
     <string name="general_exit">Exit</string>
     <string name="likes_can_help_you">Likes help you meet people</string>
-    <string name="general_get_dating">Meet</string>
+    <string name="general_get_dating">Date</string>
     <string name="settings_select_language">Select app language</string>
     <string name="settings_select_preload_photo_type">Choose when photos preload is turned on
     </string>
@@ -770,9 +767,8 @@
         it to receive Notifications.
     </string>
     <string name="google_service_disabled_button">Enable</string>
-    <string name="google_service_missing_title">You don\'t have Google Play installed. You need to
-        install it to receive Notifications.
-    </string>
+    <string name="google_service_missing_title">You do not have Google Play installed. You need to
+        install it to receive Notifications.</string>
     <string name="google_service_missing_button">Install</string>
     <string name="google_service_version_update_required_title">Your version of Google Play is
         outdated. For Notifications to work correctly, please update Google Play.
@@ -819,7 +815,7 @@
     <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!
     </string>
-    <string name="go_dating_message">Start getting to know people and here will appear the names of those users who visited your profile.</string>
+    <string name="go_dating_message">Start dating and here will appear the names of those users who visited your profile.</string>
     <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
     <string name="sidebar_vk_profile">VK Profile</string>
     <string name="title_vk_profile">VK Profile</string>
@@ -841,7 +837,7 @@
     <string name="join_group_success">You have joined the group</string>
     <string name="settings_auto_greeting_title">Auto-Greetings</string>
     <string name="settings_auto_greeting_subtitle">Allow the system to automatically start a conversation with a greeting when you receive Like</string>
-    <string name="take_photo_text_1">Please upload a photo of yourself to start chatting.</string>
+    <string name="take_photo_text_1">Please upload a photo of yourself to start dating.</string>
     <string name="take_photo_text_2">Only you should be in the photo; all photos are reviewed by moderators to ensure rules are followed.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Unlock for free at %s</string>
     <plurals name="free_minutes">
@@ -898,10 +894,10 @@
     <string name="dont_miss_a_beat">Don\'t miss a beat!</string>
     <string name="push_alert_dating_title">Want to get a notification when %s sends a mutual reply?</string>
     <string name="push_alert_chat_title">Want to get a notification when %s replies?</string>
-    <string name="photo_feed_no_conversations">Right now you have no messages</string>
+    <string name="photo_feed_no_conversations">You do not have any messages yet</string>
     <string name="photo_feed_start_dating">Start dating to find new people</string>
     <string name="mutual_write_them_first">Write to them</string>
-    <string name="mutual_no_mutuals">Right now you have no mutual Likes</string>
+    <string name="mutual_no_mutuals">You do not have any mutual Likes yet</string>
     <string name="mutual_module_title">MUTUAL</string>
     <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
     <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>

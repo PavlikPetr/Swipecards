@@ -220,7 +220,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ? new DialogsFragment() : new TabbedDialogsFragment();
+                fragment = new DialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();

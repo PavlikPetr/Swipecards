@@ -875,7 +875,7 @@
     <string name="settings_auto_greeting_subtitle">Autoriser le système à débuter automatiquement une conversation avec un message d\'accueil lorsque vous recevez un J\'aime</string>
     <string name="take_photo_text_1">Veuillez télécharger votre photo pour faire connaissance.</string>
     <string name="take_photo_text_2">Seul vous êtes autorisé à apparaître sur la photo. Toutes les photos sont modérées.</string>
-    <string name="unlock_by_viewed_ad_video_button_text">Déverrouiller gratuitement à %s</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Débloquer gratuitement à %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutes</item>
         <item quantity="one">%d minute</item>
