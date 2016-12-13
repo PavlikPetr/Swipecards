@@ -19,18 +19,18 @@ public class EditFormItemsEditDialog extends BaseEditDialog<FormItem> {
 
     public static EditFormItemsEditDialog newInstance(String title, FormItem notification,
                                                       final BaseEditDialog.EditingFinishedListener<FormItem> editingFinishedListener) {
-        final EditFormItemsEditDialog selector = new EditFormItemsEditDialog();
+        final EditFormItemsEditDialog editDialog = new EditFormItemsEditDialog();
         Bundle selectorArgs = new Bundle();
         selectorArgs.putString(DIALOG_TITLE, title);
         selectorArgs.putParcelable(DATA, notification);
-        selector.setArguments(selectorArgs);
-        selector.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        editDialog.setArguments(selectorArgs);
+        editDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                editingFinishedListener.onEditingFinished(selector.getAdapter().getData());
+                editingFinishedListener.onEditingFinished(editDialog.getAdapter().getData());
             }
         });
-        return selector;
+        return editDialog;
     }
 
     @Override
