@@ -34,6 +34,11 @@ class GoDatingContactsStubItem()
 class UForeverAloneStubItem()
 
 /**
+ * Пустой итем для отображения рекламы приложения дня
+ */
+class AppDayStubItem() : FeedDialog()
+
+/**
  * Ивент о загрузке контактов есть/нет
  */
 data class DialogContactsEvent(var hasContacts: Boolean)

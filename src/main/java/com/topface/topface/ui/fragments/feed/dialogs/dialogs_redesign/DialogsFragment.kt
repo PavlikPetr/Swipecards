@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.AppDayItemComponent
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.ContactsItemComponent
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.DialogItemComponent
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.EmptyDialogsComponent
@@ -55,6 +56,7 @@ class DialogsFragment : BaseFragment() {
                 putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
             }
         }
+                .addAdapterComponent(AppDayItemComponent(mApi))
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
                 .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))
