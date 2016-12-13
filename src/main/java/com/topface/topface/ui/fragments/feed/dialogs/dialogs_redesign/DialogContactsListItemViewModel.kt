@@ -19,9 +19,9 @@ class DialogContactsListItemViewModel(private val mNavigator: IFeedNavigator
     val name = ObservableField(mItem.user.firstName)
 
     private fun getTransformType() = when {
-        mItem.user.online && mItem.highrate -> GlideTransformationType.ADMIRATION_ONLINE_TYPE
+        mItem.user.online && mItem.highrate -> GlideTransformationType.ADMIRATION_AND_ONLINE_TYPE
         !mItem.user.online && mItem.highrate -> GlideTransformationType.ADMIRATION_TYPE
-        mItem.user.online -> GlideTransformationType.ONLINE_TYPE
+        mItem.user.online -> GlideTransformationType.DIALOG_ONLINE_TYPE
         else -> GlideTransformationType.CROP_CIRCLE_TYPE
     }
 
