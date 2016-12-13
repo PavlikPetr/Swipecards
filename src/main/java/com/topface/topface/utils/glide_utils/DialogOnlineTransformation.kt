@@ -8,10 +8,10 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import com.topface.topface.R
 
 /**
- * Этот transformation может рисовать значок онлайн на аватарке
+ * Этот transformation для отрисовки значка online на item'е диалога
  * Created by siberia87 on 30.11.16.
  */
-class OnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
+class DialogOnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
         super.transform(resource, outWidth, outHeight)
@@ -20,11 +20,13 @@ class OnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 
-    fun drawOnline(): Bitmap? = BitmapFactory.decodeResource(mContext.resources, R.drawable.online_small).apply {
-        val online = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
-        mCanvas.drawBitmap(online, 0f, 0f, null)
-        online.recycle()
+    fun drawOnline() {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.online_small).apply {
+            val online = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+            mCanvas.drawBitmap(online, 0f, 0f, null)
+            online.recycle()
+        }.recycle()
     }
 
-    override fun getId() = "OnlineTransformation"
+    override fun getId() = "DialogOnlineTransformation"
 }

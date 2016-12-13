@@ -25,28 +25,31 @@ class AdmirationTransformation(mContext: Context) : BaseGlideTransformation(mCon
     }
 
     /*Тут верхние круги восхищений.*/
-    private fun drawTopCircleAdmiration() =
-            BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_top).apply {
-                val admirationCircleTop = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
-                mCanvas.drawBitmap(admirationCircleTop, 0f, 0f, null)
-                admirationCircleTop.recycle()
-            }
+    private fun drawTopCircleAdmiration() {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_top).apply {
+            val admirationCircleTop = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+            mCanvas.drawBitmap(admirationCircleTop, 0f, 0f, null)
+            admirationCircleTop.recycle()
+        }.recycle()
+    }
 
     /*Тут круги для восхищений снизу*/
-    private fun drawBottomCircleAdmiration() =
-            BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_bottom).apply {
-                val admirationCircleBottom = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
-                mCanvas.drawBitmap(admirationCircleBottom, 0f, 0f, null)
-                admirationCircleBottom.recycle()
-            }
+    private fun drawBottomCircleAdmiration() {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.circles_bottom).apply {
+            val admirationCircleBottom = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+            mCanvas.drawBitmap(admirationCircleBottom, 0f, 0f, null)
+            admirationCircleBottom.recycle()
+        }.recycle()
+    }
 
     /*Тут рисуется сердечко.*/
-    private fun drawHeardAdmiration() =
-            BitmapFactory.decodeResource(mContext.resources, R.drawable.admiration_big_81).apply {
-                val heart = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
-                mCanvas.drawBitmap(heart, 0f, 0f, null)
-                heart.recycle()
-            }
+    private fun drawHeardAdmiration() {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.admiration_big_81).apply {
+            val heart = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+            mCanvas.drawBitmap(heart, 0f, 0f, null)
+            heart.recycle()
+        }.recycle()
+    }
 
     override fun getId() = "AdmirationTransformation"
 }
