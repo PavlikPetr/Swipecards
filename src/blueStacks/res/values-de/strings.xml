@@ -878,4 +878,11 @@
   <string name="fake_female_name_8">Anastasia</string>
   <string name="fake_female_name_9">Helena</string>
   <string name="fake_female_name_10">Maria</string>
+  <string name="dialog_empty_title">Keine Nachrichten</string>
+  <string name="write_those_with_who_you_have_mutual_sympathy">Schreibe Nutzer an, mit denen du ein beidseitiges Like hast</string>
+  <string name="mutually">Beidseitig</string>
+  <string name="write_them">Schreibe sie an</string>
+  <string name="go_dating">Fange mit \nDating an</string>
+  <string name="start_dating">Fange mit Dating an</string>
+  <string name="no_mutual">Du hast keine beidseitige Likes</string>
 </resources>

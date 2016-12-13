@@ -997,4 +997,11 @@
     <string name="fake_female_name_8">Anastasia</string>
     <string name="fake_female_name_9">Elena</string>
     <string name="fake_female_name_10">María</string>
+    <string name="dialog_empty_title">Sin mensajes</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Escribe a los usuarios con los que tienes simpatía mutua</string>
+    <string name="mutually">Mutua</string>
+    <string name="write_them">Escríbeles</string>
+    <string name="go_dating">Empieza \na ligar</string>
+    <string name="start_dating">Empieza a ligar</string>
+    <string name="no_mutual">No tienes ninguna simpatía mutua</string>
 </resources>

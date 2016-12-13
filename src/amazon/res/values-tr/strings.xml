@@ -911,4 +911,11 @@
     <string name="fake_female_name_8">Hatice</string>
     <string name="fake_female_name_9">Ayşe</string>
     <string name="fake_female_name_10">Merve</string>
+    <string name="dialog_empty_title">Mesaj Yok</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Ortak Beğeniniz olan kullanıcılara yaz</string>
+    <string name="mutually">Ortak</string>
+    <string name="write_them">Onlara yaz</string>
+    <string name="go_dating">\nTanışmaya başla</string>
+    <string name="start_dating">Tanışmaya başla</string>
+    <string name="no_mutual">Hiç Ortak Beğeniniz yok</string>
 </resources>
