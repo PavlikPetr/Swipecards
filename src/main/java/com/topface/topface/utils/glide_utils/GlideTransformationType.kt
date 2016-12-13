@@ -17,6 +17,7 @@ object GlideTransformationType {
      * @param ADMIRATION_TYPE - параметр для выбора transition отрисовки рюшек восхищения
      * @param DIALOG_ONLINE_TRANSFORMATION_TYPE - параметр для выбора transition отрисовки значка онлайн на item'e диалогов
      * @param ADMIRATION_ONLINE_TRANSFORMATION_TYPE - параметр для выбора transition отрисовки значка онлайн на item'e восхищений
+     * @param ADMIRATION_AND_ONLINE_TYPE - параметр для выбора transition отрисовки значка онлайн и восхищений
      */
 
     const val CROP_CIRCLE_TYPE = 0L
