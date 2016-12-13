@@ -76,7 +76,6 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
     private val mMarketFragmentRunner by lazy {
         TransparentMarketFragmentRunner(activity, mArgs.getInt(FRAGMENT_CONTAINER_ID))
     }
-    override var mTimeForTransaction = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +94,6 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putAll(mArgs)
-        mTimeForTransaction = false
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
