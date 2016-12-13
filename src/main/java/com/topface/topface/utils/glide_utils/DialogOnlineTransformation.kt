@@ -20,10 +20,12 @@ class DialogOnlineTransformation(mContext: Context) : BaseGlideTransformation(mC
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 
-    fun drawOnline(): Bitmap? = BitmapFactory.decodeResource(mContext.resources, R.drawable.online_small).apply {
-        val online = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
-        mCanvas.drawBitmap(online, 0f, 0f, null)
-        online.recycle()
+    fun drawOnline() {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.online_small).apply {
+            val online = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+            mCanvas.drawBitmap(online, 0f, 0f, null)
+            online.recycle()
+        }.recycle()
     }
 
     override fun getId() = "DialogOnlineTransformation"

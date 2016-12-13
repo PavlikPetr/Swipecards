@@ -26,15 +26,17 @@ class AdmirationAndOnlineTransformation(mContext: Context) : BaseGlideTransforma
             drawBitmap(workBitmap, 0f, 0f, null)
             drawOnline(this, width, height)
         }
+        workBitmap.recycle()
         return BitmapResource.obtain(bitmap, mBitmapPool)
     }
 
-    fun drawOnline(canvas: Canvas, width: Int, height: Int): Bitmap? =
-            BitmapFactory.decodeResource(mContext.resources, R.drawable.online_big).apply {
-                val online = Bitmap.createScaledBitmap(this, width, height, true)
-                canvas.drawBitmap(online, 0f, 0f, null)
-                online.recycle()
-            }
+    fun drawOnline(canvas: Canvas, width: Int, height: Int) {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.online_big).apply {
+            val online = Bitmap.createScaledBitmap(this, width, height, true)
+            canvas.drawBitmap(online, 0f, 0f, null)
+            online.recycle()
+        }.recycle()
+    }
 
     override fun getId() = "AdmirationAndOnlineTransformation"
 }
