@@ -101,8 +101,9 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     private fun update(updateBundle: Bundle = Bundle()) {
         mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java,
-                constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY))).
-                subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedDialog>>() {
+                constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)))
+                .retry(3)
+                .subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedDialog>>() {
                     override fun onCompleted() {
                         mCallUpdateSubscription.safeUnsubscribe()
                     }
@@ -267,16 +268,22 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         data.observableList.forEachIndexed { position, dataItem ->
             if (dataItem.user != null && dataItem.user.id == userId && dataItem.unread) {
                 itemForRead = dataItem
-                val unread = dataItem.unreadCounter - readMessages
-                if (unread > 0) {
-                    itemForRead.unreadCounter = unread
-                } else {
-                    itemForRead.unread = false
-                    itemForRead.unreadCounter = 0
-                }
+                itemForRead.unread = false
+                itemForRead.unreadCounter = 0
                 data.observableList[position] = itemForRead
+                return
             }
         }
     }
 
+    override fun userAddToBlackList(userId: Int) {
+        val iterator = data.observableList.listIterator()
+        var item: FeedDialog
+        while (iterator.hasNext()) {
+            item = iterator.next()
+            if (item.user != null && item.user.id == userId) {
+                iterator.remove()
+            }
+        }
+    }
 }

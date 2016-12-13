@@ -18,18 +18,18 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
 
             <ImageView
-                android:layout_margin="16dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:layout_margin="16dp"
                 app:glideTransformationPhoto="@{model.userPhoto}"
-                app:typeTransformation="@{model.type}"
-                app:placeholderRes="@{model.placeholderRes}"/>
+                app:placeholderRes="@{model.placeholderRes}"
+                app:typeTransformation="@{model.type}"/>
 
         </FrameLayout>
 
@@ -94,6 +94,7 @@
                     android:id="@+id/onlineFlag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
                     android:src="@drawable/new_message"
                     android:visibility="@{model.counterVisibility}"/>
             </LinearLayout>
