@@ -95,7 +95,8 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
             @Override
             public void onClick(View v) {
                 mFormItem.dataId = mIds[position];
-                mFormItem.value = item;
+                // show minus sign when selected last item from predefined array
+                mFormItem.value = (position == mEntries.length - 1) ? FormItem.EMPTY_FORM_VALUE : item;
                 notifyDataSetChanged();
             }
         });
