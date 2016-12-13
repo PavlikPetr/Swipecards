@@ -1,45 +1,40 @@
-package com.topface.topface.ui.fragments.feed.app_day
+package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import android.databinding.ObservableInt
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.topface.framework.utils.Debug
-import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.statistics.AppBannerStatistics
-import com.topface.topface.viewModels.BaseViewModel
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
+import com.topface.topface.ui.fragments.feed.app_day.AppDayAdapter
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import org.jetbrains.anko.doAsync
-import java.util.*
+import rx.Subscriber
 
 /**
  * VM для ленты рекламы приложений дня
  * Created by siberia87 on 06.10.16.
  */
-class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) :
-        RecyclerView.OnScrollListener() {
+class AppDayViewModel(var mApi: FeedApi, var block: (AppDay) -> (Unit)) : RecyclerView.OnScrollListener() {
 
     companion object {
+        const val TYPE_FEED_FRAGMENT = "dialog"
         const val TAG_LOG = "app_of_the_day_banner_show"
     }
 
     var isProgressBarVisible = ObservableInt(View.VISIBLE)
     private var mRes = mutableListOf<Int>()
 
-    val mAdapter by lazy {
-        val adapter = AppDayAdapter()
-        adapter.addData(ArrayList(array))
-        adapter
+    init {
+        appDayRequest()
     }
 
-    init {
-        with(binding.bannerList) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            layoutManager.isAutoMeasureEnabled = true
-            adapter = mAdapter
-            setNestedScrollingEnabled(false)
-        }
-    }
+    private fun appDayRequest() = mApi.getAppDayRequest(TYPE_FEED_FRAGMENT).subscribe(object : Subscriber<AppDay>() {
+        override fun onCompleted() = isProgressBarVisible.set(View.INVISIBLE)
+        override fun onError(e: Throwable?) = e?.let { Debug.log("App day banner error request: $it") } ?: Unit
+        override fun onNext(appDay: AppDay?) = appDay?.let { it -> block(it) } ?: Unit
+    })
 
     override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
         super.onScrollStateChanged(recyclerView, newState)
@@ -67,6 +62,10 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
                         }
                     }
         }
+    }
+
+    fun release() {
+        appDayRequest().unsubscribe()
     }
 }
 
