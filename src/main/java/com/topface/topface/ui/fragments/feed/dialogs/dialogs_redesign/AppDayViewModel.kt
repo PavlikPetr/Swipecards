@@ -9,6 +9,7 @@ import com.topface.topface.statistics.AppBannerStatistics
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.app_day.AppDayAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.utils.ListUtils
 import org.jetbrains.anko.doAsync
 import rx.Subscriber
 
@@ -33,7 +34,12 @@ class AppDayViewModel(var mApi: FeedApi, var block: (AppDay) -> (Unit)) : Recycl
     private fun appDayRequest() = mApi.getAppDayRequest(TYPE_FEED_FRAGMENT).subscribe(object : Subscriber<AppDay>() {
         override fun onCompleted() = isProgressBarVisible.set(View.INVISIBLE)
         override fun onError(e: Throwable?) = e?.let { Debug.log("App day banner error request: $it") } ?: Unit
-        override fun onNext(appDay: AppDay?) = appDay?.let { it -> block(it) } ?: Unit
+        override fun onNext(appDay: AppDay?) = appDay?.let { it ->
+            isProgressBarVisible.set(View.INVISIBLE)
+            if (ListUtils.isNotEmpty(it.list)) {
+                block(it)
+            }
+        } ?: Unit
     })
 
     override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
@@ -64,8 +70,7 @@ class AppDayViewModel(var mApi: FeedApi, var block: (AppDay) -> (Unit)) : Recycl
         }
     }
 
-    fun release() {
-        appDayRequest().unsubscribe()
-    }
+    fun release() = appDayRequest().unsubscribe()
+
 }
 
