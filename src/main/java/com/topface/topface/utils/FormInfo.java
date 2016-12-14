@@ -31,11 +31,6 @@ public class FormInfo {
         return mSex;
     }
 
-    public int getProfileType() {
-        return mProfileType;
-    }
-
-
     public void fillFormItem(FormItem formItem) {
         String title = formItem.title;
         String data = formItem.value;
@@ -89,10 +84,6 @@ public class FormInfo {
             }
         }
         return null;
-    }
-
-    public String getEntry(int titleId, int targetId) {
-        return getEntryById(getEntriesByTitleId(titleId), getIdsByTitleId(titleId), targetId);
     }
 
     public String[] getEntriesByTitleId(int titleId) {
