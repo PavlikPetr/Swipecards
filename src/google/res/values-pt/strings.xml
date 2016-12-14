@@ -995,4 +995,11 @@
     <string name="fake_female_name_8">Amanda</string>
     <string name="fake_female_name_9">Helena</string>
     <string name="fake_female_name_10">Maria</string>
+    <string name="dialog_empty_title">Sem mensagens</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Envia uma mensagem a utilizadores com quem tens um Gosto Mútuo</string>
+    <string name="mutually">Mútuo</string>
+    <string name="write_them">Escreve-lhes uma mensagem</string>
+    <string name="go_dating">Começa a \nnamorar</string>
+    <string name="start_dating">Começar a namorar</string>
+    <string name="no_mutual">Não tens quaisquer Gostos Mútuos</string>
 </resources>

@@ -29,6 +29,9 @@ public class TextFormEditAdapter extends AbstractEditAdapter<FormItem> {
 
     public TextFormEditAdapter(Context context, FormItem formItem) {
         super(context);
+        if (TextUtils.equals(formItem.value, FormItem.EMPTY_FORM_VALUE)) {
+            formItem.value = "";
+        }
         mOriginalItem = formItem;
         mFormItem = new FormItem(formItem);
     }

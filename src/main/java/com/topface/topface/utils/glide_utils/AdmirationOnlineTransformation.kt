@@ -1,40 +1,32 @@
 package com.topface.topface.utils.glide_utils
 
 import android.content.Context
-import android.graphics.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.Transformation
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.bumptech.glide.load.engine.Resource
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import com.topface.topface.R
 
 /**
- * Этот transformation может рисовать восхищение и значок online на аватарке
- * Created by siberia87 on 30.11.16.
+ * Этот transformation для отрисовки значка online на item'e восхищений
+ * Created by siberia87 on 13.12.16.
  */
 class AdmirationOnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
-        val mAdmirationTransformation = AdmirationTransformation(mContext)
-        mAdmirationTransformation.transform(resource, outWidth, outHeight)
-        val workBitmap = mAdmirationTransformation.mMainBitmap
-        val width = workBitmap.width
-        val height = workBitmap.height
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        Canvas(bitmap).apply {
-            drawBitmap(workBitmap, 0f, 0f, null)
-            drawOnline(this, width, height)
-        }
-        return BitmapResource.obtain(bitmap, mBitmapPool)
+        super.transform(resource, outWidth, outHeight)
+        /*Тут рисуется значок онлайн с обводкой*/
+        drawOnline()
+        return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 
-    fun drawOnline(canvas: Canvas, width: Int, height: Int): Bitmap? =
-            BitmapFactory.decodeResource(mContext.resources, R.drawable.online_small).apply {
-                val online = Bitmap.createScaledBitmap(this, width, height, true)
-                canvas.drawBitmap(online, 0f, 0f, null)
-                online.recycle()
-            }
+    fun drawOnline() {
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.online_big).apply {
+            val online = Bitmap.createScaledBitmap(this, mMainBitmap.width, mMainBitmap.height, true)
+            mCanvas.drawBitmap(online, 0f, 0f, null)
+            online.recycle()
+        }.recycle()
+    }
 
     override fun getId() = "AdmirationOnlineTransformation"
 }

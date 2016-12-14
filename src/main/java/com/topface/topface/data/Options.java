@@ -197,6 +197,11 @@ public class Options extends AbstractData {
      */
     public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
 
+    /**
+     * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
+     */
+    private boolean dialogRedesignEnabled;
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -369,6 +374,8 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
 
+            dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
             // не пропустить ошибку парсинга опций, т.к. это может приветси к денежным потерям проекта
@@ -433,6 +440,10 @@ public class Options extends AbstractData {
 
     public String getPaymentwallLink() {
         return paymentwall;
+    }
+
+    public boolean getDialogRedesignEnabled() {
+        return dialogRedesignEnabled;
     }
 
     public boolean containsBannerType(String bannerType) {
