@@ -15,7 +15,7 @@
             type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout
         android:id="@+id/root_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -78,6 +78,6 @@
             app:layout_anchor="@id/appbar"
             app:layout_anchorGravity="bottom|center"/>
 
-    </android.support.design.widget.CoordinatorLayout>
+    </com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout>
 
 </layout>
