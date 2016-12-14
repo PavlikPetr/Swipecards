@@ -966,7 +966,7 @@
     <string name="fake_female_name_8">Anastasia</string>
     <string name="fake_female_name_9">Helen</string>
     <string name="fake_female_name_10">Maria</string>
-    <string name="dialog_empty_title">Aucun message</string>
+    <string name="dialog_empty_title">No messages</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Write to users with whom you have a Mutual Like</string>
     <string name="mutually">Mutual</string>
     <string name="write_them">Write to them</string>

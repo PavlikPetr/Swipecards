@@ -44,6 +44,7 @@
   <string name="profile_mygifts_empty">Nie dostałeś/-aś jeszvze żadnego prezentu</string>
   <string name="dating_people_unnoticed">Dziesięć osób zostało bez Twojej uwagi</string>
   <string name="dating_continue">Kontynuuj znajomość</string>
+  <string name="dating_better_look">Rozglądnij się lepiej!\nByć może ominęła Cię Twoja szansa!</string>
   <string name="edit_my_photos">Moje zdjęcia</string>
   <string name="general_search_empty_title">Niestety niczego nie znaleziono</string>
   <string name="general_search_empty_text">Możesz spróbować powtórzyć wyszukiwanie lub zmienić
@@ -140,8 +141,31 @@
   <string name="filter_age">Wiek</string>
   <string name="filter_cities_all">We wszystkich miastach</string>
   <string name="buying_header_title">Zakupy</string>
-  <plurals name="buying_gift_you_need_coins"/>
-  <plurals name="buying_admiration_you_need_coins"/>
+  <plurals name="buying_gift_you_need_coins">
+    <item quantity="few">Kup jeszcze %d  monety, aby móc podarować prezent.</item>
+    <item quantity="other">Kup jeszcze %d  monet, aby móc podarować prezent.</item>
+    <item quantity="one">Kup jeszcze %d  monetę, aby móc podarować prezent.</item>
+  </plurals>
+  <plurals name="buying_admiration_you_need_coins">
+    <item quantity="few">Aby móc wysłać zachwyt, kup jeszcze %d monety.</item>
+    <item quantity="other">Aby móc wysłać zachwyt, kup jeszcze %d monet.</item>
+    <item quantity="one">Aby móc wysłać zachwyt, kup jeszcze %d monetę.</item>
+  </plurals>
+  <plurals name="buying_unlock_likes_you_need_coins">
+    <item quantity="few">Aby zobaczyć kto Cię polubił, kup jeszcze %d monety</item>
+    <item quantity="other">Aby zobaczyć kto Cię polubił, kup jeszcze %d monet</item>
+    <item quantity="one">Aby zobaczyć kto Cię polubił, kup jeszcze %d monetę</item>
+  </plurals>
+  <plurals name="buying_leaders_you_need_coins">
+    <item quantity="few">Aby być widocznym dla wszystkich, kup jeszcze %d monety</item>
+    <item quantity="other">Aby być widocznym dla wszystkich, kup jeszcze %d monet</item>
+    <item quantity="one">Aby być widocznym dla wszystkich, kup jeszcze %d monetę</item>
+  </plurals>
+  <plurals name="buying_you_need_coins">
+    <item quantity="few">Brakuje Ci %d monet</item>
+    <item quantity="other">Brakuje Ci %d monet</item>
+    <item quantity="one">Brakuje Ci %d monety</item>
+  </plurals>
   <string name="buying_default_message">Możesz wysyłać prezenty i podziwy za monety</string>
   <string name="buying_money">Zakup monet</string>
   <string name="gifts_title">Wybierz prezent</string>
@@ -435,6 +459,8 @@
   <string name="black_list_add_short">Do czarnej listy</string>
   <string name="confirm_email_for_dating">Jesteśmy przeciwko spamowi. Potwierdź swój adres e-mail
         aby korzystać z Spark!</string>
+  <string name="confirm_email_for_dating_title">Nie tolerujemy Spamu</string>
+  <string name="confirm_email_for_dating_desc">Potwierdź swój adres e-mail, aby móc umawiać się z innymi użytkownikami Spark!</string>
   <string name="complain_type_swearing_msg">Chamstwo, groźby, przekleństwa</string>
   <string name="general_exit">Wyloguj się</string>
   <string name="general_get_dating">Poznawaj</string>
@@ -454,6 +480,8 @@
   <string name="auth_btn_ok">Odnoklassniki</string>
   <string name="auth_btn_tf">Konto Spark</string>
   <string name="birthday">Urodziny</string>
+  <string name="current_city">Aktualne miasto</string>
+  <string name="coins_subscription">Subskrypcja na monety</string>
   <string name="cannot_get_geo">Nie można ustalić lokalizacji</string>
   <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
      przetwarzania</string>
@@ -497,6 +525,7 @@
   <string name="ask_moar_info">Uzyskaj więcej informacji!</string>
   <string name="chat_mutual_symphaty">Wzajemne Polubienie!</string>
   <string name="chat_mutual_start_conversation">Zacznij czatować!</string>
+  <string name="chat_send_message_button_title">Wyślij</string>
   <string name="buy_vip_write_anyone">Napisz do każdej dziewczyny, nawet jeśli nie macie wzajemnych Polubień</string>
   <string name="buy_vip_write_anyone_boy">Napisz do każdego chłopaka, nawet jeśli nie macie wzajemnych Polubień</string>
   <string name="buy_vip_more_views">Uzyskaj 1,5 razy więcej odsłon profilu</string>

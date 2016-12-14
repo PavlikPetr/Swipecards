@@ -924,4 +924,11 @@
   <string name="fake_female_name_8">Нађа</string>
   <string name="fake_female_name_9">Јелена</string>
   <string name="fake_female_name_10">Маша</string>
+  <string name="dialog_empty_title">Немате разговоре</string>
+  <string name="write_those_with_who_you_have_mutual_sympathy">Пишите онима са којима имате узајамна свиђања</string>
+  <string name="mutually">Узајамно</string>
+  <string name="write_them">Пишите им</string>
+  <string name="go_dating">Започети \nупознавање</string>
+  <string name="start_dating">Започети упознавање</string>
+  <string name="no_mutual">Немате узајамних свиђања</string>
 </resources>
