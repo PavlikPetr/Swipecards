@@ -80,8 +80,11 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         currentUser = it
                         mDatingViewModelEvents.onDataReceived(it)
                         binding.root.post {
-                            prepareFormsData(it)
-                            mDatingButtonsView.unlockControls()
+                            //если есть currentUser, например после востановления стейта, то работаем с ним
+                            (if (currentUser == null) it else currentUser)?.let {
+                                prepareFormsData(it)
+                                mDatingButtonsView.unlockControls()
+                            }
                         }
                     }
                 }
@@ -244,9 +247,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         mUpdateInProcess = getBoolean(UPDATE_IN_PROCESS)
         mNewFilter = getBoolean(NEW_FILTER)
-        currentUser = getParcelable<SearchUser>(CURRENT_USER)?.apply {
-            prepareFormsData(this)
-        }
+        currentUser = getParcelable<SearchUser>(CURRENT_USER)
     }
 
     override fun release() {
