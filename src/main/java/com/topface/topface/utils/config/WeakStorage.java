@@ -75,18 +75,6 @@ public class WeakStorage extends AbstractConfig {
     }
 
     /**
-     * Sets "design version" to use in feeds
-     * if some value was set it WILL NOT be overwritten
-     * @param dialogRedesignEnabled true if must use new version
-     */
-    public void setProfileDialogRedesignEnabled(boolean dialogRedesignEnabled) {
-        SettingsMap settingsMap = getSettingsMap();
-        if (TextUtils.isEmpty(getStringField(settingsMap, PROFILE_DIALOG_REDESIGN_ENABLED))) {
-            setField(settingsMap, PROFILE_DIALOG_REDESIGN_ENABLED, String.valueOf(dialogRedesignEnabled));
-        }
-    }
-
-    /**
      * @return true if must use new design for feeds
      */
     public boolean getProfileDialogRedesignEnabled() {
