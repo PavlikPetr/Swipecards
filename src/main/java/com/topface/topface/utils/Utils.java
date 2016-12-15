@@ -64,6 +64,7 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -714,6 +715,12 @@ public class Utils {
 
     public static Boolean isLollipop() {
         return android.os.Build.VERSION.SDK_INT >= 21;
+    }
+
+    public static ArrayList<Integer> getLocationInWindow(View view) {
+        int[] position = new int[2];
+        view.getLocationInWindow(position);
+        return new ArrayList<Integer>(Arrays.asList(position[0], position[1]));
     }
 
 }

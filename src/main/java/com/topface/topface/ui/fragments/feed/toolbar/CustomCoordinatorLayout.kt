@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
+import com.topface.topface.utils.Utils
 
 /**
  * Created by ppavlik on 13.12.16.
@@ -16,31 +17,42 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     private var mPrevMotionEv: MyMotionEvent = MyMotionEvent.empty()
     private var mIsHorizontalScroll: Boolean? = null
+    private val mViewConfigList = listOf<ViewConfig>(ViewConfig(R.id.dating_album, 1f, 0.4f, true))
 
     override fun onInterceptTouchEvent(motionEvent: MotionEvent?): Boolean {
         printMotionEvent("catchTouch", motionEvent)
         when (motionEvent?.action) {
             MotionEvent.ACTION_DOWN -> {
                 dropSavedData()
-                motionEvent?.let { mPrevMotionEv = MyMotionEvent(it) }
+                motionEvent?.let {
+                    mPrevMotionEv = MyMotionEvent(it)
+                    mPrevMotionEv.viewConfig = findTrackedViewTouch(it)
+                }
             }
             MotionEvent.ACTION_MOVE -> {
                 if (mIsHorizontalScroll == null) {
-                    var crop = 0F
-                    findViewById(R.id.dating_album)?.let { view->
-                        motionEvent?.let {
-                            if(it.x>view.x && it.x<(view.x+view.width)&&it.y>view.y && it.y<(view.y+view.height)){
-                                crop = 0.4F
-                            }
-                        }
-                    }
-
-                    mIsHorizontalScroll = getDistanceX(motionEvent) >crop * getDistanceY(motionEvent)
+                    mIsHorizontalScroll = mPrevMotionEv.viewConfig.horizontalRider * getDistanceX(motionEvent) >
+                            mPrevMotionEv.viewConfig.verticalRider * getDistanceY(motionEvent)
                     motionEvent?.let { Debug.error("COORDINATOR_TOUCH mIsHorizontalScroll = $mIsHorizontalScroll ") }
                 }
             }
         }
         return senMotionEvent(motionEvent)
+    }
+
+    private fun findTrackedViewTouch(motionEvent: MotionEvent?): ViewConfig {
+        motionEvent?.let { ev ->
+            mViewConfigList.find {
+                val id = it.id
+                if (id != null) {
+                    findViewById(id)?.let { view ->
+                        val position = Utils.getLocationInWindow(view)
+                        ev.x > position[0] && ev.x < (position[0] + view.width) && ev.y > position[1] && ev.y < (position[1] + view.height)
+                    } ?: false
+                } else false
+            }?.let { return it }
+        }
+        return ViewConfig()
     }
 
     private fun dropSavedData() {
@@ -72,36 +84,58 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     private fun senMotionEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent != null) {
-            mIsHorizontalScroll?.let {
-                if (it) {
-                    findViewById(R.id.dating_album)?.let { view ->
-                        if (!mPrevMotionEv.isRecycled) {
-                            mPrevMotionEv.getMotionEvent().apply {
-                                view.onTouchEvent(this)
-                                printMotionEvent("send it to view", this)
-                                recyclePrevMotionEvent()
-                            }
-                        }
+            val id = mPrevMotionEv.viewConfig.id
+            if (id != null) {
+                mIsHorizontalScroll?.let {
+                    if (it == mPrevMotionEv.viewConfig.isHorizontalScrollPrefer) {
                         val tempMotionEvent = MyMotionEvent(motionEvent)
-                        tempMotionEvent.y=mPrevMotionEv.y
-                        view.onTouchEvent(tempMotionEvent.getMotionEvent())
-                        printMotionEvent("send motionEvent to view", tempMotionEvent.getMotionEvent())
-                    }
-
-                } else {
-                    if (!mPrevMotionEv.isRecycled) {
-                        mPrevMotionEv.getMotionEvent().apply {
-                            super.onInterceptTouchEvent(this)
-                            printMotionEvent("send it to super", this)
-                            recyclePrevMotionEvent()
+                        if (it) {
+                            tempMotionEvent.y = mPrevMotionEv.y
+                        } else {
+                            tempMotionEvent.x = mPrevMotionEv.x
                         }
+                        sendMotionEventToView(tempMotionEvent.getMotionEvent(), id)?.let { return it }
+                    } else {
+                        sendMotionEventToParent(motionEvent)?.let { return it }
                     }
-                    printMotionEvent("send motionEvent to super", motionEvent)
-                    return super.onInterceptTouchEvent(motionEvent)
                 }
+            } else {
+                sendMotionEventToParent(motionEvent)?.let { return it }
             }
         }
         return false
+    }
+
+    private fun sendMotionEventToView(motionEvent: MotionEvent?, viewId: Int): Boolean? {
+        if (motionEvent != null) {
+            findViewById(viewId)?.let { view ->
+                if (!mPrevMotionEv.isRecycled) {
+                    mPrevMotionEv.getMotionEvent().apply {
+                        view.onTouchEvent(this)
+                        printMotionEvent("send it to view", this)
+                        recyclePrevMotionEvent()
+                    }
+                }
+                view.onTouchEvent(motionEvent)
+                printMotionEvent("send motionEvent to view", motionEvent)
+            }
+        }
+        return null
+    }
+
+    private fun sendMotionEventToParent(motionEvent: MotionEvent?): Boolean? {
+        if (motionEvent != null) {
+            if (!mPrevMotionEv.isRecycled) {
+                mPrevMotionEv.getMotionEvent().apply {
+                    super.onInterceptTouchEvent(this)
+                    printMotionEvent("send it to super", this)
+                    recyclePrevMotionEvent()
+                }
+            }
+            printMotionEvent("send motionEvent to super", motionEvent)
+            return super.onInterceptTouchEvent(motionEvent)
+        }
+        return null
     }
 
     private fun printMotionEvent(tag: String, ev: MotionEvent?) {
@@ -109,7 +143,8 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
     }
 
     data class MyMotionEvent(var downTime: Long = 0L, var eventTime: Long = 0L, var action: Int = MyMotionEvent.UNDEFINED_ACTION,
-                             var x: Float = 0F, var y: Float = 0F, var metaState: Int = UNDEFINED_META_STATE, var isRecycled: Boolean = false) {
+                             var x: Float = 0F, var y: Float = 0F, var metaState: Int = UNDEFINED_META_STATE,
+                             var viewConfig: ViewConfig = ViewConfig(), var isRecycled: Boolean = false) {
         constructor(ev: MotionEvent) : this(ev.downTime, ev.eventTime, ev.action, ev.x, ev.y, ev.metaState)
 
         companion object {
@@ -124,4 +159,6 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
             isRecycled = true
         }
     }
+
+    data class ViewConfig(var id: Int? = null, var horizontalRider: Float = 1F, var verticalRider: Float = 1F, var isHorizontalScrollPrefer: Boolean? = null)
 }
