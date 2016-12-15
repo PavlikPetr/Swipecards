@@ -140,6 +140,10 @@
   <string name="filter_extra_parameters">Dodatkowe kryteria</string>
   <string name="filter_age">Wiek</string>
   <string name="filter_cities_all">We wszystkich miastach</string>
+  <string name="dating_empty_nothing_found">Nic nie znaleziono!</string>
+  <string name="dating_empty_reset">Resetuj</string>
+  <string name="dating_empty_change_settings">Zmiana</string>
+  <string name="dating_empty_try_to_change_settings_or_reset">Spróbuj zresetować lub zmienić opcje wyszukiwania</string>
   <string name="buying_header_title">Zakupy</string>
   <plurals name="buying_gift_you_need_coins">
     <item quantity="few">Kup jeszcze %d  monety, aby móc podarować prezent.</item>
@@ -285,6 +289,7 @@
   <string name="settings_feedback_email">E-mail kontaktowy</string>
   <string name="settings_invalid_email">Niewłaściwy e-mail</string>
   <string name="chat_write_message">Napisz wiadomość</string>
+  <string name="dating_message">Wiadomość …</string>
   <string name="buying_sympathies">Zakup sympatie</string>
   <string name="general_reconnect_social">Nie ma dostępu do sieci socjalnej. Spróbuj ponownie
         później.</string>
@@ -301,6 +306,7 @@
   <string name="general_version_not_supported">Twoja wersja aplikacji nie jest aktualna. Prosimy o
         odnowienie aplikacji</string>
   <string name="default_price_format">Razem: %.2f USD</string>
+  <string name="default_price_format_extended">Razem: %1$.2f %2$s</string>
   <string name="leaders_pick_condition">Nie możesz wybrać zdjęcie o rankingu poniżej %d%%:</string>
   <string name="general_gift">Prezent</string>
   <string name="user_actions_chat">Rozmowa</string>
@@ -475,11 +481,15 @@
   <string name="chat_block_not_mutual">Możesz zacząć czatować z użykownikiem, jesli on/ona wyśle Tobie Polubienie lub jeśli posiadasz status VIP</string>
   <string name="add_to_favorite_block_not_vip">Tylko użytkownicy VIP mogą dodawać Ulubionych z ekranu
         Randki</string>
+  <string name="delete_account_are_you_sure">Jesteś pewien?</string>
+  <string name="delete">Usuń</string>
+  <string name="delete_account_error">Niestety nie udało się usunąć Twojego konta. Proszę spróbować ponownie.</string>
   <string name="admiration_sended">Adoracja została wysłana.</string>
   <string name="chat">Czatuj</string>
   <string name="auth_btn_ok">Odnoklassniki</string>
   <string name="auth_btn_tf">Konto Spark</string>
   <string name="birthday">Urodziny</string>
+  <string name="default_ringtone">Domyślnie</string>
   <string name="current_city">Aktualne miasto</string>
   <string name="coins_subscription">Subskrypcja na monety</string>
   <string name="cannot_get_geo">Nie można ustalić lokalizacji</string>
