@@ -26,12 +26,18 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
             }
             MotionEvent.ACTION_MOVE -> {
                 if (mIsHorizontalScroll == null) {
-                    mIsHorizontalScroll = getDistanceX(motionEvent) > 3*getDistanceY(motionEvent)
+                    var crop = 0F
+                    findViewById(R.id.dating_album)?.let { view->
+                        motionEvent?.let {
+                            if(it.x>view.x && it.x<(view.x+view.width)&&it.y>view.y && it.y<(view.y+view.height)){
+                                crop = 0.4F
+                            }
+                        }
+                    }
+
+                    mIsHorizontalScroll = getDistanceX(motionEvent) >crop * getDistanceY(motionEvent)
                     motionEvent?.let { Debug.error("COORDINATOR_TOUCH mIsHorizontalScroll = $mIsHorizontalScroll ") }
                 }
-            }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                dropSavedData()
             }
         }
         return senMotionEvent(motionEvent)
@@ -48,7 +54,7 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     private fun getDistanceX(motionEvent: MotionEvent?): Float {
         motionEvent?.let { currentMotionEvent ->
-            if (!mPrevMotionEv.isEmpty()) {
+            if (!mPrevMotionEv.isRecycled) {
                 return Math.abs(currentMotionEvent.x - mPrevMotionEv.x)
             }
         }
@@ -57,7 +63,7 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     private fun getDistanceY(motionEvent: MotionEvent?): Float {
         motionEvent?.let { currentMotionEvent ->
-            if (!mPrevMotionEv.isEmpty()) {
+            if (!mPrevMotionEv.isRecycled) {
                 return Math.abs(currentMotionEvent.y - mPrevMotionEv.y)
             }
         }
@@ -68,20 +74,22 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         if (motionEvent != null) {
             mIsHorizontalScroll?.let {
                 if (it) {
-                    findViewById(R.id.collapse_frame)?.let { view ->
-                        if(!mPrevMotionEv.isEmpty()){
+                    findViewById(R.id.dating_album)?.let { view ->
+                        if (!mPrevMotionEv.isRecycled) {
                             mPrevMotionEv.getMotionEvent().apply {
                                 view.onTouchEvent(this)
                                 printMotionEvent("send it to view", this)
                                 recyclePrevMotionEvent()
                             }
                         }
-                        view.onTouchEvent(motionEvent)
-                        printMotionEvent("send motionEvent to view", motionEvent)
+                        val tempMotionEvent = MyMotionEvent(motionEvent)
+                        tempMotionEvent.y=mPrevMotionEv.y
+                        view.onTouchEvent(tempMotionEvent.getMotionEvent())
+                        printMotionEvent("send motionEvent to view", tempMotionEvent.getMotionEvent())
                     }
 
                 } else {
-                    if(!mPrevMotionEv.isEmpty()){
+                    if (!mPrevMotionEv.isRecycled) {
                         mPrevMotionEv.getMotionEvent().apply {
                             super.onInterceptTouchEvent(this)
                             printMotionEvent("send it to super", this)
@@ -101,27 +109,19 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
     }
 
     data class MyMotionEvent(var downTime: Long = 0L, var eventTime: Long = 0L, var action: Int = MyMotionEvent.UNDEFINED_ACTION,
-                             var x: Float = 0F, var y: Float = 0F, var metaState: Int = UNDEFINED_META_STATE) {
+                             var x: Float = 0F, var y: Float = 0F, var metaState: Int = UNDEFINED_META_STATE, var isRecycled: Boolean = false) {
         constructor(ev: MotionEvent) : this(ev.downTime, ev.eventTime, ev.action, ev.x, ev.y, ev.metaState)
 
         companion object {
             public const val UNDEFINED_ACTION = Int.MAX_VALUE
             public const val UNDEFINED_META_STATE = Int.MAX_VALUE
-            public fun empty() = MyMotionEvent()
+            public fun empty() = MyMotionEvent(isRecycled = true)
         }
 
         public fun getMotionEvent() = MotionEvent.obtain(downTime, eventTime, action, x, y, metaState)
 
-        public fun isEmpty() = downTime == 0L && eventTime == 0L && action == UNDEFINED_ACTION
-                && x == 0F && y == 0F && metaState == UNDEFINED_META_STATE
-
         public fun recycle() {
-            downTime = 0L
-            eventTime = 0L
-            action = UNDEFINED_ACTION
-            x = 0F
-            y = 0F
-            metaState = UNDEFINED_META_STATE
+            isRecycled = true
         }
     }
 }
