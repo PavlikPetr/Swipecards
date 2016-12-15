@@ -540,7 +540,7 @@ public class AuthFragment extends BaseAuthFragment {
 
     private void sendFirstViewLoginScreen() {
         AppConfig appConfig = App.getAppConfig();
-        if (appConfig.isFirstViewLoginScreen()) {
+        if (appConfig.isFirstViewLoginScreen() && AuthToken.getInstance().isEmpty()) {
             AuthStatistics.sendFirstViewLoginPage();
             appConfig.setFirstViewLoginScreen();
             appConfig.saveConfig();
