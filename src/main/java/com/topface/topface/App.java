@@ -524,9 +524,17 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         AppConfig appConfig = App.getAppConfig();
         App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
+        lookedAuthScreen();
     }
 
-
+    private void lookedAuthScreen() {
+        AppConfig appConfig = App.getAppConfig();
+        if (!appConfig.isFirstViewLoginScreen() && AuthToken.getInstance().isEmpty()) {
+            appConfig.setFirstViewLoginScreen(true);
+            appConfig.saveConfig();
+        }
+    }
+    
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
      *
