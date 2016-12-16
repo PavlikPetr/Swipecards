@@ -75,8 +75,8 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 // add empty dialogs stub if need
                 var found = false
                 val stub = EmptyDialogsStubItem()
-                data.observableList.forEach { item ->
-                    if (item.javaClass == stub.javaClass) {
+                data.observableList.forEach {
+                    if (it.javaClass == stub.javaClass) {
                         found = true
                         return@forEach
                     }
@@ -290,12 +290,18 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         val iterator = data.observableList.listIterator()
         var item: FeedDialog
         var gotUser = false
+        // этом цикле делается две задачи
+        // 1 удаляется диалог с пользователем, которого внесли в черный список
+        // 2 вычисляется флаг, что остались еще диалоги, помимо всяких заглушек/реклам и тд
         while (iterator.hasNext()) {
             item = iterator.next()
             if (item.user != null) {
+                // если нашли пользователя, то либо удалим его (если его внесли в чс)
+                // либо запомним что еще есть диалоги
                 if (item.user.id == userId) iterator.remove() else gotUser = true
             }
         }
+        // если нет диалогов с пользователями, то надо уведомить для добавления заглушки
         if (!gotUser) mEventBus.setData(DialogItemsEvent(false))
     }
 }
