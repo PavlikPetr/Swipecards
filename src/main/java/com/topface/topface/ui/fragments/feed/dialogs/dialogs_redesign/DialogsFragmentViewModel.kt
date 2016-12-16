@@ -70,17 +70,15 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
             }
         })
         mContentAvailableSubscription = Observable.zip(mEventBus.getObservable(DialogContactsEvent::class.java),
-                (mEventBus.getObservable(DialogItemsEvent::class.java))) { item1, item2 ->
+                mEventBus.getObservable(DialogItemsEvent::class.java)) { item1, item2 ->
             item1.hasContacts || item2.hasDialogItems
         }.first().filter { !it }.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
             override fun onNext(type: Boolean?) {
-                data.observableList.clear()
                 isEnable.set(false)
+                data.observableList.clear()
                 data.observableList.add(EmptyDialogsFragmentStubItem())
             }
         })
-
-
     }
 
     override fun onResume() {
@@ -111,7 +109,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                     override fun onNext(data: FeedListData<FeedDialog>?) {
                         data?.let {
                             addContactsItem()
-                            mEventBus.setData(DialogItemsEvent(data.items.isNotEmpty()))
                             if (it.items.isEmpty()) {
                                 this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsStubItem())
                                 this@DialogsFragmentViewModel.data.observableList.add(AppDayStubItem())
@@ -121,6 +118,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 handleUnreadState(it, false)
                                 mIsAllDataLoaded = !data.more
                             }
+                            mEventBus.setData(DialogItemsEvent(data.items.isNotEmpty()))
                         }
                     }
                 })

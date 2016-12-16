@@ -35,6 +35,7 @@ import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,11 +75,11 @@ public class BindingsAdapters {
 
                 @Override
                 public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
-                    Debug.log("EPTA onItemRangeRemoved" + objects.size());
+                    Debug.log("EPTA onItemRangeRemoved " + objects.size());
                     if (itemCount == 1) {
                         adapter.getData().remove(positionStart);
                     } else {
-                        adapter.getData().removeAll(adapter.getData().subList(positionStart, itemCount));
+                        adapter.getData().removeAll(new ArrayList<>(adapter.getData().subList(positionStart, itemCount)));
                     }
                     adapter.notifyItemRangeRemoved(positionStart, itemCount);
                 }

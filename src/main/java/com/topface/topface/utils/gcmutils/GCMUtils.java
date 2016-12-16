@@ -381,7 +381,9 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
+        boolean dialogRedesignEnabled = App.get().getOptions().getDialogRedesignEnabled();
         Intent i = null;
+        String pageName;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
@@ -390,12 +392,12 @@ public class GCMUtils {
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
+                    pageName = dialogRedesignEnabled ? DialogsFragment.class.getName() : MutualFragment.class.getName();
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(dialogRedesignEnabled ? TABBED_DIALOGS : TABBED_LIKES));
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
                 }
                 break;
-
             case GCM_TYPE_LIKE:
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
@@ -404,13 +406,13 @@ public class GCMUtils {
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
-
             case GCM_TYPE_ADMIRATION:
                 if (showAdmirations) {
                     lastNotificationType = GCM_TYPE_ADMIRATION;
+                    pageName = dialogRedesignEnabled ? DialogsFragment.class.getName() : AdmirationFragment.class.getName();
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, AdmirationFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(dialogRedesignEnabled ? TABBED_DIALOGS : TABBED_LIKES));
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
                 }
                 break;
             case GCM_TYPE_GUESTS:

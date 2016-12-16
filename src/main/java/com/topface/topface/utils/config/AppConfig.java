@@ -144,7 +144,7 @@ public class AppConfig extends AbstractConfig {
         // ключ, который устанавливает количество отправленных симпатий
         addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
         // ключ, который устанавливает статус первого просмотра экрана логина
-        addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, true);
+        addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, false);
         // храним последний выбранный тип попапа триального вип
         addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
     }
@@ -605,8 +605,8 @@ public class AppConfig extends AbstractConfig {
     }
 
     /* Тут устанавливаю статус первого просмотра экрана логина (просмотрен) */
-    public void setFirstViewLoginScreen() {
-        setField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN, false);
+    public void setFirstViewLoginScreen(boolean looked) {
+        setField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN, looked);
     }
 
     /* Получение статуса первого просмотра экрана логина */

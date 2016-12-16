@@ -496,7 +496,7 @@ public class AuthFragment extends BaseAuthFragment {
             loadAllProfileData();
         }
 
-        sendFirstViewLoginScreen();
+        sendLookedAuthScreen();
     }
 
     @Override
@@ -538,11 +538,11 @@ public class AuthFragment extends BaseAuthFragment {
 //        return getString(R.string.app_name) + "                          ";
 //    }
 
-    private void sendFirstViewLoginScreen() {
+    private void sendLookedAuthScreen() {
         AppConfig appConfig = App.getAppConfig();
         if (appConfig.isFirstViewLoginScreen()) {
             AuthStatistics.sendFirstViewLoginPage();
-            appConfig.setFirstViewLoginScreen();
+            appConfig.setFirstViewLoginScreen(false);
             appConfig.saveConfig();
         }
     }
