@@ -717,6 +717,7 @@ public class Utils {
         return android.os.Build.VERSION.SDK_INT >= 21;
     }
 
+    // костыль только по причине того, что IntArray котлин не подходит для getLocationInWindow
     public static ArrayList<Integer> getLocationInWindow(View view) {
         int[] position = new int[2];
         view.getLocationInWindow(position);
