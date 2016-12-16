@@ -7,7 +7,6 @@ import com.topface.topface.R
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.extensions.getDrawable
-import kotlin.properties.Delegates
 
 /**
  * Рулим options меню в знакомствах
