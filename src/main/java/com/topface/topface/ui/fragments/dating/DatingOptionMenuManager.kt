@@ -12,7 +12,6 @@ import com.topface.topface.utils.extensions.getDrawable
  * Рулим options меню в знакомствах
  * Created by ppavlik on 11.11.16.
  */
-//TODO закоментил кнопку cebab-menu до реализации выпадающего списка
 class DatingOptionMenuManager(private val mNavigator: IFeedNavigator) : IAppBarState, IOptionMenuCallback {
     private var mFilterItem: MenuItem? = null
     private var filterImgRes = 0
