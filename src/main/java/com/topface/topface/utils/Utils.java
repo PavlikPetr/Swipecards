@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
@@ -64,7 +63,6 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

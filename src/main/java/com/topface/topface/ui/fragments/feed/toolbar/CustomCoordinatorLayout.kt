@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
+import com.topface.framework.utils.Debug
 import com.topface.topface.utils.Utils
 
 /**
@@ -68,15 +69,13 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         mIsHorizontalScroll = null
     }
 
-    private fun recyclePrevMotionEvent() {
-        mPrevMotionEv.recycle()
-    }
+    private fun recyclePrevMotionEvent() = mPrevMotionEv.recycle()
 
     // находим величину смещения по оси X
     private fun getDistanceX(motionEvent: MotionEvent?): Float {
-        motionEvent?.let { currentMotionEvent ->
+        motionEvent?.let {
             if (!mPrevMotionEv.isRecycled) {
-                return Math.abs(currentMotionEvent.x - mPrevMotionEv.x)
+                return Math.abs(it.x - mPrevMotionEv.x)
             }
         }
         return 0f
@@ -84,52 +83,49 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     // находим величину смещения по оси Y
     private fun getDistanceY(motionEvent: MotionEvent?): Float {
-        motionEvent?.let { currentMotionEvent ->
+        motionEvent?.let {
             if (!mPrevMotionEv.isRecycled) {
-                return Math.abs(currentMotionEvent.y - mPrevMotionEv.y)
+                return Math.abs(it.y - mPrevMotionEv.y)
             }
         }
         return 0f
     }
 
-    private fun senMotionEvent(motionEvent: MotionEvent?): Boolean {
-        if (motionEvent != null) {
-            val id = mPrevMotionEv.viewConfig.id
-            /**
-             * если тач начинался со view, для которой следует корректировать свайп,
-             * то в нее и отправим данные
-             * в противном случае в super
-             */
-            if (id != null) {
-                mIsHorizontalScroll?.let {
-                    /**
-                     * если текущее состояние направления скрола совпадает с тем, которое следует
-                     * переопределить для этой view, то подменяем координаты одной из осей
-                     * т.е. если скролл горизонтальный, то подменим координаты тача по Y
-                     * это нужно для того, чтобы view, в которую мы досылаем тач не сомневалась,
-                     * что скролл именно в этом направлении выполняется
-                     *
-                     * если направление скрола не совпадает с предпочтениями этой вью, то отправляем тачи
-                     * в super
-                     */
-                    if (it == mPrevMotionEv.viewConfig.isHorizontalScrollPrefer) {
-                        val tempMotionEvent = MyMotionEvent(motionEvent)
-                        if (it) {
-                            tempMotionEvent.y = mPrevMotionEv.y
-                        } else {
-                            tempMotionEvent.x = mPrevMotionEv.x
-                        }
-                        sendMotionEventToView(tempMotionEvent.getMotionEvent(), id)?.let { return it }
+    private fun senMotionEvent(motionEvent: MotionEvent?) = motionEvent?.let {
+        val id = mPrevMotionEv.viewConfig.id
+        /**
+         * если тач начинался со view, для которой следует корректировать свайп,
+         * то в нее и отправим данные
+         * в противном случае в super
+         */
+        if (id != null) {
+            mIsHorizontalScroll?.let {
+                /**
+                 * если текущее состояние направления скрола совпадает с тем, которое следует
+                 * переопределить для этой view, то подменяем координаты одной из осей
+                 * т.е. если скролл горизонтальный, то подменим координаты тача по Y
+                 * это нужно для того, чтобы view, в которую мы досылаем тач не сомневалась,
+                 * что скролл именно в этом направлении выполняется
+                 *
+                 * если направление скрола не совпадает с предпочтениями этой вью, то отправляем тачи
+                 * в super
+                 */
+                if (it == mPrevMotionEv.viewConfig.isHorizontalScrollPrefer) {
+                    val tempMotionEvent = MyMotionEvent(motionEvent)
+                    if (it) {
+                        tempMotionEvent.y = mPrevMotionEv.y
                     } else {
-                        sendMotionEventToParent(motionEvent)?.let { return it }
+                        tempMotionEvent.x = mPrevMotionEv.x
                     }
+                    sendMotionEventToView(tempMotionEvent.getMotionEvent(), id)?.let { it }
+                } else {
+                    sendMotionEventToParent(motionEvent)?.let { it }
                 }
-            } else {
-                sendMotionEventToParent(motionEvent)?.let { return it }
             }
+        } else {
+            sendMotionEventToParent(motionEvent)?.let { it }
         }
-        return false
-    }
+    } ?: false
 
     // досылаем тачи во вью, на которую пришелся ACTION_DOWN, если она была в списке конфигураций
     private fun sendMotionEventToView(motionEvent: MotionEvent?, viewId: Int): Boolean? {
