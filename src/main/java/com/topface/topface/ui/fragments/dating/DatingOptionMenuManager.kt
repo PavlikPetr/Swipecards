@@ -7,13 +7,11 @@ import com.topface.topface.R
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.extensions.getDrawable
-import kotlin.properties.Delegates
 
 /**
  * Рулим options меню в знакомствах
  * Created by ppavlik on 11.11.16.
  */
-//TODO закоментил кнопку cebab-menu до реализации выпадающего списка
 class DatingOptionMenuManager(private val mNavigator: IFeedNavigator) : IAppBarState, IOptionMenuCallback {
     private var mFilterItem: MenuItem? = null
     private var filterImgRes = 0

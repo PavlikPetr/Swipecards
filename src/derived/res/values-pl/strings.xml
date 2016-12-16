@@ -196,6 +196,7 @@
     <string name="edit_selected">Wybrana</string>
     <string name="edit_name">Imię</string>
     <string name="edit_age">Wiek</string>
+    <string name="edit_age_error">Aby używać aplikacji, musisz mieć od  %1$d do %2$d lat.</string>
     <string name="edit_status">Status</string>
     <string name="edit_set_as_main">Zapisz jako główne</string>
     <string name="edit_delete">Usuń</string>
@@ -524,18 +525,24 @@
         Randki</string>
     <string name="delete_account_are_you_sure">Jesteś pewien?</string>
     <string name="delete">Usuń</string>
+    <string name="delete_account_warning">Uwaga! Próbujesz usunąć swój profil w Topface.</string>
     <string name="delete_account_error">Niestety nie udało się usunąć Twojego konta. Proszę spróbować ponownie.</string>
+    <string name="delete_account_will_be_restored_are_you_sure">Próbujesz zalogować się do usuniętego konta. Kontynuuj jeżeli chcesz, żeby zostało ono przywrócone.</string>
     <string name="admiration_sended">Adoracja została wysłana.</string>
     <string name="chat">Czatuj</string>
     <string name="auth_btn_ok">Odnoklassniki</string>
     <string name="auth_btn_tf">Konto Topface</string>
     <string name="birthday">Urodziny</string>
+    <string name="delete_visitors">Usuń odwiedzających</string>
+    <string name="delete_admirations">Usuń zachwyt</string>
     <string name="default_ringtone">Domyślnie</string>
     <string name="current_city">Aktualne miasto</string>
     <string name="coins_subscription">Subskrypcja na monety</string>
     <string name="cannot_get_geo">Nie można ustalić lokalizacji</string>
     <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
      przetwarzania</string>
+    <string name="dialog">Wiadomości</string>
+    <string name="email_changing">Zmiana adresu e-mail</string>
     <string name="buy_more_sympathies">Otrzymaj więcej polubień, stań się popularny/-na</string>
     <string name="add_leader_hint">Twoje powitanie…</string>
     <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
@@ -558,6 +565,7 @@
     <string name="album_photo_deleted">Usunięto zdjęcie</string>
     <string name="album_main_photo">Główne zdjęcie profilowe</string>
     <string name="add_photo_feed_header_description">Opublikuj swoje zdjęcie z powitaniem, a tysiące ludzi Cię zobaczy. Zostań zauważony/-na i zacznij poznawać nowych ludzi!</string>
+    <string name="dont_miss_a_beat">Nie przegap tego!</string>
     <string name="buy_vip_dating_only">Po prostu randkuj</string>
     <string name="buy_vip_message">Nie czekaj na Polubienia profilu, rozpocznij rozmowę!</string>
     <string name="buy_vip_write_tops">Pisz do posiadaczy Najpopularniejszych profili bez ograniczeń</string>
@@ -581,4 +589,6 @@
     <string name="buy_vip_write_anyone">Napisz do każdej dziewczyny, nawet jeśli nie macie wzajemnych Polubień</string>
     <string name="buy_vip_write_anyone_boy">Napisz do każdego chłopaka, nawet jeśli nie macie wzajemnych Polubień</string>
     <string name="buy_vip_more_views">Uzyskaj 1,5 razy więcej odsłon profilu</string>
+    <string name="description_experiment4_view1">Ze statusem VIP %1$s i %2$s będziesz widoczny!</string>
+    <string name="dialog_empty_title">Nie masz żadnych wiadomości</string>
 </resources>
