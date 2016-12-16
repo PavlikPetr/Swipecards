@@ -18,7 +18,8 @@
     <com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout
         android:id="@+id/root_coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:viewConfigList="@{model.viewConfigList}">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"

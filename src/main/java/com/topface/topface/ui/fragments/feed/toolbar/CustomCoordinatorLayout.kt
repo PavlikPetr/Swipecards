@@ -4,11 +4,10 @@ import android.content.Context
 import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
-import com.topface.framework.utils.Debug
-import com.topface.topface.R
 import com.topface.topface.utils.Utils
 
 /**
+ * CoordinatorLayout который умеет досылать события touch во view, заданных в setViewConfigList
  * Created by ppavlik on 13.12.16.
  */
 class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : CoordinatorLayout(context, attrs, defStyleAttr) {
@@ -17,27 +16,34 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
 
     private var mPrevMotionEv: MyMotionEvent = MyMotionEvent.empty()
     private var mIsHorizontalScroll: Boolean? = null
-    private val mViewConfigList = listOf<ViewConfig>(ViewConfig(R.id.dating_album, 1f, 0.4f, true))
+    private var mViewConfigList = listOf<ViewConfig>()
 
     override fun onInterceptTouchEvent(motionEvent: MotionEvent?): Boolean {
-        printMotionEvent("catchTouch", motionEvent)
         when (motionEvent?.action) {
             MotionEvent.ACTION_DOWN -> {
                 dropSavedData()
                 motionEvent?.let {
                     mPrevMotionEv = MyMotionEvent(it)
+                    /**
+                     * находим view, на которую приходится первое касание
+                     * ориентируемся только на список вью, в которых следует переопределить логику поведения скролов
+                     */
                     mPrevMotionEv.viewConfig = findTrackedViewTouch(it)
                 }
             }
             MotionEvent.ACTION_MOVE -> {
+                // только при первом событии ACTION_MOVE определяем направление скрола, чтобы оно не менялось в процессе
                 if (mIsHorizontalScroll == null) {
                     mIsHorizontalScroll = mPrevMotionEv.viewConfig.horizontalRider * getDistanceX(motionEvent) >
                             mPrevMotionEv.viewConfig.verticalRider * getDistanceY(motionEvent)
-                    motionEvent?.let { Debug.error("COORDINATOR_TOUCH mIsHorizontalScroll = $mIsHorizontalScroll ") }
                 }
             }
         }
         return senMotionEvent(motionEvent)
+    }
+
+    public fun setViewConfigList(list: List<ViewConfig>) {
+        mViewConfigList = list
     }
 
     private fun findTrackedViewTouch(motionEvent: MotionEvent?): ViewConfig {
@@ -47,7 +53,8 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
                 if (id != null) {
                     findViewById(id)?.let { view ->
                         val position = Utils.getLocationInWindow(view)
-                        ev.x > position[0] && ev.x < (position[0] + view.width) && ev.y > position[1] && ev.y < (position[1] + view.height)
+                        ev.x > position[0] && ev.x < (position[0] + view.width) &&
+                                ev.y > position[1] && ev.y < (position[1] + view.height)
                     } ?: false
                 } else false
             }?.let { return it }
@@ -55,6 +62,7 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         return ViewConfig()
     }
 
+    // сбрасываем хранимые данные в дефолт
     private fun dropSavedData() {
         recyclePrevMotionEvent()
         mIsHorizontalScroll = null
@@ -64,6 +72,7 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         mPrevMotionEv.recycle()
     }
 
+    // находим величину смещения по оси X
     private fun getDistanceX(motionEvent: MotionEvent?): Float {
         motionEvent?.let { currentMotionEvent ->
             if (!mPrevMotionEv.isRecycled) {
@@ -73,6 +82,7 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         return 0f
     }
 
+    // находим величину смещения по оси Y
     private fun getDistanceY(motionEvent: MotionEvent?): Float {
         motionEvent?.let { currentMotionEvent ->
             if (!mPrevMotionEv.isRecycled) {
@@ -85,8 +95,23 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
     private fun senMotionEvent(motionEvent: MotionEvent?): Boolean {
         if (motionEvent != null) {
             val id = mPrevMotionEv.viewConfig.id
+            /**
+             * если тач начинался со view, для которой следует корректировать свайп,
+             * то в нее и отправим данные
+             * в противном случае в super
+             */
             if (id != null) {
                 mIsHorizontalScroll?.let {
+                    /**
+                     * если текущее состояние направления скрола совпадает с тем, которое следует
+                     * переопределить для этой view, то подменяем координаты одной из осей
+                     * т.е. если скролл горизонтальный, то подменим координаты тача по Y
+                     * это нужно для того, чтобы view, в которую мы досылаем тач не сомневалась,
+                     * что скролл именно в этом направлении выполняется
+                     *
+                     * если направление скрола не совпадает с предпочтениями этой вью, то отправляем тачи
+                     * в super
+                     */
                     if (it == mPrevMotionEv.viewConfig.isHorizontalScrollPrefer) {
                         val tempMotionEvent = MyMotionEvent(motionEvent)
                         if (it) {
@@ -106,40 +131,34 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         return false
     }
 
+    // досылаем тачи во вью, на которую пришелся ACTION_DOWN, если она была в списке конфигураций
     private fun sendMotionEventToView(motionEvent: MotionEvent?, viewId: Int): Boolean? {
         if (motionEvent != null) {
             findViewById(viewId)?.let { view ->
                 if (!mPrevMotionEv.isRecycled) {
                     mPrevMotionEv.getMotionEvent().apply {
                         view.onTouchEvent(this)
-                        printMotionEvent("send it to view", this)
                         recyclePrevMotionEvent()
                     }
                 }
                 view.onTouchEvent(motionEvent)
-                printMotionEvent("send motionEvent to view", motionEvent)
             }
         }
         return null
     }
 
+    // отправляем тачи в super
     private fun sendMotionEventToParent(motionEvent: MotionEvent?): Boolean? {
         if (motionEvent != null) {
             if (!mPrevMotionEv.isRecycled) {
                 mPrevMotionEv.getMotionEvent().apply {
                     super.onInterceptTouchEvent(this)
-                    printMotionEvent("send it to super", this)
                     recyclePrevMotionEvent()
                 }
             }
-            printMotionEvent("send motionEvent to super", motionEvent)
             return super.onInterceptTouchEvent(motionEvent)
         }
         return null
-    }
-
-    private fun printMotionEvent(tag: String, ev: MotionEvent?) {
-        ev?.let { Debug.error("COORDINATOR_TOUCH $tag action = ${ev.action} x = ${ev.x} y = ${ev.y} ") } ?: Debug.error("COORDINATOR_TOUCH $tag action = null")
     }
 
     data class MyMotionEvent(var downTime: Long = 0L, var eventTime: Long = 0L, var action: Int = MyMotionEvent.UNDEFINED_ACTION,
@@ -160,5 +179,6 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         }
     }
 
-    data class ViewConfig(var id: Int? = null, var horizontalRider: Float = 1F, var verticalRider: Float = 1F, var isHorizontalScrollPrefer: Boolean? = null)
+    data class ViewConfig(var id: Int? = null, var horizontalRider: Float = 1F, var verticalRider: Float = 1F,
+                          var isHorizontalScrollPrefer: Boolean? = null)
 }
