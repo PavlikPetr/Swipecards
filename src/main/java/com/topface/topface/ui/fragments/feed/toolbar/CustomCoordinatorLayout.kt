@@ -47,6 +47,10 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         mViewConfigList = list
     }
 
+    /**
+     *  находим view из списка, на которую пришелся ACTION_DOWN, если не нашли, то вернем дефолтные настройки
+     *  которые не вносят правок на расчет оси свайпа
+     */
     private fun findTrackedViewTouch(motionEvent: MotionEvent?): ViewConfig {
         motionEvent?.let { ev ->
             mViewConfigList.find {
