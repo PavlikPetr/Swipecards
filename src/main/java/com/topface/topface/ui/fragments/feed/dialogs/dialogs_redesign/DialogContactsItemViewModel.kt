@@ -156,6 +156,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
             if (it is DialogContactsItem && it.user.id == userId) {
                 data.observableList.remove(it)
                 mContactsStubItem.dialogContacts.items.remove(it)
+                mEventBus.setData(DialogContactsEvent(mContactsStubItem.dialogContacts.items.isNotEmpty()))
                 return true
             }
         }

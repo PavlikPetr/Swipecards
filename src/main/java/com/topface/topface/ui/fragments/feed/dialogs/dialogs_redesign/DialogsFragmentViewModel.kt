@@ -69,10 +69,22 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 }
             }
         })
-        mContentAvailableSubscription = Observable.zip(mEventBus.getObservable(DialogContactsEvent::class.java),
+        mContentAvailableSubscription = Observable.combineLatest(mEventBus.getObservable(DialogContactsEvent::class.java),
                 mEventBus.getObservable(DialogItemsEvent::class.java)) { item1, item2 ->
+            if (!item2.hasDialogItems) {
+                // add empty dialogs stub if need
+                var found = false
+                val stub = EmptyDialogsStubItem()
+                data.observableList.forEach {
+                    if (it.javaClass == stub.javaClass) {
+                        found = true
+                        return@forEach
+                    }
+                }
+                if (!found) data.observableList.add(stub)
+            }
             item1.hasContacts || item2.hasDialogItems
-        }.first().filter { !it }.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
+        }.filter { !it }.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
             override fun onNext(type: Boolean?) {
                 isEnable.set(false)
                 data.observableList.clear()
@@ -277,11 +289,19 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     override fun userAddToBlackList(userId: Int) {
         val iterator = data.observableList.listIterator()
         var item: FeedDialog
+        var gotUser = false
+        // этом цикле делается две задачи
+        // 1 удаляется диалог с пользователем, которого внесли в черный список
+        // 2 вычисляется флаг, что остались еще диалоги, помимо всяких заглушек/реклам и тд
         while (iterator.hasNext()) {
             item = iterator.next()
-            if (item.user != null && item.user.id == userId) {
-                iterator.remove()
+            if (item.user != null) {
+                // если нашли пользователя, то либо удалим его (если его внесли в чс)
+                // либо запомним что еще есть диалоги
+                if (item.user.id == userId) iterator.remove() else gotUser = true
             }
         }
+        // если нет диалогов с пользователями, то надо уведомить для добавления заглушки
+        if (!gotUser) mEventBus.setData(DialogItemsEvent(false))
     }
 }
