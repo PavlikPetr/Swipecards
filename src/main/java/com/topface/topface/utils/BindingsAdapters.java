@@ -28,6 +28,7 @@ import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
+import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
@@ -383,4 +384,8 @@ public class BindingsAdapters {
                 .into(imageView);
     }
 
+    @BindingAdapter("viewConfigList")
+    public static void setViewConfigList(CustomCoordinatorLayout view, List<CustomCoordinatorLayout.ViewConfig> list) {
+        view.setViewConfigList(list);
+    }
 }

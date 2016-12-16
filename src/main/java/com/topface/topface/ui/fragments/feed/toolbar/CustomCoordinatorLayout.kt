@@ -43,9 +43,7 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
         return senMotionEvent(motionEvent)
     }
 
-    public fun setViewConfigList(list: List<ViewConfig>) {
-        mViewConfigList = list
-    }
+    public fun setViewConfigList(list: List<ViewConfig>?) = list?.let { mViewConfigList = it }
 
     /**
      *  находим view из списка, на которую пришелся ACTION_DOWN, если не нашли, то вернем дефолтные настройки
