@@ -7,7 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.banners.BannersController
+import com.topface.topface.banners.IPageWithAds
+import com.topface.topface.banners.PageInfo
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
@@ -31,12 +35,13 @@ import org.jetbrains.anko.layoutInflater
  * Created by tiberal on 30.11.16.
  */
 @FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
-class DialogsFragment : BaseFragment() {
+class DialogsFragment : BaseFragment(), IPageWithAds {
 
     companion object {
         const val PAGE_NAME = "Dialogs"
     }
 
+    private lateinit var mBannersController: BannersController
     private val mFeedRequestFactory by lazy {
         FeedRequestFactory(context)
     }
@@ -101,6 +106,7 @@ class DialogsFragment : BaseFragment() {
         }
         mViewModel.release()
         mAdapter.releaseComponents()
+        mBannersController.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -111,5 +117,14 @@ class DialogsFragment : BaseFragment() {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
     }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mBannersController = BannersController(this, App.get().options)
+    }
+
+    override fun getPageName() = PageInfo.PageName.MESSAGES_TABS
+
+    override fun getContainerForAd() = mBinding.bannerContainerForFeeds as ViewGroup
 
 }
