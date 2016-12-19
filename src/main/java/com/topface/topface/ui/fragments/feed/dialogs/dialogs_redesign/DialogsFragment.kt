@@ -9,12 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
+import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.AppDayItemComponent
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.ContactsItemComponent
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.DialogItemComponent
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.EmptyDialogsComponent
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.EmptyDialogsFragmentComponent
+import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.*
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -29,10 +27,15 @@ import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
- * Новый дейтинг прагмент с симпатиями и восхищениями
+ * Новый дейтинг фрагмент с симпатиями и восхищениями
  * Created by tiberal on 30.11.16.
  */
+@FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
 class DialogsFragment : BaseFragment() {
+
+    companion object {
+        const val PAGE_NAME = "Dialogs"
+    }
 
     private val mFeedRequestFactory by lazy {
         FeedRequestFactory(context)
@@ -87,6 +90,15 @@ class DialogsFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        /**
+         * https://code.google.com/p/android/issues/detail?id=78062
+         * увидел, промониторь изменения и обнови дату/поправь
+         * 14.12.16
+         */
+        with(mBinding.refresh) {
+            destroyDrawingCache()
+            clearAnimation()
+        }
         mViewModel.release()
         mAdapter.releaseComponents()
     }

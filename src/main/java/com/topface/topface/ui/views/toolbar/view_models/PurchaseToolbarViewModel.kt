@@ -10,9 +10,9 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.PurchaseCustomToolbarViewModel
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
 import javax.inject.Inject
 

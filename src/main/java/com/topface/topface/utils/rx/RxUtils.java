@@ -1,5 +1,7 @@
 package com.topface.topface.utils.rx;
 
+import com.topface.framework.utils.Debug;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -29,6 +31,7 @@ public class RxUtils {
 
         @Override
         public void onError(Throwable e) {
+            Debug.log("ShortSubscription " + e.toString());
             e.printStackTrace();
         }
 

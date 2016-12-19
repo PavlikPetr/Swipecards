@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemAppDayBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.utils.extensions.appContext
 
 /**
  * Адаптер для итемов рекламы апы дня
@@ -13,10 +14,8 @@ class AppDayAdapter : BaseRecyclerViewAdapter<ItemAppDayBinding, AppDayImage>() 
 
     override fun bindData(binding: ItemAppDayBinding?, position: Int) = binding?.let { bind ->
         getDataItem(position)?.let {
-            bind.root.tag = null  //хак, чтобы избежать java.lang.IllegalArgumentException: You must not call setTag() on a view Glide is targeting
-            bind.viewModel = AppDayItemViewModel(bind, it)
+            bind.viewModel = AppDayItemViewModel(bind.appContext(), it)
         }
-
     } ?: Unit
 
     override fun getItemLayout() = R.layout.item_app_day

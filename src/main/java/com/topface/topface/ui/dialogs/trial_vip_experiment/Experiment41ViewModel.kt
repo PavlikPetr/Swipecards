@@ -10,7 +10,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDrawableListFromArrayId
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import java.util.*

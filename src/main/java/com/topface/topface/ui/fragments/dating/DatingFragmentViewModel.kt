@@ -35,7 +35,7 @@ import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
