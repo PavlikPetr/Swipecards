@@ -115,7 +115,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                         val nextIndex = iterator.nextIndex()
                         val item = iterator.next()
                         if (nextIndex > data.first.firstPosition - 1
-                                && lastInsertPos == -1 || lastInsertPos == nextIndex - data.first.repeat
+                                && lastInsertPos == -1 || lastInsertPos == nextIndex - (data.first.repeat + 1)
                                 && item !is AppDayStubItem && insertCount < data.first.maxCount) {
                             iterator.add(AppDayStubItem(data.first))
                             insertCount++
