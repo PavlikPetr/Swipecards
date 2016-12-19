@@ -268,7 +268,7 @@ public class UsersList<T extends FeedUser> extends ArrayList<T> implements Seria
         addAll(usersList);
     }
 
-    private boolean isNeedPreload() {
+    public boolean isNeedPreload() {
         return mNeedPreload && size() > 0 && mPosition > size() - mLoadController.getItemsOffsetByConnectionType();
     }
 
