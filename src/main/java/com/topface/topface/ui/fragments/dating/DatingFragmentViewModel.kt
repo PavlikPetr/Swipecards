@@ -63,6 +63,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     var currentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
+    private var isLastUser = false
     private lateinit var mReceiver: BroadcastReceiver
 
     companion object {
@@ -73,7 +74,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     init {
         App.get().inject(this)
-        mProfileSubscription = state.getObservable(Profile::class.java).distinct { profile -> profile.dating }.subscribe {
+        mProfileSubscription = state.getObservable(Profile::class.java).distinctUntilChanged { profile -> profile.dating }.subscribe {
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -106,8 +107,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         LocalBroadcastManager.getInstance(context)
                 .registerReceiver(mReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
     }
-
-    private var isLastUser = false
 
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         Debug.log("LOADER_INTEGRATION start update")
