@@ -24,7 +24,7 @@
             app:needAnimateLoader="@{model.isNeedAnimateLoader}"
             app:onPageChangeListener="@{model}"/>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="136dp"
             android:layout_gravity="bottom"
@@ -35,10 +35,15 @@
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_weight="1"
                 android:drawablePadding="@dimen/online_icon_padding"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="@{model.nameAgeOnline}"
                 android:textSize="24sp"
                 app:online="@{model.isOnline}"/>
@@ -47,12 +52,14 @@
                 android:id="@+id/photos_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
                 android:drawableLeft="@drawable/foto"
                 android:drawablePadding="8dp"
+                android:paddingLeft="8dp"
+                android:paddingStart="8dp"
+                android:layout_gravity="bottom"
                 android:text="@{model.photosCounter}"
                 android:textSize="14sp"
                 android:visibility="@{model.isPhotosCounterVisible}"/>
-        </FrameLayout>
+        </LinearLayout>
     </FrameLayout>
 </layout>
