@@ -73,7 +73,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     init {
         App.get().inject(this)
-        mProfileSubscription = state.getObservable(Profile::class.java).subscribe {
+        mProfileSubscription = state.getObservable(Profile::class.java).distinct { profile -> profile.dating }.subscribe {
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
