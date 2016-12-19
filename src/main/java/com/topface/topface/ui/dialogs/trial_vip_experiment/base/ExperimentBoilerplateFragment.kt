@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
+import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
@@ -21,7 +22,7 @@ import org.jetbrains.anko.layoutInflater
  * База для всех экспериментов
  * Created by tiberal on 15.11.16.
  */
-class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmentRunner.IRunner {
+class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), TransparentMarketFragmentRunner.IRunner {
 
     var cancelListener: DialogInterface.OnCancelListener? = null
     var dismissListener: DialogInterface.OnDismissListener? = null
@@ -136,7 +137,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     override fun runMarketPopup() {
-        if (isAdded) {
+        if (isAdded && mTimeForTransaction) {
             mMarketFragmentRunner.startTransparentMarketFragment {
                 TrialVipExperimentStatistics.sendPurchaseCompleted()
                 dismiss()

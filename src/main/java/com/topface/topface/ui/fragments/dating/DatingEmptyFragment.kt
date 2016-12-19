@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.dating
+package com.topface.topface.ui.fragments.dating
 
 import android.view.View
 import com.topface.topface.R

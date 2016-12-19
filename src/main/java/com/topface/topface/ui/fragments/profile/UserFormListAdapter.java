@@ -59,7 +59,7 @@ public class UserFormListAdapter extends AbstractFormListAdapter {
         Iterator<FormItem> itemsIterator = userForms.iterator();
         while (itemsIterator.hasNext()) {
             FormItem formItem = itemsIterator.next();
-            if (TextUtils.isEmpty(formItem.value) || formItem.dataId == 0) {
+            if (TextUtils.isEmpty(formItem.value) || formItem.dataId == 0 || formItem.isEmpty()) {
                 itemsIterator.remove();
             }
         }

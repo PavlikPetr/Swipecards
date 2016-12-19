@@ -9,6 +9,8 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.Gift
 import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.search.CachableSearchList
+import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.GiftsFormItemBinding
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.GiftsActivity
@@ -17,7 +19,6 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.ExpandableItem
 import com.topface.topface.ui.new_adapter.ExpandableItemDelegate
-import com.topface.topface.utils.Utils
 import java.util.*
 
 
@@ -48,7 +49,8 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
         data?.data?.let { giftsModel ->
             mGiftsModel = giftsModel
             if (giftsModel.gifts != null) {
-                giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.more).apply {
+                Debug.log("GIFTS_BUGS adapter init has gifts ${giftsModel.gifts.items.isNotEmpty()} moar? =  ${giftsModel.gifts.more}")
+                giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.items.isNotEmpty() || giftsModel.gifts.more).apply {
                     mAdapter = this
                     mViewModel = GiftsItemViewModel(mApi, mNavigator, giftsModel.gifts, giftsModel.userId) {
                         //добавляем подарочки в search user, чтобы не загружать их заново после поворота
@@ -56,16 +58,19 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                         addData(it.items)
                         notifyDataSetChanged()
                     }
-                    updaterObservable.distinct {
-                        it?.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)
-                    }.subscribe {
-                        if (giftsModel.gifts.more) {
-                            Debug.log("GIFTS_BUGS loadGifts ${data.data?.userId} want ${giftsModel.gifts.count}")
-                            var lastGiftId = -1
-                            if (this.data.isNotEmpty()) lastGiftId = this.data.last().feedId
-                            mViewModel?.loadGifts(lastGiftId)
-                        }
-                    }
+                    Debug.log("GIFTS_BUGS try add items ${giftsModel.gifts.items.count()}")
+                    addData(giftsModel.gifts.items)
+                    notifyDataSetChanged()
+                    updaterObservable
+                            .distinct {
+                                it?.getInt(BaseFeedFragmentViewModel.TO, -1)
+                            }
+                            .subscribe {
+                                Debug.log("GIFTS_BUGS loadGifts ${data.data?.userId} count ${giftsModel.gifts.count} moar ${giftsModel.gifts.more}")
+                                if (giftsModel.gifts.more) {
+                                    mViewModel?.loadGifts(it.getInt(BaseFeedFragmentViewModel.TO, -1))
+                                }
+                            }
                     binding.model = mViewModel
                 }
             }
@@ -99,8 +104,10 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                 it.hasGifts = true
             }
             mGiftsModel?.gifts?.let {
+                Debug.log("GIFTS_BUGS handle gifts ${gifts.count()} adapter items ${it.items}")
                 it.items?.addAll(0, gifts)
-                it.count++
+                it.count += gifts.count()
+                it.more = true
                 mViewModel?.gifts = it
             }
             it.addFirst(gifts)
