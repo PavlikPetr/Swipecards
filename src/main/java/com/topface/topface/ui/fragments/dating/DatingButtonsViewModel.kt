@@ -280,7 +280,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         SendLikeRequest.DEFAULT_NO_MUTUAL
 
     private fun showNextUser() {
-        if (mUserSearchList.searchPosition == mUserSearchList.size - 1) {
+        if (mUserSearchList.searchPosition == mUserSearchList.size - 1 && mUserSearchList.isNeedPreload()) {
             showProgress()
             return
         } else {
