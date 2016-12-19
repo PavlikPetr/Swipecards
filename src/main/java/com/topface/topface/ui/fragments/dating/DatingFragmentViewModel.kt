@@ -63,6 +63,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     var currentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
+    private var isLastUser = false
     private lateinit var mReceiver: BroadcastReceiver
 
     companion object {
@@ -73,7 +74,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     init {
         App.get().inject(this)
-        mProfileSubscription = state.getObservable(Profile::class.java).subscribe {
+        mProfileSubscription = state.getObservable(Profile::class.java).distinctUntilChanged { profile -> profile.dating }.subscribe {
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -92,10 +93,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         binding.root.post { prepareFormsData(it) }
                     }
                 }
-                mUserSearchList.setOnEmptyListListener(this)
-                mUserSearchList.updateSignatureAndUpdate()
             }
         }
+        mUserSearchList.setOnEmptyListListener(this)
+        mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
     }
 
@@ -111,7 +112,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess) {
             mDatingButtonsView.lockControls()
-            mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
                 mUserSearchList.clear()
                 currentUser = null
@@ -134,7 +134,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 override fun onNext(usersList: UsersList<SearchUser>?) {
                     Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
-                        val isNeedShowNext = mUserSearchList.isEnded
+                        val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
@@ -146,11 +146,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             prepareFormsData(user)
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
+                            isLastUser = true
                         }
                         mDatingButtonsView.unlockControls()
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
                             mEmptySearchVisibility.showEmptySearchDialog()
+                            isLastUser = true
                         }
                     }
                 }
