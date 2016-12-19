@@ -137,7 +137,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                             handleUnreadState(it, false)
                             mIsAllDataLoaded = !it.more
                         }
-                        mEventBus.setData(DialogItemsEvent(data.items.isNotEmpty()))
+                        mEventBus.setData(DialogItemsEvent(it.items.isNotEmpty()))
                     }
                 }, { it?.printStackTrace() }
         )
