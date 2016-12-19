@@ -107,11 +107,12 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 .registerReceiver(mReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
     }
 
+    private var isLastUser = false
+
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess) {
             mDatingButtonsView.lockControls()
-            mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
                 mUserSearchList.clear()
                 currentUser = null
@@ -134,7 +135,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 override fun onNext(usersList: UsersList<SearchUser>?) {
                     Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
-                        val isNeedShowNext = mUserSearchList.isEnded
+                        val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
@@ -146,11 +147,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             prepareFormsData(user)
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
+                            isLastUser = true
                         }
                         mDatingButtonsView.unlockControls()
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
                             mEmptySearchVisibility.showEmptySearchDialog()
+                            isLastUser = true
                         }
                     }
                 }
