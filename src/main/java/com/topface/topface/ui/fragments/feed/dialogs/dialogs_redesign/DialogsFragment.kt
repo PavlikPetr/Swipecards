@@ -106,6 +106,7 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         }
         mViewModel.release()
         mAdapter.releaseComponents()
+        mBannersController.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
