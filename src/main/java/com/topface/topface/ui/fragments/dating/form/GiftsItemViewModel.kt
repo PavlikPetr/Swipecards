@@ -6,7 +6,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription
 

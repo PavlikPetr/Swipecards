@@ -15,10 +15,10 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.isHasNotification
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 

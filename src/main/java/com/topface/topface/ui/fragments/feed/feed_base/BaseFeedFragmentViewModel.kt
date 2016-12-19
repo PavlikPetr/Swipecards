@@ -26,12 +26,12 @@ import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RunningStateManager
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.debug.FuckingVoodooMagic
 import com.topface.topface.utils.extensions.registerReceiver
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.extensions.unregisterReceiver
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.viewModels.BaseViewModel
@@ -263,7 +263,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     fun getAppDayRequest(typeFeedFragment: String) {
-        mAppDayRequestSubscription = mApi.getAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
+        mAppDayRequestSubscription = mApi.callAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
             override fun onCompleted() {
             }
 

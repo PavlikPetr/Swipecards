@@ -10,7 +10,7 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 import rx.Observable

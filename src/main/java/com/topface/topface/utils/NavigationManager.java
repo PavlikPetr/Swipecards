@@ -32,6 +32,7 @@ import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.config.WeakStorage;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -220,7 +221,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ? new DialogsFragment() : new TabbedDialogsFragment();
+                fragment = true ? new DialogsFragment() : new TabbedDialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();

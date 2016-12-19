@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.requests.response.DialogContacts
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
 
 /**
  * Модели для диалогов
@@ -12,6 +13,7 @@ import com.topface.topface.requests.response.DialogContacts
  * Пустой итем для отображения общей загушки(нет ни контактов, ни диалогов)
  */
 class EmptyDialogsFragmentStubItem() : FeedDialog()
+
 /**
  * Пустой итем для отображения заглушки "Нет диалогов"
  */
@@ -35,7 +37,7 @@ class UForeverAloneStubItem()
 /**
  * Пустой итем для отображения рекламы приложения дня
  */
-class AppDayStubItem() : FeedDialog()
+class AppDayStubItem(var appDay: AppDay) : FeedDialog()
 
 /**
  * Ивент о загрузке контактов есть/нет

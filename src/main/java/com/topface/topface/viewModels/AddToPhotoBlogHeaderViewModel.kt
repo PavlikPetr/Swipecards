@@ -23,7 +23,7 @@ import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.FlurryManager.GET_LEAD
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.extensions.getFakePhotosCount
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject

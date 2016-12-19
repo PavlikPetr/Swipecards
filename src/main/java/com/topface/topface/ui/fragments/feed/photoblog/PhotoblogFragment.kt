@@ -17,7 +17,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.AddPhotoHelper
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.extensions.getString
 
 /**
