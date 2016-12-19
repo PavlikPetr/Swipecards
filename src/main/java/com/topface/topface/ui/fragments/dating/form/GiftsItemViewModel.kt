@@ -29,7 +29,7 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
         //если подарочки есть, а приходит дефолтный id(-1 от нас или 0 если только что отправили
         // подарочек и он не добавлен еще в фиды) для выборки, значит что то не так и
         // мы пытаемся згрузить дубликаты, НЕНАДО ТАК
-        if (gifts.items.isNotEmpty() && (lastGiftId == 0 || gifts.items.last().id == lastGiftId || lastGiftId == -1)) return
+        if (gifts.items.isNotEmpty() && (lastGiftId == 0 || lastGiftId == -1)) return
         mLoadGiftsSubscription = mApi.callGetGifts(userId, lastGiftId)
                 .subscribe(object : Subscriber<Profile.Gifts>() {
                     override fun onNext(data: Profile.Gifts?) {
