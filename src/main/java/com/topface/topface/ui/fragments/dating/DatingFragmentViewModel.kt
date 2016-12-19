@@ -92,10 +92,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         binding.root.post { prepareFormsData(it) }
                     }
                 }
-                mUserSearchList.setOnEmptyListListener(this)
-                mUserSearchList.updateSignatureAndUpdate()
             }
         }
+        mUserSearchList.setOnEmptyListListener(this)
+        mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
     }
 
