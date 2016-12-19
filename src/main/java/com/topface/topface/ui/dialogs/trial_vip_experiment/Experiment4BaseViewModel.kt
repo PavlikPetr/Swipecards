@@ -8,7 +8,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.databinding.Experiment4Binding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject

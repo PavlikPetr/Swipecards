@@ -21,7 +21,7 @@ import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.IOnListChangedCallbackBinded
 import com.topface.topface.utils.databinding.SingleObservableArrayList
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription

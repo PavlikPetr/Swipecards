@@ -52,7 +52,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
 

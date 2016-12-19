@@ -17,8 +17,8 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.CityAdapter;
 import com.topface.topface.ui.adapters.ItemEventListener;
 import com.topface.topface.ui.dialogs.IOnCitySelected;
-import com.topface.topface.utils.RxFieldObservable;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxFieldObservable;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;

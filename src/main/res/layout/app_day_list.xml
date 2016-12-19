@@ -27,10 +27,11 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/banner_list"
-            app:addOnScrollListener="@{viewModel??viewModelRedesign}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="3dp"/>
+            android:layout_margin="3dp"
+            android:background="@color/dating_fab_small"
+            app:addOnScrollListener="@{viewModel??viewModelRedesign}"/>
     </FrameLayout>
 
 </layout>

@@ -28,9 +28,7 @@ import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.TabLayoutCreator;
-import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -171,10 +169,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mPager.setCurrentItem(lastPage);
         mPageChangeListener.onPageSelected(lastPage);
         initFloatBlock();
-    }
-
-    public int getTabLayoutHeight() {
-        return 0;
     }
 
     protected void initFloatBlock() {

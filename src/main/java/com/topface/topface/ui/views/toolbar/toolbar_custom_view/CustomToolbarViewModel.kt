@@ -1,13 +1,12 @@
 package com.topface.topface.ui.views.toolbar.toolbar_custom_view
 
 import android.databinding.ObservableBoolean
-import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
-import com.topface.topface.utils.RxFieldObservable
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.RxFieldObservable
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.subscriptions.CompositeSubscription
 

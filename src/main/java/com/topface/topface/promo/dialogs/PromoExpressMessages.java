@@ -18,7 +18,7 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.PromoExpressMessagesBinding;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 

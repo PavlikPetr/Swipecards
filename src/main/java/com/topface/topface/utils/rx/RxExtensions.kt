@@ -1,4 +1,4 @@
-package com.topface.topface.utils.extensions
+package com.topface.topface.utils.rx
 
 import rx.Observable
 import rx.Subscription

@@ -5,7 +5,7 @@ import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
-import com.topface.topface.utils.RxFieldObservable
+import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.viewModels.BaseViewModel
