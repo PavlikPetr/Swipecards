@@ -164,7 +164,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
-    fun getAppDayRequest(typeFeedFragment: String): Observable<AppDay> {
+    fun callAppDayRequest(typeFeedFragment: String): Observable<AppDay> {
         return Observable.create {
             val request = AppDayRequest(mContext, typeFeedFragment)
             mRequestClient.registerRequest(request)
@@ -173,7 +173,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                         it.onNext(data)
 
                 override fun parseResponse(response: ApiResponse?): AppDay =
-                        JsonUtils.fromJson(response?.jsonResult.let { it.toString() }, AppDay::class.java)
+                        JsonUtils.fromJson(response?.jsonResult.toString(), AppDay::class.java)
 
                 override fun fail(codeError: Int, response: IApiResponse?) =
                         it.onError(Throwable(codeError.toString()))

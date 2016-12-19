@@ -8,8 +8,6 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.safeUnsubscribe
-import rx.subscriptions.CompositeSubscription
 
 /**
  * Created by petrp on 09.10.2016.

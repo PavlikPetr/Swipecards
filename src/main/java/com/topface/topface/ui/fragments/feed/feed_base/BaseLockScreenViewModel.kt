@@ -4,7 +4,7 @@ import android.databinding.ViewDataBinding
 import com.topface.topface.App
 import com.topface.topface.data.BalanceData
 import com.topface.topface.state.TopfaceAppState
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject

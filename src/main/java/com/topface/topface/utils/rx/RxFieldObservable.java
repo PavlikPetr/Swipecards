@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.rx;
 
 import android.databinding.ObservableField;
 

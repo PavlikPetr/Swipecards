@@ -13,7 +13,7 @@ import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.external_libs.offers.OffersUtils;
 import com.topface.topface.utils.ListUtils;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 
