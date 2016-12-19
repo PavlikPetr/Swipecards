@@ -7,7 +7,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.banners.BannersController
+import com.topface.topface.banners.IPageWithAds
+import com.topface.topface.banners.PageInfo
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.AppDayItemComponent
@@ -32,8 +36,8 @@ import org.jetbrains.anko.layoutInflater
  * Новый дейтинг прагмент с симпатиями и восхищениями
  * Created by tiberal on 30.11.16.
  */
-class DialogsFragment : BaseFragment() {
-
+class DialogsFragment : BaseFragment(), IPageWithAds {
+    private lateinit var mBannersController: BannersController
     private val mFeedRequestFactory by lazy {
         FeedRequestFactory(context)
     }
@@ -99,5 +103,14 @@ class DialogsFragment : BaseFragment() {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
     }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mBannersController = BannersController(this, App.get().options)
+    }
+
+    override fun getPageName() = PageInfo.PageName.MESSAGES_TABS
+
+    override fun getContainerForAd() = mBinding.bannerContainerForFeeds as ViewGroup
 
 }
