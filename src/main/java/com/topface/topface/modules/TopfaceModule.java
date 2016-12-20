@@ -80,6 +80,7 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.popups.start_actions.ChooseCityPopupAction;
@@ -174,7 +175,8 @@ import dagger.Provides;
         staticInjections = {
                 AddPhotoHelper.class,
                 App.class,
-                AppodealProvider.class
+                AppodealProvider.class,
+                GCMUtils.class
         }
 )
 public class TopfaceModule {
