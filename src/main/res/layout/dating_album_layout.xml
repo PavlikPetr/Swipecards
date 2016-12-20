@@ -33,30 +33,35 @@
             android:paddingLeft="15dp"
             android:paddingRight="7dp">
 
-            <TextView
-                android:id="@+id/name"
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/online_icon_padding"
-                android:singleLine="true"
-                android:lines="1"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:text="@{model.nameAgeOnline}"
-                android:textSize="24sp"
-                app:online="@{model.isOnline}"/>
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/online_icon_padding"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@{model.nameAgeOnline}"
+                    android:textSize="24sp"
+                    app:online="@{model.isOnline}"/>
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/photos_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:drawableLeft="@drawable/foto"
                 android:drawablePadding="8dp"
                 android:paddingLeft="8dp"
                 android:paddingStart="8dp"
-                android:layout_gravity="bottom"
                 android:text="@{model.photosCounter}"
                 android:textSize="14sp"
                 android:visibility="@{model.isPhotosCounterVisible}"/>
