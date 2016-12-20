@@ -58,6 +58,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
@@ -167,7 +168,8 @@ import dagger.Provides;
                 DatingEmptyFragment.class,
                 Experiment41ViewModel.class,
                 DialogContactsItemViewModel.class,
-                DialogsFragmentViewModel.class
+                DialogsFragmentViewModel.class,
+                ProfileFormFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
