@@ -57,10 +57,6 @@ public class FormInfo {
                 case FormItem.HEADER:
                     title = getFormTitle(formItem);
                 case FormItem.STATUS:
-                    if (data.isEmpty()) {
-                        emptyValue = FormItem.EMPTY_FORM_VALUE;
-                        formItem.setIsEmpty(true);
-                    }
                     title = getFormTitle(formItem);
                     if (formItem.dataId != FormItem.NO_RESOURCE_ID) {
                         data = getEntryById(getEntriesByTitleId(formItem.titleId), getIdsByTitleId(formItem.titleId), formItem.dataId);

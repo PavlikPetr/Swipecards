@@ -39,9 +39,12 @@ import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.BaseViewModel
+import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /** Бизнеслогика для дейтинга
@@ -56,7 +59,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     @Inject lateinit var state: TopfaceAppState
 
-    private var mProfileSubscription: Subscription
+    private var mProfileSubscription = CompositeSubscription()
     private var mUpdateSubscription: Subscription? = null
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
@@ -75,7 +78,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     init {
         App.get().inject(this)
-        mProfileSubscription = state.getObservable(Profile::class.java).distinctUntilChanged { profile -> profile.dating }.subscribe {
+        mProfileSubscription.add(state.getObservable(Profile::class.java).distinctUntilChanged { it.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -84,18 +87,25 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         binding.root.post {
                             //если есть currentUser, например после востановления стейта, то работаем с ним
                             (if (currentUser == null) it else currentUser)?.let {
-                                prepareFormsData(it)
+                                prepareFormsData(it, profile)
                                 mDatingButtonsView.unlockControls()
                             }
                         }
                     }
-                } else {
-                    currentUser?.let {
-                        binding.root.post { prepareFormsData(it) }
-                    }
                 }
             }
-        }
+        })
+        // слушаем изменения в анкете и статусе
+        mProfileSubscription.add(Observable.merge(state.getObservable(Profile::class.java).distinctUntilChanged { it.forms },
+                state.getObservable(Profile::class.java).distinctUntilChanged { it.status })
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .subscribe { profile ->
+                    binding.root.post {
+                        currentUser?.let {
+                            prepareFormsData(it, profile)
+                        }
+                    }
+                })
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
@@ -163,14 +173,17 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun prepareFormsData(user: SearchUser) = with((binding.formsList
+    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = with((binding.formsList
             .adapter as CompositeAdapter<IType>).data) {
         clear()
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
-        if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
+        // перед отображением статуса пропускаем значение через "нормализатор"
+        val status = Profile.normilizeStatus(user.status)
+        if (!status.isNullOrEmpty()) addExpandableItem(ParentModel(status, false, R.drawable.status))
         addExpandableItem(GiftsModel(user.gifts, user.id))
         val forms: MutableList<IType>
-        if (App.get().profile.hasEmptyFields) {
+        // проверяем не только все поля анкеты, но и статус. Статус имеет проверку на корректность данных
+        if (ownProfile.hasEmptyFields || Profile.normilizeStatus(ownProfile.status).isNullOrEmpty()) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
             forms = mutableListOf<IType>(FormModel(
                     Pair(String.format(if (user.sex == Profile.BOY) R.string.fill_own_profile_boy.getString()
