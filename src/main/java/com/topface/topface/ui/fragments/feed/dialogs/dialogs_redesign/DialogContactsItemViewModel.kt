@@ -145,6 +145,10 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (removeItemByUserId(userId)) {
                     sendReadRequest(userId)
+                    if (this@DialogContactsItemViewModel.data.observableList.count() == 1
+                            && this@DialogContactsItemViewModel.data.observableList[0] is GoDatingContactsStubItem) {
+                        addEmptyContactsItem()
+                    }
                 }
 
             }

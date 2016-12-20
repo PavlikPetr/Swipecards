@@ -19,7 +19,6 @@ import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
-import com.topface.topface.ui.fragments.feed.feed_utils.getFirstItem
 import com.topface.topface.ui.fragments.feed.feed_utils.getRealDataFirstItem
 import com.topface.topface.ui.fragments.feed.feed_utils.isEmpty
 import com.topface.topface.utils.DateUtils
@@ -143,7 +142,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 }, { it?.printStackTrace() }
         )
     }
-
 
     override fun onResume() {
         if (mLoadTopSubscription?.isUnsubscribed ?: true && mUpdaterSubscription?.isUnsubscribed ?: true && data.observableList.isEmpty()) {
