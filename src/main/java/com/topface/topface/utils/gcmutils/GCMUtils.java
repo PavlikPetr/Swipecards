@@ -39,6 +39,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -50,6 +51,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
 import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
 import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;
 import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_LIKES;
@@ -57,7 +60,8 @@ import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
-
+    @Inject
+    static WeakStorage mWeakStorage;
     private Context mContext;
 
     public static final int GCM_TYPE_UNKNOWN = -1;
@@ -381,7 +385,7 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
-        boolean dialogRedesignEnabled = App.get().getOptions().getDialogRedesignEnabled();
+        boolean dialogRedesignEnabled = mWeakStorage.getProfileDialogRedesignEnabled();
         Intent i = null;
         String pageName;
         switch (type) {
