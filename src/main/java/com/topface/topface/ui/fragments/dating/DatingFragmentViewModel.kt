@@ -32,6 +32,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcher
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
+import com.topface.topface.utils.FormItem
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
@@ -186,11 +187,23 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
                     val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
-                    add(FormModel(Pair(it.title, it.value), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
+                    add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
                 }
             }
         }
         addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
+    }
+
+    private fun getFormValue(formItem: FormItem): String {
+        if (formItem.value.isNullOrEmpty()) {
+            if (!formItem.emptyValue.isNullOrEmpty()) {
+                return formItem.emptyValue
+            } else {
+                return FormItem.EMPTY_FORM_VALUE
+            }
+        } else {
+            return formItem.value
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

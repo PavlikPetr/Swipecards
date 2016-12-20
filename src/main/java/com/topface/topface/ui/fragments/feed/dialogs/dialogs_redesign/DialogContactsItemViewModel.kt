@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import android.content.Context
 import android.content.Intent
+import android.databinding.Observable.OnPropertyChangedCallback
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.IOnListChangedCallbackBinded
 import com.topface.topface.utils.databinding.SingleObservableArrayList
+import com.topface.topface.utils.extensions.toIntSafe
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
 import rx.Subscriber
@@ -67,6 +69,13 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 }
             }
         }
+        amount.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
+            override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) {
+                counterVisibility.set(if (with(obs as? ObservableField<String>) {
+                    this?.get().isNullOrEmpty() || this?.get().toIntSafe() == 0
+                }) View.INVISIBLE else View.VISIBLE)
+            }
+        })
     }
 
     override fun onCallbackBinded() = data.addAll(mContactsStubItem.dialogContacts.items)
