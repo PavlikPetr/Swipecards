@@ -26,6 +26,17 @@ fun <T : FeedItem> List<T>.getFirstItem(): T? {
     return item
 }
 
+fun <T : FeedItem> List<T>.getRealDataFirstItem(): T? {
+    if (!isEmpty()) {
+        forEach {
+            if (!it.isEmpty()) {
+                return it
+            }
+        }
+    }
+    return null
+}
+
 fun List<Any>.findLastFeedItem(): FeedItem? {
     if (!isEmpty()) {
         forEachReversedByIndex {

@@ -20,6 +20,7 @@ import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirstItem
+import com.topface.topface.ui.fragments.feed.feed_utils.getRealDataFirstItem
 import com.topface.topface.ui.fragments.feed.feed_utils.isEmpty
 import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.ILifeCycle
@@ -114,9 +115,9 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                     while (iterator.hasNext()) {
                         val nextIndex = iterator.nextIndex()
                         val item = iterator.next()
-                        if (nextIndex > data.first.firstPosition - 1
-                                && lastInsertPos == -1 || lastInsertPos == nextIndex - (data.first.repeat + 1)
-                                && item !is AppDayStubItem && insertCount < data.first.maxCount) {
+                        if (nextIndex == data.first.firstPosition - 1
+                                || (lastInsertPos == nextIndex - (data.first.repeat + 1)
+                                && item !is AppDayStubItem && insertCount < data.first.maxCount)) {
                             iterator.add(AppDayStubItem(data.first))
                             insertCount++
                             lastInsertPos = nextIndex
@@ -169,7 +170,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     fun loadTopFeeds() {
         if (isTopFeedsLoading.get()) return
         isTopFeedsLoading.set(true)
-        val from = data.observableList.getFirstItem()?.id ?: return
+        val from = data.observableList.getRealDataFirstItem()?.id ?: return
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
         mLoadTopSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<FeedDialog>>() {
