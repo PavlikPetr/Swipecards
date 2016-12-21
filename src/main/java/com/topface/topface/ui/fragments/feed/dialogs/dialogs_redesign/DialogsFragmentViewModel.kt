@@ -134,7 +134,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                         addContactsItem()
                         with(this@DialogsFragmentViewModel.data) {
                             if (it.items.isEmpty()) {
-                                if (observableList.getRealDataFirstItem() == null) {
+                                if (isEmptyDialogs()) {
                                     observableList.add(EmptyDialogsStubItem())
                                 }
                             } else {
@@ -142,7 +142,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 handleUnreadState(it, false)
                                 mIsAllDataLoaded = !it.more
                             }
-                            mEventBus.setData(DialogItemsEvent(observableList.getRealDataFirstItem() != null))
+                            mEventBus.setData(DialogItemsEvent(!isEmptyDialogs()))
                         }
                     }
                 }, { it?.printStackTrace() }
@@ -204,10 +204,11 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 //удаляем заглушку
                                 removeAt(1)
                             } else
-                            /* если итем только один и тот заглушка, значит у нас на экране общий стаб
-                            * чистим список, добавляем стаб пустых контактов
-                            * диалоги будут добавлены ниже
-                            */
+                            /*
+                             если итем только один и тот заглушка, значит у нас на экране общий стаб
+                             чистим список, добавляем стаб пустых контактов
+                             диалоги будут добавлены ниже
+                             */
                                 if (count() == 1 && this[0].isEmpty()) {
                                     clear()
                                     addContactsItem()
@@ -226,10 +227,12 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 addAll(1, data.items)
                             }
                         }
-                        mEventBus.setData(DialogItemsEvent(getRealDataFirstItem() != null))
+                        mEventBus.setData(DialogItemsEvent(!isEmptyDialogs()))
                     }
                 })
     }
+
+    private fun isEmptyDialogs() = this@DialogsFragmentViewModel.data.observableList.getRealDataFirstItem() == null
 
     /**
      * Апдейтит итем диалога

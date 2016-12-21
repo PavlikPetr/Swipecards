@@ -104,7 +104,9 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                         } else {
                             contactsEmpty()
                         }
-                    } ?: if (this@DialogContactsItemViewModel.data.observableList.count() == 0) contactsEmpty()
+                    } ?: if (this@DialogContactsItemViewModel.data.observableList.count() == 0) {
+                        contactsEmpty()
+                    }
 
                     /* в контактах всегда будет минимум один элемент
                     * но надо проверить еще, что будет догрузка
@@ -166,14 +168,18 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (removeItemByUserId(userId)) {
                     sendReadRequest(userId)
-                    if (with(this@DialogContactsItemViewModel.data.observableList) {
-                        count() == 1 && this[0] is GoDatingContactsStubItem
-                    }) {
-                        contactsEmpty()
-                    }
+                    showStubIfNeed()
                 }
 
             }
+        }
+    }
+
+    // проверяем List на длину, если там 1 итем и тот fake "иди знакомиться" -> показываем stub
+    private fun showStubIfNeed() {
+        val observableList = this@DialogContactsItemViewModel.data.observableList
+        if (observableList.count() == 1 && observableList[0] is GoDatingContactsStubItem) {
+            contactsEmpty()
         }
     }
 
@@ -183,11 +189,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 data.observableList.remove(it)
                 mContactsStubItem.dialogContacts.items.remove(it)
                 mEventBus.setData(DialogContactsEvent(mContactsStubItem.dialogContacts.items.isNotEmpty()))
-                if (with(this@DialogContactsItemViewModel.data.observableList) {
-                    count() == 1 && this[0] is GoDatingContactsStubItem
-                }) {
-                    contactsEmpty()
-                }
+                showStubIfNeed()
                 return true
             }
         }

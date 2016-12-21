@@ -1,5 +1,6 @@
 package com.topface.topface.requests;
 
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
@@ -10,6 +11,14 @@ import com.topface.topface.requests.handlers.ApiHandler;
  */
 abstract public class DataApiHandler<T> extends ApiHandler {
     private T mData;
+
+    public DataApiHandler(Looper looper) {
+        super(looper);
+    }
+
+    public DataApiHandler() {
+        super();
+    }
 
     @Override
     public boolean sendMessageAtTime(@NonNull Message msg, long uptimeMillis) {

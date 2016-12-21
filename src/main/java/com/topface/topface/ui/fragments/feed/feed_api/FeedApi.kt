@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.feed_api
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Looper
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.data.*
@@ -255,7 +256,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     private inline fun callRate(func: () -> ApiRequest): Observable<Rate> {
         val request = func()
         return Observable.create {
-            request.callback(object : DataApiHandler<Rate>() {
+            request.callback(object : DataApiHandler<Rate>(Looper.getMainLooper()) {
                 override fun success(rate: Rate, response: IApiResponse) = it.onNext(rate)
                 override fun parseResponse(response: ApiResponse) = Rate.parse(response)
                 override fun fail(codeError: Int, response: IApiResponse) = it.onError(Exception(codeError.toString()))
