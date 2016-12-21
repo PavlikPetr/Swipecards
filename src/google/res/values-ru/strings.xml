@@ -1210,5 +1210,8 @@
     <string name="likes_empty_title">У вас пока нет симпатий.\nСимпатии помогут познакомиться</string>
 
     <string name="unlock_sympathy_price">Стоимость услуги:</string>
-
+    
+    <string name="send_gift">Отправить подарок</string>
+    <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
+    <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
 </resources>
