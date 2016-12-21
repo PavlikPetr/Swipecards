@@ -315,7 +315,7 @@ public class UsersList<T extends FeedUser> extends ArrayList<T> implements Seria
         if (!useSignature) return false;
         boolean result = false;
         String currentSignature = getSignature();
-        if (currentSignature == null) {
+        if (currentSignature == null || currentSignature.isEmpty()) {
             mSignature = signature;
         } else if (!TextUtils.equals(currentSignature, signature)) {
             log("Signature is changed. Clear search");
