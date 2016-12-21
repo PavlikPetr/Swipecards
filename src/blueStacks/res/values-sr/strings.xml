@@ -885,7 +885,7 @@
   <string name="fill_own_profile_boy">Попуните свој профил како бисте видели шта је написао %s</string>
   <string name="fill_own_profile">Попуните свој профил да бисте видели шта је %s написала</string>
   <string name="chat_mutual_symphaty">Узајамно свиђање!</string>
-  <string name="chat_mutual_start_conversation">Започните разговор!</string>
+  <string name="chat_mutual_start_conversation">Започните разговор!\nПоклон ће бити одличан почетак</string>
   <string name="chat_send_message_button_title">Посл.</string>
   <string name="know_your_guests_by_sight">Сазнајте ко су Ваши гости и обожаваоци тако што ћете им видети лица</string>
   <string name="know_your_guests">Сазнајте ко посећује Вашу страницу</string>
@@ -900,6 +900,7 @@
   <string name="i_see_u_face">Сазнајте ко је посетио Вашу страницу и видите ко су Ваши обожаватељи</string>
   <string name="buy_vip_write_anyone">Пишите било којој девојци без узајамног свиђања</string>
   <string name="buy_vip_write_anyone_boy">Пишите било ком мушкарцу без узајамног свиђања</string>
+  <string name="buy_vip_write_anyone_without_mutual">Пишите коме год хоћете без узајамног свиђања</string>
   <string name="moar_messages">Ћаскајте са популарним корисницима</string>
   <string name="buy_vip_more_views">Добијте 1,5 пута више прегледа Вашег профила</string>
   <string name="special_offer">Специјална понуда</string>
@@ -931,4 +932,30 @@
   <string name="go_dating">Започети \nупознавање</string>
   <string name="start_dating">Започети упознавање</string>
   <string name="no_mutual">Немате узајамних свиђања</string>
+  <string name="buy_vip_button_title">Добити VIP</string>
+  <string name="unlock_symphaty_coins_one">Цена услуге: %d новчић</string>
+  <string name="unlock_symphaty_coins_many">Цена услуге: %d новчића</string>
+  <string name="unlock_symphaty_coins_few">Цена услуге: %d новчића</string>
+  <string name="unlock_symphaty_coins_other">Цена услуге: %d новчића</string>
+  <string name="unlock_symphaty_hours_one">Услуга откључана на: %d сат</string>
+  <string name="unlock_symphaty_hours_many">Услуга откључана на: %d сати</string>
+  <string name="unlock_symphaty_hours_few">Услуга откључана на: %d сата</string>
+  <string name="unlock_symphaty_hours_other">Услуга откључана на: %d сати</string>
+  <string name="unlock_symphaty_women_one">%d девојка Вам је послала свиђање!</string>
+  <string name="unlock_symphaty_women_many">%d девојака Вам је послало свиђања!</string>
+  <string name="unlock_symphaty_women_few">%d девојке су Вам послале свиђања!</string>
+  <string name="unlock_symphaty_women_other">%d девојака Вам је послало свиђања!</string>
+  <string name="unlock_symphaty_men_one">%d мушкарац Вам је послао свиђање!</string>
+  <string name="unlock_symphaty_men_many">%d мушкараца Вам је послало свиђања!</string>
+  <string name="unlock_symphaty_men_few">%d мушкарца су Вам послала свиђања!</string>
+  <string name="unlock_symphaty_men_other">%d мушкараца Вам је послало свиђања!</string>
+  <string name="unlock_symphaty_title">Тренутно не можете да видите који корисници су Вам послали свиђања</string>
+  <string name="unlock_symphaty_get_access">Добити приступ</string>
+  <string name="send_gift_start_dialog">Послати поклон и започети разговор одмах!</string>
+  <string name="likes_start_dating_button">Започети упознавање</string>
+  <string name="likes_empty_title">Још увек немате свиђања.\nСвиђања ће Вам помоћи да се упознате</string>
+  <string name="unlock_sympathy_price">Цена услуге:</string>
+  <string name="send_gift">Послати поклон</string>
+  <string name="write_him_without_symphaty">Пишите му без узајамног свиђања!</string>
+  <string name="write_her_without_symphaty">Пишите јој без узајамног свиђања!</string>
 </resources>

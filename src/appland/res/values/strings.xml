@@ -927,7 +927,7 @@
     <string name="fill_own_profile_boy">Fill in your profile to see what %s wrote</string>
     <string name="fill_own_profile">Fill in your profile to see what %s wrote</string>
     <string name="chat_mutual_symphaty">Mutual Like!</string>
-    <string name="chat_mutual_start_conversation">Start chatting!</string>
+    <string name="chat_mutual_start_conversation">Start chatting!\nA gift would be a great intro</string>
     <string name="chat_send_message_button_title">Send</string>
     <string name="know_your_guests_by_sight">Find out your guests and Fans by seeing their faces</string>
     <string name="know_your_guests">Find out your guests!</string>
@@ -942,6 +942,7 @@
     <string name="i_see_u_face">Find out who visited your page</string>
     <string name="buy_vip_write_anyone">Write to any girl even without a mutual Like</string>
     <string name="buy_vip_write_anyone_boy">Write to any guy even without a mutual Like</string>
+    <string name="buy_vip_write_anyone_without_mutual">Write to anyone, even without a mutual Like</string>
     <string name="moar_messages">Chat with popular users</string>
     <string name="buy_vip_more_views">Get x1.5 more profile views</string>
     <string name="special_offer">Special offer</string>
@@ -973,4 +974,30 @@
     <string name="go_dating">Start \ndating</string>
     <string name="start_dating">Start dating</string>
     <string name="no_mutual">You do not have any Mutual Likes</string>
+    <string name="buy_vip_button_title">Get VIP</string>
+    <string name="unlock_symphaty_coins_one">Cost to unlock: %d Coin</string>
+    <string name="unlock_symphaty_coins_many">Cost to unlock: %d Coins</string>
+    <string name="unlock_symphaty_coins_few">Cost to unlock: %d Coins</string>
+    <string name="unlock_symphaty_coins_other">Cost to unlock: %d Coins</string>
+    <string name="unlock_symphaty_hours_one">Unlocked for: %d hour</string>
+    <string name="unlock_symphaty_hours_many">Unlocked for: %d hours</string>
+    <string name="unlock_symphaty_hours_few">Unlocked for: %d hours</string>
+    <string name="unlock_symphaty_hours_other">Unlocked for: %d hours</string>
+    <string name="unlock_symphaty_women_one">%d girl sent you a Like!</string>
+    <string name="unlock_symphaty_women_many">%d girls sent you Likes!</string>
+    <string name="unlock_symphaty_women_few">%d girls sent you Likes!</string>
+    <string name="unlock_symphaty_women_other">%d girls sent you Likes!</string>
+    <string name="unlock_symphaty_men_one">%d guy sent you a Like!</string>
+    <string name="unlock_symphaty_men_many">%d guys sent you Likes!</string>
+    <string name="unlock_symphaty_men_few">%d guys sent you Likes!</string>
+    <string name="unlock_symphaty_men_other">%d guys sent you Likes!</string>
+    <string name="unlock_symphaty_title">Right now you are unable to see which users sent you Likes</string>
+    <string name="unlock_symphaty_get_access">Get access</string>
+    <string name="send_gift_start_dialog">Send a gift and start chatting now!</string>
+    <string name="likes_start_dating_button">Start dating</string>
+    <string name="likes_empty_title">You do not have any Likes yet.\nLikes help you to date people</string>
+    <string name="unlock_sympathy_price">Cost to unlock:</string>
+    <string name="send_gift">Send Gift</string>
+    <string name="write_him_without_symphaty">Write to him without a Mutual Like!</string>
+    <string name="write_her_without_symphaty">Write to her without a Mutual Like!</string>
 </resources>

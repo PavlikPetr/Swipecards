@@ -584,11 +584,12 @@
   <string name="fill_own_profile_boy">Uzupełnij swój profil, by zobaczyć co napisał %s</string>
   <string name="fill_own_profile">Uzupełnij swój profil, by zobaczyć co napisała %s</string>
   <string name="chat_mutual_symphaty">Wzajemne Polubienie!</string>
-  <string name="chat_mutual_start_conversation">Zacznij czatować!</string>
+  <string name="chat_mutual_start_conversation">Zacznij czatować!\nPrezent byłby idealny na początek</string>
   <string name="chat_send_message_button_title">Wyślij</string>
   <string name="free_vip">Status VIP-a za darmo!</string>
   <string name="buy_vip_write_anyone">Napisz do każdej dziewczyny, nawet jeśli nie macie wzajemnych Polubień</string>
   <string name="buy_vip_write_anyone_boy">Napisz do każdego chłopaka, nawet jeśli nie macie wzajemnych Polubień</string>
+  <string name="buy_vip_write_anyone_without_mutual">Napisz do każdej osoby, nawet jeśli nie macie wzajemnych Polubień</string>
   <string name="buy_vip_more_views">Uzyskaj 1,5 razy więcej odsłon profilu</string>
   <string name="description_experiment4_view1">Ze statusem VIP %1$s i %2$s będziesz widoczny!</string>
   <string name="fake_male_name_1">Kacper</string>
@@ -612,4 +613,5 @@
   <string name="fake_female_name_9">Aneta</string>
   <string name="fake_female_name_10">Maria</string>
   <string name="dialog_empty_title">Nie masz żadnych wiadomości</string>
+  <string name="buy_vip_button_title">Zostań VIP</string>
 </resources>

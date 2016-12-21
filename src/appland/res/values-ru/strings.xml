@@ -1155,7 +1155,7 @@
     <string name="fill_own_profile">Заполните анкету у себя в профиле, чтобы посмотреть, что написала %s</string>
 
     <string name="chat_mutual_symphaty">Взаимная симпатия!</string>
-    <string name="chat_mutual_start_conversation">Начните общение!</string>
+    <string name="chat_mutual_start_conversation">Начните общение!\nПодарок будет отличным началом</string>
     <string name="chat_send_message_button_title">Отпр.</string>
 
     <!--Экспериментальные попапы VIP-->
@@ -1175,6 +1175,7 @@
     <string name="i_see_u_face">Узнайте своих гостей и поклонников в лицо</string>
     <string name="buy_vip_write_anyone">Пишите любой девушке без взаимной симпатии</string>
     <string name="buy_vip_write_anyone_boy">Пишите любому мужчине без взаимной симпатии</string>
+    <string name="buy_vip_write_anyone_without_mutual">Пишите кому угодно без взаимной симпатии</string>
     <string name="moar_messages">Переписывайтесь с популярными пользователями</string>
     <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
 
@@ -1211,5 +1212,39 @@
     <string name="go_dating">Начать \nзнакомиться</string>
     <string name="start_dating">Начать знакомиться</string>
     <string name="no_mutual">У вас нет взаимных симпатий</string>
+    <string name="buy_vip_button_title">Получить VIP</string>
 
+    <string name="unlock_symphaty_coins_one">Стоимость услуги: %d монета</string>
+    <string name="unlock_symphaty_coins_many">Стоимость услуги: %d монет</string>
+    <string name="unlock_symphaty_coins_few">Стоимость услуги: %d монеты</string>
+    <string name="unlock_symphaty_coins_other">Стоимость услуги: %d монет</string>
+
+    <string name="unlock_symphaty_hours_one">Услуга действует: %d час</string>
+    <string name="unlock_symphaty_hours_many">Услуга действует: %d часов</string>
+    <string name="unlock_symphaty_hours_few">Услуга действует: %d часа</string>
+    <string name="unlock_symphaty_hours_other">Услуга действует: %d часов</string>
+
+    <string name="unlock_symphaty_women_one">%d девушка отправила вам симпатию!</string>
+    <string name="unlock_symphaty_women_many">%d девушек отправили вам симпатии!</string>
+    <string name="unlock_symphaty_women_few">%d девушки отправили вам симпатии!</string>
+    <string name="unlock_symphaty_women_other">%d девушек отправили вам симпатии!</string>
+
+    <string name="unlock_symphaty_men_one">%d мужчина отправил вам симпатию!</string>
+    <string name="unlock_symphaty_men_many">%d мужчин отправили вам симпатии!</string>
+    <string name="unlock_symphaty_men_few">%d мужчины отправили вам симпатии!</string>
+    <string name="unlock_symphaty_men_other">%d мужчин отправили вам симпатии!</string>
+
+    <string name="unlock_symphaty_title">Вы не можете просматривать тех, кто отправил вам симпатии</string>
+
+    <string name="unlock_symphaty_get_access">Получить доступ</string>
+
+    <string name="send_gift_start_dialog">Отправь подарок и начни диалог сейчас!</string>
+    <string name="likes_start_dating_button">Начать знакомиться</string>
+    <string name="likes_empty_title">У вас пока нет симпатий.\nСимпатии помогут познакомиться</string>
+
+    <string name="unlock_sympathy_price">Стоимость услуги:</string>
+
+    <string name="send_gift">Отправить подарок</string>
+    <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
+    <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
 </resources>

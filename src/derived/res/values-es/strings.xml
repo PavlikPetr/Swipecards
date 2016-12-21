@@ -958,7 +958,7 @@
     <string name="fill_own_profile_boy">Rellena tu perfil para ver lo que te ha escrito %s</string>
     <string name="fill_own_profile">Rellena tu perfil para ver lo que ha escrito %s</string>
     <string name="chat_mutual_symphaty">¡Simpatía mutua!</string>
-    <string name="chat_mutual_start_conversation">¡Empieza a chatear!</string>
+    <string name="chat_mutual_start_conversation">¡Empieza a chatear!\nUn regalo sería un buen inicio</string>
     <string name="chat_send_message_button_title">Enviar</string>
     <string name="know_your_guests_by_sight">Encuentra a tus invitados y fans viendo sus caras</string>
     <string name="know_your_guests">¡Encuentra a tus invitados!</string>
@@ -973,6 +973,7 @@
     <string name="i_see_u_face">Descubre quién ha visitado tu página y quiénes son tos fans</string>
     <string name="buy_vip_write_anyone">Escribe a cualquier chica sin simpatía mutua</string>
     <string name="buy_vip_write_anyone_boy">Escribe a cualquier chico, incluso sin simpatía mutua</string>
+    <string name="buy_vip_write_anyone_without_mutual">Escribe a cualquiera, incluso sin simpatía mutua</string>
     <string name="moar_messages">Chatea con usuarios populares</string>
     <string name="buy_vip_more_views">Recibe 1,5 más de visitas en tu perfil</string>
     <string name="special_offer">Oferta especial</string>
@@ -1004,4 +1005,30 @@
     <string name="go_dating">Empieza \na ligar</string>
     <string name="start_dating">Empieza a ligar</string>
     <string name="no_mutual">No tienes ninguna simpatía mutua</string>
+    <string name="buy_vip_button_title">Hazte VIP</string>
+    <string name="unlock_symphaty_coins_one">Precio de desbloqueo: %d moneda</string>
+    <string name="unlock_symphaty_coins_many">Precio de desbloqueo: %d monedas</string>
+    <string name="unlock_symphaty_coins_few">Precio de desbloqueo: %d monedas</string>
+    <string name="unlock_symphaty_coins_other">Precio de desbloqueo: %d monedas</string>
+    <string name="unlock_symphaty_hours_one">Desbloqueado durante: %d hora</string>
+    <string name="unlock_symphaty_hours_many">Desbloqueado durante: %d horas</string>
+    <string name="unlock_symphaty_hours_few">Desbloqueado durante: %d horas</string>
+    <string name="unlock_symphaty_hours_other">Desbloqueado durante: %d horas</string>
+    <string name="unlock_symphaty_women_one">¡%d chica te ha enviado una simpatía!</string>
+    <string name="unlock_symphaty_women_many">¡%d chicas te han enviado simpatías!</string>
+    <string name="unlock_symphaty_women_few">¡%d chicas te han enviado simpatías!</string>
+    <string name="unlock_symphaty_women_other">¡%d chicas te han enviado simpatías!</string>
+    <string name="unlock_symphaty_men_one">¡%d chico te ha enviado una simpatía!</string>
+    <string name="unlock_symphaty_men_many">¡%d chicos te han enviado simpatías!</string>
+    <string name="unlock_symphaty_men_few">¡%d chicos te han enviado simpatías!</string>
+    <string name="unlock_symphaty_men_other">¡%d chicos te han enviado simpatías!</string>
+    <string name="unlock_symphaty_title">Ahora mismo no puedes ver que usuarios te han enviado simpatías</string>
+    <string name="unlock_symphaty_get_access">Consigue acceso</string>
+    <string name="send_gift_start_dialog">¡Envía un regalo y empieza a chatear ahora!</string>
+    <string name="likes_start_dating_button">Empieza a ligar</string>
+    <string name="likes_empty_title">Aun no tienes ninguna simpatía.\nLas simpatías te ayudan a conocer personas</string>
+    <string name="unlock_sympathy_price">Precio de desbloqueo:</string>
+    <string name="send_gift">Enviar regalo</string>
+    <string name="write_him_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
+    <string name="write_her_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
 </resources>

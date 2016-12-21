@@ -956,7 +956,7 @@
     <string name="fill_own_profile_boy">Preenche o teu perfil para veres o que %s escreveu</string>
     <string name="fill_own_profile">Preenche o teu perfil para veres o que %s escreveu</string>
     <string name="chat_mutual_symphaty">Gosto Mútuo!</string>
-    <string name="chat_mutual_start_conversation">Começa a conversar!</string>
+    <string name="chat_mutual_start_conversation">Começa a conversar!\nUm presente seria uma bela introdução</string>
     <string name="chat_send_message_button_title">Enviar</string>
     <string name="know_your_guests_by_sight">Vê a cara de quem te visitou e dos teus Fãs</string>
     <string name="know_your_guests">Descobre quem te visitou!</string>
@@ -971,6 +971,7 @@
     <string name="i_see_u_face">Descobre quem visitou o teu perfil e vê quem são os teus Fãs</string>
     <string name="buy_vip_write_anyone">Envia mensagens a qualquer mulher mesmo sem Gosto mútuo</string>
     <string name="buy_vip_write_anyone_boy">Envia mensagens a qualquer homem mesmo sem Gosto mútuo</string>
+    <string name="buy_vip_write_anyone_without_mutual">Envia mensagens a quem quiseres, mesmo sem um Gosto mútuo</string>
     <string name="moar_messages">Conversa com utilizadores populares</string>
     <string name="buy_vip_more_views">Ganha 1.5x mais visualizações de perfil</string>
     <string name="special_offer">Oferta especial</string>
@@ -1002,4 +1003,27 @@
     <string name="go_dating">Começa a \nnamorar</string>
     <string name="start_dating">Começar a namorar</string>
     <string name="no_mutual">Não tens quaisquer Gostos Mútuos</string>
+    <string name="buy_vip_button_title">Adquire VIP</string>
+    <string name="unlock_symphaty_coins_one">Custo para desbloquear: %d Moeda</string>
+    <string name="unlock_symphaty_coins_many">Custo para desbloquear: %d Moedas</string>
+    <string name="unlock_symphaty_coins_few">Custo para desbloquear: %d Moedas</string>
+    <string name="unlock_symphaty_coins_other">Custo para desbloquear: %d Moedas</string>
+    <string name="unlock_symphaty_hours_one">Desbloqueado por: %d hora</string>
+    <string name="unlock_symphaty_hours_many">Desbloqueado por: %d horas</string>
+    <string name="unlock_symphaty_hours_few">Desbloqueado por: %d horas</string>
+    <string name="unlock_symphaty_hours_other">Desbloqueado por: %d horas</string>
+    <string name="unlock_symphaty_women_one">%d mulher enviou-te um Gosto!</string>
+    <string name="unlock_symphaty_women_many">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_women_few">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_women_other">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_men_one">%d homem enviou-te um Gosto!</string>
+    <string name="unlock_symphaty_men_many">%d homens enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_men_few">%d homens enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_men_other">%d homens enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_title">Neste momento não consegues ver que utilizadores te enviaram Gostos</string>
+    <string name="unlock_symphaty_get_access">Obtém acesso</string>
+    <string name="send_gift_start_dialog">Envia um presente e começa a conversar agora!</string>
+    <string name="likes_start_dating_button">Começa a namorar</string>
+    <string name="likes_empty_title">Ainda não tens Gostos. \nOs Gostos ajudam-te a conhecer pessoas</string>
+    <string name="unlock_sympathy_price">Custo para desbloquear:</string>
 </resources>
