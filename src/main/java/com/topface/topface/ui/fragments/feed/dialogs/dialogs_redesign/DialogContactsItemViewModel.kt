@@ -8,6 +8,7 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
 import com.topface.topface.App
+import com.topface.topface.data.FeedDialog
 import com.topface.topface.requests.MutualReadRequest
 import com.topface.topface.requests.ReadLikeRequest
 import com.topface.topface.requests.response.DialogContacts
@@ -94,17 +95,24 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 override fun onNext(data: DialogContacts?) {
                     mUpdateInProgress = false
                     data?.let {
-                        mEventBus.setData(DialogContactsEvent(it.items.isNotEmpty()))
-                        if (it.items.isNotEmpty()) {
+                        if (this@DialogContactsItemViewModel.data.observableList.count() != 0 ||
+                                it.items.isNotEmpty()) {
                             updateDialogContacts(it)
                             this@DialogContactsItemViewModel.data.addAll(data.items)
                             amount.set(getAmount(it.counter))
                             addFooterGoDatingItem(it.more)
                         } else {
-                            commandVisibility.set(View.INVISIBLE)
-                            addEmptyContactsItem()
+                            contactsEmpty()
                         }
+                    } ?: if (this@DialogContactsItemViewModel.data.observableList.count() == 0) {
+                        contactsEmpty()
                     }
+
+                    /* в контактах всегда будет минимум один элемент
+                    * но надо проверить еще, что будет догрузка
+                     */
+
+                    mEventBus.setData(DialogContactsEvent(this@DialogContactsItemViewModel.data.observableList.count() > 1 || data?.more ?: false))
                 }
 
                 override fun onError(e: Throwable?) {
@@ -119,6 +127,12 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
 
             })
         }
+    }
+
+    private fun contactsEmpty() {
+        commandVisibility.set(View.INVISIBLE)
+        addEmptyContactsItem()
+        amount.set(Utils.EMPTY)
     }
 
     /**
@@ -154,13 +168,18 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (removeItemByUserId(userId)) {
                     sendReadRequest(userId)
-                    if (this@DialogContactsItemViewModel.data.observableList.count() == 1
-                            && this@DialogContactsItemViewModel.data.observableList[0] is GoDatingContactsStubItem) {
-                        addEmptyContactsItem()
-                    }
+                    showStubIfNeed()
                 }
 
             }
+        }
+    }
+
+    // проверяем List на длину, если там 1 итем и тот fake "иди знакомиться" -> показываем stub
+    private fun showStubIfNeed() {
+        val observableList = this@DialogContactsItemViewModel.data.observableList
+        if (observableList.count() == 1 && observableList[0] is GoDatingContactsStubItem) {
+            contactsEmpty()
         }
     }
 
@@ -170,6 +189,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 data.observableList.remove(it)
                 mContactsStubItem.dialogContacts.items.remove(it)
                 mEventBus.setData(DialogContactsEvent(mContactsStubItem.dialogContacts.items.isNotEmpty()))
+                showStubIfNeed()
                 return true
             }
         }

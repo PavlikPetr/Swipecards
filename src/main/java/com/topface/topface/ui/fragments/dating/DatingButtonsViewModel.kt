@@ -33,12 +33,11 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
-import rx.Scheduler
 import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
@@ -172,22 +171,22 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH)
                     .subscribeOn(Schedulers.io())
                     .subscribe(object : Subscriber<Rate>() {
-                override fun onCompleted() {
-                    mLikeSubscription.safeUnsubscribe()
-                    validateDeviceActivation()
-                }
+                        override fun onCompleted() {
+                            mLikeSubscription.safeUnsubscribe()
+                            validateDeviceActivation()
+                        }
 
-                override fun onError(e: Throwable?) {
-                    it.rated = false
-                    mDatingButtonsView.unlockControls()
-                }
+                        override fun onError(e: Throwable?) {
+                            it.rated = false
+                            mDatingButtonsView.unlockControls()
+                        }
 
-                override fun onNext(rate: Rate?) {
-                    it.rated = true
-                    SearchCacheManager.markUserAsRatedInCache(it.id)
-                    mDatingButtonsView.unlockControls()
-                }
-            })
+                        override fun onNext(rate: Rate?) {
+                            it.rated = true
+                            SearchCacheManager.markUserAsRatedInCache(it.id)
+                            mDatingButtonsView.unlockControls()
+                        }
+                    })
         } else {
             showNextUser()
         }
@@ -280,7 +279,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         SendLikeRequest.DEFAULT_NO_MUTUAL
 
     private fun showNextUser() {
-        if (mUserSearchList.searchPosition == mUserSearchList.size - 1 && mUserSearchList.isNeedPreload()) {
+        if (mUserSearchList.searchPosition == mUserSearchList.size - 1 && mUserSearchList.isNeedPreload) {
             showProgress()
             return
         } else {

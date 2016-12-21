@@ -30,7 +30,6 @@ abstract public class ApiHandler extends Handler {
     private CompleteAction mCompleteAction;
 
     public ApiHandler() {
-
     }
 
     public ApiHandler(Looper looper) {
