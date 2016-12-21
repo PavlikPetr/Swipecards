@@ -2,7 +2,6 @@ package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableBoolean
-import android.databinding.ObservableInt
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +15,10 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
-import com.topface.topface.utils.RxFieldObservable
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.isHasNotification
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -34,14 +32,14 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
 
     @Inject lateinit var mState: TopfaceAppState
     var extraViewModel: CustomToolbarViewModel? = null
-    val isCollapsStyle = object : ObservableBoolean(false) {
+    val isCollapsStyle = object : ObservableBoolean() {
         override fun set(value: Boolean) {
             super.set(value)
             setCorrectStyle(value)
             isScrimVisible.set(!value)
         }
     }
-    val isScrimVisible = object : ObservableBoolean(false) {
+    val isScrimVisible = object : ObservableBoolean() {
         override fun set(value: Boolean) {
             super.set(value)
             // тулбар с градиентом только до тех пор, пока не началась анимация по переходу между CollapsingToolbar и Toolbar
@@ -81,6 +79,7 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
 
     init {
         App.get().inject(this)
+        isCollapsStyle.set(false)
         title.set(Utils.EMPTY)
         subTitle.set(Utils.EMPTY)
         shadowVisibility.set(View.GONE)

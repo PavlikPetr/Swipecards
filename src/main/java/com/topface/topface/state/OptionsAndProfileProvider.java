@@ -3,7 +3,7 @@ package com.topface.topface.state;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import javax.inject.Inject;
 

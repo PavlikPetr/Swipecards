@@ -253,12 +253,14 @@ public class Profile extends AbstractDataWithPhotos {
                 formInfo.fillFormItem(headerItem);
             }
 
-            // 11 breast position 7
-            formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
-                    FormItem.DATA, headerItem, BREAST);
-            formItem.setOnlyForWomen(true);
-            formInfo.fillFormItem(formItem);
-            forms.add(formItem);
+            if (formInfo.getSex() != Profile.BOY) {
+                // 11 breast position 7
+                formItem = new FormItem(R.array.form_physique_breast, form.optInt("breastId"),
+                        FormItem.DATA, headerItem, BREAST);
+                formItem.setOnlyForWomen(true);
+                formInfo.fillFormItem(formItem);
+                forms.add(formItem);
+            }
 
             // 6 fitness position 2
             formItem = new FormItem(R.array.form_physique_fitness, form.optInt("fitnessId"),

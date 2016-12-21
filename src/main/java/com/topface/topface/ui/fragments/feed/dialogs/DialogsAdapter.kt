@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.content.Context
 import android.databinding.ViewDataBinding
-import android.support.v7.widget.RecyclerView
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog

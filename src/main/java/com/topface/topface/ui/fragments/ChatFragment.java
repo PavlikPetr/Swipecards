@@ -139,6 +139,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String BANNED_USER = "banned_user";
     public static final String SEX = "sex";
     private static final String HISTORY_LAST_ITEM = "history_last_item";
+    public static final String SEND_MESSAGE = "send_message";
+    private  Boolean isSendMessage = false;
 
     private int deleteItemsCount = 0;
     private int mUserId;
@@ -926,7 +928,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void finish() {
-        getActivity().setResult(Activity.RESULT_CANCELED);
+        Intent intent = new Intent();
+        intent.putExtra(SEND_MESSAGE, isSendMessage);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_CANCELED, intent);
         getActivity().finish();
     }
 
@@ -970,6 +977,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
             intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
             intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+            intent.putExtra(SEND_MESSAGE, isSendMessage);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
             getActivity().setResult(Activity.RESULT_OK, intent);
         }
         mRootLayout.setKeyboardListener(null);
@@ -985,6 +994,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
+                    isSendMessage = true;
                     scrollListToTheEnd();
                     Bundle extras = data.getExtras();
                     if (extras != null) {
@@ -1003,6 +1013,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         LocalBroadcastManager.getInstance(getActivity())
                                 .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                     }
+                    Intent intent = new Intent();
+                    intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+                    intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+                    intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+                    intent.putExtra(SEND_MESSAGE, isSendMessage);
+                    intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
                 }
                 break;
             case PurchasesActivity.INTENT_BUY_VIP:
@@ -1059,7 +1076,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, activity, App.from(activity).getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
             if (!App.from(activity).getProfile().emailConfirmed) {
@@ -1077,6 +1094,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
+                isSendMessage = true;
                 if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                     // в момент успешной отправки сообщения, проверяем состоялся ли полноценный диалог
@@ -1088,6 +1106,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 LocalBroadcastManager.getInstance(getActivity())
                         .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                 scrollListToTheEnd();
+                //на тот случай, если закрыли по up сетим результат сразу
+                Intent intent = new Intent();
+                intent.putExtra(ChatFragment.SEND_MESSAGE, isSendMessage);
+                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+                intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+                getActivity().setResult(Activity.RESULT_CANCELED, intent);
             }
 
             @Override

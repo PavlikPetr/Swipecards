@@ -45,6 +45,9 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_ON;
@@ -55,7 +58,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  * Фрагмент админки. Доступен только для редакторов.
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
-    public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
+    public static final String API_STAGE_TF = "https://api-%s.dev.stage.tf/";
     public static final String API_SCRUFFY_STAGE_TF = "wss://api-%s.stage.tf/scruffy/";
     private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private Spinner mApiUrl;
@@ -119,6 +122,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
         initNavigationBar();
         initApiUrl(root);
+        initTrialVipType(root);
         initDebugMode(root);
         initProfileId(root);
         initEditorMode(root);
@@ -260,6 +264,31 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private void setInfoText(View rootLayout, int fieldId, String text) {
         TextView textView = (TextView) rootLayout.findViewById(fieldId);
         textView.setText(textView.getText() + " " + text);
+    }
+
+    private void initTrialVipType(View rootLayout) {
+        Spinner trialType = (Spinner) rootLayout.findViewById(R.id.trialType);
+        //Создаем стандартный адаптер
+        @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                new ArrayList(Arrays.asList(getActivity().getResources().getStringArray(R.array.trial_vip_types)))
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        trialType.setAdapter(adapter);
+        trialType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mAppConfig.setTrialVipPopupType(i - 1);
+                mAppConfig.saveConfig();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        trialType.setSelection((int)mAppConfig.getTrialVipPopupType() + 1);
     }
 
     private void initApiUrl(View rootLayout) {

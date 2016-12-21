@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.widget.Toast
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.RetryRequestReceiver
@@ -25,19 +26,21 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
+import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
-import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -56,11 +59,33 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         BaseViewModel<DatingButtonsLayoutBinding>(binding), IAppBarState {
 
     var currentUser: SearchUser? = null
+        set(value) {
+            Debug.log("LOADER_INTEGRATION user setter")
+            if (mLockDatingButtonsVisibility) {
+                mLockDatingButtonsVisibility = false
+                isDatingProgressBarVisible.set(View.GONE)
+                isDatingButtonsVisible.set(View.VISIBLE)
+            }
+            field = value
+        }
     private var mLikeSubscription: Subscription? = null
     private var mSkipSubscription: Subscription? = null
     private var mAdmirationSubscription: Subscription? = null
-    val isDatingButtonsVisible = ObservableInt(View.VISIBLE)
+    val isDatingButtonsVisible = object : ObservableInt(View.INVISIBLE) {
+        override fun set(value: Int) {
+            if (!mLockDatingButtonsVisibility) {
+                super.set(value)
+            }
+        }
+    }
+    val isDatingProgressBarVisible = ObservableInt(View.VISIBLE)
     val isDatingButtonsLocked = ObservableBoolean(false)
+
+    /*
+       isDatingButtonsVisible  неистово срет вызовами, по этому не можем ипользовать эту переменную
+       для определения состояния кнопок. И поэтому пояаилось это.
+     */
+    private var mLockDatingButtonsVisibility = true
 
     @Inject lateinit internal var mAppState: TopfaceAppState
     private val mBalanceDataSubscriptions = CompositeSubscription()
@@ -120,27 +145,22 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     fun skip() = currentUser?.let {
         if (!it.skipped && !it.rated) {
-            if (App.isOnline()) {
-                showNextUser()
-                mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {
-                    override fun onCompleted() = mSkipSubscription.safeUnsubscribe()
-                    override fun onError(e: Throwable?) = e?.printStackTrace() ?: Unit
-                    override fun onNext(t: IApiResponse?) {
-                        for (user in mUserSearchList) {
-                            if (user.id == it.id) {
-                                user.skipped = true
-                                return
-                            }
+            showNextUser()
+            mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {
+                override fun onCompleted() = mSkipSubscription.safeUnsubscribe()
+                override fun onError(e: Throwable?) = e?.printStackTrace() ?: Unit
+                override fun onNext(t: IApiResponse?) {
+                    for (user in mUserSearchList) {
+                        if (user.id == it.id) {
+                            user.skipped = true
+                            return
                         }
-                        mDatingButtonsView.unlockControls()
                     }
-                })
-            } else {
-                if (mUserSearchList.isCurrentUserLast) {
-                    //todo чтос делать с диалогм, если запрос не дошел
-                    // showRetryDialog()
+                    mDatingButtonsView.unlockControls()
                 }
-            }
+            })
+        } else {
+            showNextUser()
         }
     }
 
@@ -148,26 +168,28 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         if (!it.rated) {
             tryShowTrialPopup(navigator = mNavigator)
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
-                    getMutualId(it), SendLikeRequest.FROM_SEARCH).subscribe(object : Subscriber<Rate>() {
-                override fun onCompleted() {
-                    mLikeSubscription.safeUnsubscribe()
-                    validateDeviceActivation()
-                }
+                    getMutualId(it), SendLikeRequest.FROM_SEARCH)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(object : Subscriber<Rate>() {
+                        override fun onCompleted() {
+                            mLikeSubscription.safeUnsubscribe()
+                            validateDeviceActivation()
+                        }
 
-                override fun onError(e: Throwable?) {
-                    it.rated = false
-                    mDatingButtonsView.unlockControls()
-                }
+                        override fun onError(e: Throwable?) {
+                            it.rated = false
+                            mDatingButtonsView.unlockControls()
+                        }
 
-                override fun onNext(rate: Rate?) {
-                    it.rated = true
-                    SearchCacheManager.markUserAsRatedInCache(it.id)
-                    mDatingButtonsView.unlockControls()
-                }
-            })
-        }/* else {
+                        override fun onNext(rate: Rate?) {
+                            it.rated = true
+                            SearchCacheManager.markUserAsRatedInCache(it.id)
+                            mDatingButtonsView.unlockControls()
+                        }
+                    })
+        } else {
             showNextUser()
-        }*/
+        }
     }
 
     private fun validateDeviceActivation() {
@@ -201,7 +223,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private fun startAdmirationPurchasePopup(viewID: Int) {
         App.getUserConfig().setAdmirationPurchasePopupShown()
         mStartAdmirationPurchasePopup.startAnimateAdmirationPurchasePopup(viewID,
-                R.color.dating_fab_small, R.drawable.admiration)
+                R.color.black, R.drawable.admiration)
     }
 
     fun sendAdmiration() = sendSomething {
@@ -228,14 +250,18 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         })
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK &&
                 requestCode == AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP) {
             sendAdmiration()
         }
+        if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+            showProgress()
+        }
     }
 
-    private inline fun sendSomething(func: (SearchUser) -> Unit) =
+    private fun sendSomething(func: (SearchUser) -> Unit) {
+        if (App.isOnline()) {
             if (!isNeedTakePhoto()) {
                 currentUser?.let {
                     showNextUser()
@@ -244,17 +270,39 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
             } else {
                 mDatingButtonsEvents.showTakePhoto()
             }
+        }
+    }
 
     private fun getMutualId(user: SearchUser) = if (user.isMutualPossible)
         SendLikeRequest.DEFAULT_MUTUAL
     else
         SendLikeRequest.DEFAULT_NO_MUTUAL
 
-    private fun showNextUser() = mUserSearchList.nextUser()?.let {
-        mEmptySearchVisibility.hideEmptySearchDialog()
-        mDatingButtonsView.unlockControls()
-        mDatingButtonsEvents.onNewSearchUser(it)
-        currentUser = it
+    private fun showNextUser() {
+        if (mUserSearchList.searchPosition == mUserSearchList.size - 1 && mUserSearchList.isNeedPreload) {
+            showProgress()
+            return
+        } else {
+            hideProgress()
+        }
+        mUserSearchList.nextUser()?.let {
+            mEmptySearchVisibility.hideEmptySearchDialog()
+            mDatingButtonsView.unlockControls()
+            mDatingButtonsEvents.onNewSearchUser(it)
+            currentUser = it
+        }
+    }
+
+    private fun showProgress() {
+        isDatingProgressBarVisible.set(View.VISIBLE)
+        isDatingButtonsVisible.set(View.INVISIBLE)
+        mLockDatingButtonsVisibility = true
+    }
+
+    private fun hideProgress() {
+        mLockDatingButtonsVisibility = false
+        isDatingProgressBarVisible.set(View.GONE)
+        isDatingButtonsVisible.set(View.VISIBLE)
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {

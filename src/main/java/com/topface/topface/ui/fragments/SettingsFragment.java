@@ -22,6 +22,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.FlurryOpenEvent;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.AboutAppDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorDialog;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
@@ -260,7 +261,7 @@ public class SettingsFragment extends ProfileInnerFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == AuthorizationManager.RESULT_LOGOUT &&
                 requestCode == SettingsContainerActivity.INTENT_ACCOUNT) {
-            if (isAdded()) {
+            if (isAdded() && !(getActivity() instanceof NavigationActivity)) {
                 getActivity().finish();
             }
         }

@@ -31,21 +31,17 @@ public class FormInfo {
         return mSex;
     }
 
-    public int getProfileType() {
-        return mProfileType;
-    }
-
-
     public void fillFormItem(FormItem formItem) {
         String title = formItem.title;
         String data = formItem.value;
+        String emptyValue = formItem.emptyValue;
         try {
             switch (formItem.type) {
                 case FormItem.DATA:
                     title = getFormTitle(formItem);
                     if (formItem.dataId != FormItem.NO_RESOURCE_ID) {
                         if (formItem.dataId == 0) {
-                            data = FormItem.EMPTY_FORM_VALUE;
+                            emptyValue = FormItem.EMPTY_FORM_VALUE;
                             formItem.setIsEmpty(true);
                         } else {
                             data = getEntryById(getEntriesByTitleId(formItem.titleId),
@@ -53,7 +49,7 @@ public class FormInfo {
                         }
                     } else {
                         if (data.isEmpty()) {
-                            data = FormItem.EMPTY_FORM_VALUE;
+                            emptyValue = FormItem.EMPTY_FORM_VALUE;
                             formItem.setIsEmpty(true);
                         }
                     }
@@ -75,6 +71,7 @@ public class FormInfo {
         } finally {
             formItem.title = title;
             formItem.value = data;
+            formItem.emptyValue = emptyValue;
         }
     }
 
@@ -89,10 +86,6 @@ public class FormInfo {
             }
         }
         return null;
-    }
-
-    public String getEntry(int titleId, int targetId) {
-        return getEntryById(getEntriesByTitleId(titleId), getIdsByTitleId(titleId), targetId);
     }
 
     public String[] getEntriesByTitleId(int titleId) {

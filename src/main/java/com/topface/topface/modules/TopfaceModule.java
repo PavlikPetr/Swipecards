@@ -45,14 +45,20 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
-import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
+import com.topface.topface.ui.fragments.dating.DatingEmptyFragment;
+import com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel;
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
+import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.ui.fragments.profile.ProfileFormFragment;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
@@ -74,6 +80,7 @@ import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.geo.GeoLocationManager;
 import com.topface.topface.utils.popups.start_actions.ChooseCityPopupAction;
@@ -125,6 +132,7 @@ import dagger.Provides;
                 OptionsAndProfileProvider.class,
                 MenuFragment.class,
                 NavigationManager.class,
+                TabbedLikesFragment.class,
                 FragmentLifeCycleReporter.class,
                 ActivityLifeCycleReporter.class,
                 LifeCycleReporter.class,
@@ -157,12 +165,18 @@ import dagger.Provides;
                 Experiment4BaseViewModel.class,
                 Experiment4WithBlurViewModel.class,
                 Experiment4WithoutBlurViewModel.class,
-                Experiment41ViewModel.class
+                DatingEmptyFragmentViewModel.class,
+                DatingEmptyFragment.class,
+                Experiment41ViewModel.class,
+                DialogContactsItemViewModel.class,
+                DialogsFragmentViewModel.class,
+                ProfileFormFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
                 App.class,
-                AppodealProvider.class
+                AppodealProvider.class,
+                GCMUtils.class
         }
 )
 public class TopfaceModule {

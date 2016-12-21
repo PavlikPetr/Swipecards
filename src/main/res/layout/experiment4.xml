@@ -11,11 +11,10 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+        >
 
             <RelativeLayout android:layout_width="300dp"
-                            android:layout_height="300dp">
+                            android:layout_height="290dp">
                     <ImageView
                         android:id="@+id/firstFakeAvatar"
                         android:layout_height="50dp"
@@ -50,8 +49,8 @@
                         android:src="@drawable/circle__for_experiment_popup"
                         android:layout_alignBottom="@+id/IVForAvatar"
                         android:layout_toLeftOf="@+id/IVForAvatar"
-                        android:layout_marginRight="9dp"
-                        android:layout_marginBottom="31dp"/>
+                        android:layout_marginRight="19dp"
+                        android:layout_marginBottom="41dp"/>
                     <ImageView
                         android:id="@+id/secondFakeAvatar"
                         android:layout_width="50dp"
@@ -99,7 +98,7 @@
                         android:layout_height="74dp"
                         android:src="@{viewModel.imageUnderAvatar}"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="13dp"
+                        android:layout_marginBottom="20dp"
                         android:layout_centerHorizontal="true"/>
                     <ImageView
                         android:id="@+id/thirdFakeAvatar"
@@ -115,7 +114,7 @@
 
             <TextView
                 style="@style/PopupMessage"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="@{viewModel.popupMessage}"/>
         </LinearLayout>
 </layout>

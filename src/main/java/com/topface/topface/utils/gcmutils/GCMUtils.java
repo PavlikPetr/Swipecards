@@ -39,6 +39,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -50,6 +51,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+
 import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
 import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;
 import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_LIKES;
@@ -57,7 +60,8 @@ import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
-
+    @Inject
+    static WeakStorage mWeakStorage;
     private Context mContext;
 
     public static final int GCM_TYPE_UNKNOWN = -1;
@@ -381,7 +385,9 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
+        boolean dialogRedesignEnabled = mWeakStorage.getProfileDialogRedesignEnabled();
         Intent i = null;
+        String pageName;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
@@ -390,12 +396,12 @@ public class GCMUtils {
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
+                    pageName = dialogRedesignEnabled ? DialogsFragment.class.getName() : MutualFragment.class.getName();
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(dialogRedesignEnabled ? TABBED_DIALOGS : TABBED_LIKES));
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
                 }
                 break;
-
             case GCM_TYPE_LIKE:
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
@@ -404,13 +410,13 @@ public class GCMUtils {
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
-
             case GCM_TYPE_ADMIRATION:
                 if (showAdmirations) {
                     lastNotificationType = GCM_TYPE_ADMIRATION;
+                    pageName = dialogRedesignEnabled ? DialogsFragment.class.getName() : AdmirationFragment.class.getName();
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, AdmirationFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(dialogRedesignEnabled ? TABBED_DIALOGS : TABBED_LIKES));
+                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
                 }
                 break;
             case GCM_TYPE_GUESTS:

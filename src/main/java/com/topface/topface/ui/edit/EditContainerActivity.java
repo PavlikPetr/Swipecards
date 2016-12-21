@@ -49,7 +49,7 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
         }
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mFragment, FilterFragment.TAG).commit();
+                    .replace(R.id.fragment_content, mFragment, FilterFragment.TAG).commit();
         }
     }
 

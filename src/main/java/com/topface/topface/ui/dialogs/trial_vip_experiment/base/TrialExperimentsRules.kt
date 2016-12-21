@@ -13,10 +13,10 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.getBundle
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.UserProfileFragment
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.config.UserConfig
-import com.topface.topface.utils.extensions.applySchedulers
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
 import rx.Subscription
 import java.util.concurrent.TimeUnit
@@ -61,14 +61,13 @@ object TrialExperimentsRules {
         val count = mConfig.getShowsInUserProfile<Int>()
         Debug.log("FUCKING_EXP trial_shows_count = $count")
         if (count.configFieldInfo.amount <= SHOWS_IN_USER_PROFILE) {
-            mShowInUserProfileSubscription = Observable.interval(1, PROFILE_INTERVAL, TimeUnit.SECONDS)
+            mShowInUserProfileSubscription = Observable.interval(0, PROFILE_INTERVAL, TimeUnit.SECONDS)
+                    .skip(1)
                     .applySchedulers()
                     .subscribe(object : RxUtils.ShortSubscription<Long>() {
                         override fun onNext(time: Long?) {
-                            if (time != null && time >= PROFILE_INTERVAL) {
-                                startTrialPopup(type, navigator, type.getBundle(MESSAGE_FIRST, SUBTYPE_4_1))
-                                unsubscribe()
-                            }
+                            startTrialPopup(type, navigator, type.getBundle(MESSAGE_FIRST, SUBTYPE_4_1))
+                            unsubscribe()
                         }
                     })
         }

@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragmentViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView

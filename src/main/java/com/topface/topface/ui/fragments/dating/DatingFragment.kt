@@ -8,7 +8,6 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.os.Parcelable
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v7.widget.LinearLayoutManager
@@ -37,10 +36,7 @@ import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
-import com.topface.topface.utils.AddPhotoHelper
-import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.IStateSaverRegistrator
-import com.topface.topface.utils.Utils
+import com.topface.topface.utils.*
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
@@ -66,7 +62,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         DataBindingUtil.inflate<FragmentDatingLayoutBinding>(context.layoutInflater, R.layout.fragment_dating_layout, null, false)
     }
 
-    private lateinit var mUserSearchList: CachableSearchList<SearchUser>
+    private val mUserSearchList: CachableSearchList<SearchUser> = CachableSearchList<SearchUser>(SearchUser::class.java)
 
     // ------------- этот блок нужно будет вынести в даггер2 --------------
 
@@ -99,10 +95,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
     //~~~~~~~~~~~~~~~~~~~~~~~ конец ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    companion object {
-        const val USER_SEARCH_LIST = "user_search_list"
-    }
-
     override fun bindModels() {
         super.bindModels()
         mAnchorBinding.setModel(mDatingButtonsViewModel)
@@ -122,15 +114,10 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (savedInstanceState != null) {
-            mUserSearchList = savedInstanceState.getParcelableArrayList<Parcelable>(USER_SEARCH_LIST) as CachableSearchList<SearchUser>
-        } else {
-            mUserSearchList = CachableSearchList<SearchUser>(SearchUser::class.java)
-        }
         super.onCreateView(inflater, container, savedInstanceState)
         val stateSaverRegistrator = activity
         if (stateSaverRegistrator is IStateSaverRegistrator) {
-            stateSaverRegistrator.registerStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
+            stateSaverRegistrator.registerLifeCycleDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
         initFormList()
         return mBinding.root
@@ -162,15 +149,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         })
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putParcelableArrayList(USER_SEARCH_LIST, mUserSearchList)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         mDatingButtonsViewModel.release()
         mDatingFragmentViewModel.release()
+        mDatingAlbumViewModel.release()
         govnocod.onDestroyView()
         mAddPhotoHelper.releaseHelper()
     }
@@ -179,7 +162,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.onDetach()
         val stateSaverRegistrator = activity
         if (stateSaverRegistrator is IStateSaverRegistrator) {
-            stateSaverRegistrator.unregisterStateDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
+            stateSaverRegistrator.unregisterLifeCycleDelegate(mDatingAlbumViewModel, mDatingButtonsViewModel, mDatingFragmentViewModel)
         }
     }
 
@@ -219,12 +202,21 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun onNewSearchUser(user: SearchUser) {
         with(mDatingAlbumViewModel) {
-            albumData.set(user.photos)
-            currentUser = user
+            setUser(user)
         }
         with(mDatingFragmentViewModel) {
             currentUser = user
             prepareFormsData(user)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (LocaleConfig.localeChangeInitiated) {
+            mUserSearchList.removeAllUsers()
+            mUserSearchList.saveCache()
+        } else {
+            mUserSearchList.saveCache()
         }
     }
 
@@ -249,16 +241,18 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onOptionsItemSelected(item: MenuItem?) =
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
-    override fun isScrimVisible(isVisible: Boolean) {
-        mDatingOptionMenuManager.isScrimVisible(isVisible)
-        mDatingButtonsViewModel.isScrimVisible(isVisible)
-        operateWithToolbar({ this.isScrimVisible(isVisible) })
-    }
+    override fun isScrimVisible(isVisible: Boolean) =
+            if (mDatingFragmentViewModel.currentUser != null) {
+                mDatingButtonsViewModel.isScrimVisible(isVisible)
+                mDatingOptionMenuManager.isScrimVisible(isVisible)
+                operateWithToolbar { this.isScrimVisible(isVisible) }
+            } else Unit
 
-    override fun isCollapsed(isCollapsed: Boolean) {
-        mDatingButtonsViewModel.isCollapsed(isCollapsed)
-        operateWithToolbar({ this.isCollapsed(isCollapsed) })
-    }
+    override fun isCollapsed(isCollapsed: Boolean) =
+            if (mDatingFragmentViewModel.currentUser != null) {
+                mDatingButtonsViewModel.isCollapsed(isCollapsed)
+                operateWithToolbar({ this.isCollapsed(isCollapsed) })
+            } else Unit
 
     private fun operateWithToolbar(block: NavigationToolbarViewModel.() -> Unit) {
         (activity as? ToolbarActivity<*>)?.let {
@@ -274,7 +268,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     override fun unlockControls() = mDatingButtonsViewModel.isDatingButtonsLocked.set(true)
 
-    override fun showEmptySearchDialog() = mNavigator.showEmptyDating()
+    override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mDatingFragmentViewModel.update(false, false) }
 
     override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
 }

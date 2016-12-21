@@ -4,11 +4,12 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
+import android.databinding.ObservableList;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
@@ -22,18 +23,83 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.data.Photo;
+import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Сюда складывать все BindingAdapter
  * Created by tiberal on 18.01.16.
  */
 public class BindingsAdapters {
+
+    @BindingAdapter("bindDataToCompositeAdapter")
+    public static void bindDataToCompositeAdapter(final RecyclerView recyclerView, SingleObservableArrayList<?> observableArrayList) {
+        if (!observableArrayList.isListenerAdded() && recyclerView.getAdapter() instanceof CompositeAdapter) {
+            final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
+            observableArrayList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<?>>() {
+                @Override
+                public void onChanged(ObservableList<?> objects) {
+                    Debug.log("EPTA onChanged" + objects.size());
+                    adapter.getData().add(objects);
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onItemRangeInserted(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeInserted" + " to pos " + positionStart + " count " + itemCount + " size " + objects.size());
+                    if (itemCount == 1) {
+                        adapter.getData().add(positionStart, objects.get(positionStart));
+                        adapter.notifyItemInserted(positionStart);
+                    } else {
+                        List<?> data = objects.subList(positionStart, objects.size());
+                        Debug.log("EPTA onItemRangeInserted " + " sublist size " + data.size());
+                        adapter.getData().addAll(positionStart, data);
+                        adapter.notifyItemRangeInserted(positionStart, itemCount);
+                        if (positionStart == 0) {
+                            recyclerView.getLayoutManager().scrollToPosition(0);
+                        }
+                    }
+                }
+
+                @Override
+                public void onItemRangeRemoved(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeRemoved " + objects.size());
+                    if (itemCount == 1) {
+                        adapter.getData().remove(positionStart);
+                    } else {
+                        adapter.getData().removeAll(new ArrayList<>(adapter.getData().subList(positionStart, itemCount)));
+                    }
+                    adapter.notifyItemRangeRemoved(positionStart, itemCount);
+                }
+
+                @Override
+                public void onItemRangeMoved(ObservableList<?> objects, int fromPosition, int toPosition, int itemCount) {
+                    Debug.log("EPTA onItemRangeMoved" + objects.size());
+                }
+
+                @Override
+                public void onItemRangeChanged(ObservableList<?> objects, int positionStart, int itemCount) {
+                    Debug.log("EPTA onItemRangeChanged" + objects.size());
+                    if (itemCount == 1) {
+                        adapter.notifyItemChanged(positionStart);
+                    }
+                }
+            });
+        }
+    }
 
     @BindingAdapter("pxTextSize")
     public static void setPxTextSize(TextView view, int size) {
@@ -51,23 +117,18 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("fabVisibility")
-    public static void setFabVisibility(FloatingActionButton fab, int visible) {
-        if (visible == View.VISIBLE) {
-            try {
-                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_show));
-                fab.show();
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
+    public static void setFabVisibility(View view, int visible) {
+        com.topface.topface.utils.AnimationUtils.cancelViewAnivation(view);
+        try {
+            if (visible == View.VISIBLE) {
+                view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fab_show));
+                view.setVisibility(View.VISIBLE);
+            } else {
+                view.startAnimation(AnimationUtils.loadAnimation(view.getContext(), R.anim.fab_hide));
+                view.setVisibility(View.INVISIBLE);
             }
-        } else {
-            try {
-//                com.topface.topface.utils.AnimationUtils.cancelViewAnivation(fab);
-//                fab.startAnimation(AnimationUtils.loadAnimation(fab.getContext(), R.anim.fab_hide));
-                fab.hide();
-            } catch (Resources.NotFoundException e) {
-                e.printStackTrace();
-            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -279,5 +340,52 @@ public class BindingsAdapters {
     public static void setAnimationSrc(View view, Animation resource, Long bindStartOffSet) {
         resource.setStartOffset(bindStartOffSet);
         view.startAnimation(resource);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, long type, int placeholderRes) {
+        if (photo == null) {
+            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+            return;
+        }
+        int size = Math.max(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
+        int width = imageView.getLayoutParams().width;
+        int height = imageView.getLayoutParams().height;
+        String suitableLink = photo.getSuitableLink(width, height);
+        String defaultLink = photo.getDefaultLink();
+        if (suitableLink != null && size > 0) {
+            Glide.with(imageView.getContext())
+                    .load(suitableLink)
+                    .placeholder(placeholderRes)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        } else if (defaultLink != null) {
+            Glide.with(imageView.getContext())
+                    .load(defaultLink)
+                    .placeholder(placeholderRes)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .into(imageView);
+        } else {
+            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
+    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
+        Glide.with(imageView.getContext())
+                .load(imgUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                .into(imageView);
+    }
+
+    @BindingAdapter("viewConfigList")
+    public static void setViewConfigList(CustomCoordinatorLayout view, List<CustomCoordinatorLayout.ViewConfig> list) {
+        view.setViewConfigList(list);
     }
 }

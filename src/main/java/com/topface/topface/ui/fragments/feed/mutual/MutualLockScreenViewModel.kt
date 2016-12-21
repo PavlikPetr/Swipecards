@@ -6,7 +6,7 @@ import com.topface.topface.databinding.LayoutEmptyMutualBinding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 import javax.inject.Inject
@@ -37,6 +37,6 @@ class MutualLockScreenViewModel(binding: LayoutEmptyMutualBinding,
 
     override fun release() {
         super.release()
-        RxUtils.safeUnsubscribe(mBalanceSubscription)
+        mBalanceSubscription.safeUnsubscribe()
     }
 }

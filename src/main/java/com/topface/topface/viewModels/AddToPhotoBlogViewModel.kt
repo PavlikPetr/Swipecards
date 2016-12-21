@@ -13,10 +13,10 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.utils.AddPhotoHelper
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.photosForPhotoBlog
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
@@ -115,7 +115,7 @@ class AddToPhotoBlogViewModel(binding: AddToPhotoBlogLayoutBinding, private val 
         }).exec()
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mPhotoHelper.processActivityResult(requestCode, resultCode, data)
     }
 

@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -26,6 +27,7 @@ import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,10 +114,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 Profile profile = App.get().getProfile();
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-
-                    final ExperimentBoilerplateFragment popup =
-                            new ExperimentBoilerplateFragment();
-                    popup.show(getActivity().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
+                    //noinspection WrongConstant
+                    ExperimentBoilerplateFragment mTrialVipPopup = ExperimentBoilerplateFragment.newInstance(TrialVipPopupAction.getTrialVipType());
+                    mTrialVipPopup.show(getActivity().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
                     App.isNeedShowTrial = false;
                 }
             }

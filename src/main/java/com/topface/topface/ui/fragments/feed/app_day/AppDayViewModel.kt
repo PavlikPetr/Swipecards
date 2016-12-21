@@ -16,8 +16,11 @@ import java.util.*
  * Created by siberia87 on 06.10.16.
  */
 class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) :
-        BaseViewModel<AppDayListBinding>(binding) {
-    val TAG_LOG = "app_of_the_day_banner_show"
+        RecyclerView.OnScrollListener() {
+
+    companion object {
+        const val TAG_LOG = "app_of_the_day_banner_show"
+    }
 
     var isProgressBarVisible = ObservableInt(View.VISIBLE)
     private var mRes = mutableListOf<Int>()
@@ -34,40 +37,35 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             layoutManager.isAutoMeasureEnabled = true
             adapter = mAdapter
-            setNestedScrollingEnabled(false)
+            isNestedScrollingEnabled = false
+        }
+    }
 
-            binding.bannerList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    val adapter = recyclerView?.let { adapter as AppDayAdapter }
-                    val lm = recyclerView?.let { layoutManager as LinearLayoutManager }
-                    val resultSequence = mutableListOf<Int>()
-
-                    lm?.let {
-                        with(it) {
-                            findFirstCompletelyVisibleItemPosition()..findLastCompletelyVisibleItemPosition()
+    override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+        super.onScrollStateChanged(recyclerView, newState)
+        recyclerView ?: return
+        val resultSequence = mutableListOf<Int>()
+        (recyclerView.layoutManager as LinearLayoutManager).let {
+            with(it) {
+                findFirstCompletelyVisibleItemPosition()..findLastCompletelyVisibleItemPosition()
+            }
+                    .toMutableList()
+                    .apply {
+                        with(resultSequence) {
+                            addAll(this@apply)
+                            removeAll(mRes.intersect(this@apply))
                         }
-                                .toMutableList()
-                                .apply {
-                                    with(resultSequence) {
-                                        addAll(this@apply)
-                                        removeAll(mRes.intersect(this@apply))
-                                    }
-                                }
-                                .apply { mRes = this }
-                                .forEach {
-                                    Debug.log(TAG_LOG, "id: $it")
-                                    doAsync {
-                                        adapter?.getDataItem(it)?.let {
-                                            Debug.log(TAG_LOG, "send id: $it")
-                                            AppBannerStatistics.sendBannerShown(it.id)
-                                        }
-                                    }
-                                }
                     }
-                }
-
-            })
+                    .apply { mRes = this }
+                    .forEach {
+                        Debug.log(TAG_LOG, "id: $it")
+                        doAsync {
+                            (recyclerView.adapter as AppDayAdapter).getDataItem(it)?.let {
+                                Debug.log(TAG_LOG, "send id: $it")
+                                AppBannerStatistics.sendBannerShown(it.id)
+                            }
+                        }
+                    }
         }
     }
 }

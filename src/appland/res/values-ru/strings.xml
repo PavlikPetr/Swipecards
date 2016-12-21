@@ -1163,6 +1163,7 @@
     <string name="know_your_guests">Узнай своих гостей!</string>
     <string name="write_any_girl">Пиши любой девушке!</string>
     <string name="write_any_boy">Пиши любому парню!</string>
+    <string name="get_more_visitors">Получи больше просмотров!</string>
     <string name="write_beautiful_girls_without_limits">Пиши красивым девушкам без ограничений
     </string>
     <string name="write_beautiful_boys_without_limits">Пиши красивым парням без ограничений</string>
@@ -1173,9 +1174,42 @@
     <string name="no_more_ad">Никакой рекламы в приложении</string>
     <string name="i_see_u_face">Узнайте своих гостей и поклонников в лицо</string>
     <string name="buy_vip_write_anyone">Пишите любой девушке без взаимной симпатии</string>
+    <string name="buy_vip_write_anyone_boy">Пишите любому мужчине без взаимной симпатии</string>
     <string name="moar_messages">Переписывайтесь с популярными пользователями</string>
     <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
 
     <string name="special_offer">Спецпредложение</string>
+    <string name="description_experiment4_view1">С VIP-статусом %1$s и %2$s тебя увидят!</string>
+    <!--Фэйковые мужские имена-->
+    <string name="fake_male_name_1">Костя</string>
+    <string name="fake_male_name_2">Паша</string>
+    <string name="fake_male_name_3">Петя</string>
+    <string name="fake_male_name_4">Максим</string>
+    <string name="fake_male_name_5">Даня</string>
+    <string name="fake_male_name_6">Алексей</string>
+    <string name="fake_male_name_7">Андрей</string>
+    <string name="fake_male_name_8">Вова</string>
+    <string name="fake_male_name_9">Олег</string>
+    <string name="fake_male_name_10">Игорь</string>
+    <!--Фэйковые женские имена-->
+    <string name="fake_female_name_1">Наташа</string>
+    <string name="fake_female_name_2">Света</string>
+    <string name="fake_female_name_3">Лена</string>
+    <string name="fake_female_name_4">Маргарита</string>
+    <string name="fake_female_name_5">Василиса</string>
+    <string name="fake_female_name_6">Аня</string>
+    <string name="fake_female_name_7">Оля</string>
+    <string name="fake_female_name_8">Настя</string>
+    <string name="fake_female_name_9">Алена</string>
+    <string name="fake_female_name_10">Маша</string>
+
+    <!--Dialogs-redesign-->
+    <string name="dialog_empty_title">У вас нет диалогов</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Напиши тем, с кем у тебя взаимная симпатия</string>
+    <string name="mutually">Взаимно</string>
+    <string name="write_them">Напишите им</string>
+    <string name="go_dating">Начать \nзнакомиться</string>
+    <string name="start_dating">Начать знакомиться</string>
+    <string name="no_mutual">У вас нет взаимных симпатий</string>
 
 </resources>

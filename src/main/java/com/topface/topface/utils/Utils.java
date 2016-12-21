@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
@@ -660,7 +659,7 @@ public class Utils {
     }
 
     @NotNull
-    public static List<Integer> randomImageRes(int count, List<Integer> images) {
+    public static List<Integer> chooseRandomResourceID(int count, List<Integer> images) {
         List<Integer> result = new ArrayList<>();
         Random random = new Random();
         int randomIndex;
@@ -714,6 +713,13 @@ public class Utils {
 
     public static Boolean isLollipop() {
         return android.os.Build.VERSION.SDK_INT >= 21;
+    }
+
+    // костыль только по причине того, что IntArray котлин не подходит для getLocationInWindow
+    public static ArrayList<Integer> getLocationInWindow(View view) {
+        int[] position = new int[2];
+        view.getLocationInWindow(position);
+        return new ArrayList<Integer>(Arrays.asList(position[0], position[1]));
     }
 
 }

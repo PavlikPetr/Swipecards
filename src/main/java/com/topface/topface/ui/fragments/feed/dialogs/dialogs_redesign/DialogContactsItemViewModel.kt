@@ -1,0 +1,227 @@
+package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
+
+import android.content.Context
+import android.content.Intent
+import android.databinding.Observable.OnPropertyChangedCallback
+import android.databinding.ObservableField
+import android.databinding.ObservableInt
+import android.os.Bundle
+import android.view.View
+import com.topface.topface.App
+import com.topface.topface.data.FeedDialog
+import com.topface.topface.requests.MutualReadRequest
+import com.topface.topface.requests.ReadLikeRequest
+import com.topface.topface.requests.response.DialogContacts
+import com.topface.topface.requests.response.DialogContactsItem
+import com.topface.topface.state.EventBus
+import com.topface.topface.ui.ChatActivity
+import com.topface.topface.ui.fragments.ChatFragment
+import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
+import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.Utils
+import com.topface.topface.utils.databinding.IOnListChangedCallbackBinded
+import com.topface.topface.utils.databinding.SingleObservableArrayList
+import com.topface.topface.utils.extensions.toIntSafe
+import com.topface.topface.utils.rx.safeUnsubscribe
+import rx.Observable
+import rx.Subscriber
+import rx.Subscription
+import javax.inject.Inject
+
+/**
+ * Моедь итема хедера
+ * Created by tiberal on 01.12.16.
+ */
+class DialogContactsItemViewModel(private val mContext: Context, private val mContactsStubItem: DialogContactsStubItem, private val mApi: FeedApi, updateObservable: Observable<Bundle>)
+    : ILifeCycle, IOnListChangedCallbackBinded, IFeedPushHandlerListener {
+
+    val data = SingleObservableArrayList<Any>()
+    val amount = ObservableField<String>()
+    val commandVisibility = ObservableInt(View.VISIBLE)
+    val counterVisibility = ObservableInt(View.INVISIBLE)
+    private var mHasInitialData = mContactsStubItem.dialogContacts.items.isNotEmpty()
+    private var mUpdateInProgress = false
+    private var mUpdateSubscription: Subscription
+    private var mMutualBandSubscription: Subscription? = null
+    private val mPushHandler = FeedPushHandler(this, mContext)
+
+    @Inject lateinit var mEventBus: EventBus
+
+    companion object {
+        private const val MAX_COUNTER: Byte = 100
+        private const val OVER_ONE_HUNDRED = "99+"
+    }
+
+    init {
+        App.get().inject(this)
+        mUpdateSubscription = updateObservable.subscribe {
+            if (mHasInitialData) {
+                data.onCallbackBinded = this
+                mHasInitialData = false
+            } else {
+                when {
+                    data.observableList.isEmpty() -> loadMutual(to = null)
+                    data.observableList.last() is DialogContactsItem -> {
+                        val item = data.observableList.last() as DialogContactsItem
+                        loadMutual(to = item.id)
+                    }
+                }
+            }
+        }
+        amount.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
+            override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) {
+                counterVisibility.set(if (with(obs as? ObservableField<String>) {
+                    this?.get().isNullOrEmpty() || this?.get().toIntSafe() == 0
+                }) View.INVISIBLE else View.VISIBLE)
+            }
+        })
+    }
+
+    override fun onCallbackBinded() = data.addAll(mContactsStubItem.dialogContacts.items)
+
+    private fun getAmount(counter: Byte) =
+            if (counter == MAX_COUNTER) {
+                OVER_ONE_HUNDRED
+            } else {
+                counter.toString()
+            }
+
+    fun loadMutual(from: Int? = null, to: Int? = null) {
+        if (!mUpdateInProgress) {
+            mUpdateInProgress = true
+            mMutualBandSubscription = mApi.callMutualBandGetList(from = from, to = to).subscribe(object : Subscriber<DialogContacts>() {
+                override fun onNext(data: DialogContacts?) {
+                    mUpdateInProgress = false
+                    data?.let {
+                        if (this@DialogContactsItemViewModel.data.observableList.count() != 0 ||
+                                it.items.isNotEmpty()) {
+                            updateDialogContacts(it)
+                            this@DialogContactsItemViewModel.data.addAll(data.items)
+                            amount.set(getAmount(it.counter))
+                            addFooterGoDatingItem(it.more)
+                        } else {
+                            contactsEmpty()
+                        }
+                    } ?: if (this@DialogContactsItemViewModel.data.observableList.count() == 0) {
+                        contactsEmpty()
+                    }
+
+                    /* в контактах всегда будет минимум один элемент
+                    * но надо проверить еще, что будет догрузка
+                     */
+
+                    mEventBus.setData(DialogContactsEvent(this@DialogContactsItemViewModel.data.observableList.count() > 1 || data?.more ?: false))
+                }
+
+                override fun onError(e: Throwable?) {
+                    mUpdateInProgress = false
+                    Utils.showErrorMessage()
+                }
+
+                override fun onCompleted() {
+                    mUpdateInProgress = false
+                    unsubscribe()
+                }
+
+            })
+        }
+    }
+
+    private fun contactsEmpty() {
+        commandVisibility.set(View.INVISIBLE)
+        addEmptyContactsItem()
+        amount.set(Utils.EMPTY)
+    }
+
+    /**
+     * Обновляем инфу о контактах в data массиве адаптера. Чтобы не грузить все при следующем создании итема.
+     */
+    private fun updateDialogContacts(dialogContacts: DialogContacts) = with(mContactsStubItem.dialogContacts) {
+        counter = dialogContacts.counter
+        more = dialogContacts.more
+        items.addAll(dialogContacts.items)
+    }
+
+    /**
+     * Добавить итем, сообщеющий, что нет взаимных(в шапке)
+     */
+    private fun addEmptyContactsItem() = with(data.observableList) {
+        clear()
+        add(0, UForeverAloneStubItem())
+    }
+
+    /**
+     * Добавить итем, сообщающий, что взаимные кончили, и надо идти знакомиться
+     */
+    private fun addFooterGoDatingItem(more: Boolean) {
+        if (!more) {
+            data.observableList.add(data.observableList.count(), GoDatingContactsStubItem())
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        data?.let {
+            if (requestCode == ChatActivity.REQUEST_CHAT
+                    && data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
+                val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
+                if (removeItemByUserId(userId)) {
+                    sendReadRequest(userId)
+                    showStubIfNeed()
+                }
+
+            }
+        }
+    }
+
+    // проверяем List на длину, если там 1 итем и тот fake "иди знакомиться" -> показываем stub
+    private fun showStubIfNeed() {
+        val observableList = this@DialogContactsItemViewModel.data.observableList
+        if (observableList.count() == 1 && observableList[0] is GoDatingContactsStubItem) {
+            contactsEmpty()
+        }
+    }
+
+    private fun removeItemByUserId(userId: Int): Boolean {
+        data.observableList.forEach {
+            if (it is DialogContactsItem && it.user.id == userId) {
+                data.observableList.remove(it)
+                mContactsStubItem.dialogContacts.items.remove(it)
+                mEventBus.setData(DialogContactsEvent(mContactsStubItem.dialogContacts.items.isNotEmpty()))
+                showStubIfNeed()
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun sendReadRequest(userId: Int) = if (true) {
+        MutualReadRequest(mContext, userId).exec()
+    } else {
+        ReadLikeRequest(mContext, userId).exec()
+    }
+
+    fun release() {
+        mUpdateSubscription.safeUnsubscribe()
+        mMutualBandSubscription.safeUnsubscribe()
+        mPushHandler.release()
+        data.removeListener()
+    }
+
+    override fun updateFeedMutual() = loadTop()
+
+    override fun updateFeedAdmiration() = loadTop()
+
+    override fun userAddToBlackList(userId: Int) {
+        removeItemByUserId(userId)
+    }
+
+    private fun loadTop() {
+        val item = data.observableList.first()
+        if (data.observableList.isNotEmpty() && item is DialogContactsItem) {
+            loadMutual(from = item.id)
+        }
+    }
+
+}

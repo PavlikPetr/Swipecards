@@ -12,6 +12,8 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormInfo;
 import com.topface.topface.utils.FormItem;
 
+import java.util.Arrays;
+
 /**
  * Adapter for form items edit dialog
  */
@@ -28,6 +30,11 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
         mFormInfo = new FormInfo(App.getContext(), profile.sex, Profile.TYPE_OWN_PROFILE);
         mEntries = createEntries(mFormItem);
         mIds = createIds(mFormItem);
+        // select item if it was "Not specified"
+        // in our predefined lists, last item is "Not specified"
+        if (!Arrays.asList(mEntries).contains(mFormItem.value)) {
+            mFormItem.value = mEntries[mEntries.length - 1];
+        }
     }
 
     @Override
@@ -88,7 +95,8 @@ public class FormItemEditAdapter extends AbstractEditAdapter<FormItem> {
             @Override
             public void onClick(View v) {
                 mFormItem.dataId = mIds[position];
-                mFormItem.value = item;
+                // show minus sign when selected last item from predefined array
+                mFormItem.value = (position == mEntries.length - 1) ? FormItem.EMPTY_FORM_VALUE : item;
                 notifyDataSetChanged();
             }
         });

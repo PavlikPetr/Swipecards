@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
@@ -26,11 +25,14 @@ import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.RunningStateManager
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.debug.FuckingVoodooMagic
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.extensions.registerReceiver
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.extensions.unregisterReceiver
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
@@ -46,7 +48,7 @@ import javax.inject.Inject
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
                                                        private val mApi: FeedApi) :
-        BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
+        BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     @Inject lateinit var mState: TopfaceAppState
     var isRefreshing = object : ObservableBoolean() {
@@ -92,6 +94,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
 
     private var isDataFromCache: Boolean = false
     private var mIsAllDataLoaded: Boolean = false
+    private var mStateManager = RunningStateManager()
 
     companion object {
         val FROM = "from"
@@ -148,6 +151,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     }
                 })
         createAndRegisterBroadcasts()
+        mStateManager.registerAppChangeStateListener(this)
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
@@ -175,9 +179,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        LocalBroadcastManager.getInstance(context).registerReceiver(mReadItemReceiver, filter)
+        mReadItemReceiver.registerReceiver(context, filter)
         gcmTypeUpdateAction?.let {
-            LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
+            mGcmReceiver.registerReceiver(context, IntentFilter(it))
         }
     }
 
@@ -259,7 +263,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     fun getAppDayRequest(typeFeedFragment: String) {
-        mAppDayRequestSubscription = mApi.getAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
+        mAppDayRequestSubscription = mApi.callAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
             override fun onCompleted() {
             }
 
@@ -419,35 +423,40 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     private fun createSubscriber(items: List<T>) = object : Subscriber<Boolean>() {
-        override fun onCompleted() {
-            isLockViewVisible.set(View.GONE)
-        }
+        override fun onCompleted() = isLockViewVisible.set(View.GONE)
 
         override fun onError(e: Throwable?) {
             Utils.showErrorMessage()
             isLockViewVisible.set(View.GONE)
         }
 
-        override fun onNext(appDay: Boolean?) {
-            mAdapter?.let { adapter ->
-                adapter.removeItems(items)
-                if (adapter.data.isEmpty()) {
-                    isListVisible.set(View.INVISIBLE)
-                    stubView?.onEmptyFeed()
-                }
-                mCache.saveToCache(adapter.data)
-            }
+        override fun onNext(appDay: Boolean?) =
+                mAdapter?.let { adapter ->
+                    adapter.removeItems(items)
+                    if (adapter.data.isEmpty()) {
+                        isListVisible.set(View.INVISIBLE)
+                        stubView?.onEmptyFeed()
+                    }
+                    mCache.saveToCache(adapter.data)
+                } ?: Unit
+    }
+
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver(context)
+
+    override fun onAppForeground(timeOnStart: Long) {
+        gcmTypeUpdateAction?.let {
+            mGcmReceiver.registerReceiver(context, IntentFilter(it))
+        }
+        for (type in gcmType) {
+            GCMUtils.cancelNotification(context, type)
         }
     }
 
     override fun release() {
+        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(context)
         super.release()
-        RxUtils.safeUnsubscribe(mUpdaterSubscription)
-        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
-        RxUtils.safeUnsubscribe(mDeleteSubscription)
-        RxUtils.safeUnsubscribe(mBlackListSubscription)
-        RxUtils.safeUnsubscribe(mCountersSubscription)
-        RxUtils.safeUnsubscribe(mAppDayRequestSubscription)
+        arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
+                mBlackListSubscription, mCountersSubscription, mAppDayRequestSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             mAdapter?.let { adapter ->
                 if (!adapter.data.isEmpty()) {
@@ -455,7 +464,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 }
             }
         }
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+        mStateManager.unregisterAppChangeStateListener(this)
     }
 }

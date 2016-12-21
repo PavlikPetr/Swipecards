@@ -30,7 +30,7 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void release(){
+    public void release() {
         mInflater = null;
         mForms.clear();
     }
@@ -82,7 +82,7 @@ public abstract class AbstractFormListAdapter extends BaseAdapter {
         String itemTitle = item.getTitle();
         holder.title.setText(itemTitle);
         if (TextUtils.isEmpty(item.value)) {
-            holder.value.setText(R.string.form_not_specified);
+            holder.value.setText(TextUtils.isEmpty(item.emptyValue) ? FormItem.EMPTY_FORM_VALUE : item.emptyValue);
         } else if (App.getContext().getResources().getString(R.string.form_main_about_status_2).equals(itemTitle) ||
                 item.type == FormItem.NAME || item.type == FormItem.STATUS) {
             holder.value.setText(item.value);

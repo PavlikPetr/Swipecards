@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="66dp"
+            android:src="@drawable/pic_start_dating"/>
+
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="2"
+            android:text="@string/go_dating"
+            android:textColor="@color/mutual_counter_bg"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+</layout>

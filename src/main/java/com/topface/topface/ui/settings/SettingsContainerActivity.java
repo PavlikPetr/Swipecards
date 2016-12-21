@@ -80,7 +80,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
                     break;
             }
             if (fragment != null) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.loFrame, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_content, fragment).commit();
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.topface.topface.requests;
 
 import android.content.Context;
-import android.os.StrictMode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +17,6 @@ public class AppDayRequest extends ApiRequest {
     public AppDayRequest(Context context, String typeFeedFragment) {
         super(context);
         mTypeFeedFragment = typeFeedFragment;
-
     }
 
     @Override

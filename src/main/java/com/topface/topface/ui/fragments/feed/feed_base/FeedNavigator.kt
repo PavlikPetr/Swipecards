@@ -9,10 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Photos
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.NavigationState
@@ -26,7 +23,7 @@ import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
+import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -81,7 +78,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from dating
      */
-    override fun showChat(user: SearchUser?, answer: SendGiftAnswer?) {
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
         user?.let {
             showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
         }
@@ -128,9 +125,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         )
     }
 
-    override fun showEmptyDating() = mEmptyDatingFragment.show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+    override fun showEmptyDating(onCancelFunction: (() -> Unit)?) = with(mEmptyDatingFragment) {
+        if (onCancelFunction != null) {
+            setOnCancelListener { onCancelFunction() }
+        }
+        show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+    }
 
     override fun closeEmptyDating() {
+        mEmptyDatingFragment.setOnCancelListener(null)
         mEmptyDatingFragment.dialog?.cancel()
     }
 

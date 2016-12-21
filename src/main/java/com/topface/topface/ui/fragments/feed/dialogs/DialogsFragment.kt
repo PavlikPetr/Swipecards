@@ -33,9 +33,11 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
     override val mViewModel by lazy {
         DialogsFragmentViewModel(mBinding, mNavigator, mApi)
     }
+
     override val mLockerControllerBase by lazy {
         DialogsLockController(mBinding.emptyFeedStub as ViewStubProxy)
     }
+
     override val mAdapter by lazy {
         val adapter = DialogsAdapter(mNavigator, activity)
         adapter

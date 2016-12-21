@@ -1174,11 +1174,44 @@
     <string name="no_more_ad">Никакой рекламы в приложении</string>
     <string name="i_see_u_face">Узнайте своих гостей и поклонников в лицо</string>
     <string name="buy_vip_write_anyone">Пишите любой девушке без взаимной симпатии</string>
+    <string name="buy_vip_write_anyone_boy">Пишите любому мужчине без взаимной симпатии</string>
     <string name="buy_vip_write_anyone_without_mutual">Пишите кому угодно без взаимной симпатии</string>
     <string name="moar_messages">Переписывайтесь с популярными пользователями</string>
     <string name="buy_vip_more_views">Получайте в 1,5 раза больше просмотров</string>
 
     <string name="special_offer">Спецпредложение</string>
+    <string name="description_experiment4_view1">С VIP-статусом %1$s и %2$s тебя увидят!</string>
+    <!--Фэйковые мужские имена-->
+    <string name="fake_male_name_1">Костя</string>
+    <string name="fake_male_name_2">Паша</string>
+    <string name="fake_male_name_3">Петя</string>
+    <string name="fake_male_name_4">Максим</string>
+    <string name="fake_male_name_5">Даня</string>
+    <string name="fake_male_name_6">Алексей</string>
+    <string name="fake_male_name_7">Андрей</string>
+    <string name="fake_male_name_8">Вова</string>
+    <string name="fake_male_name_9">Олег</string>
+    <string name="fake_male_name_10">Игорь</string>
+    <!--Фэйковые женские имена-->
+    <string name="fake_female_name_1">Наташа</string>
+    <string name="fake_female_name_2">Света</string>
+    <string name="fake_female_name_3">Лена</string>
+    <string name="fake_female_name_4">Маргарита</string>
+    <string name="fake_female_name_5">Василиса</string>
+    <string name="fake_female_name_6">Аня</string>
+    <string name="fake_female_name_7">Оля</string>
+    <string name="fake_female_name_8">Настя</string>
+    <string name="fake_female_name_9">Алена</string>
+    <string name="fake_female_name_10">Маша</string>
+
+    <!--Dialogs-redesign-->
+    <string name="dialog_empty_title">У вас нет диалогов</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Напиши тем, с кем у тебя взаимная симпатия</string>
+    <string name="mutually">Взаимно</string>
+    <string name="write_them">Напишите им</string>
+    <string name="go_dating">Начать \nзнакомиться</string>
+    <string name="start_dating">Начать знакомиться</string>
+    <string name="no_mutual">У вас нет взаимных симпатий</string>
     <string name="buy_vip_button_title">Получить VIP</string>
 
     <string name="unlock_symphaty_coins_one">Стоимость услуги: %d монета</string>
@@ -1195,22 +1228,22 @@
     <string name="unlock_symphaty_women_many">%d девушек отправили вам симпатии!</string>
     <string name="unlock_symphaty_women_few">%d девушки отправили вам симпатии!</string>
     <string name="unlock_symphaty_women_other">%d девушек отправили вам симпатии!</string>
-    
+
     <string name="unlock_symphaty_men_one">%d мужчина отправил вам симпатию!</string>
     <string name="unlock_symphaty_men_many">%d мужчин отправили вам симпатии!</string>
     <string name="unlock_symphaty_men_few">%d мужчины отправили вам симпатии!</string>
     <string name="unlock_symphaty_men_other">%d мужчин отправили вам симпатии!</string>
-    
+
     <string name="unlock_symphaty_title">Вы не можете просматривать тех, кто отправил вам симпатии</string>
-    
+
     <string name="unlock_symphaty_get_access">Получить доступ</string>
-    
+
     <string name="send_gift_start_dialog">Отправь подарок и начни диалог сейчас!</string>
     <string name="likes_start_dating_button">Начать знакомиться</string>
     <string name="likes_empty_title">У вас пока нет симпатий.\nСимпатии помогут познакомиться</string>
 
     <string name="unlock_sympathy_price">Стоимость услуги:</string>
-    
+
     <string name="send_gift">Отправить подарок</string>
     <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
     <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
