@@ -77,13 +77,15 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 if (!found) data.observableList.add(stub)
             }
             item1.hasContacts || item2.hasDialogItems
-        }.filter { !it }.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
-            override fun onNext(type: Boolean?) {
-                isEnable.set(false)
-                data.observableList.clear()
-                data.observableList.add(EmptyDialogsFragmentStubItem())
-            }
-        })
+        }
+                .filter { !it }
+                .subscribe(object : RxUtils.ShortSubscription<Boolean>() {
+                    override fun onNext(type: Boolean?) {
+                        isEnable.set(false)
+                        data.observableList.clear()
+                        data.observableList.add(EmptyDialogsFragmentStubItem())
+                    }
+                })
     }
 
     private fun bindUpdater() {
@@ -130,14 +132,18 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 {
                     it?.let {
                         addContactsItem()
-                        if (it.items.isEmpty()) {
-                            this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsStubItem())
-                        } else {
-                            this@DialogsFragmentViewModel.data.addAll(it.items)
-                            handleUnreadState(it, false)
-                            mIsAllDataLoaded = !it.more
+                        with(this@DialogsFragmentViewModel.data) {
+                            if (it.items.isEmpty()) {
+                                if (observableList.getRealDataFirstItem() == null) {
+                                    observableList.add(EmptyDialogsStubItem())
+                                }
+                            } else {
+                                addAll(it.items)
+                                handleUnreadState(it, false)
+                                mIsAllDataLoaded = !it.more
+                            }
+                            mEventBus.setData(DialogItemsEvent(observableList.getRealDataFirstItem() != null))
                         }
-                        mEventBus.setData(DialogItemsEvent(it.items.isNotEmpty()))
                     }
                 }, { it?.printStackTrace() }
         )
@@ -168,7 +174,9 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     fun loadTopFeeds() {
         if (isTopFeedsLoading.get()) return
         isTopFeedsLoading.set(true)
-        val from = data.observableList.getRealDataFirstItem()?.id ?: return
+        // список диалогов может быть пустой, т.е. в нем нет ничего кроме фейков (заглушка/реклама),
+        // в этом случае запросим весь список
+        val from = data.observableList.getRealDataFirstItem()?.id ?: ""
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
         mLoadTopSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<FeedDialog>>() {
@@ -195,9 +203,18 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                             if (count() == 2 && this[1].isEmpty()) {
                                 //удаляем заглушку
                                 removeAt(1)
-                            }
+                            } else
+                            /* если итем только один и тот заглушка, значит у нас на экране общий стаб
+                            * чистим список, добавляем стаб пустых контактов
+                            * диалоги будут добавлены ниже
+                            */
+                                if (count() == 1 && this[0].isEmpty()) {
+                                    clear()
+                                    addContactsItem()
+                                }
+                            // поиск дубликатов в старом списке и удаление их
                             data.items.forEach { topDialog ->
-                                val iterator = this@DialogsFragmentViewModel.data.observableList.listIterator()
+                                val iterator = listIterator()
                                 while (iterator.hasNext()) {
                                     val item = iterator.next()
                                     if (item.user != null && item.user.id == topDialog.user.id) {
@@ -209,6 +226,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 addAll(1, data.items)
                             }
                         }
+                        mEventBus.setData(DialogItemsEvent(getRealDataFirstItem() != null))
                     }
                 })
     }
@@ -327,6 +345,8 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
             }
         }
         // если нет диалогов с пользователями, то надо уведомить для добавления заглушки
-        if (!gotUser) mEventBus.setData(DialogItemsEvent(false))
+        if (!gotUser) {
+            mEventBus.setData(DialogItemsEvent(false))
+        }
     }
 }
