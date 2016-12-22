@@ -801,7 +801,7 @@
     <string name="vk_profile_button_join_tf_group">Der Topface-Gruppe beitreten</string>
     <string name="vk_profile_button_join_vkgames_group">Der Gruppe \"VK Spiele\" beitreten</string>
     <string name="vk_profile_button_invite_friends">Freunde einladen</string>
-    <string name="vk_profile_invite_friends_title">Freunde einladen</string>
+    <string name="invite_friends">Freunde einladen</string>
     <string name="invite_friend_button">Einladen</string>
     <string name="invitation_sended_button">Verschickt</string>
     <string name="friends_empty_list_error">Deine Freundesliste ist leer</string>

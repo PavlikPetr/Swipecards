@@ -65,7 +65,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFrie
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.vk_profile_invite_friends_title), this);
+        return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.invite_friends), this);
     }
 
     @Override

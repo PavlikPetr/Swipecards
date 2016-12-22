@@ -869,7 +869,7 @@
     <string name="vk_profile_button_join_tf_group">Придружити се групи Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Придружити се групи \"ВК игре\"</string>
     <string name="vk_profile_button_invite_friends">Позвати пријатеље</string>
-    <string name="vk_profile_invite_friends_title">Позвати пријатеље</string>
+    <string name="invite_friends">Позвати пријатеље</string>
     <string name="invite_friend_button">Позвати</string>
     <string name="invitation_sended_button">Послато</string>
     <string name="friends_empty_list_error">Ваша листа пријатеља је празна</string>

@@ -774,7 +774,7 @@
     <string name="vk_profile_button_join_tf_group">Topface grubuna katıl</string>
     <string name="vk_profile_button_join_vkgames_group">\"VK Oyunları\" grubuna katıl</string>
     <string name="vk_profile_button_invite_friends">Arkadaşlarını davet et</string>
-    <string name="vk_profile_invite_friends_title">Arkadaşlarını davet et</string>
+    <string name="invite_friends">Arkadaşlarını davet et</string>
     <string name="invite_friend_button">Davet et</string>
     <string name="invitation_sended_button">Davet gönder</string>
     <string name="friends_empty_list_error">Arkadaş listen boş</string>

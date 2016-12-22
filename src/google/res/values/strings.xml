@@ -829,7 +829,7 @@
     <string name="vk_profile_button_join_tf_group">Join the Topface group</string>
     <string name="vk_profile_button_join_vkgames_group">Join the group \"VK Games\"</string>
     <string name="vk_profile_button_invite_friends">Invite friends</string>
-    <string name="vk_profile_invite_friends_title">Invite friends</string>
+    <string name="invite_friends">Invite friends</string>
     <string name="invite_friend_button">Invite</string>
     <string name="invitation_sended_button">Sent</string>
     <string name="friends_empty_list_error">Your list of friends is empty</string>
