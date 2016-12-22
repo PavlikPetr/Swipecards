@@ -42,6 +42,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -95,16 +96,13 @@ public class MenuFragment extends Fragment {
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
             LeftMenuData data = getBalanceItem();
+            ArrayList<LeftMenuData> listForIntegration = getListForAddingIntegration(options);
+            int integrationsLastItem = listForIntegration.get(listForIntegration.size() - 1).getSettings().getUniqueKey();
+
+            // Добавление итема "Баланса", ибо "Баланс" всегда последним быть должен
             if (options.showRefillBalanceInSideMenu) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                    // ибо "Баланс" всегда последним быть должен
-                    int afterFragment;
-                    if (options.enableFacebookInvite) {
-                        afterFragment = FragmentIdData.FB_INVITE_FRIENDS;
-                    } else {
-                        afterFragment = FragmentIdData.GEO;
-                    }
-                    adapter.addItemAfterFragment(data, afterFragment);
+                    adapter.addItemAfterFragment(data, FragmentIdData.BONUS, integrationsLastItem, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
                 }
             } else {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
@@ -112,6 +110,22 @@ public class MenuFragment extends Fragment {
                 }
             }
 
+            // Добавление "Бонусного итема"
+            data = getBonusItem();
+            if (options.offerwallsSettings.isEnable()) {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
+                    adapter.addItemAfterFragment(data, integrationsLastItem, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
+                }
+            } else {
+                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
+                    adapter.removeItem(data);
+                }
+            }
+
+            // Добавление блока "Интеграций"
+            adapter.addItemsAfterFragment(listForIntegration, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
+
+            // Добавление "приглашений фейсбука"
             data = getFbInvitation();
             if (options.enableFacebookInvite) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
@@ -123,17 +137,6 @@ public class MenuFragment extends Fragment {
                 }
             }
 
-            data = getBonusItem();
-            if (options.offerwallsSettings.isEnable()) {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                    adapter.addItemAfterFragment(data, FragmentIdData.GEO);
-                }
-            } else {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
-                    adapter.removeItem(data);
-                }
-            }
-            updateIntegrationPage(options);
         }
 
         @Override
@@ -183,10 +186,12 @@ public class MenuFragment extends Fragment {
         getAdapter().updateSelected(mSelectedPos, true);
     }
 
-    private void updateIntegrationPage(Options options) {
+    @NotNull
+    private ArrayList<LeftMenuData> getListForAddingIntegration(Options options) {
         ArrayList<LeftMenuData> data = getAdapter().getData();
         ArrayList<LeftMenuData> integrationData = getIntegrationItems(options);
         ArrayList<LeftMenuData> addedIntegrationData = getAddedIntegrationItems(data);
+        ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
             for (int i = 0; i < data.size(); i++) {
                 for (LeftMenuData leftMenuData : addedIntegrationData) {
@@ -196,8 +201,9 @@ public class MenuFragment extends Fragment {
                     }
                 }
             }
-            getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.GEO);
+            arrayList = integrationData;
         }
+        return arrayList;
     }
 
     @NotNull
@@ -375,7 +381,8 @@ public class MenuFragment extends Fragment {
             arrayList.add(getBonusItem());
         }
 
-        if (options.enableFacebookInvite) {
+        // Если авторизован и с сервера пришла необходимость, то показываем пункт меню "Пригласи друга"
+        if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             arrayList.add(getBonusItem());
         }
 
