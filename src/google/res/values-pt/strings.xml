@@ -857,7 +857,7 @@
     <string name="vk_profile_button_join_tf_group">Junta-te ao grupo Topface</string>
     <string name="vk_profile_button_join_vkgames_group">Junta-te ao grupo \"Jogos VK\"</string>
     <string name="vk_profile_button_invite_friends">Convidar amigos</string>
-    <string name="invite_friends">Convidar amigos</string>
+    <string name="vk_profile_invite_friends_title">Convidar amigos</string>
     <string name="invite_friend_button">Convidar</string>
     <string name="invitation_sended_button">Enviado</string>
     <string name="friends_empty_list_error">A tua lista de amigos está vazia</string>

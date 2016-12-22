@@ -97,8 +97,7 @@ public class MenuFragment extends Fragment {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
             LeftMenuData data = getBalanceItem();
             ArrayList<LeftMenuData> listForIntegration = getListForAddingIntegration(options);
-            int integrationsLastItem = listForIntegration.get(listForIntegration.size() - 1).getSettings().getUniqueKey();
-
+            int integrationsLastItem = listForIntegration.size() > 0 ? listForIntegration.get(listForIntegration.size() - 1).getSettings().getUniqueKey() : EMPTY_POS;
             // Добавление итема "Баланса", ибо "Баланс" всегда последним быть должен
             if (options.showRefillBalanceInSideMenu) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
@@ -127,7 +126,7 @@ public class MenuFragment extends Fragment {
 
             // Добавление "приглашений фейсбука"
             data = getFbInvitation();
-            if (options.enableFacebookInvite) {
+            if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data, FragmentIdData.GEO);
                 }
@@ -370,8 +369,6 @@ public class MenuFragment extends Fragment {
                 String.valueOf(mCountersData.getVisitors()), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby,
                 String.valueOf(mCountersData.getPeopleNearby()), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
-        arrayList.add(new LeftMenuData(R.drawable.ic_invite, R.string.invite_friends,
-                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.FB_INVITE_FRIENDS)));
 
         if (options.showRefillBalanceInSideMenu) {
             arrayList.add(getBalanceItem());
@@ -383,7 +380,7 @@ public class MenuFragment extends Fragment {
 
         // Если авторизован и с сервера пришла необходимость, то показываем пункт меню "Пригласи друга"
         if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            arrayList.add(getBonusItem());
+            arrayList.add(getFbInvitation());
         }
 
         if (App.get().getProfile().isEditor()) {
@@ -408,7 +405,7 @@ public class MenuFragment extends Fragment {
     // пункт меню "Пригласить друзей"
     @NotNull
     private LeftMenuData getFbInvitation() {
-        return new LeftMenuData(R.drawable.ic_invite, R.string.invite_friends,
+        return new LeftMenuData(R.drawable.ic_invite, R.string.fb_invite_friends_menu_item,
                 Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.FB_INVITE_FRIENDS));
     }
 
