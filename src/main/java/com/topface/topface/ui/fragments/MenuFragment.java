@@ -189,7 +189,7 @@ public class MenuFragment extends Fragment {
         if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
             data.removeAll(addedIntegrationData);
             getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
-            lastOfIntegrationItemsKey = addedIntegrationData.size() > 0 ? addedIntegrationData.get(addedIntegrationData.size() - 1).getSettings().getUniqueKey() : EMPTY_POS;
+            lastOfIntegrationItemsKey = integrationData.size() > 0 ? integrationData.get(integrationData.size() - 1).getSettings().getUniqueKey() : EMPTY_POS;
         }
     }
 
