@@ -42,7 +42,6 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,7 +62,6 @@ import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_
  * extends ListFragment and does not have any xml layout
  */
 public class MenuFragment extends Fragment {
-    public static final String ITEM_TAG_TEMPLATE = "left_menu_%d";
 
     private static final String BALANCE_TEMPLATE = "%s    %s %d   %s %d";
     private static final String COINS_ICON = "coins_icon";
@@ -95,47 +93,19 @@ public class MenuFragment extends Fragment {
         @Override
         public void onOptionsUpdate(Options options) {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
-            LeftMenuData data = getBalanceItem();
-            ArrayList<LeftMenuData> listForIntegration = getListForAddingIntegration(options);
-            int integrationsLastItem = listForIntegration.size() > 0 ? listForIntegration.get(listForIntegration.size() - 1).getSettings().getUniqueKey() : EMPTY_POS;
-            // Добавление итема "Баланса", ибо "Баланс" всегда последним быть должен
+
             if (options.showRefillBalanceInSideMenu) {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                    adapter.addItemAfterFragment(data, FragmentIdData.BONUS, integrationsLastItem, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
-                }
+                adapter.addItemAfterFragment(getBalansItem(), FragmentIdData.GEO);
             } else {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
-                    adapter.removeItem(data);
-                }
+                adapter.removeItem(getBalansItem());
             }
 
-            // Добавление "Бонусного итема"
-            data = getBonusItem();
             if (options.offerwallsSettings.isEnable()) {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                    adapter.addItemAfterFragment(data, integrationsLastItem, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
-                }
+                adapter.addItemAfterFragment(getBonusItem(), FragmentIdData.GEO);
             } else {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
-                    adapter.removeItem(data);
-                }
+                adapter.removeItem(getBonusItem());
             }
-
-            // Добавление блока "Интеграций"
-            adapter.addItemsAfterFragment(listForIntegration, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
-
-            // Добавление "приглашений фейсбука"
-            data = getFbInvitation();
-            if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                    adapter.addItemAfterFragment(data, FragmentIdData.GEO);
-                }
-            } else {
-                if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
-                    adapter.removeItem(data);
-                }
-            }
-
+            updateIntegrationPage(options);
         }
 
         @Override
@@ -185,12 +155,10 @@ public class MenuFragment extends Fragment {
         getAdapter().updateSelected(mSelectedPos, true);
     }
 
-    @NotNull
-    private ArrayList<LeftMenuData> getListForAddingIntegration(Options options) {
+    private void updateIntegrationPage(Options options) {
         ArrayList<LeftMenuData> data = getAdapter().getData();
         ArrayList<LeftMenuData> integrationData = getIntegrationItems(options);
         ArrayList<LeftMenuData> addedIntegrationData = getAddedIntegrationItems(data);
-        ArrayList<LeftMenuData> arrayList = new ArrayList<>();
         if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
             for (int i = 0; i < data.size(); i++) {
                 for (LeftMenuData leftMenuData : addedIntegrationData) {
@@ -200,9 +168,8 @@ public class MenuFragment extends Fragment {
                     }
                 }
             }
-            arrayList = integrationData;
+            getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.GEO);
         }
-        return arrayList;
     }
 
     @NotNull
@@ -371,22 +338,16 @@ public class MenuFragment extends Fragment {
                 String.valueOf(mCountersData.getPeopleNearby()), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
 
         if (options.showRefillBalanceInSideMenu) {
-            arrayList.add(getBalanceItem());
+            arrayList.add(getBalansItem());
         }
 
         if (options.offerwallsSettings.isEnable()) {
             arrayList.add(getBonusItem());
         }
 
-        // Если авторизован и с сервера пришла необходимость, то показываем пункт меню "Пригласи друга"
-        if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
-            arrayList.add(getFbInvitation());
-        }
-
         if (App.get().getProfile().isEditor()) {
             arrayList.add(getEditorItem());
         }
-
         return arrayList;
     }
 
@@ -397,16 +358,9 @@ public class MenuFragment extends Fragment {
     }
 
     @NotNull
-    private LeftMenuData getBalanceItem() {
+    private LeftMenuData getBalansItem() {
         return new LeftMenuData(R.drawable.ic_balance_left_menu, getBalanceTitle(), Utils.EMPTY, false,
                 new LeftMenuSettingsData(FragmentIdData.BALLANCE));
-    }
-
-    // пункт меню "Пригласить друзей"
-    @NotNull
-    private LeftMenuData getFbInvitation() {
-        return new LeftMenuData(R.drawable.ic_invite, R.string.fb_invite_friends_menu_item,
-                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.FB_INVITE_FRIENDS));
     }
 
     @NotNull
@@ -422,15 +376,10 @@ public class MenuFragment extends Fragment {
     }
 
     private void updateEditorItem(@NotNull Profile profile) {
-        LeftMenuData data = getEditorItem();
         if (profile.isEditor()) {
-            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                getAdapter().updateEditorsItem(data);
-            }
+            getAdapter().updateEditorsItem(getEditorItem());
         } else {
-            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
-                getAdapter().removeItem(data);
-            }
+            getAdapter().removeItem(getEditorItem().getSettings().getUniqueKey());
         }
     }
 
@@ -442,9 +391,7 @@ public class MenuFragment extends Fragment {
                 getAdapter().addFirst(data);
             }
         } else {
-            if (getAdapter().getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
-                getAdapter().removeItem(data);
-            }
+            getAdapter().removeItem(data.getSettings().getUniqueKey());
         }
     }
 

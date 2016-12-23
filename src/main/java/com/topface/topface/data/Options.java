@@ -375,7 +375,8 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
-            enableFacebookInvite = response.optBoolean("enableFacebookInvite");
+            enableFacebookInvite = true;
+//                    response.optBoolean("enableFacebookInvite");
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
