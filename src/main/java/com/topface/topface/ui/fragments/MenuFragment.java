@@ -98,9 +98,7 @@ public class MenuFragment extends Fragment {
             // Добавление итема "Баланса", ибо "Баланс" всегда последним быть должен
             if (options.showRefillBalanceInSideMenu) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
-                    adapter.addItemAfterFragment(data,
-                            lastOfIntegrationItemsKey,
-                            FragmentIdData.GEO, FragmentIdData.FB_INVITE_FRIENDS);
+                    adapter.addItemAfterFragment(data, lastOfIntegrationItemsKey, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
                 }
             } else {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) != EMPTY_POS) {
@@ -124,8 +122,7 @@ public class MenuFragment extends Fragment {
 
             // Добавление "приглашений фейсбука"
             data = getFbInvitation();
-            if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)
-                    ) {
+            if (isNeedToAddFBInvitation(options)) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data, FragmentIdData.GEO);
                 }
@@ -192,8 +189,8 @@ public class MenuFragment extends Fragment {
         if (!Arrays.equals(integrationData.toArray(), addedIntegrationData.toArray())) {
             data.removeAll(addedIntegrationData);
             getAdapter().addItemsAfterFragment(integrationData, FragmentIdData.FB_INVITE_FRIENDS, FragmentIdData.GEO);
+            lastOfIntegrationItemsKey = addedIntegrationData.size() > 0 ? addedIntegrationData.get(addedIntegrationData.size() - 1).getSettings().getUniqueKey() : EMPTY_POS;
         }
-        lastOfIntegrationItemsKey = addedIntegrationData.size() > 0 ? addedIntegrationData.get(addedIntegrationData.size() - 1).getSettings().getUniqueKey() : EMPTY_POS;
     }
 
     @NotNull
@@ -363,7 +360,7 @@ public class MenuFragment extends Fragment {
             arrayList.add(getBonusItem());
         }
         // Если авторизован и с сервера пришла необходимость, то показываем пункт меню "Пригласи друга"
-        if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
+        if (isNeedToAddFBInvitation(options)) {
             arrayList.add(getFbInvitation());
         }
         if (options.showRefillBalanceInSideMenu) {
@@ -431,6 +428,10 @@ public class MenuFragment extends Fragment {
                 getAdapter().removeItem(data);
             }
         }
+    }
+
+    private Boolean isNeedToAddFBInvitation(Options options) {
+        return options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK);
     }
 
     @NotNull
