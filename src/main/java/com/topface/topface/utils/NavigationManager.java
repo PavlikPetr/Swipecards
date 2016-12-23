@@ -223,6 +223,9 @@ public class NavigationManager {
             case FragmentIdData.TABBED_DIALOGS:
                 fragment = mWeakStorage.getProfileDialogRedesignEnabled() ?  new DialogsFragment() : new TabbedDialogsFragment();
                 break;
+            case FragmentIdData.FB_INVITE_FRIENDS:
+                fragment = OwnProfileFragment.newInstance();  // todo webView with FB-invitation
+                break;
             default:
                 fragment = OwnProfileFragment.newInstance();
                 break;

@@ -451,7 +451,17 @@ dependencies {
         exclude module: 'kotlin-stdlib'
         exclude module: 'javapoet'
     }
+    compile files('libs/processor.jar')
+    kapt files('libs/processor.jar')
+    provided files('libs/processor.jar')
 }
+
+task processorTask(type: Exec) {
+    commandLine 'cp', 'libs/statistics-android/processor/build/libs/processor.jar', 'libs/'
+}
+
+processorTask.dependsOn(':libs:statistics-android:processor:build')
+preBuild.dependsOn(processorTask)
 
 project(':libs:PullToRefresh') {
     apply plugin: 'com.android.library'
