@@ -185,7 +185,7 @@ public class Options extends AbstractData {
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
      */
-    public HashMap<String, Object> statisticsSlices;
+    public HashMap<String, Object> statisticsSlices = new HashMap<>();
 
     /**
      * массив пунктов левого меню от интеграторов
