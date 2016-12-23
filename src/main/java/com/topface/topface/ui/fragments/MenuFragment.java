@@ -363,8 +363,7 @@ public class MenuFragment extends Fragment {
             arrayList.add(getBonusItem());
         }
         // Если авторизован и с сервера пришла необходимость, то показываем пункт меню "Пригласи друга"
-        if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)
-                ) {
+        if (options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
             arrayList.add(getFbInvitation());
         }
         if (options.showRefillBalanceInSideMenu) {
