@@ -1,14 +1,18 @@
 package com.topface.topface.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FragmentLifreCycleData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
@@ -33,6 +37,7 @@ import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.rx.RxUtils;
+import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -221,10 +226,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ?  new DialogsFragment() : new TabbedDialogsFragment();
-                break;
-            case FragmentIdData.FB_INVITE_FRIENDS:
-                fragment = OwnProfileFragment.newInstance();  // todo webView with FB-invitation
+                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ? new DialogsFragment() : new TabbedDialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();
@@ -256,8 +258,8 @@ public class NavigationManager {
                         if (mActivityDelegate != null) {
                             mActivityDelegate.startActivityForResult(PurchasesActivity
                                     .createVipBuyIntent(null, "LeftMenu"), PurchasesActivity.INTENT_BUY_VIP);
-                            selectPreviousLeftMenuItem();
                         }
+                        selectPreviousLeftMenuItem();
                     }
                 });
                 break;
@@ -267,8 +269,23 @@ public class NavigationManager {
                     public void onCall() {
                         if (mActivityDelegate != null) {
                             mActivityDelegate.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
-                            selectPreviousLeftMenuItem();
                         }
+                        selectPreviousLeftMenuItem();
+                    }
+                });
+                break;
+            case FragmentIdData.FB_INVITE_FRIENDS:
+                closeMenuAndSwitchAfter(new ISimpleCallback() {
+                    @Override
+                    public void onCall() {
+                        Options options = App.get().getOptions();
+                        BaseFragment fragment = mActivityDelegate != null ?
+                                (BaseFragment) mActivityDelegate.getSupportFragmentManager().findFragmentById(R.id.fragment_content) : null;
+                        Activity activity = fragment != null ? fragment.getActivity() : null;
+                        if (activity != null && isFBInviteApplicable(options)) {
+                            showFBInvitePopup(activity, options.fbInviteSettings.getAppLink(), options.fbInviteSettings.getIconUrl());
+                        }
+                        selectPreviousLeftMenuItem();
                     }
                 });
                 break;
@@ -291,6 +308,25 @@ public class NavigationManager {
             default:
                 switchFragment(data);
         }
+    }
+
+    // билдим и запускаем фэйсбучный диалог для инвайта друзей в ТФ
+    private void showFBInvitePopup(Activity activity, String appLinkUrl, String previewImageUrl) {
+        AppInviteContent.Builder builder = new AppInviteContent.Builder()
+                .setApplinkUrl(appLinkUrl);
+        // если сервер прислал пустой линк на картинку, то надежда только на FB и что они смогут
+        // вытянуть картинку из FB приложения для TF
+        if (!TextUtils.isEmpty(previewImageUrl)) {
+            builder.setPreviewImageUrl(previewImageUrl);
+        }
+        AppInviteDialog.show(activity, builder.build());
+    }
+
+    // проверяем возможность показа FB диалога приглашения друзей
+    private boolean isFBInviteApplicable(Options options) {
+        return AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK) &&
+                AppInviteDialog.canShow() && !options.fbInviteSettings.isEmpty() &&
+                options.fbInviteSettings.getEnabled();
     }
 
     public void setNeedCloseMenuListener(ISimpleCallback callback) {

@@ -8,11 +8,14 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.ViewDataBinding;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.net.UrlQuerySanitizer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +23,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.facebook.FacebookSdk;
+import com.facebook.applinks.AppLinkData;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -35,6 +40,7 @@ import com.topface.topface.utils.ILifeCycle;
 import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
@@ -45,6 +51,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
+
+import bolts.AppLinks;
 
 public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T> implements IRequestClient, IStateSaverRegistrator {
 
@@ -94,6 +102,9 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     protected void onCreate(Bundle savedInstanceState) {
         setWindowOptions();
         super.onCreate(savedInstanceState);
+//        if (!App.getAppConfig().isFBInstallCatched()) {
+        getFBAppLinkData();
+//        }
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -101,6 +112,43 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
+    }
+
+    private void getFBAppLinkData() {
+        final AppConfig config = App.getAppConfig();
+        FacebookSdk.sdkInitialize(this);
+        Uri targetUrl =
+                AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
+        if (targetUrl != null) {
+            Log.e("FB LINK", "" + targetUrl.toString());
+            config.setFBInstallCatched(true);
+            config.saveConfig();
+        } else {
+            AppLinkData.fetchDeferredAppLinkData(
+                    this,
+                    new AppLinkData.CompletionHandler() {
+                        @Override
+                        public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                            if (appLinkData != null) {
+                                Bundle bundle = appLinkData.getArgumentBundle();
+                                String targetUrl = bundle.getString("target_url");
+                                String nativeClass = bundle.getString(AppLinkData.ARGUMENTS_NATIVE_CLASS_KEY);
+                                String nativeUrl = bundle.getString(AppLinkData.ARGUMENTS_NATIVE_URL);
+                                String ref = appLinkData.getRef();
+
+                                Log.e("FB LINK", "onDeferredAppLinkDataFetched \ntargetUrl = " + targetUrl +
+                                        "\n nativeClass = " + nativeClass +
+                                        "\n nativeUrl = " + nativeUrl +
+                                        "\n ref = " + ref +
+                                        "\n uri = " + appLinkData.getTargetUri().toString());
+                                config.setFBInstallCatched(true);
+                                config.saveConfig();
+                            } else {
+                                Log.e("FB LINK", "appLinkData null");
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
