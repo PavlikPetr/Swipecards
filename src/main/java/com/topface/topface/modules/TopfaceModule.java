@@ -26,6 +26,7 @@ import com.topface.topface.state.EventBus;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.CommonSlices;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -170,7 +171,8 @@ import dagger.Provides;
                 Experiment41ViewModel.class,
                 DialogContactsItemViewModel.class,
                 DialogsFragmentViewModel.class,
-                ProfileFormFragment.class
+                ProfileFormFragment.class,
+                CommonSlices.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
