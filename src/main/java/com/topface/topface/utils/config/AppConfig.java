@@ -78,7 +78,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
     private static final String TRIAL_VIP_POPUP_TYPE = "trial_vip_popup_type";
     private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
-    private static final String FB_INSTALL_CATCHED = "fb_install_catched";
+    private static final String FB_APP_LINK = "fb_app_link";
 
     public AppConfig(Context context) {
         super(context);
@@ -149,7 +149,7 @@ public class AppConfig extends AbstractConfig {
         // храним последний выбранный тип попапа триального вип
         addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
         // был ли обнаружен переход по приглашению из FB
-        addField(settingsMap, FB_INSTALL_CATCHED, false);
+        addField(settingsMap, FB_APP_LINK, "");
     }
 
     protected SharedPreferences getPreferences() {
@@ -617,12 +617,13 @@ public class AppConfig extends AbstractConfig {
         return getBooleanField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN);
     }
 
-    public void setFBInstallCatched(boolean catched) {
-        setField(getSettingsMap(), FB_INSTALL_CATCHED, catched);
+    // запоминаем fb invite applink
+    public void setFBInviteAppLink(String appLink) {
+        setField(getSettingsMap(), FB_APP_LINK, appLink);
     }
 
-    public boolean isFBInstallCatched() {
-        return getBooleanField(getSettingsMap(), FB_INSTALL_CATCHED);
+    // достаем fb invite applink
+    public String getFBInviteAppLink() {
+        return getStringField(getSettingsMap(), FB_APP_LINK);
     }
-
 }

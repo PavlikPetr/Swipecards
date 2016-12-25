@@ -280,10 +280,12 @@ public class NavigationManager {
                     public void onCall() {
                         Options options = App.get().getOptions();
                         BaseFragment fragment = mActivityDelegate != null ?
-                                (BaseFragment) mActivityDelegate.getSupportFragmentManager().findFragmentById(R.id.fragment_content) : null;
+                                (BaseFragment) mActivityDelegate.getSupportFragmentManager()
+                                        .findFragmentById(R.id.fragment_content) : null;
                         Activity activity = fragment != null ? fragment.getActivity() : null;
-                        if (activity != null && isFBInviteApplicable(options)) {
-                            showFBInvitePopup(activity, options.fbInviteSettings.getAppLink(), options.fbInviteSettings.getIconUrl());
+                        if (activity != null && FBInvitesUtils.INSTANCE.isFBInviteApplicable(options)) {
+                            FBInvitesUtils.INSTANCE.showFBInvitePopup(activity, options.fbInviteSettings.getAppLink(),
+                                    options.fbInviteSettings.getIconUrl());
                         }
                         selectPreviousLeftMenuItem();
                     }
@@ -308,25 +310,6 @@ public class NavigationManager {
             default:
                 switchFragment(data);
         }
-    }
-
-    // билдим и запускаем фэйсбучный диалог для инвайта друзей в ТФ
-    private void showFBInvitePopup(Activity activity, String appLinkUrl, String previewImageUrl) {
-        AppInviteContent.Builder builder = new AppInviteContent.Builder()
-                .setApplinkUrl(appLinkUrl);
-        // если сервер прислал пустой линк на картинку, то надежда только на FB и что они смогут
-        // вытянуть картинку из FB приложения для TF
-        if (!TextUtils.isEmpty(previewImageUrl)) {
-            builder.setPreviewImageUrl(previewImageUrl);
-        }
-        AppInviteDialog.show(activity, builder.build());
-    }
-
-    // проверяем возможность показа FB диалога приглашения друзей
-    private boolean isFBInviteApplicable(Options options) {
-        return AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK) &&
-                AppInviteDialog.canShow() && !options.fbInviteSettings.isEmpty() &&
-                options.fbInviteSettings.getEnabled();
     }
 
     public void setNeedCloseMenuListener(ISimpleCallback callback) {

@@ -35,6 +35,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.ILifeCycle;
 import com.topface.topface.utils.IStateSaverRegistrator;
@@ -102,9 +103,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     protected void onCreate(Bundle savedInstanceState) {
         setWindowOptions();
         super.onCreate(savedInstanceState);
-//        if (!App.getAppConfig().isFBInstallCatched()) {
-        getFBAppLinkData();
-//        }
+        FBInvitesUtils.INSTANCE.onCreateActivity(getIntent());
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -112,43 +111,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
-    }
-
-    private void getFBAppLinkData() {
-        final AppConfig config = App.getAppConfig();
-        FacebookSdk.sdkInitialize(this);
-        Uri targetUrl =
-                AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
-        if (targetUrl != null) {
-            Log.e("FB LINK", "" + targetUrl.toString());
-            config.setFBInstallCatched(true);
-            config.saveConfig();
-        } else {
-            AppLinkData.fetchDeferredAppLinkData(
-                    this,
-                    new AppLinkData.CompletionHandler() {
-                        @Override
-                        public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-                            if (appLinkData != null) {
-                                Bundle bundle = appLinkData.getArgumentBundle();
-                                String targetUrl = bundle.getString("target_url");
-                                String nativeClass = bundle.getString(AppLinkData.ARGUMENTS_NATIVE_CLASS_KEY);
-                                String nativeUrl = bundle.getString(AppLinkData.ARGUMENTS_NATIVE_URL);
-                                String ref = appLinkData.getRef();
-
-                                Log.e("FB LINK", "onDeferredAppLinkDataFetched \ntargetUrl = " + targetUrl +
-                                        "\n nativeClass = " + nativeClass +
-                                        "\n nativeUrl = " + nativeUrl +
-                                        "\n ref = " + ref +
-                                        "\n uri = " + appLinkData.getTargetUri().toString());
-                                config.setFBInstallCatched(true);
-                                config.saveConfig();
-                            } else {
-                                Log.e("FB LINK", "appLinkData null");
-                            }
-                        }
-                    });
-        }
     }
 
     @Override
