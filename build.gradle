@@ -55,6 +55,7 @@ buildscript {
     }
     repositories {
         jcenter()
+        mavenCentral()
         //костыль. как тольок будет выложена новыя версия плагина это можно убрать
         maven { url 'https://jitpack.io' }
     }

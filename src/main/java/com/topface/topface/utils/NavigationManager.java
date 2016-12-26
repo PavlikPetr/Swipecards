@@ -1,14 +1,17 @@
 package com.topface.topface.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FragmentLifreCycleData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
@@ -17,6 +20,7 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
+import com.topface.topface.statistics.FBInvitesStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -221,10 +225,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ?  new DialogsFragment() : new TabbedDialogsFragment();
-                break;
-            case FragmentIdData.FB_INVITE_FRIENDS:
-                fragment = OwnProfileFragment.newInstance();  // todo webView with FB-invitation
+                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ? new DialogsFragment() : new TabbedDialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();
@@ -256,8 +257,8 @@ public class NavigationManager {
                         if (mActivityDelegate != null) {
                             mActivityDelegate.startActivityForResult(PurchasesActivity
                                     .createVipBuyIntent(null, "LeftMenu"), PurchasesActivity.INTENT_BUY_VIP);
-                            selectPreviousLeftMenuItem();
                         }
+                        selectPreviousLeftMenuItem();
                     }
                 });
                 break;
@@ -267,8 +268,27 @@ public class NavigationManager {
                     public void onCall() {
                         if (mActivityDelegate != null) {
                             mActivityDelegate.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
-                            selectPreviousLeftMenuItem();
                         }
+                        selectPreviousLeftMenuItem();
+                    }
+                });
+                break;
+            case FragmentIdData.FB_INVITE_FRIENDS:
+                closeMenuAndSwitchAfter(new ISimpleCallback() {
+                    @Override
+                    public void onCall() {
+                        FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_BUTTON_CLICK();
+                        Options options = App.get().getOptions();
+                        BaseFragment fragment = mActivityDelegate != null ?
+                                (BaseFragment) mActivityDelegate.getSupportFragmentManager()
+                                        .findFragmentById(R.id.fragment_content) : null;
+                        Activity activity = fragment != null ? fragment.getActivity() : null;
+                        if (activity != null && FBInvitesUtils.INSTANCE.isFBInviteApplicable(options)) {
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_SHOW();
+                            FBInvitesUtils.INSTANCE.showFBInvitePopup(activity, options.fbInviteSettings.getAppLink(),
+                                    options.fbInviteSettings.getIconUrl());
+                        }
+                        selectPreviousLeftMenuItem();
                     }
                 });
                 break;

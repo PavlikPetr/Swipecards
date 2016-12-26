@@ -29,11 +29,10 @@ class CommonSlices private constructor() {
     init {
         App.get().inject(this)
         StatisticsTracker.getInstance().setPredefinedSlice(CommonSlices.DEFAULT_SLICES)
-        mAppState.getObservable(Options::class.java).subscribe {
-            val map = it.statisticsSlices.apply { putAll(CommonSlices.DEFAULT_SLICES) }
-            if (!StatisticsTracker.getInstance().predefinedSlice.equals(map)) {
-                StatisticsTracker.getInstance().setPredefinedSlice(map)
-            }
+        mAppState.getObservable(Options::class.java).distinctUntilChanged().subscribe {
+            StatisticsTracker.getInstance().setPredefinedSlice(it.statisticsSlices.apply {
+                putAll(CommonSlices.DEFAULT_SLICES)
+            })
         }
     }
 }
