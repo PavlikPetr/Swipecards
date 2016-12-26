@@ -8,14 +8,11 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.ViewDataBinding;
 import android.graphics.PixelFormat;
-import android.net.Uri;
-import android.net.UrlQuerySanitizer;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,8 +20,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.facebook.FacebookSdk;
-import com.facebook.applinks.AppLinkData;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -41,7 +36,6 @@ import com.topface.topface.utils.ILifeCycle;
 import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
@@ -52,8 +46,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
-
-import bolts.AppLinks;
 
 public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T> implements IRequestClient, IStateSaverRegistrator {
 
