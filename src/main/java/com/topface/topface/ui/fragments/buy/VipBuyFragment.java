@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
+import com.topface.statistics.processor.utils.RxUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
@@ -37,6 +39,8 @@ import org.jetbrains.annotations.Nullable;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import java.util.List;
+
+import rx.Subscription;
 
 import static android.view.View.OnClickListener;
 
@@ -69,6 +73,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             }
         }
     };
+    private Subscription mVipOpenSubscription = null;
 
     private void getDataFromIntent(Bundle args) {
         if (args != null) {
@@ -104,12 +109,12 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataFromIntent(getArguments());
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mVipOpenSubscription = NewProductsKeysGeneratedStatistics.sendPost_VIP_OPEN(getActivity().getApplicationContext());
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
         mInvisSwitcher.setProgressState(false, App.from(getActivity()).getProfile().invisible);
@@ -119,6 +124,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
+        RxUtils.safeUnsubscribe(mVipOpenSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }

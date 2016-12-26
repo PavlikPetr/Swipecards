@@ -484,7 +484,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     @Override
                     public void clickSendGift() {
                         startActivityForResult(
-                                GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                                GiftsActivity.getSendGiftIntent(getActivity(), mProfileId, "profile"),
                                 GiftsActivity.INTENT_REQUEST_GIFT
                         );
                     }
