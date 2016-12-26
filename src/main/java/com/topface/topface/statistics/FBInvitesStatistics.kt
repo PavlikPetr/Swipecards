@@ -24,20 +24,17 @@ object FBInvitesStatistics {
     @SendNow(single = false)
     const val FB_INVITE_SHOW = "mobile_fb_invite_show"
 
-    // TODO события должны быть уникальными, после обновления подмодуля следует исправить
-    // ---------------
     /**
      * Уникальный клик по кнопке приглашения друзей через FB
      */
-    @SendNow(single = false)
+    @SendNow(single = false, unique = true)
     const val FB_INVITE_BUTTON_CLICK_UNIQUE = "mobile_fb_invite_button_click_unique"
 
     /**
      * Уникальный показ диалога приглашений друзей через FB
      */
-    @SendNow(single = false)
+    @SendNow(single = false, unique = true)
     const val FB_INVITE_SHOW_UNIQUE = "mobile_fb_invite_show_unique"
-    // ---------------
 
     /**
      * Показ диалога приглашений друзей через FB
