@@ -55,7 +55,6 @@ object FBInvitesUtils {
         } else {
             fbInviteAppLink = FB_APP_LINK_SENDED
         }
-        Debug.error("FB_APP_LINK link = $fbInviteAppLink")
         saveConfig()
     }
 
