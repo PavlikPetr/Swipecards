@@ -344,11 +344,6 @@ dependencies {
     }
     // flurry analytics
     compile 'com.flurry.android:analytics:6.5.0'
-    //Topface sub libs
-    compile(project(':libs:statistics-android')) {
-        exclude group: 'com.google.code.gson'
-        exclude group: 'com.android.support'
-    }
     compile project(':libs:PullToRefresh')
 
     compile(project(':libs:tf-offerwall:sdk')) {
@@ -451,9 +446,8 @@ dependencies {
         exclude module: 'kotlin-stdlib'
         exclude module: 'javapoet'
     }
-    compile files('libs/processor.jar')
-    kapt files('libs/processor.jar')
-    provided files('libs/processor.jar')
+    //наша статистика
+    kapt files("libs/processor.jar")
 }
 
 task processorTask(type: Exec) {
