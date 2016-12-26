@@ -203,6 +203,11 @@ public class Options extends AbstractData {
      */
     private boolean dialogRedesignEnabled;
 
+    /**
+     * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
+     */
+    public FBInviteSettings fbInviteSettings = new FBInviteSettings();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -376,6 +381,11 @@ public class Options extends AbstractData {
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
+
+            JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
+            if (fbInvitesJsonObject != null) {
+                fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
+            }
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала

@@ -431,7 +431,9 @@ public class MenuFragment extends Fragment {
     }
 
     private Boolean isNeedToAddFBInvitation(Options options) {
-        return options.enableFacebookInvite && AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK);
+        return !options.fbInviteSettings.isEmpty() &&
+                options.fbInviteSettings.getEnabled() &&
+                AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK);
     }
 
     @NotNull
