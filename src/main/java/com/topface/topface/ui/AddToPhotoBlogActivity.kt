@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import com.topface.framework.utils.Debug
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Photos
@@ -61,7 +62,6 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
         val DEFAULT_SELECTED_POS = 1
         val SELECTED_POSITION = "selected_position"
         val SELECTED_PHOTO_ID = "selected_photo_id"
-        val PAGE_NAME = "adtoleader"
         val GREETING_TEXT = "greeting_text"
     }
 
@@ -103,6 +103,7 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NewProductsKeysGeneratedStatistics.sendNow_PHOTOFEED_SEND_OPEN(applicationContext)
         savedInstanceState?.let {
             onRestoreState(it)
         }

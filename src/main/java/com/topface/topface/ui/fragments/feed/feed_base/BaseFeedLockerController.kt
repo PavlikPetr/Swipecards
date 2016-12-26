@@ -64,7 +64,7 @@ abstract class BaseFeedLockerController<T : ViewDataBinding, VM : BaseViewModel<
         it.visibility = visibility
     }
 
-    fun release() {
+    open fun release() {
         mStubModel?.release()
         mViewStub = null
         mStubModel = null
