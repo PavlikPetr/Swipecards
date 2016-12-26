@@ -7,6 +7,7 @@ import android.net.Uri
 import android.text.TextUtils
 import bolts.AppLinks
 import com.facebook.FacebookSdk
+import com.facebook.applinks.AppLinkData
 import com.facebook.share.model.AppInviteContent
 import com.facebook.share.widget.AppInviteDialog
 import com.topface.framework.utils.Debug
@@ -37,25 +38,26 @@ object FBInvitesUtils {
                     options.fbInviteSettings.enabled
 
     /**
-     * Инциализируем FB sdk и пробуем достать AppLink
-     */
-    fun getAppLinkFromIntent(intent: Intent, context: Context = App.getContext()): Uri? {
-        FacebookSdk.sdkInitialize(context)
-        return AppLinks.getTargetUrlFromInboundIntent(context, intent)
-    }
-
-    /**
      * При создании активити проверяем наличие AppLink в интенте
      */
-    fun onCreateActivity(intent: Intent) = App.getAppConfig().apply {
-        if (AuthToken.getInstance().isEmpty) {
-            if (App.getAppConfig().fbInviteAppLink.isNullOrEmpty()) {
-                fbInviteAppLink = getAppLinkFromIntent(intent)?.toString() ?: FB_APP_LINK_SENDED
-            }
-        } else {
-            fbInviteAppLink = FB_APP_LINK_SENDED
+    fun onCreateActivity(intent: Intent) = App.getAppConfig().run {
+        if (AuthToken.getInstance().isEmpty && App.getAppConfig().fbInviteAppLink.isNullOrEmpty()) {
+            val context = App.getContext();
+            FacebookSdk.sdkInitialize(context)
+            AppLinks.getTargetUrlFromInboundIntent(context, intent)?.let {
+                fbInviteAppLink = it.toString()
+                saveConfig()
+            } ?:
+                    AppLinkData.fetchDeferredAppLinkData(context, object : AppLinkData.CompletionHandler {
+                        override fun onDeferredAppLinkDataFetched(appLinkData: AppLinkData?) {
+                            val appLink = appLinkData?.targetUri?.toString()
+                            if (!appLink.isNullOrEmpty() && appLink != "null") {
+                                fbInviteAppLink = appLink
+                                saveConfig()
+                            }
+                        }
+                    })
         }
-        saveConfig()
     }
 
     fun getAppLinkToSend() =

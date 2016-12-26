@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -36,6 +38,8 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import org.json.JSONException;
 
 import javax.inject.Inject;
 
@@ -146,14 +150,29 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
                             .getResources().getString(R.string.appsflyer_registration), "");
-                    String authStatus = response.getJsonResult().getString("authStatus");
-                    sendFirstAuthUser(authRequest.getPlatform(), authStatus);
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }
-
+                String authStatus = null;
+                try {
+                    authStatus = response.getJsonResult().getString("authStatus");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (authStatus != null) {
+                    sendFirstAuthUser(authRequest.getPlatform(), authStatus);
+                }
                 mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
-                FBInvitesUtils.INSTANCE.AppLinkSended();
+                if (!TextUtils.isEmpty(FBInvitesUtils.INSTANCE.getAppLinkToSend())) {
+                    if (authStatus != null) {
+                        if (authStatus.equals("regular")) {
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_AUTHORIZE();
+                        } else if (authStatus.equals("created")) {
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_REGISTER();
+                        }
+                    }
+                    FBInvitesUtils.INSTANCE.AppLinkSended();
+                }
             }
 
             @Override
