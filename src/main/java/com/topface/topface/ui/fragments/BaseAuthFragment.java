@@ -31,6 +31,7 @@ import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -152,6 +153,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 }
 
                 mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
+                FBInvitesUtils.INSTANCE.AppLinkSended();
             }
 
             @Override

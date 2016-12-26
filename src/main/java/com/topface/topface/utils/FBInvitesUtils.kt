@@ -9,6 +9,7 @@ import bolts.AppLinks
 import com.facebook.FacebookSdk
 import com.facebook.share.model.AppInviteContent
 import com.facebook.share.widget.AppInviteDialog
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.Options
 import com.topface.topface.utils.social.AuthToken
@@ -44,30 +45,30 @@ object FBInvitesUtils {
     }
 
     /**
-     * Чтобы не инициализировать FB sdk зря, сначала надо проверить необходимость сего мероприятия
-     */
-    fun isApplicableToGetAppLink() = AuthToken.getInstance().isEmpty &&
-            with(App.getAppConfig().fbInviteAppLink) { TextUtils.isEmpty(this) || !this.equals(FB_APP_LINK_SENDED, true) }
-
-    /**
      * При создании активити проверяем наличие AppLink в интенте
      */
-    fun onCreateActivity(intent: Intent) {
-        if (isApplicableToGetAppLink()) {
-            val config = App.getAppConfig()
-            config.fbInviteAppLink = getAppLinkFromIntent(intent)?.toString() ?: FB_APP_LINK_SENDED
-            config.saveConfig()
+    fun onCreateActivity(intent: Intent) = App.getAppConfig().apply {
+        if (AuthToken.getInstance().isEmpty) {
+            if (App.getAppConfig().fbInviteAppLink.isNullOrEmpty()) {
+                fbInviteAppLink = getAppLinkFromIntent(intent)?.toString() ?: FB_APP_LINK_SENDED
+            }
+        } else {
+            fbInviteAppLink = FB_APP_LINK_SENDED
         }
+        Debug.error("FB_APP_LINK link = $fbInviteAppLink")
+        saveConfig()
     }
 
     fun getAppLinkToSend() =
-            with(App.getAppConfig()) {
-                if (!TextUtils.isEmpty(this.fbInviteAppLink) &&
-                        this.fbInviteAppLink.equals(FB_APP_LINK_SENDED, true)) {
-                    val appLink = this.fbInviteAppLink
-                    this.fbInviteAppLink = FB_APP_LINK_SENDED
-                    appLink
+            with(App.getAppConfig().fbInviteAppLink) {
+                if (!this.isNullOrEmpty() &&
+                        this != FB_APP_LINK_SENDED) {
+                    this
                 } else Utils.EMPTY
             }
 
+    fun AppLinkSended() = App.getAppConfig().apply {
+        fbInviteAppLink = FB_APP_LINK_SENDED
+        saveConfig()
+    }
 }
