@@ -356,16 +356,20 @@ public class MenuFragment extends Fragment {
                 String.valueOf(mCountersData.getVisitors()), false, new LeftMenuSettingsData(FragmentIdData.TABBED_VISITORS)));
         arrayList.add(new LeftMenuData(R.drawable.ic_people_left_menu, R.string.people_nearby,
                 String.valueOf(mCountersData.getPeopleNearby()), false, new LeftMenuSettingsData(FragmentIdData.GEO)));
-        if (options.offerwallsSettings.isEnable()) {
-            arrayList.add(getBonusItem());
-        }
+
         // Если авторизован и с сервера пришла необходимость, то показываем пункт меню "Пригласи друга"
         if (isNeedToAddFBInvitation(options)) {
             arrayList.add(getFbInvitation());
         }
+        //  Item "Бонус"
+        if (options.offerwallsSettings.isEnable()) {
+            arrayList.add(getBonusItem());
+        }
+        // Item "Баланс"
         if (options.showRefillBalanceInSideMenu) {
             arrayList.add(getBalanceItem());
         }
+        // Item "Админка"
         if (App.get().getProfile().isEditor()) {
             arrayList.add(getEditorItem());
         }
