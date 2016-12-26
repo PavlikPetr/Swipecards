@@ -169,7 +169,8 @@ public class Options extends AbstractData {
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
 
-    public boolean showRefillBalanceInSideMenu = false;
+    public boolean showRefillBalanceInSideMenu;
+    public boolean enableFacebookInvite;
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
@@ -185,7 +186,7 @@ public class Options extends AbstractData {
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
      */
-    public HashMap<String, Object> statisticsSlices;
+    public HashMap<String, Object> statisticsSlices = new HashMap<>();
 
     /**
      * массив пунктов левого меню от интеграторов
@@ -373,8 +374,8 @@ public class Options extends AbstractData {
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
-
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+            enableFacebookInvite = response.optBoolean("enableFacebookInvite");
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
