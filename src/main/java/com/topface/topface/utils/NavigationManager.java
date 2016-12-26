@@ -277,7 +277,11 @@ public class NavigationManager {
                 closeMenuAndSwitchAfter(new ISimpleCallback() {
                     @Override
                     public void onCall() {
+                        String uid = Integer.toString(App.get().getProfile().uid);
                         FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_BUTTON_CLICK();
+                        FBInvitesStatisticsGeneratedStatistics
+                                .sendNow_FB_INVITE_BUTTON_CLICK_UNIQUE(uid.concat("_")
+                                        .concat(FBInvitesStatistics.FB_INVITE_BUTTON_CLICK_UNIQUE));
                         Options options = App.get().getOptions();
                         BaseFragment fragment = mActivityDelegate != null ?
                                 (BaseFragment) mActivityDelegate.getSupportFragmentManager()
@@ -285,6 +289,9 @@ public class NavigationManager {
                         Activity activity = fragment != null ? fragment.getActivity() : null;
                         if (activity != null && FBInvitesUtils.INSTANCE.isFBInviteApplicable(options)) {
                             FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_SHOW();
+                            FBInvitesStatisticsGeneratedStatistics
+                                    .sendNow_FB_INVITE_SHOW_UNIQUE(uid.concat("_")
+                                            .concat(FBInvitesStatistics.FB_INVITE_SHOW_UNIQUE));
                             FBInvitesUtils.INSTANCE.showFBInvitePopup(activity, options.fbInviteSettings.getAppLink(),
                                     options.fbInviteSettings.getIconUrl());
                         }
