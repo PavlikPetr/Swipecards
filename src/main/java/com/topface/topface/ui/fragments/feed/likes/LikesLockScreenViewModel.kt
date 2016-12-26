@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.support.annotation.DrawableRes
 import android.view.View
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.BalanceData
@@ -18,7 +19,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 import com.topface.topface.utils.FlurryManager
-import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
@@ -65,7 +66,10 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
     val likesAccessProgressVisibility = ObservableInt(View.INVISIBLE)
     val flipperVisibility = ObservableInt(View.VISIBLE)
 
-    fun onBuyCoins() = mNavigator.showPurchaseCoins()
+    fun onBuyCoins() {
+        NewProductsKeysGeneratedStatistics.sendNow_LIKES_ZERODATA_GO_PURCHASES(context)
+        mNavigator.showPurchaseCoins()
+    }
 
     fun onBuyVipClick() {
         if (mBalanceData.money >= mBlockSympathy.price) {
@@ -109,8 +113,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
                 maleIcon
             }
 
-    override fun release() {
-        RxUtils.safeUnsubscribe(mBalanceSubscription)
-    }
+    override fun release() = mBalanceSubscription.safeUnsubscribe()
 
 }

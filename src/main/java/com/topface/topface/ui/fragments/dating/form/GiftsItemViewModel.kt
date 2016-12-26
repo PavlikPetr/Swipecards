@@ -54,7 +54,7 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
                 })
     }
 
-    fun sendGift() = mNavigator.showGiftsActivity(userId)
+    fun sendGift() = mNavigator.showGiftsActivity(userId, "dating")
 
     fun release() = mLoadGiftsSubscription.safeUnsubscribe()
 

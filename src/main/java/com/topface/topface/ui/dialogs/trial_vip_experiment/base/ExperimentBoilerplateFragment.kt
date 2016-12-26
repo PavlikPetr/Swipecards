@@ -4,10 +4,10 @@ import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.IdRes
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
@@ -79,6 +79,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NewProductsKeysGeneratedStatistics.sendNow_TRIAL_VIP_POPUP_SHOW(activity.applicationContext)
         if (savedInstanceState == null) {
             with(App.getUserConfig()) {
                 val showCounter = trialVipShowCounter + 1

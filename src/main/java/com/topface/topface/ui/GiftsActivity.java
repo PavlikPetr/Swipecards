@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
@@ -50,6 +52,7 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
     public static final String GIFTS_LIST = "gifts_list";
     public static final String SUCCESS_TOAST_AVAILABLE = "success_toast_available";
     public static final String INTENT_SEND_GIFT_ANSWER = "send_gift_answer";
+    public static final String FROM = "From";
 
     private ArrayList<Gift> mAllGifts = new ArrayList<>();
     private int mUserIdToSendGift;
@@ -69,9 +72,10 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
      * @param userId  profile id to send gift
      * @return intent
      */
-    public static Intent getSendGiftIntent(Context context, int userId) {
+    public static Intent getSendGiftIntent(Context context, int userId, String from) {
         Intent result = new Intent(context, GiftsActivity.class);
         result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
+        result.putExtra(FROM, from);
         return result;
     }
 
@@ -85,10 +89,11 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
      * @param isSuccessToastAvailable show or not toast on success gift send
      * @return intent
      */
-    public static Intent getSendGiftIntent(Context context, int userId, boolean isSuccessToastAvailable) {
+    public static Intent getSendGiftIntent(Context context, int userId, boolean isSuccessToastAvailable, String from) {
         Intent result = new Intent(context, GiftsActivity.class);
         result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
         result.putExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, isSuccessToastAvailable);
+        result.putExtra(FROM, from);
         return result;
     }
 
@@ -96,6 +101,7 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        NewProductsKeysGeneratedStatistics.sendNow_GIFTS_OPEN(new Slices().putSlice("ref",getIntent().getStringExtra(FROM)), getApplicationContext());
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         mIsSuccessToastAvailable = getIntent().getBooleanExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);

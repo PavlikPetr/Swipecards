@@ -59,7 +59,7 @@ public class UserFormFragment extends AbstractFormFragment implements OnClickLis
     @Override
     protected void onGiftsClick() {
         Activity activity = getActivity();
-        Intent intent = GiftsActivity.getSendGiftIntent(activity, getUserId());
+        Intent intent = GiftsActivity.getSendGiftIntent(activity, getUserId(), "forms");
         getParentFragment().startActivityForResult(intent, GiftsActivity.INTENT_REQUEST_GIFT);
     }
 

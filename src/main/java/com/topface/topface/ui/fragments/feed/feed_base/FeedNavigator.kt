@@ -9,7 +9,10 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.data.*
+import com.topface.topface.data.FeedItem
+import com.topface.topface.data.FeedUser
+import com.topface.topface.data.Photos
+import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.NavigationState
@@ -20,10 +23,10 @@ import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -118,9 +121,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showGiftsActivity(id: Int) {
+    override fun showGiftsActivity(id: Int, from: String) {
         mActivityDelegate.startActivityForResult(
-                GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false),
+                GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false, from),
                 GiftsActivity.INTENT_REQUEST_GIFT
         )
     }
