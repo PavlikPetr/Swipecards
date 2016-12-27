@@ -1,11 +1,13 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedListData
@@ -13,6 +15,8 @@ import com.topface.topface.data.History
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
@@ -28,9 +32,13 @@ import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
+import rx.Observer
 import rx.Subscriber
 import rx.Subscription
+import rx.functions.Action1
 import rx.functions.Func1
+import rx.lang.kotlin.addTo
+import rx.lang.kotlin.toSingletonObservable
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -58,6 +66,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private var mContentAvailableSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
     private var mAppDayRequestSubscription: Subscription? = null
+    private var mUpdateFromPopupMenuSubscription: Subscription? = null
 
     init {
         App.get().inject(this)
@@ -86,6 +95,20 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                         data.observableList.add(EmptyDialogsFragmentStubItem())
                     }
                 })
+        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : Subscriber<FeedDialog>() {
+            override fun onNext(type: FeedDialog?) {
+                data.observableList.add(type)
+            }
+
+            override fun onError(e: Throwable?) {
+                throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+            }
+
+            override fun onCompleted() {
+                throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     private fun bindUpdater() {

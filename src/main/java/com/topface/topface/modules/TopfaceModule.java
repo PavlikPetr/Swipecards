@@ -52,6 +52,7 @@ import com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel;
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
@@ -172,7 +173,8 @@ import dagger.Provides;
                 DialogContactsItemViewModel.class,
                 DialogsFragmentViewModel.class,
                 ProfileFormFragment.class,
-                CommonSlices.class
+                CommonSlices.class,
+                DialogsMenuPopupViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

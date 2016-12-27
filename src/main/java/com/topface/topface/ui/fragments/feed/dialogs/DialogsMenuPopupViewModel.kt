@@ -2,10 +2,13 @@ package com.topface.topface.ui.fragments.feed.dialogs
 
 import android.databinding.ObservableField
 import android.widget.Toast
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogPopupEvent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
@@ -13,6 +16,7 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription
+import javax.inject.Inject
 
 /**
  * Created by mbulgakov on 05.12.16.
@@ -21,6 +25,7 @@ class DialogsMenuPopupViewModel(private val item: FeedDialog,
                                 private val mApi: FeedApi,
                                 private val iDialogCloser: IDialogCloser) {
 
+    @Inject lateinit var mEventBus: EventBus
     private var mBlackListSubscriber: Subscription? = null
     private var mDeleteDialogsSubscriber: Subscription? = null
     val userPhoto = ObservableField(item.user.photo)
@@ -36,7 +41,7 @@ class DialogsMenuPopupViewModel(private val item: FeedDialog,
             override fun onCompleted() = mDeleteDialogsSubscriber.safeUnsubscribe()
 
             override fun onNext(t: Boolean?) {
-
+                mEventBus.setData(DialogPopupEvent(item))
                 mDeleteDialogsSubscriber.safeUnsubscribe()
             }
 
@@ -53,7 +58,8 @@ class DialogsMenuPopupViewModel(private val item: FeedDialog,
             override fun onCompleted() = mDeleteDialogsSubscriber.safeUnsubscribe()
 
             override fun onNext(t: Boolean?) {
-
+                mEventBus.setData(DialogPopupEvent(item))
+                Debug.error("-------------------Засетили событие--------------------")
                 mDeleteDialogsSubscriber.safeUnsubscribe()
             }
         })
