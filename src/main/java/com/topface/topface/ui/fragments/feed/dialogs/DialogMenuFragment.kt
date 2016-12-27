@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.DeleteOrBlacklistPopupBinding
-import com.topface.topface.ui.fragments.feed.dating.IDialogCloser
+import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.http.IRequestClient
@@ -17,6 +17,11 @@ import org.jetbrains.anko.layoutInflater
 
 
 class DialogMenuFragment(val item: FeedDialog) : DialogFragment(), IDialogCloser {
+
+
+    companion object {
+        val TAG = "dialog_menu_fragment"
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
         model = mViewModel

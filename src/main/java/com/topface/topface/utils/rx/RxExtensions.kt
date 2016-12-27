@@ -1,6 +1,8 @@
-package com.topface.topface.utils.extensions
+package com.topface.topface.utils.rx
 
+import com.topface.framework.utils.Debug
 import rx.Observable
+import rx.Subscriber
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -19,3 +21,21 @@ fun <T> Observable<T>.applySchedulers(): Observable<T> = compose<T>(Observable.T
     subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
 })
+
+fun <T> shortSubscription(next: (T) -> Unit) = object : Subscriber<T>() {
+
+    override fun onCompleted() {
+        if (isUnsubscribed) {
+            unsubscribe()
+        }
+    }
+
+    override fun onError(e: Throwable) {
+        Debug.log("ShortSubscription " + e.toString())
+        e.printStackTrace()
+    }
+
+    override fun onNext(type: T) = next(type)
+}
+
+

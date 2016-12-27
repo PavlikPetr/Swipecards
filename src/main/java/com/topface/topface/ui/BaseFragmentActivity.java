@@ -30,6 +30,7 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.ILifeCycle;
 import com.topface.topface.utils.IStateSaverRegistrator;
@@ -94,6 +95,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     protected void onCreate(Bundle savedInstanceState) {
         setWindowOptions();
         super.onCreate(savedInstanceState);
+        FBInvitesUtils.INSTANCE.onCreateActivity(getIntent());
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,

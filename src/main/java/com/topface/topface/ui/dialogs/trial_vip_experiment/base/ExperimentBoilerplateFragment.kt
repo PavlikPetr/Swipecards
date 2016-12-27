@@ -4,13 +4,14 @@ import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.IdRes
-import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
+import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
@@ -21,7 +22,7 @@ import org.jetbrains.anko.layoutInflater
  * База для всех экспериментов
  * Created by tiberal on 15.11.16.
  */
-class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmentRunner.IRunner {
+class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), TransparentMarketFragmentRunner.IRunner {
 
     var cancelListener: DialogInterface.OnCancelListener? = null
     var dismissListener: DialogInterface.OnDismissListener? = null
@@ -78,6 +79,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NewProductsKeysGeneratedStatistics.sendNow_TRIAL_VIP_POPUP_SHOW(activity.applicationContext)
         if (savedInstanceState == null) {
             with(App.getUserConfig()) {
                 val showCounter = trialVipShowCounter + 1
@@ -136,7 +138,7 @@ class ExperimentBoilerplateFragment : DialogFragment(), TransparentMarketFragmen
     }
 
     override fun runMarketPopup() {
-        if (isAdded) {
+        if (isAdded && mTimeForTransaction) {
             mMarketFragmentRunner.startTransparentMarketFragment {
                 TrialVipExperimentStatistics.sendPurchaseCompleted()
                 dismiss()

@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.topface.framework.utils.Debug
-import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.IStateSaverRegistrator
 import rx.Observable
 import rx.Subscriber
 
@@ -39,6 +37,9 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
+        components.values.forEach {
+            it.onAttachedToRecyclerView(recyclerView)
+        }
         recyclerView?.layoutManager?.let {
             if (it is LinearLayoutManager) {
                 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -48,8 +49,10 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
                             if (!data.isEmpty()) {
                                 val firstVisibleItem = it.findFirstCompletelyVisibleItemPosition()
                                 val lastVisibleItem = it.findLastVisibleItemPosition()
-                                val visibleItemCount = lastVisibleItem - firstVisibleItem
-                                if (visibleItemCount != 0 && firstVisibleItem + visibleItemCount >= data.size - 1) {
+                                val visibleItemCount = lastVisibleItem - firstVisibleItem + 1
+                                if (firstVisibleItem != RecyclerView.NO_POSITION &&
+                                        lastVisibleItem != RecyclerView.NO_POSITION && visibleItemCount != 0 &&
+                                        firstVisibleItem + visibleItemCount >= data.size - 1) {
                                     subscriber.onNext(updaterEmitObject())
                                 }
                             } else {
@@ -83,8 +86,6 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun getItemCount() = data.count()
 
-    fun releaseComponents() {
-        components.values.forEach(AdapterComponent<*, *>::release)
-    }
+    fun releaseComponents() = components.values.forEach(AdapterComponent<*, *>::release)
 
 }

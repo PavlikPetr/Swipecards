@@ -78,6 +78,7 @@ public class AppConfig extends AbstractConfig {
     private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
     private static final String TRIAL_VIP_POPUP_TYPE = "trial_vip_popup_type";
     private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
+    private static final String FB_APP_LINK = "fb_app_link";
 
     public AppConfig(Context context) {
         super(context);
@@ -144,9 +145,11 @@ public class AppConfig extends AbstractConfig {
         // ключ, который устанавливает количество отправленных симпатий
         addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
         // ключ, который устанавливает статус первого просмотра экрана логина
-        addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, true);
+        addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, false);
         // храним последний выбранный тип попапа триального вип
         addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
+        // был ли обнаружен переход по приглашению из FB
+        addField(settingsMap, FB_APP_LINK, "");
     }
 
     protected SharedPreferences getPreferences() {
@@ -605,8 +608,8 @@ public class AppConfig extends AbstractConfig {
     }
 
     /* Тут устанавливаю статус первого просмотра экрана логина (просмотрен) */
-    public void setFirstViewLoginScreen() {
-        setField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN, false);
+    public void setFirstViewLoginScreen(boolean looked) {
+        setField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN, looked);
     }
 
     /* Получение статуса первого просмотра экрана логина */
@@ -614,4 +617,13 @@ public class AppConfig extends AbstractConfig {
         return getBooleanField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN);
     }
 
+    // запоминаем fb invite applink
+    public void setFBInviteAppLink(String appLink) {
+        setField(getSettingsMap(), FB_APP_LINK, appLink);
+    }
+
+    // достаем fb invite applink
+    public String getFBInviteAppLink() {
+        return getStringField(getSettingsMap(), FB_APP_LINK);
+    }
 }

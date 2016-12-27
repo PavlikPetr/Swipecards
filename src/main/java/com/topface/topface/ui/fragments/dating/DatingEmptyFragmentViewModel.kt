@@ -1,16 +1,15 @@
-package com.topface.topface.ui.fragments.feed.dating
+package com.topface.topface.ui.fragments.dating
 
 import android.widget.Toast
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.DatingFilter
 import com.topface.topface.databinding.LayoutEmptyDatingBinding
-import com.topface.topface.state.AppState
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription

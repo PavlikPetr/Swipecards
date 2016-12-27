@@ -898,7 +898,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     break;
                 }
                 startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId),
+                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId, "chat"),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);

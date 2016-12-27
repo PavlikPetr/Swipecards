@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.FbAuthorizer;
@@ -97,6 +98,10 @@ public class AuthRequest extends PrimalAuthRequest {
                 .put("refresh", mRefresh)
                 .put("timezone", timezone)
                 .put("token", mToken);
+        String appLink = FBInvitesUtils.INSTANCE.getAppLinkToSend();
+        if (!TextUtils.isEmpty(appLink)) {
+            data.put("fbAppLink", appLink);
+        }
         if (mAppsflyer != null) {
             data.put("appsflyer", mAppsflyer.toJsonWithConversions(App.getConversionHolder()));
         }

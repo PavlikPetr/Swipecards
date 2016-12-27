@@ -32,15 +32,19 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcher
 import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
+import com.topface.topface.utils.FormItem
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.BaseViewModel
+import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /** Бизнеслогика для дейтинга
@@ -55,7 +59,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     @Inject lateinit var state: TopfaceAppState
 
-    private var mProfileSubscription: Subscription
+    private var mProfileSubscription = CompositeSubscription()
     private var mUpdateSubscription: Subscription? = null
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
@@ -63,6 +67,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     var currentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
+    private var isLastUser = false
     private lateinit var mReceiver: BroadcastReceiver
 
     companion object {
@@ -73,26 +78,36 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     init {
         App.get().inject(this)
-        mProfileSubscription = state.getObservable(Profile::class.java).subscribe {
+        mProfileSubscription.add(state.getObservable(Profile::class.java).distinctUntilChanged { it.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
                         currentUser = it
                         mDatingViewModelEvents.onDataReceived(it)
                         binding.root.post {
-                            prepareFormsData(it)
-                            mDatingButtonsView.unlockControls()
+                            //если есть currentUser, например после востановления стейта, то работаем с ним
+                            (if (currentUser == null) it else currentUser)?.let {
+                                prepareFormsData(it, profile)
+                                mDatingButtonsView.unlockControls()
+                            }
                         }
                     }
-                } else {
-                    currentUser?.let {
-                        binding.root.post { prepareFormsData(it) }
-                    }
                 }
-                mUserSearchList.setOnEmptyListListener(this)
-                mUserSearchList.updateSignatureAndUpdate()
             }
-        }
+        })
+        // слушаем изменения в анкете и статусе
+        mProfileSubscription.add(Observable.merge(state.getObservable(Profile::class.java).distinctUntilChanged { it.forms },
+                state.getObservable(Profile::class.java).distinctUntilChanged { it.status })
+                .debounce(100, TimeUnit.MILLISECONDS)
+                .subscribe { profile ->
+                    binding.root.post {
+                        currentUser?.let {
+                            prepareFormsData(it, profile)
+                        }
+                    }
+                })
+        mUserSearchList.setOnEmptyListListener(this)
+        mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
     }
 
@@ -108,7 +123,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess) {
             mDatingButtonsView.lockControls()
-            mEmptySearchVisibility.hideEmptySearchDialog()
             if (isNeedRefresh) {
                 mUserSearchList.clear()
                 currentUser = null
@@ -131,7 +145,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 override fun onNext(usersList: UsersList<SearchUser>?) {
                     Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
-                        val isNeedShowNext = mUserSearchList.isEnded
+                        val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
@@ -143,11 +157,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                             prepareFormsData(user)
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
+                            isLastUser = true
                         }
                         mDatingButtonsView.unlockControls()
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
                             mEmptySearchVisibility.showEmptySearchDialog()
+                            isLastUser = true
                         }
                     }
                 }
@@ -157,14 +173,17 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun prepareFormsData(user: SearchUser) = with((binding.formsList
+    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = with((binding.formsList
             .adapter as CompositeAdapter<IType>).data) {
         clear()
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
-        if (!user.status.isNullOrEmpty()) addExpandableItem(ParentModel(user.status, false, R.drawable.status))
+        // перед отображением статуса пропускаем значение через "нормализатор"
+        val status = Profile.normilizeStatus(user.status)
+        if (!status.isNullOrEmpty()) addExpandableItem(ParentModel(status, false, R.drawable.status))
         addExpandableItem(GiftsModel(user.gifts, user.id))
         val forms: MutableList<IType>
-        if (App.get().profile.hasEmptyFields) {
+        // проверяем не только все поля анкеты, но и статус. Статус имеет проверку на корректность данных
+        if (ownProfile.hasEmptyFields || Profile.normilizeStatus(ownProfile.status).isNullOrEmpty()) {
             //показываем заглушку, чтоб юзер заполнил свою анкету
             forms = mutableListOf<IType>(FormModel(
                     Pair(String.format(if (user.sex == Profile.BOY) R.string.fill_own_profile_boy.getString()
@@ -181,11 +200,23 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                                 it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                     }
                     val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
-                    add(FormModel(Pair(it.title, it.value), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
+                    add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
                 }
             }
         }
         addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
+    }
+
+    private fun getFormValue(formItem: FormItem): String {
+        if (formItem.value.isNullOrEmpty()) {
+            if (!formItem.emptyValue.isNullOrEmpty()) {
+                return formItem.emptyValue
+            } else {
+                return FormItem.EMPTY_FORM_VALUE
+            }
+        } else {
+            return formItem.value
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -248,9 +279,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         mUpdateInProcess = getBoolean(UPDATE_IN_PROCESS)
         mNewFilter = getBoolean(NEW_FILTER)
-        currentUser = getParcelable<SearchUser>(CURRENT_USER)?.apply {
-            prepareFormsData(this)
-        }
+        currentUser = getParcelable<SearchUser>(CURRENT_USER)
     }
 
     override fun release() {

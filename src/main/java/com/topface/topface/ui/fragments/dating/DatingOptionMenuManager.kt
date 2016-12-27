@@ -12,17 +12,15 @@ import com.topface.topface.utils.extensions.getDrawable
  * Рулим options меню в знакомствах
  * Created by ppavlik on 11.11.16.
  */
-//TODO закоментил кнопку cebab-menu до реализации выпадающего списка
 class DatingOptionMenuManager(private val mNavigator: IFeedNavigator) : IAppBarState, IOptionMenuCallback {
     private var mFilterItem: MenuItem? = null
-    //    private var mOptionMenuItem: MenuItem? = null
+    private var filterImgRes = 0
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         if (menu != null && inflater != null) {
             menu.clear()
             inflater.inflate(R.menu.actions_dating, menu)
             mFilterItem = menu.findItem(R.id.action_dating_filter)
-            //        mOptionMenuItem = menu.findItem(R.id.action_dating_options)
         }
     }
 
@@ -36,11 +34,20 @@ class DatingOptionMenuManager(private val mNavigator: IFeedNavigator) : IAppBarS
             }
 
     override fun isScrimVisible(isVisible: Boolean) {
-        //        mOptionMenuItem?.let {
-//            it.icon = if (isVisible) R.drawable.ic_cebab_gray.getDrawable() else R.drawable.ic_cebab_white.getDrawable()
-//        }
-        mFilterItem?.let {
-            it.icon = if (isVisible) R.drawable.filter_gray.getDrawable() else R.drawable.filter_white.getDrawable()
+        (if (isVisible) R.drawable.filter_gray else R.drawable.filter_white).let {
+            if (filterImgRes != it && setOptionMenuImage(mFilterItem, it)) {
+                filterImgRes = it
+            }
         }
+    }
+
+    private fun setOptionMenuImage(menuItem: MenuItem?, imgRes: Int): Boolean {
+        menuItem?.let { menu ->
+            imgRes.getDrawable()?.let {
+                menu.icon = it
+                return true
+            }
+        }
+        return false
     }
 }

@@ -5,12 +5,12 @@ import android.widget.Toast
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
-import com.topface.topface.ui.fragments.feed.dating.IDialogCloser
+import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
-import com.topface.topface.utils.extensions.safeUnsubscribe
 import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription
 

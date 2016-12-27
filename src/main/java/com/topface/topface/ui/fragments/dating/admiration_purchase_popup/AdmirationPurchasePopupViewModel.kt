@@ -15,7 +15,7 @@ import com.topface.topface.databinding.AdmirationPurchasePopupBinding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.subscriptions.CompositeSubscription

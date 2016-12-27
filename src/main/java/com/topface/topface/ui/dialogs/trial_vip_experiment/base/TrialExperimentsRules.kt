@@ -13,10 +13,10 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.getBundle
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.UserProfileFragment
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.config.UserConfig
-import com.topface.topface.utils.extensions.applySchedulers
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
 import rx.Subscription
 import java.util.concurrent.TimeUnit

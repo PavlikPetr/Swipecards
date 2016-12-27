@@ -6,7 +6,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription
 
@@ -26,6 +26,10 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
     private var mLoadGiftsSubscription: Subscription? = null
 
     fun loadGifts(lastGiftId: Int) {
+        //если подарочки есть, а приходит дефолтный id(-1 от нас или 0 если только что отправили
+        // подарочек и он не добавлен еще в фиды) для выборки, значит что то не так и
+        // мы пытаемся згрузить дубликаты, НЕНАДО ТАК
+        if (gifts.items.isNotEmpty() && (lastGiftId == 0 || lastGiftId == -1)) return
         mLoadGiftsSubscription = mApi.callGetGifts(userId, lastGiftId)
                 .subscribe(object : Subscriber<Profile.Gifts>() {
                     override fun onNext(data: Profile.Gifts?) {
@@ -37,7 +41,7 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
                             // изначально может прийти more == true и count == 1, но это будет от веб-подарка
                             gifts.more = it.more
                             gifts.count = it.count
-                }
+                        }
                     }
 
                     override fun onError(e: Throwable?) {
@@ -50,7 +54,7 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
                 })
     }
 
-    fun sendGift() = mNavigator.showGiftsActivity(userId)
+    fun sendGift() = mNavigator.showGiftsActivity(userId, "dating")
 
     fun release() = mLoadGiftsSubscription.safeUnsubscribe()
 

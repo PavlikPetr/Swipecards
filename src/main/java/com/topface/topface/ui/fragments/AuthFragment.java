@@ -56,7 +56,7 @@ import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
@@ -496,7 +496,7 @@ public class AuthFragment extends BaseAuthFragment {
             loadAllProfileData();
         }
 
-        sendFirstViewLoginScreen();
+        sendLookedAuthScreen();
     }
 
     @Override
@@ -538,11 +538,11 @@ public class AuthFragment extends BaseAuthFragment {
 //        return getString(R.string.app_name) + "                          ";
 //    }
 
-    private void sendFirstViewLoginScreen() {
+    private void sendLookedAuthScreen() {
         AppConfig appConfig = App.getAppConfig();
         if (appConfig.isFirstViewLoginScreen()) {
             AuthStatistics.sendFirstViewLoginPage();
-            appConfig.setFirstViewLoginScreen();
+            appConfig.setFirstViewLoginScreen(false);
             appConfig.saveConfig();
         }
     }

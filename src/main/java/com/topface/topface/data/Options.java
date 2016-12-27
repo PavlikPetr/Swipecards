@@ -26,7 +26,6 @@ import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.config.WeakStorage;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -170,7 +169,8 @@ public class Options extends AbstractData {
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
 
-    public boolean showRefillBalanceInSideMenu = false;
+    public boolean showRefillBalanceInSideMenu;
+    public boolean enableFacebookInvite;
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
@@ -182,13 +182,11 @@ public class Options extends AbstractData {
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
     @Inject
     transient TopfaceAppState mAppState;
-    @Inject
-    transient WeakStorage mWeakStorage;
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
      */
-    public HashMap<String, Object> statisticsSlices;
+    public HashMap<String, Object> statisticsSlices = new HashMap<>();
 
     /**
      * массив пунктов левого меню от интеграторов
@@ -204,6 +202,11 @@ public class Options extends AbstractData {
      * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
      */
     private boolean dialogRedesignEnabled;
+
+    /**
+     * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
+     */
+    public FBInviteSettings fbInviteSettings = new FBInviteSettings();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -376,10 +379,13 @@ public class Options extends AbstractData {
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
-
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
-            // store "design version" of feeds if need
-            mWeakStorage.setProfileDialogRedesignEnabled(dialogRedesignEnabled);
+            enableFacebookInvite = response.optBoolean("enableFacebookInvite");
+
+            JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
+            if (fbInvitesJsonObject != null) {
+                fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
+            }
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала

@@ -59,6 +59,7 @@ import com.topface.topface.state.IStateDataUpdater;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.statistics.AppStateStatistics;
 import com.topface.topface.statistics.AuthStatistics;
+import com.topface.topface.statistics.CommonSlices;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.ui.external_libs.AdWords;
 import com.topface.topface.ui.external_libs.AdjustManager;
@@ -489,12 +490,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
-
-        // Инициализируем общие срезы для статистики
-        StatisticsTracker.getInstance()
-                .setContext(mContext)
-                .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
-                .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
+        StatisticsTracker.getInstance().setContext(mContext);
+        // Инициализируем слушателя опций, который будет обновлять срезы в статистике
+        // на инциализации он засетит дефолтные срезы *app* и *cvn*
+        CommonSlices.Companion.getInstance();
         if (BuildConfig.DEBUG) {
             StatisticsTracker.getInstance().setLogger(new ILogger() {
                 public void log(String msg) {
@@ -524,8 +523,16 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         AppConfig appConfig = App.getAppConfig();
         App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
+        lookedAuthScreen();
     }
 
+    private void lookedAuthScreen() {
+        AppConfig appConfig = App.getAppConfig();
+        if (!appConfig.isFirstViewLoginScreen() && AuthToken.getInstance().isEmpty()) {
+            appConfig.setFirstViewLoginScreen(true);
+            appConfig.saveConfig();
+        }
+    }
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке

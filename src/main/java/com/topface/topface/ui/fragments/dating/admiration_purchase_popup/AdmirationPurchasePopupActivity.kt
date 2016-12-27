@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.dating.admiration_purchase_popup
 
 import android.os.Bundle
 import android.transition.Transition
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
 import com.topface.topface.databinding.ToolbarBinding
@@ -9,6 +10,8 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.rx.safeUnsubscribe
+import rx.Subscription
 
 /**
  * Это активити попата восхищения. Такие дела.
@@ -38,6 +41,8 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
     private val mNavigator by lazy {
         FeedNavigator(this)
     }
+
+    private var mDatingGoAdmirationSubscription: Subscription? = null
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
@@ -76,6 +81,16 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
 
             })
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mDatingGoAdmirationSubscription = NewProductsKeysGeneratedStatistics.sendPost_DATING_GO_ADMIRATION(applicationContext)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mDatingGoAdmirationSubscription.safeUnsubscribe()
     }
 
     override fun hideAdmirationPurchasePopup(resultCode: Int) {

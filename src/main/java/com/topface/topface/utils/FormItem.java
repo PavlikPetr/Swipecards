@@ -11,6 +11,7 @@ public class FormItem implements Parcelable {
     public int type;
     public String title;
     public String value;
+    public String emptyValue;
     public FormItem header;
     public DATA_TYPE dataType = DATA_TYPE.UNDEFINED;
 

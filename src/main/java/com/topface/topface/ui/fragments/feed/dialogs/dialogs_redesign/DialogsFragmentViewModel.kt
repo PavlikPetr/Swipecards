@@ -14,21 +14,23 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ChatFragment
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
-import com.topface.topface.ui.fragments.feed.feed_utils.getFirstItem
+import com.topface.topface.ui.fragments.feed.feed_utils.getRealDataFirstItem
 import com.topface.topface.ui.fragments.feed.feed_utils.isEmpty
 import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
-import com.topface.topface.utils.extensions.safeUnsubscribe
+import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
+import rx.functions.Func1
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -37,13 +39,13 @@ import javax.inject.Inject
  * Created by tiberal on 30.11.16.
  */
 class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
-                               updater: () -> Observable<Bundle>)
+                               private val updater: () -> Observable<Bundle>)
     : SwipeRefreshLayout.OnRefreshListener, ILifeCycle, IFeedPushHandlerListener {
 
     var isRefreshing = ObservableBoolean()
     var isEnable = ObservableBoolean(true)
 
-    private var mCallUpdateSubscription: Subscription? = null
+    private var mLoadTopSubscription: Subscription? = null
     private var mIsAllDataLoaded: Boolean = false
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
     private val mPushHandler = FeedPushHandler(this, context)
@@ -53,39 +55,103 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     val data = SingleObservableArrayList<FeedDialog>()
 
-    private var mContentAvailableSubscription: Subscription
-    private var mUpdaterSubscription: Subscription
+    private var mContentAvailableSubscription: Subscription? = null
+    private var mUpdaterSubscription: Subscription? = null
+    private var mAppDayRequestSubscription: Subscription? = null
 
     init {
         App.get().inject(this)
-        mUpdaterSubscription = updater().distinct {
-            it?.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)
-        }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
-            override fun onNext(updateBundle: Bundle?) {
-                if (!mIsAllDataLoaded) {
-                    updateBundle?.let {
-                        update(it)
+        bindUpdater()
+        mContentAvailableSubscription = Observable.combineLatest(mEventBus.getObservable(DialogContactsEvent::class.java),
+                mEventBus.getObservable(DialogItemsEvent::class.java)) { item1, item2 ->
+            if (!item2.hasDialogItems) {
+                // add empty dialogs stub if need
+                var found = false
+                val stub = EmptyDialogsStubItem()
+                data.observableList.forEach {
+                    if (it.javaClass == stub.javaClass) {
+                        found = true
+                        return@forEach
                     }
                 }
+                if (!found) data.observableList.add(stub)
             }
-        })
-        mContentAvailableSubscription = Observable.zip(mEventBus.getObservable(DialogContactsEvent::class.java),
-                (mEventBus.getObservable(DialogItemsEvent::class.java))) { item1, item2 ->
             item1.hasContacts || item2.hasDialogItems
-        }.first().filter { !it }.subscribe(object : RxUtils.ShortSubscription<Boolean>() {
-            override fun onNext(type: Boolean?) {
-                data.observableList.clear()
-                isEnable.set(false)
-                data.observableList.add(EmptyDialogsFragmentStubItem())
+        }
+                .filter { !it }
+                .subscribe(object : RxUtils.ShortSubscription<Boolean>() {
+                    override fun onNext(type: Boolean?) {
+                        isEnable.set(false)
+                        data.observableList.clear()
+                        data.observableList.add(EmptyDialogsFragmentStubItem())
+                    }
+                })
+    }
+
+    private fun bindUpdater() {
+        val appDayRequest = mApi.callAppDayRequest(AppDayViewModel.TYPE_FEED_FRAGMENT)
+        mUpdaterSubscription = updater().distinct {
+            it?.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)
+        }.filter {
+            !mIsAllDataLoaded
+        }.flatMap {
+            Observable.combineLatest<AppDay, Bundle, Pair<AppDay, Bundle>>(appDayRequest, Observable.just(it)) { appDay, bundle ->
+                mEventBus.setData(appDay)
+                Pair(appDay, bundle)
             }
-        })
+        }.flatMap {
+            mApi.callFeedUpdate(false, FeedDialog::class.java,
+                    constructFeedRequestArgs(isPullToRef = false
+                            , to = it.second.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY))).zipWith(Observable.just(it.first)) {
+                list, appDay ->
+                Pair(appDay, list)
+            }
+        }.flatMap(object : Func1<Pair<AppDay, FeedListData<FeedDialog>>, Observable<FeedListData<FeedDialog>>> {
+            var insertCount = 0
 
+            override fun call(data: Pair<AppDay, FeedListData<FeedDialog>>): Observable<FeedListData<FeedDialog>> {
+                if (insertCount < data.first.maxCount) {
+                    val iterator = data.second.items.listIterator()
+                    var lastInsertPos = -1
+                    while (iterator.hasNext()) {
+                        val nextIndex = iterator.nextIndex()
+                        val item = iterator.next()
+                        if (nextIndex == data.first.firstPosition - 1
+                                || (lastInsertPos == nextIndex - (data.first.repeat + 1)
+                                && item !is AppDayStubItem && insertCount < data.first.maxCount)) {
+                            iterator.add(AppDayStubItem(data.first))
+                            insertCount++
+                            lastInsertPos = nextIndex
+                        }
+                    }
+                }
+                return Observable.just(data.second)
+            }
 
+        }).subscribe(
+                {
+                    it?.let {
+                        addContactsItem()
+                        with(this@DialogsFragmentViewModel.data) {
+                            if (it.items.isEmpty()) {
+                                if (isEmptyDialogs()) {
+                                    observableList.add(EmptyDialogsStubItem())
+                                }
+                            } else {
+                                addAll(it.items)
+                                handleUnreadState(it, false)
+                                mIsAllDataLoaded = !it.more
+                            }
+                            mEventBus.setData(DialogItemsEvent(!isEmptyDialogs()))
+                        }
+                    }
+                }, { it?.printStackTrace() }
+        )
     }
 
     override fun onResume() {
-        if (mCallUpdateSubscription?.isUnsubscribed ?: true && data.observableList.isEmpty()) {
-            update()
+        if (mLoadTopSubscription?.isUnsubscribed ?: true && mUpdaterSubscription?.isUnsubscribed ?: true && data.observableList.isEmpty()) {
+            bindUpdater()
         }
     }
 
@@ -99,33 +165,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         }
     }
 
-    private fun update(updateBundle: Bundle = Bundle()) {
-        mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java,
-                constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(BaseFeedFragmentViewModel.TO, Utils.EMPTY)))
-                .retry(3)
-                .subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedDialog>>() {
-                    override fun onCompleted() {
-                        mCallUpdateSubscription.safeUnsubscribe()
-                    }
-
-                    override fun onNext(data: FeedListData<FeedDialog>?) {
-                        data?.let {
-                            addContactsItem()
-                            mEventBus.setData(DialogItemsEvent(data.items.isNotEmpty()))
-                            if (it.items.isEmpty()) {
-                                this@DialogsFragmentViewModel.data.observableList.add(EmptyDialogsStubItem())
-                                this@DialogsFragmentViewModel.data.observableList.add(AppDayStubItem())
-                            } else {
-                                this@DialogsFragmentViewModel.data.observableList.add(AppDayStubItem())
-                                this@DialogsFragmentViewModel.data.addAll(it.items)
-                                handleUnreadState(it, false)
-                                mIsAllDataLoaded = !data.more
-                            }
-                        }
-                    }
-                })
-    }
-
     private fun addContactsItem() {
         if (data.observableList.isEmpty() && this@DialogsFragmentViewModel.data.observableList.isEmpty()) {
             data.observableList.add(DialogContactsStubItem())
@@ -135,12 +174,14 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     fun loadTopFeeds() {
         if (isTopFeedsLoading.get()) return
         isTopFeedsLoading.set(true)
-        val from = data.observableList.getFirstItem()?.id ?: return
+        // список диалогов может быть пустой, т.е. в нем нет ничего кроме фейков (заглушка/реклама),
+        // в этом случае запросим весь список
+        val from = data.observableList.getRealDataFirstItem()?.id ?: ""
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
-        mCallUpdateSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java, requestBundle)
+        mLoadTopSubscription = mApi.callFeedUpdate(false, FeedDialog::class.java, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<FeedDialog>>() {
                     override fun onCompleted() {
-                        mCallUpdateSubscription.safeUnsubscribe()
+                        mLoadTopSubscription.safeUnsubscribe()
                         isTopFeedsLoading.set(false)
                         if (isRefreshing.get()) {
                             isRefreshing.set(false)
@@ -162,9 +203,19 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                             if (count() == 2 && this[1].isEmpty()) {
                                 //удаляем заглушку
                                 removeAt(1)
-                            }
+                            } else
+                            /*
+                             если итем только один и тот заглушка, значит у нас на экране общий стаб
+                             чистим список, добавляем стаб пустых контактов
+                             диалоги будут добавлены ниже
+                             */
+                                if (count() == 1 && this[0].isEmpty()) {
+                                    clear()
+                                    addContactsItem()
+                                }
+                            // поиск дубликатов в старом списке и удаление их
                             data.items.forEach { topDialog ->
-                                val iterator = this@DialogsFragmentViewModel.data.observableList.listIterator()
+                                val iterator = listIterator()
                                 while (iterator.hasNext()) {
                                     val item = iterator.next()
                                     if (item.user != null && item.user.id == topDialog.user.id) {
@@ -176,9 +227,12 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                                 addAll(1, data.items)
                             }
                         }
+                        mEventBus.setData(DialogItemsEvent(!isEmptyDialogs()))
                     }
                 })
     }
+
+    private fun isEmptyDialogs() = this@DialogsFragmentViewModel.data.observableList.getRealDataFirstItem() == null
 
     /**
      * Апдейтит итем диалога
@@ -238,8 +292,10 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     }
 
     fun release() {
-        arrayOf(mCallUpdateSubscription, mContentAvailableSubscription, mUpdaterSubscription).safeUnsubscribe()
+        arrayOf(mLoadTopSubscription, mContentAvailableSubscription,
+                mUpdaterSubscription, mAppDayRequestSubscription).safeUnsubscribe()
         mPushHandler.release()
+        isRefreshing.set(false)
         data.removeListener()
     }
 
@@ -288,11 +344,21 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     override fun userAddToBlackList(userId: Int) {
         val iterator = data.observableList.listIterator()
         var item: FeedDialog
+        var gotUser = false
+        // этом цикле делается две задачи
+        // 1 удаляется диалог с пользователем, которого внесли в черный список
+        // 2 вычисляется флаг, что остались еще диалоги, помимо всяких заглушек/реклам и тд
         while (iterator.hasNext()) {
             item = iterator.next()
-            if (item.user != null && item.user.id == userId) {
-                iterator.remove()
+            if (item.user != null) {
+                // если нашли пользователя, то либо удалим его (если его внесли в чс)
+                // либо запомним что еще есть диалоги
+                if (item.user.id == userId) iterator.remove() else gotUser = true
             }
+        }
+        // если нет диалогов с пользователями, то надо уведомить для добавления заглушки
+        if (!gotUser) {
+            mEventBus.setData(DialogItemsEvent(false))
         }
     }
 }

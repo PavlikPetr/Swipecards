@@ -20,12 +20,11 @@ import com.topface.topface.ui.*
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.feed.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
-import com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -38,6 +37,9 @@ import javax.inject.Inject
  */
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
+    override fun showDialogpopupMenu(item: FeedDialog) {
+        DialogMenuFragment(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
+    }
 
     @Inject lateinit var mNavigationState: NavigationState
 
@@ -120,9 +122,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showGiftsActivity(id: Int) {
+    override fun showGiftsActivity(id: Int, from: String) {
         mActivityDelegate.startActivityForResult(
-                GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false),
+                GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false, from),
                 GiftsActivity.INTENT_REQUEST_GIFT
         )
     }
@@ -149,10 +151,6 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showTrialPopup(type: Long, args: Bundle) {
         ExperimentBoilerplateFragment.newInstance(type, args = args)
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
-    }
-
-    override fun showDialogpopupMenu(item: FeedDialog) {
-        DialogMenuFragment(item).show(mActivityDelegate.supportFragmentManager, "DIALOG_POPUP_MENU")
     }
 
 }
