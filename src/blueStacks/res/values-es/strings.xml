@@ -762,6 +762,7 @@
   <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
   <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
   <string name="sidebar_vk_profile">Perfil VKontakt</string>
+  <string name="fb_invite_friends_menu_item">Invitar amigos</string>
   <string name="title_vk_profile">Perfil VK</string>
   <string name="vk_profile_invite_friends_error">El usuario ha prohibido que le envíen mensajes</string>
   <string name="foreign_profile_empty_gifts_title">Envía un regalo y serás el centro de atención</string>

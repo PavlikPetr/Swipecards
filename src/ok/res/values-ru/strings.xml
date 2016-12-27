@@ -1019,6 +1019,7 @@
         аватар
     </string>
     <string name="sidebar_vk_profile">Профиль ВКонтакте</string>
+    <string name="fb_invite_friends_menu_item">Пригласить друзей</string>
     <string name="title_vk_profile">Профиль ВК</string>
     <string name="vk_profile_invite_friends_error">Пользователь запретил отправлять ему приглашения</string>
     <string name="foreign_profile_empty_gifts_title">Отправьте подарок и вы будете в центре внимания</string>

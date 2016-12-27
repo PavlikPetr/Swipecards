@@ -730,6 +730,7 @@
   <string name="go_dating_message">Fange an, Leute kennenzulernen und die Namen derjenigen, die dein Profil besucht haben, werden hier erscheinen.</string>
   <string name="photo_not_from_main_album">Unsere Moderatoren haben entschieden, dass dieses Foto nicht als Profilfoto verwendet werden darf.</string>
   <string name="sidebar_vk_profile">VK Profil</string>
+  <string name="fb_invite_friends_menu_item">Freunde einladen</string>
   <string name="title_vk_profile">VK Profil</string>
   <string name="vk_profile_invite_friends_error">Der User akzeptiert keine Einladungen mehr</string>
   <string name="foreign_profile_empty_gifts_title">Verschicke ein Geschenk um alle Aufmerksamkeit auf dich zu ziehen</string>

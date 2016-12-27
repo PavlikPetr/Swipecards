@@ -818,6 +818,7 @@
     <string name="go_dating_message">Start dating and here will appear the names of those users who visited your profile.</string>
     <string name="photo_not_from_main_album">A moderator has decided that this photo may not be used as a profile photo.</string>
     <string name="sidebar_vk_profile">VK Profile</string>
+    <string name="fb_invite_friends_menu_item">Invite friends</string>
     <string name="title_vk_profile">VK Profile</string>
     <string name="vk_profile_invite_friends_error">User is no longer accepting invitations</string>
     <string name="foreign_profile_empty_gifts_title">Send a gift and you\'ll be the center of attention</string>

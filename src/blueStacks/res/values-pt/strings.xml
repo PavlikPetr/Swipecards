@@ -758,6 +758,7 @@
   <string name="go_dating_message">Começa a conhecer pessoas e aqui irão aparecer os nomes dos utilizadores que viram o teu perfil.</string>
   <string name="photo_not_from_main_album">Um moderador decidiu que esta foto não pode ser usada como foto de perfil.</string>
   <string name="sidebar_vk_profile">Perfil VK</string>
+  <string name="fb_invite_friends_menu_item">Convidar amigos</string>
   <string name="title_vk_profile">Perfil VK</string>
   <string name="vk_profile_invite_friends_error">O utilizador já não está a aceitar convites</string>
   <string name="foreign_profile_empty_gifts_title">Envia um presente e serás o centro das atenções</string>
@@ -938,4 +939,7 @@
   <string name="likes_start_dating_button">Começa a namorar</string>
   <string name="likes_empty_title">Ainda não tens Gostos. \nOs Gostos ajudam-te a conhecer pessoas</string>
   <string name="unlock_sympathy_price">Custo para desbloquear:</string>
+  <string name="send_gift">Enviar Presente</string>
+  <string name="write_him_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
+  <string name="write_her_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
 </resources>

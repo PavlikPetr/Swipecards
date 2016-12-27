@@ -744,6 +744,7 @@
         burada görüntüle.</string>
   <string name="photo_not_from_main_album">Bir moderatör bu fotoğrafın profil resmi olarak kullanılamayacağına karar verdi.</string>
   <string name="sidebar_vk_profile">Vkontakte profili</string>
+  <string name="fb_invite_friends_menu_item">Arkadaşlarını Davet Et</string>
   <string name="title_vk_profile">VK profili</string>
   <string name="vk_profile_invite_friends_error">Bu kullanıcı artık davetiye kabul etmiyor</string>
   <string name="foreign_profile_empty_gifts_title">Bir hediye göndererek dikkat çekebilirsin</string>
