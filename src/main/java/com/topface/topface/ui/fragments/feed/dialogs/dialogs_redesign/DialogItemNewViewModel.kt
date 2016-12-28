@@ -14,7 +14,7 @@ import com.topface.topface.utils.glide_utils.GlideTransformationType
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА
  */
-class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator) : View.OnLongClickListener {
+class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator) {
 
     val userPhoto = ObservableField(item.user.photo)
     val type = ObservableField(if (item.user.online) GlideTransformationType.DIALOG_ONLINE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
@@ -56,7 +56,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     fun onClick() = navigator.showChat(item)
 
-    override fun onLongClick(v: View?): Boolean {
+    fun onLongClick(): Boolean {
         navigator.showDialogpopupMenu(item)
         return true
     }

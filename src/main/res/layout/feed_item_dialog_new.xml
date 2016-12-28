@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> model.onClick()}"
         android:orientation="horizontal"
-        app:onLongItemClick="@{model.onLongClick}">
+        app:onLongClickListener="@{()->model.onLongClick()}">
 
         <FrameLayout
             android:layout_width="wrap_content"
