@@ -20,7 +20,7 @@ class DialogMenuFragment(val item: FeedDialog) : DialogFragment(), IDialogCloser
 
 
     companion object {
-        val TAG = "dialog_menu_fragment"
+        const val TAG = "dialog_menu_fragment"
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {

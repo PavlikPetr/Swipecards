@@ -1,13 +1,11 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedListData
@@ -15,8 +13,6 @@ import com.topface.topface.data.History
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
-import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder
-import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
@@ -32,13 +28,9 @@ import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
-import rx.Observer
 import rx.Subscriber
 import rx.Subscription
-import rx.functions.Action1
 import rx.functions.Func1
-import rx.lang.kotlin.addTo
-import rx.lang.kotlin.toSingletonObservable
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -97,27 +89,28 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 })
 
         // подписка на события об удалении или добавлении  в ч\с через попап меню.
-        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : Observer<DialogPopupEvent> {
-            override fun onError(e: Throwable?) = mUpdateFromPopupMenuSubscription.safeUnsubscribe()
-
+        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : RxUtils.ShortSubscription<DialogPopupEvent>() {
             // если все пришло, то удаляем пришедший итем из списка сообщений через итератор
-            override fun onNext(t: DialogPopupEvent?) {
-                if (t != null) {
+            override fun onNext(type: DialogPopupEvent?) {
+                super.onNext(type)
+                if (type != null) {
                     val iterator = data.observableList.listIterator()
                     var item: FeedDialog
                     while (iterator.hasNext()) {
                         item = iterator.next()
                         if (item.user != null) {
-                            if (item.user.id == t.feedForDelete.user.id) iterator.remove()
+                            if (item.user.id == type.feedForDelete.user.id) {
+                                iterator.remove()
+                            }
                         }
                     }
                 }
+
             }
-
-            override fun onCompleted() = mUpdateFromPopupMenuSubscription.safeUnsubscribe()
-
         })
+
     }
+
 
     private fun bindUpdater() {
         val appDayRequest = mApi.callAppDayRequest(AppDayViewModel.TYPE_FEED_FRAGMENT)
@@ -324,7 +317,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     fun release() {
         arrayOf(mLoadTopSubscription, mContentAvailableSubscription,
-                mUpdaterSubscription, mAppDayRequestSubscription).safeUnsubscribe()
+                mUpdaterSubscription, mAppDayRequestSubscription, mUpdateFromPopupMenuSubscription).safeUnsubscribe()
         mPushHandler.release()
         isRefreshing.set(false)
         data.removeListener()
@@ -343,7 +336,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         data.observableList.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, itemId) && dataItem.unread) {
                 itemForRead = dataItem
-                // data.observableList.remove(dataItem)
                 itemForRead.unread = false
                 data.observableList[position] = itemForRead
                 return
@@ -356,7 +348,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         data.observableList.forEachIndexed { position, dataItem ->
             if (dataItem.user != null && dataItem.user.id == userId && dataItem.unread) {
                 itemForRead = dataItem
-                // data.observableList.remove(dataItem)
                 val unread = dataItem.unreadCounter - readMessages
                 if (unread > 0) {
                     itemForRead.unreadCounter = unread
@@ -374,7 +365,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     override fun userAddToBlackList(userId: Int) {
         val iterator = data.observableList.listIterator()
-
         var item: FeedDialog
         var gotUser = false
         // этом цикле делается две задачи

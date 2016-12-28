@@ -48,3 +48,9 @@ data class DialogContactsEvent(var hasContacts: Boolean)
  * Ивент о загрузке диалогов есть/нет
  */
 data class DialogItemsEvent(var hasDialogItems: Boolean)
+
+/**
+ *  события попапМеню, возникающего при длительном нажатии на экране сообщений
+ */
+data class DialogPopupEvent(val feedForDelete: FeedDialog)
+
