@@ -95,19 +95,27 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                         data.observableList.add(EmptyDialogsFragmentStubItem())
                     }
                 })
-        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : Subscriber<FeedDialog>() {
-            override fun onNext(type: FeedDialog?) {
-                data.observableList.add(type)
+
+        // подписка на события об удалении или добавлении  в ч\с через попап меню.
+        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : Observer<DialogPopupEvent> {
+            override fun onError(e: Throwable?) = mUpdateFromPopupMenuSubscription.safeUnsubscribe()
+
+            // если все пришло, то удаляем пришедший итем из списка сообщений через итератор
+            override fun onNext(t: DialogPopupEvent?) {
+                if (t != null) {
+                    val iterator = data.observableList.listIterator()
+                    var item: FeedDialog
+                    while (iterator.hasNext()) {
+                        item = iterator.next()
+                        if (item.user != null) {
+                            if (item.user.id == t.feedForDelete.user.id) iterator.remove()
+                        }
+                    }
+                }
             }
 
-            override fun onError(e: Throwable?) {
-                throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onCompleted() = mUpdateFromPopupMenuSubscription.safeUnsubscribe()
 
-            }
-
-            override fun onCompleted() {
-                throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
         })
     }
 
@@ -366,6 +374,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     override fun userAddToBlackList(userId: Int) {
         val iterator = data.observableList.listIterator()
+
         var item: FeedDialog
         var gotUser = false
         // этом цикле делается две задачи
