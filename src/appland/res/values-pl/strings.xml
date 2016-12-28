@@ -625,11 +625,23 @@
     <string name="enter_text">Wprowadź tekst</string>
     <string name="get_vip_free">Zdobądź status VIP-a</string>
     <string name="buy_more_sympathies">Otrzymaj więcej polubień, stań się popularny/-na</string>
+    <string name="google_service_general_title">Przypomnienia są niedostępne</string>
+    <string name="google_service_disabled_title">Masz wyłączone usługi Google Play. Włącz je,
+        by móc otrzymywać powiadomienia.</string>
+    <string name="google_service_disabled_button">Włącz</string>
+    <string name="google_service_missing_title">Nie masz zainstalowanych usług Google Play. Zainstaluj je,
+        by móc otrzymywać powiadomienia.</string>
+    <string name="google_service_missing_button">Zainstaluj</string>
+    <string name="google_service_version_update_required_button">Zaktualizuj</string>
+    <string name="google_invalid_account_title">Sprawdź dane swojego konta Google lub
+        skontaktuj się ze wsparciem technicznym Google.</string>
     <string name="add_leader_hint">Twoje powitanie…</string>
     <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
         zacząć miłą znajomość
     </string>
+    <string name="go_dating_message">Zacznij randkować, a pojawią się tutaj nazwy użytkowników,
+        którzy odwiedzili twój profil.</string>
     <string name="fb_invite_friends_menu_item">Zaproś znajomych</string>
     <string name="foreign_profile_empty_gifts_title">Wyślij upominek a znajdziesz się w centrum
         uwagi
@@ -753,5 +765,6 @@
     <string name="fake_female_name_9">Aneta</string>
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Nie masz żadnych wiadomości</string>
+    <string name="go_dating">Zacznij \nrandkować</string>
     <string name="buy_vip_button_title">Zostań VIP</string>
 </resources>

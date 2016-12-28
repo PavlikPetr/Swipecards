@@ -774,6 +774,7 @@
   <string name="photo_not_from_main_album">Наши модератори су одлучили да ова фотографија не може да буде искоришћена као
           профилна слика</string>
   <string name="sidebar_vk_profile">ВК профил</string>
+  <string name="fb_invite_friends_menu_item">Позвати пријатеље</string>
   <string name="title_vk_profile">ВК профил</string>
   <string name="vk_profile_invite_friends_error">Корисник више не прихвата позиве</string>
   <string name="foreign_profile_empty_gifts_title">Пошаљите поклон и бићете у центру пажње</string>
