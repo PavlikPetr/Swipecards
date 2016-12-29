@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import android.content.Intent
 import android.databinding.ObservableField
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.User
