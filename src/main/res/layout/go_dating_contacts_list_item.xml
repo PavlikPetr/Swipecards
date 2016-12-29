@@ -6,6 +6,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="15dp"
+        android:gravity="center_horizontal"
         android:paddingRight="15dp">
 
         <ImageView
@@ -14,7 +15,7 @@
             android:src="@drawable/pic_start_dating"/>
 
         <TextView
-            android:layout_width="75dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:ellipsize="end"
