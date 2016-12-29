@@ -9,10 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.topface.App
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Photos
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.NavigationState
@@ -27,6 +24,7 @@ import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -39,6 +37,9 @@ import javax.inject.Inject
  */
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
+    override fun showDialogpopupMenu(item: FeedDialog) {
+        DialogMenuFragment(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
+    }
 
     @Inject lateinit var mNavigationState: NavigationState
 

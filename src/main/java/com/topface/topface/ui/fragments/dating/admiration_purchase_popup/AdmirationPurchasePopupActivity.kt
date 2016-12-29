@@ -42,7 +42,7 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
         FeedNavigator(this)
     }
 
-    private var mDatingGoAdmirationSubscription : Subscription? = null
+    private var mDatingGoAdmirationSubscription: Subscription? = null
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)

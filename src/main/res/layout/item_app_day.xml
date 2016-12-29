@@ -10,9 +10,10 @@
 
     </data>
 
-    <FrameLayout android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:background="@color/dating_fab_small">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/dating_fab_small">
 
         <com.topface.topface.ui.views.ImageViewRemote
             android:id="@+id/app_day_image"

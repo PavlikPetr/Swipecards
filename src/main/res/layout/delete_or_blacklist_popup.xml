@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel"/>
+    </data>
+
+        <LinearLayout
+            android:windowIsFloating="true"
+            android:windowIsTranslucent="true"
+            android:colorBackground="@color/bg_white"
+            android:textColor="@color/list_text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:background="@drawable/menu_popup_top"
+                android:id="@+id/add_to_black_new"
+                android:layout_width="296dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> model.addToBlackList()}"
+                android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginBottom="7dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="17dp"
+                        app:glideTransformationPhoto="@{model.userPhoto}"
+                        app:placeholderRes="@{model.placeholderRes}"
+                        app:typeTransformation="@{model.type}"/>
+
+
+                    <TextView
+                        android:paddingTop="23dp"
+                        android:gravity="top"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/popup_add_to_black_list"
+                        android:textColor="@color/black"
+                        android:layout_marginRight="24dp"
+                        android:textSize="15sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/menu_popup_bottom"
+                android:id="@+id/delete_dialogs_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> model.deleteDialog()}"
+                android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_marginLeft="24dp"
+                        android:layout_marginRight="24dp"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/delete_gray"/>
+
+
+                    <TextView
+                        android:layout_marginBottom="23dp"
+                        android:gravity="bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/popup_delete_dialog"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+                </LinearLayout>
+
+        </LinearLayout>
+</layout>

@@ -58,6 +58,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private var mContentAvailableSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
     private var mAppDayRequestSubscription: Subscription? = null
+    private var mUpdateFromPopupMenuSubscription: Subscription? = null
 
     init {
         App.get().inject(this)
@@ -86,7 +87,20 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                         data.observableList.add(EmptyDialogsFragmentStubItem())
                     }
                 })
+
+        // подписка на события об удалении или добавлении  в ч\с через попап меню.
+        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : RxUtils.ShortSubscription<DialogPopupEvent>() {
+            // если все пришло, то удаляем пришедший итем из списка сообщений через итератор
+            override fun onNext(type: DialogPopupEvent?) {
+                super.onNext(type)
+                if (type != null) {
+                    deleteDialogItemFromList(type.feedForDelete.user.id)
+                }
+            }
+        })
+
     }
+
 
     private fun bindUpdater() {
         val appDayRequest = mApi.callAppDayRequest(AppDayViewModel.TYPE_FEED_FRAGMENT)
@@ -293,7 +307,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
 
     fun release() {
         arrayOf(mLoadTopSubscription, mContentAvailableSubscription,
-                mUpdaterSubscription, mAppDayRequestSubscription).safeUnsubscribe()
+                mUpdaterSubscription, mAppDayRequestSubscription, mUpdateFromPopupMenuSubscription).safeUnsubscribe()
         mPushHandler.release()
         isRefreshing.set(false)
         data.removeListener()
@@ -332,12 +346,14 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         }
     }
 
-    override fun userAddToBlackList(userId: Int) {
+    override fun userAddToBlackList(userId: Int) = deleteDialogItemFromList(userId)
+
+    private fun deleteDialogItemFromList(userId: Int) {
         val iterator = data.observableList.listIterator()
         var item: FeedDialog
         var gotUser = false
         // этом цикле делается две задачи
-        // 1 удаляется диалог с пользователем, которого внесли в черный список
+        // 1 удаляется диалог с пользователем
         // 2 вычисляется флаг, что остались еще диалоги, помимо всяких заглушек/реклам и тд
         while (iterator.hasNext()) {
             item = iterator.next()

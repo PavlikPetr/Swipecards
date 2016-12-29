@@ -964,7 +964,9 @@
     <string name="fill_own_profile_boy">Remplissez votre profil pour voir ce que %s a écrit</string>
     <string name="fill_own_profile">Remplissez votre profil pour savoir ce que %s a écrit</string>
     <string name="chat_mutual_symphaty">J\'aime mutuel !</string>
-    <string name="chat_mutual_start_conversation">Commencez à tchater !\nUn cadeau serait une excellente introduction</string>
+    <string name="chat_mutual_start_conversation">Commencez à tchater !\nUn cadeau serait une
+        excellente introduction
+    </string>
     <string name="chat_send_message_button_title">Envoyer.</string>
     <string name="know_your_guests_by_sight">Découvrez vos visteurs et vos fans en voyant leurs visages</string>
     <string name="know_your_guests">Découvrez vos visiteurs !</string>
@@ -979,7 +981,9 @@
     <string name="i_see_u_face">Découvrez qui a consulté votre page et découvrez qui sont vos fans</string>
     <string name="buy_vip_write_anyone">Ecrivez à n\'importe quelle fille même sans attraction mutuelle</string>
     <string name="buy_vip_write_anyone_boy">Écrivez à n\'importe quel garçons, même sans attraction mutuelle</string>
-    <string name="buy_vip_write_anyone_without_mutual">Ecrivez à n\'importe qui, même sans attraction mutuelle</string>
+    <string name="buy_vip_write_anyone_without_mutual">Ecrivez à n\'importe qui, même sans
+        attraction mutuelle
+    </string>
     <string name="moar_messages">Tchatez avec des utilisateurs populaires</string>
     <string name="buy_vip_more_views">Obtenez 1,5 fois plus de vues sur votre profil</string>
     <string name="special_offer">Offre spéciale</string>
@@ -1005,7 +1009,9 @@
     <string name="fake_female_name_9">Hélène</string>
     <string name="fake_female_name_10">Marie</string>
     <string name="dialog_empty_title">Aucun message</string>
-    <string name="write_those_with_who_you_have_mutual_sympathy">Ecrivez aux utilisateurs avec qui vous avez un J\'aime mutuel</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Ecrivez aux utilisateurs avec qui
+        vous avez un J\'aime mutuel
+    </string>
     <string name="mutually">Mutuel</string>
     <string name="write_them">Écrivez-leur</string>
     <string name="go_dating">Commencer \nà faire connaissance</string>
@@ -1028,11 +1034,17 @@
     <string name="unlock_symphaty_men_many">%d garçons vous ont envoyé des J\'aime !</string>
     <string name="unlock_symphaty_men_few">%d garçons vous ont envoyé des J\'aime !</string>
     <string name="unlock_symphaty_men_other">%d garçons vous ont envoyé des J\'aime !</string>
-    <string name="unlock_symphaty_title">Vous ne pouvez plus voir les utilisateurs qui vous ont envoyé des J\'aime</string>
+    <string name="unlock_symphaty_title">Vous ne pouvez plus voir les utilisateurs qui vous ont
+        envoyé des J\'aime
+    </string>
     <string name="unlock_symphaty_get_access">Avoir accès</string>
-    <string name="send_gift_start_dialog">Envoyez un cadeau et commencez dès maintenant à discuter !</string>
+    <string name="send_gift_start_dialog">Envoyez un cadeau et commencez dès maintenant à discuter
+        !
+    </string>
     <string name="likes_start_dating_button">Commencer à faire connaissance</string>
-    <string name="likes_empty_title">Vous n\'avez pas encore de J\'aime.\nLes J\'aime vous aident à rencontrer des personnes</string>
+    <string name="likes_empty_title">Vous n\'avez pas encore de J\'aime.\nLes J\'aime vous aident à
+        rencontrer des personnes
+    </string>
     <string name="unlock_sympathy_price">Coût de déblocage :</string>
     <string name="send_gift">Envoyer un cadeau</string>
     <string name="write_him_without_symphaty">Écrivez-lui sans Attraction mutuelle !</string>

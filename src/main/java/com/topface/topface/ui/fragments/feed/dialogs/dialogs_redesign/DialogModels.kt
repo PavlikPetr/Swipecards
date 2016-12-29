@@ -54,3 +54,8 @@ data class DialogItemsEvent(var hasDialogItems: Boolean)
  * Ивент о прочтении взаимно/восхищения
  */
 data class ContactsItemsReadEvent(var contactsItem: DialogContactsItem)
+
+/**
+ *  события попапМеню, возникающего при длительном нажатии на экране сообщений
+ */
+data class DialogPopupEvent(val feedForDelete: FeedDialog)

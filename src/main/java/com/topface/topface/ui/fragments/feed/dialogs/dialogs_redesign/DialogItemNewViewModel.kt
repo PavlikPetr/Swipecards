@@ -56,8 +56,10 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     fun onClick() = navigator.showChat(item)
 
-    fun onLongClick() {
-        // открытие опшнМеню с удалением и черным списком
+    fun onLongClick(): Boolean {
+        navigator.showDialogpopupMenu(item)
+        return true
     }
 
 }
+
