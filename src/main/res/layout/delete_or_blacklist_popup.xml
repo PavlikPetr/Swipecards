@@ -40,9 +40,10 @@
 
 
                     <TextView
-                        android:layout_marginTop="23dp"
+                        android:paddingTop="23dp"
+                        android:gravity="top"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/popup_add_to_black_list"
                         android:textColor="@color/black"
                         android:layout_marginRight="24dp"
@@ -69,9 +70,10 @@
 
 
                     <TextView
-                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="23dp"
+                        android:gravity="bottom"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="@string/popup_delete_dialog"
                         android:textColor="@color/black"
                         android:textSize="15sp"/>

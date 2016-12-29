@@ -27,13 +27,14 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         get() = DialogContactsItemBinding::class.java
     private var mModel: DialogContactsItemViewModel? = null
     private lateinit var mAdapter: CompositeAdapter
+    private val mContactsListItemComponent by lazy { ContactsListItemComponent(mApi, mNavigator) }
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
         data?.let {
             with(binding.giftsList) {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
-                        .addAdapterComponent(ContactsListItemComponent(mNavigator))
+                        .addAdapterComponent(mContactsListItemComponent)
                         .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))
                         .addAdapterComponent(UForeverAloneContactsListItemComponent(mNavigator))
                 adapter = mAdapter
@@ -45,6 +46,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mModel?.onActivityResult(requestCode, resultCode, data)
+        mContactsListItemComponent.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun release() {

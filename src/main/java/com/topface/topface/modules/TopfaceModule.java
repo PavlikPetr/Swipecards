@@ -54,6 +54,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsListItemViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
@@ -174,7 +175,8 @@ import dagger.Provides;
                 DialogsFragmentViewModel.class,
                 ProfileFormFragment.class,
                 CommonSlices.class,
-                DialogsMenuPopupViewModel.class
+                DialogsMenuPopupViewModel.class,
+                DialogContactsListItemViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

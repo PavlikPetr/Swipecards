@@ -23,4 +23,4 @@ data class DialogContacts(var counter: Byte = 0, var more: Boolean = false, val 
  * @param user {Object} экземпляр собеседника. Начиная с 6 версии метод History не содержит это поле.
  * @param highrate {Boolean} признак восхищения (это то, которое платное)
  */
-data class DialogContactsItem(val type: Int, val id: Int, val created: Long, val target: Int, val unread: Boolean, val highrate: Boolean, val user: FeedUser)
+data class DialogContactsItem(val type: Int, val id: Int, val created: Long, val target: Int, var unread: Boolean, val highrate: Boolean, val user: FeedUser)

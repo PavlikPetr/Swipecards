@@ -287,4 +287,8 @@
     <color name="message_was_read">#737373</color>
     <color name="mutual_counter_bg">#4c99ff</color>
 
+    <!--Dialog contacts-->
+    <color name="dialog_contacts_unread">#DE000000</color>
+    <color name="dialog_contacts_was_read">#7f7f7f</color>
+
 </resources>
