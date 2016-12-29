@@ -76,7 +76,5 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
 
     fun goChat() = mNavigator.showChat(mItem.user, null)
 
-    fun release() {
-        mItemUpdateEventSubscription.safeUnsubscribe()
-    }
+    fun release() = mItemUpdateEventSubscription.safeUnsubscribe()
 }

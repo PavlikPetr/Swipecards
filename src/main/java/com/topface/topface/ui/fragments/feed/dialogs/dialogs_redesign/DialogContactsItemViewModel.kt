@@ -88,12 +88,8 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                             .run {
                                 // 1-й - это элемент списка data.observableList
                                 // 2-й - mContactsStubItem.dialogContacts.items
-                                (first as? DialogContactsItem)?.let {
-                                    it.unread = false
-                                }
-                                second?.let {
-                                    it.unread = false
-                                }
+                                (first as? DialogContactsItem)?.unread = false
+                                second?.unread = false
                                 // если пользователя уже нет в списке, то не следует вызывать декремент счетчика
                                 if (first != null || second != null) {
                                     decrementCounter()
