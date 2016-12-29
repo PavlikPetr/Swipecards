@@ -247,13 +247,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     }
 
     private fun decrementCounter() = amount.set(getAmount(mContactsStubItem.dialogContacts
-            .apply {
-                counter = if ((counter--) < 0) {
-                    0
-                } else {
-                    counter--
-                }
-            }
+            .apply { counter = if ((counter--) < 0) 0 else counter-- }
             .run { counter }))
 
     private fun loadTop() {
