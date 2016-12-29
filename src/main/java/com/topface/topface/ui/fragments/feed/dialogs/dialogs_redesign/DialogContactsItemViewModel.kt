@@ -7,7 +7,6 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
@@ -72,7 +71,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         amount.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) {
                 counterVisibility.set(if (with(obs as? ObservableField<String>) {
-                    this?.get().isNullOrEmpty() || this?.get().toIntSafe() == 0
+                    this?.get().isNullOrEmpty() || this?.get().toIntSafe() <= 0
                 }) View.INVISIBLE else View.VISIBLE)
             }
         })
@@ -186,9 +185,11 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
                     removeItemByUserId(userId)?.let {
-                        sendReadRequest(it).subscribe {
-                            if (it.completed) {
-                                decrementCounter()
+                        if (it.unread) {
+                            sendReadRequest(it).subscribe {
+                                if (it.completed) {
+                                    decrementCounter()
+                                }
                             }
                         }
                         showStubIfNeed()
@@ -245,9 +246,15 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         }
     }
 
-    private fun decrementCounter() =
-            amount.set(getAmount(--mContactsStubItem.dialogContacts.counter))
-
+    private fun decrementCounter() = amount.set(getAmount(mContactsStubItem.dialogContacts
+            .apply {
+                counter = if ((counter--) < 0) {
+                    0
+                } else {
+                    counter--
+                }
+            }
+            .run { counter }))
 
     private fun loadTop() {
         val item = data.observableList.first()
