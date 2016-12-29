@@ -42,9 +42,9 @@ import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
+import com.topface.topface.utils.rx.RxUtils;
 
 import javax.inject.Inject;
 
@@ -153,7 +153,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
         }).exec();
     }
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void takeCameraPhoto() {
         if (mBinding != null) {
             mBinding.vfFlipper.setDisplayedChild(0);

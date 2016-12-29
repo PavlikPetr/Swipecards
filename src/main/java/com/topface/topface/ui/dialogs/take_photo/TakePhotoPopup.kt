@@ -99,13 +99,13 @@ class TakePhotoPopup : AbstractDialogFragment() {
 
     override fun isUnderActionBar() = false
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     fun takePhoto() {
         mEventBus.setData(TakePhotoActionHolder(ACTION_CAMERA_CHOSEN, getPlc()))
         dialog.cancel()
     }
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     fun takeExternalPhoto() {
         mEventBus.setData(TakePhotoActionHolder(ACTION_GALLERY_CHOSEN, getPlc()))
         dialog.cancel()
