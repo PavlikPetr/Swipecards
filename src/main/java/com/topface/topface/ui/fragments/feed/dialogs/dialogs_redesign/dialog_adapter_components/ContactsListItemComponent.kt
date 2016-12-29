@@ -33,6 +33,10 @@ class ContactsListItemComponent(private val mApi: FeedApi, private val mNavigato
         }
     }
 
+    override fun recycle(binding: DialogContactsListItemBinding, data: DialogContactsItem?, position: Int) {
+        mModels.remove(binding.model)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mModels.forEach { it.onActivityResult(requestCode, resultCode, data) }
     }

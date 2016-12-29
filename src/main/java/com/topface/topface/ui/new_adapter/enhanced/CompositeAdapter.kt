@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.topface.framework.utils.Debug
+import com.topface.topface.utils.ListUtils
 import rx.Observable
 import rx.Subscriber
 
@@ -19,6 +20,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
+    private var recyclerView: RecyclerView? = null
 
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
@@ -35,8 +37,19 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
         return this
     }
 
+    override fun onViewRecycled(holder: ViewHolder<ViewDataBinding>?) {
+        super.onViewRecycled(holder)
+        if (holder != null) {
+            val position = recyclerView?.layoutManager?.getPosition(holder.itemView)
+            if (position != null && ListUtils.isEntry(position, data)) {
+                components[typeProvider.getType(data[position].javaClass)]?.onViewRecycled(holder, data[position], position)
+            }
+        }
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
         components.values.forEach {
             it.onAttachedToRecyclerView(recyclerView)
         }

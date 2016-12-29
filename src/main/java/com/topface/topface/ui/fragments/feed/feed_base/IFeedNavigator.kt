@@ -5,11 +5,7 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
-import com.topface.topface.data.FeedDialog
-import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Photos
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 
 /**
