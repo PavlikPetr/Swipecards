@@ -94,18 +94,8 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
             override fun onNext(type: DialogPopupEvent?) {
                 super.onNext(type)
                 if (type != null) {
-                    val iterator = data.observableList.listIterator()
-                    var item: FeedDialog
-                    while (iterator.hasNext()) {
-                        item = iterator.next()
-                        if (item.user != null) {
-                            if (item.user.id == type.feedForDelete.user.id) {
-                                iterator.remove()
-                            }
-                        }
-                    }
+                    deleteDialogItemFromList(type.feedForDelete.user.id)
                 }
-
             }
         })
 
@@ -348,13 +338,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         data.observableList.forEachIndexed { position, dataItem ->
             if (dataItem.user != null && dataItem.user.id == userId && dataItem.unread) {
                 itemForRead = dataItem
-                val unread = dataItem.unreadCounter - readMessages
-                if (unread > 0) {
-                    itemForRead.unreadCounter = unread
-                } else {
-                    itemForRead.unread = false
-                    itemForRead.unreadCounter = 0
-                }
                 itemForRead.unread = false
                 itemForRead.unreadCounter = 0
                 data.observableList[position] = itemForRead
@@ -363,12 +346,14 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
         }
     }
 
-    override fun userAddToBlackList(userId: Int) {
+    override fun userAddToBlackList(userId: Int) = deleteDialogItemFromList(userId)
+
+    private fun deleteDialogItemFromList(userId: Int) {
         val iterator = data.observableList.listIterator()
         var item: FeedDialog
         var gotUser = false
         // этом цикле делается две задачи
-        // 1 удаляется диалог с пользователем, которого внесли в черный список
+        // 1 удаляется диалог с пользователем
         // 2 вычисляется флаг, что остались еще диалоги, помимо всяких заглушек/реклам и тд
         while (iterator.hasNext()) {
             item = iterator.next()

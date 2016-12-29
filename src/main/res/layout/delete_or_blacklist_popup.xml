@@ -38,21 +38,15 @@
                         app:placeholderRes="@{model.placeholderRes}"
                         app:typeTransformation="@{model.type}"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    android:layout_marginTop="6dp"
-                    android:gravity="center_vertical">
 
                     <TextView
+                        android:layout_marginTop="23dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/popup_add_to_black_list"
                         android:textColor="@color/black"
                         android:layout_marginRight="24dp"
                         android:textSize="15sp"/>
-                </LinearLayout>
 
             </LinearLayout>
 
@@ -73,19 +67,15 @@
                         android:layout_marginTop="8dp"
                         android:src="@drawable/delete_gray"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="7dp"
-                    android:gravity="center_vertical">
 
                     <TextView
+                        android:layout_marginTop="14dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/popup_delete_dialog"
                         android:textColor="@color/black"
                         android:textSize="15sp"/>
                 </LinearLayout>
-            </LinearLayout>
+
         </LinearLayout>
 </layout>
