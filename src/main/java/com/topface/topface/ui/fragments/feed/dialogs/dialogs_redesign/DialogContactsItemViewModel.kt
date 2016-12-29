@@ -7,10 +7,8 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
-import com.topface.topface.data.FeedDialog
-import com.topface.topface.requests.MutualReadRequest
-import com.topface.topface.requests.ReadLikeRequest
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.state.EventBus
@@ -46,6 +44,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     private var mUpdateSubscription: Subscription
     private var mMutualBandSubscription: Subscription? = null
     private val mPushHandler = FeedPushHandler(this, mContext)
+    private var mContactsItemReadSubscription: Subscription? = null
 
     @Inject lateinit var mEventBus: EventBus
 
@@ -77,6 +76,30 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 }) View.INVISIBLE else View.VISIBLE)
             }
         })
+        // подписка на ивент о прочтении итема
+        mContactsItemReadSubscription = mEventBus.getObservable(ContactsItemsReadEvent::class.java)
+                .subscribe { event ->
+                    data.observableList.find {
+                        it is DialogContactsItem && it.id == event.contactsItem.id
+                    }
+                            .to(mContactsStubItem.dialogContacts.items.find {
+                                it.id == event.contactsItem.id
+                            })
+                            .run {
+                                // 1-й - это элемент списка data.observableList
+                                // 2-й - mContactsStubItem.dialogContacts.items
+                                (first as? DialogContactsItem)?.let {
+                                    it.unread = false
+                                }
+                                second?.let {
+                                    it.unread = false
+                                }
+                                // если пользователя уже нет в списке, то не следует вызывать декремент счетчика
+                                if (first != null || second != null) {
+                                    decrementCounter()
+                                }
+                            }
+                }
     }
 
     override fun onCallbackBinded() = data.addAll(mContactsStubItem.dialogContacts.items)
@@ -163,14 +186,18 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         data?.let {
-            if (requestCode == ChatActivity.REQUEST_CHAT
-                    && data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
+            if (requestCode == ChatActivity.REQUEST_CHAT) {
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
-                if (removeItemByUserId(userId)) {
-                    sendReadRequest(userId)
-                    showStubIfNeed()
+                if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
+                    removeItemByUserId(userId)?.let {
+                        sendReadRequest(it).subscribe {
+                            if (it.completed) {
+                                decrementCounter()
+                            }
+                        }
+                        showStubIfNeed()
+                    }
                 }
-
             }
         }
     }
@@ -183,23 +210,23 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         }
     }
 
-    private fun removeItemByUserId(userId: Int): Boolean {
+    private fun removeItemByUserId(userId: Int): DialogContactsItem? {
         data.observableList.forEach {
             if (it is DialogContactsItem && it.user.id == userId) {
                 data.observableList.remove(it)
                 mContactsStubItem.dialogContacts.items.remove(it)
                 mEventBus.setData(DialogContactsEvent(mContactsStubItem.dialogContacts.items.isNotEmpty()))
                 showStubIfNeed()
-                return true
+                return it
             }
         }
-        return false
+        return null
     }
 
-    private fun sendReadRequest(userId: Int) = if (true) {
-        MutualReadRequest(mContext, userId).exec()
+    private fun sendReadRequest(dialogContacts: DialogContactsItem) = if (dialogContacts.highrate) {
+        mApi.callAdmirationRead(listOf(dialogContacts.id))
     } else {
-        ReadLikeRequest(mContext, userId).exec()
+        mApi.callMutualRead(listOf(dialogContacts.id))
     }
 
     fun release() {
@@ -207,6 +234,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         mMutualBandSubscription.safeUnsubscribe()
         mPushHandler.release()
         data.removeListener()
+        mContactsItemReadSubscription.safeUnsubscribe()
     }
 
     override fun updateFeedMutual() = loadTop()
@@ -214,8 +242,16 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     override fun updateFeedAdmiration() = loadTop()
 
     override fun userAddToBlackList(userId: Int) {
-        removeItemByUserId(userId)
+        removeItemByUserId(userId)?.let {
+            if (it.unread) {
+                decrementCounter()
+            }
+        }
     }
+
+    private fun decrementCounter() =
+            amount.set(getAmount(--mContactsStubItem.dialogContacts.counter))
+
 
     private fun loadTop() {
         val item = data.observableList.first()

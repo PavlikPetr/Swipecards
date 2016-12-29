@@ -36,7 +36,7 @@
             android:lines="1"
             android:paddingBottom="19dp"
             android:text="@{model.name}"
-            android:textColor="@color/take_photo_screen_text_dark"
+            app:textColor="@{model.nameTextColor}"
             android:textSize="14sp"/>
 
     </LinearLayout>

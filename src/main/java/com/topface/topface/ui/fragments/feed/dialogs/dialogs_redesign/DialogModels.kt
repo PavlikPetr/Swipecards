@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.requests.response.DialogContacts
+import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 
 /**
@@ -48,3 +49,8 @@ data class DialogContactsEvent(var hasContacts: Boolean)
  * Ивент о загрузке диалогов есть/нет
  */
 data class DialogItemsEvent(var hasDialogItems: Boolean)
+
+/**
+ * Ивент о прочтении взаимно/восхищения
+ */
+data class ContactsItemsReadEvent(var contactsItem: DialogContactsItem)

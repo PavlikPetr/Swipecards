@@ -140,7 +140,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String SEX = "sex";
     private static final String HISTORY_LAST_ITEM = "history_last_item";
     public static final String SEND_MESSAGE = "send_message";
-    private  Boolean isSendMessage = false;
+    private Boolean isSendMessage = false;
 
     private int deleteItemsCount = 0;
     private int mUserId;
@@ -336,6 +336,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         sendReadDialogsBroadcast(intent);
+        intent = new Intent();
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
     @Override

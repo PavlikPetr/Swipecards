@@ -380,6 +380,7 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+            dialogRedesignEnabled = true;
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
 
             JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
