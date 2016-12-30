@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
+
 import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View

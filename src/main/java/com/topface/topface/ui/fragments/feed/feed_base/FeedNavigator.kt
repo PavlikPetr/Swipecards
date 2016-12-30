@@ -37,9 +37,6 @@ import javax.inject.Inject
  */
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
-    override fun showDialogpopupMenu(item: FeedDialog) {
-        DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
-    }
 
     @Inject lateinit var mNavigationState: NavigationState
 
@@ -151,6 +148,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showTrialPopup(type: Long, args: Bundle) {
         ExperimentBoilerplateFragment.newInstance(type, args = args)
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
+    }
+
+    override fun showDialogpopupMenu(item: FeedDialog) {
+        DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
     }
 
 }
