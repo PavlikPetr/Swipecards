@@ -22,7 +22,7 @@ class DialogMenuFragment : DialogFragment(), IDialogCloser {
 
     companion object {
         const val TAG = "dialog_menu_fragment"
-        const val BOZHENKA_DAVAI_POLUCHITSIA_I_IA_DOMOI_POIDU = "dialig_item"
+        const val BOZHENKA_DAVAI_POLUCHITSIA_I_IA_DOMOI_POIDU = "dialog_item"
 
         fun getInstance(item: FeedDialog) = DialogMenuFragment().apply {
             arguments = Bundle().apply {
