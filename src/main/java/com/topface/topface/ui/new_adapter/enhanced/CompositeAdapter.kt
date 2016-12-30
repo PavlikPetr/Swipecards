@@ -20,7 +20,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
-    private var recyclerView: RecyclerView? = null
+    private var mRecyclerView: RecyclerView? = null
 
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
@@ -40,7 +40,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     override fun onViewRecycled(holder: ViewHolder<ViewDataBinding>?) {
         super.onViewRecycled(holder)
         if (holder != null) {
-            val position = recyclerView?.layoutManager?.getPosition(holder.itemView)
+            val position = mRecyclerView?.layoutManager?.getPosition(holder.itemView)
             if (position != null && ListUtils.isEntry(position, data)) {
                 components[typeProvider.getType(data[position].javaClass)]?.onViewRecycled(holder, data[position], position)
             }
@@ -49,7 +49,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
-        this.recyclerView = recyclerView
+        mRecyclerView = recyclerView
         components.values.forEach {
             it.onAttachedToRecyclerView(recyclerView)
         }
