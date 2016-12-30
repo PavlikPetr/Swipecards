@@ -58,4 +58,5 @@ class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val
         iDialogCloser.closeIt()
 
     }
+
 }

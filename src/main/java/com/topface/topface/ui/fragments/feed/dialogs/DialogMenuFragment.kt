@@ -16,15 +16,26 @@ import com.topface.topface.utils.http.IRequestClient
 import org.jetbrains.anko.layoutInflater
 
 
-class DialogMenuFragment(val item: FeedDialog) : DialogFragment(), IDialogCloser {
+class DialogMenuFragment : DialogFragment(), IDialogCloser {
 
+    var item: FeedDialog? = null
 
     companion object {
         const val TAG = "dialog_menu_fragment"
+        const val DIALOG_ITEM_TAG = "dialog_item"
+
+        fun getInstance(item: FeedDialog) = DialogMenuFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(DIALOG_ITEM_TAG, item)
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
-        model = mViewModel
+        item = arguments.getParcelable(DIALOG_ITEM_TAG)
+        item?.let {
+            model = DialogsMenuPopupViewModel(it, mApi, this@DialogMenuFragment)
+        }
         root
     }
 
@@ -36,9 +47,5 @@ class DialogMenuFragment(val item: FeedDialog) : DialogFragment(), IDialogCloser
         FeedApi(context, activity as IRequestClient, DeleteFeedRequestFactory(context))
     }
 
-    private val mViewModel by lazy {
-        DialogsMenuPopupViewModel(item, mApi, this)
-    }
-
-    override fun closeIt() = dialog.cancel()
+    override fun closeIt() = dialog?.cancel() ?: Unit
 }
