@@ -251,9 +251,11 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
             .run { counter }))
 
     private fun loadTop() {
-        val item = data.observableList.first()
-        if (data.observableList.isNotEmpty() && item is DialogContactsItem) {
-            loadMutual(from = item.id)
+        if (data.observableList.isNotEmpty()) {
+            val item = data.observableList.first()
+            if (item is DialogContactsItem) {
+                loadMutual(from = item.id)
+            }
         }
     }
 
