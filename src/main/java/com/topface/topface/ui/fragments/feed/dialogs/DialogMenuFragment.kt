@@ -22,17 +22,17 @@ class DialogMenuFragment : DialogFragment(), IDialogCloser {
 
     companion object {
         const val TAG = "dialog_menu_fragment"
-        const val BOZHENKA_DAVAI_POLUCHITSIA_I_IA_DOMOI_POIDU = "dialog_item"
+        const val DIALOG_ITEM_TAG = "dialog_item"
 
         fun getInstance(item: FeedDialog) = DialogMenuFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(BOZHENKA_DAVAI_POLUCHITSIA_I_IA_DOMOI_POIDU, item)
+                putParcelable(DIALOG_ITEM_TAG, item)
             }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
-        item = arguments.getParcelable(BOZHENKA_DAVAI_POLUCHITSIA_I_IA_DOMOI_POIDU)
+        item = arguments.getParcelable(DIALOG_ITEM_TAG)
         item?.let {
             model = DialogsMenuPopupViewModel(it, mApi, this@DialogMenuFragment)
         }
