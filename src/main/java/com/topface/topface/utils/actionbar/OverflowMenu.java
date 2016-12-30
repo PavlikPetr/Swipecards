@@ -501,7 +501,7 @@ public class OverflowMenu {
                         LocalBroadcastManager.getInstance(mContext).
                                 sendBroadcast(new Intent(BlackListAndBookmarkHandler
                                         .getValuedActionsUpdateIntent(BlackListAndBookmarkHandler
-                                                        .ActionTypes.BOOKMARK, false, getUserId())));
+                                                .ActionTypes.BOOKMARK, false, getUserId())));
                     }
 
                     @Override

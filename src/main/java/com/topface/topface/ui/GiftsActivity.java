@@ -101,7 +101,7 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NewProductsKeysGeneratedStatistics.sendNow_GIFTS_OPEN(new Slices().putSlice("ref",getIntent().getStringExtra(FROM)), getApplicationContext());
+        NewProductsKeysGeneratedStatistics.sendNow_GIFTS_OPEN(new Slices().putSlice("ref", getIntent().getStringExtra(FROM)), getApplicationContext());
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         mIsSuccessToastAvailable = getIntent().getBooleanExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);

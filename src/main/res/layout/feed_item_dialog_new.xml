@@ -11,11 +11,13 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/root"
         style="@style/NewDating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> model.onClick()}"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:onLongClickListener="@{()->model.onLongClick()}">
 
         <FrameLayout
             android:layout_width="wrap_content"

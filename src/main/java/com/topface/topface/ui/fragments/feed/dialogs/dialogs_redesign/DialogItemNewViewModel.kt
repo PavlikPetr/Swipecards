@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
+
 import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View
@@ -56,8 +57,10 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     fun onClick() = navigator.showChat(item)
 
-    fun onLongClick() {
-        // открытие опшнМеню с удалением и черным списком
+    fun onLongClick(): Boolean {
+        navigator.showDialogpopupMenu(item)
+        return true
     }
 
 }
+

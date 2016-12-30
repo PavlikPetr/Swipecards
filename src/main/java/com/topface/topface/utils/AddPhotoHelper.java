@@ -59,7 +59,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.RuntimePermissions;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -190,7 +189,7 @@ public class AddPhotoHelper {
         return mOnAddPhotoClickListener;
     }
 
-    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void startCamera() {
         startCamera(false);
     }

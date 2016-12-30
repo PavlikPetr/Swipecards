@@ -9,7 +9,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  * Компонент для отображения заглушки, когда симпатии емсть, а диалогов нет
  * Created by tiberal on 01.12.16.
  */
-class EmptyDialogsComponent : AdapterComponent<LayoutEmptyDialogItemBinding, EmptyDialogsStubItem>(){
+class EmptyDialogsComponent : AdapterComponent<LayoutEmptyDialogItemBinding, EmptyDialogsStubItem>() {
 
     override val itemLayout: Int
         get() = R.layout.layout_empty_dialog_item

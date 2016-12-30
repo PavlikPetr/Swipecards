@@ -14,6 +14,7 @@ abstract class DialogFragmentWithSafeTransaction : DialogFragment() {
         mTimeForTransaction = true
         super.onResume()
     }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         mTimeForTransaction = false
     }

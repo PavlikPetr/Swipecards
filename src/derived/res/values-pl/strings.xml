@@ -37,9 +37,9 @@
     <string name="general_bookmarks_add_short">Do ulubionych</string>
     <string name="general_complaint">Poskarżyć się</string>
     <string name="general_type_complain">Temat skargi</string>
-    <string name="address_book_access_error">Ta aplikacja nie ma dostępu do swoich kontaktów. Możesz 
-         zezwolić na dostęp w Ustawieniach Prywatności swojego urządzenia.</string>
-    <string name="camera_access_error">Aplikacja nie ma dostępu do aparatu fotograficznego. Możesz 
+    <string name="address_book_access_error">Ta aplikacja nie ma dostępu do swoich kontaktów. Możesz
+        zezwolić na dostęp w Ustawieniach Prywatności swojego urządzenia.</string>
+    <string name="camera_access_error">Aplikacja nie ma dostępu do aparatu fotograficznego. Możesz
         nadać jej dostęp, używając Twojego urządzenia</string>
     <string name="profile_deleted_user">Użytkownik został usunięty</string>
     <string name="filter_main_parameters">Interesują mnie</string>
@@ -333,8 +333,8 @@
     </string>
     <string name="general_block">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
-    <string name="ban_flood_detected">Robisz żądania do serwera zbyt często. Poczekaj                                                                                                                                                                                                           
-          kilka chwil zanim zaczniesz kontynuować.</string>
+    <string name="ban_flood_detected">Robisz żądania do serwera zbyt często. Poczekaj
+        kilka chwil zanim zaczniesz kontynuować.</string>
     <string name="general_maintenance">Serwer jest w trakcie prac konserwacyjnych i prośba nie
         może zostać przetworzona.
         Spróbuj ponownie później.</string>
@@ -370,7 +370,7 @@
     <string name="start_communication">Zacznij rozmowę</string>
     <string name="birthdate">Urodziny</string>
     <string name="birthdate_confirm">Musisz podać swój wiek, aby móc poznawać
-         ludzi.</string>
+        ludzi.</string>
     <string name="welcome_to_topface">Witamy w Topface!</string>
     <string name="incorrect_email">Nieprawidłowo wpisany e-mail</string>
     <string name="incorrect_login">Nieprawidłowo wpisany login</string>
@@ -586,7 +586,7 @@
     <string name="cannot_get_geo">Nie można ustalić lokalizacji</string>
     <string name="feedback_subject_ban">Odwołaj się od nieuczciwej blokady</string>
     <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
-     przetwarzania</string>
+        przetwarzania</string>
     <string name="dialog">Wiadomości</string>
     <string name="email_changing">Zmiana adresu e-mail</string>
     <string name="enter_text">Wprowadź tekst</string>
