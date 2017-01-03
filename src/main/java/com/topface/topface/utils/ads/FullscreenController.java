@@ -168,6 +168,7 @@ public class FullscreenController {
     }
 
     private void handleFullscreenSettings(AdsSettings settings) {
+        settings.nextRequestNoEarlierThen=1;
         if (settings.nextRequestNoEarlierThen != 0) {
             App.getUserConfig().setFullscreenInterval(settings.nextRequestNoEarlierThen);
         }

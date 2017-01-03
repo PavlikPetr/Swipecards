@@ -18,14 +18,22 @@ abstract class AdapterComponent<T : ViewDataBinding, in D> {
     }
 
     fun onBindViewHolder(holder: ViewHolder<*>?, data: Any?, position: Int) {
-        bind(bindingClass.cast(holder?.binding), data as D, position)
+        try {
+            bind(bindingClass.cast(holder?.binding), data as? D, position)
+        } catch (ex: ClassCastException) {
+
+        }
     }
 
     open fun recycle(binding: T, data: D?, position: Int) {
     }
 
     fun onViewRecycled(holder: ViewHolder<*>?, data: Any?, position: Int) {
-        recycle(bindingClass.cast(holder?.binding), data as D, position)
+        try {
+            recycle(bindingClass.cast(holder?.binding), data as? D, position)
+        } catch (ex: ClassCastException) {
+
+        }
     }
 
     open fun release() {
