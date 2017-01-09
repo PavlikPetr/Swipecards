@@ -999,6 +999,8 @@
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Sem mensagens</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Envia uma mensagem a utilizadores com quem tens um Gosto Mútuo</string>
+    <string name="popup_add_to_black_list">Adicionar à Lista Negra</string>
+    <string name="popup_delete_dialog">Eliminar conversa</string>
     <string name="mutually">Mútuo</string>
     <string name="write_them">Escreve-lhes uma mensagem</string>
     <string name="go_dating">Começa a \nnamorar</string>

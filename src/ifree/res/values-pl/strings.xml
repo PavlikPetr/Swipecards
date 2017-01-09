@@ -372,6 +372,8 @@
     <string name="birthdate_confirm">Musisz podać swój wiek, aby móc poznawać
          ludzi.</string>
     <string name="welcome_to_topface">Witamy w Topface!</string>
+    <string name="im_boy">Jestem mężczyzną</string>
+    <string name="im_girl">Jestem kobietą</string>
     <string name="incorrect_email">Nieprawidłowo wpisany e-mail</string>
     <string name="incorrect_login">Nieprawidłowo wpisany login</string>
     <string name="incorrect_password">Nieprawidłowo wpisane hasło</string>
@@ -504,6 +506,8 @@
         lub png
     </string>
     <string name="incorrect_photo_size">Niedopuszczalny rozmiar zdjęcia</string>
+    <string name="incorrect_photo_size_show_restrictions">To zdjęcie jest zbyt małe (zdjęcie musi mieć co najmniej 
+        — %1$dx%2$d pikseli).</string>
     <string name="input_contact_name">Wpisz imię kontaktu</string>
     <string name="incorrect_locale">Jeśli chcesz abyśmy mogli przeczytać Twoją opinię, napisz ją w
         języku rosyjskim lub angielskim
@@ -544,6 +548,7 @@
     <string name="confirm_email_for_dating_desc">Potwierdź swój adres e-mail, aby móc umawiać się z innymi użytkownikami Topface!</string>
     <string name="complain_type_swearing_msg">Chamstwo, groźby, przekleństwa</string>
     <string name="general_exit">Wyloguj się</string>
+    <string name="likes_can_help_you">Polubienia ułatwiają poznanie nowych ludzi</string>
     <string name="general_get_dating">Poznawaj</string>
     <string name="settings_select_language">Wybierz język aplikacji</string>
     <string name="locale_changing">Zmiana języka</string>
@@ -552,6 +557,7 @@
         <item quantity="other">Podobasz się %d ludziom</item>
         <item quantity="one">Podobasz się %d osobie</item>
     </plurals>
+    <string name="likes_buy_vip">By już teraz dowiedzieć się, kto cię lubi, aktywuj status VIP-a</string>
     <string name="or">lub</string>
     <string name="chat_block_not_mutual">Możesz zacząć czatować z użykownikiem, jesli on/ona wyśle Tobie Polubienie lub jeśli posiadasz status VIP</string>
     <string name="add_to_favorite_block_not_vip">Tylko użytkownicy VIP mogą dodawać Ulubionych z ekranu
@@ -584,14 +590,22 @@
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Nie można ustalić lokalizacji</string>
+    <string name="loading_photo_percent">Wysyłanie zdjęć %d%%</string>
     <string name="feedback_subject_ban">Odwołaj się od nieuczciwej blokady</string>
     <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
      przetwarzania</string>
     <string name="dialog">Wiadomości</string>
     <string name="email_changing">Zmiana adresu e-mail</string>
+    <string name="hint_faces_filter">Zmień swoje parametry wyszukiwania i poznaj nowych, interesujących ludzi.</string>
+    <string name="hint_faces_buy_like">Im więcej masz Polubień, tym częściej twój profil będzie oceniany.
+        Nie zapomnij uzupełnić swojego salda Polubień!</string>
+    <string name="hint_myprofile_buy_vip">Zdobądź status VIP-a i ciesz się Nielimitowaną Komunikacją</string>
+    <string name="messaging_block_buy_vip">Aby kontynuować konwersację, musisz posiadać 
+        status VIP\u2011a</string>
     <string name="enter_text">Wprowadź tekst</string>
     <string name="get_vip_free">Zdobądź status VIP-a</string>
     <string name="buy_more_sympathies">Otrzymaj więcej polubień, stań się popularny/-na</string>
+    <string name="google_wallet">Portfel Google</string>
     <string name="google_service_general_title">Przypomnienia są niedostępne</string>
     <string name="google_service_disabled_title">Masz wyłączone usługi Google Play. Włącz je,
         by móc otrzymywać powiadomienia.</string>
@@ -599,10 +613,18 @@
     <string name="google_service_missing_title">Nie masz zainstalowanych usług Google Play. Zainstaluj je,
         by móc otrzymywać powiadomienia.</string>
     <string name="google_service_missing_button">Zainstaluj</string>
+    <string name="google_service_version_update_required_title">Używasz starej wersji usług
+        Google Play. Zaktualizuj je, by Powiadomienia mogły działać prawidłowo.</string>
     <string name="google_service_version_update_required_button">Zaktualizuj</string>
     <string name="google_invalid_account_title">Sprawdź dane swojego konta Google lub
         skontaktuj się ze wsparciem technicznym Google.</string>
+    <string name="google_sign_in_account_title">Twoje Konto Google nie zostało dodane. Musisz się
+        zalogować, jeśli chcesz otrzymywać Powiadomienia.</string>
+    <string name="google_sign_in_account_button">Zaloguj</string>
+    <string name="google_unavailable_services_title">Niestety, ale Powiadomienia nie są dostępne
+        na twoim urządzeniu.</string>
     <string name="add_leader_hint">Twoje powitanie…</string>
+    <string name="more">więcej</string>
     <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
         zacząć miłą znajomość
@@ -614,7 +636,10 @@
     <string name="chat_auto_reply_title">Tekst wiadomości jest ukryty</string>
     <string name="chat_auto_reply_message">Aby otworzyć/odpowiedzieć na tę wiadomość, musisz zostać VIP</string>
     <string name="chat_auto_reply_button">Zostań VIP, aby móc czatować</string>
+    <string name="invite_friend_button">Zaproś</string>
+    <string name="invitation_sended_button">Wysłano</string>
     <string name="friends_empty_list_error">Twoja lista znajomych jest pusta</string>
+    <string name="join_group_success">Dołączyłeś do grupy</string>
     <plurals name="free_minutes">
         <item quantity="few">%d minuty</item>
         <item quantity="zero">%d minut</item>
@@ -622,6 +647,7 @@
         <item quantity="one">%d minuta</item>
     </plurals>
     <string name="buy_vip_title_from_input">Możesz rozpocząć rozmowę z użytkownikiem, jeśli posiadasz status VIP</string>
+    <string name="mutual_like_popup_button">Powiedz \"Cześć\"</string>
     <string name="buy_button_sticker_popular">Popularny</string>
     <string name="buy_button_sticker_best_value">Najlepsza cena</string>
     <string name="access_to_location_popup_title">Ustalenie położenia geograficznego nie jest możliwe.</string>
@@ -639,6 +665,7 @@
     <string name="album_main_photo">Główne zdjęcie profilowe</string>
     <string name="add_photo_feed_header_description">Opublikuj swoje zdjęcie z powitaniem, a tysiące ludzi Cię zobaczy. Zostań zauważony/-na i zacznij poznawać nowych ludzi!</string>
     <string name="dont_miss_a_beat">Nie przegap tego!</string>
+    <string name="mutual_module_title">WZAJEMNIE</string>
     <string name="buy_vip_dating_only">Po prostu randkuj</string>
     <string name="buy_vip_message">Nie czekaj na Polubienia profilu, rozpocznij rozmowę!</string>
     <string name="buy_vip_write_tops">Pisz do posiadaczy Najpopularniejszych profili bez ograniczeń</string>
@@ -653,9 +680,12 @@
     <string name="chat_no_mutual_symphaty">Obecnie nie masz wzajemnych Polubień!</string>
     <string name="chat_with_no_mutual_buy_vip">Możesz zacząć czatować nie mając wzajemnych Polubień, lecz aby to zrobić musisz aktywować status VIP</string>
     <string name="about">O Tobie</string>
+    <string name="moar_info">Dowiedz się więcej!</string>
     <string name="geo_switched_off_explanation">Aby sprawdzić, kto jest w pobliżu, włącz usługi geolokalizacji</string>
     <string name="geo_show_settings_explanation">Aby sprawdzić, kto jest w pobliżu, włącz w ustawieniach usługi geolokalizacji w swoim telefonie</string>
     <string name="buy_vip_button_text_admiration_purchase_popup">Wyślij za %d monet</string>
+    <string name="label1_text_admiration_purchase_popup">Odbiorcy \"Adoracji\" natychmiast wyświetli się powiadomienie</string>
+    <string name="label2_text_admiration_purchase_popup">Wyślij \"Adorację\" za darmo!</string>
     <string name="buy_vip_button_text">Zostań VIP</string>
     <string name="ask_moar_info">Uzyskaj więcej informacji!</string>
     <string name="fill_own_profile_boy">Uzupełnij swój profil, by zobaczyć co napisał %s</string>
@@ -663,11 +693,15 @@
     <string name="chat_mutual_symphaty">Wzajemne Polubienie!</string>
     <string name="chat_mutual_start_conversation">Zacznij czatować!\nPrezent byłby idealny na początek</string>
     <string name="chat_send_message_button_title">Wyślij</string>
+    <string name="know_your_guests_by_sight">Poznaj twarze twoich Fanów i gości</string>
+    <string name="know_your_guests">Dowiedz się, kto cię odwiedza!</string>
     <string name="get_more_visitors">Zdobądź więcej wyświetleń profilu!</string>
     <string name="free_vip">Status VIP-a za darmo!</string>
+    <string name="i_see_u_face">Dowiedz się, kto odwiedzał twoją stronę</string>
     <string name="buy_vip_write_anyone">Napisz do każdej dziewczyny, nawet jeśli nie macie wzajemnych Polubień</string>
     <string name="buy_vip_write_anyone_boy">Napisz do każdego chłopaka, nawet jeśli nie macie wzajemnych Polubień</string>
     <string name="buy_vip_write_anyone_without_mutual">Napisz do każdej osoby, nawet jeśli nie macie wzajemnych Polubień</string>
+    <string name="moar_messages">Czatuj z popularnymi użytkownikami</string>
     <string name="buy_vip_more_views">Uzyskaj 1,5 razy więcej odsłon profilu</string>
     <string name="description_experiment4_view1">Ze statusem VIP %1$s i %2$s będziesz widoczny!</string>
     <string name="fake_male_name_1">Kacper</string>
@@ -691,6 +725,9 @@
     <string name="fake_female_name_9">Aneta</string>
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Nie masz żadnych wiadomości</string>
+    <string name="mutually">Wzajemnie</string>
     <string name="go_dating">Zacznij \nrandkować</string>
     <string name="buy_vip_button_title">Zostań VIP</string>
+    <string name="likes_start_dating_button">Zacznij randkować</string>
+    <string name="likes_empty_title">Nie masz jeszcze żadnych Polubień\nPolubienia pomogą ci poznać nowych ludzi</string>
 </resources>

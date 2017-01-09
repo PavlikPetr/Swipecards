@@ -1006,6 +1006,8 @@
     <string name="fake_female_name_10">Marie</string>
     <string name="dialog_empty_title">Aucun message</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Ecrivez aux utilisateurs avec qui vous avez un J\'aime mutuel</string>
+    <string name="popup_add_to_black_list">Ajouter à la Liste noire</string>
+    <string name="popup_delete_dialog">Supprimer la conversation</string>
     <string name="mutually">Mutuel</string>
     <string name="write_them">Écrivez-leur</string>
     <string name="go_dating">Commencer \nà faire connaissance</string>

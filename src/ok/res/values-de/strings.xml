@@ -900,9 +900,7 @@
     <string name="fill_own_profile_boy">Vervollständige dein Profil, um zu sehen, was %s geschrieben hat</string>
     <string name="fill_own_profile">Ergänze dein Profil, um zu erfahren, was %s geschrieben hat</string>
     <string name="chat_mutual_symphaty">Beidseitiges Like!</string>
-    <string name="chat_mutual_start_conversation">Starte einen Chat!\nEin Geschenk wäre eine super
-        Einleitung
-    </string>
+    <string name="chat_mutual_start_conversation">Starte einen Chat!\nEin Geschenk wäre eine super Einleitung</string>
     <string name="chat_send_message_button_title">Verschicken.</string>
     <string name="know_your_guests_by_sight">Erfahre, wer deine Gäste und Fans sind, indem du ihre Gesichter siehst</string>
     <string name="know_your_guests">Erfahre, wer deine Gäste sind!</string>
@@ -917,9 +915,7 @@
     <string name="i_see_u_face">Erfahre, wer deine Seite besucht hat, und wer deine Fans sind</string>
     <string name="buy_vip_write_anyone">Schreibe jedem Mädchen, auch ohne beidseitiges Like</string>
     <string name="buy_vip_write_anyone_boy">Schreibe jedes Mädchen an, auch ohne beidseitiges Like</string>
-    <string name="buy_vip_write_anyone_without_mutual">Schreibe jeden an, auch ohne beidseitiges
-        Like
-    </string>
+    <string name="buy_vip_write_anyone_without_mutual">Schreibe jeden an, auch ohne beidseitiges Like</string>
     <string name="moar_messages">Chatte mit beliebten Nutzern</string>
     <string name="buy_vip_more_views">Erhalte 1,5 mal mehr Profilaufrufe</string>
     <string name="special_offer">Sonderangebote</string>
@@ -945,9 +941,9 @@
     <string name="fake_female_name_9">Helena</string>
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Keine Nachrichten</string>
-    <string name="write_those_with_who_you_have_mutual_sympathy">Schreibe Nutzer an, mit denen du
-        ein beidseitiges Like hast
-    </string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Schreibe Nutzer an, mit denen du ein beidseitiges Like hast</string>
+    <string name="popup_add_to_black_list">Der schwarzen Liste hinzufügen</string>
+    <string name="popup_delete_dialog">Unterhaltung löschen</string>
     <string name="mutually">Beidseitig</string>
     <string name="write_them">Schreibe sie an</string>
     <string name="go_dating">Fange mit \nDating an</string>
@@ -970,16 +966,11 @@
     <string name="unlock_symphaty_men_many">%d Typen haben dir Likes geschickt!</string>
     <string name="unlock_symphaty_men_few">%d Typen haben dir Likes geschickt!</string>
     <string name="unlock_symphaty_men_other">%d Typen haben dir Likes geschickt!</string>
-    <string name="unlock_symphaty_title">Momentan kannst du nicht sehen, wer dir Likes geschickt
-        hat
-    </string>
+    <string name="unlock_symphaty_title">Momentan kannst du nicht sehen, wer dir Likes geschickt hat</string>
     <string name="unlock_symphaty_get_access">Zugang erhalten</string>
-    <string name="send_gift_start_dialog">Verschicke ein Geschenk und fange jetzt an zu chatten!
-    </string>
+    <string name="send_gift_start_dialog">Verschicke ein Geschenk und fange jetzt an zu chatten!</string>
     <string name="likes_start_dating_button">Fange mit Dating an</string>
-    <string name="likes_empty_title">Du hast noch keine Likes.\nLikes helfen dir, mit Leuten Dates
-        zu kriegen
-    </string>
+    <string name="likes_empty_title">Du hast noch keine Likes.\nLikes helfen dir, mit Leuten Dates zu kriegen</string>
     <string name="unlock_sympathy_price">Entsperrkosten:</string>
     <string name="send_gift">Geschenk verschicken</string>
     <string name="write_him_without_symphaty">Schreibe ihm ohne ein beidseitiges Like!</string>

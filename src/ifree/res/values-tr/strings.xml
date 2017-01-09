@@ -915,6 +915,8 @@
     <string name="fake_female_name_10">Merve</string>
     <string name="dialog_empty_title">Mesaj Yok</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Ortak Beğeniniz olan kullanıcılara yaz</string>
+    <string name="popup_add_to_black_list">Kara Listeye Ekle</string>
+    <string name="popup_delete_dialog">Konuşmayı sil</string>
     <string name="mutually">Ortak</string>
     <string name="write_them">Onlara yaz</string>
     <string name="go_dating">\nTanışmaya başla</string>
