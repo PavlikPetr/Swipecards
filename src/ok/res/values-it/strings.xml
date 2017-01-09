@@ -578,8 +578,7 @@
         con l’espansione .jpg o .png
     </string>
     <string name="incorrect_photo_size">La dimensione della foto è inammissibile</string>
-    <string name="incorrect_photo_size_show_restrictions">Questa foto è troppo piccola (le
-        dimensioni minime della foto sono
+    <string name="incorrect_photo_size_show_restrictions">Questa foto è troppo piccola (le dimensioni minime della foto sono 
         — %1$dx%2$d pixel).</string>
     <string name="input_contact_name">Inserisci il nome del contatto</string>
     <string name="incorrect_locale">Se vuoi che il tuo commento venga letto scrivilo in russo o in
@@ -868,8 +867,7 @@
     <string name="join_group_success">Adesso fai parte del gruppo</string>
     <string name="settings_auto_greeting_title">Auto</string>
     <string name="settings_auto_greeting_subtitle">Consenti al sistema di iniziare automaticamente una conversazione con un saluto quando ricevi un Like
-        Allow the system to automatically start a conversation with a greeting when you receive Like
-    </string>
+Allow the system to automatically start a conversation with a greeting when you receive Like</string>
     <string name="take_photo_text_1">Carica la tua foto per cominciare a fare conoscenza.</string>
     <string name="take_photo_text_2">Nella foto devi comparire tu. Tute le foto sono controllate da moderatori.</string>
     <string name="unlock_by_viewed_ad_video_button_text">Sblocca gratis a %s</string>
@@ -961,9 +959,7 @@
     <string name="fill_own_profile_boy">Completa il tuo profilo per vedere cosa ha scritto %s</string>
     <string name="fill_own_profile">Inseriscilo nel tuo profilo per vedere cosa %s scritto</string>
     <string name="chat_mutual_symphaty">Like reciproco!</string>
-    <string name="chat_mutual_start_conversation">2. Comincia a chattare!\nFare un regalo è un
-        ottimo modo per rompere il ghiaccio
-    </string>
+    <string name="chat_mutual_start_conversation">2. Comincia a chattare!\nFare un regalo è un ottimo modo per rompere il ghiaccio</string>
     <string name="chat_send_message_button_title">Invia</string>
     <string name="know_your_guests_by_sight">Scopri i tuoi ospiti e i tuoi fan, vedendo i loro volti</string>
     <string name="know_your_guests">Scopri i tuoi ospiti!</string>
@@ -976,14 +972,9 @@
     <string name="free_vip">Stato VIP gratuito</string>
     <string name="no_more_ad">Nessun ads in-app</string>
     <string name="i_see_u_face">Scopri chi ha visitato la tua pagina e chi sono i tuoi Fan</string>
-    <string name="buy_vip_write_anyone">Scrivi a qualsiasi ragazza, anche senza un Like reciproco
-    </string>
-    <string name="buy_vip_write_anyone_boy">Scrivi a qualsiasi ragazzo, anche senza un Like
-        reciproco
-    </string>
-    <string name="buy_vip_write_anyone_without_mutual">Scrivi a chi vuoi, anche senza esservi prima
-        scambiati un Like
-    </string>
+    <string name="buy_vip_write_anyone">Scrivi a qualsiasi ragazza, anche senza un Like reciproco</string>
+    <string name="buy_vip_write_anyone_boy">Scrivi a qualsiasi ragazzo, anche senza un Like reciproco</string>
+    <string name="buy_vip_write_anyone_without_mutual">Scrivi a chi vuoi, anche senza esservi prima scambiati un Like</string>
     <string name="moar_messages">Chatta con gli utenti popolari</string>
     <string name="buy_vip_more_views">Ottieni più visualizzazioni per il tuo profilo</string>
     <string name="special_offer">Offerta speciale</string>
@@ -1009,9 +1000,9 @@
     <string name="fake_female_name_9">Elena</string>
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Nessun messaggio</string>
-    <string name="write_those_with_who_you_have_mutual_sympathy">Scrivi alle persone con cui hai un
-        Like reciproco
-    </string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Scrivi alle persone con cui hai un Like reciproco</string>
+    <string name="popup_add_to_black_list">Aggiungi alla Black List</string>
+    <string name="popup_delete_dialog">Elimina la conversazione</string>
     <string name="mutually">Reciproco</string>
     <string name="write_them">Scrivi qualcosa</string>
     <string name="go_dating">Comincia a \nfare conoscenza</string>
@@ -1034,14 +1025,11 @@
     <string name="unlock_symphaty_men_many">%d ragazzi ti hanno inviato un Like!</string>
     <string name="unlock_symphaty_men_few">%d ragazzi ti hanno mandato dei Like!</string>
     <string name="unlock_symphaty_men_other">%d ragazzi ti hanno inviato un Like!</string>
-    <string name="unlock_symphaty_title">Al momento non puoi vedere chi ti ha mandato i Like
-    </string>
+    <string name="unlock_symphaty_title">Al momento non puoi vedere chi ti ha mandato i Like</string>
     <string name="unlock_symphaty_get_access">Ottieni l\'accesso</string>
     <string name="send_gift_start_dialog">Manda un regalo e comincia a chattare!</string>
     <string name="likes_start_dating_button">Fai nuove conoscenze</string>
-    <string name="likes_empty_title">Non hai ancora ricevuto dei Like.\n I Like ti aiutano a
-        conoscere nuove persone
-    </string>
+    <string name="likes_empty_title">Non hai ancora ricevuto dei Like.\n I Like ti aiutano a conoscere nuove persone</string>
     <string name="unlock_sympathy_price">Costo per sbloccare:</string>
     <string name="send_gift">Invia regalo</string>
     <string name="write_him_without_symphaty">Scrivigli senza un Like Reciproco!</string>

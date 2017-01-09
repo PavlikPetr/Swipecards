@@ -854,9 +854,7 @@
   <string name="fill_own_profile_boy">Profilini tamamla ve %s ne yazmış gör</string>
   <string name="fill_own_profile">Profilini tamamla ve %s kişisinin yazdıklarını görüntüle</string>
   <string name="chat_mutual_symphaty">Karşılıklı beğenme!</string>
-  <string name="chat_mutual_start_conversation">Sohbete başlayın! Hediye güzel bir başlangıç
-    olabilir
-  </string>
+  <string name="chat_mutual_start_conversation">Sohbete başlayın! Hediye güzel bir başlangıç olabilir</string>
   <string name="chat_send_message_button_title">Gönder</string>
   <string name="know_your_guests_by_sight">Ziyaretçilerinin ve hayranlarının yüzlerini gör</string>
   <string name="know_your_guests">Ziyaretçilerini gör</string>
@@ -871,9 +869,7 @@
   <string name="i_see_u_face">Hayranlarını ve sayfanı ziyaret edenleri gör</string>
   <string name="buy_vip_write_anyone">Karşılıklı beğeni olmadan her kadına mesaj yaz</string>
   <string name="buy_vip_write_anyone_boy">Karşılıklı beğeni olmadan her erkeğe mesaj yaz</string>
-  <string name="buy_vip_write_anyone_without_mutual">Karşılıklı beğenme olmasa bile herhangi birine
-    mesaj yaz
-  </string>
+  <string name="buy_vip_write_anyone_without_mutual">Karşılıklı beğenme olmasa bile herhangi birine mesaj yaz</string>
   <string name="moar_messages">Popüler kullanıcılar ile sohbet et</string>
   <string name="buy_vip_more_views">1.5 kat daha fazla profil ziyareti al.</string>
   <string name="special_offer">Özel teklif</string>
@@ -899,9 +895,9 @@
   <string name="fake_female_name_9">Ayşe</string>
   <string name="fake_female_name_10">Merve</string>
   <string name="dialog_empty_title">Mesaj Yok</string>
-  <string name="write_those_with_who_you_have_mutual_sympathy">Ortak Beğeniniz olan kullanıcılara
-    yaz
-  </string>
+  <string name="write_those_with_who_you_have_mutual_sympathy">Ortak Beğeniniz olan kullanıcılara yaz</string>
+  <string name="popup_add_to_black_list">Kara Listeye Ekle</string>
+  <string name="popup_delete_dialog">Konuşmayı sil</string>
   <string name="mutually">Ortak</string>
   <string name="write_them">Onlara yaz</string>
   <string name="go_dating">\nTanışmaya başla</string>
@@ -924,15 +920,11 @@
   <string name="unlock_symphaty_men_many">%d erkek sana beğeni gönderdi!</string>
   <string name="unlock_symphaty_men_few">%d erkek sana Beğeni gönderdi!</string>
   <string name="unlock_symphaty_men_other">%d erkek sana beğeni gönderdi!</string>
-  <string name="unlock_symphaty_title">Şu anda sana hangi kullanıcıların Beğeni gönderdiğini
-    göremiyorsun
-  </string>
+  <string name="unlock_symphaty_title">Şu anda sana hangi kullanıcıların Beğeni gönderdiğini göremiyorsun</string>
   <string name="unlock_symphaty_get_access">Erişim kazan</string>
   <string name="send_gift_start_dialog">Hediye gönder ve konuşmaya şimdi başla!</string>
   <string name="likes_start_dating_button">Buluşmaya başla</string>
-  <string name="likes_empty_title">Yeterli Beğeniniz yok. \n Beğeni biriyle buluşmanıza yardım
-    eder.
-  </string>
+  <string name="likes_empty_title">Yeterli Beğeniniz yok. \n Beğeni biriyle buluşmanıza yardım eder.</string>
   <string name="unlock_sympathy_price">Açmak için:</string>
   <string name="send_gift">Hediye Gönder</string>
   <string name="write_him_without_symphaty">Ortak Beğeni olmadan ona yaz</string>

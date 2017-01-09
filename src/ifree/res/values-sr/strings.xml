@@ -1012,6 +1012,8 @@
     <string name="fake_female_name_10">Маша</string>
     <string name="dialog_empty_title">Немате разговоре</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Пишите онима са којима имате узајамна свиђања</string>
+    <string name="popup_add_to_black_list">Додати на црну листу</string>
+    <string name="popup_delete_dialog">Избрисати дијалог</string>
     <string name="mutually">Узајамно</string>
     <string name="write_them">Пишите им</string>
     <string name="go_dating">Започети \nупознавање</string>

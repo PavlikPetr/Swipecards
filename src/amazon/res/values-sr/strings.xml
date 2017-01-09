@@ -970,9 +970,7 @@
     <string name="fill_own_profile_boy">Попуните свој профил како бисте видели шта је написао %s</string>
     <string name="fill_own_profile">Попуните свој профил да бисте видели шта је %s написала</string>
     <string name="chat_mutual_symphaty">Узајамно свиђање!</string>
-    <string name="chat_mutual_start_conversation">Започните разговор!\nПоклон ће бити одличан
-        почетак
-    </string>
+    <string name="chat_mutual_start_conversation">Започните разговор!\nПоклон ће бити одличан почетак</string>
     <string name="chat_send_message_button_title">Посл.</string>
     <string name="know_your_guests_by_sight">Сазнајте ко су Ваши гости и обожаваоци тако што ћете им видети лица</string>
     <string name="know_your_guests">Сазнајте ко посећује Вашу страницу</string>
@@ -987,9 +985,7 @@
     <string name="i_see_u_face">Сазнајте ко је посетио Вашу страницу и видите ко су Ваши обожаватељи</string>
     <string name="buy_vip_write_anyone">Пишите било којој девојци без узајамног свиђања</string>
     <string name="buy_vip_write_anyone_boy">Пишите било ком мушкарцу без узајамног свиђања</string>
-    <string name="buy_vip_write_anyone_without_mutual">Пишите коме год хоћете без узајамног
-        свиђања
-    </string>
+    <string name="buy_vip_write_anyone_without_mutual">Пишите коме год хоћете без узајамног свиђања</string>
     <string name="moar_messages">Ћаскајте са популарним корисницима</string>
     <string name="buy_vip_more_views">Добијте 1,5 пута више прегледа Вашег профила</string>
     <string name="special_offer">Специјална понуда</string>
@@ -1015,9 +1011,9 @@
     <string name="fake_female_name_9">Јелена</string>
     <string name="fake_female_name_10">Маша</string>
     <string name="dialog_empty_title">Немате разговоре</string>
-    <string name="write_those_with_who_you_have_mutual_sympathy">Пишите онима са којима имате
-        узајамна свиђања
-    </string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Пишите онима са којима имате узајамна свиђања</string>
+    <string name="popup_add_to_black_list">Додати на црну листу</string>
+    <string name="popup_delete_dialog">Избрисати дијалог</string>
     <string name="mutually">Узајамно</string>
     <string name="write_them">Пишите им</string>
     <string name="go_dating">Започети \nупознавање</string>
@@ -1040,15 +1036,11 @@
     <string name="unlock_symphaty_men_many">%d мушкараца Вам је послало свиђања!</string>
     <string name="unlock_symphaty_men_few">%d мушкарца су Вам послала свиђања!</string>
     <string name="unlock_symphaty_men_other">%d мушкараца Вам је послало свиђања!</string>
-    <string name="unlock_symphaty_title">Тренутно не можете да видите који корисници су Вам послали
-        свиђања
-    </string>
+    <string name="unlock_symphaty_title">Тренутно не можете да видите који корисници су Вам послали свиђања</string>
     <string name="unlock_symphaty_get_access">Добити приступ</string>
     <string name="send_gift_start_dialog">Послати поклон и започети разговор одмах!</string>
     <string name="likes_start_dating_button">Започети упознавање</string>
-    <string name="likes_empty_title">Још увек немате свиђања.\nСвиђања ће Вам помоћи да се
-        упознате
-    </string>
+    <string name="likes_empty_title">Још увек немате свиђања.\nСвиђања ће Вам помоћи да се упознате</string>
     <string name="unlock_sympathy_price">Цена услуге:</string>
     <string name="send_gift">Послати поклон</string>
     <string name="write_him_without_symphaty">Пишите му без узајамног свиђања!</string>

@@ -1001,6 +1001,8 @@
     <string name="fake_female_name_10">María</string>
     <string name="dialog_empty_title">Sin mensajes</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Escribe a los usuarios con los que tienes simpatía mutua</string>
+    <string name="popup_add_to_black_list">Añadir a la Lista Negra</string>
+    <string name="popup_delete_dialog">Borrar conversación</string>
     <string name="mutually">Mutua</string>
     <string name="write_them">Escríbeles</string>
     <string name="go_dating">Empieza \na ligar</string>

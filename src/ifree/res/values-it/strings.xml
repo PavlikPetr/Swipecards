@@ -1001,6 +1001,8 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Nessun messaggio</string>
     <string name="write_those_with_who_you_have_mutual_sympathy">Scrivi alle persone con cui hai un Like reciproco</string>
+    <string name="popup_add_to_black_list">Aggiungi alla Black List</string>
+    <string name="popup_delete_dialog">Elimina la conversazione</string>
     <string name="mutually">Reciproco</string>
     <string name="write_them">Scrivi qualcosa</string>
     <string name="go_dating">Comincia a \nfare conoscenza</string>
