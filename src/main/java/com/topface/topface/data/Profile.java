@@ -587,7 +587,7 @@ public class Profile extends AbstractDataWithPhotos {
     public FormItem getFormByType(FormItem.DATA_TYPE dataType) {
         if (forms != null) {
             for (FormItem item : forms) {
-                if (item.dataType == dataType) {
+                if (item != null && item.dataType == dataType) {
                     return item;
                 }
             }
