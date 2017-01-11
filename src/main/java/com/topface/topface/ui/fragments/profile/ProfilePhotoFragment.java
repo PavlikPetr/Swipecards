@@ -154,6 +154,15 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     }
 
     @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    public void takeAlbumPhoto() {
+        if (mBinding != null) {
+            mBinding.vfFlipper.setDisplayedChild(0);
+        }
+        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(
+                new Intent(AbstractProfileFragment.ADD_PHOTO_INTENT).putExtra(EXTRA_BUTTON_ID, R.id.btnAddPhotoAlbum));
+    }
+
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void takeCameraPhoto() {
         if (mBinding != null) {
             mBinding.vfFlipper.setDisplayedChild(0);
@@ -177,13 +186,21 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
             ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
         }
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile_photos, container, false);
-        ProfilePhotoFragmentViewModel viewModel = new ProfilePhotoFragmentViewModel(mBinding, new Function0<Unit>() {
-            @Override
-            public Unit invoke() {
-                ProfilePhotoFragmentPermissionsDispatcher.takeCameraPhotoWithCheck(ProfilePhotoFragment.this);
-                return null;
-            }
-        });
+        ProfilePhotoFragmentViewModel viewModel = new ProfilePhotoFragmentViewModel(mBinding,
+                new Function0<Unit>() {
+                    @Override
+                    public Unit invoke() {
+                        ProfilePhotoFragmentPermissionsDispatcher.takeCameraPhotoWithCheck(ProfilePhotoFragment.this);
+                        return null;
+                    }
+                },
+                new Function0<Unit>() {
+                    @Override
+                    public Unit invoke() {
+                        ProfilePhotoFragmentPermissionsDispatcher.takeAlbumPhotoWithCheck(ProfilePhotoFragment.this);
+                        return null;
+                    }
+                });
         mBinding.setViewModel(viewModel);
         if (getActivity() instanceof EditContainerActivity) {
             getActivity().setResult(Activity.RESULT_OK);
