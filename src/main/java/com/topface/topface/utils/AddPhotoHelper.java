@@ -1,6 +1,5 @@
 package com.topface.topface.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -58,7 +57,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
-import permissions.dispatcher.NeedsPermission;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -189,7 +187,6 @@ public class AddPhotoHelper {
         return mOnAddPhotoClickListener;
     }
 
-    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void startCamera() {
         startCamera(false);
     }
