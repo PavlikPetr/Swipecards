@@ -37,7 +37,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.NoFilterFeedFragment;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragmentPermissionsDispatcher;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CountersManager;

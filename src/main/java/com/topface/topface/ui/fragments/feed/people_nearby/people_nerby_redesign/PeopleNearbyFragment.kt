@@ -9,26 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.banners.BannersController
-import com.topface.topface.databinding.DialogsFragmentLayoutBinding
+import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
+import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogTypeProvider
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragmentViewModel
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.*
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_utils.findLastFeedItem
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment.Companion.PAGE_NAME
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components.*
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.Utils
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
+import javax.inject.Inject
 
 /**
  * Новый экран "Люди рядом", который содержит функционал фотоленты
@@ -37,6 +34,8 @@ import org.jetbrains.anko.layoutInflater
 
 @FlurryOpenEvent(name = PAGE_NAME)
 class PeopleNearbyFragment : BaseFragment() {
+
+    @Inject lateinit var mEventBus: EventBus
 
     companion object {
         const val PAGE_NAME = "PeopleNearby"
@@ -52,32 +51,31 @@ class PeopleNearbyFragment : BaseFragment() {
     private val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
     }
-    private val mBinding: DialogsFragmentLayoutBinding by lazy {
-        DataBindingUtil.inflate<DialogsFragmentLayoutBinding>(context.layoutInflater, R.layout.people_nearby_fragment_layout, null, false)
+    private val mBinding: PeopleNearbyFragmentLayoutBinding by lazy {
+        DataBindingUtil.inflate<PeopleNearbyFragmentLayoutBinding>(context.layoutInflater, R.layout.people_nearby_fragment_layout, null, false)
     }
     private val mPeopleNearbyTypeProvider by lazy {
-        DialogTypeProvider()
+        PeopleNearbyTypeProvider()
     }
     private val mAdapter: CompositeAdapter by lazy {
-        CompositeAdapter(mPeopleNearbyTypeProvider) {
-            Bundle().apply {
-                val last = mAdapter.data.findLastFeedItem()
-                putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
-            }
-        }
-                .addAdapterComponent(AppDayItemComponent(mApi))
-                .addAdapterComponent(DialogItemComponent(mNavigator))
-                .addAdapterComponent(EmptyDialogsComponent())
-                .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))
-                .addAdapterComponent(activity.registerLifeCycleDelegate(ContactsItemComponent(mNavigator, context.applicationContext, mApi)))
+        CompositeAdapter(mPeopleNearbyTypeProvider) { Bundle() }
+                .addAdapterComponent(PeopleNearbyEmptyListComponent())
+                .addAdapterComponent(PeopleNearbyEmptyLocationComponent())
+                .addAdapterComponent(PeopleNearbyPermissionsDeniedComponent {
+                    // TODO отправить ивент о запуске менеджера ГЕО
+                })
+                .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
+                .addAdapterComponent(PeopleNearbyLoaderComponent())
+                // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
     }
     private val mViewModel by lazy {
-        DialogsFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
+        PeopleNearbyFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
             activity.registerLifeCycleDelegate(this)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        App.get().inject(this)
         initList()
         mBinding.viewModel = mViewModel
         return mBinding.root
@@ -85,7 +83,7 @@ class PeopleNearbyFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.settings_messages)))
+        ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.people_nearby)))
     }
 
     override fun onDetach() {
@@ -113,13 +111,13 @@ class PeopleNearbyFragment : BaseFragment() {
         mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun initList() = with(mBinding.dialogsList) {
+    private fun initList() = with(mBinding.list) {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mAdapter.data.add(PeopleNearbyEmptyListComponent())
     }
-
 }
