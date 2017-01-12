@@ -21,7 +21,7 @@ public class GcmListenerService extends com.google.android.gms.gcm.GcmListenerSe
     public void onMessageReceived(String from, Bundle data) {
         isOnMessageReceived.set(true);
         if (data != null) {
-            Debug.log("GCM: Try show\n" + data.keySet());
+            Debug.log("GCM: Try show\n" + data);
             // send update broadcast in any case
             //Сообщаем о том что есть новое уведомление и нужно обновить список
             Intent broadcastNotificationIntent = new Intent(GCMUtils.GCM_NOTIFICATION);

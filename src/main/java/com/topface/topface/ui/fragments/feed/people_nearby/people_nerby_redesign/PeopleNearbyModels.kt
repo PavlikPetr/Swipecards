@@ -2,6 +2,8 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 
 import android.os.Bundle
 import android.support.annotation.IntDef
+import com.topface.topface.data.FeedListData
+import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 
 /**
@@ -47,24 +49,20 @@ class PeopleNearbyList
 /**
  * Итем списка "Фотолента"
  */
-class PhotoBlogList
+class PhotoBlogList(var item: FeedListData<FeedPhotoBlog>? = null)
+
+/**
+ * Итем постановки в фотоленту
+ */
+class PhotoBlogAdd
+
+/**
+ * Итем списка фотоленты
+ */
+class PhotoBlogItem
+
 
 /**
  * Лоадер на время отправки запроса
  */
 class PeopleNearbyLoader //----------------
-
-
-data class PeopleNearbyListEvents(val action:PeopleNearbyAction){
-    companion object {
-
-
-        const val ACTION_UNDEFINED = 0L
-        const val ACTION_CAMERA_CHOSEN = 1L
-        const val ACTION_GALLERY_CHOSEN = 2L
-        const val ACTION_CANCEL = 3L
-    }
-
-    @IntDef(ACTION_UNDEFINED, ACTION_CAMERA_CHOSEN, ACTION_GALLERY_CHOSEN, ACTION_CANCEL)
-    annotation class PeopleNearbyAction
-}

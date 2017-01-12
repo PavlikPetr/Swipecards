@@ -66,7 +66,9 @@ class PeopleNearbyFragment : BaseFragment() {
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
+                .addAdapterComponent(PhotoBlogListComponent(context, mApi,mNavigator))
                 // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
+                .apply { data.add(PhotoBlogList()) }
     }
     private val mViewModel by lazy {
         PeopleNearbyFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
@@ -97,7 +99,8 @@ class PeopleNearbyFragment : BaseFragment() {
         /**
          * https://code.google.com/p/android/issues/detail?id=78062
          * увидел, промониторь изменения и обнови дату/поправь
-         * 14.12.16
+         * без изменений
+         * 12.01.17
          */
         with(mBinding.refresh) {
             destroyDrawingCache()
@@ -118,6 +121,5 @@ class PeopleNearbyFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mAdapter.data.add(PeopleNearbyEmptyListComponent())
     }
 }

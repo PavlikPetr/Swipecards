@@ -43,6 +43,5 @@ class PeopleNearbyFragmentViewModel(context: Context, private val mApi: FeedApi,
     }
 
     fun release() {
-
     }
 }

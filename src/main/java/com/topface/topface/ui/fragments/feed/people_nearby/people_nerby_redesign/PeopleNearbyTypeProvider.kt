@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import com.topface.topface.data.FeedGeo
+import com.topface.topface.data.FeedListData
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayStubItem
@@ -10,7 +11,7 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 
 /**
  * Type provider for people nearby fragment items
- * Created by tiberal on 30.11.16.
+ * Created by ppavlik on 11.01.17.
  */
 class PeopleNearbyTypeProvider : ITypeProvider {
     override fun getType(java: Class<*>): Int {
