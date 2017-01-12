@@ -39,7 +39,7 @@ class PhotoBlogListComponent(private val mContext: Context,
                     .addAdapterComponent(PhotoBlogItemComponent(mNavigator))
                     .addAdapterComponent(PhotoBlogAddButtonComponent(mNavigator))
             photoblogList.adapter = mAdapter
-            mViewModel = PhotoBlogListViewModel(mContext, mApi, data?.item)
+            mViewModel = PhotoBlogListViewModel(mContext, mApi, data?.item) { mAdapter }
             viewModel = mViewModel
         }
     }

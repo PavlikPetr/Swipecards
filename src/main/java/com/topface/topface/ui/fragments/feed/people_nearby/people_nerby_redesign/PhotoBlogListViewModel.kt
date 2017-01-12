@@ -4,6 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
+import android.support.v7.widget.RecyclerView
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.FeedListData
@@ -13,6 +16,7 @@ import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
@@ -24,13 +28,15 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.function.UnaryOperator
 import javax.inject.Inject
 
 /**
  * ViewMdel для элемента списка, который содержит фотоленту с горизонтальным скролом
  * Created by ppavlik on 12.01.17.
  */
-class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, private var mFeedPhotoBlog: FeedListData<FeedPhotoBlog>?) : ILifeCycle {
+class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, private var mFeedPhotoBlog: FeedListData<FeedPhotoBlog>?,
+                             private val getAdapter: () -> CompositeAdapter?) : ILifeCycle {
     val data = SingleObservableArrayList<Any>()
     @Inject lateinit var mEventBus: EventBus
     private var mSubscriptions = CompositeSubscription()
@@ -77,7 +83,22 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
 
                     override fun onNext(data: FeedListData<FeedPhotoBlog>?) {
                         data?.let {
-                            with(this@PhotoBlogListViewModel.data.observableList) {
+                            val newList = arrayListOf<Any>(PhotoBlogAdd()).apply { addAll(it.items) }
+                            getAdapter.invoke()?.let { adapter ->
+                                val oldList = adapter.data
+                              DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                                    override fun getNewListSize() = newList.size
+                                    override fun getOldListSize() = oldList.size
+                                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
+                                            = oldList.get(oldItemPosition) == newList.get(newItemPosition)
+
+                                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
+                                            = oldList.get(oldItemPosition) == newList.get(newItemPosition)
+                                }).let {
+                                  adapter.data = newList
+                                  it.dispatchUpdatesTo(adapter)
+                              }
+                            } ?: with(this@PhotoBlogListViewModel.data.observableList) {
                                 // чистим старый список
                                 clear()
                                 // добавляем итем перехода в активити постановки в лидеры

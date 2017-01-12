@@ -53,8 +53,9 @@ class PhotoBlogList(var item: FeedListData<FeedPhotoBlog>? = null)
 
 /**
  * Итем постановки в фотоленту
+ * для корректной работы DiffUtil надо накидать в него данных
  */
-class PhotoBlogAdd
+data class PhotoBlogAdd(var diffTemp: Int = 0)
 
 /**
  * Итем списка фотоленты
