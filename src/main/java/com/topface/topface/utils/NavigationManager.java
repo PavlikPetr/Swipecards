@@ -193,7 +193,7 @@ public class NavigationManager {
                 fragment = new DatingFragment();
                 break;
             case FragmentIdData.GEO:
-                fragment = new PeopleNearbyFragment();
+                fragment = new com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
                 fragment = BonusFragment.newInstance(true);

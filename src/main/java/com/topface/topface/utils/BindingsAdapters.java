@@ -35,6 +35,7 @@ import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
+import com.topface.topface.utils.glide_utils.GlideTransformationType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,6 +180,29 @@ public class BindingsAdapters {
         if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
             lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
+        }
+    }
+
+    @BindingAdapter("android:layout_marginStart")
+    public static void setMarginStart(View view, float padding) {
+        setMarginLeft(view, padding);
+    }
+
+    @BindingAdapter("android:layout_marginEnd")
+    public static void setMarginEnd(View view, float padding) {
+        setMarginRight(view, padding);
+    }
+
+    @BindingAdapter("android:layout_marginLeft")
+    public static void setMarginLeft(View view, float padding) {
+        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
+            lp.setMargins((int) padding, lp.topMargin, lp.rightMargin, lp.bottomMargin);
+            return;
+        }
+        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
+            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
+            lp.setMargins((int) padding, lp.topMargin, lp.rightMargin, lp.bottomMargin);
         }
     }
 
@@ -345,7 +369,7 @@ public class BindingsAdapters {
 
     @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
-    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, long type, int placeholderRes) {
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes) {
         if (photo == null) {
             Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
             return;

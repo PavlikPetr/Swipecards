@@ -31,6 +31,9 @@
     <string name="autorefill">Automatyczne uzupełnianie</string>
     <string name="coins">Monety</string>
     <string name="leaders_select_photo">Wybierz efektowne zdjęcie</string>
+    <string name="locking_screen_button_answer">Odpowiedz</string>
+    <string name="locking_screen_advice">Odpowiedz na wszystkie Sympatie</string>
+    <string name="locking_screen_advice2">Zdobądź nieograniczony dostęp</string>
     <string name="general_bookmarks_is_deleted">Użytkownik został usunięty z ulubionych</string>
     <string name="general_blacklist_is_deleted">Użytkownik został usunięty z czarnej listy</string>
     <string name="invite_friends_title_short">Zaproś wszystkich znajomych do Topface</string>
@@ -579,6 +582,9 @@
     <string name="delete_admirations">Usuń zachwyt</string>
     <string name="general_admirations">Uwielbienia</string>
     <string name="default_ringtone">Domyślnie</string>
+    <string name="locking_popup_button_answer">Odpowiedz na Sympatie</string>
+    <string name="locking_menu_message">Ważne! Dostęp do niektórych stron aplikacji jest ograniczony. By
+        otrzymać pełen dostęp, odpowiedz na wszystkie Sympatie lub zakup status VIP-a.</string>
     <string name="current_city">Aktualne miasto</string>
     <string name="general_bonus">Premia</string>
     <string name="coins_subscription">Subskrypcja na monety</string>
@@ -595,6 +601,9 @@
     <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
      przetwarzania</string>
     <string name="dialog">Wiadomości</string>
+    <string name="maximum_number_of_users">Wybrano maksymalną liczbę użytkowników.</string>
+    <string name="logout_if_email_already_registred">Istnieje już użytkownik o tym adresie e-mail. Jeśli
+        należy on do ciebie, wyloguj się z obecnego konta i zaloguj się na konto %s.</string>
     <string name="email_changing">Zmiana adresu e-mail</string>
     <string name="hint_faces_filter">Zmień swoje parametry wyszukiwania i poznaj nowych, interesujących ludzi.</string>
     <string name="hint_faces_buy_like">Im więcej masz Polubień, tym częściej twój profil będzie oceniany.

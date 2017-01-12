@@ -37,7 +37,6 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.NoFilterFeedFragment;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragmentPermissionsDispatcher;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CountersManager;
@@ -70,7 +69,7 @@ import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     private final static int WAIT_LOCATION_DELAY = 10000;
-    private static final String PAGE_NAME = "PeopleNerby";
+    public static final String PAGE_NAME = "PeopleNerby";
     private DataSetObserver mObserver = new DataSetObserver() {
         @Override
         public void onChanged() {

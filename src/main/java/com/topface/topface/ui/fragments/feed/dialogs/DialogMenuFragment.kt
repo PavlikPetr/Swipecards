@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.DeleteOrBlacklistPopupBinding
@@ -35,6 +36,7 @@ class DialogMenuFragment : DialogFragment(), IDialogCloser {
         item = arguments.getParcelable(DIALOG_ITEM_TAG)
         item?.let {
             model = DialogsMenuPopupViewModel(it, mApi, this@DialogMenuFragment)
+            dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
         }
         root
     }
