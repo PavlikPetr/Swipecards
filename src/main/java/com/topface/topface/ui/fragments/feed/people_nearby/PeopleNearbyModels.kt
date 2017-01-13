@@ -7,3 +7,5 @@ import com.topface.topface.data.FeedGeo
  */
 
 class PeoplesNearbyStubItem() : FeedGeo()
+
+data class PeopleNearbyEvent(val isPossibleDownload: Boolean)

@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.people_nearby
 
 import android.databinding.ObservableField
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.Profile
@@ -15,10 +16,11 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mI
 
     private val feedUser = mItem.user
 
-    val avatar: ObservableField<String> = ObservableField(prepareAvatar())
-    val nameAndAge: ObservableField<String> = ObservableField(feedUser.nameAndAge)
-    val distance: ObservableField<String> = ObservableField(prepareDistanceText())
-    val onlineImage: ObservableField<Int> = ObservableField(prepareImageForOnline())
+
+    val avatar = ObservableField(prepareAvatar())
+    val nameAndAge = ObservableField(feedUser.nameAndAge)
+    val distance = ObservableField(prepareDistanceText())
+    val onlineImage = ObservableField(prepareImageForOnline())
 
     private fun prepareImageForOnline() = if (feedUser.online) R.drawable.online else 0
 
@@ -32,7 +34,7 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mI
     private fun prepareStringFromDouble() =
             when {
                 mItem.distance >= 1000 -> String.format(context.getString(R.string.general_distance_km), mItem.distance / 1000)
-                else -> String.format(context.getString(R.string.general_distance_m), if (mItem.distance >= 1) mItem.distance else 1)
+                else -> String.format(context.getString(R.string.general_distance_m), if (mItem.distance >= 1) mItem.distance.toInt() else 1)
             }
 
     private fun prepareAvatar() =

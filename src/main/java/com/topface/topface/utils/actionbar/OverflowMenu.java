@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.StringRes;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.ActionProvider;
 import android.view.ContextMenu;
@@ -71,7 +70,6 @@ public class OverflowMenu {
 
     private Menu mBarActions;
     private OverflowMenuType mOverflowMenuType;
-    @Nullable
     private Context mContext;
     private RateController mRateController;
     private ApiResponse mSavedResponse = null;
@@ -111,8 +109,7 @@ public class OverflowMenu {
         App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
-        FragmentActivity activity = iFragmentDelegate.getActivity();
-        mContext = activity != null ? activity.getApplicationContext() : App.getContext();
+        mContext = iFragmentDelegate.getActivity().getApplicationContext();
         registerBroadcastReceiver();
         mFragmentDelegate = iFragmentDelegate;
     }

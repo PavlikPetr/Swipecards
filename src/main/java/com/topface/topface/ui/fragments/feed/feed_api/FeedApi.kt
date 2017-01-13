@@ -205,6 +205,24 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
+    fun callNewGeo(lat: Double, lon: Double): Observable<FeedListData<FeedGeo>> {
+        return Observable.create {
+            val request = PeopleNearbyRequest(mContext, lat, lon)
+            request.callback(object : DataApiHandler<FeedListData<FeedGeo>>() {
+
+                override fun success(data: FeedListData<FeedGeo>, response: IApiResponse) = it.onNext(data)
+
+                override fun parseResponse(response: ApiResponse): FeedListData<FeedGeo> = FeedListData(response.jsonResult, FeedGeo::class.java)
+
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
+                override fun always(response: IApiResponse) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }
+    }
+
     fun callAddToBlackList(items: List<FeedItem>): Observable<Boolean> {
         val ids = getFeedIntIds(items)
         return Observable.create {

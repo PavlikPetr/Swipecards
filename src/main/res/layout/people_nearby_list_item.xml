@@ -8,23 +8,42 @@
             type="com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyListItemViewModel"/>
     </data>
 
+    <!--<android.support.v7.widget.CardView-->
+        <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--card_view:cardCornerRadius="2dp"-->
+        <!--card_view:cardUseCompatPadding="true">-->
+
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="2dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="5dp">
+        card_view:cardUseCompatPadding="true">
 
         <LinearLayout
+            android:id="@+id/llForcardView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@{viewModel.avatar}"/>
+
+            <!--<com.topface.topface.ui.views.ImageViewRemote-->
+                <!--android:id="@+id/IVRAvatar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:remoteSrcGlide="@{viewModel.avatar}"/>-->
+
+            <com.topface.topface.ui.views.ImageViewRemote
+                android:id="@+id/IVRAvatar"
+                style="@style/Huift"
+                app:remoteSrcGlide="@{viewModel.avatar}"/>
+
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@{viewModel.avatar}"/>-->
 
             <TextView
                 android:layout_width="match_parent"
