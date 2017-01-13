@@ -189,7 +189,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             val request = mFeedRequestFactory?.construct(requestArgs)
             if (request != null) {
                 mRequestClient.registerRequest(request)
-                request.callback(object : DataApiHandler<FeedListData<T>>() {
+                request.callback(object : DataApiHandler<FeedListData<T>>(Looper.getMainLooper()) {
                     override fun parseResponse(response: ApiResponse): FeedListData<T> = FeedListData(response.jsonResult, mItemClass)
                     override fun success(data: FeedListData<T>, response: IApiResponse) = it.onNext(data)
                     override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))

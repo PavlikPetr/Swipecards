@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -34,11 +35,13 @@ import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 import com.topface.topface.utils.glide_utils.GlideTransformationType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -50,6 +53,12 @@ public class BindingsAdapters {
     public static void bindDataToCompositeAdapter(final RecyclerView recyclerView, SingleObservableArrayList<?> observableArrayList) {
         if (!observableArrayList.isListenerAdded() && recyclerView.getAdapter() instanceof CompositeAdapter) {
             final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
+            ArrayList<Object> list = new ArrayList<>();
+            for (Object item : observableArrayList.getObservableList()) {
+                list.add(item);
+            }
+            adapter.setData(list);
+            adapter.notifyDataSetChanged();
             observableArrayList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<?>>() {
                 @Override
                 public void onChanged(ObservableList<?> objects) {
@@ -172,15 +181,7 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:layout_marginTop")
     public static void setMarginTop(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
-        }
+        ViewExtensionsKt.setMargins(view, null, (int) padding, null, null);
     }
 
     @BindingAdapter("android:layout_marginStart")
@@ -195,41 +196,17 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:layout_marginLeft")
     public static void setMarginLeft(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins((int) padding, lp.topMargin, lp.rightMargin, lp.bottomMargin);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins((int) padding, lp.topMargin, lp.rightMargin, lp.bottomMargin);
-        }
+        ViewExtensionsKt.setMargins(view, (int) padding, null, null, null);
     }
 
     @BindingAdapter("android:layout_marginRight")
     public static void setMarginRight(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, (int) padding, lp.bottomMargin);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, (int) padding, lp.bottomMargin);
-        }
+        ViewExtensionsKt.setMargins(view, null, null, (int) padding, null);
     }
 
     @BindingAdapter("android:layout_marginBottom")
     public static void setMarginBottom(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, lp.rightMargin, (int) padding);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, lp.rightMargin, (int) padding);
-        }
+        ViewExtensionsKt.setMargins(view, null, null, null, (int) padding);
     }
 
     @BindingAdapter("android:background")
