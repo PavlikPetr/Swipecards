@@ -183,25 +183,17 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         addExpandableItem(GiftsModel(user.gifts, user.id))
         val forms: MutableList<IType>
         // проверяем не только все поля анкеты, но и статус. Статус имеет проверку на корректность данных
-        if (ownProfile.hasEmptyFields || Profile.normilizeStatus(ownProfile.status).isNullOrEmpty()) {
-            //показываем заглушку, чтоб юзер заполнил свою анкету
-            forms = mutableListOf<IType>(FormModel(
-                    Pair(String.format(if (user.sex == Profile.BOY) R.string.fill_own_profile_boy.getString()
-                    else R.string.fill_own_profile.getString(), user.firstName), Utils.EMPTY),
-                    isEmptyItem = false, iconRes = R.drawable.bt_question))
-        } else {
-            forms = mutableListOf <IType>().apply {
-                var hasEmptyItem = false
-                user.forms.forEach {
-                    if (it.isEmpty && !hasEmptyItem) {
-                        hasEmptyItem = true
-                        //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
-                        add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
-                                it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
-                    }
-                    val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
-                    add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
+        forms = mutableListOf <IType>().apply {
+            var hasEmptyItem = false
+            user.forms.forEach {
+                if (it.isEmpty && !hasEmptyItem) {
+                    hasEmptyItem = true
+                    //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
+                    add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
+                            it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
                 }
+                val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
+                add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
             }
         }
         addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)

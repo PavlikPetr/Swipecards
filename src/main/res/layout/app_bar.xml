@@ -36,7 +36,7 @@
                 app:collapsedTitleTextColor="@{@color/toolbar_transparent_title_color}"
                 app:contentScrim="@color/toolbar_background"
                 app:expandedTitleColor="@{@color/toolbar_transparent_title_color}"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
                 app:scrimVisibleHeightTrigger="@dimen/collapsing_scrim_size"
                 app:toolbarId="@+id/toolbar">
 
