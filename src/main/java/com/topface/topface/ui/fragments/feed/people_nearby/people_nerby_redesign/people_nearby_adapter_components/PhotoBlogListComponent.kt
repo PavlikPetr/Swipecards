@@ -25,7 +25,7 @@ class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>() {
     private lateinit var mAdapter: CompositeAdapter
-    private lateinit var mViewModel: PhotoBlogListViewModel
+    private var mViewModel: PhotoBlogListViewModel?=null
 
     override val itemLayout: Int
         get() = R.layout.photoblog_list
@@ -46,6 +46,6 @@ class PhotoBlogListComponent(private val mContext: Context,
 
     override fun release() {
         super.release()
-        mViewModel.release()
+        mViewModel?.release()
     }
 }

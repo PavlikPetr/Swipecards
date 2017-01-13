@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
+import android.Manifest
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
+import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
@@ -22,9 +24,17 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.extensions.PermissionsExtensions.Companion.PERMISSION_DENIED
+import com.topface.topface.utils.extensions.PermissionsExtensions.Companion.PERMISSION_NEVER_ASK_AGAIN
+import com.topface.topface.utils.extensions.getPermissionStatus
+import com.topface.topface.utils.extensions.isGrantedPermissions
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnNeverAskAgain
+import permissions.dispatcher.OnPermissionDenied
+import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
 
 /**
@@ -33,6 +43,7 @@ import javax.inject.Inject
  */
 
 @FlurryOpenEvent(name = PAGE_NAME)
+@RuntimePermissions
 class PeopleNearbyFragment : BaseFragment() {
 
     @Inject lateinit var mEventBus: EventBus
@@ -51,7 +62,7 @@ class PeopleNearbyFragment : BaseFragment() {
     private val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
     }
-    private val mBinding: PeopleNearbyFragmentLayoutBinding by lazy {
+    private val mBinding by lazy {
         DataBindingUtil.inflate<PeopleNearbyFragmentLayoutBinding>(context.layoutInflater, R.layout.people_nearby_fragment_layout, null, false)
     }
     private val mPeopleNearbyTypeProvider by lazy {
@@ -62,18 +73,14 @@ class PeopleNearbyFragment : BaseFragment() {
                 .addAdapterComponent(PeopleNearbyEmptyListComponent())
                 .addAdapterComponent(PeopleNearbyEmptyLocationComponent())
                 .addAdapterComponent(PeopleNearbyPermissionsDeniedComponent {
-                    // TODO отправить ивент о запуске менеджера ГЕО
+                    PeopleNearbyFragmentPermissionsDispatcher.sendInitGeoEventWithCheck(this@PeopleNearbyFragment)
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
-                .addAdapterComponent(PhotoBlogListComponent(context, mApi,mNavigator))
-                // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
-                .apply { data.add(PhotoBlogList()) }
+                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator))
     }
     private val mViewModel by lazy {
-        PeopleNearbyFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
-            activity.registerLifeCycleDelegate(this)
-        }
+        PeopleNearbyFragmentViewModel()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -86,6 +93,11 @@ class PeopleNearbyFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.people_nearby)))
+        if (context.isGrantedPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))) {
+            sendInitGeoEvent()
+        } else {
+            showPermissionsScreen()
+        }
     }
 
     override fun onDetach() {
@@ -110,16 +122,25 @@ class PeopleNearbyFragment : BaseFragment() {
         mAdapter.releaseComponents()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mViewModel.onActivityResult(requestCode, resultCode, data)
-    }
-
     private fun initList() = with(mBinding.list) {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+    fun sendInitGeoEvent() {
+        mViewModel.geoPermissionsGranted()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        PeopleNearbyFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults)
+        App.getAppConfig().putPermissionsState(permissions, grantResults)
+    }
+
+    @OnNeverAskAgain(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+    @OnPermissionDenied(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+    fun showPermissionsScreen() {
+        mViewModel.askGeoPermissions(activity.getPermissionStatus(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
     }
 }

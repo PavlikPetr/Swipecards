@@ -5,9 +5,6 @@ import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v7.util.DiffUtil
-import android.support.v7.util.ListUpdateCallback
-import android.support.v7.widget.RecyclerView
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.FeedPhotoBlog
@@ -15,20 +12,17 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
-import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
-import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription
-import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.function.UnaryOperator
 import javax.inject.Inject
 
 /**
@@ -52,8 +46,12 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
         // интервал для перезапроса фотоленты, первый запрос делаем без задержек
         mSubscriptions.add(Observable.interval(0, REQUEST_TIMEOUT, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : RxUtils.ShortSubscription<Long>() {
-                    override fun onNext(type: Long?) = loadFeeds()
+                .subscribe(shortSubscription { loadFeeds() }))
+        mSubscriptions.add(mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
+                .subscribe(shortSubscription {
+                    if (it?.isRefreshing ?: false) {
+                        loadFeeds()
+                    }
                 }))
     }
 
@@ -65,7 +63,8 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
     fun loadFeeds() {
         mSubscriptions.add(mApi.callFeedUpdate(false, FeedPhotoBlog::class.java, Bundle().apply {
             putSerializable(BaseFeedFragmentViewModel.SERVICE, FeedRequest.FeedService.PHOTOBLOG)
-        })
+        }).delay(2, TimeUnit.SECONDS)
+                .applySchedulers()
                 .subscribe(object : Subscriber<FeedListData<FeedPhotoBlog>>() {
                     override fun onCompleted() {
                         if (isRefreshing.get()) {
@@ -83,10 +82,11 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
 
                     override fun onNext(data: FeedListData<FeedPhotoBlog>?) {
                         data?.let {
+                            mEventBus.setData(PhotoBlogLoaded(it.items.isEmpty()))
                             val newList = arrayListOf<Any>(PhotoBlogAdd()).apply { addAll(it.items) }
                             getAdapter.invoke()?.let { adapter ->
                                 val oldList = adapter.data
-                              DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                                DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                                     override fun getNewListSize() = newList.size
                                     override fun getOldListSize() = oldList.size
                                     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int)
@@ -95,9 +95,9 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
                                     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)
                                             = oldList.get(oldItemPosition) == newList.get(newItemPosition)
                                 }).let {
-                                  adapter.data = newList
-                                  it.dispatchUpdatesTo(adapter)
-                              }
+                                    adapter.data = newList
+                                    it.dispatchUpdatesTo(adapter)
+                                }
                             } ?: with(this@PhotoBlogListViewModel.data.observableList) {
                                 // чистим старый список
                                 clear()
@@ -107,7 +107,7 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
                                 addAll(it.items)
                             }
 
-                        }
+                        } ?: mEventBus.setData(PhotoBlogLoaded(true))
                     }
 
                 }))

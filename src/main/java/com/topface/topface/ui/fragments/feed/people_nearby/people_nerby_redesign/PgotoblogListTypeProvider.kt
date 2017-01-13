@@ -8,13 +8,9 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
  * Created by ppavlik on 11.01.17.
  */
 class PgotoblogListTypeProvider : ITypeProvider {
-    override fun getType(java: Class<*>): Int {
-        if (java == PhotoBlogAdd::class.java) {
-            return 1
-        }
-        if (java == FeedPhotoBlog::class.java) {
-            return 2
-        }
-        return 0
+    override fun getType(java: Class<*>) = when (java) {
+        PhotoBlogAdd::class.java -> 1
+        FeedPhotoBlog::class.java -> 2
+        else -> 0
     }
 }

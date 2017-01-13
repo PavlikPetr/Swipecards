@@ -14,31 +14,15 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
  * Created by ppavlik on 11.01.17.
  */
 class PeopleNearbyTypeProvider : ITypeProvider {
-    override fun getType(java: Class<*>): Int {
-        if (java == PhotoBlogList::class.java) {
-            return 1
-        }
-        if (java == PeopleNearbyList::class.java) {
-            return 2
-        }
-        if (java == PeopleNearbyEmptyList::class.java) {
-            return 3
-        }
-        if (java == PeopleNearbyVipOnly::class.java) {
-            return 4
-        }
-        if (java == PeopleNearbyEmptyLocation::class.java) {
-            return 5
-        }
-        if (java == PeopleNearbyPermissionDenied::class.java) {
-            return 6
-        }
-        if (java == PeopleNearbyPermissionNeverAskAgain::class.java) {
-            return 7
-        }
-        if (java == PeopleNearbyLoader::class.java) {
-            return 8
-        }
-        return 0
+    override fun getType(java: Class<*>) = when (java) {
+        PhotoBlogList::class.java -> 1
+        PeopleNearbyList::class.java -> 2
+        PeopleNearbyEmptyList::class.java -> 3
+        PeopleNearbyVipOnly::class.java -> 4
+        PeopleNearbyEmptyLocation::class.java -> 5
+        PeopleNearbyPermissionDenied::class.java -> 6
+        PeopleNearbyPermissionNeverAskAgain::class.java -> 7
+        PeopleNearbyLoader::class.java -> 8
+        else -> 0
     }
 }

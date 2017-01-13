@@ -10,6 +10,7 @@ import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
     }
 }) {
     @Inject lateinit var appState: TopfaceAppState
-    private var mProfileSubscription: Subscription
+    private val mProfileSubscription: Subscription
 
     companion object {
         fun getPlaceholder(profile: Profile) = if (profile.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small
@@ -34,15 +35,13 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
 
     init {
         App.get().inject(this)
-        mProfileSubscription = appState.getObservable(Profile::class.java).subscribe(object : RxUtils.ShortSubscription<Profile>() {
-            override fun onNext(profile: Profile?) {
-                super.onNext(profile)
-                profile?.let {
-                    userPhoto.set(it.photo)
-                    placeholder.set(getPlaceholder(it))
-                }
-            }
-        })
+        mProfileSubscription = appState.getObservable(Profile::class.java)
+                .subscribe(shortSubscription {
+                    it?.let {
+                        userPhoto.set(it.photo)
+                        placeholder.set(getPlaceholder(it))
+                    }
+                })
     }
 
     fun release() {
