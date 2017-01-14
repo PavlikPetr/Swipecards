@@ -11,9 +11,6 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  */
 class PeopleNearbyAdapter : AdapterComponent<PeopleNearbyListItemBinding, FeedGeo>() {
 
-    init {
-        Debug.error("----------Конструктор--PeopleNearbyAdapter-------------")
-    }
     override val itemLayout: Int
         get() = R.layout.people_nearby_list_item
     override val bindingClass: Class<PeopleNearbyListItemBinding>
@@ -24,6 +21,4 @@ class PeopleNearbyAdapter : AdapterComponent<PeopleNearbyListItemBinding, FeedGe
             binding.viewModel = PeopleNearbyListItemViewModel(binding, data)
         }
     }
-
-
 }

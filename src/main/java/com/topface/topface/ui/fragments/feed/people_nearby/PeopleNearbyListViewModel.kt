@@ -28,22 +28,14 @@ import javax.inject.Inject
  */
 class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: FeedListData<FeedGeo>? ) : ILifeCycle {
 
-    companion object {
-        val LAT = "lat"
-        val LON = "lon"
-    }
-
     @Inject lateinit var mState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
-    private var mSubscriptionPeopleNearbyEvent: Subscription
     private var mSubscribtionLocation: Subscription
     private var mSubscriptionPeopleNearbyList: Subscription? = null
-    private var mTimeForFun = false
     private lateinit var mGeoLocationManager: GeoLocationManager
     private var mWaitLocationTimer: CountDownTimer? = null
     private val WAIT_LOCATION_DELAY = 10000
     val data = SingleObservableArrayList<Any>()
-    private var isForPremiun = true
     private val mLocationAction = Action1<Location> { location ->
             sendPeopleNearbyRequest(location)
 
@@ -55,25 +47,10 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
             Debug.error("------------Конструктор МоделВью Листа Людей рядом-------------")
         App.get().inject(this)
         mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(mLocationAction)
-        mSubscriptionPeopleNearbyEvent = mEventBus.getObservable(PeopleNearbyEvent::class.java).subscribe(object : RxUtils.ShortSubscription<PeopleNearbyEvent>() {
-            override fun onError(e: Throwable?) {
-                super.onError(e)
-            }
-
-            override fun onNext(event: PeopleNearbyEvent) {
-                mTimeForFun = event.isPossibleDownload
-            }
-
-            override fun onCompleted() {
-                super.onCompleted()
-                safeUnsubscribe()
-            }
-        })
 
         geolocationManagerInit()
 
     }
-
 
     fun sendPeopleNearbyRequest(location: Location) {
         Debug.error("------------Запрос на получение людей-------------")
@@ -90,7 +67,7 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
             }
 
             override fun onError(e: Throwable?) {
-                Debug.error("------------Запрос на людей------------ОШИБКА" + e?.message)
+                // todo обработка ошибки при запросе списка
             }
         })
     }
@@ -108,21 +85,18 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
             override fun onTick(millisUntilFinished: Long) {}
 
             override fun onFinish() {
-//                updateListWithOldGeo()
                 stopWaitLocationTimer()
             }
         }.start()
     }
 
     private fun stopWaitLocationTimer() {
-
             mWaitLocationTimer?.cancel()
             mWaitLocationTimer = null
     }
 
     fun release(){
         mSubscribtionLocation.safeUnsubscribe()
-        mSubscriptionPeopleNearbyEvent.safeUnsubscribe()
         mSubscriptionPeopleNearbyList.safeUnsubscribe()
     }
 
