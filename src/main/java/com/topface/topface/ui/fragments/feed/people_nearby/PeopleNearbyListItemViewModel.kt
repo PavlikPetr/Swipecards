@@ -20,7 +20,7 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mI
     val avatar = ObservableField(prepareAvatar())
     val nameAndAge = ObservableField(feedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
-    val onlineImage = ObservableField(prepareImageForOnline())
+    val onlineImage = ObservableField( prepareImageForOnline() )
 
     private fun prepareImageForOnline() = if (feedUser.online) R.drawable.online else 0
 
