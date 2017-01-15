@@ -12,36 +12,34 @@ import com.topface.topface.viewModels.BaseViewModel
 /**
  *  Вьюмодель для итема списка людей рядом
  */
-class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mItem: FeedGeo) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
+class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
 
-    private val feedUser = mItem.user
-
-
+    private val mFeedUser = item.user
     val avatar = ObservableField(prepareAvatar())
-    val nameAndAge = ObservableField(feedUser.nameAndAge)
+    val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
-    val onlineImage = ObservableField( prepareImageForOnline() )
+    val onlineImage = ObservableField(prepareImageForOnline())
 
-    private fun prepareImageForOnline() = if (feedUser.online) R.drawable.online else 0
+    private fun prepareImageForOnline() = if (mFeedUser.online) R.drawable.online else 0
 
     private fun prepareDistanceText() =
             when {
-                feedUser.deleted -> R.string.user_is_deleted.getString()
-                feedUser.banned -> R.string.user_is_banned.getString()
+                mFeedUser.deleted -> R.string.user_is_deleted.getString()
+                mFeedUser.banned -> R.string.user_is_banned.getString()
                 else -> prepareStringFromDouble()
             }
 
     private fun prepareStringFromDouble() =
-            when {
-                mItem.distance >= 1000 -> String.format(context.getString(R.string.general_distance_km), mItem.distance / 1000)
-                else -> String.format(context.getString(R.string.general_distance_m), if (mItem.distance >= 1) mItem.distance.toInt() else 1)
+            if (item.distance >= 1000) {
+                String.format(context.getString(R.string.general_distance_km), item.distance / 1000)
+            } else {
+                String.format(context.getString(R.string.general_distance_m), if (item.distance >= 1) item.distance.toInt() else 1)
             }
 
-    private fun prepareAvatar() =
-            when {
-                feedUser.deleted || feedUser.banned || feedUser.photo.isEmpty || feedUser.photo == null -> if (feedUser.sex == Profile.BOY) R.drawable.feed_banned_male_avatar.getString()
-                else R.drawable.feed_banned_female_avatar.getString()
-                else -> feedUser.photo.defaultLink
-            }
-
+private fun prepareAvatar() =
+        when {
+            mFeedUser.deleted || mFeedUser.banned || mFeedUser.photo.isEmpty || mFeedUser.photo == null -> if (mFeedUser.sex == Profile.BOY) R.drawable.feed_banned_male_avatar.getString()
+            else R.drawable.feed_banned_female_avatar.getString()
+            else -> mFeedUser.photo.defaultLink
+        }
 }

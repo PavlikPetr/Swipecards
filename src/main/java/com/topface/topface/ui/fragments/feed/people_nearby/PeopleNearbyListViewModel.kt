@@ -26,7 +26,7 @@ import javax.inject.Inject
 /**
  * ВьюМодель Листа "Людей рядом"
  */
-class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: FeedListData<FeedGeo>? ) : ILifeCycle {
+class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: FeedListData<FeedGeo>? ) : ILifeCycle {
 
     @Inject lateinit var mState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
@@ -36,29 +36,22 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
     private var mWaitLocationTimer: CountDownTimer? = null
     private val WAIT_LOCATION_DELAY = 10000
     val data = SingleObservableArrayList<Any>()
-    private val mLocationAction = Action1<Location> { location ->
-            sendPeopleNearbyRequest(location)
-
-    }
-
     var isProgressBarVisible: ObservableField<Int> = ObservableField<Int>(View.VISIBLE)
 
     init {
-            Debug.error("------------Конструктор МоделВью Листа Людей рядом-------------")
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(mLocationAction)
-
+        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object :Action1<Location>{
+            override fun call(location: Location?) {
+                location?.let { sendPeopleNearbyRequest(it) }
+            }
+        })
         geolocationManagerInit()
-
     }
 
     fun sendPeopleNearbyRequest(location: Location) {
-        Debug.error("------------Запрос на получение людей-------------")
-
-        mApi.callNewGeo(location.latitude,location.longitude).subscribe(object: RxUtils.ShortSubscription<FeedListData<FeedGeo>>(){
+        api.callNewGeo(location.latitude,location.longitude).subscribe(object: RxUtils.ShortSubscription<FeedListData<FeedGeo>>(){
             override fun onNext(data: FeedListData<FeedGeo>?) {
                 data?.let {
-                    Debug.error("------------Запрос на людей-----------Получен размер коллекции: " + data.items.size+ " кто-то - " + data.items.first.user.nameAndAge)
                     with(this@PeopleNearbyListViewModel.data.observableList) {
                         clear()
                         addAll(it.items)
@@ -74,8 +67,9 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     fun geolocationManagerInit() {
-        mGeoLocationManager = GeoLocationManager()
-        mGeoLocationManager.registerProvidersChangedActionReceiver()
+        mGeoLocationManager = GeoLocationManager().apply{
+            registerProvidersChangedActionReceiver()
+        }
         startWaitLocationTimer()
     }
 
