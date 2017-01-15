@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
 import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -163,12 +164,14 @@ public abstract class BaseAuthFragment extends BaseFragment {
                     sendFirstAuthUser(authRequest.getPlatform(), authStatus);
                 }
                 mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
-                if (!TextUtils.isEmpty(FBInvitesUtils.INSTANCE.getAppLinkToSend())) {
+                String appLink = FBInvitesUtils.INSTANCE.getAppLinkToSend();
+                if (!TextUtils.isEmpty(appLink)) {
                     if (authStatus != null) {
+                        Slices slice = new Slices().putSlice("val", appLink);
                         if (authStatus.equals("regular")) {
-                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_AUTHORIZE();
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_AUTHORIZE(slice);
                         } else if (authStatus.equals("created")) {
-                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_REGISTER();
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_REGISTER(slice);
                         }
                     }
                     FBInvitesUtils.INSTANCE.AppLinkSended();

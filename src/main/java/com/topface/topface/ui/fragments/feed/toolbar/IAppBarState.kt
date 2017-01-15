@@ -15,5 +15,6 @@ interface IAppBarState {
     /**
      * Развернули тулбар. Вызовов может быть несколько. Страдай.
      */
-    fun isExpanded(){}
+    fun isExpanded(isExpanded: Boolean) {
+    }
 }

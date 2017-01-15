@@ -241,9 +241,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onOptionsItemSelected(item: MenuItem?) =
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
-    override fun isExpanded() = with(mBinding.formsList) {
-        stopScroll()
-        smoothScrollToPosition(0)
+    override fun isExpanded(isExpanded: Boolean) = with(mBinding.formsList) {
+        if(isExpanded) {
+            stopScroll()
+            smoothScrollToPosition(0)
+        }
     }
 
     override fun isScrimVisible(isVisible: Boolean) =

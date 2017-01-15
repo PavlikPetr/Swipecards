@@ -7,6 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout.ViewConfig
 import com.topface.topface.utils.extensions.appContext
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.viewModels.BaseViewModel
 import org.jetbrains.anko.dimen
 
@@ -28,14 +29,11 @@ class PrimalCollapseViewModel(binding: AppBarBinding,
     override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
         appBar?.let {
             val visiblePartSize = it.height + verticalOffset
-            val isScrimsAreShown = visiblePartSize < binding.collapsingLayout.scrimVisibleHeightTrigger
             val isCollapsed = visiblePartSize <= binding.toolbarInclude.root.height
-            mScrimStateListener.isScrimVisible(isScrimsAreShown)
+            mScrimStateListener.isScrimVisible(visiblePartSize < binding.collapsingLayout.scrimVisibleHeightTrigger)
             mScrimStateListener.isCollapsed(isCollapsed)
             shadowVisibility.set(if (isCollapsed) View.VISIBLE else View.GONE)
-            if (visiblePartSize == binding.appContext().dimen(R.dimen.dating_album_height)) {
-                mScrimStateListener.isExpanded()
-            }
+            mScrimStateListener.isExpanded(visiblePartSize >= R.dimen.dating_album_height.getDimen())
         }
     }
 }

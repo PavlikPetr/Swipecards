@@ -37,15 +37,15 @@ object FBInvitesStatistics {
     const val FB_INVITE_SHOW_UNIQUE = "mobile_fb_invite_show_unique"
 
     /**
-     * Показ диалога приглашений друзей через FB
+     * Авторизация пользователя, который получил инвайт из FB
      */
-    @SendNow(single = false)
+    @SendNow(single = false, withSlices = true)
     const val FB_INVITE_AUTHORIZE = "mobile_fb_invite_authorize"
 
     /**
-     * Показ диалога приглашений друзей через FB
+     * Регистрация пользователя, который получил инвайт из FB
      */
-    @SendNow(single = false)
+    @SendNow(single = false, withSlices = true)
     const val FB_INVITE_REGISTER = "mobile_fb_invite_register"
 
 }
