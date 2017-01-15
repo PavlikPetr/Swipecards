@@ -77,7 +77,7 @@ class PeopleNearbyFragment : BaseFragment() {
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
-                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator))
+                .addAdapterComponent(activity.registerLifeCycleDelegate(PhotoBlogListComponent(context, mApi, mNavigator)))
     }
     private val mViewModel by lazy {
         PeopleNearbyFragmentViewModel()

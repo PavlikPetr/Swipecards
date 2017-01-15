@@ -18,28 +18,31 @@ import javax.inject.Inject
  * VM итема постановки в фотоленту
  * Created by ppavlik on 11.01.17.
  */
-class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profile: Profile) : PhotoBlogItemViewModel(profile.photo,
-        getPlaceholder(profile), R.drawable.place_in.getDrawable(), marginLeft = R.dimen.photoblog_add_button_margin_left.getDimen(), avatarClickListener = {
-    if (App.get().profile.photo.isEmpty) {
-        mNavigator.showTakePhotoPopup()
-    } else {
-        mNavigator.showAddToLeader()
-    }
-}) {
+class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profile: Profile) {
     @Inject lateinit var appState: TopfaceAppState
     private val mProfileSubscription: Subscription
+    val photoBlogViewModel: PhotoBlogItemViewModel
 
-    companion object {
-        fun getPlaceholder(profile: Profile) = if (profile.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small
-    }
+    private fun getPlaceholder(profile: Profile) =
+            if (profile.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small
 
     init {
         App.get().inject(this)
+        photoBlogViewModel = PhotoBlogItemViewModel(profile.photo,
+                getPlaceholder(profile), R.drawable.place_in.getDrawable(),
+                marginLeft = R.dimen.photoblog_add_button_margin_left.getDimen(),
+                avatarClickListener = {
+                    if (App.get().profile.photo.isEmpty) {
+                        mNavigator.showTakePhotoPopup()
+                    } else {
+                        mNavigator.showAddToLeader()
+                    }
+                })
         mProfileSubscription = appState.getObservable(Profile::class.java)
                 .subscribe(shortSubscription {
                     it?.let {
-                        userPhoto.set(it.photo)
-                        placeholder.set(getPlaceholder(it))
+                        photoBlogViewModel.userPhoto.set(it.photo)
+                        photoBlogViewModel.placeholder.set(getPlaceholder(it))
                     }
                 })
     }

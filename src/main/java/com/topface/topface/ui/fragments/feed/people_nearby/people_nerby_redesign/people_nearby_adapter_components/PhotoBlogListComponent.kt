@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.topface.topface.R
@@ -15,6 +16,7 @@ import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.utils.ILifeCycle
 
 /**
  * Компонент фотоленты с горизонтальным скролом
@@ -23,9 +25,9 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 
 class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
-                             private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>() {
+                             private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
     private lateinit var mAdapter: CompositeAdapter
-    private var mViewModel: PhotoBlogListViewModel?=null
+    private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) { mAdapter } }
 
     override val itemLayout: Int
         get() = R.layout.photoblog_list
@@ -39,13 +41,17 @@ class PhotoBlogListComponent(private val mContext: Context,
                     .addAdapterComponent(PhotoBlogItemComponent(mNavigator))
                     .addAdapterComponent(PhotoBlogAddButtonComponent(mNavigator))
             photoblogList.adapter = mAdapter
-            mViewModel = PhotoBlogListViewModel(mContext, mApi, data?.item) { mAdapter }
             viewModel = mViewModel
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mViewModel.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun release() {
         super.release()
-        mViewModel?.release()
+        mViewModel.release()
     }
 }
