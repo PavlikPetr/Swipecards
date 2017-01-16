@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 
 import android.os.Bundle
 import android.support.annotation.IntDef
+import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
@@ -44,7 +45,7 @@ class PeopleNearbyPermissionNeverAskAgain
 /**
  * Итем списка "Люди рядом"
  */
-class PeopleNearbyList
+class PeopleNearbyList(var item: FeedListData<FeedGeo>? = null)
 
 /**
  * Итем списка "Фотолента"
@@ -62,10 +63,11 @@ data class PhotoBlogAdd(var diffTemp: Int = 0)
  */
 class PhotoBlogItem
 
-
 /**
  * Лоадер на время отправки запроса
  */
 data class PeopleNearbyLoader(var diffTemp: Int = 0)
 
 data class PhotoBlogLoaded(var isEmptyList: Boolean)
+
+data class PeopleNearbyLoaded(var isEmptyList: Boolean)

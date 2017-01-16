@@ -66,7 +66,6 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
                             isRefreshing.set(false)
                         }
                     }
-
                     override fun onError(e: Throwable?) {
                         e?.let {
                         }

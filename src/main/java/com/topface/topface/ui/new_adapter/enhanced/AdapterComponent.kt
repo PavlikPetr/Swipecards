@@ -38,4 +38,5 @@ abstract class AdapterComponent<T : ViewDataBinding, in D> {
 
     open fun release() {
     }
+
 }

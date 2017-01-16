@@ -56,7 +56,7 @@ public class UsersListCacheManager extends PreferencesCacheManager {
      * @throws JSONException
      */
     protected void saveToCache(SharedPreferences.Editor editor, UsersList usersList) throws JSONException {
-        editor.putString(getDataCacheKey(mCacheKey), usersList.toJson().toString());
+        editor.putString(getDataCacheKey(mCacheKey), new JSONObject().put(UsersList.USERS, new JSONArray(JsonUtils.toJson(usersList))).toString());
         editor.putInt(getPositionCacheKey(mCacheKey), usersList.getSearchPosition());
     }
 

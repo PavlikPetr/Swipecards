@@ -15,9 +15,11 @@ import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.DialogItemComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyListComponent
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment.Companion.PAGE_NAME
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components.*
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -95,7 +97,11 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
-                .addAdapterComponent(activity.registerLifeCycleDelegate(PhotoBlogListComponent(context, mApi, mNavigator)))
+                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator))
+                // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
+                .apply { data.add(PhotoBlogList()) }
+                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator)).apply { data.add(PeopleNearbyList()) }
+
     }
     private val mViewModel by lazy {
         PeopleNearbyFragmentViewModel(this)
