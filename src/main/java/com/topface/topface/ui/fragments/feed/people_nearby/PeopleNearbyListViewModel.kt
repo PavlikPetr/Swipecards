@@ -39,26 +39,20 @@ class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: Feed
     private var mWaitLocationTimer: CountDownTimer? = null
     private val WAIT_LOCATION_DELAY = 10000
     val data = SingleObservableArrayList<Any>()
-
     var isProgressBarVisible: ObservableField<Int> = ObservableField<Int>(View.VISIBLE)
 
     init {
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object : Action1<Location> {
+        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object :Action1<Location>{
             override fun call(location: Location?) {
-                if (location != null) {
-                    sendPeopleNearbyRequest(location)
-                } else {
-                    mEventBus.setData(PeopleNearbyLoaded(true))
-                    showEmptyGeo()
-                }
+                location?.let { sendPeopleNearbyRequest(it) }
             }
         })
         geolocationManagerInit()
     }
 
-
     fun sendPeopleNearbyRequest(location: Location) {
+
         api.callNewGeo(location.latitude, location.longitude).subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedGeo>>() {
             override fun onNext(data: FeedListData<FeedGeo>?) {
                 data?.let {
@@ -78,7 +72,7 @@ class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: Feed
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     fun geolocationManagerInit() {
-        mGeoLocationManager = GeoLocationManager().apply {
+        mGeoLocationManager = GeoLocationManager().apply{
             registerProvidersChangedActionReceiver()
         }
         startWaitLocationTimer()
@@ -101,6 +95,8 @@ class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: Feed
 
     private fun showEmptyGeo() {
         data.observableList.clear()
+            mWaitLocationTimer?.cancel()
+            mWaitLocationTimer = null
     }
 
     fun release() {

@@ -16,18 +16,19 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo, val navigator: FeedNavigator) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
 
-    private val feedUser = item.user
+
+    private val mFeedUser = item.user
     val avatar = ObservableField(prepareAvatar())
-    val nameAndAge = ObservableField(feedUser.nameAndAge)
+    val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
     val onlineImage = ObservableField(prepareImageForOnline())
 
-    private fun prepareImageForOnline() = if (feedUser.online) R.drawable.online else 0
+    private fun prepareImageForOnline() = if (mFeedUser.online) R.drawable.online else 0
 
     private fun prepareDistanceText() =
             when {
-                feedUser.deleted -> R.string.user_is_deleted.getString()
-                feedUser.banned -> R.string.user_is_banned.getString()
+                mFeedUser.deleted -> R.string.user_is_deleted.getString()
+                mFeedUser.banned -> R.string.user_is_banned.getString()
                 else -> prepareStringFromDouble()
             }
 
@@ -40,9 +41,9 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val it
 
     private fun prepareAvatar() =
             when {
-                feedUser.deleted || feedUser.banned || feedUser.photo.isEmpty || feedUser.photo == null -> if (feedUser.sex == Profile.BOY) R.drawable.feed_banned_male_avatar.getString()
+                mFeedUser.deleted || mFeedUser.banned || mFeedUser.photo.isEmpty || mFeedUser.photo == null -> if (mFeedUser.sex == Profile.BOY) R.drawable.feed_banned_male_avatar.getString()
                 else R.drawable.feed_banned_female_avatar.getString()
-                else -> feedUser.photo.defaultLink
+                else -> mFeedUser.photo.defaultLink
             }
 
     fun onClick() = navigator.showProfile(item)

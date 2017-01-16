@@ -15,6 +15,7 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 /**
  * Адаптер компонент для итема "Людей рядом", внутри которого
  */
+
 class PeopleNearbyListComponent(val context: Context, val api: FeedApi, val navigator: FeedNavigator) : AdapterComponent<PeopleNearbyListBinding, PeopleNearbyList>() {
 
     private lateinit var mViewModel: PeopleNearbyListViewModel
