@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.google.gson.reflect.TypeToken;
+import com.topface.statistics.generated.PeopleNearbyStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
@@ -31,6 +32,8 @@ import com.topface.topface.requests.PeopleNearbyRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FBInvitesStatistics;
+import com.topface.topface.statistics.PeopleNearbyStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
 import com.topface.topface.ui.adapters.FeedList;
@@ -41,6 +44,7 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.extensions.PermissionsExtensions;
 import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
@@ -284,6 +288,9 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         if (emptyView != null) {
             switch ((int) PermissionsExtensionsKt.getPermissionStatus(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 case (int) PermissionsExtensions.PERMISSION_GRANTED:
+                    PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_OPEN(Utils.
+                            getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_OPEN));
+                    PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NOT_UNIQUE_NEARBY_OPEN();
                     emptyView.setDisplayedChild(0);
                     ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
                             .setText(errorCode == ErrorCodes.CANNOT_GET_GEO
@@ -291,6 +298,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                                     : R.string.nobody_nearby);
                     break;
                 case (int) PermissionsExtensions.PERMISSION_DENIED:
+                    sendPeopleNearbyPermissionOpen();
                     emptyView.setDisplayedChild(2);
                     com.topface.topface.databinding.LayoutUnavailableGeoBinding binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
                     binding.setViewModel(new UnavailableGeoViewModel(binding, new Function0<Unit>() {
@@ -302,12 +310,18 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                     }));
                     break;
                 case (int) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN:
+                    sendPeopleNearbyPermissionOpen();
                     emptyView.setDisplayedChild(2);
                     binding = DataBindingUtil.bind(emptyView.findViewById(R.id.unavailableGeoRootView));
                     binding.setViewModel(new DontAskGeoViewModel(binding));
                     break;
             }
         }
+    }
+
+    private void sendPeopleNearbyPermissionOpen() {
+        PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_PERMISSION_OPEN(Utils.
+                getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_PERMISSION_OPEN));
     }
 
     private void initEmptyScreenOnBlocked(ViewFlipper emptyView, final Options.BlockPeopleNearby blockPeopleNearby) {

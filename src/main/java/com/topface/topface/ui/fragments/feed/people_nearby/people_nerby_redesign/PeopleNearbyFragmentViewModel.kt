@@ -3,9 +3,12 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import android.databinding.Observable.OnPropertyChangedCallback
 import android.databinding.ObservableBoolean
 import android.support.v4.widget.SwipeRefreshLayout
+import com.topface.statistics.generated.PeopleNearbyStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.state.EventBus
+import com.topface.topface.statistics.PeopleNearbyStatistics
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.extensions.PermissionsExtensions
 import com.topface.topface.utils.extensions.PermissionsExtensions.PermissionState
@@ -19,7 +22,7 @@ import javax.inject.Inject
  * VM для нового дизайна "Люди рядом"
  * Created by tiberal on 30.11.16.
  */
-class PeopleNearbyFragmentViewModel : SwipeRefreshLayout.OnRefreshListener, IFeedPushHandlerListener {
+class PeopleNearbyFragmentViewModel(private val mPopoverControl:IPopoverControl) : SwipeRefreshLayout.OnRefreshListener, IFeedPushHandlerListener {
     var isRefreshing = ObservableBoolean()
     var isEnable = ObservableBoolean(false)
     val data = SingleObservableArrayList<Any>()
@@ -47,6 +50,7 @@ class PeopleNearbyFragmentViewModel : SwipeRefreshLayout.OnRefreshListener, IFee
     private fun removeLoader() {
         if (data.observableList.remove(PeopleNearbyLoader())) {
             isEnable.set(true)
+            mPopoverControl.show()
         }
     }
 
@@ -55,14 +59,21 @@ class PeopleNearbyFragmentViewModel : SwipeRefreshLayout.OnRefreshListener, IFee
     }
 
     fun geoPermissionsGranted() {
+        PeopleNearbyStatisticsGeneratedStatistics
+                .sendNow_PEOPLE_NEARBY_OPEN(Utils.getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_OPEN))
+        PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NOT_UNIQUE_NEARBY_OPEN()
         with(data.observableList) {
-            clear()
-            addAll(listOf(PhotoBlogList(), PeopleNearbyLoader(), PeopleNearbyList()))
+            if (find { it is PhotoBlogList } == null) {
+                clear()
+                addAll(listOf(PhotoBlogList(), PeopleNearbyLoader()))
+            }
         }
     }
 
     @Suppress("IMPLICIT_CAST_TO_ANY")
     fun askGeoPermissions(@PermissionState state: Long) = with(data.observableList) {
+        PeopleNearbyStatisticsGeneratedStatistics
+                .sendNow_PEOPLE_NEARBY_PERMISSION_OPEN(Utils.getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_PERMISSION_OPEN))
         when (state) {
             PermissionsExtensions.PERMISSION_DENIED -> PeopleNearbyPermissionDenied()
             PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN -> PeopleNearbyPermissionNeverAskAgain()

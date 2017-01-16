@@ -1,17 +1,17 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.Manifest
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
-import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
@@ -26,8 +26,6 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.extensions.PermissionsExtensions.Companion.PERMISSION_DENIED
-import com.topface.topface.utils.extensions.PermissionsExtensions.Companion.PERMISSION_NEVER_ASK_AGAIN
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
 import com.topface.topface.utils.registerLifeCycleDelegate
@@ -38,6 +36,13 @@ import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
+import android.support.v4.view.ViewCompat.setElevation
+import android.os.Build.VERSION.SDK_INT
+import android.content.Context.LAYOUT_INFLATER_SERVICE
+import android.os.Build
+import android.widget.ImageButton
+import android.widget.LinearLayout
+
 
 /**
  * Новый экран "Люди рядом", который содержит функционал фотоленты
@@ -46,7 +51,20 @@ import javax.inject.Inject
 
 @FlurryOpenEvent(name = PAGE_NAME)
 @RuntimePermissions
-class PeopleNearbyFragment : BaseFragment() {
+class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
+
+    override fun show() {
+        val customView = (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)?.inflate(R.layout.people_nearby_popover, null)
+        val mPopupWindow = PopupWindow(
+                customView,
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        customView?.findViewById(R.id.root)?.setOnClickListener {
+            mPopupWindow.dismiss()
+        }
+        mPopupWindow.showAtLocation(mBinding.root, Gravity.CENTER, 0, 0)
+    }
 
     @Inject lateinit var mEventBus: EventBus
 
@@ -83,9 +101,10 @@ class PeopleNearbyFragment : BaseFragment() {
                 // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
                 .apply { data.add(PhotoBlogList()) }
                 .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator)).apply { data.add(PeopleNearbyList()) }
+
     }
     private val mViewModel by lazy {
-        PeopleNearbyFragmentViewModel()
+        PeopleNearbyFragmentViewModel(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

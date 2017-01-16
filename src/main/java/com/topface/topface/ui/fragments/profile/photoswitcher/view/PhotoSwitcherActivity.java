@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
@@ -398,6 +400,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
         startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null, null,
                 mUid, itemId, false, true, null, null));
+        NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc","photoAlbum"));
         finish();
     }
 

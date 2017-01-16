@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
             android:fadingEdge="none"
-            app:bindDataToCompositeAdapter="@{viewModel.data}"/>
+            app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}"/>
 
         <View
             android:layout_width="match_parent"

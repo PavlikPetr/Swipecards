@@ -1,12 +1,10 @@
 package com.topface.topface.ui.fragments.feed.people_nearby
 
 import android.databinding.ObservableField
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.PeopleNearbyListItemBinding
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.viewModels.BaseViewModel

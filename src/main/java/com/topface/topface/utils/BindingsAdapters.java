@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -33,11 +34,15 @@ import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.databinding.IArrayListChange;
+import com.topface.topface.utils.databinding.MultiObservableArrayList;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 import com.topface.topface.utils.glide_utils.GlideTransformationType;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +114,42 @@ public class BindingsAdapters {
                 }
             });
         }
+    }
+
+    @BindingAdapter("bindDataToCompositeAdapterWithSmoothUpdate")
+    public static void bindDataToCompositeAdapterWithSmoothUpdate(final RecyclerView recyclerView, MultiObservableArrayList<Object> observableArrayList) {
+        final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
+        adapter.setData(observableArrayList.getList());
+        adapter.notifyDataSetChanged();
+        observableArrayList.addOnListChangeListener(new IArrayListChange<Object>() {
+            @Override
+            public void onChange(@NotNull final ArrayList<Object> newList) {
+                final List<Object> oldList = adapter.getData();
+                DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                    @Override
+                    public int getOldListSize() {
+                        return oldList.size();
+                    }
+
+                    @Override
+                    public int getNewListSize() {
+                        return newList.size();
+                    }
+
+                    @Override
+                    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                        return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                        return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+                    }
+                });
+                adapter.setData(newList);
+                diff.dispatchUpdatesTo(adapter);
+            }
+        });
     }
 
     @BindingAdapter("pxTextSize")

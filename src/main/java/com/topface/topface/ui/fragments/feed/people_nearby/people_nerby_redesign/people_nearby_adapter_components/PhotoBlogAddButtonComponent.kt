@@ -24,7 +24,7 @@ class PhotoBlogAddButtonComponent(private val mNavigator: IFeedNavigator) : Adap
 
     override fun bind(binding: PhotoblogItemBinding, data: PhotoBlogAdd?, position: Int) {
         data?.let {
-            binding.viewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile)
+            binding.viewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile).photoBlogViewModel
         }
     }
 }
