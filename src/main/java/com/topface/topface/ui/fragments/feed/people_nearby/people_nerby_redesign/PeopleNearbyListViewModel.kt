@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.people_nearby
+package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.Manifest
 import android.databinding.ObservableField
@@ -11,7 +11,6 @@ import com.topface.topface.data.FeedListData
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyLoaded
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.geo.GeoLocationManager
@@ -39,7 +38,7 @@ class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: Feed
 
     init {
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object :Action1<Location>{
+        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object : Action1<Location> {
             override fun call(location: Location?) {
                 location?.let { sendPeopleNearbyRequest(it) }
             }
@@ -101,4 +100,3 @@ class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: Feed
     }
 
 }
-

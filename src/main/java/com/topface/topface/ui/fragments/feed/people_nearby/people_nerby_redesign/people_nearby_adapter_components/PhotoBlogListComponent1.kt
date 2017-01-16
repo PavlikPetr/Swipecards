@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.people_nearby
+package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components
 
 import android.content.Context
 import android.os.Bundle
@@ -7,7 +7,10 @@ import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyAdapter
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyList
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyTypeProvider
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 

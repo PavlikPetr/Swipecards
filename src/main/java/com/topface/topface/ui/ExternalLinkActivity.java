@@ -24,8 +24,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc","externalLink"));
-            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null));
+            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null,"externalLink"));
             getIntent().setData(null);
             finish();
         }

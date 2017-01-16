@@ -399,8 +399,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         Intent intent = getIntent();
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
         startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null, null,
-                mUid, itemId, false, true, null, null));
-        NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc","photoAlbum"));
+                mUid, itemId, false, true, null, null, "photoAlbum"));
         finish();
     }
 

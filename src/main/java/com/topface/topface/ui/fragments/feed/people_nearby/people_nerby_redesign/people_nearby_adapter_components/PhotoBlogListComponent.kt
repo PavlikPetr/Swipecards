@@ -5,10 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.topface.topface.R
-import com.topface.topface.data.FeedListData
-import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.databinding.PhotoblogListBinding
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogTypeProvider
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PgotoblogListTypeProvider

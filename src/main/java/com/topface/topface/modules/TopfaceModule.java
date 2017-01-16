@@ -60,7 +60,7 @@ import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyListViewModel;
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogAddButtonViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel;

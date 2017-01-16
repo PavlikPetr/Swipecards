@@ -86,8 +86,7 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
     }
 
     open fun onAvatarClickActionModeDisabled() {
-        mNavigator.showProfile(item)
-        NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(Slices().putSlice("plc", feed_type.toLowerCase()))
+        mNavigator.showProfile(item, feed_type.toLowerCase())
     }
 
 }

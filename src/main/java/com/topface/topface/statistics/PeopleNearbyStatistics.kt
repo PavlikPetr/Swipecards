@@ -25,7 +25,7 @@ object PeopleNearbyStatistics {
     const val PEOPLE_NEARBY_OPEN = "mobile_nearby_open"
 
     /**
-     * Уникальный статистика пятого показа экрана "Люди рядом"
+     * Уникальная статистика пятого показа экрана "Люди рядом" (с разрешенными пермишинами)
      */
     @SendNow(single = false, unique = true)
     const val PEOPLE_NEARBY_FIFTH_OPEN = "mobile_nearby_fifth_open"

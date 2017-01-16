@@ -3,16 +3,10 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import com.topface.topface.R
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.data.User
-import com.topface.topface.databinding.ItemEmptyPeopleNearbyBinding
 import com.topface.topface.databinding.PhotoblogItemBinding
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyEmptyList
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyEmptyViewModel
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogItem
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogItemViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
-import com.topface.topface.utils.extensions.getString
 
 /**
  * Компонент итема фотоленты
@@ -20,6 +14,10 @@ import com.topface.topface.utils.extensions.getString
  */
 
 class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogItemBinding, FeedPhotoBlog>() {
+    companion object {
+        const val PLC = "geo_with_photoblog"
+    }
+
     override val itemLayout: Int
         get() = R.layout.photoblog_item
     override val bindingClass: Class<PhotoblogItemBinding>
@@ -29,7 +27,7 @@ class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator) : AdapterCo
         data?.let {
             binding.viewModel = PhotoBlogItemViewModel(it.user.photo,
                     if (it.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small) {
-                mNavigator.showChat(it.user, null)
+                mNavigator.showProfile(it, PLC)
             }
         }
     }

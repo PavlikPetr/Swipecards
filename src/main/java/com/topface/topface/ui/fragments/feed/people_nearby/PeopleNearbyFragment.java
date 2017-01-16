@@ -32,7 +32,6 @@ import com.topface.topface.requests.PeopleNearbyRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.statistics.FBInvitesStatistics;
 import com.topface.topface.statistics.PeopleNearbyStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -45,6 +44,7 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.extensions.PermissionsExtensions;
 import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
@@ -115,6 +115,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         super.onCreate(savedInstanceState);
         if (PermissionsExtensionsKt.isGrantedPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             geolocationManagerInit();
+            sendShowStatistics();
         } else {
             onEmptyFeed(ErrorCodes.CANNOT_GET_GEO);
         }
@@ -288,9 +289,6 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         if (emptyView != null) {
             switch ((int) PermissionsExtensionsKt.getPermissionStatus(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 case (int) PermissionsExtensions.PERMISSION_GRANTED:
-                    PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_OPEN(Utils.
-                            getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_OPEN));
-                    PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NOT_UNIQUE_NEARBY_OPEN();
                     emptyView.setDisplayedChild(0);
                     ((TextView) emptyView.findViewById(R.id.blocked_geo_text))
                             .setText(errorCode == ErrorCodes.CANNOT_GET_GEO
@@ -316,6 +314,20 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                     binding.setViewModel(new DontAskGeoViewModel(binding));
                     break;
             }
+        }
+
+    }
+
+    private void sendShowStatistics() {
+        PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_OPEN(Utils.
+                getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_OPEN));
+        PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NOT_UNIQUE_NEARBY_OPEN();
+        AppConfig appConfig = App.getAppConfig();
+        appConfig.incrGeoScreenShowCount();
+        appConfig.saveConfig();
+        if (appConfig.getGeoScreenShowCount() == com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel.SEND_SHOW_SCREEN_STATISTICS) {
+            PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_FIFTH_OPEN(Utils
+                    .getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_FIFTH_OPEN));
         }
     }
 

@@ -1,13 +1,14 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.Manifest
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import com.topface.topface.App
 import com.topface.topface.R
@@ -15,11 +16,9 @@ import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.DialogItemComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyListComponent
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment.Companion.PAGE_NAME
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components.*
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -28,7 +27,6 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
-import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 import permissions.dispatcher.NeedsPermission
@@ -36,12 +34,6 @@ import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
-import android.support.v4.view.ViewCompat.setElevation
-import android.os.Build.VERSION.SDK_INT
-import android.content.Context.LAYOUT_INFLATER_SERVICE
-import android.os.Build
-import android.widget.ImageButton
-import android.widget.LinearLayout
 
 
 /**
@@ -53,18 +45,15 @@ import android.widget.LinearLayout
 @RuntimePermissions
 class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
-    override fun show() {
-        val customView = (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)?.inflate(R.layout.people_nearby_popover, null)
-        val mPopupWindow = PopupWindow(
-                customView,
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        customView?.findViewById(R.id.root)?.setOnClickListener {
-            mPopupWindow.dismiss()
-        }
-        mPopupWindow.showAtLocation(mBinding.root, Gravity.CENTER, 0, 0)
-    }
+    // показываем PopupWindow о том, что фотолента помогает популярности
+    override fun show() =
+            (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)
+                    ?.inflate(R.layout.people_nearby_popover, null)?.let {
+                with(PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)) {
+                    it.findViewById(R.id.root)?.setOnClickListener { dismiss() }
+                    showAtLocation(mBinding.refresh, Gravity.CENTER, 0, 0)
+                }
+            } ?: Unit
 
     @Inject lateinit var mEventBus: EventBus
 
@@ -98,9 +87,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
                 .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator))
-                // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
-                .apply { data.add(PhotoBlogList()) }
-                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator)).apply { data.add(PeopleNearbyList()) }
+                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator))
 
     }
     private val mViewModel by lazy {
@@ -147,7 +134,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
     }
 
     private fun initList() = with(mBinding.list) {
-        layoutManager = LinearLayoutManager(context)
+        layoutManager = NonScrolledLinearLayoutManager(context)
         adapter = mAdapter
     }
 

@@ -10,6 +10,7 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
+import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.rx.applySchedulers
@@ -52,7 +53,9 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        //TODO отловить закрытие активити на постановку в ленту с успешным размещением и вызвать обновление списка
+        if (requestCode == PhotoblogFragment.ADD_TO_PHOTO_BLOG_ACTIVITY_ID) {
+            loadFeeds()
+        }
     }
 
     fun loadFeeds() {
@@ -66,6 +69,7 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
                             isRefreshing.set(false)
                         }
                     }
+
                     override fun onError(e: Throwable?) {
                         e?.let {
                         }

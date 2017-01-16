@@ -20,6 +20,5 @@ class PeopleNearbyLoaderComponent : AdapterComponent<ItemLoaderBinding, PeopleNe
     override val bindingClass: Class<ItemLoaderBinding>
         get() = ItemLoaderBinding::class.java
 
-    override fun bind(binding: ItemLoaderBinding, data: PeopleNearbyLoader?, position: Int) {
-    }
+    override fun bind(binding: ItemLoaderBinding, data: PeopleNearbyLoader?, position: Int) {}
 }

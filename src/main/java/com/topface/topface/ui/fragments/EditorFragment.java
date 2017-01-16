@@ -188,8 +188,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 try {
                     getActivity().startActivity(
                             UserProfileActivity.createIntent(null, null,
-                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null));
-                    NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc","editor"));
+                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null, "editor"));
                 } catch (Exception e) {
                     Debug.error(e);
                 }

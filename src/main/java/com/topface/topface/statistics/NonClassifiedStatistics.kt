@@ -17,10 +17,4 @@ object NonClassifiedStatistics {
      */
     @SendNow(single = false, withSlices = true)
     const val PROFILE_OPEN = "mobile_profile_open"
-
-    /**
-     * Статистика просмотров экрана блокировки отправки сообщения без взаимной симпатии
-     */
-    @SendNow(single = false, withSlices = true)
-    const val DIALOGS_BLOCK_MESSAGES_WITHOUT_MUTUAL = "mobile_dialogs_block_messages_without_mutual"
 }

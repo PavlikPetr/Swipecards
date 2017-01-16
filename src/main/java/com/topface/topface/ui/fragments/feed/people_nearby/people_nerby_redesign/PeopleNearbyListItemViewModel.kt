@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.people_nearby
+package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.databinding.ObservableField
 import com.topface.topface.R
@@ -14,6 +14,9 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo, val navigator: FeedNavigator) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
 
+    companion object {
+        private const val PLC = "geo"
+    }
 
     private val mFeedUser = item.user
     val avatar = ObservableField(prepareAvatar())
@@ -44,6 +47,6 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val it
                 else -> mFeedUser.photo.defaultLink
             }
 
-    fun onClick() = navigator.showProfile(item)
+    fun onClick() = navigator.showProfile(item, PLC)
 
 }

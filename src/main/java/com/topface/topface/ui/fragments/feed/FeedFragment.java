@@ -743,8 +743,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
-                NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc", getFeedService().name().toLowerCase()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id,
+                        item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age),
+                        item.user.city.getName(),getFeedService().name().toLowerCase()));
             }
         }
     }

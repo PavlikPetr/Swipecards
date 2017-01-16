@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.people_nearby
+package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
@@ -18,7 +18,7 @@ class PeopleNearbyAdapter(val mNavigator: FeedNavigator) : AdapterComponent<Peop
 
     override fun bind(binding: PeopleNearbyListItemBinding, data: FeedGeo?, position: Int) {
         data?.let {
-            binding.viewModel = PeopleNearbyListItemViewModel( binding, data, mNavigator)
+            binding.viewModel = PeopleNearbyListItemViewModel(binding, data, mNavigator)
         }
     }
 }

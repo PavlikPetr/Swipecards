@@ -54,13 +54,13 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showPurchaseVip() = mActivityDelegate.startActivityForResult(PurchasesActivity
             .createVipBuyIntent(null, "Likes"), PurchasesActivity.INTENT_BUY_VIP)
 
-    override fun <T : FeedItem> showProfile(item: T?) {
+    override fun <T : FeedItem> showProfile(item: T?, from: String) {
         item?.let {
             if (!it.user.isEmpty) {
                 val user = it.user
                 mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, user.photo,
                         user.id, it.id, false, true, Utils.getNameAndAge(user.firstName, user.age),
-                        user.city.getName()))
+                        user.city.getName(), from))
             }
         }
     }

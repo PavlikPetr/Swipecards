@@ -22,7 +22,12 @@ import javax.inject.Inject
  * VM для нового дизайна "Люди рядом"
  * Created by tiberal on 30.11.16.
  */
-class PeopleNearbyFragmentViewModel(private val mPopoverControl:IPopoverControl) : SwipeRefreshLayout.OnRefreshListener, IFeedPushHandlerListener {
+class PeopleNearbyFragmentViewModel(private val mPopoverControl: IPopoverControl) : SwipeRefreshLayout.OnRefreshListener, IFeedPushHandlerListener {
+    companion object {
+        // номер показа когда следует отправить угикальное событие статистики
+        const val SEND_SHOW_SCREEN_STATISTICS = 5
+    }
+
     var isRefreshing = ObservableBoolean()
     var isEnable = ObservableBoolean(false)
     val data = SingleObservableArrayList<Any>()
@@ -59,13 +64,25 @@ class PeopleNearbyFragmentViewModel(private val mPopoverControl:IPopoverControl)
     }
 
     fun geoPermissionsGranted() {
-        PeopleNearbyStatisticsGeneratedStatistics
-                .sendNow_PEOPLE_NEARBY_OPEN(Utils.getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_OPEN))
-        PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NOT_UNIQUE_NEARBY_OPEN()
         with(data.observableList) {
             if (find { it is PhotoBlogList } == null) {
                 clear()
-                addAll(listOf(PhotoBlogList(), PeopleNearbyLoader()))
+                addAll(listOf(PhotoBlogList(), PeopleNearbyLoader(), PeopleNearbyList()))
+                sendScreenShowStatistics()
+            }
+        }
+    }
+
+    private fun sendScreenShowStatistics() {
+        PeopleNearbyStatisticsGeneratedStatistics
+                .sendNow_PEOPLE_NEARBY_OPEN(Utils.getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_OPEN))
+        PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NOT_UNIQUE_NEARBY_OPEN()
+        with(App.getAppConfig()) {
+            incrGeoScreenShowCount()
+            saveConfig()
+            if (geoScreenShowCount == SEND_SHOW_SCREEN_STATISTICS) {
+                PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_FIFTH_OPEN(Utils
+                        .getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_FIFTH_OPEN))
             }
         }
     }
