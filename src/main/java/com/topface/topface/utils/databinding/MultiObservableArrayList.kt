@@ -74,7 +74,7 @@ class MultiObservableArrayList<T> : ArrayList<T>() {
                 if (isEntry(i)) {
                     this[i] = list.get(i)
                 } else {
-                    this.addAll(i, list.subList(i, list.size - 1))
+                    this.addAll(i, list.subList(i, list.size ))
                     break
                 }
                 i++
@@ -86,5 +86,7 @@ class MultiObservableArrayList<T> : ArrayList<T>() {
         informSubscribers()
     }
 
-    private fun informSubscribers() = mListeners.forEach { it.onChange(this) }
+    private fun informSubscribers() = mListeners.forEach { it.onChange(getList()) }
+
+    fun getList()= arrayListOf<T>().apply { addAll(this@MultiObservableArrayList) }
 }

@@ -119,7 +119,7 @@ public class BindingsAdapters {
     @BindingAdapter("bindDataToCompositeAdapterWithSmoothUpdate")
     public static void bindDataToCompositeAdapterWithSmoothUpdate(final RecyclerView recyclerView, MultiObservableArrayList<Object> observableArrayList) {
         final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
-        adapter.setData(observableArrayList);
+        adapter.setData(observableArrayList.getList());
         adapter.notifyDataSetChanged();
         observableArrayList.addOnListChangeListener(new IArrayListChange<Object>() {
             @Override
@@ -138,20 +138,15 @@ public class BindingsAdapters {
 
                     @Override
                     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-//                        return false;
                         return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
                     }
 
                     @Override
                     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-//                        return false;
                         return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
                     }
                 });
                 adapter.setData(newList);
-//                if (oldList.size() == 0) {
-//                    adapter.notifyDataSetChanged();
-//                }
                 diff.dispatchUpdatesTo(adapter);
             }
         });

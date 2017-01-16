@@ -3,6 +3,8 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
@@ -22,6 +24,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
+            NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc","externalLink"));
             startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null));
             getIntent().setData(null);
             finish();

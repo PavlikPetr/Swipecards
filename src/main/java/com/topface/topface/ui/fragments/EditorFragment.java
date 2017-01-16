@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -186,8 +188,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 try {
                     getActivity().startActivity(
                             UserProfileActivity.createIntent(null, null,
-                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null)
-                    );
+                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null));
+                    NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc","editor"));
                 } catch (Exception e) {
                     Debug.error(e);
                 }
@@ -288,7 +290,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
             }
         });
-        trialType.setSelection((int)mAppConfig.getTrialVipPopupType() + 1);
+        trialType.setSelection((int) mAppConfig.getTrialVipPopupType() + 1);
     }
 
     private void initApiUrl(View rootLayout) {

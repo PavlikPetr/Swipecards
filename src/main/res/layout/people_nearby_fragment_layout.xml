@@ -11,23 +11,29 @@
             type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel"/>
     </data>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh"
+    <LinearLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_white"
-        app:OnSwipeRefreshListener="@{viewModel}"
-        app:setEnabled="@{viewModel.isEnable}"
-        app:setRefresh="@{viewModel.isRefreshing}">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fadeScrollbars="true"
-            android:fadingEdge="none"
-            android:overScrollMode="never"
-            app:bindDataToCompositeAdapter="@{viewModel.data}"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent"
+            android:background="@color/bg_white"
+            app:OnSwipeRefreshListener="@{viewModel}"
+            app:setEnabled="@{viewModel.isEnable}"
+            app:setRefresh="@{viewModel.isRefreshing}">
+
+            <android.support.v7.widget.RecyclerView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:overScrollMode="never"
+                app:bindDataToCompositeAdapter="@{viewModel.data}"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 </layout>

@@ -27,7 +27,7 @@ class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
     private lateinit var mAdapter: CompositeAdapter
-    private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) { mAdapter } }
+    private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) }
 
     override val itemLayout: Int
         get() = R.layout.photoblog_list
