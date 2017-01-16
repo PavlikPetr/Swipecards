@@ -16,7 +16,8 @@ import com.topface.topface.utils.extensions.getString
  * Created by ppavlik on 11.01.17.
  */
 
-class PhotoBlogAddButtonComponent(private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogItemBinding, PhotoBlogAdd>() {
+class PhotoBlogAddButtonComponent(private val mNavigator: IFeedNavigator,
+                                  private val mPopoverControl: IPopoverControl) : AdapterComponent<PhotoblogItemBinding, PhotoBlogAdd>() {
     override val itemLayout: Int
         get() = R.layout.photoblog_item
     override val bindingClass: Class<PhotoblogItemBinding>
@@ -24,7 +25,7 @@ class PhotoBlogAddButtonComponent(private val mNavigator: IFeedNavigator) : Adap
 
     override fun bind(binding: PhotoblogItemBinding, data: PhotoBlogAdd?, position: Int) {
         data?.let {
-            binding.viewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile).photoBlogViewModel
+            binding.viewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile, mPopoverControl).photoBlogViewModel
         }
     }
 }

@@ -5,6 +5,7 @@ import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.data.User
 import com.topface.topface.databinding.PhotoblogItemBinding
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.IPopoverControl
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogItemViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
@@ -13,7 +14,8 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  * Created by ppavlik on 11.01.17.
  */
 
-class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogItemBinding, FeedPhotoBlog>() {
+class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator,
+                             private val mPopoverControl: IPopoverControl) : AdapterComponent<PhotoblogItemBinding, FeedPhotoBlog>() {
     companion object {
         const val PLC = "geo_with_photoblog"
     }
@@ -27,6 +29,7 @@ class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator) : AdapterCo
         data?.let {
             binding.viewModel = PhotoBlogItemViewModel(it.user.photo,
                     if (it.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small) {
+                mPopoverControl.close()
                 mNavigator.showProfile(it, PLC)
             }
         }

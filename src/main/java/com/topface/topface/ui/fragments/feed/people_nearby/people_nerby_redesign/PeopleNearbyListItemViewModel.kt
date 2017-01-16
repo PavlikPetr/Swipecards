@@ -12,7 +12,8 @@ import com.topface.topface.viewModels.BaseViewModel
 /**
  *  Вьюмодель для итема списка людей рядом
  */
-class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo, val navigator: FeedNavigator) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
+class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo, val navigator: FeedNavigator,
+                                    private val mPopoverControl: IPopoverControl) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
 
     companion object {
         private const val PLC = "geo"
@@ -47,6 +48,9 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val it
                 else -> mFeedUser.photo.defaultLink
             }
 
-    fun onClick() = navigator.showProfile(item, PLC)
+    fun onClick() {
+        mPopoverControl.close()
+        navigator.showProfile(item, PLC)
+    }
 
 }

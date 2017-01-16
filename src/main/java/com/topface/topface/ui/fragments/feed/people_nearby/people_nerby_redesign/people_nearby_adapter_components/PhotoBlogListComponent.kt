@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.topface.topface.R
 import com.topface.topface.databinding.PhotoblogListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.IPopoverControl
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PgotoblogListTypeProvider
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogList
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel
@@ -22,7 +24,8 @@ import com.topface.topface.utils.ILifeCycle
 
 class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
-                             private val mNavigator: IFeedNavigator) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
+                             private val mNavigator: IFeedNavigator,
+                             private val mPopoverControl: IPopoverControl) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
     private lateinit var mAdapter: CompositeAdapter
     private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) }
 
@@ -35,9 +38,15 @@ class PhotoBlogListComponent(private val mContext: Context,
         with(binding) {
             photoblogList.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
             mAdapter = CompositeAdapter(PgotoblogListTypeProvider()) { Bundle() }
-                    .addAdapterComponent(PhotoBlogItemComponent(mNavigator))
-                    .addAdapterComponent(PhotoBlogAddButtonComponent(mNavigator))
+                    .addAdapterComponent(PhotoBlogItemComponent(mNavigator, mPopoverControl))
+                    .addAdapterComponent(PhotoBlogAddButtonComponent(mNavigator, mPopoverControl))
             photoblogList.adapter = mAdapter
+            photoblogList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    mPopoverControl.close()
+                }
+            })
             viewModel = mViewModel
         }
     }

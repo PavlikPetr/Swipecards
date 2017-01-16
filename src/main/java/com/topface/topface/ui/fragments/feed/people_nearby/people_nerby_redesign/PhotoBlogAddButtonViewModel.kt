@@ -18,7 +18,7 @@ import javax.inject.Inject
  * VM итема постановки в фотоленту
  * Created by ppavlik on 11.01.17.
  */
-class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profile: Profile) {
+class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profile: Profile, popoverControl: IPopoverControl) {
     @Inject lateinit var appState: TopfaceAppState
     private val mProfileSubscription: Subscription
     val photoBlogViewModel: PhotoBlogItemViewModel
@@ -32,6 +32,7 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
                 getPlaceholder(profile), R.drawable.place_in.getDrawable(),
                 marginLeft = R.dimen.photoblog_add_button_margin_left.getDimen(),
                 avatarClickListener = {
+                    popoverControl.close()
                     if (App.get().profile.photo.isEmpty) {
                         mNavigator.showTakePhotoPopup()
                     } else {

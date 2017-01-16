@@ -45,20 +45,31 @@ import javax.inject.Inject
 @RuntimePermissions
 class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
-    // показываем PopupWindow о том, что фотолента помогает популярности
-    override fun show() =
-            (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)
-                    ?.inflate(R.layout.people_nearby_popover, null)?.let {
-                with(PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)) {
-                    it.findViewById(R.id.root)?.setOnClickListener { dismiss() }
-                    showAtLocation(mBinding.refresh, Gravity.CENTER, 0, 0)
-                }
-            } ?: Unit
-
     @Inject lateinit var mEventBus: EventBus
 
     companion object {
         const val PAGE_NAME = "PeopleNearby"
+    }
+
+    private val mPopupVindow: PopupWindow? by lazy {
+        (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)
+                ?.inflate(R.layout.people_nearby_popover, null)?.let {
+            with(PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)) {
+                it.findViewById(R.id.close)?.setOnClickListener { dismiss() }
+                this
+            }
+        }
+    }
+
+    // показываем PopupWindow о том, что фотолента помогает популярности
+    override fun show() {
+//        mPopupVindow?.showAtLocation(mBinding.refresh, Gravity.CENTER, 0, 0)
+        mPopupVindow?.showAsDropDown(mBinding.root.findViewById(R.id.avatar))
+    }
+
+    // скрываем PopupWindow
+    override fun close() {
+        mPopupVindow?.dismiss()
     }
 
     private val mFeedRequestFactory by lazy {
@@ -86,8 +97,8 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
-                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator))
-                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator))
+                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator, this))
+                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator, this))
 
     }
     private val mViewModel by lazy {
@@ -113,6 +124,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
     override fun onDetach() {
         super.onDetach()
+        close()
         activity.unregisterLifeCycleDelegate(mAdapter.components.values)
         activity.unregisterLifeCycleDelegate(mViewModel)
     }
