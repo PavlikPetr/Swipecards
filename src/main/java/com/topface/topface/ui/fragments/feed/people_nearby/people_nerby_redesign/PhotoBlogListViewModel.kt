@@ -71,7 +71,6 @@ class PhotoBlogListViewModel(context: Context, private val mApi: FeedApi, privat
                             isRefreshing.set(false)
                         }
                     }
-
                     override fun onError(e: Throwable?) {
                         e?.let {
                         }

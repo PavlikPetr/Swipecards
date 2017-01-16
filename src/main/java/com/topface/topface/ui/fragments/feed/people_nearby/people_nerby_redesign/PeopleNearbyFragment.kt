@@ -82,7 +82,7 @@ class PeopleNearbyFragment : BaseFragment() {
                 .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator))
                 // при создании фрагмента вставляем лоадер, который прибъем после получения первых данных
                 .apply { data.add(PhotoBlogList()) }
-                .addAdapterComponent(PeopleNearbyListComponent(context, mApi)).apply { data.add(PeopleNearbyList()) }
+                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator)).apply { data.add(PeopleNearbyList()) }
     }
     private val mViewModel by lazy {
         PeopleNearbyFragmentViewModel()

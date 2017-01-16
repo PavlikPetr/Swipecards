@@ -63,10 +63,11 @@ data class PhotoBlogAdd(var diffTemp: Int = 0)
  */
 class PhotoBlogItem
 
-
 /**
  * Лоадер на время отправки запроса
  */
 data class PeopleNearbyLoader(var diffTemp: Int = 0)
 
 data class PhotoBlogLoaded(var isEmptyList: Boolean)
+
+data class PeopleNearbyLoaded(var isEmptyList: Boolean)

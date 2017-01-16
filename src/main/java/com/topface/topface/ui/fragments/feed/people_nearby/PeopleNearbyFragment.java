@@ -250,6 +250,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
                 @Override
                 public void fail(int codeError, IApiResponse response) {
                     processFailUpdate(codeError, isHistoryLoad, getListAdapter(), false);
+
                 }
 
                 @Override

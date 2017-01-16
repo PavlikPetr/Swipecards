@@ -57,7 +57,7 @@ class PeopleNearbyFragmentViewModel : SwipeRefreshLayout.OnRefreshListener, IFee
     fun geoPermissionsGranted() {
         with(data.observableList) {
             clear()
-            addAll(listOf(PhotoBlogList(), PeopleNearbyList()))
+            addAll(listOf(PhotoBlogList(), PeopleNearbyLoader(), PeopleNearbyList()))
         }
     }
 

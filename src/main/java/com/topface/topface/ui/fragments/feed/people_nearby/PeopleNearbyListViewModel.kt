@@ -10,9 +10,12 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.FeedListData
+import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyEmptyViewModel
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyLoaded
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.geo.GeoLocationManager
@@ -26,62 +29,39 @@ import javax.inject.Inject
 /**
  * ВьюМодель Листа "Людей рядом"
  */
-class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: FeedListData<FeedGeo>? ) : ILifeCycle {
-
-    companion object {
-        val LAT = "lat"
-        val LON = "lon"
-    }
+class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: FeedListData<FeedGeo>?) : ILifeCycle {
 
     @Inject lateinit var mState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
-    private var mSubscriptionPeopleNearbyEvent: Subscription
     private var mSubscribtionLocation: Subscription
     private var mSubscriptionPeopleNearbyList: Subscription? = null
-    private var mTimeForFun = false
     private lateinit var mGeoLocationManager: GeoLocationManager
     private var mWaitLocationTimer: CountDownTimer? = null
     private val WAIT_LOCATION_DELAY = 10000
     val data = SingleObservableArrayList<Any>()
-    private var isForPremiun = true
-    private val mLocationAction = Action1<Location> { location ->
-            sendPeopleNearbyRequest(location)
-
-    }
 
     var isProgressBarVisible: ObservableField<Int> = ObservableField<Int>(View.VISIBLE)
 
     init {
-            Debug.error("------------Конструктор МоделВью Листа Людей рядом-------------")
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(mLocationAction)
-        mSubscriptionPeopleNearbyEvent = mEventBus.getObservable(PeopleNearbyEvent::class.java).subscribe(object : RxUtils.ShortSubscription<PeopleNearbyEvent>() {
-            override fun onError(e: Throwable?) {
-                super.onError(e)
-            }
-
-            override fun onNext(event: PeopleNearbyEvent) {
-                mTimeForFun = event.isPossibleDownload
-            }
-
-            override fun onCompleted() {
-                super.onCompleted()
-                safeUnsubscribe()
+        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object : Action1<Location> {
+            override fun call(location: Location?) {
+                if (location != null) {
+                    sendPeopleNearbyRequest(location)
+                } else {
+                    mEventBus.setData(PeopleNearbyLoaded(true))
+                    showEmptyGeo()
+                }
             }
         })
-
         geolocationManagerInit()
-
     }
 
 
     fun sendPeopleNearbyRequest(location: Location) {
-        Debug.error("------------Запрос на получение людей-------------")
-
-        mApi.callNewGeo(location.latitude,location.longitude).subscribe(object: RxUtils.ShortSubscription<FeedListData<FeedGeo>>(){
+        api.callNewGeo(location.latitude, location.longitude).subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedGeo>>() {
             override fun onNext(data: FeedListData<FeedGeo>?) {
                 data?.let {
-                    Debug.error("------------Запрос на людей-----------Получен размер коллекции: " + data.items.size+ " кто-то - " + data.items.first.user.nameAndAge)
                     with(this@PeopleNearbyListViewModel.data.observableList) {
                         clear()
                         addAll(it.items)
@@ -90,15 +70,17 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
             }
 
             override fun onError(e: Throwable?) {
-                Debug.error("------------Запрос на людей------------ОШИБКА" + e?.message)
+                data.observableList.clear()
             }
         })
+        mEventBus.setData(PeopleNearbyLoaded(true))
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     fun geolocationManagerInit() {
-        mGeoLocationManager = GeoLocationManager()
-        mGeoLocationManager.registerProvidersChangedActionReceiver()
+        mGeoLocationManager = GeoLocationManager().apply {
+            registerProvidersChangedActionReceiver()
+        }
         startWaitLocationTimer()
     }
 
@@ -106,23 +88,23 @@ class PeopleNearbyListViewModel(val mApi: FeedApi, private var mFeedGeoList: Fee
         stopWaitLocationTimer()
         mWaitLocationTimer = object : CountDownTimer(WAIT_LOCATION_DELAY.toLong(), WAIT_LOCATION_DELAY.toLong()) {
             override fun onTick(millisUntilFinished: Long) {}
-
             override fun onFinish() {
-//                updateListWithOldGeo()
                 stopWaitLocationTimer()
             }
         }.start()
     }
 
     private fun stopWaitLocationTimer() {
-
-            mWaitLocationTimer?.cancel()
-            mWaitLocationTimer = null
+        mWaitLocationTimer?.cancel()
+        mWaitLocationTimer = null
     }
 
-    fun release(){
+    private fun showEmptyGeo() {
+        data.observableList.clear()
+    }
+
+    fun release() {
         mSubscribtionLocation.safeUnsubscribe()
-        mSubscriptionPeopleNearbyEvent.safeUnsubscribe()
         mSubscriptionPeopleNearbyList.safeUnsubscribe()
     }
 

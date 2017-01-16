@@ -6,17 +6,17 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.PeopleNearbyListItemBinding
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.viewModels.BaseViewModel
 
 /**
  *  Вьюмодель для итема списка людей рядом
  */
-class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mItem: FeedGeo) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
+class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo, val navigator: FeedNavigator) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
 
-    private val feedUser = mItem.user
-
-
+    private val feedUser = item.user
     val avatar = ObservableField(prepareAvatar())
     val nameAndAge = ObservableField(feedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
@@ -32,9 +32,10 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mI
             }
 
     private fun prepareStringFromDouble() =
-            when {
-                mItem.distance >= 1000 -> String.format(context.getString(R.string.general_distance_km), mItem.distance / 1000)
-                else -> String.format(context.getString(R.string.general_distance_m), if (mItem.distance >= 1) mItem.distance.toInt() else 1)
+            if (item.distance >= 1000) {
+                String.format(context.getString(R.string.general_distance_km), item.distance / 1000)
+            } else {
+                String.format(context.getString(R.string.general_distance_m), if (item.distance >= 1) item.distance.toInt() else 1)
             }
 
     private fun prepareAvatar() =
@@ -43,5 +44,7 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val mI
                 else R.drawable.feed_banned_female_avatar.getString()
                 else -> feedUser.photo.defaultLink
             }
+
+    fun onClick() = navigator.showProfile(item)
 
 }
