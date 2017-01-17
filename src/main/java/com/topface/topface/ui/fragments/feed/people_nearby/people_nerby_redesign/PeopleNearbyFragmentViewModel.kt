@@ -15,6 +15,7 @@ import com.topface.topface.utils.extensions.PermissionsExtensions.PermissionStat
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -44,10 +45,19 @@ class PeopleNearbyFragmentViewModel(private val mPopoverControl: IPopoverControl
                 (obs as? ObservableBoolean)?.let { mEventBus.setData(PeopleNearbyRefreshStatus(it.get())) }
             }
         })
-        mSubscriptions.add(mEventBus.getObservable(PhotoBlogLoaded::class.java)
-                .applySchedulers()
+        mSubscriptions.add(Observable
+                .merge(mEventBus.getObservable(PhotoBlogLoaded::class.java), mEventBus.getObservable(PeopleNearbyLoaded::class.java))
+                .first()
                 .subscribe(shortSubscription {
                     removeLoader()
+                })
+        )
+        mSubscriptions.add(Observable
+                .zip(mEventBus.getObservable(PhotoBlogLoaded::class.java).filter { it.isPullToRefresh },
+                        mEventBus.getObservable(PeopleNearbyLoaded::class.java).filter { it.isPullToRefresh }) { item1, item2 ->
+                    Pair(item1, item2)
+                }
+                .subscribe(shortSubscription {
                     isRefreshing.set(false)
                 }))
     }

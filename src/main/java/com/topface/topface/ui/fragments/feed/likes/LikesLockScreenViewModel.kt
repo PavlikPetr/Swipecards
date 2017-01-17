@@ -68,7 +68,7 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
 
     fun onBuyCoins() {
         NewProductsKeysGeneratedStatistics.sendNow_LIKES_ZERODATA_GO_PURCHASES(context)
-        mNavigator.showPurchaseCoins()
+        mNavigator.showPurchaseCoins("EmptyLikes")
     }
 
     fun onBuyVipClick() {

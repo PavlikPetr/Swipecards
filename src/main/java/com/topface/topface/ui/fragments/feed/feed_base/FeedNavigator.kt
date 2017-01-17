@@ -48,11 +48,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         App.get().inject(this)
     }
 
-    override fun showPurchaseCoins() = mActivityDelegate.startActivity(PurchasesActivity
-            .createBuyingIntent("EmptyLikes", App.get().options.topfaceOfferwallRedirect))
+    override fun showPurchaseCoins(from :String) = mActivityDelegate.startActivity(PurchasesActivity
+            .createBuyingIntent(from, App.get().options.topfaceOfferwallRedirect))
 
-    override fun showPurchaseVip() = mActivityDelegate.startActivityForResult(PurchasesActivity
-            .createVipBuyIntent(null, "Likes"), PurchasesActivity.INTENT_BUY_VIP)
+    override fun showPurchaseVip(from :String) = mActivityDelegate.startActivityForResult(PurchasesActivity
+            .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
 
     override fun <T : FeedItem> showProfile(item: T?, from: String) {
         item?.let {

@@ -9,10 +9,11 @@
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id="@+id/root"
                   style="@style/EmptyFeedsViewGravity"
-                  android:layout_width="match_parent"
+                  android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:layout_gravity="center_vertical"
+                  android:layout_gravity="center"
                   android:gravity="center"
                   android:orientation="vertical">
 
@@ -28,7 +29,7 @@
             style="@style/ListItemEmptyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.text}"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:text="@{viewModel.text}"/>
     </LinearLayout>
 </layout>

@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components
 
+import android.support.v7.widget.StaggeredGridLayoutManager
+import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemEmptyPeopleNearbyBinding
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyEmptyList
@@ -20,5 +22,7 @@ class PeopleNearbyEmptyListComponent : AdapterComponent<ItemEmptyPeopleNearbyBin
 
     override fun bind(binding: ItemEmptyPeopleNearbyBinding, data: PeopleNearbyEmptyList?, position: Int) {
         binding.viewModel = PeopleNearbyEmptyViewModel(R.string.nobody_nearby.getString())
+        binding.root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
+                StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
     }
 }

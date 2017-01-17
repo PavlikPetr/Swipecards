@@ -12,7 +12,7 @@ class PeopleNearbyTypeProvider : ITypeProvider {
         PhotoBlogList::class.java -> 1
         PeopleNearbyList::class.java -> 2
         PeopleNearbyEmptyList::class.java -> 3
-        PeopleNearbyVipOnly::class.java -> 4
+        PeopleNearbyLocked::class.java -> 4
         PeopleNearbyEmptyLocation::class.java -> 5
         PeopleNearbyPermissionDenied::class.java -> 6
         PeopleNearbyPermissionNeverAskAgain::class.java -> 7

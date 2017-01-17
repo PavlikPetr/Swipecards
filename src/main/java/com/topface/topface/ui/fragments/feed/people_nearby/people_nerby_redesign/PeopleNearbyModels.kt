@@ -20,17 +20,17 @@ data class PeopleNearbyRefreshStatus(var isRefreshing: Boolean = true)
 /**
  * Заглушка пустого списка "Люди рядом" (Вокруг ни души)
  */
-class PeopleNearbyEmptyList
+data class PeopleNearbyEmptyList(var diffTemp: Int = 0)
 
 /**
  * Заглушка заблокированного списка "Люди рядом" (PREMIUM_ACCESS_ONLY)
  */
-class PeopleNearbyVipOnly
+data class PeopleNearbyLocked(var diffTemp: Int = 0)
 
 /**
  * Заглушка о проблеме с получением ГЕО
  */
-class PeopleNearbyEmptyLocation
+data class PeopleNearbyEmptyLocation(var diffTemp: Int = 0)
 
 /**
  * Заглушка с запросом на разрешение доступа к пермишину {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}
@@ -68,6 +68,6 @@ class PhotoBlogItem
  */
 data class PeopleNearbyLoader(var diffTemp: Int = 0)
 
-data class PhotoBlogLoaded(var isEmptyList: Boolean)
+data class PhotoBlogLoaded(var isEmptyList: Boolean, var isPullToRefresh: Boolean)
 
-data class PeopleNearbyLoaded(var isEmptyList: Boolean)
+data class PeopleNearbyLoaded(var isEmptyList: Boolean, var isPullToRefresh: Boolean)

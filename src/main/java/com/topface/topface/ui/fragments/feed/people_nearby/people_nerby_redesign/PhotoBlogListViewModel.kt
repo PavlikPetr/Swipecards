@@ -43,7 +43,7 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
         mSubscriptions.add(mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
                 .subscribe(shortSubscription {
                     if (it?.isRefreshing ?: false) {
-                        loadFeeds()
+                        loadFeeds(true)
                     }
                 }))
         mSubscriptions.add(Observable.interval(0, REQUEST_TIMEOUT, TimeUnit.SECONDS)
@@ -58,7 +58,7 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
         }
     }
 
-    fun loadFeeds() {
+    fun loadFeeds(isPullToRefresh: Boolean = false) {
         mSubscriptions.add(mApi.callFeedUpdate(false, FeedPhotoBlog::class.java, Bundle().apply {
             putSerializable(BaseFeedFragmentViewModel.SERVICE, FeedRequest.FeedService.PHOTOBLOG)
         }).delay(2, TimeUnit.SECONDS)
@@ -79,7 +79,7 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
                     }
 
                     override fun onNext(data: FeedListData<FeedPhotoBlog>?) {
-                        mEventBus.setData(PhotoBlogLoaded(data?.items?.isEmpty() ?: true))
+                        mEventBus.setData(PhotoBlogLoaded(data?.items?.isEmpty() ?: true, isPullToRefresh))
                         data?.let {
                             this@PhotoBlogListViewModel.data.replaceData(arrayListOf<Any>(PhotoBlogAdd())
                                     .apply { addAll(it.items) })

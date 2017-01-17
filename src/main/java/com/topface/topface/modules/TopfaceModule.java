@@ -62,6 +62,7 @@ import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel;
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyLockedViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogAddButtonViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -184,7 +185,8 @@ import dagger.Provides;
                 com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment.class,
                 PhotoBlogListViewModel.class,
                 PhotoBlogAddButtonViewModel.class,
-                PeopleNearbyListViewModel.class
+                PeopleNearbyListViewModel.class,
+                PeopleNearbyLockedViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

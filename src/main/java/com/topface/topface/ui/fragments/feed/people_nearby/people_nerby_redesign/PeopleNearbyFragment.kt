@@ -12,7 +12,9 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.data.leftMenu.DrawerLayoutStateData
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
+import com.topface.topface.state.DrawerLayoutState
 import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
@@ -27,12 +29,17 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
+import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
+import rx.Subscription
 import javax.inject.Inject
 
 
@@ -46,11 +53,13 @@ import javax.inject.Inject
 class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
     @Inject lateinit var mEventBus: EventBus
+    @Inject lateinit var mDrawerLayoutState: DrawerLayoutState
 
     companion object {
         const val PAGE_NAME = "PeopleNearby"
     }
 
+    private var mDrawerStateSubscription: Subscription? = null
     private val mPopupVindow: PopupWindow? by lazy {
         (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)
                 ?.inflate(R.layout.people_nearby_popover, null)?.let {
@@ -63,8 +72,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
     // показываем PopupWindow о том, что фотолента помогает популярности
     override fun show() {
-//        mPopupVindow?.showAtLocation(mBinding.refresh, Gravity.CENTER, 0, 0)
-        mPopupVindow?.showAsDropDown(mBinding.root.findViewById(R.id.avatar))
+        mPopupVindow?.showAsDropDown(mBinding.root.findViewById(R.id.photoblogInGeoAvatar))
     }
 
     // скрываем PopupWindow
@@ -105,8 +113,19 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
         PeopleNearbyFragmentViewModel(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         App.get().inject(this)
+        mDrawerStateSubscription = mDrawerLayoutState
+                .observable
+                .subscribe(shortSubscription {
+                    if (it.state == DrawerLayoutStateData.SLIDE) {
+                        close()
+                    }
+                })
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         initList()
         mBinding.viewModel = mViewModel
         return mBinding.root
@@ -143,6 +162,12 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
         }
         mViewModel.release()
         mAdapter.releaseComponents()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        close()
+        mDrawerStateSubscription.safeUnsubscribe()
     }
 
     private fun initList() = with(mBinding.list) {
