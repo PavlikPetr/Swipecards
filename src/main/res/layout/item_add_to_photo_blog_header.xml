@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.add_to_photo_blog.HeaderItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/add_to_photo_blog_item_background">
+
+        <com.topface.topface.ui.views.ImageViewRemote
+            android:id="@+id/ifp_avatar_image"
+            style="@style/RoundListAvatar"
+            android:layout_marginBottom="19dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="19dp"
+            app:setPhoto="@{viewModel.photo}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toRightOf="@+id/ifp_avatar_image"
+            android:text="@string/add_to_photo_blog_header"
+            android:textColor="@color/dark_primary_text"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/forms_divider_color" />
+    </RelativeLayout>
+</layout>
