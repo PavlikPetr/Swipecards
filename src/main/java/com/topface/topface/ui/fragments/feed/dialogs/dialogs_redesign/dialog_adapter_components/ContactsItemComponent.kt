@@ -2,8 +2,11 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_ad
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogContactsItemBinding
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel
@@ -33,6 +36,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         data?.let {
             with(binding.giftsList) {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                addItemDecoration(Decoration(32))
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
                         .addAdapterComponent(mContactsListItemComponent)
                         .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))
@@ -51,6 +55,15 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     override fun release() {
         mModel?.release()
+    }
+
+    class Decoration(val marginLeft:Int): RecyclerView.ItemDecoration(){
+        override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+            val position= parent?.getChildLayoutPosition(view)
+             if(position==0) {
+                 outRect?.left = marginLeft
+            }
+        }
     }
 
 }
