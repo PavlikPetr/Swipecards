@@ -27,7 +27,8 @@ import javax.inject.Inject
  * ViewMdel для элемента списка, который содержит фотоленту с горизонтальным скролом
  * Created by ppavlik on 12.01.17.
  */
-class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
+class PhotoBlogListViewModel(private val mApi: FeedApi,
+                             private val calculateSize: () -> Unit) : ILifeCycle {
     val data = MultiObservableArrayList<Any>()
     @Inject lateinit var mEventBus: EventBus
     private var mSubscriptions = CompositeSubscription()
@@ -81,8 +82,13 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
                     override fun onNext(data: FeedListData<FeedPhotoBlog>?) {
                         mEventBus.setData(PhotoBlogLoaded(data?.items?.isEmpty() ?: true, isPullToRefresh))
                         data?.let {
-                            this@PhotoBlogListViewModel.data.replaceData(arrayListOf<Any>(PhotoBlogAdd())
-                                    .apply { addAll(it.items) })
+                            with(this@PhotoBlogListViewModel.data) {
+                                if (isEmpty()) {
+                                   calculateSize.invoke()
+                                }
+                                replaceData(arrayListOf<Any>(PhotoBlogAdd())
+                                        .apply { addAll(it.items) })
+                            }
                         }
                     }
 

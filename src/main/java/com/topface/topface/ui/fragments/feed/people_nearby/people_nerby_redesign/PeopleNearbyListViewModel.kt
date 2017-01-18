@@ -25,7 +25,7 @@ import javax.inject.Inject
 /**
  * ВьюМодель Листа "Людей рядом"
  */
-class PeopleNearbyListViewModel(val api: FeedApi, private var mFeedGeoList: FeedListData<FeedGeo>?) : ILifeCycle {
+class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     @Inject lateinit var mState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus

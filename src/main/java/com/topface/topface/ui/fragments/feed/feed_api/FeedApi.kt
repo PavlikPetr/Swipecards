@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Looper
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
@@ -12,7 +11,6 @@ import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
-import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.requests.handlers.SimpleApiHandler
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.SimpleResponse
@@ -22,7 +20,6 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
-import org.json.JSONObject
 import rx.Observable
 import java.util.*
 
@@ -209,46 +206,18 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     }
 
     fun callNewGeo(lat: Double, lon: Double): Observable<FeedListData<FeedGeo>> {
-        return Observable.create { obs ->
+        return Observable.create {
             val request = PeopleNearbyRequest(mContext, lat, lon)
             request.callback(object : DataApiHandler<FeedListData<FeedGeo>>() {
 
-                override fun success(data: FeedListData<FeedGeo>, response: IApiResponse) = with(Calendar.getInstance()) {
-                    when (get(Calendar.SECOND)) {
-                        in 1..10 -> {
-                            Debug.error("TEST_PEOPLE_NEARBY BLOCKED_PEOPLE_NEARBY")
-                            obs.onError(Throwable(ErrorCodes.BLOCKED_PEOPLE_NEARBY.toString()))
-                        }
-                        in 11..20 -> {
-                            Debug.error("TEST_PEOPLE_NEARBY PREMIUM_ACCESS_ONLY")
-                            obs.onError(Throwable(ErrorCodes.PREMIUM_ACCESS_ONLY.toString()))
-                        }
-                        in 21..30 -> {
-                            Debug.error("TEST_PEOPLE_NEARBY INTERNAL_SERVER_ERROR")
-                            obs.onError(Throwable(ErrorCodes.PREMIUM_ACCESS_ONLY.toString()))
-                        }
-                        in 31..40 -> {
-                            Debug.error("TEST_PEOPLE_NEARBY CANNOT_GET_GEO")
-                            obs.onError(Throwable(ErrorCodes.PREMIUM_ACCESS_ONLY.toString()))
-                        }
-                        in 41..50 -> {
-                            Debug.error("TEST_PEOPLE_NEARBY empty")
-                            obs.onNext(FeedListData(JSONObject(), FeedGeo::class.java))
-                        }
-                        else -> {
-                            Debug.error("TEST_PEOPLE_NEARBY real data")
-                            obs.onNext(data)
-                        }
-                    }
-
-                }
+                override fun success(data: FeedListData<FeedGeo>, response: IApiResponse) = it.onNext(data)
 
                 override fun parseResponse(response: ApiResponse): FeedListData<FeedGeo> = FeedListData(response.jsonResult, FeedGeo::class.java)
 
-                override fun fail(codeError: Int, response: IApiResponse) = obs.onError(Throwable(codeError.toString()))
+                override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
                 override fun always(response: IApiResponse) {
                     super.always(response)
-                    obs.onCompleted()
+                    it.onCompleted()
                 }
             }).exec()
         }

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel" />
     </data>
 
     <LinearLayout
+        android:id="@+id/photoblogListRootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -21,12 +22,12 @@
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
             android:fadingEdge="none"
-            app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}"/>
+            app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#dbdbdb"/>
+            android:background="#dbdbdb" />
     </LinearLayout>
 </layout>
 

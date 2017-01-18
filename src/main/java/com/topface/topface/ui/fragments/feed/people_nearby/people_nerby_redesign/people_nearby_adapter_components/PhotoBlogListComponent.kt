@@ -9,10 +9,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.PhotoblogListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.IPopoverControl
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PgotoblogListTypeProvider
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogList
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.*
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
@@ -25,9 +22,15 @@ import com.topface.topface.utils.ILifeCycle
 class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
-                             private val mPopoverControl: IPopoverControl) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
+                             private val mPopoverControl: IPopoverControl,
+                             private val mSize: IViewSize) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
     private lateinit var mAdapter: CompositeAdapter
-    private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) }
+    private lateinit var mPhotoblogListBinding: PhotoblogListBinding
+    private val mViewModel: PhotoBlogListViewModel by lazy {
+        PhotoBlogListViewModel(mApi) {
+            mPhotoblogListBinding.root.post { mSize.size(Size(mPhotoblogListBinding.root.measuredHeight, mPhotoblogListBinding.root.measuredWidth)) }
+        }
+    }
 
     override val itemLayout: Int
         get() = R.layout.photoblog_list
@@ -36,6 +39,7 @@ class PhotoBlogListComponent(private val mContext: Context,
 
     override fun bind(binding: PhotoblogListBinding, data: PhotoBlogList?, position: Int) {
         with(binding) {
+            mPhotoblogListBinding = this
             photoblogList.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
             mAdapter = CompositeAdapter(PgotoblogListTypeProvider()) { Bundle() }
                     .addAdapterComponent(PhotoBlogItemComponent(mNavigator, mPopoverControl))

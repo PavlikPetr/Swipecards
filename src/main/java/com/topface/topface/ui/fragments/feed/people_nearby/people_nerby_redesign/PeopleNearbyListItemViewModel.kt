@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
+import android.content.Context
 import android.databinding.ObservableField
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
@@ -12,8 +13,8 @@ import com.topface.topface.viewModels.BaseViewModel
 /**
  *  Вьюмодель для итема списка людей рядом
  */
-class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val item: FeedGeo, val navigator: FeedNavigator,
-                                    private val mPopoverControl: IPopoverControl) : BaseViewModel<PeopleNearbyListItemBinding>(binding) {
+class PeopleNearbyListItemViewModel(val item: FeedGeo, val navigator: FeedNavigator,
+                                    private val mPopoverControl: IPopoverControl) {
 
     companion object {
         private const val PLC = "geo"
@@ -36,9 +37,10 @@ class PeopleNearbyListItemViewModel(binding: PeopleNearbyListItemBinding, val it
 
     private fun prepareStringFromDouble() =
             if (item.distance >= 1000) {
-                String.format(context.getString(R.string.general_distance_km), item.distance / 1000)
+                String.format(R.string.general_distance_km.getString(), item.distance / 1000)
             } else {
-                String.format(context.getString(R.string.general_distance_m), if (item.distance >= 1) item.distance.toInt() else 1)
+                String.format(R.string.general_distance_m.getString(),
+                        if (item.distance >= 1) item.distance.toInt() else 1)
             }
 
     private fun prepareAvatar() =

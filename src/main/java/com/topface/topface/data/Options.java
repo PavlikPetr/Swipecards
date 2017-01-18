@@ -319,12 +319,6 @@ public class Options extends AbstractData {
                 blockPeople.buttonTextPremium = blockPeopleJson.optString("buttonTextPremium");
                 blockPeople.price = blockPeopleJson.optInt("price");
             }
-            blockPeople.buttonText = "button text";
-            blockPeople.buttonTextPremium = "button text premium";
-            blockPeople.enabled = true;
-            blockPeople.price = 20;
-            blockPeople.text = "text";
-            blockPeople.textPremium = "text premium";
 
             JSONObject getJarJson = response.optJSONObject("getjar");
             if (getJarJson != null) {
@@ -355,7 +349,6 @@ public class Options extends AbstractData {
 
             forceCoinsSubscriptions = response.optBoolean("forceCoinsSubscriptions");
             unlockAllForPremium = response.optBoolean("unlockAllForPremium");
-            unlockAllForPremium = true;
 
             maxMessageSize = response.optInt("maxMessageSize", 10000);
 

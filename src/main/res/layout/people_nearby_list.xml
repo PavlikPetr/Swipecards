@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel" />
     </data>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/people_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_margin="0px"
         android:background="#f5f5f5"
         android:fadeScrollbars="true"
@@ -20,5 +20,5 @@
         android:horizontalSpacing="14dp"
         android:listSelector="@android:color/transparent"
         android:verticalSpacing="14dp"
-        app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}"/>
+        app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}" />
 </layout>

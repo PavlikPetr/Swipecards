@@ -21,7 +21,7 @@ class PeopleNearbyAdapter(val mNavigator: FeedNavigator,
 
     override fun bind(binding: PeopleNearbyListItemBinding, data: FeedGeo?, position: Int) {
         data?.let {
-            binding.viewModel = PeopleNearbyListItemViewModel(binding, data, mNavigator, mPopoverControl)
+            binding.viewModel = PeopleNearbyListItemViewModel(data, mNavigator, mPopoverControl)
         }
     }
 }

@@ -1,10 +1,8 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.Manifest
-import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +27,6 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
-import com.topface.topface.utils.rx.RxUtils
-import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.unregisterLifeCycleDelegate
@@ -50,7 +46,7 @@ import javax.inject.Inject
 
 @FlurryOpenEvent(name = PAGE_NAME)
 @RuntimePermissions
-class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
+class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     @Inject lateinit var mEventBus: EventBus
     @Inject lateinit var mDrawerLayoutState: DrawerLayoutState
@@ -61,14 +57,14 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
     private var mDrawerStateSubscription: Subscription? = null
     private val mPopupVindow: PopupWindow? by lazy {
-        (context.getSystemService(LAYOUT_INFLATER_SERVICE) as? LayoutInflater)
-                ?.inflate(R.layout.people_nearby_popover, null)?.let {
-            with(PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)) {
+        context.layoutInflater.inflate(R.layout.people_nearby_popover, null)?.let {
+            PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
                 it.findViewById(R.id.close)?.setOnClickListener { dismiss() }
-                this
             }
         }
     }
+
+    private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
 
     // показываем PopupWindow о том, что фотолента помогает популярности
     override fun show() {
@@ -98,17 +94,19 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
     }
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPeopleNearbyTypeProvider) { Bundle() }
-                .addAdapterComponent(PeopleNearbyEmptyListComponent())
-                .addAdapterComponent(PeopleNearbyEmptyLocationComponent())
                 .addAdapterComponent(PeopleNearbyPermissionsDeniedComponent {
                     PeopleNearbyFragmentPermissionsDispatcher.sendInitGeoEventWithCheck(this@PeopleNearbyFragment)
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
-                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator, this))
-                .addAdapterComponent(PeopleNearbyListComponent(context, mApi, mNavigator, this))
-
+                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator, this, this))
+                .addAdapterComponent(mPeopleNearbyListComponent)
     }
+
+    override fun size(size: Size) {
+        mPeopleNearbyListComponent.size(size.apply { height = mBinding.list.measuredHeight - height })
+    }
+
     private val mViewModel by lazy {
         PeopleNearbyFragmentViewModel(this)
     }
