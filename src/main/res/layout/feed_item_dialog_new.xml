@@ -26,9 +26,8 @@
             android:layout_marginTop="5dp">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="16dp"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
                 app:glideTransformationPhoto="@{model.userPhoto}"
                 app:placeholderRes="@{model.placeholderRes}"
                 app:typeTransformation="@{model.type}"/>
