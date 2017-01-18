@@ -8,6 +8,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.databinding.PeopleNearbyListItemBinding
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.glide_utils.GlideTransformationType
 import com.topface.topface.viewModels.BaseViewModel
 
 /**
@@ -21,7 +22,9 @@ class PeopleNearbyListItemViewModel(val item: FeedGeo, val navigator: FeedNaviga
     }
 
     private val mFeedUser = item.user
-    val avatar = ObservableField(prepareAvatar())
+    val avatar = ObservableField(mFeedUser.photo)
+    val placeholderRes = ObservableField(if (item.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar)
+    val type = GlideTransformationType.CROP_SQUARE_TYPE
     val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
     val onlineImage = ObservableField(prepareImageForOnline())
@@ -41,13 +44,6 @@ class PeopleNearbyListItemViewModel(val item: FeedGeo, val navigator: FeedNaviga
             } else {
                 String.format(R.string.general_distance_m.getString(),
                         if (item.distance >= 1) item.distance.toInt() else 1)
-            }
-
-    private fun prepareAvatar() =
-            when {
-                mFeedUser.deleted || mFeedUser.banned || mFeedUser.photo.isEmpty || mFeedUser.photo == null -> if (mFeedUser.sex == Profile.BOY) R.drawable.feed_banned_male_avatar.getString()
-                else R.drawable.feed_banned_female_avatar.getString()
-                else -> mFeedUser.photo.defaultLink
             }
 
     fun onClick() {
