@@ -14,7 +14,7 @@ import com.topface.topface.data.search.SearchUser
  */
 interface IFeedNavigator {
 
-    fun showPurchaseCoins(from: String)
+    fun showPurchaseCoins(from: String, itemType: Int = -1, price: Int = -1)
     fun showPurchaseVip(from: String)
     fun <T : FeedItem> showProfile(item: T?, from: String)
     fun <T : FeedItem> showChat(item: T?)

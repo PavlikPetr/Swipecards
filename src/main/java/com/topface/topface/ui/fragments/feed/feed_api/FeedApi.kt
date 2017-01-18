@@ -240,6 +240,23 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
     }
 
+    fun callPeopleNearbyAccess(): Observable<IApiResponse> {
+        return Observable.create {
+            with(PeopleNearbyAccessRequest(mContext)) {
+                callback(object : SimpleApiHandler() {
+                    override fun success(response: IApiResponse) = it.onNext(response)
+                    override fun fail(codeError: Int, response: IApiResponse) = it.onError(Exception(codeError.toString()))
+                    override fun always(response: IApiResponse) {
+                        super.always(response)
+                        it.onCompleted()
+                    }
+                })
+                mRequestClient.registerRequest(this)
+                exec()
+            }
+        }
+    }
+
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Boolean> {
         return Observable.create {
             val arg = Bundle()

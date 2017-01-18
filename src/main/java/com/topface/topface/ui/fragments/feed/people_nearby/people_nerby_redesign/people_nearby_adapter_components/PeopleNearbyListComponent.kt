@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -22,11 +23,16 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
                                 private val mNavigator: FeedNavigator,
                                 private val mPopoverControl: IPopoverControl) : AdapterComponent<PeopleNearbyListBinding, PeopleNearbyList>(),
         IViewSize {
-
     private lateinit var mViewModel: PeopleNearbyListViewModel
     private lateinit var mAdapter: CompositeAdapter
-    private var mRecyclerView: RecyclerView? = null
+    private var mRecyclerView: RecyclerView?=null
     private var mSize: Size? = null
+    private val mScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            mPopoverControl.close()
+        }
+    }
 
     override fun bind(binding: PeopleNearbyListBinding, data: PeopleNearbyList?, position: Int) {
         with(binding) {
@@ -42,12 +48,7 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
             peopleList.adapter = mAdapter
             mViewModel = PeopleNearbyListViewModel(mApi)
             viewModel = mViewModel
-            peopleList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-//                    mPopoverControl.close()
-                }
-            })
+            peopleList.addOnScrollListener(mScrollListener)
         }
     }
 
@@ -71,6 +72,9 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
     override val bindingClass: Class<PeopleNearbyListBinding>
         get() = PeopleNearbyListBinding::class.java
 
-    override fun release() = mViewModel.release()
-
+    override fun release() {
+        mViewModel.release()
+        mRecyclerView?.removeOnScrollListener(mScrollListener)
+        mAdapter.releaseComponents()
+    }
 }

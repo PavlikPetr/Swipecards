@@ -11,6 +11,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
+import com.topface.topface.utils.extensions.safeToInt
 import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.geo.GeoLocationManager
 import com.topface.topface.utils.rx.RxUtils
@@ -108,24 +109,12 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
                 }
             }
 
-
     private fun handleError(errorCode: String?) =
-            showStub(getErrorCode(errorCode))
-
-    private fun getErrorCode(error: String?) =
-            error?.let {
-                try {
-                    it.toInt()
-                } catch (e: NumberFormatException) {
-                    ErrorCodes.INTERNAL_SERVER_ERROR
-                }
-            } ?: ErrorCodes.INTERNAL_SERVER_ERROR
-
+            showStub(errorCode.safeToInt(ErrorCodes.INTERNAL_SERVER_ERROR))
 
     fun release() {
         mIntervalSubscription.safeUnsubscribe()
         mSubscribtionLocation.safeUnsubscribe()
         mSubscriptionPeopleNearbyList.safeUnsubscribe()
     }
-
 }

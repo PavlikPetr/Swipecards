@@ -24,9 +24,17 @@ class PeopleNearbyLockedComponent(private val mApi: FeedApi, private val mNaviga
     override val bindingClass: Class<ItemLockedPeopleNearbyBinding>
         get() = ItemLockedPeopleNearbyBinding::class.java
 
+    private lateinit var mViewModel: PeopleNearbyLockedViewModel
+
     override fun bind(binding: ItemLockedPeopleNearbyBinding, data: PeopleNearbyLocked?, position: Int) {
-        binding.viewModel = PeopleNearbyLockedViewModel(mApi, mNavigator)
+        mViewModel = PeopleNearbyLockedViewModel(mApi, mNavigator)
+        binding.viewModel = mViewModel
         binding.root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                 StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
+    }
+
+    override fun release() {
+        super.release()
+        mViewModel.release()
     }
 }

@@ -3,14 +3,19 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.BalanceData
-import com.topface.topface.data.CountersData
 import com.topface.topface.data.Options
+import com.topface.topface.requests.handlers.ErrorCodes
+import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.fragments.PurchasesFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.FlurryManager
+import com.topface.topface.utils.extensions.safeToInt
+import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
@@ -33,26 +38,36 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
     val unlockByPremiumButtonVisibility = ObservableInt(View.GONE)
 
     @Inject lateinit var mState: TopfaceAppState
+    @Inject lateinit var mEventBus: EventBus
+
+    companion object {
+        private const val BUY_COINS_FROM = "PeoplePaidNearby"
+        private const val BUY_VIP_FROM = "PeopleNearby"
+    }
 
     private val mOptionsSubscription: Subscription
     private val mCoinsSubscription: Subscription
-    private var mBlockPeopleNearby: Options.BlockPeopleNearby? = null
-    private var mUnlockAllForPremium = false
+    private var mPeopleNearbyAccessSubscription: Subscription? = null
+    private var mBlockPeopleNearby = App.get().options.blockPeople
+    private var mUnlockAllForPremium = App.get().options.unlockAllForPremium
     private var mBalanceData: BalanceData? = null
 
     init {
         App.get().inject(this)
-        unlockByCoinsText.addOnPropertyChangedCallback(object : android.databinding.Observable.OnPropertyChangedCallback() {
+        unlockByCoinsText.addOnPropertyChangedCallback(object : android.databinding.Observable
+        .OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) =
                     unlockByCoinsVisibility.set(getVisibility(obs))
         })
-        premiumText.addOnPropertyChangedCallback(object : android.databinding.Observable.OnPropertyChangedCallback() {
+        premiumText.addOnPropertyChangedCallback(object : android.databinding.Observable
+        .OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) =
                     premiumTextVisibility.set(if (mUnlockAllForPremium) {
                         getVisibility(obs)
                     } else View.GONE)
         })
-        unlockByPremiumButtonText.addOnPropertyChangedCallback(object : android.databinding.Observable.OnPropertyChangedCallback() {
+        unlockByPremiumButtonText.addOnPropertyChangedCallback(object : android.databinding.Observable
+        .OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) =
                     unlockByPremiumButtonVisibility.set(if (mUnlockAllForPremium) {
                         getVisibility(obs)
@@ -85,17 +100,33 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
     fun release() {
         mOptionsSubscription.safeUnsubscribe()
         mCoinsSubscription.safeUnsubscribe()
+        mPeopleNearbyAccessSubscription.safeUnsubscribe()
     }
 
     fun onBuyVipClick() {
-        mNavigator.showPurchaseVip("PeopleNearby")
+        mNavigator.showPurchaseVip(BUY_VIP_FROM)
     }
 
     fun unlockByCoinsClick() {
-        if (mBalanceData?.money ?: 0 < mBlockPeopleNearby?.price ?: 0) {
-            mNavigator.showPurchaseCoins("PeoplePaidNearby")
+        if (mBalanceData?.money ?: 0 < mBlockPeopleNearby.price) {
+            mNavigator.showPurchaseCoins(BUY_COINS_FROM)
         } else {
+            mPeopleNearbyAccessSubscription = mApi.callPeopleNearbyAccess()
+                    .subscribe({
+                        FlurryManager.getInstance()
+                                .sendSpendCoinsEvent(mBlockPeopleNearby.price,
+                                        FlurryManager.PEOPLE_NEARBY_UNLOCK)
+                        mEventBus.setData(PeopleNearbyUpdate())
 
+                    },
+                            {
+                                when (it.message.safeToInt(ErrorCodes.INTERNAL_SERVER_ERROR)) {
+                                    ErrorCodes.PAYMENT -> mNavigator.showPurchaseCoins(BUY_COINS_FROM,
+                                            PurchasesFragment.TYPE_PEOPLE_NEARBY, mBlockPeopleNearby.price)
+                                    else -> R.string.general_data_error.showShortToast()
+                                }
+                            }
+                    )
         }
     }
 }

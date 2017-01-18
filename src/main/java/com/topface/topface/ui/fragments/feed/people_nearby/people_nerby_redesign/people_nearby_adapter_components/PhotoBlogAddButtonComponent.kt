@@ -23,9 +23,17 @@ class PhotoBlogAddButtonComponent(private val mNavigator: IFeedNavigator,
     override val bindingClass: Class<PhotoblogItemBinding>
         get() = PhotoblogItemBinding::class.java
 
+    private lateinit var mViewModel: PhotoBlogAddButtonViewModel
+
     override fun bind(binding: PhotoblogItemBinding, data: PhotoBlogAdd?, position: Int) {
         data?.let {
-            binding.viewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile, mPopoverControl).photoBlogViewModel
+            mViewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile, mPopoverControl)
+            binding.viewModel = mViewModel.photoBlogViewModel
         }
+    }
+
+    override fun release() {
+        super.release()
+        mViewModel.release()
     }
 }

@@ -23,12 +23,20 @@ class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
                              private val mPopoverControl: IPopoverControl,
-                             private val mSize: IViewSize) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
+                             private val mSize: IViewSize) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(),
+        ILifeCycle {
     private lateinit var mAdapter: CompositeAdapter
     private lateinit var mPhotoblogListBinding: PhotoblogListBinding
+    private lateinit var mRecyclerView: RecyclerView
     private val mViewModel: PhotoBlogListViewModel by lazy {
         PhotoBlogListViewModel(mApi) {
             mPhotoblogListBinding.root.post { mSize.size(Size(mPhotoblogListBinding.root.measuredHeight, mPhotoblogListBinding.root.measuredWidth)) }
+        }
+    }
+    private val mScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            mPopoverControl.close()
         }
     }
 
@@ -39,18 +47,14 @@ class PhotoBlogListComponent(private val mContext: Context,
 
     override fun bind(binding: PhotoblogListBinding, data: PhotoBlogList?, position: Int) {
         with(binding) {
+            mRecyclerView = photoblogList
             mPhotoblogListBinding = this
             photoblogList.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
             mAdapter = CompositeAdapter(PgotoblogListTypeProvider()) { Bundle() }
                     .addAdapterComponent(PhotoBlogItemComponent(mNavigator, mPopoverControl))
                     .addAdapterComponent(PhotoBlogAddButtonComponent(mNavigator, mPopoverControl))
             photoblogList.adapter = mAdapter
-            photoblogList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    mPopoverControl.close()
-                }
-            })
+            photoblogList.addOnScrollListener(mScrollListener)
             viewModel = mViewModel
         }
     }
@@ -63,5 +67,7 @@ class PhotoBlogListComponent(private val mContext: Context,
     override fun release() {
         super.release()
         mViewModel.release()
+        mAdapter.releaseComponents()
+        mRecyclerView.removeOnScrollListener(mScrollListener)
     }
 }

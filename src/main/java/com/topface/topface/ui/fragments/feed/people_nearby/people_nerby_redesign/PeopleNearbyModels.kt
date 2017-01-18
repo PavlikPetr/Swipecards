@@ -71,3 +71,8 @@ data class PeopleNearbyLoader(var diffTemp: Int = 0)
 data class PhotoBlogLoaded(var isEmptyList: Boolean, var isPullToRefresh: Boolean)
 
 data class PeopleNearbyLoaded(var isEmptyList: Boolean, var isPullToRefresh: Boolean)
+
+/**
+ * Класс, по которому можно понять, что требуется обновить список "Люди рядом"
+ */
+class PeopleNearbyUpdate()

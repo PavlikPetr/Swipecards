@@ -1,26 +1,23 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
-import android.content.Context
 import android.databinding.ObservableField
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.Profile
-import com.topface.topface.databinding.PeopleNearbyListItemBinding
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.viewModels.BaseViewModel
 
 /**
  *  Вьюмодель для итема списка людей рядом
  */
-class PeopleNearbyListItemViewModel(val item: FeedGeo, val navigator: FeedNavigator,
+class PeopleNearbyListItemViewModel(private val mItem: FeedGeo, private val mNavigator: FeedNavigator,
                                     private val mPopoverControl: IPopoverControl) {
 
     companion object {
         private const val PLC = "geo"
     }
 
-    private val mFeedUser = item.user
+    private val mFeedUser = mItem.user
     val avatar = ObservableField(prepareAvatar())
     val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
@@ -36,11 +33,11 @@ class PeopleNearbyListItemViewModel(val item: FeedGeo, val navigator: FeedNaviga
             }
 
     private fun prepareStringFromDouble() =
-            if (item.distance >= 1000) {
-                String.format(R.string.general_distance_km.getString(), item.distance / 1000)
+            if (mItem.distance >= 1000) {
+                String.format(R.string.general_distance_km.getString(), mItem.distance / 1000)
             } else {
                 String.format(R.string.general_distance_m.getString(),
-                        if (item.distance >= 1) item.distance.toInt() else 1)
+                        if (mItem.distance >= 1) mItem.distance.toInt() else 1)
             }
 
     private fun prepareAvatar() =
@@ -52,7 +49,6 @@ class PeopleNearbyListItemViewModel(val item: FeedGeo, val navigator: FeedNaviga
 
     fun onClick() {
         mPopoverControl.close()
-        navigator.showProfile(item, PLC)
+        mNavigator.showProfile(mItem, PLC)
     }
-
 }

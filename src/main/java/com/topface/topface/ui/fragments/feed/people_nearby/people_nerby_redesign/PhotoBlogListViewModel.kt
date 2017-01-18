@@ -84,14 +84,13 @@ class PhotoBlogListViewModel(private val mApi: FeedApi,
                         data?.let {
                             with(this@PhotoBlogListViewModel.data) {
                                 if (isEmpty()) {
-                                   calculateSize.invoke()
+                                    calculateSize.invoke()
                                 }
                                 replaceData(arrayListOf<Any>(PhotoBlogAdd())
                                         .apply { addAll(it.items) })
                             }
                         }
                     }
-
                 }))
     }
 
