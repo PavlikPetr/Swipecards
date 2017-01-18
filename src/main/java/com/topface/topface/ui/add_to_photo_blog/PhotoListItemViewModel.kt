@@ -15,7 +15,6 @@ import javax.inject.Inject
  * Created by mbayutin on 12.01.17.
  */
 class PhotoListItemViewModel(val lastSelectedPhotoId: Int) : IOnListChangedCallbackBinded {
-    //} : ILifeCycle {
     val data = SingleObservableArrayList<Any>()
     @Inject lateinit var appState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
