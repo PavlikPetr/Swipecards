@@ -11,6 +11,7 @@ import com.bumptech.glide.load.Transformation
 class GlideTransformationFactory(val mContext: Context) {
     fun construct(@GlideTransformationType.GlideTransformationType type: Long): Transformation<Bitmap> = when (type) {
         GlideTransformationType.CROP_CIRCLE_TYPE -> CropCircleTransformation(mContext)
+        GlideTransformationType.CROP_SQUARE_TYPE -> CropSquareTransformation(mContext)
         GlideTransformationType.DIALOG_ONLINE_TYPE -> DialogOnlineTransformation(mContext)
         GlideTransformationType.ADMIRATION_ONLINE_TYPE -> AdmirationOnlineTransformation(mContext)
         GlideTransformationType.ADMIRATION_TYPE -> AdmirationTransformation(mContext)
