@@ -24,7 +24,7 @@ import javax.inject.Inject
  * VM for AddToPhotoBlogRedesignActivity
  * Created by m.bayutin on 19.01.17.
  */
-class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDelegate?) {
+class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDelegate?, val feedNavigator: FeedNavigator) {
     val isLockerVisible = ObservableBoolean(false)
     @Inject lateinit var mAppState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
@@ -81,7 +81,5 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
         }
     }
 
-    private fun startPurchasesActivity() {
-        activityDelegate?.let { FeedNavigator(it).showPurchaseCoins() }
-    }
+    private fun startPurchasesActivity() = feedNavigator.showPurchaseCoins()
 }

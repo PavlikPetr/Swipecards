@@ -12,6 +12,7 @@ import com.topface.topface.ui.add_to_photo_blog.adapter_components.HeaderCompone
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PhotoListComponent
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PlaceButtonComponent
 import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 
@@ -24,7 +25,9 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
     private companion object {
         const val SELECTED_PHOTO_ID = "selected_photo_id"
     }
-    private val mViewModel by lazy { AddToPhotoBlogRedesignActivityViewModel(this) }
+
+    private val mFeedNavigator by lazy { FeedNavigator(this) }
+    private val mViewModel by lazy { AddToPhotoBlogRedesignActivityViewModel(this, mFeedNavigator) }
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(TypeProvider()) { Bundle() }
