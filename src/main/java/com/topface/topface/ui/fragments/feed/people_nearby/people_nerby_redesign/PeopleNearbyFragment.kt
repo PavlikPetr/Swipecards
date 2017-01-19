@@ -3,6 +3,8 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import android.Manifest
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +57,13 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         const val PAGE_NAME = "PeopleNearby"
     }
 
+    private val mAppbarLayoutParams: AppBarLayout.LayoutParams? by lazy {
+        (activity.findViewById(R.id.collapsing_layout) as? CollapsingToolbarLayout)
+                ?.layoutParams as? AppBarLayout.LayoutParams
+    }
     private var mDrawerStateSubscription: Subscription? = null
+    private var mAppbarScrollFlags: Int = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
+            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
     private val mPopupVindow: PopupWindow? by lazy {
         context.layoutInflater.inflate(R.layout.people_nearby_popover, null)?.let {
             PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
@@ -129,13 +137,27 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         return mBinding.root
     }
 
+    override fun onPause() {
+        overideScrollFlags()
+        super.onPause()
+    }
+
     override fun onResume() {
+        overideScrollFlags()
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.people_nearby)))
         if (context.isGrantedPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))) {
             sendInitGeoEvent()
         } else {
             showPermissionsScreen()
+        }
+    }
+
+    private fun overideScrollFlags() {
+        mAppbarLayoutParams?.apply {
+            val currentFlags = scrollFlags
+            scrollFlags = mAppbarScrollFlags
+            mAppbarScrollFlags = currentFlags
         }
     }
 
