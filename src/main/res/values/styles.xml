@@ -1641,6 +1641,12 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <style name="DatingStausAndPhotoCount">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/bg_white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/dating_fab_skip</item>

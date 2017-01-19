@@ -19,7 +19,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_blur"
+            android:gravity="bottom"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/black_white_gradient"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    style="@style/DatingStausAndPhotoCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/foto_alpha"
+                    android:drawablePadding="16dp"
+                    android:text="@{viewModel.photoCounter}"
+                    android:visibility="@{viewModel.counterVisibility}"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.statusVisibility}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:src="@drawable/status"/>
+
+                    <TextView
+                        style="@style/DatingStausAndPhotoCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="@{viewModel.statusText}"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
