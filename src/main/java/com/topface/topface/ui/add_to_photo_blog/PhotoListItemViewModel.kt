@@ -44,7 +44,7 @@ class PhotoListItemViewModel(val lastSelectedPhotoId: Int) : IOnListChangedCallb
     private fun dispatchPhotoSelected(id: Int) = mEventBus.setData(PhotoSelectedEvent(id))
 
     fun release() {
-        mProfileSubscription?.safeUnsubscribe()
+        mProfileSubscription.safeUnsubscribe()
         data.removeListener()
     }
 }

@@ -10,6 +10,7 @@ import com.topface.topface.ui.add_to_photo_blog.PhotoListItemViewModel
 import com.topface.topface.ui.add_to_photo_blog.PhotoTypeProvider
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.utils.extensions.appContext
 
 /**
  * Компонент со списком фоток пользователя
@@ -25,7 +26,7 @@ class PhotoListComponent() : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding
 
     override fun bind(binding: ItemAddToPhotoBlogPhotoListBinding, data: PhotoListItem?, position: Int) {
         with(binding) {
-            content.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+            content.layoutManager = LinearLayoutManager(binding.appContext(), LinearLayoutManager.HORIZONTAL, false)
             mAdapter = CompositeAdapter(PhotoTypeProvider()) { Bundle() }
                     .addAdapterComponent(PhotoComponent())
             content.adapter = mAdapter

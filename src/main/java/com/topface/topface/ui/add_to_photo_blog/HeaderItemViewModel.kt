@@ -23,12 +23,7 @@ class HeaderItemViewModel {
         App.get().inject(this)
         mPhotoSelectedSubscription = mEventBus.getObservable(PhotoSelectedEvent::class.java)
                 .subscribe { event ->
-                    App.get().profile.photos.forEach {
-                        if (it.id == event.id) {
-                            this.photo.set(it)
-                            return@forEach
-                        }
-                    }
+                    photo.set(App.get().profile.photos.find{ it.id == event.id })
                 }
     }
 
