@@ -1,6 +1,7 @@
 package com.topface.topface.ui.add_to_photo_blog
 
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.graphics.drawable.Drawable
 import com.topface.topface.App
 import com.topface.topface.R
@@ -20,7 +21,7 @@ class PhotoItemViewModel(photo: Photo) {
     private var mPhotoSelectedSubscription: Subscription
     val userPhoto = ObservableField(photo)
     var foregroundDrawable = ObservableField<Drawable>()
-    val placeholderRes = ObservableField<Int>(0)
+    val placeholderRes = ObservableInt(0)
 
     init {
         App.get().inject(this)

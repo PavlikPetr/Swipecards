@@ -16,8 +16,8 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
  * Created by mbayutin on 10.01.17.
  */
 class PhotoListComponent() : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
-    private lateinit var mAdapter: CompositeAdapter
-    private lateinit var mViewModel: PhotoListItemViewModel
+    private var mAdapter: CompositeAdapter? = null
+    private var mViewModel: PhotoListItemViewModel? = null
     override val itemLayout: Int
         get() = R.layout.item_add_to_photo_blog_photo_list
     override val bindingClass: Class<ItemAddToPhotoBlogPhotoListBinding>
@@ -35,7 +35,7 @@ class PhotoListComponent() : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding
     }
 
     override fun release() {
-        mViewModel.release()
-        mAdapter.releaseComponents()
+        mViewModel?.release()
+        mAdapter?.releaseComponents()
     }
 }

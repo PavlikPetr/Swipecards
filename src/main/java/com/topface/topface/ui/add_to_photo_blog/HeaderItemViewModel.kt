@@ -1,6 +1,7 @@
 package com.topface.topface.ui.add_to_photo_blog
 
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import com.topface.topface.App
 import com.topface.topface.data.Photo
 import com.topface.topface.state.EventBus
@@ -16,6 +17,7 @@ class HeaderItemViewModel {
     @Inject lateinit var mEventBus: EventBus
     private var mPhotoSelectedSubscription: Subscription
     var photo = ObservableField<Photo>()
+    val placeholderRes = ObservableInt(0)
 
     init {
         App.get().inject(this)

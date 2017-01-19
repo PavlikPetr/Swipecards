@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.topface.topface.utils.glide_utils.GlideTransformationType" />
 
         <variable
             name="viewModel"
@@ -14,14 +15,17 @@
         android:layout_height="wrap_content"
         android:background="@color/add_to_photo_blog_item_background">
 
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             android:id="@+id/ifp_avatar_image"
-            style="@style/RoundListAvatar"
+            android:layout_width="@dimen/round_list_avatar_size"
+            android:layout_height="@dimen/round_list_avatar_size"
             android:layout_marginBottom="19dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="19dp"
-            app:setPhoto="@{viewModel.photo}" />
+            app:glideTransformationPhoto="@{viewModel.photo}"
+            app:placeholderRes="@{viewModel.placeholderRes}"
+            app:typeTransformation="@{GlideTransformationType.CROP_CIRCLE_TYPE}" />
 
         <TextView
             android:layout_width="wrap_content"
