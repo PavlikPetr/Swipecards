@@ -30,7 +30,7 @@ import com.topface.topface.statistics.CommonSlices;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity;
+import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivityViewModel;
 import com.topface.topface.ui.add_to_photo_blog.HeaderItemViewModel;
 import com.topface.topface.ui.add_to_photo_blog.PhotoItemViewModel;
 import com.topface.topface.ui.add_to_photo_blog.PhotoListItemViewModel;
@@ -183,7 +183,7 @@ import dagger.Provides;
                 PhotoListItemViewModel.class,
                 PhotoItemViewModel.class,
                 HeaderItemViewModel.class,
-                AddToPhotoBlogRedesignActivity.class,
+                AddToPhotoBlogRedesignActivityViewModel.class,
                 PlaceButtonItemViewModel.class,
                 DialogsMenuPopupViewModel.class,
                 DialogContactsListItemViewModel.class

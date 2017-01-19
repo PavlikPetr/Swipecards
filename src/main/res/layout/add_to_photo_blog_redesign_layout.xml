@@ -7,6 +7,10 @@
         <variable
             name="toolbarViewModel"
             type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivityViewModel" />
     </data>
 
     <FrameLayout
@@ -28,7 +32,7 @@
         <com.topface.topface.ui.views.LockerView
             android:id="@+id/locker"
             style="@style/LoadingLocker"
-            android:visibility="gone" />
+            android:visibility="@{viewModel.isLockerVisible, default=gone}" />
 
     </FrameLayout>
 
