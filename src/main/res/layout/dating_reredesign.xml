@@ -38,8 +38,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/foto_alpha"
                     android:drawablePadding="16dp"
-                    android:text="@{viewModel.photoCounter}"
-                    android:visibility="@{viewModel.counterVisibility}"/>
+                    android:text="@{viewModel.photoCounter}"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
