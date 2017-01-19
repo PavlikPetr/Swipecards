@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.photoblog
 
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedPhotoBlog
@@ -10,9 +9,9 @@ import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
+import com.topface.topface.utils.rx.RxUtils
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -28,7 +27,7 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
         return false
     }
 
-    private lateinit var mRefreshIntervalSubscription: Subscription
+    private var mRefreshIntervalSubscription: Subscription
 
     companion object {
 

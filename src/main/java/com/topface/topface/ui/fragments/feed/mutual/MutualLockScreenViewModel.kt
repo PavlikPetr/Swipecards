@@ -33,7 +33,7 @@ class MutualLockScreenViewModel(binding: LayoutEmptyMutualBinding,
 
     fun onGoToDatingClick() = mNavigator.showDating()
 
-    fun onGoToPurchaseCoins() = mNavigator.showPurchaseCoins()
+    fun onGoToPurchaseCoins() = mNavigator.showPurchaseCoins("EmptyMutual")
 
     override fun release() {
         super.release()

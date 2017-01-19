@@ -54,6 +54,16 @@ fun Int.getDimen(default: Float = 0f): Float {
     return res
 }
 
+@JvmOverloads
+@DimenRes
+fun Int.getInt(default: Int = 0) = with(this) {
+    try {
+        App.getContext().resources.getInteger(this)
+    } catch(e: Resources.NotFoundException) {
+        default
+    }
+}
+
 @DrawableRes
 fun Int.getDrawable(): Drawable? {
     var res: Drawable?

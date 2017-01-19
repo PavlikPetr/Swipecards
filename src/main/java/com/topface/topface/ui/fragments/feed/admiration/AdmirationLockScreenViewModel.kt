@@ -27,9 +27,9 @@ class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding, priv
     val thirdMuzzle = ObservableInt(getMuzzleIcon(3))
     val flipperVisibility = ObservableInt(View.VISIBLE)
 
-    fun onBuyCoins() = mNavigator.showPurchaseCoins()
+    fun onBuyCoins() = mNavigator.showPurchaseCoins("EmptyAdmirations")
 
-    fun onBuyVipClick() = mNavigator.showPurchaseVip()
+    fun onBuyVipClick() = mNavigator.showPurchaseVip("Admirations")
 
     private fun getMuzzleIcon(iconNumber: Int) = when (iconNumber) {
         1 -> choiceIcon(R.drawable.likes_female_one, R.drawable.likes_male_one)

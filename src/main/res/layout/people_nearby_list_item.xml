@@ -1,0 +1,64 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListItemViewModel"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:id="@+id/llForcardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> viewModel.onClick()}"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/PeopleNearbyAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                app:glideTransformationPhoto="@{viewModel.avatar}"
+                app:placeholderRes="@{viewModel.placeholderRes}"
+                app:typeTransformation="@{viewModel.type}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@{viewModel.onlineImage}"
+                android:text="@{viewModel.nameAndAge}"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:drawablePadding="4dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:ellipsize="end"
+                android:maxLines="1"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_geo"
+                android:paddingLeft="16dp"
+                android:drawablePadding="8dp"
+                android:layout_marginTop="2dp"
+                android:paddingBottom="8dp"
+                android:text="@{viewModel.distance}"
+                android:textColor="@color/gray_forms_color"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</layout>

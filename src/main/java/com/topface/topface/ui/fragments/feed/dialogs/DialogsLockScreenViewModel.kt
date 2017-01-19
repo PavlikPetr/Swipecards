@@ -8,7 +8,7 @@ import com.topface.topface.viewModels.BaseViewModel
 class DialogsLockScreenViewModel(binding: LayoutEmptyDialogsBinding, private val mNavigator: IFeedNavigator, private val mIFeedUnlocked: IFeedUnlocked) :
         BaseViewModel<LayoutEmptyDialogsBinding>(binding) {
 
-    fun showPurchaseVip() = mNavigator.showPurchaseCoins()
+    fun showPurchaseVip() = mNavigator.showPurchaseCoins("EmptyDialogs")
 
     fun showDating() = mNavigator.showDating()
 }

@@ -109,6 +109,10 @@ public class Utils {
         return String.format(App.getCurrentLocale(), Utils.getLocalRes(), res);
     }
 
+    public static String getUniqueKeyStatistic(String postfix) {
+        return String.format(App.getCurrentLocale(), "%d_%s", App.get().getProfile().uid, postfix);
+    }
+
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
         try {
             mPluralResources = new PluralResources(App.getContext().getResources());

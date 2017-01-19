@@ -364,6 +364,30 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         for (int i = 0; i < extraScreenArray.size(); i++) {
             sum += extraScreenArray.get(i).getProbability();
         }
+        //TODO
+        /**
+         * FATAL EXCEPTION: main
+         Process: com.topface.topface, PID: 21584
+         java.lang.IllegalArgumentException: n <= 0: -1
+         at java.util.Random.nextInt(Random.java:182)
+         at com.topface.topface.ui.PurchasesActivity.getRandomPosByProbability(PurchasesActivity.java:367)
+         at com.topface.topface.ui.PurchasesActivity.isScreenShow(PurchasesActivity.java:315)
+         at com.topface.topface.ui.PurchasesActivity.onPreFinish(PurchasesActivity.java:311)
+         at com.topface.topface.ui.fragments.ToolbarActivity.doPreFinish(ToolbarActivity.kt:79)
+         at com.topface.topface.ui.fragments.ToolbarActivity.onUpClick(ToolbarActivity.kt:71)
+         at com.topface.topface.ui.PurchasesActivity.onUpClick(PurchasesActivity.java:342)
+         at com.topface.topface.ui.fragments.ToolbarActivity.onUpButtonClick(ToolbarActivity.kt:67)
+         at com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel$init$1$1.onClick(BaseToolbarViewModel.kt:33)
+         at android.view.View.performClick(View.java:5204)
+         at android.view.View$PerformClick.run(View.java:21153)
+         at android.os.Handler.handleCallback(Handler.java:739)
+         at android.os.Handler.dispatchMessage(Handler.java:95)
+         at android.os.Looper.loop(Looper.java:148)
+         at android.app.ActivityThread.main(ActivityThread.java:5417)
+         at java.lang.reflect.Method.invoke(Native Method)
+         at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
+         at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
+         */
         int randomValue = new Random().nextInt(sum - 1) + 1;
         sum = 0;
         for (int i = 0; i < extraScreenArray.size(); i++) {

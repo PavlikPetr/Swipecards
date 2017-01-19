@@ -95,6 +95,24 @@ public class MenuFragment extends Fragment {
             LeftMenuRecyclerViewAdapter adapter = getAdapter();
             LeftMenuData data = getBalanceItem();
 
+            // Показ/скрытие итема "Фотолента" по настройке с сервера
+            if (options.peopleNearbyRedesignEnabled) {
+                adapter.removeItem(getPhotoblogItem().getSettings().getUniqueKey());
+            } else {
+                LeftMenuData photoblogItem = getPhotoblogItem();
+                LeftMenuData becomeVipItem = getBecomeVipItem();
+                if (adapter.getDataPositionByFragmentId(photoblogItem.getSettings().getUniqueKey()) == EMPTY_POS) {
+                    int position = adapter.getDataPositionByFragmentId(becomeVipItem.getSettings().getUniqueKey());
+                    if (position != EMPTY_POS) {
+                        // Вставляем итем фотоленты после BecomeVIP если такой элемент нашли в списке
+                        adapter.addItemAfterFragment(getPhotoblogItem(), becomeVipItem.getSettings().getUniqueKey());
+                    } else {
+                        // Вставляем фотоленту в нулевую позицию
+                        adapter.addFirst(getPhotoblogItem());
+                    }
+                }
+            }
+
             // Добавление итема "Баланса", ибо "Баланс" всегда последним быть должен
             if (options.showRefillBalanceInSideMenu) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
@@ -344,8 +362,10 @@ public class MenuFragment extends Fragment {
         if (!App.get().getProfile().premium) {
             arrayList.add(getBecomeVipItem());
         }
-        arrayList.add(new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog,
-                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG)));
+        // фотоленту показываем только со старым экранаом "Люди рядом" (без фотоленты в "шапке")
+        if (!options.peopleNearbyRedesignEnabled) {
+            arrayList.add(getPhotoblogItem());
+        }
         arrayList.add(new LeftMenuData(R.drawable.ic_dating_left_menu, R.string.general_dating,
                 Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.DATING)));
         arrayList.add(new LeftMenuData(R.drawable.ic_like_left_menu, R.string.general_sympathies,
@@ -380,6 +400,12 @@ public class MenuFragment extends Fragment {
     private LeftMenuData getBecomeVipItem() {
         return new LeftMenuData(R.drawable.ic_crown_left_menu, getString(R.string.chat_auto_reply_button),
                 BECOME_VIP_BAGE, false, new LeftMenuSettingsData(FragmentIdData.BECOME_VIP));
+    }
+
+    @NotNull
+    private LeftMenuData getPhotoblogItem() {
+        return new LeftMenuData(R.drawable.ic_photo_left_menu, R.string.general_photoblog,
+                Utils.EMPTY, false, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG));
     }
 
     @NotNull

@@ -48,19 +48,19 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         App.get().inject(this)
     }
 
-    override fun showPurchaseCoins() = mActivityDelegate.startActivity(PurchasesActivity
-            .createBuyingIntent("EmptyLikes", App.get().options.topfaceOfferwallRedirect))
+    override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
+            .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
 
-    override fun showPurchaseVip() = mActivityDelegate.startActivityForResult(PurchasesActivity
-            .createVipBuyIntent(null, "Likes"), PurchasesActivity.INTENT_BUY_VIP)
+    override fun showPurchaseVip(from: String) = mActivityDelegate.startActivityForResult(PurchasesActivity
+            .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
 
-    override fun <T : FeedItem> showProfile(item: T?) {
+    override fun <T : FeedItem> showProfile(item: T?, from: String) {
         item?.let {
             if (!it.user.isEmpty) {
                 val user = it.user
                 mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, user.photo,
                         user.id, it.id, false, true, Utils.getNameAndAge(user.firstName, user.age),
-                        user.city.getName()))
+                        user.city.getName(), from))
             }
         }
     }

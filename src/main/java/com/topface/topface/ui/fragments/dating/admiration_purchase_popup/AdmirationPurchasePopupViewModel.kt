@@ -72,13 +72,13 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
 
     fun skip() = mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_CANCELED)
 
-    fun buyVip() = mNavigator.showPurchaseVip()
+    fun buyVip() = mNavigator.showPurchaseVip("Admirations")
 
     fun buyCoins() = mBalance?.let {
         if (it.money >= App.get().options.priceAdmiration) {
             mAdmirationPurchasePopupHide.hideAdmirationPurchasePopup(Activity.RESULT_OK)
         } else {
-            mNavigator.showPurchaseCoins()
+            mNavigator.showPurchaseCoins("EmptyAdmirations")
         }
     }
 
