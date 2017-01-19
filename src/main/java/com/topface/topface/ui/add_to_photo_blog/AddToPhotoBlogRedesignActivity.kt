@@ -12,8 +12,6 @@ import com.topface.topface.ui.add_to_photo_blog.adapter_components.HeaderCompone
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PhotoListComponent
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PlaceButtonComponent
 import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 
@@ -22,13 +20,11 @@ import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
  * Created by mbayutin on 10.01.17.
  */
 
-class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRedesignLayoutBinding>(),
-        AddToPhotoBlogRedesignActivityViewModel.IActivityDelegateWithFeedNavigator {
+class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRedesignLayoutBinding>() {
     private companion object {
         const val SELECTED_PHOTO_ID = "selected_photo_id"
     }
-    private lateinit var mViewModel: AddToPhotoBlogRedesignActivityViewModel
-    private val mNavigator by lazy { FeedNavigator(this) }
+    private val mViewModel by lazy { AddToPhotoBlogRedesignActivityViewModel(this) }
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(TypeProvider()) { Bundle() }
@@ -47,7 +43,6 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mViewModel = AddToPhotoBlogRedesignActivityViewModel(this)
         viewBinding.viewModel = mViewModel
         NewProductsKeysGeneratedStatistics.sendNow_PHOTOFEED_SEND_OPEN(applicationContext)
         initRecyclerView(viewBinding.content,
@@ -73,7 +68,6 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
             }
         }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(SELECTED_PHOTO_ID, mViewModel.lastSelectedPhotoId)
@@ -87,7 +81,4 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
         }
         return lastSelectedPhotoId
     }
-
-    override fun getFeedNavigator(): IFeedNavigator { return mNavigator }
-
 }

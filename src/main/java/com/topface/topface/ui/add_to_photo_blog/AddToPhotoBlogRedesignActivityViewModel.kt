@@ -13,7 +13,7 @@ import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -24,15 +24,14 @@ import javax.inject.Inject
  * VM for AddToPhotoBlogRedesignActivity
  * Created by m.bayutin on 19.01.17.
  */
-class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDelegateWithFeedNavigator?) {
+class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDelegate?) {
     val isLockerVisible = ObservableBoolean(false)
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    @Inject lateinit var mAppState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
     private var mBalance: BalanceData? = null
     private val mSubscriptions = CompositeSubscription()
     // договаривались использовать цену из первой кнопки лидеров
-    private val mPrice by lazy { App.get().options.buyLeaderButtons[0].price }
-    val price: Int get() = mPrice
+    val price by lazy { App.get().options.buyLeaderButtons[0].price }
 
     private var mLastSelectedPhotoId = 0
     val lastSelectedPhotoId: Int
@@ -55,15 +54,15 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
     }
 
     private fun placeOrBuy() = mBalance?.let {
-        if (it.money < mPrice) {
+        if (it.money < price) {
             startPurchasesActivity()
         } else {
             isLockerVisible.set(true)
             AddPhotoFeedRequest(mLastSelectedPhotoId, App.get(), 1, ""
-                    , mPrice.toLong()).callback(object : ApiHandler() {
+                    , price.toLong()).callback(object : ApiHandler() {
 
                 override fun success(response: IApiResponse) {
-                    FlurryManager.getInstance().sendSpendCoinsEvent(mPrice, FlurryManager.GET_LEAD)
+                    FlurryManager.getInstance().sendSpendCoinsEvent(price, FlurryManager.GET_LEAD)
                     activityDelegate?.let {
                         it.setResult(Activity.RESULT_OK, Intent())
                         it.finish()
@@ -83,10 +82,6 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
     }
 
     private fun startPurchasesActivity() {
-        activityDelegate?.getFeedNavigator()?.showPurchaseCoins()
-    }
-
-    interface IActivityDelegateWithFeedNavigator : IActivityDelegate {
-        fun getFeedNavigator(): IFeedNavigator
+        activityDelegate?.let { FeedNavigator(it).showPurchaseCoins() }
     }
 }
