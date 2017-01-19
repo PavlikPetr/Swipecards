@@ -146,7 +146,7 @@ public class CountersData implements Parcelable {
             case FragmentIdData.TABBED_VISITORS:
                 return getVisitors() + getFans();
             case FragmentIdData.TABBED_LIKES:
-                return getLikes() + getMutual() + getAdmirations();
+                return getLikes();
             case FragmentIdData.GEO:
                 return getPeopleNearby();
         }
