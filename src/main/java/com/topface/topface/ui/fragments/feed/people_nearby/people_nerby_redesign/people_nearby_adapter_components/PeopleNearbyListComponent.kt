@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -23,9 +22,9 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
                                 private val mNavigator: FeedNavigator,
                                 private val mPopoverControl: IPopoverControl) : AdapterComponent<PeopleNearbyListBinding, PeopleNearbyList>(),
         IViewSize {
-    private lateinit var mViewModel: PeopleNearbyListViewModel
-    private lateinit var mAdapter: CompositeAdapter
-    private var mRecyclerView: RecyclerView?=null
+    private var mViewModel: PeopleNearbyListViewModel? = null
+    private var mAdapter: CompositeAdapter? = null
+    private var mRecyclerView: RecyclerView? = null
     private var mSize: Size? = null
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
@@ -73,8 +72,8 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
         get() = PeopleNearbyListBinding::class.java
 
     override fun release() {
-        mViewModel.release()
+        mViewModel?.release()
         mRecyclerView?.removeOnScrollListener(mScrollListener)
-        mAdapter.releaseComponents()
+        mAdapter?.releaseComponents()
     }
 }

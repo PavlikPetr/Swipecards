@@ -25,12 +25,14 @@ class PhotoBlogListComponent(private val mContext: Context,
                              private val mPopoverControl: IPopoverControl,
                              private val mSize: IViewSize) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(),
         ILifeCycle {
-    private lateinit var mAdapter: CompositeAdapter
-    private lateinit var mPhotoblogListBinding: PhotoblogListBinding
-    private lateinit var mRecyclerView: RecyclerView
+    private var mAdapter: CompositeAdapter? = null
+    private var mPhotoblogListBinding: PhotoblogListBinding? = null
+    private var mRecyclerView: RecyclerView? = null
     private val mViewModel: PhotoBlogListViewModel by lazy {
         PhotoBlogListViewModel(mApi) {
-            mPhotoblogListBinding.root.post { mSize.size(Size(mPhotoblogListBinding.root.measuredHeight, mPhotoblogListBinding.root.measuredWidth)) }
+            mPhotoblogListBinding?.let {
+                it.root.post { mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth)) }
+            }
         }
     }
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
@@ -67,7 +69,7 @@ class PhotoBlogListComponent(private val mContext: Context,
     override fun release() {
         super.release()
         mViewModel.release()
-        mAdapter.releaseComponents()
-        mRecyclerView.removeOnScrollListener(mScrollListener)
+        mAdapter?.releaseComponents()
+        mRecyclerView?.removeOnScrollListener(mScrollListener)
     }
 }

@@ -22,7 +22,7 @@ class CropSquareTransformation(mContext: Context) : BaseGlideTransformation(mCon
         return BitmapResource.obtain(outBitmap, mBitmapPool)
     }
 
-    private fun bitmapCreating(source:Bitmap, width:Int, height:Int) = if (width >= height) Bitmap.createBitmap(source, width / 2 - height / 2, 0, height, height)
-                                                                        else Bitmap.createBitmap(source, 0, height / 2 - width / 2, width, width)
-
+    private fun bitmapCreating(source: Bitmap, width: Int, height: Int) =
+            if (width >= height) Bitmap.createBitmap(source, width / 2 - height / 2, 0, height, height)
+            else Bitmap.createBitmap(source, 0, height / 2 - width / 2, width, width)
 }

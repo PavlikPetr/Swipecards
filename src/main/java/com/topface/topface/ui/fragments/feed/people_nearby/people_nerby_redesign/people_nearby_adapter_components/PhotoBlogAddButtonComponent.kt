@@ -2,14 +2,12 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.data.FeedPhotoBlog
-import com.topface.topface.databinding.ItemEmptyPeopleNearbyBinding
 import com.topface.topface.databinding.PhotoblogItemBinding
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.*
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.IPopoverControl
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogAdd
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogAddButtonViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
-import com.topface.topface.utils.extensions.getString
 
 /**
  * Компонент итема "+" для постановки в ленту
@@ -23,17 +21,19 @@ class PhotoBlogAddButtonComponent(private val mNavigator: IFeedNavigator,
     override val bindingClass: Class<PhotoblogItemBinding>
         get() = PhotoblogItemBinding::class.java
 
-    private lateinit var mViewModel: PhotoBlogAddButtonViewModel
+    private var mViewModel: PhotoBlogAddButtonViewModel? = null
 
     override fun bind(binding: PhotoblogItemBinding, data: PhotoBlogAdd?, position: Int) {
         data?.let {
-            mViewModel = PhotoBlogAddButtonViewModel(mNavigator, App.get().profile, mPopoverControl)
-            binding.viewModel = mViewModel.photoBlogViewModel
+            with(PhotoBlogAddButtonViewModel(mNavigator, App.get().profile, mPopoverControl)) {
+                mViewModel = this
+                binding.viewModel = photoBlogViewModel
+            }
         }
     }
 
     override fun release() {
         super.release()
-        mViewModel.release()
+        mViewModel?.release()
     }
 }

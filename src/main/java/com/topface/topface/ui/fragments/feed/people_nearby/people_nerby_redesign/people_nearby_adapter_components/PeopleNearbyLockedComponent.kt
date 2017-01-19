@@ -24,7 +24,7 @@ class PeopleNearbyLockedComponent(private val mApi: FeedApi, private val mNaviga
     override val bindingClass: Class<ItemLockedPeopleNearbyBinding>
         get() = ItemLockedPeopleNearbyBinding::class.java
 
-    private lateinit var mViewModel: PeopleNearbyLockedViewModel
+    private var mViewModel: PeopleNearbyLockedViewModel? = null
 
     override fun bind(binding: ItemLockedPeopleNearbyBinding, data: PeopleNearbyLocked?, position: Int) {
         mViewModel = PeopleNearbyLockedViewModel(mApi, mNavigator)
@@ -35,6 +35,6 @@ class PeopleNearbyLockedComponent(private val mApi: FeedApi, private val mNaviga
 
     override fun release() {
         super.release()
-        mViewModel.release()
+        mViewModel?.release()
     }
 }

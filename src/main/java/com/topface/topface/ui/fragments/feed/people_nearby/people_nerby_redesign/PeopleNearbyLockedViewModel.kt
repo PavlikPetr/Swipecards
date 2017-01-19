@@ -20,6 +20,7 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
 /**
@@ -45,8 +46,7 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
         private const val BUY_VIP_FROM = "PeopleNearby"
     }
 
-    private val mOptionsSubscription: Subscription
-    private val mCoinsSubscription: Subscription
+    private val mSubscriptions = CompositeSubscription()
     private var mPeopleNearbyAccessSubscription: Subscription? = null
     private var mBlockPeopleNearby = App.get().options.blockPeople
     private var mUnlockAllForPremium = App.get().options.unlockAllForPremium
@@ -73,13 +73,13 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
                         getVisibility(obs)
                     } else View.GONE)
         })
-        mCoinsSubscription = mState.getObservable(BalanceData::class.java)
+        mSubscriptions.add(mState.getObservable(BalanceData::class.java)
                 .distinctUntilChanged()
                 .subscribe(shortSubscription {
                     mBalanceData = it
-                })
+                }))
 
-        mOptionsSubscription = mState.getObservable(Options::class.java)
+        mSubscriptions.add(mState.getObservable(Options::class.java)
                 .flatMap { options -> Observable.just(Pair(options.unlockAllForPremium, options.blockPeople)) }
                 .distinctUntilChanged()
                 .subscribe(shortSubscription {
@@ -91,16 +91,14 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
                         premiumText.set(textPremium)
                         unlockByPremiumButtonText.set(buttonTextPremium)
                     }
-                })
+                }))
     }
 
     private fun getVisibility(obs: android.databinding.Observable?) =
             if (((obs as? ObservableField<*>)?.get() as? String)?.isEmpty() ?: true) View.GONE else View.VISIBLE
 
     fun release() {
-        mOptionsSubscription.safeUnsubscribe()
-        mCoinsSubscription.safeUnsubscribe()
-        mPeopleNearbyAccessSubscription.safeUnsubscribe()
+        mSubscriptions.safeUnsubscribe()
     }
 
     fun onBuyVipClick() {
