@@ -18,6 +18,7 @@ import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -62,6 +63,10 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
                     , price.toLong()).callback(object : ApiHandler() {
 
                 override fun success(response: IApiResponse) {
+                    App.getUserConfig().apply {
+                        peopleNearbyPopoverClose = Long.MAX_VALUE
+                        saveConfig()
+                    }
                     FlurryManager.getInstance().sendSpendCoinsEvent(price, FlurryManager.GET_LEAD)
                     activityDelegate?.let {
                         it.setResult(Activity.RESULT_OK, Intent())
@@ -81,5 +86,5 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
         }
     }
 
-    private fun startPurchasesActivity() = feedNavigator.showPurchaseCoins()
+    private fun startPurchasesActivity() = feedNavigator.showPurchaseCoins("AdToPhotoBlog")
 }

@@ -56,7 +56,7 @@ public class DrawerLayoutState {
     /**
      * Notify that DrawerLayout is change state
      */
-    public void onStateChanged() {
+    public void  onStateChanged() {
         newState(new DrawerLayoutStateData(STATE_CHANGED));
     }
 

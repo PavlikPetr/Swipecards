@@ -36,6 +36,7 @@ import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import rx.Subscription
+import java.util.*
 import javax.inject.Inject
 
 
@@ -53,13 +54,22 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     companion object {
         const val PAGE_NAME = "PeopleNearby"
+        private const val POPOVER_SHOW_DELAY = 24 * 60 * 60
     }
 
     private var mDrawerStateSubscription: Subscription? = null
+    private var mDrawerLayoutData: DrawerLayoutStateData? = null
     private val mPopupVindow: PopupWindow? by lazy {
         context.layoutInflater.inflate(R.layout.people_nearby_popover, null)?.let {
             PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
                 it.findViewById(R.id.close)?.setOnClickListener { dismiss() }
+                it.findViewById(R.id.root)?.setOnClickListener {
+                    if (App.get().profile.photo.isEmpty) {
+                        mNavigator.showTakePhotoPopup()
+                    } else {
+                        mNavigator.showAddToLeader()
+                    }
+                }
             }
         }
     }
@@ -68,11 +78,25 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     // показываем PopupWindow о том, что фотолента помогает популярности
     override fun show() {
-        mPopupVindow?.showAsDropDown(mBinding.root.findViewById(R.id.photoblogInGeoAvatar))
+        mPopupVindow?.let {
+            if (!it.isShowing && mDrawerLayoutData?.state != DrawerLayoutStateData.SLIDE &&
+                    mDrawerLayoutData?.state != DrawerLayoutStateData.OPENED) {
+                if (Calendar.getInstance().timeInMillis >=
+                        App.getUserConfig().peopleNearbyPopoverClose + POPOVER_SHOW_DELAY) {
+                    it.showAsDropDown(mBinding.root.findViewById(R.id.photoblogInGeoAvatar))
+                }
+            }
+        }
     }
 
     // скрываем PopupWindow
-    override fun close() {
+    override fun close(isManually: Boolean) {
+        if (isManually) {
+            App.getUserConfig().apply {
+                peopleNearbyPopoverClose = Calendar.getInstance().timeInMillis
+                saveConfig()
+            }
+        }
         mPopupVindow?.dismiss()
     }
 
@@ -116,9 +140,11 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         App.get().inject(this)
         mDrawerStateSubscription = mDrawerLayoutState
                 .observable
+                .filter { it.state != DrawerLayoutStateData.STATE_CHANGED }
                 .subscribe(shortSubscription {
+                    mDrawerLayoutData = it
                     if (it.state == DrawerLayoutStateData.SLIDE) {
-                        close()
+                        close(false)
                     }
                 })
     }
@@ -141,7 +167,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     override fun onDetach() {
         super.onDetach()
-        close()
+        close(false)
         activity.unregisterLifeCycleDelegate(mAdapter.components.values)
         activity.unregisterLifeCycleDelegate(mViewModel)
     }
@@ -164,7 +190,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     override fun onDestroy() {
         super.onDestroy()
-        close()
+        close(false)
         mDrawerStateSubscription.safeUnsubscribe()
     }
 

@@ -38,7 +38,7 @@ class PhotoBlogListComponent(private val mContext: Context,
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
-            mPopoverControl.close()
+            mPopoverControl.close(true)
         }
     }
 
