@@ -138,12 +138,12 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     }
 
     override fun onPause() {
-        overideScrollFlags()
+        overrideScrollFlags()
         super.onPause()
     }
 
     override fun onResume() {
-        overideScrollFlags()
+        overrideScrollFlags()
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.people_nearby)))
         if (context.isGrantedPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))) {
@@ -153,7 +153,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         }
     }
 
-    private fun overideScrollFlags() {
+    private fun overrideScrollFlags() {
         mAppbarLayoutParams?.apply {
             val currentFlags = scrollFlags
             scrollFlags = mAppbarScrollFlags
