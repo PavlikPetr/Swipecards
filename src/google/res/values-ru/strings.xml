@@ -1080,7 +1080,7 @@
     <string name="photo_gallery_photo_deleted">Фотография удалена</string>
 
     <string name="photofeed_add_photo_to_feed_title">Подняться на первое место!</string>
-    <string name="photofeed_add_photo_to_feed_description">Разместите фото с приветствием, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
+    <string name="photofeed_add_photo_to_feed_description">Разместите фото, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас!</string>
 
     <string name="offers_screen_title">Бонусы</string>
     <string name="offers_loading_text">Загружаем доступные для вас задания...</string>
@@ -1248,4 +1248,6 @@
     <string name="send_gift">Отправить подарок</string>
     <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
     <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
+    
+    <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
 </resources>
