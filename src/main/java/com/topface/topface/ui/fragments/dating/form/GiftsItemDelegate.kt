@@ -9,8 +9,6 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.Gift
 import com.topface.topface.data.SendGiftAnswer
-import com.topface.topface.data.search.CachableSearchList
-import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.GiftsFormItemBinding
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.GiftsActivity
