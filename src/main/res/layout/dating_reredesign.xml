@@ -12,45 +12,65 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/DatingNameAndAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="55dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{viewModel.name}"/>
-            <!--АХТУНГИ, ПАЦАНЫ!!!!!!!!!!!! Отсуп сверху на 55 и снизу на -55 нужны, чтобы гарантировать место под возраст и онлайн значок-->
-            <TextView
-                style="@style/DatingNameAndAge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-55dp"
-                android:drawablePadding="8dp"
-                android:drawableRight="@{viewModel.iconOnlineRes}"
-                android:ellipsize="none"
-                android:maxLines="1"
-                android:text="@{viewModel.age}"/>
+            android:background="@drawable/bg_blur"
+            android:orientation="vertical">
         </LinearLayout>
 
-        <TextView
-            style="@style/DatingCity"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="8dp"
-            android:gravity="center_vertical"
-            android:text="@{viewModel.city}"/>
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="152dp"
+            android:background="@color/bg_white"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/DatingNameAndAge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="55dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{viewModel.name}"/>
+                    <!--АХТУНГИ, ПАЦАНЫ!!!!!!!!!!!! Отсуп сверху на 55 и снизу на -55 нужны, чтобы гарантировать место под возраст и онлайн значок-->
+                    <TextView
+                        style="@style/DatingNameAndAge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-55dp"
+                        android:drawablePadding="8dp"
+                        android:drawableRight="@{viewModel.iconOnlineRes}"
+                        android:ellipsize="none"
+                        android:maxLines="1"
+                        android:text="@{viewModel.age}"/>
+                </LinearLayout>
+
+                <TextView
+                    style="@style/DatingCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@{viewModel.city}"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </layout>
