@@ -194,6 +194,13 @@
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
+            android:name=".ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity"
+            android:parentActivityName=".ui.NavigationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity"/>
+        </activity>
+        <activity
             android:name=".ui.InviteVkFriendsActivity"
             android:parentActivityName=".ui.NavigationActivity">
             <meta-data

@@ -291,4 +291,8 @@
     <color name="dialog_contacts_unread">#DE000000</color>
     <color name="dialog_contacts_was_read">#7f7f7f</color>
 
+    <!-- New add-to-photo-blog screen -->
+    <color name="add_to_photo_blog_item_background">#f5f5f5</color>
+    <color name="add_to_photo_blog_price_text">#9a9999</color>
+
 </resources>

@@ -1643,4 +1643,17 @@
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/dating_fab_skip</item>
     </style>
+
+    <style name="AddToPhotoBlogGreenButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/btn_green_selector</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
 </resources>
