@@ -14,16 +14,11 @@ import javax.inject.Inject
 class PlaceButtonItemViewModel(val price: Int) {
     @Inject lateinit var mEventBus: EventBus
 
-    val priceText : ObservableField<String> by lazy {
-        val text : String = Utils.getQuantityString(R.plurals.add_to_photo_blog_coins, price, price)
-        ObservableField(text)
-    }
+    val priceText by lazy { ObservableField<String>(Utils.getQuantityString(R.plurals.add_to_photo_blog_coins, price, price)) }
 
     init {
         App.get().inject(this)
     }
 
-    fun onClick() {
-        mEventBus.setData(PlaceButtonTapEvent())
-    }
+    fun onClick() = mEventBus.setData(PlaceButtonTapEvent())
 }

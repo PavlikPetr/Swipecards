@@ -13,7 +13,7 @@ class HeaderItem()
 /**
  * Итем горизонтального списка фоток пользователя
  */
-class PhotoListItem(val lastSelectedPhotoId: Int)
+data class PhotoListItem(val lastSelectedPhotoId: Int)
 
 /**
  * Итем кнопки "Разместить" с подписью о количестве монет

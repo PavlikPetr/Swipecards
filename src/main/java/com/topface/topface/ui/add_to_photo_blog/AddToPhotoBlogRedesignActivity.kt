@@ -26,9 +26,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.FlurryManager
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
-import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -39,16 +37,14 @@ import javax.inject.Inject
 
 class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRedesignLayoutBinding>() {
     private companion object {
-        val SELECTED_PHOTO_ID = "selected_photo_id"
+        const val SELECTED_PHOTO_ID = "selected_photo_id"
     }
     @Inject lateinit internal var mAppState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
-    private lateinit var mPhotoSelectedSubscription: Subscription
-    private lateinit var mPlaceButtonTapSubscription: Subscription
-    lateinit private var mBalance: BalanceData
+    private var mBalance: BalanceData? = null
     private val mSubscriptions = CompositeSubscription()
     // договаривались использовать цену из первой кнопки лидеров
-    private val mPrice : Int by lazy { App.get().options.buyLeaderButtons[0].price }
+    private val mPrice by lazy { App.get().options.buyLeaderButtons[0].price }
 
     private val mNavigator by lazy { FeedNavigator(this) }
 
@@ -57,7 +53,7 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(TypeProvider()) { Bundle() }
                 .addAdapterComponent(HeaderComponent())
-                .addAdapterComponent(PhotoListComponent(this@AddToPhotoBlogRedesignActivity))
+                .addAdapterComponent(PhotoListComponent())
                 .addAdapterComponent(PlaceButtonComponent())
     }
 
@@ -72,38 +68,26 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         App.get().inject(this)
-        mPhotoSelectedSubscription = mEventBus.getObservable(PhotoSelectedEvent::class.java)
-                .subscribe { event ->
-                    mLastSelectedPhotoId = event.id
-                }
-        mPlaceButtonTapSubscription = mEventBus.getObservable(PlaceButtonTapEvent::class.java)
-                .subscribe { event ->
-                    placeOrBuy()
-                }
-        mSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
-            override fun onNext(balance: BalanceData?) = balance?.let {
-                mBalance = it
-            } ?: Unit
-        }))
+        mSubscriptions.add(mEventBus.getObservable(PhotoSelectedEvent::class.java)
+                .subscribe { mLastSelectedPhotoId = it.id })
+        mSubscriptions.add(mEventBus.getObservable(PlaceButtonTapEvent::class.java)
+                .subscribe { placeOrBuy() })
+        mSubscriptions.add(mAppState.getObservable(BalanceData::class.java)
+                .subscribe({ mBalance = it }))
 
         NewProductsKeysGeneratedStatistics.sendNow_PHOTOFEED_SEND_OPEN(applicationContext)
-        val lastSelectedPhotoId = onRestoreState(savedInstanceState)
-        initRecyclerView(viewBinding.content, lastSelectedPhotoId)
+        initRecyclerView(viewBinding.content, restoreLastSelectedPhotoId(savedInstanceState))
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mAdapter.releaseComponents()
-        mPhotoSelectedSubscription.safeUnsubscribe()
-        mPlaceButtonTapSubscription.safeUnsubscribe()
         mSubscriptions.safeUnsubscribe()
     }
 
-    override fun onUpClick() {
-        finish()
-    }
+    override fun onUpClick() = finish()
 
-    private fun initRecyclerView(recyclerView: RecyclerView, lastSelectedPhotoId: Int) {
+    private fun initRecyclerView(recyclerView: RecyclerView, lastSelectedPhotoId: Int) =
         with(recyclerView) {
             layoutManager = LinearLayoutManager(this@AddToPhotoBlogRedesignActivity)
             adapter = mAdapter
@@ -111,14 +95,14 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
                 mAdapter.data = mutableListOf(HeaderItem(), PhotoListItem(lastSelectedPhotoId), PlaceButtonItem(mPrice))
             }
         }
-    }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(SELECTED_PHOTO_ID, mLastSelectedPhotoId)
     }
 
-    fun onRestoreState(savedInstanceState: Bundle?): Int {
+    fun restoreLastSelectedPhotoId(savedInstanceState: Bundle?): Int {
         var lastSelectedPhotoId = App.get().profile.photos[0].id
         if (savedInstanceState != null) {
             val storedId = savedInstanceState.getInt(SELECTED_PHOTO_ID)
@@ -127,8 +111,8 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
         return lastSelectedPhotoId
     }
 
-    private fun placeOrBuy() {
-        if (mBalance.money < mPrice) {
+    private fun placeOrBuy() = mBalance?.let {
+        if (it.money < mPrice) {
             startPurchasesActivity()
         } else {
             viewBinding.locker.setVisibility(View.VISIBLE)

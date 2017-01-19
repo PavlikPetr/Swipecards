@@ -19,8 +19,7 @@ class PhotoListItemViewModel(val lastSelectedPhotoId: Int) : IOnListChangedCallb
     @Inject lateinit var appState: TopfaceAppState
     @Inject lateinit var mEventBus: EventBus
 
-
-    private lateinit var mProfileSubscription: Subscription
+    private var mProfileSubscription: Subscription? = null
 
     init {
         App.get().inject(this)
@@ -42,12 +41,10 @@ class PhotoListItemViewModel(val lastSelectedPhotoId: Int) : IOnListChangedCallb
         }
     }
 
-    private fun dispatchPhotoSelected(id: Int) {
-        mEventBus.setData(PhotoSelectedEvent(id))
-    }
+    private fun dispatchPhotoSelected(id: Int) = mEventBus.setData(PhotoSelectedEvent(id))
 
     fun release() {
-        mProfileSubscription.safeUnsubscribe()
+        mProfileSubscription?.safeUnsubscribe()
         data.removeListener()
     }
 }

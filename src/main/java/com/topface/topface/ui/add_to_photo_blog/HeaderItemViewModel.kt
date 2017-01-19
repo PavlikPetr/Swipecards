@@ -15,16 +15,16 @@ import javax.inject.Inject
 class HeaderItemViewModel {
     @Inject lateinit var mEventBus: EventBus
     private var mPhotoSelectedSubscription: Subscription
-    var photo : ObservableField<Photo> = ObservableField()
+    var photo = ObservableField<Photo>()
 
     init {
         App.get().inject(this)
         mPhotoSelectedSubscription = mEventBus.getObservable(PhotoSelectedEvent::class.java)
                 .subscribe { event ->
-                    for (photo in App.get().profile.photos) {
-                        if (photo.id == event.id) {
-                            this.photo.set(photo)
-                            break
+                    App.get().profile.photos.forEach {
+                        if (it.id == event.id) {
+                            this.photo.set(it)
+                            return@forEach
                         }
                     }
                 }

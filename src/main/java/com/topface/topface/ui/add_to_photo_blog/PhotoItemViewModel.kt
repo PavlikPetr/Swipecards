@@ -19,24 +19,19 @@ class PhotoItemViewModel(photo: Photo) {
     @Inject lateinit var mEventBus: EventBus
     private var mPhotoSelectedSubscription: Subscription
     val userPhoto = ObservableField(photo)
-    var foregroundDrawable: ObservableField<Drawable> = ObservableField()
-    val placeholderRes: ObservableField<Int> = ObservableField(0)
+    var foregroundDrawable = ObservableField<Drawable>()
+    val placeholderRes = ObservableField<Int>(0)
 
     init {
         App.get().inject(this)
         mPhotoSelectedSubscription = mEventBus.getObservable(PhotoSelectedEvent::class.java)
-                .subscribe { event ->
-                    setSelected(photo.id == event.id)
+                .subscribe { setSelected(photo.id == it.id)
                 }
     }
 
-    fun onClick() {
-        mEventBus.setData(PhotoSelectedEvent(userPhoto.get().id))
-    }
+    fun onClick() = mEventBus.setData(PhotoSelectedEvent(userPhoto.get().id))
 
-    fun setSelected(selected: Boolean) {
-        foregroundDrawable.set(if (selected) R.drawable.selected_photo.getDrawable() else null)
-    }
+    fun setSelected(selected: Boolean) = foregroundDrawable.set(if (selected) R.drawable.selected_photo.getDrawable() else null)
 
     fun release() = mPhotoSelectedSubscription.safeUnsubscribe()
 }

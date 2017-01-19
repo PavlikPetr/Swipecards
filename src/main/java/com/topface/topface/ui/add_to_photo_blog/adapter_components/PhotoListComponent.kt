@@ -1,6 +1,5 @@
 package com.topface.topface.ui.add_to_photo_blog.adapter_components
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.topface.topface.App
@@ -16,7 +15,7 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
  * Компонент со списком фоток пользователя
  * Created by mbayutin on 10.01.17.
  */
-class PhotoListComponent(val context: Context) : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
+class PhotoListComponent() : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
     private lateinit var mAdapter: CompositeAdapter
     private lateinit var mViewModel: PhotoListItemViewModel
     override val itemLayout: Int
@@ -26,7 +25,7 @@ class PhotoListComponent(val context: Context) : AdapterComponent<ItemAddToPhoto
 
     override fun bind(binding: ItemAddToPhotoBlogPhotoListBinding, data: PhotoListItem?, position: Int) {
         with(binding) {
-            content.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            content.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
             mAdapter = CompositeAdapter(PhotoTypeProvider()) { Bundle() }
                     .addAdapterComponent(PhotoComponent())
             content.adapter = mAdapter
