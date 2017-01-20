@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.location.Location
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
@@ -11,8 +12,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.safeToInt
-import com.topface.topface.utils.extensions.showShortToast
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.geo.GeoLocationManager
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -44,15 +44,13 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     init {
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).filter({location -> isValidLocation(location)}).subscribe(object : Action1<Location> {
+        mSubscribtionLocation = mState.getObservable(Location::class.java).filter { it.isValidLocation() }.subscribe(object : Action1<Location> {
             override fun call(location: Location?) {
                 location?.let {
-//                    if (isValidLocation(location)) {
-                        mIntervalSubscription.safeUnsubscribe()
-                        mLastLocation = location
-                        sendPeopleNearbyRequest()
-                    }
-//                }
+                    mIntervalSubscription.safeUnsubscribe()
+                    mLastLocation = location
+                    sendPeopleNearbyRequest()
+                }
             }
         })
 
@@ -114,10 +112,6 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     private fun handleError(errorCode: String?) =
             showStub(errorCode.safeToInt(ErrorCodes.INTERNAL_SERVER_ERROR))
-
-    // Имбо-метод проверки валидности координат. Красивый как восход солнца в горах. Короткий как мимолетная улыбка незнакомки в метро,епт
-    fun isValidLocation(location: Location):Boolean = location.latitude <= 90 && location.latitude >= -90
-            && location.longitude <= 180 && location.longitude >= -180
 
     fun release() {
         mIntervalSubscription.safeUnsubscribe()
