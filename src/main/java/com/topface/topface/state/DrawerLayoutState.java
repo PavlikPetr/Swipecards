@@ -4,7 +4,11 @@ import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 
 import rx.subjects.BehaviorSubject;
 
-import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.*;
+import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.CLOSED;
+import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.OPENED;
+import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.SLIDE;
+import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.STATE_CHANGED;
+import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.UNDEFINED;
 
 public class DrawerLayoutState {
 
@@ -56,7 +60,7 @@ public class DrawerLayoutState {
     /**
      * Notify that DrawerLayout is change state
      */
-    public void  onStateChanged() {
+    public void onStateChanged() {
         newState(new DrawerLayoutStateData(STATE_CHANGED));
     }
 

@@ -44,7 +44,7 @@ class PeopleNearbyListItemViewModel(private val mItem: FeedGeo, private val mNav
             }
 
     fun onClick() {
-        mPopoverControl.close(true)
+        mPopoverControl.closeByUser()
         mNavigator.showProfile(mItem, PLC)
     }
 }

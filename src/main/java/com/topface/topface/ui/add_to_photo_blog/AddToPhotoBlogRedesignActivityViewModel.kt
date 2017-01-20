@@ -63,7 +63,7 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
                     , price.toLong()).callback(object : ApiHandler() {
 
                 override fun success(response: IApiResponse) {
-                    App.getUserConfig().apply {
+                    with(App.getUserConfig()) {
                         peopleNearbyPopoverClose = Long.MAX_VALUE
                         saveConfig()
                     }

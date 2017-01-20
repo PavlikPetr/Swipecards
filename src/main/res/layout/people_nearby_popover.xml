@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="12dp"
-    android:layout_marginRight="12dp"
-    android:background="@drawable/popover"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingTop="-3dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/people_nearby_popover_text" />
+    <data>
 
-    <ImageView
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyPopoverViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/popover_close_selector" />
-</LinearLayout>
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/popover"
+        android:gravity="center_vertical"
+        android:onClick="@{() -> viewModel.addToLeaderClick()}"
+        android:orientation="horizontal"
+        android:paddingTop="-3dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/people_nearby_popover_text" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.closeClick()}"
+            android:src="@drawable/popover_close_selector" />
+    </LinearLayout>
+</layout>

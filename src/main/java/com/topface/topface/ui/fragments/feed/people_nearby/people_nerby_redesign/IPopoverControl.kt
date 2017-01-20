@@ -6,5 +6,6 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
  */
 interface IPopoverControl {
     fun show()
-    fun close(isManually: Boolean)
+    fun closeProgrammatically()
+    fun closeByUser()
 }
