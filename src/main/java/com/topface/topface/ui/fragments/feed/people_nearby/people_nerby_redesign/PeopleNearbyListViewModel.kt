@@ -11,8 +11,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.safeToInt
-import com.topface.topface.utils.extensions.showShortToast
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.geo.GeoLocationManager
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -44,7 +43,9 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     init {
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object : Action1<Location> {
+        mSubscribtionLocation = mState.getObservable(Location::class.java)
+                .filter { it.isValidLocation() }
+                .subscribe(object : Action1<Location> {
             override fun call(location: Location?) {
                 location?.let {
                     mIntervalSubscription.safeUnsubscribe()
@@ -53,6 +54,7 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
                 }
             }
         })
+
         mSubscriptionPTR = mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
                 .subscribe(shortSubscription {
                     if (it?.isRefreshing ?: false) {
