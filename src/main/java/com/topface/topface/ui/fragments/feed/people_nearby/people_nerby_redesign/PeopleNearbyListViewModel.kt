@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.location.Location
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
@@ -44,7 +43,9 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     init {
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).filter { it.isValidLocation() }.subscribe(object : Action1<Location> {
+        mSubscribtionLocation = mState.getObservable(Location::class.java)
+                .filter { it.isValidLocation() }
+                .subscribe(object : Action1<Location> {
             override fun call(location: Location?) {
                 location?.let {
                     mIntervalSubscription.safeUnsubscribe()
