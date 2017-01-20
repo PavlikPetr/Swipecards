@@ -47,12 +47,15 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
         mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object : Action1<Location> {
             override fun call(location: Location?) {
                 location?.let {
-                    mIntervalSubscription.safeUnsubscribe()
-                    mLastLocation = location
-                    sendPeopleNearbyRequest()
+                    if (isValidLocation(location)) {
+                        mIntervalSubscription.safeUnsubscribe()
+                        mLastLocation = location
+                        sendPeopleNearbyRequest()
+                    }
                 }
             }
         })
+
         mSubscriptionPTR = mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
                 .subscribe(shortSubscription {
                     if (it?.isRefreshing ?: false) {
@@ -111,6 +114,10 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     private fun handleError(errorCode: String?) =
             showStub(errorCode.safeToInt(ErrorCodes.INTERNAL_SERVER_ERROR))
+
+    // Имбо-метод проверки валидности координат. Красивый как восход солнца в горах. Короткий как мимолетная улыбка незнакомки в метро,епт
+    fun isValidLocation(location: Location):Boolean = location.latitude <= 90 && location.latitude >= -90
+            && location.longitude <= 180 && location.longitude >= -180
 
     fun release() {
         mIntervalSubscription.safeUnsubscribe()
