@@ -29,7 +29,7 @@ class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator,
         data?.let {
             binding.viewModel = PhotoBlogItemViewModel(it.user.photo,
                     if (it.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small) {
-                mPopoverControl.close()
+                mPopoverControl.closeByUser()
                 mNavigator.showProfile(it, PLC)
             }
         }

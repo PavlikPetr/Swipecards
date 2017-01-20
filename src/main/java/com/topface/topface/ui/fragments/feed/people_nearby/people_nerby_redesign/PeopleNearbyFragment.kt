@@ -6,13 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.data.leftMenu.DrawerLayoutStateData
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
-import com.topface.topface.state.DrawerLayoutState
 import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
@@ -27,15 +23,12 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
-import com.topface.topface.utils.rx.safeUnsubscribe
-import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
-import rx.Subscription
 import javax.inject.Inject
 
 
@@ -49,32 +42,16 @@ import javax.inject.Inject
 class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     @Inject lateinit var mEventBus: EventBus
-    @Inject lateinit var mDrawerLayoutState: DrawerLayoutState
 
     companion object {
         const val PAGE_NAME = "PeopleNearby"
     }
 
-    private var mDrawerStateSubscription: Subscription? = null
-    private val mPopupVindow: PopupWindow? by lazy {
-        context.layoutInflater.inflate(R.layout.people_nearby_popover, null)?.let {
-            PopupWindow(it, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-                it.findViewById(R.id.close)?.setOnClickListener { dismiss() }
-            }
-        }
+    private val mPeopleNearbyPopover: PeopleNearbyPopover by lazy {
+        PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
     }
 
     private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
-
-    // показываем PopupWindow о том, что фотолента помогает популярности
-    override fun show() {
-        mPopupVindow?.showAsDropDown(mBinding.root.findViewById(R.id.photoblogInGeoAvatar))
-    }
-
-    // скрываем PopupWindow
-    override fun close() {
-        mPopupVindow?.dismiss()
-    }
 
     private val mFeedRequestFactory by lazy {
         FeedRequestFactory(context)
@@ -87,7 +64,8 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         FeedNavigator(activity as IActivityDelegate)
     }
     private val mBinding by lazy {
-        DataBindingUtil.inflate<PeopleNearbyFragmentLayoutBinding>(context.layoutInflater, R.layout.people_nearby_fragment_layout, null, false)
+        DataBindingUtil.inflate<PeopleNearbyFragmentLayoutBinding>(context.layoutInflater,
+                R.layout.people_nearby_fragment_layout, null, false)
     }
     private val mPeopleNearbyTypeProvider by lazy {
         PeopleNearbyTypeProvider()
@@ -103,6 +81,18 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
                 .addAdapterComponent(mPeopleNearbyListComponent)
     }
 
+    override fun show() {
+        mPeopleNearbyPopover.show()
+    }
+
+    override fun closeByUser() {
+        mPeopleNearbyPopover.closeByUser()
+    }
+
+    override fun closeProgrammatically() {
+        mPeopleNearbyPopover.closeProgrammatically()
+    }
+
     override fun size(size: Size) {
         mPeopleNearbyListComponent.size(size.apply { height = mBinding.list.measuredHeight - height })
     }
@@ -114,13 +104,6 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         App.get().inject(this)
-        mDrawerStateSubscription = mDrawerLayoutState
-                .observable
-                .subscribe(shortSubscription {
-                    if (it.state == DrawerLayoutStateData.SLIDE) {
-                        close()
-                    }
-                })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -141,9 +124,10 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     override fun onDetach() {
         super.onDetach()
-        close()
+        closeProgrammatically()
         activity.unregisterLifeCycleDelegate(mAdapter.components.values)
         activity.unregisterLifeCycleDelegate(mViewModel)
+        mPeopleNearbyPopover.release()
     }
 
     override fun onDestroyView() {
@@ -164,8 +148,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     override fun onDestroy() {
         super.onDestroy()
-        close()
-        mDrawerStateSubscription.safeUnsubscribe()
+        closeProgrammatically()
     }
 
     private fun initList() = with(mBinding.list) {
