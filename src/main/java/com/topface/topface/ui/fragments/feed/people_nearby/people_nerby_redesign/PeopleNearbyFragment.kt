@@ -23,6 +23,7 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
+import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 import permissions.dispatcher.NeedsPermission
@@ -77,7 +78,8 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
                 })
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
-                .addAdapterComponent(PhotoBlogListComponent(context, mApi, mNavigator, this, this))
+                .addAdapterComponent(activity.registerLifeCycleDelegate(PhotoBlogListComponent(context,
+                        mApi, mNavigator, this, this)))
                 .addAdapterComponent(mPeopleNearbyListComponent)
     }
 
