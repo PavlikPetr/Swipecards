@@ -44,15 +44,15 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     init {
         App.get().inject(this)
-        mSubscribtionLocation = mState.getObservable(Location::class.java).subscribe(object : Action1<Location> {
+        mSubscribtionLocation = mState.getObservable(Location::class.java).filter({location -> isValidLocation(location)}).subscribe(object : Action1<Location> {
             override fun call(location: Location?) {
                 location?.let {
-                    if (isValidLocation(location)) {
+//                    if (isValidLocation(location)) {
                         mIntervalSubscription.safeUnsubscribe()
                         mLastLocation = location
                         sendPeopleNearbyRequest()
                     }
-                }
+//                }
             }
         })
 
