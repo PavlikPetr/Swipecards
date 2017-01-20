@@ -18,7 +18,5 @@ class PeopleNearbyPopoverViewModel(private val mNavigator: FeedNavigator,
         }
     }
 
-    fun closeClick() {
-        close.invoke()
-    }
+    fun closeClick() = close.invoke()
 }

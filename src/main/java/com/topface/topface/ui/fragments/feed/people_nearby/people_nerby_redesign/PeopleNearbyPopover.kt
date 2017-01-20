@@ -37,7 +37,7 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
         PeopleNearbyPopoverViewModel(mNavigator) { closeByUser() }
     }
     private val mPopupVindow: PopupWindow by lazy {
-        PopupWindow(mBinding.apply { viewModel = mViewModel }.root, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        PopupWindow(mBinding.apply { viewModel = mViewModel }.getRoot(), LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     }
 
     private val mDrawerStateSubscription: Subscription
@@ -64,23 +64,17 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
         mPopupVindow.dismiss()
     }
 
-    override fun closeProgrammatically() {
-        mPopupVindow.dismiss()
-    }
+    override fun closeProgrammatically() = mPopupVindow.dismiss()
 
     override fun show() {
-        mPopupVindow.let {
-            if (!it.isShowing && mDrawerLayoutData?.state != DrawerLayoutStateData.SLIDE &&
-                    mDrawerLayoutData?.state != DrawerLayoutStateData.OPENED) {
-                if (Calendar.getInstance().timeInMillis >=
-                        App.getUserConfig().peopleNearbyPopoverClose + POPOVER_SHOW_DELAY) {
-                    it.showAsDropDown(anchorView.invoke())
-                }
+        if (!mPopupVindow.isShowing && mDrawerLayoutData?.state != DrawerLayoutStateData.SLIDE &&
+                mDrawerLayoutData?.state != DrawerLayoutStateData.OPENED) {
+            if (Calendar.getInstance().timeInMillis >=
+                    App.getUserConfig().peopleNearbyPopoverClose + POPOVER_SHOW_DELAY) {
+                mPopupVindow.showAsDropDown(anchorView.invoke())
             }
         }
     }
 
-    fun release() {
-        mDrawerStateSubscription.safeUnsubscribe()
-    }
+    fun release() = mDrawerStateSubscription.safeUnsubscribe()
 }
