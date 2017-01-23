@@ -24,17 +24,18 @@ public class GiftsListAdapter extends GiftsAdapter {
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            ImageView imgView = (ImageView)v.findViewById(R.id.giftImage);
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    setHighlight(v, true);
+                    setHighlight(imgView, true);
                     break;
                 case MotionEvent.ACTION_UP:
-                    setHighlight(v, false);
-                    Integer pos = (Integer) v.getTag();
+                    setHighlight(imgView, false);
+                    Integer pos = (Integer) imgView.getTag();
                     mOnGridClickLIstener.onGridClick(getData().get(pos));
                     break;
                 case MotionEvent.ACTION_CANCEL:
-                    setHighlight(v, false);
+                    setHighlight(imgView, false);
                     break;
             }
             return true;
@@ -55,7 +56,8 @@ public class GiftsListAdapter extends GiftsAdapter {
     public class ViewHolder {
         ImageViewRemote giftImage;
         TextView priceText;
-        LinearLayout root;
+        LinearLayout descriptionRoot;
+        LinearLayout viewRoot;
     }
 
     @Override
@@ -67,8 +69,9 @@ public class GiftsListAdapter extends GiftsAdapter {
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
             holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
-            holder.root = (LinearLayout) convertView.findViewById(R.id.descriptionRoot);
-            holder.giftImage.setOnTouchListener(mOnTouchListener);
+            holder.descriptionRoot = (LinearLayout) convertView.findViewById(R.id.descriptionRoot);
+            holder.viewRoot = (LinearLayout) convertView.findViewById(R.id.viewRoot);
+            holder.viewRoot.setOnTouchListener(mOnTouchListener);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -76,17 +79,17 @@ public class GiftsListAdapter extends GiftsAdapter {
         holder.giftImage.setTag(position);
         holder.giftImage.setRemoteSrc(item.gift.link);
         holder.priceText.setText(Integer.toString(item.gift.price));
-        UiTestsExtensionKt.setUiTestTag(holder.root, UiTestsExtensionKt.getGiftTag(item.gift));
+        UiTestsExtensionKt.setUiTestTag(holder.descriptionRoot, UiTestsExtensionKt.getGiftTag(item.gift));
         return convertView;
     }
 
-    private void setHighlight(View view, boolean isSelected) {
+    private void setHighlight(ImageView view, boolean isSelected) {
         if (isSelected) {
-            ((ImageView) view).setColorFilter(mContext.getResources().getColor(R.color.blue_60_percent));
-            Utils.setBackground((ImageView) view, R.color.blue_60_percent);
+            view.setColorFilter(mContext.getResources().getColor(R.color.blue_60_percent));
+            Utils.setBackground(view, R.color.blue_60_percent);
         } else {
-            ((ImageView) view).setColorFilter(null);
-            Utils.setBackground((ImageView) view, -1);
+            view.setColorFilter(null);
+            Utils.setBackground(view, -1);
         }
     }
 }

@@ -40,7 +40,8 @@ fun Gift.getGiftTag() = String.format(GIFT_TEMPLATE, id)
 /**
  * Set tag for qa/debug build and for editors in release build
  */
-fun View.setUiTestTag(tag: Any) =
-        if (Debug.isDebugLogsEnabled()) {
-            apply { setTag(tag) }
-        } else this
+fun View.setUiTestTag(tag: Any) = apply {
+    if (Debug.isDebugLogsEnabled()) {
+        setTag(tag)
+    }
+}

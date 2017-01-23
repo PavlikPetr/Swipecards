@@ -93,6 +93,7 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
             registerProvidersChangedActionReceiver()
         }
         mIntervalSubscription = Observable.interval(WAIT_LOCATION_DELAY, TimeUnit.SECONDS)
+                .first()
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     data.replaceData(arrayListOf<Any>(PeopleNearbyEmptyList()))
