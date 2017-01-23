@@ -39,6 +39,7 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.PeopleNearbyAdapter;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.feed.NoFilterFeedFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CountersManager;
@@ -325,7 +326,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         AppConfig appConfig = App.getAppConfig();
         appConfig.incrGeoScreenShowCount();
         appConfig.saveConfig();
-        if (appConfig.getGeoScreenShowCount() == com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel.SEND_SHOW_SCREEN_STATISTICS) {
+        if (appConfig.getGeoScreenShowCount() == PeopleNearbyFragmentViewModel.SEND_SHOW_SCREEN_STATISTICS) {
             PeopleNearbyStatisticsGeneratedStatistics.sendNow_PEOPLE_NEARBY_FIFTH_OPEN(Utils
                     .getUniqueKeyStatistic(PeopleNearbyStatistics.PEOPLE_NEARBY_FIFTH_OPEN));
         }
