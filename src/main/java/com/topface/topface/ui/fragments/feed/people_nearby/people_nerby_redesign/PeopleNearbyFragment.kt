@@ -112,12 +112,8 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         PeopleNearbyFragmentViewModel(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        App.get().inject(this)
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        App.get().inject(this)
         initList()
         mBinding.viewModel = mViewModel
         return mBinding.root
