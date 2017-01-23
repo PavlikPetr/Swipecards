@@ -828,7 +828,7 @@
   <string name="city_selector_your_city">Ваш град</string>
   <string name="photo_gallery_photo_deleted">Фотографија је избрисана</string>
   <string name="photofeed_add_photo_to_feed_title">Доспејте на прво место!</string>
-  <string name="photofeed_add_photo_to_feed_description">Поставите фотографију са поздравом и хиљаде људи ће Вас видети. Истакните се и почните да се упознајете одмах!</string>
+  <string name="photofeed_add_photo_to_feed_description">Додајте фотографију са поздравом и хиљаде људи ће Вас видети. Привуците пажњу и почните да се упознајете одмах.</string>
   <string name="offers_screen_title">Бонуси</string>
   <string name="offers_loading_text">Учитавам доступне задатке…</string>
   <string name="offers_empty_text">На жалост, тренутно нема доступних задатака, проверите касније!</string>
@@ -848,7 +848,7 @@
   <string name="mutual_sympathy_in_chat">Свиђање је обострано!</string>
   <string name="start_chat_with_gift">Поклон ће бити добар почетак!</string>
   <string name="mutual_sympathy">Узајамно свиђање</string>
-  <string name="add_photo_feed_header_description">Поставите фотографију са поздравом и хиљаде људи че Вас видети. Будите примећени и почните да упознајете људе одмах!</string>
+  <string name="add_photo_feed_header_description">Додајте фотографију са поздравом и хиљаде људи ће Вас видети. Будите примећени и почните да се упознајете одмах.</string>
   <string name="publish_photo">Објавити фотографију</string>
   <string name="dont_miss_a_beat">Не пропустите важно!</string>
   <string name="push_alert_dating_title">Желите да добијете обавештење када %s узврати поруку?</string>
@@ -961,4 +961,5 @@
   <string name="send_gift">Послати поклон</string>
   <string name="write_him_without_symphaty">Пишите му без узајамног свиђања!</string>
   <string name="write_her_without_symphaty">Пишите јој без узајамног свиђања!</string>
+  <string name="people_nearby_popover_text">Нађите се у листи фотографија!\nХиљаде људи ће Вас видети</string>
 </resources>
