@@ -19,6 +19,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.viewModels.BaseViewModel
@@ -41,7 +42,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
     val albumData = ObservableField<Photos>()
-    val albumBackground = ObservableField<String>()
+    private var mLoadBackgroundSubscription: Subscription? = null
     val isOnline = ObservableBoolean()
     val isPhotosCounterVisible = ObservableBoolean(false)
     val isNeedAnimateLoader = ObservableBoolean(false)
@@ -176,17 +177,18 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     override fun onPageSelected(position: Int) {
         updatePhotosCounter(position)
-        binding.datingAlbum?.let {
+        binding.datingAlbum?.let { album ->
             if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
+                (album.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
                     if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
                         mCanSendAlbumReq = false
                         sendAlbumRequest(it)
                     }
                 }
             } else {
-                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
-                    albumBackground.set(it[position].defaultLink)
+                (album.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
+                    mLoadBackgroundSubscription.safeUnsubscribe()
+                    mLoadBackgroundSubscription = album.loadBackground(it[position].defaultLink)
                 }
 
             }

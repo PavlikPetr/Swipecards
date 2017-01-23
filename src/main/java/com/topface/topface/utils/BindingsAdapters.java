@@ -435,27 +435,4 @@ public class BindingsAdapters {
     public static void setViewConfigList(CustomCoordinatorLayout view, List<CustomCoordinatorLayout.ViewConfig> list) {
         view.setViewConfigList(list);
     }
-
-    @BindingAdapter("loadBackground")
-    public static void loadBackground(View view, String imgUrl) {
-        Bitmap bitmap = null;
-        try {
-            bitmap = Glide.with(view.getContext())
-                    .load(imgUrl)
-                    .asBitmap()
-                    .into(view.getMeasuredWidth(), view.getMeasuredHeight())
-                    .get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        if (bitmap != null) {
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                view.setBackground(new BitmapDrawable(view.getContext().getResources(), bitmap));
-            } else {
-                view.setBackgroundDrawable(new BitmapDrawable(bitmap));
-            }
-        }
-    }
 }
