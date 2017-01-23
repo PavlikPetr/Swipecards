@@ -42,7 +42,11 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
         mProfileSubscription = appState.getObservable(Profile::class.java)
                 .subscribe(shortSubscription {
                     it?.let {
-                        photoBlogViewModel.userPhoto.set(it.photo)
+                        it.photo?.let {
+                            if (!it.isEmpty && !it.isFake) {
+                                photoBlogViewModel.userPhoto.set(it)
+                            }
+                        }
                         photoBlogViewModel.placeholder.set(getPlaceholder(it))
                     }
                 })
