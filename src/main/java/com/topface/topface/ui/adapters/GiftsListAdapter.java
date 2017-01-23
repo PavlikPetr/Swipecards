@@ -5,12 +5,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 
 public class GiftsListAdapter extends GiftsAdapter {
 
@@ -53,6 +55,7 @@ public class GiftsListAdapter extends GiftsAdapter {
     public class ViewHolder {
         ImageViewRemote giftImage;
         TextView priceText;
+        LinearLayout root;
     }
 
     @Override
@@ -64,6 +67,7 @@ public class GiftsListAdapter extends GiftsAdapter {
             holder = new ViewHolder();
             holder.giftImage = (ImageViewRemote) convertView.findViewById(R.id.giftImage);
             holder.priceText = (TextView) convertView.findViewById(R.id.giftPrice);
+            holder.root = (LinearLayout) convertView.findViewById(R.id.descriptionRoot);
             holder.giftImage.setOnTouchListener(mOnTouchListener);
             convertView.setTag(holder);
         } else {
@@ -72,6 +76,7 @@ public class GiftsListAdapter extends GiftsAdapter {
         holder.giftImage.setTag(position);
         holder.giftImage.setRemoteSrc(item.gift.link);
         holder.priceText.setText(Integer.toString(item.gift.price));
+        UiTestsExtensionKt.setUiTestTag(holder.root, UiTestsExtensionKt.getGiftTag(item.gift));
         return convertView;
     }
 

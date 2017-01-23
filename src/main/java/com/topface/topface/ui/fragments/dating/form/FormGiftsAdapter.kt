@@ -7,6 +7,8 @@ import com.topface.topface.data.Gift
 import com.topface.topface.databinding.FormGiftItemBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
+import com.topface.topface.utils.extensions.getGiftTag
+import com.topface.topface.utils.extensions.setUiTestTag
 
 /**
  * Адаптер для подарочков в итеме анкеты
@@ -33,7 +35,11 @@ class FormGiftsAdapter(var hasGifts: Boolean) : BaseRecyclerViewAdapter<ViewData
             //sorry
             val itemBinding = it
             if (hasGifts && itemBinding is FormGiftItemBinding) {
-                itemBinding.formGiftItem.setRemoteSrc(data[position].link)
+                with(itemBinding.formGiftItem) {
+                    val item = data[position]
+                    setRemoteSrc(item.link)
+                    setUiTestTag(item.getGiftTag())
+                }
             }
         }
     }

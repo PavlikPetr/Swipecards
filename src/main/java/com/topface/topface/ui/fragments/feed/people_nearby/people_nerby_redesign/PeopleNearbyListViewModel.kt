@@ -11,14 +11,16 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.*
+import com.topface.topface.utils.extensions.isValidLocation
+import com.topface.topface.utils.extensions.safeToInt
+import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.geo.GeoLocationManager
 import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
-import rx.functions.Action1
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -35,25 +37,25 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
     private var mIntervalSubscription: Subscription? = null
     private var mLastLocation: Location? = null
     private lateinit var mGeoLocationManager: GeoLocationManager
-    val data = MultiObservableArrayList<Any>()
+
+    val data: MultiObservableArrayList<Any> by lazy {
+        MultiObservableArrayList<Any>()
+    }
 
     companion object {
-        const val WAIT_LOCATION_DELAY = 10L
+        const val WAIT_LOCATION_DELAY = 20L
     }
 
     init {
         App.get().inject(this)
         mSubscribtionLocation = mState.getObservable(Location::class.java)
                 .filter { it.isValidLocation() }
-                .subscribe(object : Action1<Location> {
-            override fun call(location: Location?) {
-                location?.let {
-                    mIntervalSubscription.safeUnsubscribe()
-                    mLastLocation = location
-                    sendPeopleNearbyRequest()
-                }
-            }
-        })
+                .subscribe(shortSubscription {
+                    it?.let {
+                        mLastLocation = it
+                        sendPeopleNearbyRequest()
+                    }
+                })
 
         mSubscriptionPTR = mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
                 .subscribe(shortSubscription {
@@ -65,6 +67,7 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
     }
 
     fun sendPeopleNearbyRequest(isPullToRefresh: Boolean = false) {
+        mIntervalSubscription.safeUnsubscribe()
         mLastLocation?.let {
             api.callNewGeo(it.latitude, it.longitude).subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedGeo>>() {
                 override fun onNext(data: FeedListData<FeedGeo>?) {
@@ -90,6 +93,7 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
             registerProvidersChangedActionReceiver()
         }
         mIntervalSubscription = Observable.interval(WAIT_LOCATION_DELAY, TimeUnit.SECONDS)
+                .applySchedulers()
                 .subscribe(shortSubscription {
                     data.replaceData(arrayListOf<Any>(PeopleNearbyEmptyList()))
                 })
