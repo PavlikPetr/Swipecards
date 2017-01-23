@@ -41,6 +41,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
     val albumData = ObservableField<Photos>()
+    val albumBackground = ObservableField<String>()
     val isOnline = ObservableBoolean()
     val isPhotosCounterVisible = ObservableBoolean(false)
     val isNeedAnimateLoader = ObservableBoolean(false)
@@ -183,6 +184,11 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                         sendAlbumRequest(it)
                     }
                 }
+            } else {
+                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
+                    albumBackground.set(it[position].defaultLink)
+                }
+
             }
         }
     }

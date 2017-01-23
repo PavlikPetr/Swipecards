@@ -5,7 +5,10 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
@@ -47,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -429,5 +434,28 @@ public class BindingsAdapters {
     @BindingAdapter("viewConfigList")
     public static void setViewConfigList(CustomCoordinatorLayout view, List<CustomCoordinatorLayout.ViewConfig> list) {
         view.setViewConfigList(list);
+    }
+
+    @BindingAdapter("loadBackground")
+    public static void loadBackground(View view, String imgUrl) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = Glide.with(view.getContext())
+                    .load(imgUrl)
+                    .asBitmap()
+                    .into(view.getMeasuredWidth(), view.getMeasuredHeight())
+                    .get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if (bitmap != null) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                view.setBackground(new BitmapDrawable(view.getContext().getResources(), bitmap));
+            } else {
+                view.setBackgroundDrawable(new BitmapDrawable(bitmap));
+            }
+        }
     }
 }
