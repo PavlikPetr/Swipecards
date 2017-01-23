@@ -30,6 +30,11 @@ import com.topface.topface.statistics.CommonSlices;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivityViewModel;
+import com.topface.topface.ui.add_to_photo_blog.HeaderItemViewModel;
+import com.topface.topface.ui.add_to_photo_blog.PhotoItemViewModel;
+import com.topface.topface.ui.add_to_photo_blog.PhotoListItemViewModel;
+import com.topface.topface.ui.add_to_photo_blog.PlaceButtonItemViewModel;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
@@ -63,6 +68,7 @@ import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyLockedViewModel;
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyPopover;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogAddButtonViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogListViewModel;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -179,6 +185,11 @@ import dagger.Provides;
                 DialogsFragmentViewModel.class,
                 ProfileFormFragment.class,
                 CommonSlices.class,
+                PhotoListItemViewModel.class,
+                PhotoItemViewModel.class,
+                HeaderItemViewModel.class,
+                AddToPhotoBlogRedesignActivityViewModel.class,
+                PlaceButtonItemViewModel.class,
                 DialogsMenuPopupViewModel.class,
                 DialogContactsListItemViewModel.class,
                 PeopleNearbyFragmentViewModel.class,
@@ -186,7 +197,8 @@ import dagger.Provides;
                 PhotoBlogListViewModel.class,
                 PhotoBlogAddButtonViewModel.class,
                 PeopleNearbyListViewModel.class,
-                PeopleNearbyLockedViewModel.class
+                PeopleNearbyLockedViewModel.class,
+                PeopleNearbyPopover.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

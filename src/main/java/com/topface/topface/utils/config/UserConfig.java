@@ -96,6 +96,7 @@ public class UserConfig extends AbstractConfig {
     private static final String TRIAL_SHOWS_IN_USER_PROFILE = "trial_shows_in_user_profile";
     private static final String TRIAL_SHOWS_IN_VISITORS = "trial_shows_in_visitors";
     public static final String TRIAL_VIP_POPUP_SHOW_COUNTER = "trial_vip_popup_show_counter";
+    public static final String PEOPLE_NEARBY_POPOVER_CLOSE_TIME = "people_nearby_popover_show_time";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -224,6 +225,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, TRIAL_SHOWS_IN_VISITORS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
         // общее число показов попапа триального вип для пользователя
         addField(settingsMap, TRIAL_VIP_POPUP_SHOW_COUNTER, 0);
+        // время последнего закрытия popover на экране Люди рядом
+        addField(settingsMap, PEOPLE_NEARBY_POPOVER_CLOSE_TIME, 0L);
     }
 
     @Override
@@ -851,4 +854,22 @@ public class UserConfig extends AbstractConfig {
         return setField(getSettingsMap(), IS_USER_CITY_CHANGED, isChanged);
     }
 
+    /**
+     * Set time of PeopleNearby popover close
+     *
+     * @param time current time of popover close
+     * @return true if set successfull
+     */
+    public boolean setPeopleNearbyPopoverClose(long time) {
+        return setField(getSettingsMap(), PEOPLE_NEARBY_POPOVER_CLOSE_TIME, time);
+    }
+
+    /**
+     * Get time of last PeopleNearby popover close
+     *
+     * @return time of last popover close
+     */
+    public long getPeopleNearbyPopoverClose() {
+        return getLongField(getSettingsMap(), PEOPLE_NEARBY_POPOVER_CLOSE_TIME);
+    }
 }

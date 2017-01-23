@@ -62,7 +62,7 @@ class PhotoBlogListViewModel(private val mApi: FeedApi,
     fun loadFeeds(isPullToRefresh: Boolean = false) {
         mSubscriptions.add(mApi.callFeedUpdate(false, FeedPhotoBlog::class.java, Bundle().apply {
             putSerializable(BaseFeedFragmentViewModel.SERVICE, FeedRequest.FeedService.PHOTOBLOG)
-        }).delay(2, TimeUnit.SECONDS)
+        })
                 .applySchedulers()
                 .subscribe(object : Subscriber<FeedListData<FeedPhotoBlog>>() {
                     override fun onCompleted() {

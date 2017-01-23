@@ -32,7 +32,7 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
                 getPlaceholder(profile), R.drawable.place_in.getDrawable(),
                 marginLeft = R.dimen.photoblog_add_button_margin_left.getDimen(),
                 avatarClickListener = {
-                    popoverControl.close()
+                    popoverControl.closeByUser()
                     if (App.get().profile.photo.isEmpty) {
                         mNavigator.showTakePhotoPopup()
                     } else {
@@ -42,7 +42,11 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
         mProfileSubscription = appState.getObservable(Profile::class.java)
                 .subscribe(shortSubscription {
                     it?.let {
-                        photoBlogViewModel.userPhoto.set(it.photo)
+                        it.photo?.let {
+                            if (!it.isEmpty && !it.isFake) {
+                                photoBlogViewModel.userPhoto.set(it)
+                            }
+                        }
                         photoBlogViewModel.placeholder.set(getPlaceholder(it))
                     }
                 })
