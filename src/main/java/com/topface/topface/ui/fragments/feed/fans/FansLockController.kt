@@ -17,7 +17,7 @@ class FansLockController(stub: ViewStubProxy) :
                 buttonText.set(App.getContext().getString(R.string.buying_vip_status))
                 title.set(App.getContext().getString(R.string.likes_buy_vip))
                 setOnButtonClickListener(View.OnClickListener {
-                    mNavigator.showPurchaseVip()
+                    mNavigator.showPurchaseVip("Fans")
                 })
             }
         }
@@ -29,7 +29,7 @@ class FansLockController(stub: ViewStubProxy) :
                 buttonText.set(App.getContext().getString(R.string.buy_sympathies))
                 title.set(App.getContext().getString(R.string.buy_more_sympathies))
                 setOnButtonClickListener(View.OnClickListener {
-                    mNavigator.showPurchaseCoins()
+                    mNavigator.showPurchaseCoins("Fans")
                 })
             }
         }

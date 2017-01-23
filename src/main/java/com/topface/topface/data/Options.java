@@ -204,6 +204,11 @@ public class Options extends AbstractData {
     private boolean dialogRedesignEnabled;
 
     /**
+     * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
+     */
+    public boolean peopleNearbyRedesignEnabled;
+
+    /**
      * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
      */
     public FBInviteSettings fbInviteSettings = new FBInviteSettings();
@@ -380,6 +385,7 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+            peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
 
             JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");

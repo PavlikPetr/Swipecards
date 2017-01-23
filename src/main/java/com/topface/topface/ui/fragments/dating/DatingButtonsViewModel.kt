@@ -140,7 +140,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     fun showChat() = if (App.get().profile.premium) {
         mNavigator.showChat(currentUser, null)
     } else {
-        mNavigator.showPurchaseVip()
+        mNavigator.showPurchaseVip("Dating")
     }
 
     fun skip() = currentUser?.let {

@@ -43,6 +43,8 @@ import com.topface.PullToRefreshBase;
 import com.topface.PullToRefreshListView;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
@@ -1278,7 +1280,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public void onAvatarClick() {
         if (mUser != null) {
             if (!(mUser.deleted || mUser.banned)) {
-                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId, false, true, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId,
+                        false, true, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName(),"chat"));
             } else {
                 Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                         Toast.LENGTH_LONG).show();

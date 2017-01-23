@@ -11,4 +11,10 @@ interface IAppBarState {
     // true когда закончилось сворачивание CollapsingToolbar
     fun isCollapsed(isCollapsed: Boolean) {
     }
+
+    /**
+     * Развернули тулбар. Вызовов может быть несколько. Страдай.
+     */
+    fun isExpanded(isExpanded: Boolean) {
+    }
 }

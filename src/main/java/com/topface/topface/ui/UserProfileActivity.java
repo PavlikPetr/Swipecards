@@ -1,9 +1,12 @@
 package com.topface.topface.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
@@ -21,13 +24,16 @@ import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarVie
 
 import org.jetbrains.annotations.NotNull;
 
+import static com.topface.topface.statistics.BuyScreenStatistics.PLC;
+
 public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_USER_PROFILE = 6;
+    public static final String FROM = "from";
 
     public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId,
                                       boolean isChatAvailable, boolean isAddToFavoritesAvailable,
-                                      String nameAndAge, String city) {
+                                      String nameAndAge, String city, String from) {
         Intent intent = new Intent(App.getContext(), UserProfileActivity.class);
         intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
         intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
@@ -43,8 +49,18 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
         if (photo != null) {
             intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
         }
+        intent.putExtra(FROM, from);
         intent.putExtra(App.INTENT_REQUEST_KEY, INTENT_USER_PROFILE);
         return intent;
+    }
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(FROM)) {
+            NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc", intent.getStringExtra(FROM)));
+        }
     }
 
     @NotNull

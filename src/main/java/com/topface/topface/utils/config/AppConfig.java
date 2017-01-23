@@ -79,6 +79,7 @@ public class AppConfig extends AbstractConfig {
     private static final String TRIAL_VIP_POPUP_TYPE = "trial_vip_popup_type";
     private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
     private static final String FB_APP_LINK = "fb_app_link";
+    private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
 
     public AppConfig(Context context) {
         super(context);
@@ -150,6 +151,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
         // был ли обнаружен переход по приглашению из FB
         addField(settingsMap, FB_APP_LINK, "");
+        // счетчик показов экрана "Люди рядом" с разблокированными пермишинами
+        addField(settingsMap, GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -625,5 +628,19 @@ public class AppConfig extends AbstractConfig {
     // достаем fb invite applink
     public String getFBInviteAppLink() {
         return getStringField(getSettingsMap(), FB_APP_LINK);
+    }
+
+    /**
+     * @return geo screen with granted permissions shows count
+     */
+    public int getGeoScreenShowCount() {
+        return getIntegerField(getSettingsMap(), GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT);
+    }
+
+    /**
+     * Increment geo screen with granted permissions shows count
+     */
+    public void incrGeoScreenShowCount() {
+        setField(getSettingsMap(), GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, getGeoScreenShowCount() + 1);
     }
 }

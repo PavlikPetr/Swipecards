@@ -6,7 +6,10 @@ import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout.ViewConfig
+import com.topface.topface.utils.extensions.appContext
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.viewModels.BaseViewModel
+import org.jetbrains.anko.dimen
 
 /**
  * Model for interaction with collapsing toolbar
@@ -17,7 +20,7 @@ class PrimalCollapseViewModel(binding: AppBarBinding,
         , AppBarLayout.OnOffsetChangedListener {
 
     // вводим коррективы для скрола в альбоме, в приоритете горизонтальный скрол
-    val viewConfigList = listOf<ViewConfig>(ViewConfig(R.id.dating_album, 1f, 0.4f, true))
+    val viewConfigList = listOf(ViewConfig(R.id.dating_album, 1f, 0.4f, true))
 
     val anchorVisibility = ObservableInt(View.VISIBLE)
     val collapseVisibility = ObservableInt(View.VISIBLE)
@@ -26,11 +29,11 @@ class PrimalCollapseViewModel(binding: AppBarBinding,
     override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
         appBar?.let {
             val visiblePartSize = it.height + verticalOffset
-            val isScrimsAreShown = visiblePartSize < binding.collapsingLayout.scrimVisibleHeightTrigger
             val isCollapsed = visiblePartSize <= binding.toolbarInclude.root.height
-            mScrimStateListener.isScrimVisible(isScrimsAreShown)
+            mScrimStateListener.isScrimVisible(visiblePartSize < binding.collapsingLayout.scrimVisibleHeightTrigger)
             mScrimStateListener.isCollapsed(isCollapsed)
             shadowVisibility.set(if (isCollapsed) View.VISIBLE else View.GONE)
+            mScrimStateListener.isExpanded(visiblePartSize >= R.dimen.dating_album_height.getDimen())
         }
     }
 }
