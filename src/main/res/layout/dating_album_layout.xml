@@ -12,7 +12,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dating_fragment_background_color">
+        android:background="@{model.albumBackground}"
+        app:backgroundDrawable="@{model.albumBackground}">
 
         <com.topface.topface.ui.views.ImageSwitcher
             android:id="@+id/dating_album"

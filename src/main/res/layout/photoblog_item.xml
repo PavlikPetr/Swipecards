@@ -24,8 +24,8 @@
             android:layout_marginRight="@{viewModel.marginRight}"
             android:layout_marginStart="@{viewModel.marginLeft}"
             android:layout_marginTop="@{viewModel.marginTop}"
+            android:foreground="@{viewModel.foregroundRes}"
             android:onClick="@{() -> viewModel.avatarClickListener.invoke()}"
-            app:foreground="@{viewModel.foregroundRes}"
             app:glideTransformationPhoto="@{viewModel.userPhoto}"
             app:placeholderRes="@{viewModel.placeholder}"
             app:typeTransformation="@{viewModel.type}"/>

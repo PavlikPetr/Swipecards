@@ -2,12 +2,19 @@ package com.topface.topface.ui.fragments.dating
 
 import android.app.Activity
 import android.content.Intent
+import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
+import com.topface.framework.utils.Debug
+import com.topface.topface.R
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
@@ -20,8 +27,8 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcher
 import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.loadBackground
-import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscription
@@ -42,6 +49,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
     val albumData = ObservableField<Photos>()
+    val albumBackground = ObservableField<Drawable>()
     private var mLoadBackgroundSubscription: Subscription? = null
     val isOnline = ObservableBoolean()
     val isPhotosCounterVisible = ObservableBoolean(false)
@@ -56,6 +64,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
             }
             currentItem.set(0)
             updatePhotosCounter(0)
+            albumBackground.set(getDefaultAlbumBAckground())
             nameAgeOnline.set(value?.nameAndAge ?: Utils.EMPTY)
             isOnline.set(value?.online ?: false)
         }
@@ -77,6 +86,13 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val LOADED_COUNT = "loaded_count"
         const val CAN_SEND_ALBUM_REQUEST = "can_send_album_request"
         const val NEED_MORE = "need_more"
+    }
+
+    init {
+        albumBackground.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(obs: Observable?, p1: Int) {
+            }
+        })
     }
 
     fun onPhotoClick() = with(currentUser) {
@@ -185,15 +201,24 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                         sendAlbumRequest(it)
                     }
                 }
-            } else {
-                (album.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
-                    mLoadBackgroundSubscription.safeUnsubscribe()
-                    mLoadBackgroundSubscription = album.loadBackground(it[position].defaultLink)
-                }
-
+            }
+            (album.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.get(position)?.getSuitableLink(Photo.SIZE_128)?.let {
+                mLoadBackgroundSubscription = album.loadBackground(it).subscribe({ bitmapDrawable ->
+                    Debug.error("LOAD_BACKGROUND catch BitmapDrawable $it with size ${bitmapDrawable.intrinsicHeight} X ${bitmapDrawable.intrinsicWidth}")
+                    val drawableList = arrayOf(
+                            (albumBackground.get() as? TransitionDrawable)?.getDrawable(1) ?: getDefaultAlbumBAckground(),
+                            bitmapDrawable)
+                    albumBackground.set(TransitionDrawable(drawableList).apply { startTransition(500) })
+                }, {
+                    Debug.error("LOAD_BACKGROUND error ${it.message}")
+                }, {
+                    Debug.error("LOAD_BACKGROUND complete")
+                })
             }
         }
     }
+
+    private fun getDefaultAlbumBAckground() = BitmapDrawable(context.resources, BitmapFactory.decodeResource(context.resources, R.drawable.bg_blur))
 
     override fun onPageScrollStateChanged(state: Int) {
     }
