@@ -118,7 +118,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
         setButtonCondition(builder.mHasDiscount, builder.mShowType);
         setTitle(builder.mTitle);
         setOnClickListener(builder.mButtonClickListener);
-        UiTestsExtensionKt.setTag(mBinding.itText, builder.mTag);
+        UiTestsExtensionKt.setUiTestTag(mBinding.itText, builder.mTag);
     }
 
     @Override
