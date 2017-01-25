@@ -345,7 +345,7 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("remoteSrcGlide")
-    public static void setImgeByGlide(ImageViewRemote view, String res) {
+    public static void setImgeByGlide(ImageView view, String res) {
         setImgeByGlideWithPlaceholder(view, res, 0);
     }
 

@@ -20,7 +20,7 @@ class PeopleNearbyListItemViewModel(private val mItem: FeedGeo, private val mNav
     }
 
     private val mFeedUser = mItem.user
-    val avatar = ObservableField(mFeedUser.photo.getSuitableLink(220,220))
+    val avatar = ObservableField(mFeedUser.photo.getSuitableLink(R.dimen.people_nearby_image_height,R.dimen.people_nearby_image_height))
     val placeholderRes = ObservableField(if (mItem.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar)
     val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
