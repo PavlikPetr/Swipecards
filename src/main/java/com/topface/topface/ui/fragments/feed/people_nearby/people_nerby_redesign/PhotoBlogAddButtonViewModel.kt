@@ -6,9 +6,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.data.User
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getDrawable
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
@@ -29,16 +27,15 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
     init {
         App.get().inject(this)
         photoBlogViewModel = PhotoBlogItemViewModel(profile.photo,
-                getPlaceholder(profile), R.drawable.place_in.getDrawable(),
-                marginLeft = R.dimen.photoblog_add_button_margin_left.getDimen(),
-                avatarClickListener = {
-                    popoverControl.closeByUser()
-                    if (App.get().profile.photo.isEmpty) {
-                        mNavigator.showTakePhotoPopup()
-                    } else {
-                        mNavigator.showAddToLeader()
-                    }
-                })
+                getPlaceholder(profile), R.drawable.place_in.getDrawable(), {
+            popoverControl.closeByUser()
+            if (!App.getConfig().userConfig.isUserAvatarAvailable &&
+                    with(App.get().profile.photo) { this == null || isEmpty }) {
+                mNavigator.showTakePhotoPopup()
+            } else {
+                mNavigator.showAddToLeader()
+            }
+        })
         mProfileSubscription = appState.getObservable(Profile::class.java)
                 .subscribe(shortSubscription {
                     it?.let {

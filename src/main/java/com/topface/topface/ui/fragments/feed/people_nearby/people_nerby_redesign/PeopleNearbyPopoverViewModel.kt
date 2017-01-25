@@ -11,7 +11,8 @@ class PeopleNearbyPopoverViewModel(private val mNavigator: FeedNavigator,
                                    private val close: () -> Unit) {
     fun addToLeaderClick() {
         closeClick()
-        if (App.get().profile.photo.isEmpty) {
+        if (!App.getConfig().userConfig.isUserAvatarAvailable &&
+                with(App.get().profile.photo) { this == null || isEmpty }) {
             mNavigator.showTakePhotoPopup()
         } else {
             mNavigator.showAddToLeader()

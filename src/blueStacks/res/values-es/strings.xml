@@ -1,6 +1,6 @@
 <resources>
   <string name="app_locale">es_ES</string>
-  <string name="photofeed_title">Poner en el feed</string>
+  <string name="photofeed_title">Aparece en el feed de fotos</string>
   <string name="general_warning">ADVERTENCIA</string>
   <string name="general_ok">OK</string>
   <string name="general_any">Cualquiera</string>
@@ -357,11 +357,11 @@
   <string name="vip_info_guest">Descubre quién se ha interesado por ti, ¡revisa a tus visitantes!</string>
   <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias
         al modo \&quot;invisible\&quot;</string>
-  <string name="vip_info_message">Obtenga ventaja - ¡tus mensajes serán destacados entre los
-        demás!</string>
+  <string name="vip_info_message">Llama más la atención - ¡tus mensajes destacarán del
+        fondo general!</string>
   <string name="vip_info_blackList">Evita las personas molestas con ayuda de la \&quot;lista negra\&quot;</string>
-  <string name="vip_info_vip">¡Destaca con la ayuda de tu estado VIP en la busqueda y en tu
-        perfil!</string>
+  <string name="vip_info_vip">Con el estatus VIP destacarás entre la multitud en la sección de \&quot;Citas\&quot; 
+        y también en tu perfil</string>
   <string name="buying_vip_status">Comprar estatus de VIP</string>
   <string name="edit_my_city">Mi ciudad</string>
   <string name="my_location">Mi localización</string>
@@ -465,8 +465,8 @@
   <string name="sympathy_sended">Simpatía enviada</string>
   <string name="general_photo_deleted">Tu fotografía no cumple con el reglamento y fue eliminada</string>
   <string name="general_change">Cambiar</string>
-  <string name="user_does_not_have_gifts">Este usuario aún no tiene regalos, se el primero y
-        llamarás la atención</string>
+  <string name="user_does_not_have_gifts">¡Este usuario aun no tiene regalos, dale el primero y
+        llamarás su atención!</string>
   <string name="status_is_empty">No tiene ningún estado establecido</string>
   <string name="you_dont_have_gifts_yet">Por el momento, no tienes regalos</string>
   <string name="buy_sympathies">Comprar simpatías</string>
@@ -815,7 +815,7 @@
   <string name="city_selector_your_city">Tu ciudad</string>
   <string name="photo_gallery_photo_deleted">La fotografía ha sido eliminada</string>
   <string name="photofeed_add_photo_to_feed_title">¡Subir al primer puesto!</string>
-  <string name="photofeed_add_photo_to_feed_description">Añade una foto con saludo y te verán miles de personas. Llama la atención y conoce a gente nueva ahora mismo.</string>
+  <string name="photofeed_add_photo_to_feed_description">Añade una foto y te verán miles de personas. Hazte notar y empieza a tener citas ahora.</string>
   <string name="offers_screen_title">Bonificaciones</string>
   <string name="offers_loading_text">Estamos cargando las tareas disponibles para ti…</string>
   <string name="offers_empty_text">Desgraciadamente, no hay tareas disponibles para ti, ¡inténtalo más tarde!</string>
@@ -835,7 +835,7 @@
   <string name="mutual_sympathy_in_chat">¡El sentimiento es mutuo!</string>
   <string name="start_chat_with_gift">¡Un regalo es un buen inicio!</string>
   <string name="mutual_sympathy">Simpatía mutua</string>
-  <string name="add_photo_feed_header_description">Publica una foto con un saludo y miles de personas te verán. ¡Date a conocer y empieza a conocer gente ahora!</string>
+  <string name="add_photo_feed_header_description">Añade una foto con un saludo y te verán miles de personas. Hazte notar y empieza a tener citas ahora.</string>
   <string name="publish_photo">Publicar foto</string>
   <string name="dont_miss_a_beat">¡Estate al loro!</string>
   <string name="push_alert_dating_title">¿Quieres recibir una notificación cuando %s envíe una respuesta mutua?</string>
@@ -948,4 +948,5 @@
   <string name="send_gift">Enviar regalo</string>
   <string name="write_him_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
   <string name="write_her_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
+  <string name="people_nearby_popover_text">¡Aparece en el feed de fotos!\nTe verán miles de personas</string>
 </resources>

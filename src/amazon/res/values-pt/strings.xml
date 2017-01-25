@@ -899,7 +899,7 @@
     <string name="city_selector_your_city">A tua cidade</string>
     <string name="photo_gallery_photo_deleted">A foto foi apagada</string>
     <string name="photofeed_add_photo_to_feed_title">Chega até ao 1º Lugar!</string>
-    <string name="photofeed_add_photo_to_feed_description">Faz upload de uma foto com um cumprimento e milhares de pessoas irão ver-te. Destaca-te e começa a namorar agora!</string>
+    <string name="photofeed_add_photo_to_feed_description">Adiciona uma foto com uma saudação e milhares de pessoas irão ver-te. Destaca-te e começa a conhecer pessoas agora!</string>
     <string name="offers_screen_title">Bónus</string>
     <string name="offers_loading_text">A carregar as tarefas disponíveis…</string>
     <string name="offers_empty_text">Infelizmente, não existem tarefas disponíveis de momento. Volta mais tarde!</string>
@@ -919,7 +919,7 @@
     <string name="mutual_sympathy_in_chat">O sentimento é mútuo!</string>
     <string name="start_chat_with_gift">Um presente é uma boa introdução!</string>
     <string name="mutual_sympathy">Gosto Mútuo</string>
-    <string name="add_photo_feed_header_description">Adiciona uma foto com um cumprimento e milhares de pessoas irão ver-te. Começa a dar nas vistas e começa a conhecer pessoas agora!</string>
+    <string name="add_photo_feed_header_description">Adiciona uma foto com uma saudação e milhares de pessoas irão ver-te. Destaca-te e começa a conhecer pessoas agora!</string>
     <string name="publish_photo">Publicar foto</string>
     <string name="dont_miss_a_beat">Não fiques de fora!</string>
     <string name="push_alert_dating_title">Queres receber uma notificação quando %s responder positivamente?</string>
@@ -1032,4 +1032,5 @@
     <string name="send_gift">Enviar Presente</string>
     <string name="write_him_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
     <string name="write_her_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
+    <string name="people_nearby_popover_text">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te</string>
 </resources>

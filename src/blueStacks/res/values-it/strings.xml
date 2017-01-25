@@ -1,6 +1,6 @@
 <resources>
   <string name="app_locale">it_IT</string>
-  <string name="photofeed_title">Alza a nastro</string>
+  <string name="photofeed_title">Fatti notare</string>
   <string name="general_warning">AVVERTIMENTO</string>
   <string name="general_ok">OK</string>
   <string name="general_any">Qualsiasi</string>
@@ -811,7 +811,7 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="city_selector_your_city">La tua città</string>
   <string name="photo_gallery_photo_deleted">La foto è stata eliminata</string>
   <string name="photofeed_add_photo_to_feed_title">Ottieni il 1° posto!</string>
-  <string name="photofeed_add_photo_to_feed_description">Carica una foto con un saluto e migliaia di persone potranno vederti. Risalta e inizia ad incontrare subito!</string>
+  <string name="photofeed_add_photo_to_feed_description">Carica una foto in cui saluti, migliaia di persone ti vedranno. Fatti notare e comincia subito a conoscere nuove persone.</string>
   <string name="offers_screen_title">Bonus</string>
   <string name="offers_loading_text">Caricamento dei compiti disponibili…</string>
   <string name="offers_empty_text">Sfortunatamente, adesso non ci sono compiti disponibile per te, controlla più tardi!</string>
@@ -831,7 +831,7 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="mutual_sympathy_in_chat">Il sentimento è reciproco!</string>
   <string name="start_chat_with_gift">Un regalo è una buon biglietto da visita!</string>
   <string name="mutual_sympathy">Mi piace reciproco</string>
-  <string name="add_photo_feed_header_description">Pubblica una foto con un saluto e migliaia di persone potranno vederla. Fatti notare e inizia ad incontrare subito nuove persone!</string>
+  <string name="add_photo_feed_header_description">Carica una foto in cui saluti, migliaia di persone ti vedranno. Fatti notare e comincia subito a conoscere nuove persone.</string>
   <string name="publish_photo">Pubblica foto</string>
   <string name="dont_miss_a_beat">Rimani aggiornato</string>
   <string name="push_alert_dating_title">Vuoi ricevere una notifica quando %s ti invia una risposta reciproca?</string>
@@ -944,4 +944,5 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="send_gift">Invia regalo</string>
   <string name="write_him_without_symphaty">Scrivigli senza un Like Reciproco!</string>
   <string name="write_her_without_symphaty">Scrivile senza un Like Reciproco!</string>
+  <string name="people_nearby_popover_text">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
 </resources>
