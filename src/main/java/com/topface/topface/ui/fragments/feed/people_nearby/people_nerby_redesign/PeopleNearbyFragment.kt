@@ -57,9 +57,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     private var mAppbarScrollFlags: Int = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
             AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 
-    private val mPeopleNearbyPopover: PeopleNearbyPopover by lazy {
-        PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
-    }
+    private lateinit var mPeopleNearbyPopover: PeopleNearbyPopover
 
     private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
 
@@ -116,6 +114,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         App.get().inject(this)
         initList()
         mBinding.viewModel = mViewModel
+        mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
         return mBinding.root
     }
 
@@ -170,6 +169,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     override fun onDestroy() {
         super.onDestroy()
         closeProgrammatically()
+        mPeopleNearbyPopover.release()
     }
 
     private fun initList() = with(mBinding.list) {

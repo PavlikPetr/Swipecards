@@ -14,7 +14,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
-import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import java.util.*
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
     @Inject lateinit var mDrawerLayoutState: DrawerLayoutState
 
     companion object {
-        private const val POPOVER_SHOW_DELAY = 24 * 60 * 60
+        private const val POPOVER_SHOW_DELAY = 24 * 60 * 60 * 1000
     }
 
     private val mBinding: PeopleNearbyPopoverBinding by lazy {
@@ -37,44 +37,57 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
         PeopleNearbyPopoverViewModel(mNavigator) { closeByUser() }
     }
     private val mPopupVindow: PopupWindow by lazy {
-        PopupWindow(mBinding.apply { viewModel = mViewModel }.getRoot(), LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        PopupWindow(mBinding.apply { viewModel = mViewModel }.root, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     }
 
-    private val mDrawerStateSubscription: Subscription
+    private val mDrawerStateSubscription = CompositeSubscription()
     private var mDrawerLayoutData: DrawerLayoutStateData? = null
 
     init {
         App.get().inject(this)
-        mDrawerStateSubscription = mDrawerLayoutState
+        mDrawerStateSubscription.add(mDrawerLayoutState
                 .observable
-                .filter { it.state != DrawerLayoutStateData.STATE_CHANGED }
                 .subscribe(shortSubscription {
                     mDrawerLayoutData = it
                     if (it.state == DrawerLayoutStateData.SLIDE) {
                         closeProgrammatically()
                     }
-                })
+                }))
     }
 
     override fun closeByUser() {
-        App.getUserConfig().apply {
-            peopleNearbyPopoverClose = Calendar.getInstance().timeInMillis
-            saveConfig()
+        if (mPopupVindow.isShowing) {
+            App.getUserConfig().apply {
+                peopleNearbyPopoverClose = Calendar.getInstance().timeInMillis
+                saveConfig()
+            }
+            mPopupVindow.dismiss()
         }
-        mPopupVindow.dismiss()
     }
 
     override fun closeProgrammatically() = mPopupVindow.dismiss()
 
     override fun show() {
-        if (!mPopupVindow.isShowing && mDrawerLayoutData?.state != DrawerLayoutStateData.SLIDE &&
-                mDrawerLayoutData?.state != DrawerLayoutStateData.OPENED) {
+        if (!mPopupVindow.isShowing) {
             if (Calendar.getInstance().timeInMillis >=
                     App.getUserConfig().peopleNearbyPopoverClose + POPOVER_SHOW_DELAY) {
-                mPopupVindow.showAsDropDown(anchorView.invoke())
+                if (mDrawerLayoutData?.state == DrawerLayoutStateData.CLOSED) {
+                    showPopupImmediately()
+                } else {
+                    mDrawerStateSubscription.add(mDrawerLayoutState
+                            .observable
+                            .filter { it.state == DrawerLayoutStateData.CLOSED }
+                            .first()
+                            .subscribe(shortSubscription {
+                                mDrawerLayoutData = it
+                                showPopupImmediately()
+                            }))
+                }
             }
         }
     }
+
+    private fun showPopupImmediately() = mPopupVindow.showAsDropDown(anchorView.invoke())
 
     fun release() = mDrawerStateSubscription.safeUnsubscribe()
 }

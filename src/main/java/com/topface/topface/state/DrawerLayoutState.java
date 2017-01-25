@@ -7,7 +7,6 @@ import rx.subjects.BehaviorSubject;
 import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.CLOSED;
 import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.OPENED;
 import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.SLIDE;
-import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.STATE_CHANGED;
 import static com.topface.topface.data.leftMenu.DrawerLayoutStateData.UNDEFINED;
 
 public class DrawerLayoutState {
@@ -32,7 +31,7 @@ public class DrawerLayoutState {
      *
      * @param data new state
      */
-    public void newState(DrawerLayoutStateData data) {
+    private void newState(DrawerLayoutStateData data) {
         mDrawerLayoutStateObservable.onNext(data);
     }
 
@@ -56,12 +55,4 @@ public class DrawerLayoutState {
     public void onSlide() {
         newState(new DrawerLayoutStateData(SLIDE));
     }
-
-    /**
-     * Notify that DrawerLayout is change state
-     */
-    public void onStateChanged() {
-        newState(new DrawerLayoutStateData(STATE_CHANGED));
-    }
-
 }

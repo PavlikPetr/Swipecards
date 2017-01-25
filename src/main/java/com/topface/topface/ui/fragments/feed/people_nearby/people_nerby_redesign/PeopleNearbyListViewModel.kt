@@ -45,6 +45,7 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     init {
         App.get().inject(this)
+        geolocationManagerInit()
         mSubscribtionLocation = mState.getObservable(Location::class.java)
                 .filter { it.isValidLocation() }
                 .subscribe(shortSubscription {
@@ -60,7 +61,6 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
                         loadList(true)
                     }
                 })
-        geolocationManagerInit()
         if (!isGeoEnabled()) {
             emptyLocation()
             mEventBus.setData(PeopleNearbyLoaded(true, false))
