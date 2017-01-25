@@ -13,13 +13,14 @@ class NewDatingDesign : BaseExperiment {
     constructor() : super()
     constructor(_in: Parcel) : super(_in)
 
-    val isKitKatWithNoTranslucent: Boolean
-        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-                && !isEnabled
+    val isKitKatWithNoTranslucent by lazy {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+        && !isEnabled
+    }
 
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<NewDatingDesign> = object : Parcelable.Creator<NewDatingDesign> {
+        @JvmField val CREATOR = object : Parcelable.Creator<NewDatingDesign> {
             override fun createFromParcel(source: Parcel): NewDatingDesign = NewDatingDesign(source)
             override fun newArray(size: Int): Array<NewDatingDesign?> = arrayOfNulls(size)
         }
@@ -28,8 +29,6 @@ class NewDatingDesign : BaseExperiment {
     override fun isEnabled() =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) super.isEnabled() else false
 
-    override fun getOptionsKey(): String {
-        // todo fill with correct value
-        return "newDatingDesign"
-    }
+    // todo fill with correct value
+    override fun getOptionsKey() = "newDatingDesign"
 }
