@@ -125,9 +125,7 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
     private fun emptyLocation() = data.replaceData(arrayListOf<Any>(PeopleNearbyEmptyLocation()))
 
-    private fun isGeoEnabled(): Boolean {
-        return mGeoLocationManager.enabledProvider != GeoLocationManager.NavigationType.DISABLE
-    }
+    private fun isGeoEnabled() = mGeoLocationManager.enabledProvider != GeoLocationManager.NavigationType.DISABLE
 
     private fun handleError(errorCode: String?) =
             showStub(errorCode.safeToInt(ErrorCodes.INTERNAL_SERVER_ERROR))
