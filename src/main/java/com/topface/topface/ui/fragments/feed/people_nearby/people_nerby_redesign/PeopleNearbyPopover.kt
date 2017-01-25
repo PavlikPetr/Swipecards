@@ -14,7 +14,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
-import rx.subscriptions.CompositeSubscription
+import rx.Subscription
 import java.util.*
 import javax.inject.Inject
 
@@ -40,19 +40,20 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
         PopupWindow(mBinding.apply { viewModel = mViewModel }.root, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
     }
 
-    private val mDrawerStateSubscription = CompositeSubscription()
+    private var mDrawerStateSubscription: Subscription
+    private var mDrawerClosedSubscription: Subscription? = null
     private var mDrawerLayoutData: DrawerLayoutStateData? = null
 
     init {
         App.get().inject(this)
-        mDrawerStateSubscription.add(mDrawerLayoutState
+        mDrawerStateSubscription = mDrawerLayoutState
                 .observable
                 .subscribe(shortSubscription {
                     mDrawerLayoutData = it
                     if (it.state == DrawerLayoutStateData.SLIDE) {
                         closeProgrammatically()
                     }
-                }))
+                })
     }
 
     override fun closeByUser() {
@@ -61,6 +62,7 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
                 peopleNearbyPopoverClose = Calendar.getInstance().timeInMillis
                 saveConfig()
             }
+            mDrawerClosedSubscription.safeUnsubscribe()
             mPopupVindow.dismiss()
         }
     }
@@ -74,14 +76,13 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
                 if (mDrawerLayoutData?.state == DrawerLayoutStateData.CLOSED) {
                     showPopupImmediately()
                 } else {
-                    mDrawerStateSubscription.add(mDrawerLayoutState
+                    mDrawerClosedSubscription = mDrawerLayoutState
                             .observable
                             .filter { it.state == DrawerLayoutStateData.CLOSED }
                             .first()
                             .subscribe(shortSubscription {
-                                mDrawerLayoutData = it
                                 showPopupImmediately()
-                            }))
+                            })
                 }
             }
         }
