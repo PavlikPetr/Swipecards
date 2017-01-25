@@ -9,7 +9,7 @@ import android.support.annotation.IntDef
 object GlideTransformationType {
 
     @Retention(AnnotationRetention.SOURCE)
-    @IntDef(CROP_CIRCLE_TYPE, ADMIRATION_TYPE, DIALOG_ONLINE_TYPE, ADMIRATION_AND_ONLINE_TYPE,CROP_SQUARE_TYPE)
+    @IntDef(CROP_CIRCLE_TYPE, ADMIRATION_TYPE, DIALOG_ONLINE_TYPE, ADMIRATION_AND_ONLINE_TYPE,CROP_SQUARE_TYPE,ONLINE_CIRCLE_TYPE)
     annotation class GlideTransformationType
 
     /**
@@ -27,4 +27,6 @@ object GlideTransformationType {
     const val ADMIRATION_ONLINE_TYPE = 3L
     const val ADMIRATION_AND_ONLINE_TYPE = 4L
     const val CROP_SQUARE_TYPE = 5L
+    const val ONLINE_CIRCLE_TYPE = 6L
+
 }

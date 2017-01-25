@@ -36,7 +36,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         data?.let {
             with(binding.giftsList) {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                addItemDecoration(Decoration(32))
+                addItemDecoration(Decoration(16))
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
                         .addAdapterComponent(mContactsListItemComponent)
                         .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))

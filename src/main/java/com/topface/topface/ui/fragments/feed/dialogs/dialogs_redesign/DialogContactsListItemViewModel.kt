@@ -69,7 +69,7 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
     private fun getTransformType() = when {
         mItem.user.online && mItem.highrate -> GlideTransformationType.ADMIRATION_AND_ONLINE_TYPE
         !mItem.user.online && mItem.highrate -> GlideTransformationType.ADMIRATION_TYPE
-        mItem.user.online -> GlideTransformationType.ADMIRATION_ONLINE_TYPE
+        mItem.user.online -> GlideTransformationType.ONLINE_CIRCLE_TYPE
         else -> GlideTransformationType.CROP_CIRCLE_TYPE
     }
 
