@@ -13,17 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
-/**
- * Created by ppavlik on 19.05.16.
- */
-public class DrawerLayoutManager<DrawerLayoutType extends DrawerLayout> {
+public class DrawerLayoutManager<T extends DrawerLayout> {
 
     @Inject
     DrawerLayoutState mDrawerLayoutState;
 
-    private DrawerLayoutType mDrawerLayout;
+    private T mDrawerLayout;
 
-    public DrawerLayoutManager(@NotNull DrawerLayoutType drawerLayout) {
+    public DrawerLayoutManager(@NotNull T drawerLayout) {
         App.get().inject(this);
         mDrawerLayout = drawerLayout;
     }
@@ -31,7 +28,7 @@ public class DrawerLayoutManager<DrawerLayoutType extends DrawerLayout> {
     public void initLeftMneuDrawerLayout() {
         mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
-        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 mDrawerLayoutState.onSlide();
@@ -49,16 +46,15 @@ public class DrawerLayoutManager<DrawerLayoutType extends DrawerLayout> {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                mDrawerLayoutState.onStateChanged();
             }
         });
     }
 
-    public void close(){
+    public void close() {
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    public DrawerLayoutType getDrawer() {
+    public T getDrawer() {
         return mDrawerLayout;
     }
 }
