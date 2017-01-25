@@ -3,6 +3,8 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import android.Manifest
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,9 +50,14 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         const val PAGE_NAME = "PeopleNearby"
     }
 
-    private val mPeopleNearbyPopover: PeopleNearbyPopover by lazy {
-        PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
+    private val mAppbarLayoutParams: AppBarLayout.LayoutParams? by lazy {
+        (activity.findViewById(R.id.collapsing_layout) as? CollapsingToolbarLayout)
+                ?.layoutParams as? AppBarLayout.LayoutParams
     }
+    private var mAppbarScrollFlags: Int = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
+            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+
+    private lateinit var mPeopleNearbyPopover: PeopleNearbyPopover
 
     private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
 
@@ -103,24 +110,35 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         PeopleNearbyFragmentViewModel(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        App.get().inject(this)
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        App.get().inject(this)
         initList()
         mBinding.viewModel = mViewModel
+        mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
         return mBinding.root
     }
 
+    override fun onPause() {
+        overrideScrollFlags()
+        super.onPause()
+    }
+
     override fun onResume() {
+        overrideScrollFlags()
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.people_nearby)))
         if (context.isGrantedPermissions(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))) {
             sendInitGeoEvent()
         } else {
             showPermissionsScreen()
+        }
+    }
+
+    private fun overrideScrollFlags() {
+        mAppbarLayoutParams?.apply {
+            val currentFlags = scrollFlags
+            scrollFlags = mAppbarScrollFlags
+            mAppbarScrollFlags = currentFlags
         }
     }
 
@@ -151,6 +169,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     override fun onDestroy() {
         super.onDestroy()
         closeProgrammatically()
+        mPeopleNearbyPopover.release()
     }
 
     private fun initList() = with(mBinding.list) {

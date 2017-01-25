@@ -35,6 +35,7 @@ import com.topface.topface.utils.databinding.IArrayListChange;
 import com.topface.topface.utils.databinding.MultiObservableArrayList;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 import com.topface.topface.utils.glide_utils.GlideTransformationType;
@@ -370,9 +371,7 @@ public class BindingsAdapters {
     */
     @BindingAdapter("uiTestTag")
     public static void setTag(View view, String tag) {
-        if (Debug.isDebugLogsEnabled()) {
-            view.setTag(tag);
-        }
+        UiTestsExtensionKt.setUiTestTag(view, tag);
     }
 
     @BindingAdapter("animationSrc")
