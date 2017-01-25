@@ -429,4 +429,10 @@ public class BindingsAdapters {
     public static void setViewConfigList(CustomCoordinatorLayout view, List<CustomCoordinatorLayout.ViewConfig> list) {
         view.setViewConfigList(list);
     }
+
+    // вынужден идти на такой шаг, т.к. в случае с AutoSetters от dataBinding получается лажа на preLollipop
+    @BindingAdapter("foreground")
+    public static void setForeground(FrameLayout view, Drawable drawable) {
+        view.setForeground(drawable);
+    }
 }
