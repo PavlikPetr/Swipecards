@@ -33,6 +33,8 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
@@ -741,7 +743,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id,
+                        item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age),
+                        item.user.city.getName(),getFeedService().name().toLowerCase()));
             }
         }
     }

@@ -9,6 +9,11 @@
     <!--column count for screen "add to leader"-->
     <integer name="add_to_leader_column_count">4</integer>
 
+    <!--column count for redesign "people nearby"-->
+    <integer name="add_to_people_nearby_count">3</integer>
+
+    <dimen name="people_nearby_image_height">200dp</dimen>
+
     <dimen name="dating_album_height">256dp</dimen>
 
     <dimen name="admiration_popup_label1_margin_top">8dp</dimen>

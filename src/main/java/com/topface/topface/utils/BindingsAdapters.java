@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -17,8 +18,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -32,12 +31,20 @@ import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.databinding.IArrayListChange;
+import com.topface.topface.utils.databinding.MultiObservableArrayList;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
+import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
+import com.topface.topface.utils.glide_utils.GlideTransformationType;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -49,6 +56,12 @@ public class BindingsAdapters {
     public static void bindDataToCompositeAdapter(final RecyclerView recyclerView, SingleObservableArrayList<?> observableArrayList) {
         if (!observableArrayList.isListenerAdded() && recyclerView.getAdapter() instanceof CompositeAdapter) {
             final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
+            ArrayList<Object> list = new ArrayList<>();
+            for (Object item : observableArrayList.getObservableList()) {
+                list.add(item);
+            }
+            adapter.setData(list);
+            adapter.notifyDataSetChanged();
             observableArrayList.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<?>>() {
                 @Override
                 public void onChanged(ObservableList<?> objects) {
@@ -99,6 +112,42 @@ public class BindingsAdapters {
                 }
             });
         }
+    }
+
+    @BindingAdapter("bindDataToCompositeAdapterWithSmoothUpdate")
+    public static void bindDataToCompositeAdapterWithSmoothUpdate(final RecyclerView recyclerView, MultiObservableArrayList<Object> observableArrayList) {
+        final CompositeAdapter adapter = ((CompositeAdapter) recyclerView.getAdapter());
+        adapter.setData(observableArrayList.getList());
+        adapter.notifyDataSetChanged();
+        observableArrayList.addOnListChangeListener(new IArrayListChange<Object>() {
+            @Override
+            public void onChange(@NotNull final ArrayList<Object> newList) {
+                final List<Object> oldList = adapter.getData();
+                DiffUtil.DiffResult diff = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                    @Override
+                    public int getOldListSize() {
+                        return oldList.size();
+                    }
+
+                    @Override
+                    public int getNewListSize() {
+                        return newList.size();
+                    }
+
+                    @Override
+                    public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                        return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+                    }
+
+                    @Override
+                    public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                        return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+                    }
+                });
+                adapter.setData(newList);
+                diff.dispatchUpdatesTo(adapter);
+            }
+        });
     }
 
     @BindingAdapter("pxTextSize")
@@ -171,41 +220,32 @@ public class BindingsAdapters {
 
     @BindingAdapter("android:layout_marginTop")
     public static void setMarginTop(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, (int) padding, lp.rightMargin, lp.bottomMargin);
-        }
+        ViewExtensionsKt.setMargins(view, null, (int) padding, null, null);
+    }
+
+    @BindingAdapter("android:layout_marginStart")
+    public static void setMarginStart(View view, float padding) {
+        setMarginLeft(view, padding);
+    }
+
+    @BindingAdapter("android:layout_marginEnd")
+    public static void setMarginEnd(View view, float padding) {
+        setMarginRight(view, padding);
+    }
+
+    @BindingAdapter("android:layout_marginLeft")
+    public static void setMarginLeft(View view, float padding) {
+        ViewExtensionsKt.setMargins(view, (int) padding, null, null, null);
     }
 
     @BindingAdapter("android:layout_marginRight")
     public static void setMarginRight(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, (int) padding, lp.bottomMargin);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, (int) padding, lp.bottomMargin);
-        }
+        ViewExtensionsKt.setMargins(view, null, null, (int) padding, null);
     }
 
     @BindingAdapter("android:layout_marginBottom")
     public static void setMarginBottom(View view, float padding) {
-        if (view.getLayoutParams().getClass().equals(LinearLayout.LayoutParams.class)) {
-            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, lp.rightMargin, (int) padding);
-            return;
-        }
-        if (view.getLayoutParams().getClass().equals(RelativeLayout.LayoutParams.class)) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-            lp.setMargins(lp.leftMargin, lp.topMargin, lp.rightMargin, (int) padding);
-        }
+        ViewExtensionsKt.setMargins(view, null, null, null, (int) padding);
     }
 
     @BindingAdapter("android:background")
@@ -305,11 +345,16 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("remoteSrcGlide")
-    public static void setImgeByGlide(ImageViewRemote view, String res) {
+    public static void setImgeByGlide(ImageView view, String res) {
+        setImgeByGlideWithPlaceholder(view, res, 0);
+    }
+
+    @BindingAdapter({"setImgeByGlideWithPlaceholder", "placeholderRes"})
+    public static void setImgeByGlideWithPlaceholder(ImageView view, String res, Integer placeholderRes) {
         if (res.contains(Utils.LOCAL_RES)) {
             Glide.with(view.getContext().getApplicationContext()).load(Integer.valueOf(res.replace(Utils.LOCAL_RES, Utils.EMPTY))).into(view);
         } else {
-            Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
+            Glide.with(view.getContext().getApplicationContext()).load(res).centerCrop().placeholder(placeholderRes).into(view);
         }
     }
 
@@ -326,9 +371,7 @@ public class BindingsAdapters {
     */
     @BindingAdapter("uiTestTag")
     public static void setTag(View view, String tag) {
-        if (Debug.isDebugLogsEnabled()) {
-            view.setTag(tag);
-        }
+        UiTestsExtensionKt.setUiTestTag(view, tag);
     }
 
     @BindingAdapter("animationSrc")
@@ -345,7 +388,7 @@ public class BindingsAdapters {
 
     @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
-    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, long type, int placeholderRes) {
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes) {
         if (photo == null) {
             Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
             return;

@@ -20,7 +20,7 @@ class VisitorsLockController(stub: ViewStubProxy,private val mShower: ITrialShow
                 buttonText.set(App.getContext().getString(R.string.buying_vip_status))
                 title.set(App.getContext().getString(R.string.with_vip_find_your_visitors))
                 setOnButtonClickListener(View.OnClickListener {
-                    mNavigator.showPurchaseVip()
+                    mNavigator.showPurchaseVip("Visitors")
                 })
             }
         }

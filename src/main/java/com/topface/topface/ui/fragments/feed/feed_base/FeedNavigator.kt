@@ -17,6 +17,7 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
+import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -48,19 +49,19 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         App.get().inject(this)
     }
 
-    override fun showPurchaseCoins() = mActivityDelegate.startActivity(PurchasesActivity
-            .createBuyingIntent("EmptyLikes", App.get().options.topfaceOfferwallRedirect))
+    override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
+            .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
 
-    override fun showPurchaseVip() = mActivityDelegate.startActivityForResult(PurchasesActivity
-            .createVipBuyIntent(null, "Likes"), PurchasesActivity.INTENT_BUY_VIP)
+    override fun showPurchaseVip(from: String) = mActivityDelegate.startActivityForResult(PurchasesActivity
+            .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
 
-    override fun <T : FeedItem> showProfile(item: T?) {
+    override fun <T : FeedItem> showProfile(item: T?, from: String) {
         item?.let {
             if (!it.user.isEmpty) {
                 val user = it.user
                 mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, user.photo,
                         user.id, it.id, false, true, Utils.getNameAndAge(user.firstName, user.age),
-                        user.city.getName()))
+                        user.city.getName(), from))
             }
         }
     }
@@ -98,7 +99,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                     WrappedNavigationData.SELECT_EXTERNALY))
 
     override fun showAddToLeader() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
-            AddToPhotoBlogActivity::class.java), PhotoblogFragment.ADD_TO_PHOTO_BLOG_ACTIVITY_ID)
+            if (App.get().options.peopleNearbyRedesignEnabled) AddToPhotoBlogRedesignActivity::class.java else AddToPhotoBlogActivity::class.java), PhotoblogFragment.ADD_TO_PHOTO_BLOG_ACTIVITY_ID)
 
     override fun showOwnProfile() = mActivityDelegate.startActivity(Intent(mActivityDelegate.applicationContext, OwnProfileActivity::class.java))
 
