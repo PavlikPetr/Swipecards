@@ -8,8 +8,8 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 import javax.inject.Inject
 
@@ -20,27 +20,20 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
     : BaseToolbarViewModel(binding, mNavigation) {
 
     @Inject lateinit var mState: TopfaceAppState
-
     private val mNotificationSubscription: Subscription
 
     init {
         App.get().inject(this)
-        background.set(R.drawable.newdating_toolbar_background)
+        background.set(R.color.transparent)
         upIcon.set(R.drawable.menu_white)
         updateTopPadding()
 
         shadowVisibility.set(View.GONE)
         title.set(Utils.EMPTY)
         subTitle.set(Utils.EMPTY)
-        shadowVisibility.set(View.INVISIBLE)
 
-        mNotificationSubscription = mState.getObservable(CountersData::class.java).subscribe(object : RxUtils.ShortSubscription<CountersData>() {
-            override fun onNext(type: CountersData?) {
-                type?.let {
-                    if (it.dialogs > 0 || it.mutual > 0 || it.likes > 0) upIcon.set(R.drawable.menu_white_notification)
-                }
-                super.onNext(type)
-            }
+        mNotificationSubscription = mState.getObservable(CountersData::class.java).subscribe(shortSubscription {
+            upIcon.set(if (it.dialogs > 0 || it.mutual > 0 || it.likes > 0) R.drawable.menu_white_notification else R.drawable.menu_white)
         })
     }
 
