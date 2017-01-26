@@ -15,8 +15,8 @@ class NewDatingDesign : BaseExperiment {
 
     val isKitKatWithNoTranslucent by lazy {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-        && !isEnabled
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+                && !isEnabled
     }
 
     companion object {
@@ -29,6 +29,5 @@ class NewDatingDesign : BaseExperiment {
     override fun isEnabled() =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) super.isEnabled() else false
 
-    // todo fill with correct value
-    override fun getOptionsKey() = "newDatingDesign"
+    override fun getOptionsKey() = "datingRedesignEnabled"
 }
