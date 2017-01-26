@@ -105,6 +105,7 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus" tools:ignore="NewApi">true</item>
         <item name="homeAsUpIndicator">@null</item>
         <item name="android:homeAsUpIndicator">@null</item>
     </style>
