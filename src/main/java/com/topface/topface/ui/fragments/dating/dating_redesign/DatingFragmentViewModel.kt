@@ -19,9 +19,9 @@ class DatingFragmentViewModel(val mNavigator: IFeedNavigator) {
     val name = ObservableField<String>()
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
-    val iconOnlineRes = ObservableField<Int>()
+    val iconOnlineRes = ObservableField<Int>(0)
     val statusText = ObservableField<String>()
-    val statusVisibility = ObservableField<Int>()
+    val statusVisibility = ObservableField<Int>(View.VISIBLE)
     val photoCounter = ObservableField<String>()
 //    лоадер крутится - INVISIBLE мутится
     val isVisible = ObservableInt(View.VISIBLE)

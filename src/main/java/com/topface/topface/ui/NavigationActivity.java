@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.ViewDataBinding;
 import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
+import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
@@ -79,7 +81,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-public class NavigationActivity extends ParentNavigationActivity<AcNavigationBinding> implements INavigationFragmentsListener {
+public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> implements INavigationFragmentsListener {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
@@ -579,8 +581,9 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcNavigationBinding binding) {
-        return binding.navigationAppBar.toolbarInclude;
+    public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
+        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).toolbarInclude :
+                ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }
 
     @Override

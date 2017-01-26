@@ -190,11 +190,13 @@ public class NavigationManager {
                 fragment = OwnProfileFragment.newInstance();
                 break;
             case FragmentIdData.DATING:
-                fragment = new DatingFragment();
+                fragment = App.get().getOptions().newDatingDesign.isEnabled() ?
+                        new com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment() :
+                        new DatingFragment();
                 break;
             case FragmentIdData.GEO:
                 fragment = App.get().getOptions().peopleNearbyRedesignEnabled ?
-                        new com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment():
+                        new com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment() :
                         new PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
