@@ -11,21 +11,14 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:foreground="@{viewModel.foregroundRes}">
 
         <ImageView
             android:id="@+id/photoblogInGeoAvatar"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_margin="8dp"
-            android:layout_marginBottom="@{viewModel.marginBottom}"
-            android:layout_marginEnd="@{viewModel.marginRight}"
-            android:layout_marginLeft="@{viewModel.marginLeft}"
-            android:layout_marginRight="@{viewModel.marginRight}"
-            android:layout_marginStart="@{viewModel.marginLeft}"
-            android:layout_marginTop="@{viewModel.marginTop}"
             android:onClick="@{() -> viewModel.avatarClickListener.invoke()}"
-            app:foreground="@{viewModel.foregroundRes}"
             app:glideTransformationPhoto="@{viewModel.userPhoto}"
             app:placeholderRes="@{viewModel.placeholder}"
             app:typeTransformation="@{viewModel.type}"/>

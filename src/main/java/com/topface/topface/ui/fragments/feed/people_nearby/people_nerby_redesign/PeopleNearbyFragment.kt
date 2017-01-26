@@ -1,8 +1,12 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.view.LayoutInflater
@@ -22,6 +26,7 @@ import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
+import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
@@ -57,15 +62,15 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     private var mAppbarScrollFlags: Int = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
             AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 
-    private val mPeopleNearbyPopover: PeopleNearbyPopover by lazy {
-        PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
-    }
+    private lateinit var mPeopleNearbyPopover: PeopleNearbyPopover
 
     private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
 
     private val mFeedRequestFactory by lazy {
         FeedRequestFactory(context)
     }
+
+    private lateinit var mPhotoHelper: AddPhotoHelper
 
     private val mApi by lazy {
         FeedApi(context, this, mFeedRequestFactory = mFeedRequestFactory)
@@ -92,6 +97,22 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
                 .addAdapterComponent(mPeopleNearbyListComponent)
     }
 
+    private val mHandler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            AddPhotoHelper.handlePhotoMessage(msg)
+        }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mPhotoHelper = AddPhotoHelper(this@PeopleNearbyFragment, null).setOnResultHandler(mHandler)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mPhotoHelper.processActivityResult(requestCode, resultCode, data)
+    }
+
     override fun show() {
         mPeopleNearbyPopover.show()
     }
@@ -116,6 +137,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         App.get().inject(this)
         initList()
         mBinding.viewModel = mViewModel
+        mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
         return mBinding.root
     }
 
@@ -170,6 +192,8 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     override fun onDestroy() {
         super.onDestroy()
         closeProgrammatically()
+        mPeopleNearbyPopover.release()
+        mPhotoHelper.releaseHelper()
     }
 
     private fun initList() = with(mBinding.list) {

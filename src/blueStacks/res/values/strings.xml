@@ -1,6 +1,6 @@
 <resources>
   <string name="app_locale">en_US</string>
-  <string name="photofeed_title">Put in the feed</string>
+  <string name="photofeed_title">Get featured in the photo feed</string>
   <string name="general_warning">WARNING</string>
   <string name="general_ok">OK</string>
   <string name="general_any">Any</string>
@@ -443,7 +443,7 @@
   <string name="enter_old_password">Enter your previous password</string>
   <string name="enter_password_confirmation">Confirm your password</string>
   <string name="passwords_mismatched">Passwords do not match</string>
-  <string name="old_password_mismatched">Incorrect old password</string>
+  <string name="old_password_mismatched">Incorrect old password.</string>
   <string name="passwords_matched">New and previous password don\'t match</string>
   <string name="passwords_changed">Password was changed</string>
   <string name="take_photo">Take a photo</string>
@@ -798,7 +798,7 @@
   <string name="city_selector_your_city">Your city</string>
   <string name="photo_gallery_photo_deleted">Photo has been deleted</string>
   <string name="photofeed_add_photo_to_feed_title">Get to 1st place!</string>
-  <string name="photofeed_add_photo_to_feed_description">Upload a photo with a greeting and thousands of people will see you. Stand out and start dating now!</string>
+  <string name="photofeed_add_photo_to_feed_description">Add a photo with a greeting and thousands of people will see you. Get noticed and start dating people now.</string>
   <string name="offers_screen_title">Bonuses</string>
   <string name="offers_loading_text">Loading available tasks…</string>
   <string name="offers_empty_text">Unfortunately there are no tasks available for you right now, check back soon!</string>
@@ -818,7 +818,7 @@
   <string name="mutual_sympathy_in_chat">The feeling is mutual!</string>
   <string name="start_chat_with_gift">A gift is a good intro!</string>
   <string name="mutual_sympathy">Mutual Like</string>
-  <string name="add_photo_feed_header_description">Publish a photo with a greeting and thousands of people will see you. Get noticed and start meeting people now!</string>
+  <string name="add_photo_feed_header_description">Add a photo with a greeting and thousands of people will see you. Get noticed and start dating people now.</string>
   <string name="publish_photo">Publish photo</string>
   <string name="dont_miss_a_beat">Don\'t miss a beat!</string>
   <string name="push_alert_dating_title">Want to get a notification when %s sends a mutual reply?</string>
@@ -931,4 +931,5 @@
   <string name="send_gift">Send Gift</string>
   <string name="write_him_without_symphaty">Write to him without a Mutual Like!</string>
   <string name="write_her_without_symphaty">Write to her without a Mutual Like!</string>
+  <string name="people_nearby_popover_text">Get featured in the photo feed!\nThousands of people will see you</string>
 </resources>

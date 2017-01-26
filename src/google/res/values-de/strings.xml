@@ -842,7 +842,7 @@
     <string name="city_selector_your_city">Deine Stadt</string>
     <string name="photo_gallery_photo_deleted">Das Foto wurde gelöscht</string>
     <string name="photofeed_add_photo_to_feed_title">Erreiche den ersten Platz!</string>
-    <string name="photofeed_add_photo_to_feed_description">Lade ein Foto mit einem Gruß hoch, und tausende Leute werden dich sehen. Werde erkannt und lerne neue Leute kennen!</string>
+    <string name="photofeed_add_photo_to_feed_description">Lade ein Foto mit einem Gruß hoch und tausende Leute werden dich sehen. Steche hervor und fange jetzt mit Dating an.</string>
     <string name="offers_screen_title">Boni</string>
     <string name="offers_loading_text">Aufgaben laden…</string>
     <string name="offers_empty_text">Leider sind gerade keine Aufgaben für dich verfügbar, versuche es später wieder!</string>
@@ -862,7 +862,7 @@
     <string name="mutual_sympathy_in_chat">Das Gefühl beruht auf Gegenseitigkeit!</string>
     <string name="start_chat_with_gift">Ein Geschenk ist ein guter Anfang!</string>
     <string name="mutual_sympathy">Beidseitiges Like</string>
-    <string name="add_photo_feed_header_description">Veröffentliche ein Foto mit einem Gruß und tausende Leute werden dich sehen. Werde bemerkt und fange jetzt damit an, Leute kennenzulernen!</string>
+    <string name="add_photo_feed_header_description">Lade ein Foto mit einem Gruß hoch und tausende Leute werden dich sehen. Steche hervor und fange jetzt mit Dating an.</string>
     <string name="publish_photo">Foto veröffentlichen</string>
     <string name="dont_miss_a_beat">Bleib aktuell!</string>
     <string name="push_alert_dating_title">Willst du eine Benachrichtigung erhalten, wenn %s eine gleichgesinnte Antwort schickt?</string>
@@ -975,4 +975,5 @@
     <string name="send_gift">Geschenk verschicken</string>
     <string name="write_him_without_symphaty">Schreibe ihm ohne ein beidseitiges Like!</string>
     <string name="write_her_without_symphaty">Schreibe ihr ohne ein beidseitiges Like!</string>
+    <string name="people_nearby_popover_text">Erhalte einen Platz in der Foto-Galerie!\nTausende Leute werden dich sehen</string>
 </resources>

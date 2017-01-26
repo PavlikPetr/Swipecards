@@ -17,5 +17,7 @@ class PhotoSwitcherToolbarViewModel @JvmOverloads constructor(binding: ToolbarBi
         background.set(R.drawable.photoswitcher_toolbar_background)
         upIcon.set(R.drawable.ic_arrow_up)
         titleTextColor.set(R.color.toolbar_title_white.getColor())
+        // translucent status bar may affect this screen
+        updateTopPadding()
     }
 }

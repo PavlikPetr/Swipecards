@@ -19,8 +19,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -38,15 +36,14 @@ import com.topface.topface.utils.databinding.IArrayListChange;
 import com.topface.topface.utils.databinding.MultiObservableArrayList;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
-import com.topface.topface.utils.glide_utils.GlideTransformationType;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -347,11 +344,16 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("remoteSrcGlide")
-    public static void setImgeByGlide(ImageViewRemote view, String res) {
+    public static void setImgeByGlide(ImageView view, String res) {
+        setImgeByGlideWithPlaceholder(view, res, 0);
+    }
+
+    @BindingAdapter({"setImgeByGlideWithPlaceholder", "placeholderRes"})
+    public static void setImgeByGlideWithPlaceholder(ImageView view, String res, Integer placeholderRes) {
         if (res.contains(Utils.LOCAL_RES)) {
             Glide.with(view.getContext().getApplicationContext()).load(Integer.valueOf(res.replace(Utils.LOCAL_RES, Utils.EMPTY))).into(view);
         } else {
-            Glide.with(view.getContext().getApplicationContext()).load(res).into(view);
+            Glide.with(view.getContext().getApplicationContext()).load(res).centerCrop().placeholder(placeholderRes).into(view);
         }
     }
 
@@ -368,9 +370,7 @@ public class BindingsAdapters {
     */
     @BindingAdapter("uiTestTag")
     public static void setTag(View view, String tag) {
-        if (Debug.isDebugLogsEnabled()) {
-            view.setTag(tag);
-        }
+        UiTestsExtensionKt.setUiTestTag(view, tag);
     }
 
     @BindingAdapter("animationSrc")
@@ -429,5 +429,11 @@ public class BindingsAdapters {
     @BindingAdapter("viewConfigList")
     public static void setViewConfigList(CustomCoordinatorLayout view, List<CustomCoordinatorLayout.ViewConfig> list) {
         view.setViewConfigList(list);
+    }
+
+    // вынужден идти на такой шаг, т.к. в случае с AutoSetters от dataBinding получается лажа на preLollipop
+    @BindingAdapter("foreground")
+    public static void setForeground(FrameLayout view, Drawable drawable) {
+        view.setForeground(drawable);
     }
 }

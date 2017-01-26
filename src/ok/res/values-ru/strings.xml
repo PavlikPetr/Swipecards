@@ -1053,7 +1053,7 @@
     <string name="thanks_for_your_rate_bottom_label">Поделитесь своими впечатлениями в AppStore. Мы ценим каждый отзыв!</string>
     <string name="thanks_for_your_rate_rate_app">Оставить отзыв в AppStore</string>
     <string name="thanks_for_your_rate_close">Закрыть</string>
-      <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что
+    <string name="novice_sympathies_bonus">Вы получаете %1$d симпатии в\nподарок! Это означает, что
         вы\nточно понравитесь %2$d людям,\nкоторые выразят вам свою симпатию
     </string>
     <string name="buy_vip_title_from_input">Начать общение с пользователем можно, если у вас есть VIP-статус</string>
@@ -1109,6 +1109,15 @@
 
     <string name="add_photo_feed_header_description"> Разместите фото с приветствием, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
     <string name="publish_photo">Разместить фото</string>
+    <string name="add_to_photo_blog_title">Встать в ленту</string>
+    <string name="add_to_photo_blog_header">Разместите фото и вас\nувидят тысячи людей.</string>
+    <string name="add_to_photo_blog_button_place">Разместить</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="one">Стоимость - %d монета</item>
+        <item quantity="many">Стоимость - %d монет</item>
+        <item quantity="few">Стоимость - %d монеты</item>
+        <item quantity="other">Стоимость - %d монет</item>
+    </plurals>
 
     <string name="dont_miss_a_beat">Не пропустите важное!</string>
 
@@ -1250,4 +1259,5 @@
     <string name="send_gift">Отправить подарок</string>
     <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
     <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
+    <string name="people_nearby_popover_text">Встаньте в ленту!\nВас увидят тысячи людей</string>
 </resources>

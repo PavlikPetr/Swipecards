@@ -1,14 +1,18 @@
 package com.topface.topface.ui.views.toolbar.view_models
 
+import android.content.Context
 import android.databinding.ObservableInt
 import android.view.View
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
-import com.topface.topface.utils.rx.RxFieldObservable
+import com.topface.topface.utils.extensions.appContext
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.viewModels.BaseViewModel
+
 
 /**
  * Created by ppavlik on 14.10.16.
@@ -25,6 +29,11 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
     val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)
     val visibility = ObservableInt(View.VISIBLE)
     val shadowVisibility = ObservableInt(View.VISIBLE)
+    /**
+     * Верхний отступ/высота подставляемой вместо statusBar вьюшки
+     * для toolBar'ов, с прозрачным statusBar
+     */
+    val topPadding = ObservableInt(0)
 
     // увы, но колбэк будет работать только если установить его после setSupportActionBar
     fun init() {
@@ -34,4 +43,23 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
             }
         }
     }
+
+    /**
+     * Used to update toolbar top padding with translucent status bar if need
+     */
+    protected fun updateTopPadding() {
+        // если включен новый дизайн диалогов, то надо добавить паддинг, что бы тулбар
+        // был ниже прозрачного статус бара
+        // учитывать topPadding надо только в тулбарах с прозрачным StatusBar'ом
+        if (App.get().options.newDatingDesign.isEnabled) topPadding.set(getStatusBarHeight(binding.appContext()))
+    }
+    /**
+     * Вычисляется высота системного statusBar, что бы мы могли подвинуть свой тулбар
+     */
+    fun getStatusBarHeight(context: Context) =
+        with(context.resources.getIdentifier("status_bar_height", "dimen", "android")) {
+            if (this > 0) {
+                context.resources.getDimensionPixelSize(this)
+            } else 0
+        }
 }
