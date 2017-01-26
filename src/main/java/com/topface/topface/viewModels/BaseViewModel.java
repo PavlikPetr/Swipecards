@@ -66,4 +66,9 @@ public class BaseViewModel<T extends ViewDataBinding> implements ILifeCycle {
     public void onResume() {
 
     }
+
+    @Override
+    public void onPause() {
+
+    }
 }

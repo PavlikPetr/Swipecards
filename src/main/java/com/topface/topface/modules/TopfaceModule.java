@@ -200,7 +200,8 @@ import dagger.Provides;
                 PeopleNearbyListViewModel.class,
                 PeopleNearbyLockedViewModel.class,
                 PeopleNearbyPopover.class,
-                DatingRedesignToolbarViewModel.class
+                DatingRedesignToolbarViewModel.class,
+                com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

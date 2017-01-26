@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:bind="http://schemas.android.com/tools">
 
     <data>
@@ -15,17 +16,17 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_blur"
-            android:gravity="bottom"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_blur">
 
             <!--Блок "статуса и каунтера фоток"-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_gravity="bottom"
                 android:background="@drawable/black_white_gradient"
                 android:gravity="bottom"
                 android:orientation="vertical"
@@ -33,6 +34,16 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:visibility="@{viewModel.isVisible}">
+
+                <com.topface.topface.ui.views.ImageSwitcher
+                    android:id="@+id/dating_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{()-> viewModel.onPhotoClick()}"
+                    app:currentItemImmediately="@{viewModel.currentItem}"
+                    app:data="@{viewModel.albumData}"
+                    app:needAnimateLoader="@{viewModel.isNeedAnimateLoader}"
+                    app:onPageChangeListener="@{viewModel}"/>
 
                 <TextView
                     style="@style/DatingStausAndPhotoCount"
@@ -67,13 +78,14 @@
                 </LinearLayout>
             </LinearLayout>
 
-        </LinearLayout>
+        </FrameLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="152dp"
             android:background="@color/bg_white"
+            android:gravity="center_vertical"
             android:orientation="vertical">
             <!--Блок "имени, онлайн-статуса и города"-->
             <LinearLayout

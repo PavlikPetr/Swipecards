@@ -45,6 +45,7 @@ import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ISimpleCallback;
@@ -67,6 +68,7 @@ import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
 import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
 import com.topface.topface.utils.social.AuthToken;
+import com.topface.topface.viewModels.RedesignedNavigationActivityViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,6 +147,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
+        setViewBinding();
         mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
             @Override
             public void call(AdjustAttributeData adjustAttributionData) {
@@ -223,10 +226,20 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }));
     }
 
+    private void setViewBinding() {
+        ViewDataBinding binding = getViewBinding();
+        if (binding instanceof AcNewNavigationBinding) {
+            ((AcNewNavigationBinding) binding).setViewModel(new RedesignedNavigationActivityViewModel());
+
+        }
+    }
+
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new NavigationToolbarViewModel(toolbar, this);
+        return mWeakStorage.getDatingRedesignEnabled() ?
+                new DatingRedesignToolbarViewModel(toolbar, this) :
+                new NavigationToolbarViewModel(toolbar, this);
     }
 
     private void initPopups() {
@@ -582,7 +595,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
-        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).toolbarInclude :
+        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }
 
