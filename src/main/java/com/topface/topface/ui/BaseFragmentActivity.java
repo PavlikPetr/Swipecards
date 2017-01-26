@@ -24,11 +24,11 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
-import com.topface.topface.data.experiments.NewDatingDesign;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.dating.dating_redesign.TargetSettings;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FBInvitesUtils;
@@ -187,7 +187,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        NewDatingDesign design = App.get().getOptions().newDatingDesign;
+        TargetSettings design = App.get().getOptions().newDatingDesign;
         if (!design.isEnabled()) {
             if (design.isKitKatWithNoTranslucent()) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия

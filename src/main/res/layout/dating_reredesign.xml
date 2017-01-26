@@ -4,18 +4,11 @@
         xmlns:bind="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
-
-        <variable
-            name="toolbarViewModel"
-            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
     </data>
-
-    <include
-        layout="@layout/toolbar"
-        bind:viewModel="@{toolbarViewModel}"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -116,7 +109,7 @@
                         android:drawableRight="@{viewModel.iconOnlineRes}"
                         android:ellipsize="none"
                         android:maxLines="1"
-                        android:text="@{viewModel.age}"/>
+                        android:text="@{viewModel.feedAge}"/>
                 </LinearLayout>
 
                 <TextView
@@ -125,11 +118,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
-                    android:text="@{viewModel.city}"/>
+                    android:text="@{viewModel.feedCity}"/>
             </LinearLayout>
             <!--Блок кнопок-->
             <include
-                android:id="@+id/toolbarInclude"
                 layout="@layout/dating_buttons"
                 bind:viewModel="@{viewModel}"/>
         </LinearLayout>
