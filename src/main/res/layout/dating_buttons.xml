@@ -40,6 +40,21 @@
             android:layout_weight="2">
 
             <ImageButton
+                style="@style/NewDatingLike"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:clickable="@{viewModel.isDatingButtonsLocked}"
+                android:onClick="@{() -> viewModel.sendLike()}"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <ImageButton
                 style="@style/NewDatingSkip"
                 android:layout_width="72dp"
                 android:layout_height="72dp"
@@ -48,22 +63,6 @@
                 android:clickable="@{viewModel.isDatingButtonsLocked}"
                 android:onClick="@{() -> viewModel.skip()}"/>
 
-        </FrameLayout>
-
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2">
-
-            <ImageButton
-                style="@style/NewDatingLike"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:clickable="@{viewModel.isDatingButtonsLocked}"
-                android:onClick="@{() -> viewModel.sendLike()}"/>
         </FrameLayout>
 
         <FrameLayout
