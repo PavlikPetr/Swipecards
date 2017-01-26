@@ -24,6 +24,7 @@ import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.experiments.NewDatingDesign;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
@@ -185,10 +186,21 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         if (!mNeedAnimate) {
             overridePendingTransition(0, 0);
         }
-        // status bar color
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        NewDatingDesign design = App.get().getOptions().newDatingDesign;
+        if (!design.isEnabled()) {
+            if (design.isKitKatWithNoTranslucent()) {
+                // для kitkat с отключенной прозрачностью статус бара особые условия
+                // отключаем прозрачность насильно ибо она задана в теме
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            } else {
+                // иначе старая логика
+                // status bar color
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                }
+            }
         }
     }
 
