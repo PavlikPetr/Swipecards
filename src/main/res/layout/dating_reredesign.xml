@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
 
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
     </data>
+
+    <include
+        layout="@layout/toolbar"
+        bind:viewModel="@{toolbarViewModel}"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,22 +26,71 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_blur"
+            android:gravity="bottom"
             android:orientation="vertical">
+
+            <!--Блок "статуса и каунтера фоток"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/black_white_gradient"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:visibility="@{viewModel.isVisible}">
+
+                <TextView
+                    style="@style/DatingStausAndPhotoCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/foto_alpha"
+                    android:drawablePadding="16dp"
+                    android:text="@{viewModel.photoCounter}"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.statusVisibility}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:src="@drawable/status_new"/>
+
+                    <TextView
+                        style="@style/DatingStausAndPhotoCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="@{viewModel.statusText}"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="152dp"
+            android:layout_height="wrap_content"
             android:background="@color/bg_white"
             android:orientation="vertical">
-
+            <!--Блок "имени, онлайн-статуса и города"-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="19dp"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:paddingRight="16dp"
+                android:visibility="@{viewModel.isVisible}">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -71,6 +127,11 @@
                     android:gravity="center_vertical"
                     android:text="@{viewModel.city}"/>
             </LinearLayout>
+            <!--Блок кнопок-->
+            <include
+                android:id="@+id/toolbarInclude"
+                layout="@layout/dating_buttons"
+                bind:viewModel="@{viewModel}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>
