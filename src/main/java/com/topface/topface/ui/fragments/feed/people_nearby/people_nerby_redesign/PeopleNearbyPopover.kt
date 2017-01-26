@@ -70,21 +70,20 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
     override fun closeProgrammatically() = mPopupVindow.dismiss()
 
     override fun show() {
-        if (!mPopupVindow.isShowing) {
-            if (Calendar.getInstance().timeInMillis >=
-                    App.getUserConfig().peopleNearbyPopoverClose + POPOVER_SHOW_DELAY) {
-                if (mDrawerLayoutData?.state == DrawerLayoutStateData.CLOSED) {
-                    showPopupImmediately()
-                } else {
-                    mDrawerClosedSubscription = mDrawerLayoutState
-                            .observable
-                            .filter { it.state == DrawerLayoutStateData.CLOSED }
-                            .first()
-                            .subscribe(shortSubscription {
-                                showPopupImmediately()
-                            })
-                }
-            }
+        if (mPopupVindow.isShowing ||
+                Calendar.getInstance().timeInMillis <
+                        App.getUserConfig().peopleNearbyPopoverClose.toDouble() +
+                                POPOVER_SHOW_DELAY.toDouble()) return
+        if (mDrawerLayoutData?.state == DrawerLayoutStateData.CLOSED) {
+            showPopupImmediately()
+        } else {
+            mDrawerClosedSubscription = mDrawerLayoutState
+                    .observable
+                    .filter { it.state == DrawerLayoutStateData.CLOSED }
+                    .first()
+                    .subscribe(shortSubscription {
+                        showPopupImmediately()
+                    })
         }
     }
 

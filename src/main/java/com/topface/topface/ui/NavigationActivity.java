@@ -51,6 +51,7 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
@@ -100,6 +101,8 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
     NavigationState mNavigationState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    WeakStorage mWeakStorage;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -582,7 +585,7 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
 
     @Override
     public int getLayout() {
-        return R.layout.ac_navigation;
+        return mWeakStorage.getDatingRedesignEnabled() ? R.layout.ac_new_navigation : R.layout.ac_navigation;
     }
 
     @Override
