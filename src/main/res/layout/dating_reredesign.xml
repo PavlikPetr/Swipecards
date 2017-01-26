@@ -51,7 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="2dp"
-                        android:src="@drawable/status"/>
+                        android:src="@drawable/status_new"/>
 
                     <TextView
                         style="@style/DatingStausAndPhotoCount"
