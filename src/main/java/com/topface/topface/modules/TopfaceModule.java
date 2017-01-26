@@ -77,6 +77,7 @@ import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
+import com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.ActivityLifeCycleReporter;
@@ -198,7 +199,8 @@ import dagger.Provides;
                 PhotoBlogAddButtonViewModel.class,
                 PeopleNearbyListViewModel.class,
                 PeopleNearbyLockedViewModel.class,
-                PeopleNearbyPopover.class
+                PeopleNearbyPopover.class,
+                DatingRedesignToolbarViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
