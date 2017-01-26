@@ -19,7 +19,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_blur"
+            android:gravity="bottom"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/black_white_gradient"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp">
+
+                <TextView
+                    style="@style/DatingStausAndPhotoCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/foto_alpha"
+                    android:drawablePadding="16dp"
+                    android:text="@{viewModel.photoCounter}"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.statusVisibility}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:src="@drawable/status_new"/>
+
+                    <TextView
+                        style="@style/DatingStausAndPhotoCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="@{viewModel.statusText}"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -71,6 +116,83 @@
                     android:gravity="center_vertical"
                     android:text="@{viewModel.city}"/>
             </LinearLayout>
+
+
+            <!--Блок кнопок-->
+            <LinearLayout
+                android:id="@+id/dating_buttons_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="@{viewModel.isVisible}">
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        style="@style/DatingMessage"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="left|center_vertical"
+                        android:layout_marginLeft="16dp"
+                        android:clickable="@{viewModel.isDatingButtonsLocked}"
+                        android:onClick="@{() -> viewModel.showChat()}"/>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <ImageButton
+                        style="@style/DatingSkip"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="15dp"
+                        android:clickable="@{viewModel.isDatingButtonsLocked}"
+                        android:onClick="@{() -> viewModel.skip()}"/>
+
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2">
+
+                    <ImageButton
+                        style="@style/DatingLike"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="15dp"
+                        android:clickable="@{viewModel.isDatingButtonsLocked}"
+                        android:onClick="@{() -> viewModel.sendLike()}"/>
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        style="@style/DatingAdmiration"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="16dp"
+                        android:clickable="@{viewModel.isDatingButtonsLocked}"
+                        android:onClick="@{() -> viewModel.sendAdmiration()}"/>
+                </FrameLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </layout>
