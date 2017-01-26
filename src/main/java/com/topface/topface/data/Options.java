@@ -16,13 +16,13 @@ import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
-import com.topface.topface.data.experiments.NewDatingDesign;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.fragments.dating.dating_redesign.TargetSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
@@ -175,7 +175,7 @@ public class Options extends AbstractData {
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
-    public NewDatingDesign newDatingDesign = new NewDatingDesign();
+    public TargetSettings newDatingDesign = new TargetSettings();
     transient public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
@@ -357,7 +357,7 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
-            newDatingDesign.init(response);
+            newDatingDesign.parse(response);
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());

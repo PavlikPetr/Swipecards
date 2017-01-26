@@ -17,6 +17,7 @@ public class WeakStorage extends AbstractConfig {
     private static final String APPODEAL_BANNER_SEGMENT_NAME = "appodeal_banner_segment_name";
     private static final String APPODEAL_FULLSCREEN_SEGMENT_NAME = "appodeal_fullscreen_segment_name";
     private static final String PROFILE_DIALOG_REDESIGN_ENABLED = "profile_dialog_redesign_enabled";
+    private static final String DATING_REDESIGN_ENABLED = "dating_redesign_enabled";
 
     public WeakStorage() {
         super(App.getContext());
@@ -30,6 +31,9 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, APPODEAL_FULLSCREEN_SEGMENT_NAME, Utils.EMPTY);
         // строковая обертка над boolean чтобы знать что значение было установлено
         addField(settingsMap, PROFILE_DIALOG_REDESIGN_ENABLED, Utils.EMPTY);
+        // строковая обертка над boolean чтобы знать что значение было установлено
+        // если установлено, то отражает разрешение на показ редизайна знакомств
+        addField(settingsMap, DATING_REDESIGN_ENABLED, Utils.EMPTY);
     }
 
     @Override
@@ -90,5 +94,23 @@ public class WeakStorage extends AbstractConfig {
      */
     public void resetProfileDialogRedesignEnabled() {
         setField(getSettingsMap(), PROFILE_DIALOG_REDESIGN_ENABLED, Utils.EMPTY);
+    }
+
+    /**
+     * @return true if must use new design for dating
+     */
+    public boolean getDatingRedesignEnabled() {
+        SettingsMap settingsMap = getSettingsMap();
+        if (TextUtils.isEmpty(getStringField(settingsMap, DATING_REDESIGN_ENABLED))) {
+            setField(settingsMap, DATING_REDESIGN_ENABLED, String.valueOf(App.get().getOptions().newDatingDesign.isEnabled()));
+        }
+        return Boolean.valueOf(getStringField(getSettingsMap(), DATING_REDESIGN_ENABLED));
+    }
+
+    /**
+     * Resets stored "design version" for dating
+     */
+    public void resetDatingRedesignEnabled() {
+        setField(getSettingsMap(), DATING_REDESIGN_ENABLED, Utils.EMPTY);
     }
 }

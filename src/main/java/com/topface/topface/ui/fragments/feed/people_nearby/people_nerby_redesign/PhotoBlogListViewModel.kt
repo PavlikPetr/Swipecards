@@ -55,6 +55,10 @@ class PhotoBlogListViewModel(private val mApi: FeedApi,
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PhotoblogFragment.ADD_TO_PHOTO_BLOG_ACTIVITY_ID) {
+            with(App.getUserConfig()) {
+                peopleNearbyPopoverClose = Long.MAX_VALUE
+                saveConfig()
+            }
             loadFeeds()
         }
     }
