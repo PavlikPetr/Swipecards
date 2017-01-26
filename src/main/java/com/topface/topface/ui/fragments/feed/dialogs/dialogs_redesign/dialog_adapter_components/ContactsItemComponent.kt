@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogContactsItemBinding
@@ -17,6 +18,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.Device.getDisplayMetrics
+import com.topface.topface.utils.extensions.getDimen
+
 
 /**
  * Компонент хедера диалогов с симпатиями/восхищениями. Начинает новую переписку.
@@ -36,7 +40,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         data?.let {
             with(binding.giftsList) {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                addItemDecoration(Decoration(32))
+                addItemDecoration(Decoration(R.dimen.dating_item_decorator_padding.getDimen().toInt()))
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
                         .addAdapterComponent(mContactsListItemComponent)
                         .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))

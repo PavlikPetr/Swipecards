@@ -3,6 +3,8 @@ package com.topface.topface.utils.glide_utils
 import android.content.Context
 import android.graphics.Bitmap
 import com.bumptech.glide.load.Transformation
+import com.topface.topface.R
+import com.topface.topface.utils.extensions.getDimen
 
 /**
  * Фабрика создания transformations
@@ -12,10 +14,10 @@ class GlideTransformationFactory(val mContext: Context) {
     fun construct(@GlideTransformationType.GlideTransformationType type: Long): Transformation<Bitmap> = when (type) {
         GlideTransformationType.CROP_CIRCLE_TYPE -> CropCircleTransformation(mContext)
         GlideTransformationType.CROP_SQUARE_TYPE -> CropSquareTransformation(mContext)
-        GlideTransformationType.ADMIRATION_ONLINE_TYPE -> OnlineCircleTransformation(mContext, 14F, 17F)
+        GlideTransformationType.ADMIRATION_ONLINE_TYPE -> OnlineCircleTransformation(mContext, R.dimen.dating_online_circle.getDimen(), R.dimen.dating_stroke_size.getDimen())
         GlideTransformationType.ADMIRATION_TYPE -> AdmirationTransformation(mContext)
-        GlideTransformationType.ADMIRATION_AND_ONLINE_TYPE -> AdmirationAndOnlineTransformation(mContext, 14F, 17F)
-        GlideTransformationType.ONLINE_CIRCLE_TYPE -> OnlineCircleTransformation(mContext, 15F, 18F)
+        GlideTransformationType.ADMIRATION_AND_ONLINE_TYPE -> AdmirationAndOnlineTransformation(mContext, R.dimen.dating_online_circle.getDimen(), R.dimen.dating_stroke_size.getDimen())
+        GlideTransformationType.ONLINE_CIRCLE_TYPE -> OnlineCircleTransformation(mContext, R.dimen.dating_online_circle.getDimen(), R.dimen.dating_stroke_size.getDimen())
         else -> CropCircleTransformation(mContext)
     }
 }
