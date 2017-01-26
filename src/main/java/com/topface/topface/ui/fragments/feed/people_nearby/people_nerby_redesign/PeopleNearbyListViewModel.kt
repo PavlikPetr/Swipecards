@@ -3,22 +3,21 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import android.location.Location
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.data.FeedGeo
-import com.topface.topface.data.FeedListData
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.*
+import com.topface.topface.utils.extensions.isValidLocation
+import com.topface.topface.utils.extensions.safeToInt
+import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.geo.GeoLocationManager
-import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
-import rx.functions.Action1
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -35,53 +34,54 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
     private var mIntervalSubscription: Subscription? = null
     private var mLastLocation: Location? = null
     private lateinit var mGeoLocationManager: GeoLocationManager
-    val data = MultiObservableArrayList<Any>()
+
+    val data: MultiObservableArrayList<Any> by lazy {
+        MultiObservableArrayList<Any>()
+    }
 
     companion object {
-        const val WAIT_LOCATION_DELAY = 10L
+        const val WAIT_LOCATION_DELAY = 20L
     }
 
     init {
         App.get().inject(this)
+        geolocationManagerInit()
         mSubscribtionLocation = mState.getObservable(Location::class.java)
                 .filter { it.isValidLocation() }
-                .subscribe(object : Action1<Location> {
-            override fun call(location: Location?) {
-                location?.let {
-                    mIntervalSubscription.safeUnsubscribe()
-                    mLastLocation = location
-                    sendPeopleNearbyRequest()
-                }
-            }
-        })
+                .subscribe(shortSubscription {
+                    it?.let {
+                        mLastLocation = it
+                        loadList()
+                    }
+                })
 
         mSubscriptionPTR = mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
                 .subscribe(shortSubscription {
                     if (it?.isRefreshing ?: false) {
-                        sendPeopleNearbyRequest(true)
+                        loadList(true)
                     }
                 })
-        geolocationManagerInit()
+        if (!isGeoEnabled()) {
+            emptyLocation()
+            mEventBus.setData(PeopleNearbyLoaded(true, false))
+        }
     }
 
-    fun sendPeopleNearbyRequest(isPullToRefresh: Boolean = false) {
+    private fun sendPeopleNearbyRequest(isPullToRefresh: Boolean = false) {
         mLastLocation?.let {
-            api.callNewGeo(it.latitude, it.longitude).subscribe(object : RxUtils.ShortSubscription<FeedListData<FeedGeo>>() {
-                override fun onNext(data: FeedListData<FeedGeo>?) {
-                    mEventBus.setData(PeopleNearbyLoaded(data?.items?.isEmpty() ?: true, isPullToRefresh))
-                    data?.let {
-                        this@PeopleNearbyListViewModel.data.replaceData(if (it.items.size > 0) {
-                            arrayListOf<Any>().apply { addAll(it.items) }
-                        } else {
-                            arrayListOf<Any>(PeopleNearbyEmptyList())
-                        })
-                    }
-                }
-
-                override fun onError(e: Throwable?) {
-                    mEventBus.setData(PeopleNearbyLoaded(handleError(e?.message), isPullToRefresh))
-                }
-            })
+            api.callNewGeo(it.latitude, it.longitude)
+                    .subscribe({
+                        mEventBus.setData(PeopleNearbyLoaded(it?.items?.isEmpty() ?: true, isPullToRefresh))
+                        it?.let {
+                            this@PeopleNearbyListViewModel.data.replaceData(if (it.items.size > 0) {
+                                arrayListOf<Any>().apply { addAll(it.items) }
+                            } else {
+                                arrayListOf<Any>(PeopleNearbyEmptyList())
+                            })
+                        }
+                    }, {
+                        mEventBus.setData(PeopleNearbyLoaded(handleError(it?.message), isPullToRefresh))
+                    })
         }
     }
 
@@ -90,15 +90,17 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
             registerProvidersChangedActionReceiver()
         }
         mIntervalSubscription = Observable.interval(WAIT_LOCATION_DELAY, TimeUnit.SECONDS)
+                .first()
+                .applySchedulers()
                 .subscribe(shortSubscription {
-                    data.replaceData(arrayListOf<Any>(PeopleNearbyEmptyList()))
+                    emptyLocation()
                 })
     }
 
     private fun showStub(errorCode: Int) =
             when (errorCode) {
                 ErrorCodes.CANNOT_GET_GEO -> {
-                    data.replaceData(arrayListOf<Any>(PeopleNearbyEmptyLocation()))
+                    emptyLocation()
                     true
                 }
                 ErrorCodes.PREMIUM_ACCESS_ONLY, ErrorCodes.BLOCKED_PEOPLE_NEARBY -> {
@@ -110,6 +112,20 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
                     false
                 }
             }
+
+    private fun loadList(isPullToRefresh: Boolean = false) {
+        mIntervalSubscription.safeUnsubscribe()
+        if (isGeoEnabled()) {
+            sendPeopleNearbyRequest(isPullToRefresh)
+        } else {
+            emptyLocation()
+            mEventBus.setData(PeopleNearbyLoaded(true, isPullToRefresh))
+        }
+    }
+
+    private fun emptyLocation() = data.replaceData(arrayListOf<Any>(PeopleNearbyEmptyLocation()))
+
+    private fun isGeoEnabled() = mGeoLocationManager.enabledProvider != GeoLocationManager.NavigationType.DISABLE
 
     private fun handleError(errorCode: String?) =
             showStub(errorCode.safeToInt(ErrorCodes.INTERNAL_SERVER_ERROR))

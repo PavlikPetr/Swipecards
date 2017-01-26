@@ -5,10 +5,6 @@ import com.topface.topface.utils.extensions.isEntry
 import java.util.*
 import java.util.function.Predicate
 
-/**
- * Created by petrp on 15.01.2017.
- */
-
 class MultiObservableArrayList<T> : ArrayList<T>() {
 
     private var mListeners = mutableListOf<IArrayListChange<T>>()

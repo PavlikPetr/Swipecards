@@ -12,6 +12,7 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardPreventCornerOverlap="false"
         card_view:cardCornerRadius="2dp"
         card_view:cardUseCompatPadding="true">
 
@@ -25,36 +26,37 @@
             <ImageView
                 android:id="@+id/PeopleNearbyAvatar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
+                android:layout_height="@dimen/people_nearby_image_height"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:glideTransformationPhoto="@{viewModel.avatar}"
                 app:placeholderRes="@{viewModel.placeholderRes}"
-                app:typeTransformation="@{viewModel.type}"/>
+                app:setImgeByGlideWithPlaceholder="@{viewModel.avatar}"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="4dp"
                 android:drawableRight="@{viewModel.onlineImage}"
-                android:text="@{viewModel.nameAndAge}"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:drawablePadding="4dp"
-                android:layout_marginTop="8dp"
+                android:singleLine="true"
+                android:text="@{viewModel.nameAndAge}"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:ellipsize="end"
-                android:maxLines="1"/>
+                android:textSize="14sp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_geo"
-                android:paddingLeft="16dp"
-                android:drawablePadding="8dp"
                 android:layout_marginTop="2dp"
+                android:drawableLeft="@drawable/ic_geo"
+                android:drawablePadding="8dp"
                 android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
                 android:text="@{viewModel.distance}"
                 android:textColor="@color/gray_forms_color"
                 android:textSize="12sp"/>

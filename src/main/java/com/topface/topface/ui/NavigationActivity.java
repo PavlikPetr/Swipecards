@@ -172,12 +172,9 @@ public class NavigationActivity extends ParentNavigationActivity<AcNavigationBin
         mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
             @Override
             public void call(DrawerLayoutStateData drawerLayoutStateData) {
-                switch (drawerLayoutStateData.getState()) {
-                    case DrawerLayoutStateData.STATE_CHANGED:
-                        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
-                            Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
-                        }
-                        break;
+                if (drawerLayoutStateData.getState() != DrawerLayoutStateData.UNDEFINED && mDrawerLayout != null &&
+                        mDrawerLayout.getDrawer() != null) {
+                    Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
                 }
             }
         }));
