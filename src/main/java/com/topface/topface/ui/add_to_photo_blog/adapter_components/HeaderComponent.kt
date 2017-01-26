@@ -1,5 +1,6 @@
 package com.topface.topface.ui.add_to_photo_blog.adapter_components
 
+import android.databinding.ObservableInt
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemAddToPhotoBlogHeaderBinding
 import com.topface.topface.ui.add_to_photo_blog.HeaderItem
@@ -10,7 +11,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  * Component with simple text and small avatar
  * Created by mbayutin on 10.01.17.
  */
-class HeaderComponent : AdapterComponent<ItemAddToPhotoBlogHeaderBinding, HeaderItem>() {
+class HeaderComponent(val lastSelectedPhotoId: ObservableInt) : AdapterComponent<ItemAddToPhotoBlogHeaderBinding, HeaderItem>() {
 
     override val itemLayout: Int
         get() = R.layout.item_add_to_photo_blog_header
@@ -19,7 +20,7 @@ class HeaderComponent : AdapterComponent<ItemAddToPhotoBlogHeaderBinding, Header
 
     override fun bind(binding: ItemAddToPhotoBlogHeaderBinding, data: HeaderItem?, position: Int) {
         data?.let {
-            binding.viewModel = HeaderItemViewModel()
+            binding.viewModel = HeaderItemViewModel(lastSelectedPhotoId)
         }
     }
 }

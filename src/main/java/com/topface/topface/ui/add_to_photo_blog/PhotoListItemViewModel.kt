@@ -2,10 +2,10 @@ package com.topface.topface.ui.add_to_photo_blog
 
 import com.topface.topface.App
 import com.topface.topface.data.Profile
-import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.databinding.IOnListChangedCallbackBinded
 import com.topface.topface.utils.databinding.SingleObservableArrayList
+import com.topface.topface.utils.extensions.photosForPhotoBlog
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
 import javax.inject.Inject
@@ -14,10 +14,9 @@ import javax.inject.Inject
  * View model for list of users photos
  * Created by mbayutin on 12.01.17.
  */
-class PhotoListItemViewModel(val lastSelectedPhotoId: Int) : IOnListChangedCallbackBinded {
+class PhotoListItemViewModel: IOnListChangedCallbackBinded {
     val data = SingleObservableArrayList<Any>()
     @Inject lateinit var appState: TopfaceAppState
-    @Inject lateinit var mEventBus: EventBus
 
     private var mProfileSubscription: Subscription? = null
 
@@ -29,19 +28,16 @@ class PhotoListItemViewModel(val lastSelectedPhotoId: Int) : IOnListChangedCallb
     override fun onCallbackBinded() {
         mProfileSubscription = appState.getObservable(Profile::class.java).subscribe {
             data.observableList.clear()
+            val cleanPhotos = it.photos.photosForPhotoBlog()
 
-            when(it.photosCount) {
-                0 -> return@subscribe
-                1 -> dispatchPhotoSelected(lastSelectedPhotoId)
+            when(cleanPhotos.size) {
+                0, 1 -> return@subscribe
                 else -> {
-                    data.observableList.addAll(it.photos)
-                    dispatchPhotoSelected(lastSelectedPhotoId)
+                    data.observableList.addAll(cleanPhotos)
                 }
             }
         }
     }
-
-    private fun dispatchPhotoSelected(id: Int) = mEventBus.setData(PhotoSelectedEvent(id))
 
     fun release() {
         mProfileSubscription.safeUnsubscribe()

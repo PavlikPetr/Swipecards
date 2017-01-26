@@ -1,8 +1,8 @@
 package com.topface.topface.ui.add_to_photo_blog.adapter_components
 
+import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemAddToPhotoBlogPhotoListBinding
 import com.topface.topface.ui.add_to_photo_blog.PhotoListItem
@@ -16,7 +16,7 @@ import com.topface.topface.utils.extensions.appContext
  * Компонент со списком фоток пользователя
  * Created by mbayutin on 10.01.17.
  */
-class PhotoListComponent() : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
+class PhotoListComponent(val lastSelectedPhotoId: ObservableInt) : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
     private var mAdapter: CompositeAdapter? = null
     private var mViewModel: PhotoListItemViewModel? = null
     override val itemLayout: Int
@@ -28,9 +28,9 @@ class PhotoListComponent() : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding
         with(binding) {
             content.layoutManager = LinearLayoutManager(binding.appContext(), LinearLayoutManager.HORIZONTAL, false)
             mAdapter = CompositeAdapter(PhotoTypeProvider()) { Bundle() }
-                    .addAdapterComponent(PhotoComponent())
+                    .addAdapterComponent(PhotoComponent(lastSelectedPhotoId))
             content.adapter = mAdapter
-            mViewModel = PhotoListItemViewModel(data?.lastSelectedPhotoId ?: App.get().profile.photos[0].id )
+            mViewModel = PhotoListItemViewModel()
             viewModel = mViewModel
         }
     }

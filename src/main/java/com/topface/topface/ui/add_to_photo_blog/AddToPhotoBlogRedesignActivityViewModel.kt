@@ -3,6 +3,7 @@ package com.topface.topface.ui.add_to_photo_blog
 import android.app.Activity
 import android.content.Intent
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableInt
 import android.widget.Toast
 import com.topface.topface.App
 import com.topface.topface.R
@@ -18,7 +19,6 @@ import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -34,19 +34,14 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
     // договаривались использовать цену из первой кнопки лидеров
     val price by lazy { App.get().options.buyLeaderButtons[0].price }
 
-    private var mLastSelectedPhotoId = 0
-    val lastSelectedPhotoId: Int
-        get() = mLastSelectedPhotoId
+    val lastSelectedPhotoId = ObservableInt(0)
 
     init {
         App.get().inject(this)
-        mSubscriptions.add(mEventBus.getObservable(PhotoSelectedEvent::class.java)
-                .subscribe { mLastSelectedPhotoId = it.id })
         mSubscriptions.add(mEventBus.getObservable(PlaceButtonTapEvent::class.java)
                 .subscribe { placeOrBuy() })
         mSubscriptions.add(mAppState.getObservable(BalanceData::class.java)
                 .subscribe({ mBalance = it }))
-
     }
 
     fun release() {
@@ -59,7 +54,7 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
             startPurchasesActivity()
         } else {
             isLockerVisible.set(true)
-            AddPhotoFeedRequest(mLastSelectedPhotoId, App.get(), 1, ""
+            AddPhotoFeedRequest(lastSelectedPhotoId.get(), App.get(), 1, ""
                     , price.toLong()).callback(object : ApiHandler() {
 
                 override fun success(response: IApiResponse) {

@@ -15,6 +15,7 @@ import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
+import com.topface.topface.utils.extensions.photosForPhotoBlog
 
 /**
  * Experimental redesign of add-to-photo-blog screen
@@ -31,8 +32,8 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(TypeProvider()) { Bundle() }
-                .addAdapterComponent(HeaderComponent())
-                .addAdapterComponent(PhotoListComponent())
+                .addAdapterComponent(HeaderComponent(mViewModel.lastSelectedPhotoId))
+                .addAdapterComponent(PhotoListComponent(mViewModel.lastSelectedPhotoId))
                 .addAdapterComponent(PlaceButtonComponent())
     }
 
@@ -49,9 +50,9 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
         viewBinding.viewModel = mViewModel
         NewProductsKeysGeneratedStatistics.sendNow_PHOTOFEED_SEND_OPEN(applicationContext)
         initRecyclerView(viewBinding.content,
-                restoreLastSelectedPhotoId(savedInstanceState),
                 mViewModel.price
         )
+        restoreLastSelectedPhotoId(savedInstanceState)
     }
 
     override fun onDestroy() {
@@ -62,26 +63,26 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
 
     override fun onUpClick() = finish()
 
-    private fun initRecyclerView(recyclerView: RecyclerView, lastSelectedPhotoId: Int, price: Int) =
+    private fun initRecyclerView(recyclerView: RecyclerView, price: Int) =
         with(recyclerView) {
             layoutManager = LinearLayoutManager(this@AddToPhotoBlogRedesignActivity)
             adapter = mAdapter
             post {
-                mAdapter.data = mutableListOf(HeaderItem(), PhotoListItem(lastSelectedPhotoId), PlaceButtonItem(price))
+                mAdapter.data = mutableListOf(HeaderItem(), PhotoListItem(), PlaceButtonItem(price))
             }
         }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(SELECTED_PHOTO_ID, mViewModel.lastSelectedPhotoId)
+        outState.putInt(SELECTED_PHOTO_ID, mViewModel.lastSelectedPhotoId.get())
     }
 
-    fun restoreLastSelectedPhotoId(savedInstanceState: Bundle?): Int {
-        var lastSelectedPhotoId = App.get().profile.photos.first.id
+    fun restoreLastSelectedPhotoId(savedInstanceState: Bundle?) {
+        var lastSelectedPhotoId = App.get().profile.photos.photosForPhotoBlog().first?.id ?: 0
         if (savedInstanceState != null) {
             val storedId = savedInstanceState.getInt(SELECTED_PHOTO_ID)
             if (storedId != 0) lastSelectedPhotoId = storedId
         }
-        return lastSelectedPhotoId
+        mViewModel.lastSelectedPhotoId.set(lastSelectedPhotoId)
     }
 }
