@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/dating_buttons_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:visibility="@{viewModel.isVisible}">
+
+        <ImageButton
+            style="@style/DatingMessage"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:clickable="@{viewModel.isDatingButtonsLocked}"
+            android:onClick="@{() -> viewModel.showChat()}"/>
+
+        <ImageButton
+            style="@style/DatingSkip"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{viewModel.isDatingButtonsLocked}"
+            android:onClick="@{() -> viewModel.skip()}"/>
+
+        <ImageButton
+            style="@style/DatingLike"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{viewModel.isDatingButtonsLocked}"
+            android:onClick="@{() -> viewModel.sendLike()}"/>
+
+        <ImageButton
+            style="@style/DatingAdmiration"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:clickable="@{viewModel.isDatingButtonsLocked}"
+            android:onClick="@{() -> viewModel.sendAdmiration()}"/>
+
+    </LinearLayout>
+</layout>
