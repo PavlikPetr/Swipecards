@@ -1,17 +1,20 @@
 package com.topface.topface.ui.fragments.dating.dating_redesign
 
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel.AGE_TEMPLATE
 
 /**
  * ВьюМодель ререредизайна экрана знакомств(19.01.17)
  */
-class DatingFragmentViewModel {
+class DatingFragmentViewModel(val mNavigator: IFeedNavigator) {
 
     val name = ObservableField<String>()
     val feedAge = ObservableField<String>()
@@ -20,6 +23,9 @@ class DatingFragmentViewModel {
     val statusText = ObservableField<String>()
     val statusVisibility = ObservableField<Int>()
     val photoCounter = ObservableField<String>()
+//    лоадер крутится - INVISIBLE мутится
+    val isVisible = ObservableInt(View.VISIBLE)
+    val isDatingButtonsLocked = ObservableBoolean(false)
 
     var currentUser: SearchUser? = null
         set(value) {
@@ -35,4 +41,23 @@ class DatingFragmentViewModel {
         }
 
     fun updatePhotosCounter(position: Int) = photoCounter.set("${position + 1}/${currentUser?.photosCount}")
+
+    fun showChat() = if (App.get().profile.premium) {
+        mNavigator.showChat(currentUser, null)
+    } else {
+        mNavigator.showPurchaseVip()
+    }
+
+    fun sendAdmiration() {
+        //todo отправка восхищения
+    }
+
+    fun skip() {
+        //todo Скип фида и подгрузка следующего
+    }
+
+    fun sendLike() {
+        //todo Лайк фида и подгрузка следующего
+    }
+
 }
