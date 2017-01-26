@@ -27,7 +27,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment;
+import com.topface.topface.ui.fragments.dating.DatingFragment;
 import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
@@ -57,7 +57,7 @@ import static com.topface.topface.ui.NavigationActivity.FRAGMENT_SETTINGS;
  */
 public class NavigationManager {
 
-    public static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
+    private static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
 
     @Inject
     NavigationState mNavigationState;
@@ -140,7 +140,7 @@ public class NavigationManager {
             transaction.commit();
             Debug.log("NavigationManager: commit " + fm.executePendingTransactions());
             mFragmentSettings = leftMenuSettingsData;
-            /**
+            /*
              * подписываемся на жизненный цикл загруженного фрагмента
              * ждем его загрузки не дольше CLOSE_LEFT_MENU_TIMEOUT мс
              * потом отписываемся и шлем ивент о том, что фрагмент свичнулся
@@ -190,7 +190,7 @@ public class NavigationManager {
                 fragment = OwnProfileFragment.newInstance();
                 break;
             case FragmentIdData.DATING:
-                fragment = App.get().getOptions().newDatingDesign.isEnabled() ?
+                fragment = mWeakStorage.getDatingRedesignEnabled() ?
                         new com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment() :
                         new DatingFragment();
                 break;
@@ -332,7 +332,7 @@ public class NavigationManager {
         if (iNeedCloseMenuCallback != null) {
             iNeedCloseMenuCallback.onCall();
         }
-        /**
+        /*
          * ждем когда будет закрыто левое меню, но не дольше CLOSE_LEFT_MENU_TIMEOUT мс
          * после этого отписываемся и шлем ивент о смене подсвеченного итема в левом меню
          */
