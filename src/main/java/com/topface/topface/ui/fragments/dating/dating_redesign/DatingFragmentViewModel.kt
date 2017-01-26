@@ -45,7 +45,7 @@ class DatingFragmentViewModel(val mNavigator: IFeedNavigator) {
     fun showChat() = if (App.get().profile.premium) {
         mNavigator.showChat(currentUser, null)
     } else {
-        mNavigator.showPurchaseVip()
+        mNavigator.showPurchaseVip("dating_fragment")
     }
 
     fun sendAdmiration() {
