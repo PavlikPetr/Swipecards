@@ -8,6 +8,7 @@ import com.topface.topface.databinding.ItemAddToPhotoBlogPhotoListBinding
 import com.topface.topface.ui.add_to_photo_blog.PhotoListItem
 import com.topface.topface.ui.add_to_photo_blog.PhotoListItemViewModel
 import com.topface.topface.ui.add_to_photo_blog.PhotoTypeProvider
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.appContext
@@ -16,7 +17,7 @@ import com.topface.topface.utils.extensions.appContext
  * Компонент со списком фоток пользователя
  * Created by mbayutin on 10.01.17.
  */
-class PhotoListComponent(val lastSelectedPhotoId: ObservableInt) : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
+class PhotoListComponent(val lastSelectedPhotoId: ObservableInt, private val mApi: FeedApi) : AdapterComponent<ItemAddToPhotoBlogPhotoListBinding, PhotoListItem>() {
     private var mAdapter: CompositeAdapter? = null
     private var mViewModel: PhotoListItemViewModel? = null
     override val itemLayout: Int
@@ -30,8 +31,11 @@ class PhotoListComponent(val lastSelectedPhotoId: ObservableInt) : AdapterCompon
             mAdapter = CompositeAdapter(PhotoTypeProvider()) { Bundle() }
                     .addAdapterComponent(PhotoComponent(lastSelectedPhotoId))
             content.adapter = mAdapter
-            mViewModel = PhotoListItemViewModel()
-            viewModel = mViewModel
+        }
+
+        mAdapter?.let {
+            mViewModel = PhotoListItemViewModel(mApi, it.updateObservable)
+            binding.viewModel = mViewModel
         }
     }
 
