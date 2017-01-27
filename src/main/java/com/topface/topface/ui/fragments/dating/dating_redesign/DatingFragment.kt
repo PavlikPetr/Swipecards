@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.AcNewNavigationBinding
 import com.topface.topface.databinding.DatingReredesignBinding
-import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
@@ -20,14 +20,14 @@ import org.jetbrains.anko.layoutInflater
  * Редизайн знакомств
  * Created by tiberal on 07.10.16.
  */
-class DatingFragment : BaseFragment() {
+class DatingFragment : BaseFragment(), IEmptySearchVisibility {
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<DatingReredesignBinding>(context.layoutInflater, R.layout.dating_reredesign, null, false)
     }
 
     private val mViewModel by lazy {
-        DatingFragmentViewModel(context, mNavigator, mApi)
+        DatingFragmentViewModel(context, mNavigator, mApi, mEmptySearchVisibility = this)
     }
 
     private val mApi by lazy {
@@ -55,4 +55,8 @@ class DatingFragment : BaseFragment() {
     private fun setFitSystemWindow(isNeedFit: Boolean) {
         ((activity as? NavigationActivity)?.viewBinding as? AcNewNavigationBinding)?.viewModel?.fitSystemWindow?.set(isNeedFit)
     }
+
+    override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mViewModel.update(false, false) }
+
+    override fun hideEmptySearchDialog() = mNavigator.closeEmptyDating()
 }
