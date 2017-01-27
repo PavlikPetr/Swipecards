@@ -2,10 +2,8 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import android.content.Intent
 import android.databinding.DataBindingUtil
-import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,8 +26,9 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.adapter_utils.DividerDecoration
+import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
@@ -61,6 +60,12 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
     private val mDialogTypeProvider by lazy {
         DialogTypeProvider()
     }
+
+    private val mDecorator by lazy {
+        DividerDecoration(R.color.filter_divider_color.getColor(), R.dimen.divider_size.getDimen()
+                , R.dimen.avatar_marginLeft.getDimen() + R.dimen.avatar_marginRight.getDimen() + R.dimen.avatar_width.getDimen())
+    }
+
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mDialogTypeProvider) {
             Bundle().apply {
@@ -117,23 +122,10 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 
+
     private fun initList() = with(mBinding.dialogsList) {
         layoutManager = LinearLayoutManager(context)
-        addItemDecoration(object : RecyclerView.ItemDecoration() {
-            private val mDivider = R.drawable.divider_list.getDrawable()
-            override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
-                val left = R.dimen.avatar_width.getDimen().toInt() + R.dimen.avatar_marginRight.getDimen().toInt() + R.dimen.avatar_marginLeft.getDimen().toInt()
-                val right = parent.width
-                for (i in 1..parent.childCount - 1) {
-                    val child = parent.getChildAt(i)
-                    val params = child.layoutParams as RecyclerView.LayoutParams
-                    val top = child.bottom + params.bottomMargin
-                    val bottom = top + R.dimen.divider_size.getDimen().toInt()
-                    mDivider?.setBounds(left, top, right, bottom)
-                    mDivider?.draw(c)
-                }
-            }
-        })
+        addItemDecoration(mDecorator)
         adapter = mAdapter
     }
 
