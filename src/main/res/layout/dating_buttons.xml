@@ -31,7 +31,7 @@
                 android:layout_gravity="left|center_vertical"
                 android:layout_marginLeft="16dp"
                 android:onClick="@{() -> viewModel.showChat()}"
-                app:enable="@{viewModel.isDatingButtonsEnable}"/>
+                app:enable="@{viewModel.isChatButtonsEnable}"/>
 
         </FrameLayout>
 
@@ -47,7 +47,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:onClick="@{() -> viewModel.sendLike()}"
-                app:enable="@{viewModel.isDatingButtonsEnable}"/>
+                app:enable="@{viewModel.isLikeButtonsEnable}"/>
         </FrameLayout>
 
         <FrameLayout
@@ -62,7 +62,7 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:onClick="@{() -> viewModel.skip()}"
-                app:enable="@{viewModel.isDatingButtonsEnable}"/>
+                app:enable="@{viewModel.isSkipButtonsEnable}"/>
 
         </FrameLayout>
 
@@ -78,7 +78,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="16dp"
                 android:onClick="@{() -> viewModel.showProfile()}"
-                app:enable="@{viewModel.isDatingButtonsEnable}"/>
+                app:enable="@{viewModel.isProfileButtonsEnable}"/>
 
         </FrameLayout>
     </LinearLayout>

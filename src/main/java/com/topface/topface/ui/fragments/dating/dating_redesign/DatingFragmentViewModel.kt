@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
@@ -36,14 +37,17 @@ import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
-import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.utils.*
+import com.topface.topface.utils.FlurryManager
+import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.PreloadManager
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
-import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel.AGE_TEMPLATE
 import rx.Observer
@@ -52,27 +56,35 @@ import rx.Subscription
 import rx.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 /**
  * ВьюМодель ререредизайна экрана знакомств(19.01.17)
  */
 class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFeedNavigator, private val mApi: FeedApi,
-                              private val mEmptySearchVisibility: IEmptySearchVisibility) : ILifeCycle, ViewPager.OnPageChangeListener,
+                              private val mEmptySearchVisibility: IEmptySearchVisibility,
+                              private val mController: AlbumLoadController,
+                              private val mUserSearchList: CachableSearchList<SearchUser>) : ILifeCycle, ViewPager.OnPageChangeListener,
         OnUsersListEventsListener<SearchUser> {
 
     val name = ObservableField<String>()
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
-    val iconOnlineRes = ObservableField<Int>(0)
+    val iconOnlineRes = ObservableField(0)
     val statusText = ObservableField<String>()
-    val statusVisibility = ObservableField<Int>(View.VISIBLE)
+    val statusVisibility = ObservableField<Int>(View.GONE)
+    val photoCounterVisibility = ObservableField<Int>(View.GONE)
     val photoCounter = ObservableField<String>()
-    //    лоадер крутится - INVISIBLE мутится
     val isVisible = ObservableInt(View.VISIBLE)
-    val isDatingButtonsEnable = ObservableBoolean(true)
+    val isChatButtonsEnable = ObservableBoolean(true)
+    val isLikeButtonsEnable = ObservableBoolean(true)
+    val isSkipButtonsEnable = ObservableBoolean(true)
+    val isProfileButtonsEnable = ObservableBoolean(true)
     val currentItem = ObservableInt(0)
     val albumData = ObservableField<Photos>()
     val isNeedAnimateLoader = ObservableBoolean(false)
+    val albumBackgroundLink = ObservableField<String>()
+    val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
     @Inject lateinit internal var appState: TopfaceAppState
 
@@ -80,62 +92,85 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mAlbumSubscription: Subscription? = null
     private var mNeedMore = false
     private var mCanSendAlbumReq = true
-    private var mBalanceDataSubscription: Subscription? = null
-    private var mBalance: BalanceData? = null
     private val mUpdateActionsReceiver: BroadcastReceiver
     private var mSkipSubscription: Subscription? = null
     private var mLikeSubscription: Subscription? = null
     private var mProfileSubscription: Subscription? = null
     private var mUpdateSubscription: Subscription? = null
+    private var mLoadBackgroundSubscription: Subscription? = null
     private var mNewFilter = false
     private var mUpdateInProcess = false
     private var isLastUser = false
+    private var mIsOnline by Delegates.observable(false) { prop, old, new ->
+        iconOnlineRes.set(if (new) R.drawable.im_list_online else 0)
+    }
+
+    private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
+        updatePhotosCounter(new)
+        loadBluredBackground(new)
+    }
+
+    private var mIsDatingButtonAnable by Delegates.observable(true) { prop, old, new ->
+        isChatButtonsEnable.set(new)
+        isLikeButtonsEnable.set(new)
+        isSkipButtonsEnable.set(new)
+        isProfileButtonsEnable.set(new)
+    }
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
 
     private companion object {
         private const val PHOTOS_COUNTER = "photos_counter"
-        private const val NAME_AGE_ONLINE = "name_age_online"
+        private const val NAME = "name"
+        private const val AGE = "age"
+        private const val CITY = "city"
         private const val ALBUM_DATA = "album_data"
         private const val ONLINE = "online"
-        private const val PHOTOS_COUNTER_VISIBLE = "photos_counter_visible"
+        private const val STATUS = "status"
         private const val NEED_ANIMATE_LOADER = "need_animate_loader"
-        private const val CURRENT_ITEM = "current_item"
-        private const val CURRENT_USER = "current_user_dating_album"
+        private const val CURRENT_POSITION = "current_position"
+        private const val CURRENT_USER = "current_user"
         private const val LOADED_COUNT = "loaded_count"
         private const val CAN_SEND_ALBUM_REQUEST = "can_send_album_request"
         private const val NEED_MORE = "need_more"
-        private const val DATING_BUTTONS_ENABLE = "dating_buttons_enable"
-        private const val DATING_BUTTON_VISIBILITY = "dating_button_visibility"
+        private const val CHAT_BUTTONS_ENABLE = "chat_buttons_enable"
+        private const val LIKE_BUTTONS_ENABLE = "like_buttons_enable"
+        private const val SKIP_BUTTONS_ENABLE = "skip_buttons_enable"
+        private const val PROFILE_BUTTONS_ENABLE = "profile_buttons_enable"
         private const val UPDATE_IN_PROCESS = "update_in_process"
         private const val NEW_FILTER = "new_filter"
 
         private const val MAX_LIKE_AMOUNT = 4
     }
 
-    private val mUserSearchList: CachableSearchList<SearchUser> = CachableSearchList<SearchUser>(SearchUser::class.java)
 
     var currentUser: SearchUser? = null
         set(value) {
             field = value?.apply {
-                name.set(value.firstName)
-                feedAge.set(String.format(App.getCurrentLocale(), AGE_TEMPLATE, value.age))
-                feedCity.set(value.city.name)
-                iconOnlineRes.set(if (value.online) R.drawable.ico_online else 0)
-                statusText.set(value.getStatus())
-                statusVisibility.set(if (value.getStatus().isEmpty()) View.GONE else View.VISIBLE)
-                updatePhotosCounter(0)
+                name.set(firstName)
+                feedAge.set(String.format(App.getCurrentLocale(), AGE_TEMPLATE, age))
+                feedCity.set(city.name)
+                mIsOnline = online
+                statusText.set(status)
             }
+            albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
+            mCurrentPosition = 0
             currentItem.set(0)
         }
 
     init {
         App.get().inject(this)
-        mBalanceDataSubscription = appState.getObservable(BalanceData::class.java).subscribe(shortSubscription {
-            mBalance = it
+        statusText.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(obs: Observable?, p1: Int) {
+                statusVisibility.set(getVisibility(obs))
+            }
         })
-
+        photoCounter.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(obs: Observable?, p1: Int) {
+                photoCounterVisibility.set(getVisibility(obs))
+            }
+        })
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mPreloadManager.checkConnectionType()
@@ -147,9 +182,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             skip()
                         }
                         BlackListAndBookmarkHandler.ActionTypes.SYMPATHY -> {
-                            //todo
-//                            binding.sendLike.isEnabled = false
-//                            binding.sendAdmiration.isEnabled = false
+                            isLikeButtonsEnable.set(false)
                             currentUser?.let {
                                 it.rated = true
                             }
@@ -164,8 +197,8 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
-                        currentUser = it
                         albumData.set(it.photos)
+                        currentUser = it
                         //todo
 //                        binding.root.post {
 //                            //если есть currentUser, например после востановления стейта, то работаем с ним
@@ -180,6 +213,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
     }
+
+    private fun getVisibility(obs: android.databinding.Observable?) =
+            if (((obs as? ObservableField<*>)?.get() as? String)?.isEmpty() ?: true) View.GONE else View.VISIBLE
 
     fun updatePhotosCounter(position: Int) = photoCounter.set("${position + 1}/${currentUser?.photosCount}")
 
@@ -206,7 +242,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             return
                         }
                     }
-                    isDatingButtonsEnable.set(true)
+                    mIsDatingButtonAnable = true
                 }
             })
         } else {
@@ -228,13 +264,13 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
                         override fun onError(e: Throwable?) {
                             it.rated = false
-                            isDatingButtonsEnable.set(true)
+                            mIsDatingButtonAnable = true
                         }
 
                         override fun onNext(rate: Rate?) {
                             it.rated = true
                             SearchCacheManager.markUserAsRatedInCache(it.id)
-                            isDatingButtonsEnable.set(true)
+                            mIsDatingButtonAnable = true
                         }
                     })
         } else {
@@ -251,7 +287,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             currentItem.set(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
         }
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
-            isDatingButtonsEnable.set(false)
+            mIsDatingButtonAnable = false
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (data != null && data.extras != null) {
                 sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
@@ -277,30 +313,52 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     fun onPhotoClick() = with(currentUser) {
         if (this != null && photos != null && photos.isNotEmpty()) {
-            //todo binding
-//            mNavigator.showAlbum(binding.datingAlbum.selectedPosition,
-//                    id, photosCount, photos)
+            mNavigator.showAlbum(mCurrentPosition, id, photosCount, photos)
         }
     }
 
     override fun onSavedInstanceState(state: Bundle) = with(state) {
+        putBoolean(NEW_FILTER, mNewFilter)
+        putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
+        putInt(LOADED_COUNT, mLoadedCount)
+        putParcelable(CURRENT_USER, currentUser)
+        putInt(CURRENT_POSITION, mCurrentPosition)
+        putBoolean(ONLINE, mIsOnline)
+        putString(NAME, name.get())
+        putString(CITY, feedCity.get())
+        putString(AGE, feedAge.get())
+        putString(STATUS, statusText.get())
+        putString(PHOTOS_COUNTER, photoCounter.get())
         putParcelableArrayList(ALBUM_DATA, albumData.get() as? ArrayList<Photo>)
         putBoolean(NEED_MORE, mNeedMore)
         putBoolean(NEED_ANIMATE_LOADER, isNeedAnimateLoader.get())
-        putBoolean(DATING_BUTTONS_ENABLE, isDatingButtonsEnable.get())
+        putBoolean(CHAT_BUTTONS_ENABLE, isChatButtonsEnable.get())
+        putBoolean(LIKE_BUTTONS_ENABLE, isLikeButtonsEnable.get())
+        putBoolean(SKIP_BUTTONS_ENABLE, isSkipButtonsEnable.get())
+        putBoolean(PROFILE_BUTTONS_ENABLE, isProfileButtonsEnable.get())
         putBoolean(UPDATE_IN_PROCESS, mUpdateInProcess)
-        //todo
-//        putInt(DATING_BUTTON_VISIBILITY, isDatingButtonsVisible.get())
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
+        mNewFilter = getBoolean(NEW_FILTER)
+        mCanSendAlbumReq = getBoolean(CAN_SEND_ALBUM_REQUEST)
+        mLoadedCount = getInt(LOADED_COUNT)
+        currentUser = getParcelable(CURRENT_USER)
+        name.set(getString(NAME))
+        feedCity.set(getString(CITY))
+        feedAge.set(getString(AGE))
+        mIsOnline = getBoolean(ONLINE)
+        statusText.set(getString(STATUS))
+        photoCounter.set(getString(PHOTOS_COUNTER))
         mUpdateInProcess = getBoolean(DatingFragmentViewModel.UPDATE_IN_PROCESS)
         albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
-        mNeedMore = getBoolean(NEED_MORE, false)
-        isNeedAnimateLoader.set(getBoolean(NEED_ANIMATE_LOADER, false))
-        isDatingButtonsEnable.set(getBoolean(DATING_BUTTONS_ENABLE))
-        //todo
-//        isDatingButtonsVisible.set(getInt(DatingButtonsViewModel.DATING_BUTTON_VISIBILITY))
+        mCurrentPosition = getInt(CURRENT_POSITION)
+        mNeedMore = getBoolean(NEED_MORE)
+        isNeedAnimateLoader.set(getBoolean(NEED_ANIMATE_LOADER))
+        isChatButtonsEnable.set(getBoolean(CHAT_BUTTONS_ENABLE))
+        isLikeButtonsEnable.set(getBoolean(LIKE_BUTTONS_ENABLE))
+        isSkipButtonsEnable.set(getBoolean(SKIP_BUTTONS_ENABLE))
+        isProfileButtonsEnable.set(getBoolean(PROFILE_BUTTONS_ENABLE))
     }
 
     private fun setUser(user: SearchUser?) = user?.let {
@@ -333,15 +391,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             }
                         }
                         mLoadedCount += newPhotos.size
-                        //todo binding
-//                        binding.datingAlbum?.let {
-//                            if (it.selectedPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
-//                                sendAlbumRequest(data)
-//                            }
-//                            if (it.adapter != null) {
-//                                it.adapter.notifyDataSetChanged()
-//                            }
-//                        }
+                        if (mCurrentPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
+                            sendAlbumRequest(data)
+                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -353,39 +405,31 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        if (LocaleConfig.localeChangeInitiated) {
-            mUserSearchList.removeAllUsers()
-            mUserSearchList.saveCache()
-        } else {
-            mUserSearchList.saveCache()
-        }
-    }
-
     fun release() {
         mAlbumSubscription.safeUnsubscribe()
-        mBalanceDataSubscription.safeUnsubscribe()
         mSkipSubscription.safeUnsubscribe()
         mLikeSubscription.safeUnsubscribe()
         mUpdateSubscription.safeUnsubscribe()
+        mLoadBackgroundSubscription.safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
     }
 
     override fun onPageSelected(position: Int) {
-        updatePhotosCounter(position)
-        //todo binding
-//        binding.datingAlbum?.let {
-//            if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-//                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
-//                    if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
-//                        mCanSendAlbumReq = false
-//                        sendAlbumRequest(it)
-//                    }
-//                }
-//            }
-//        }
+        mCurrentPosition = position
+        if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
+            with(albumData.get()) {
+                if (mNeedMore && mCanSendAlbumReq && !isEmpty()) {
+                    mCanSendAlbumReq = false
+                    sendAlbumRequest(this)
+                }
+            }
+        }
     }
+
+    private fun loadBluredBackground(position: Int) =
+            albumData.get()?.get(position)?.getSuitableLink(Photo.SIZE_128)?.let {
+                albumBackgroundLink.set(it)
+            }
 
     override fun onPageScrollStateChanged(state: Int) {
     }
@@ -405,10 +449,8 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         mUserSearchList.nextUser()?.let {
             mEmptySearchVisibility.hideEmptySearchDialog()
-            isDatingButtonsEnable.set(true)
+            mIsDatingButtonAnable = true
             setUser(it)
-            //todo
-//            mDatingButtonsEvents.onNewSearchUser(it)
             currentUser = it
         }
     }
@@ -464,7 +506,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess) {
-            isDatingButtonsEnable.set(false)
+            mIsDatingButtonAnable = false
             if (isNeedRefresh) {
                 mUserSearchList.clear()
                 currentUser = null
@@ -480,7 +522,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 override fun onError(e: Throwable?) {
                     Debug.log("LOADER_INTEGRATION onError ${e?.message}")
                     mUpdateInProcess = false
-                    isDatingButtonsEnable.set(true)
+                    mIsDatingButtonAnable = true
                     e?.printStackTrace()
                 }
 
@@ -493,14 +535,14 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
+                            albumData.set(user.photos)
                             currentUser = user
                             Debug.log("LOADER_INTEGRATION onNext onDataReceived")
-                            albumData.set(user.photos)
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
                             mEmptySearchVisibility.showEmptySearchDialog()
                             isLastUser = true
                         }
-                        isDatingButtonsEnable.set(true)
+                        mIsDatingButtonAnable = true
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
                             mEmptySearchVisibility.showEmptySearchDialog()
@@ -526,11 +568,11 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
             override fun onCompleted() {
                 mNewFilter = false
-                isDatingButtonsEnable.set(false)
+                mIsDatingButtonAnable = false
             }
 
             override fun onError(e: Throwable?) {
-                isDatingButtonsEnable.set(false)
+                mIsDatingButtonAnable = false
                 mNewFilter = false
                 mEmptySearchVisibility.showEmptySearchDialog()
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)

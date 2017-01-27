@@ -20,24 +20,31 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_blur">
+            app:backgroundDrawable="@{viewModel.albumDefaultBackground}"
+            app:defaultBlur="@{viewModel.albumDefaultBackground}"
+            app:loadBlurBackground="@{viewModel.albumBackgroundLink}">
 
-            <com.topface.topface.ui.views.ImageSwitcher
-                android:id="@+id/dating_album"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:onClick="@{()-> viewModel.onPhotoClick()}"
-                app:currentItemImmediately="@{viewModel.currentItem}"
-                app:data="@{viewModel.albumData}"
-                app:needAnimateLoader="@{viewModel.isNeedAnimateLoader}"
-                app:onPageChangeListener="@{viewModel}"/>
+                android:foreground="@drawable/new_dating_shadow">
+
+                <com.topface.topface.ui.views.ImageSwitcher
+                    android:id="@+id/dating_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{()-> viewModel.onPhotoClick()}"
+                    app:currentItemImmediately="@{viewModel.currentItem}"
+                    app:data="@{viewModel.albumData}"
+                    app:needAnimateLoader="@{viewModel.isNeedAnimateLoader}"
+                    app:onPageChangeListener="@{viewModel}"/>
+            </FrameLayout>
 
             <!--Блок "статуса и каунтера фоток"-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_gravity="bottom"
-                android:background="@drawable/black_white_gradient"
                 android:gravity="bottom"
                 android:orientation="vertical"
                 android:paddingBottom="16dp"
@@ -73,7 +80,8 @@
                         android:layout_marginLeft="16dp"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:text="@{viewModel.statusText}"/>
+                        android:text="@{viewModel.statusText}"
+                        android:visibility="@{viewModel.photoCounterVisibility}"/>
 
                 </LinearLayout>
             </LinearLayout>

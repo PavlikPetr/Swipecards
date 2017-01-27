@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
@@ -15,6 +15,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -29,7 +30,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
@@ -43,6 +43,7 @@ import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -439,5 +440,62 @@ public class BindingsAdapters {
     @BindingAdapter("foreground")
     public static void setForeground(FrameLayout view, Drawable drawable) {
         view.setForeground(drawable);
+    }
+
+    @BindingAdapter({"loadBlurBackground", "defaultBlur"})
+    public static void loadBlurBackground(final View view, String link, final Drawable defaultBackground) {
+        if (TextUtils.isEmpty(link)) {
+            return;
+        }
+        ViewExtensionsKt.loadBackground(view, link)
+                .subscribe(new RxUtils.ShortSubscription<BitmapDrawable>() {
+                    @Override
+                    public void onNext(BitmapDrawable bitmapDrawable) {
+                        super.onNext(bitmapDrawable);
+                        Debug.error("LOAD_BACKGROUND catch BitmapDrawable $it with size " + bitmapDrawable.getIntrinsicHeight() + "X" + bitmapDrawable.getIntrinsicWidth());
+                        Drawable currentBackground = view.getBackground();
+                        Drawable firstState = defaultBackground;
+                        if (currentBackground instanceof TransitionDrawable) {
+                            firstState = ((TransitionDrawable) currentBackground).getDrawable(1);
+                        }
+                        Drawable[] res = new Drawable[]{firstState, bitmapDrawable};
+                        TransitionDrawable transition = new TransitionDrawable(res);
+                        setBackgroundDrawable(view, transition);
+                        view.postOnAnimation(new Runnable() {
+                            @Override
+                            public void run() {
+                                Debug.error("LOAD_BACKGROUND animation completed");
+                            }
+                        });
+                        transition.startTransition(500);
+                        view.postOnAnimation(new Runnable() {
+                            @Override
+                            public void run() {
+                                Debug.error("LOAD_BACKGROUND animation completed 2");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        Debug.error("LOAD_BACKGROUND error " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        Debug.error("LOAD_BACKGROUND complete");
+                    }
+                });
+    }
+
+    @BindingAdapter("backgroundDrawable")
+    public static void setBackgroundDrawable(View view, Drawable bg) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            view.setBackground(bg);
+        } else {
+            view.setBackgroundDrawable(bg);
+        }
     }
 }
