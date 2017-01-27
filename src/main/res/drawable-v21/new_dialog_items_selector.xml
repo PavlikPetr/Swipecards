@@ -5,7 +5,3 @@
     <item android:drawable="@drawable/new_dialog_ripple_filter_v21"/>
     <item android:drawable="@drawable/new_dialog_item_normal"/>
 </ripple>
-
-
-
-

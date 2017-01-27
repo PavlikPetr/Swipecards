@@ -20,7 +20,6 @@ class AdmirationTransformation(mContext: Context) : BaseGlideTransformation(mCon
         super.transform(resource, outWidth, outHeight)
         drawHeardAdmiration()
         drawBottomCircleAdmiration()
-
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 

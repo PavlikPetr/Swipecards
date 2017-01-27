@@ -14,7 +14,7 @@ import com.topface.topface.utils.extensions.getColor
  * Этот transformation может рисовать восхищение и значок online на аватарке
  * Created by siberia87 on 30.11.16.
  */
-class AdmirationAndOnlineTransformation(mContext: Context, val circleRadius: Float, val strokeSize: Float) : BaseGlideTransformation(mContext) {
+class AdmirationAndOnlineTransformation(mContext: Context, circleRadius: Float, strokeSize: Float) : OnlineCircleTransformation(mContext,circleRadius,strokeSize) {
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
         val mAdmirationTransformation = AdmirationTransformation(mContext)

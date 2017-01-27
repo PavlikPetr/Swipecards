@@ -58,19 +58,4 @@ abstract class BaseGlideTransformation(context: Context) : Transformation<Bitmap
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 
-    /**
-     * Метод для отрисовки кружочка онлайн
-     *
-     * @param resource    аватар юзера, на котором будем рисовать
-     * @param circleRadius радиус непосредственно онлайн кружочка
-     * @param strokeSize    радиус кружочкка обводки
-     */
-    fun drawOnlineCircle(resource: Resource<Bitmap>, circleRadius: Float, strokeSize: Float) {
-        val radius = (resource.get().width / 2).toDouble()
-        val distanceToCircle = (radius + Math.sqrt((radius * radius) / 2)).toFloat()
-        mCanvas.drawCircle(distanceToCircle, distanceToCircle, circleRadius + strokeSize, Paint().apply { color = R.color.circle_around_online_circle.getColor() })
-        mCanvas.drawCircle(distanceToCircle, distanceToCircle, circleRadius, Paint().apply { color = R.color.online_circle.getColor() })
-    }
-
-
 }
