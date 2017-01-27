@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.TypedValue
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogContactsItemBinding
@@ -18,7 +17,6 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.Device.getDisplayMetrics
 import com.topface.topface.utils.extensions.getDimen
 
 
