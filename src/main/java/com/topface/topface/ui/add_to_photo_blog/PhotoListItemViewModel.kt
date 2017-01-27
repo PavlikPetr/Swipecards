@@ -82,10 +82,12 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
 
     override fun onCallbackBinded() {
         mProfileSubscription = appState.getObservable(Profile::class.java).subscribe {
-            mLastLoadedPhotoPosition = it.photos.last().position + 1
-            val cleanPhotos = it.photos.photosForPhotoBlog()
+            if (it.photos.isNotEmpty()) {
+                mLastLoadedPhotoPosition = it.photos.last().position + 1
+                val cleanPhotos = it.photos.photosForPhotoBlog()
 
-            data.replaceData(arrayListOf<Any>().apply { addAll(cleanPhotos) })
+                data.replaceData(arrayListOf<Any>().apply { addAll(cleanPhotos) })
+            }
         }
     }
 
