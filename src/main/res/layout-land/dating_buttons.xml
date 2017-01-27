@@ -19,7 +19,7 @@
         android:visibility="@{viewModel.isVisible}">
 
         <ImageButton
-            style="@style/DatingMessage"
+            style="@style/NewDatingMessage"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="center_vertical"
@@ -29,18 +29,7 @@
             android:onClick="@{() -> viewModel.showChat()}"/>
 
         <ImageButton
-            style="@style/DatingSkip"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
-            android:layout_marginTop="15dp"
-            android:clickable="@{viewModel.isDatingButtonsLocked}"
-            android:onClick="@{() -> viewModel.skip()}"/>
-
-        <ImageButton
-            style="@style/DatingLike"
+            style="@style/NewDatingLike"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:layout_marginBottom="15dp"
@@ -51,7 +40,18 @@
             android:onClick="@{() -> viewModel.sendLike()}"/>
 
         <ImageButton
-            style="@style/DatingAdmiration"
+            style="@style/NewDatingSkip"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{viewModel.isDatingButtonsLocked}"
+            android:onClick="@{() -> viewModel.skip()}"/>
+
+        <ImageButton
+            style="@style/DatingProfile"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_gravity="center_vertical"
