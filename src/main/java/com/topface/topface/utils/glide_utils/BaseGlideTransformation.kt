@@ -7,8 +7,6 @@ import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
-import com.topface.topface.R
-import com.topface.topface.utils.extensions.getColor
 
 /**
  * Базовый transformation. Умеет загруглять аватарку

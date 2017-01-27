@@ -59,9 +59,8 @@
             android:visibility="@{model.commandVisibility}">
         </TextView>
 
-
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/gifts_list"
+            android:id="@+id/dialogs_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/title"
@@ -73,7 +72,7 @@
             android:id="@+id/forms_divider"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_below="@+id/gifts_list"
+            android:layout_below="@+id/dialogs_list"
             android:background="@color/forms_divider_color"/>
     </RelativeLayout>
 

@@ -38,7 +38,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
         data?.let {
-            with(binding.giftsList) {
+            with(binding.dialogsList) {
                 if (layoutManager == null) {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     addItemDecoration(Decoration(R.dimen.dialog_item_decorator_padding.getDimen().toInt()))
