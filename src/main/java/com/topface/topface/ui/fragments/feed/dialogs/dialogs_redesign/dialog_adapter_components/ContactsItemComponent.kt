@@ -32,15 +32,14 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         get() = DialogContactsItemBinding::class.java
     private var mModel: DialogContactsItemViewModel? = null
     private lateinit var mAdapter: CompositeAdapter
+    private var mDecorator = Decoration(R.dimen.dialog_item_decorator_padding.getDimen().toInt())
     private val mContactsListItemComponent by lazy { ContactsListItemComponent(mApi, mNavigator) }
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
         data?.let {
             with(binding.dialogsList) {
-                if (layoutManager == null) {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    addItemDecoration(Decoration(R.dimen.dialog_item_decorator_padding.getDimen().toInt()))
-                }
+                    addItemDecoration(mDecorator)
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
                         .addAdapterComponent(mContactsListItemComponent)
                         .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))
@@ -59,6 +58,11 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     override fun release() {
         mModel?.release()
+    }
+
+    override fun recycle(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
+        super.recycle(binding, data, position)
+        binding.dialogsList.removeItemDecoration(mDecorator)
     }
 
     class Decoration(val marginLeft: Int) : RecyclerView.ItemDecoration() {
