@@ -26,7 +26,7 @@ class PeopleNearbyListItemViewModel(private val mItem: FeedGeo, private val mNav
     val distance = ObservableField(prepareDistanceText())
     val onlineImage = ObservableField(prepareImageForOnline())
 
-    private fun prepareImageForOnline() = if (mFeedUser.online) R.drawable.online else 0
+    private fun prepareImageForOnline() = if (mFeedUser.online) R.drawable.im_list_online else 0
 
     private fun prepareDistanceText() =
             when {
