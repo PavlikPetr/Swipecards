@@ -34,16 +34,14 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         get() = DialogContactsItemBinding::class.java
     private var mModel: DialogContactsItemViewModel? = null
     private lateinit var mAdapter: CompositeAdapter
-    private var isNeedDecoration = true
     private val mContactsListItemComponent by lazy { ContactsListItemComponent(mApi, mNavigator) }
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
         data?.let {
             with(binding.giftsList) {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                if (isNeedDecoration) {
+                if (layoutManager == null) {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     addItemDecoration(Decoration(R.dimen.dialog_item_decorator_padding.getDimen().toInt()))
-                    isNeedDecoration = false
                 }
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
                         .addAdapterComponent(mContactsListItemComponent)
@@ -67,8 +65,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     class Decoration(val marginLeft: Int) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-            val position = parent?.getChildLayoutPosition(view)
-            if (position == 0) {
+            if (parent?.getChildLayoutPosition(view) == 0) {
                 outRect?.left = marginLeft
             }
         }
