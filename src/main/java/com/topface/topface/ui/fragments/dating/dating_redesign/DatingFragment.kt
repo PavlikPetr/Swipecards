@@ -22,6 +22,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.IStateSaverRegistrator
 import com.topface.topface.utils.LocaleConfig
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.jetbrains.anko.layoutInflater
@@ -60,6 +61,7 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
     private val mUserSearchList: CachableSearchList<SearchUser> = CachableSearchList<SearchUser>(SearchUser::class.java)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        (activity as? IStateSaverRegistrator)?.apply { registerLifeCycleDelegate(mViewModel) }
         return mBinding.apply { viewModel = mViewModel }.root
     }
 

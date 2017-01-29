@@ -47,10 +47,10 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
         it.onNext(with(Glide.with(context)
                 .load(link)
                 .asBitmap()
-                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .transform(BlurTransformation(context, 10))
                 .placeholder(R.drawable.bg_blur)
+                .centerCrop()
                 .into(getMeasuredWidth(), getMeasuredHeight())
                 .get()) {
             Debug.error("LOAD_BACKGROUND catch bitmap $this size ${this.height} X ${this.width}")
@@ -65,5 +65,4 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
             }
         })
     }
-            .applySchedulers()
 }

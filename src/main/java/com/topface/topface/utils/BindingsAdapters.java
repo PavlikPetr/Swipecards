@@ -32,6 +32,7 @@ import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
+import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -443,11 +444,13 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter({"loadBlurBackground", "defaultBlur"})
-    public static void loadBlurBackground(final View view, String link, final Drawable defaultBackground) {
+    public static void loadBlurBackground(final View view, final String link, final Drawable defaultBackground) {
         if (TextUtils.isEmpty(link)) {
             return;
         }
         ViewExtensionsKt.loadBackground(view, link)
+                .retry(2)
+                .compose(RxUtils.<BitmapDrawable>applySchedulers())
                 .subscribe(new RxUtils.ShortSubscription<BitmapDrawable>() {
                     @Override
                     public void onNext(BitmapDrawable bitmapDrawable) {
@@ -461,19 +464,7 @@ public class BindingsAdapters {
                         Drawable[] res = new Drawable[]{firstState, bitmapDrawable};
                         TransitionDrawable transition = new TransitionDrawable(res);
                         setBackgroundDrawable(view, transition);
-                        view.postOnAnimation(new Runnable() {
-                            @Override
-                            public void run() {
-                                Debug.error("LOAD_BACKGROUND animation completed");
-                            }
-                        });
                         transition.startTransition(500);
-                        view.postOnAnimation(new Runnable() {
-                            @Override
-                            public void run() {
-                                Debug.error("LOAD_BACKGROUND animation completed 2");
-                            }
-                        });
                     }
 
                     @Override

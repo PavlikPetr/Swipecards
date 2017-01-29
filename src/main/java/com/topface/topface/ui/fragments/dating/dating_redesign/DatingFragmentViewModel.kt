@@ -48,6 +48,7 @@ import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel.AGE_TEMPLATE
 import rx.Observer
@@ -55,6 +56,7 @@ import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -108,6 +110,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
         updatePhotosCounter(new)
         loadBluredBackground(new)
+        currentItem.set(new)
     }
 
     private var mIsDatingButtonAnable by Delegates.observable(true) { prop, old, new ->
@@ -156,11 +159,15 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             }
             albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
             mCurrentPosition = 0
-            currentItem.set(0)
         }
 
     init {
         App.get().inject(this)
+        currentItem.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                Debug.error("LOAD_BACKGROUND position =  ${(sender as? ObservableInt)?.get()}")
+            }
+        })
         statusText.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: Observable?, p1: Int) {
                 statusVisibility.set(getVisibility(obs))
@@ -284,7 +291,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && data != null) {
-            currentItem.set(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
+            mCurrentPosition = data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mIsDatingButtonAnable = false
@@ -340,10 +347,11 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
+        albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
+        currentUser = getParcelable(CURRENT_USER)
         mNewFilter = getBoolean(NEW_FILTER)
         mCanSendAlbumReq = getBoolean(CAN_SEND_ALBUM_REQUEST)
         mLoadedCount = getInt(LOADED_COUNT)
-        currentUser = getParcelable(CURRENT_USER)
         name.set(getString(NAME))
         feedCity.set(getString(CITY))
         feedAge.set(getString(AGE))
@@ -351,14 +359,13 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         statusText.set(getString(STATUS))
         photoCounter.set(getString(PHOTOS_COUNTER))
         mUpdateInProcess = getBoolean(DatingFragmentViewModel.UPDATE_IN_PROCESS)
-        albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
-        mCurrentPosition = getInt(CURRENT_POSITION)
         mNeedMore = getBoolean(NEED_MORE)
         isNeedAnimateLoader.set(getBoolean(NEED_ANIMATE_LOADER))
         isChatButtonsEnable.set(getBoolean(CHAT_BUTTONS_ENABLE))
         isLikeButtonsEnable.set(getBoolean(LIKE_BUTTONS_ENABLE))
         isSkipButtonsEnable.set(getBoolean(SKIP_BUTTONS_ENABLE))
         isProfileButtonsEnable.set(getBoolean(PROFILE_BUTTONS_ENABLE))
+        mCurrentPosition = getInt(CURRENT_POSITION)
     }
 
     private fun setUser(user: SearchUser?) = user?.let {
