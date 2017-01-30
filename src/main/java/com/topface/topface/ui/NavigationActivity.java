@@ -625,6 +625,21 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             }
         }else if(getToolbarViewModel() instanceof DatingRedesignToolbarViewModel){
             DatingRedesignToolbarViewModel toolbarViewModel = (DatingRedesignToolbarViewModel) getToolbarViewModel();
+            CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
+            if (customViewModel != null) {
+                if (!toolbarViewModel.isDating()) {
+                    customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+                    customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+                }
+                Boolean isOnline = settings.isOnline();
+                customViewModel.isOnline().set(isOnline != null && isOnline);
+                if (settings.getTitle() != null) {
+                    customViewModel.getTitle().set(settings.getTitle());
+                }
+                if (settings.getSubtitle() != null) {
+                    customViewModel.getSubTitle().set(settings.getSubtitle());
+                }
+            }
         }
     }
 }

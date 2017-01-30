@@ -1,23 +1,28 @@
 package com.topface.topface.ui.views.toolbar.view_models
 
+import android.databinding.DataBindingUtil
 import android.databinding.ObservableField
+import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FragmentLifreCycleData
 import com.topface.topface.data.FragmentLifreCycleData.*
+import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.state.LifeCycleState
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.appContext
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -29,13 +34,30 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
 
     @Inject lateinit var mState: TopfaceAppState
     @Inject lateinit var mLifeCycleReporter: LifeCycleState
+    var extraViewModel: CustomToolbarViewModel? = null
     val contentMarginTop = ObservableField(0)
     private val mNotificationSubscription: Subscription
     private val mFragmentLifecycleSubscription: Subscription
-    private var mIsDating by Delegates.observable(false) { prop, old, new ->
+    private val mSubscriptions = CompositeSubscription()
+    var isDating by Delegates.observable(false) { prop, old, new ->
         contentMarginTop.set(if (new) 0 else binding.root.measuredHeight)
         redrawUpIcon()
         shadowVisibility.set(if (new) View.GONE else View.VISIBLE)
+        if (new) {
+            title.set(Utils.EMPTY)
+            subTitle.set(Utils.EMPTY)
+        }
+        extraViewModel?.apply {
+            titleVisibility.set(if (!new && !TextUtils.isEmpty(title.get()))
+                View.VISIBLE
+            else
+                View.GONE)
+            subTitleVisibility.set(if (!new && !TextUtils.isEmpty(subTitle.get()))
+                View.VISIBLE
+            else
+                View.GONE)
+        }
+
     }
     private var mHasNotification by Delegates.observable(false) { prop, old, new ->
         redrawUpIcon()
@@ -43,6 +65,13 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
 
     init {
         App.get().inject(this)
+        val additionalViewBinding = DataBindingUtil.inflate<CustomTitleAndSubtitleToolbarAdditionalViewBinding>(LayoutInflater.from(context),
+                R.layout.custom_title_and_subtitle_toolbar_additional_view, null, false)
+        binding.toolbarCustomView.addView(additionalViewBinding.root)
+        extraViewModel = CustomToolbarViewModel(additionalViewBinding)
+        additionalViewBinding.viewModel = extraViewModel
+        mSubscriptions.add(title.filedObservable.subscribe { extraViewModel?.title?.set(it) })
+        mSubscriptions.add(subTitle.filedObservable.subscribe { extraViewModel?.subTitle?.set(it) })
         background.set(R.color.transparent)
         upIcon.set(R.drawable.menu_white)
         updateTopPadding()
@@ -63,17 +92,17 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
                 .filter { it.className == DatingFragment::class.java.name }
                 .subscribe(shortSubscription {
                     when (it.state) {
-                        RESUME, ATTACH, CREATE, CREATE_VIEW, VIEW_CREATED, START -> mIsDating = true
-                        PAUSE, DESTROY_VIEW, STOP, DESTROY, DETACH -> mIsDating = false
+                        RESUME, ATTACH, CREATE, CREATE_VIEW, VIEW_CREATED, START -> isDating = true
+                        PAUSE, DESTROY_VIEW, STOP, DESTROY, DETACH -> isDating = false
                     }
                 })
     }
 
     private fun redrawUpIcon() {
         upIcon.set(if (mHasNotification) {
-            if (mIsDating) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
+            if (isDating) R.drawable.menu_white_notification else R.drawable.menu_gray_notification
         } else {
-            if (mIsDating) R.drawable.menu_white else R.drawable.menu_gray
+            if (isDating) R.drawable.menu_white else R.drawable.menu_gray
         })
     }
 
