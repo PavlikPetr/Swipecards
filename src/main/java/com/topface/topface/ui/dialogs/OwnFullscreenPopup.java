@@ -86,6 +86,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                     return view;
                 case AdsSettings.WEB:
                     WebView webView = new WebView(getContext().getApplicationContext());
+                    webView.getSettings().setJavaScriptEnabled(true);
                     webView.loadUrl(Utils.prepareUrl(mAdsSettings.banner.url));
                     return webView;
             }
