@@ -726,4 +726,9 @@ public class Utils {
         return new ArrayList<Integer>(Arrays.asList(position[0], position[1]));
     }
 
+    public static boolean isKitKatWithNoTranslucent() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+                && !App.get().getOptions().datingRedesignEnabled;
+    }
 }

@@ -187,19 +187,16 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        TargetSettings design = App.get().getOptions().newDatingDesign;
-        if (!design.isEnabled()) {
-            if (design.isKitKatWithNoTranslucent()) {
-                // для kitkat с отключенной прозрачностью статус бара особые условия
-                // отключаем прозрачность насильно ибо она задана в теме
+        if (Utils.isKitKatWithNoTranslucent()) {
+            // для kitkat с отключенной прозрачностью статус бара особые условия
+            // отключаем прозрачность насильно ибо она задана в теме
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        } else {
+            // иначе старая логика
+            // status bar color
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            } else {
-                // иначе старая логика
-                // status bar color
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                }
             }
         }
     }

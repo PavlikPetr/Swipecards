@@ -71,6 +71,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
+    val isDatingProgressBarVisible = ObservableField<Int>(View.GONE)
     val statusText = ObservableField<String>()
     val statusVisibility = ObservableField<Int>(View.GONE)
     val photoCounterVisibility = ObservableField<Int>(View.GONE)

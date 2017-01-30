@@ -102,7 +102,7 @@ public class WeakStorage extends AbstractConfig {
     public boolean getDatingRedesignEnabled() {
         SettingsMap settingsMap = getSettingsMap();
         if (TextUtils.isEmpty(getStringField(settingsMap, DATING_REDESIGN_ENABLED))) {
-            setField(settingsMap, DATING_REDESIGN_ENABLED, String.valueOf(App.get().getOptions().newDatingDesign.isEnabled()));
+            setField(settingsMap, DATING_REDESIGN_ENABLED, String.valueOf(App.get().getOptions().datingRedesignEnabled));
         }
         return Boolean.valueOf(getStringField(getSettingsMap(), DATING_REDESIGN_ENABLED));
     }

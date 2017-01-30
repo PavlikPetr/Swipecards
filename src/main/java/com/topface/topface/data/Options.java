@@ -175,7 +175,6 @@ public class Options extends AbstractData {
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
-    public TargetSettings newDatingDesign = new TargetSettings();
     transient public TopfaceOfferwallRedirect topfaceOfferwallRedirect = new TopfaceOfferwallRedirect();
     public InstantMessageFromSearch instantMessageFromSearch = new InstantMessageFromSearch();
     public FeedNativeAd feedNativeAd = new FeedNativeAd();
@@ -209,6 +208,11 @@ public class Options extends AbstractData {
      * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
      */
     public boolean peopleNearbyRedesignEnabled;
+
+    /**
+     * {Boolean} datingRedesignEnabled - флаг определяющий показ нового экрана "Знакомства"
+     */
+    public Boolean datingRedesignEnabled = false;
 
     /**
      * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
@@ -357,7 +361,7 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
-            newDatingDesign.parse(response);
+            datingRedesignEnabled = response.optBoolean("datingRedesignEnabled");
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
