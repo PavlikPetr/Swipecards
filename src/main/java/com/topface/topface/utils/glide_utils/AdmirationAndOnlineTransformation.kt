@@ -8,12 +8,13 @@ import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import com.topface.topface.R
+import com.topface.topface.utils.extensions.getColor
 
 /**
  * Этот transformation может рисовать восхищение и значок online на аватарке
  * Created by siberia87 on 30.11.16.
  */
-class AdmirationAndOnlineTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
+class AdmirationAndOnlineTransformation(mContext: Context, circleRadius: Float, strokeSize: Float) : OnlineCircleTransformation(mContext, circleRadius, strokeSize) {
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
         val mAdmirationTransformation = AdmirationTransformation(mContext)
@@ -24,18 +25,10 @@ class AdmirationAndOnlineTransformation(mContext: Context) : BaseGlideTransforma
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         Canvas(bitmap).apply {
             drawBitmap(workBitmap, 0f, 0f, null)
-            drawOnline(this, width, height)
+            drawOnlineCircle(resource, circleRadius, strokeSize)
         }
         workBitmap.recycle()
         return BitmapResource.obtain(bitmap, mBitmapPool)
-    }
-
-    fun drawOnline(canvas: Canvas, width: Int, height: Int) {
-        BitmapFactory.decodeResource(mContext.resources, R.drawable.online_big).apply {
-            val online = Bitmap.createScaledBitmap(this, width, height, true)
-            canvas.drawBitmap(online, 0f, 0f, null)
-            online.recycle()
-        }.recycle()
     }
 
     override fun getId() = "AdmirationAndOnlineTransformation"

@@ -2,8 +2,11 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_ad
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.DialogContactsItemBinding
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel
@@ -14,6 +17,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.extensions.getDimen
+
 
 /**
  * Компонент хедера диалогов с симпатиями/восхищениями. Начинает новую переписку.
@@ -27,12 +32,14 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
         get() = DialogContactsItemBinding::class.java
     private var mModel: DialogContactsItemViewModel? = null
     private lateinit var mAdapter: CompositeAdapter
+    private var mDecorator = Decoration(R.dimen.dialog_item_decorator_padding.getDimen().toInt())
     private val mContactsListItemComponent by lazy { ContactsListItemComponent(mApi, mNavigator) }
 
     override fun bind(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
         data?.let {
-            with(binding.giftsList) {
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            with(binding.dialogsList) {
+                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    addItemDecoration(mDecorator)
                 mAdapter = CompositeAdapter(DialogTypeProvider()) { Bundle() }
                         .addAdapterComponent(mContactsListItemComponent)
                         .addAdapterComponent(GoDatingContactsListItemComponent(mNavigator))
@@ -51,6 +58,19 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     override fun release() {
         mModel?.release()
+    }
+
+    override fun recycle(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
+        super.recycle(binding, data, position)
+        binding.dialogsList.removeItemDecoration(mDecorator)
+    }
+
+    class Decoration(val marginLeft: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+            if (parent?.getChildLayoutPosition(view) == 0) {
+                outRect?.left = marginLeft
+            }
+        }
     }
 
 }

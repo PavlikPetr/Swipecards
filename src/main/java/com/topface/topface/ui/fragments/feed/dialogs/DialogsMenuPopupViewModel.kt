@@ -28,7 +28,7 @@ class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val
     private var mBlackListSubscriber: Subscription? = null
     private var mDeleteDialogsSubscriber: Subscription? = null
     val userPhoto = ObservableField(mFeedDialog.user.photo)
-    val type = ObservableField(if (mFeedDialog.user.online) GlideTransformationType.DIALOG_ONLINE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
+    val type = ObservableField(if (mFeedDialog.user.online) GlideTransformationType.ONLINE_CIRCLE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
     val placeholderRes = ObservableField(if (mFeedDialog.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
 
     fun deleteDialog() {
