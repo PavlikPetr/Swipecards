@@ -452,6 +452,9 @@ dependencies {
     }
     //наша статистика
     kapt files("libs/processor.jar")
+
+    //норм либка с  трансформациями для glide, работает шустро
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
 }
 
 task processorTask(type: Exec) {

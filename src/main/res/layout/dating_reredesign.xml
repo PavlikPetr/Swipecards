@@ -21,9 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/description"
-            app:backgroundDrawable="@{viewModel.albumDefaultBackground}"
-            app:defaultBlur="@{viewModel.albumDefaultBackground}"
-            app:loadBlurBackground="@{viewModel.albumBackgroundLink}">
+            app:backgroundDrawable="@{viewModel.albumDefaultBackground}">
 
             <FrameLayout
                 android:layout_width="match_parent"

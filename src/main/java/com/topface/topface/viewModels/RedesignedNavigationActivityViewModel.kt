@@ -7,5 +7,9 @@ import android.databinding.ObservableBoolean
  * Created by ppavlik on 26.01.17.
  */
 class RedesignedNavigationActivityViewModel {
-    val fitSystemWindow = ObservableBoolean(true)
+    val fitSystemWindow = ObservableBoolean()
+
+    init {
+        fitSystemWindow.set(true)
+    }
 }

@@ -1,9 +1,10 @@
 package com.topface.topface.ui.fragments.dating.dating_redesign
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.drawable.TransitionDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -13,9 +14,7 @@ import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.AcNewNavigationBinding
 import com.topface.topface.databinding.DatingReredesignBinding
-import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.NavigationActivity
-import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -24,21 +23,43 @@ import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
 import com.topface.topface.utils.LocaleConfig
+import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
 
-/**
- * Редизайн знакомств
- * Created by tiberal on 07.10.16.
- */
 class DatingFragment : BaseFragment(), IEmptySearchVisibility {
+
+    private var mLoadBackgroundSubscription: Subscription? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<DatingReredesignBinding>(context.layoutInflater, R.layout.dating_reredesign, null, false)
     }
 
     private val mViewModel by lazy {
-        DatingFragmentViewModel(context, mNavigator, mApi, this, mController, mUserSearchList)
+        DatingFragmentViewModel(context, mNavigator, mApi, this, mController, mUserSearchList) {
+            with(mBinding.albumRoot) {
+                mLoadBackgroundSubscription.safeUnsubscribe()
+                mLoadBackgroundSubscription = loadBackground(it)
+                        .retry(2)
+                        .applySchedulers()
+                        .subscribe(shortSubscription {
+                            TransitionDrawable(arrayOf((background as? TransitionDrawable)
+                                    ?.getDrawable(1) ?: R.drawable.bg_blur.getDrawable() ?: it, it)).apply {
+                                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                                    @Suppress("DEPRECATION")
+                                    setBackgroundDrawable(this)
+                                } else {
+                                    background = this
+                                }
+                            }.startTransition(300)
+                        })
+            }
+        }
     }
 
     private val mApi by lazy {
@@ -85,6 +106,7 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
         super.onDestroyView()
         mAddPhotoHelper.releaseHelper()
         mViewModel.release()
+        mLoadBackgroundSubscription.safeUnsubscribe()
     }
 
     override fun onResume() {

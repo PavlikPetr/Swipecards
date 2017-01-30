@@ -1,6 +1,5 @@
 package com.topface.topface.utils.extensions
 
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.view.View
@@ -10,17 +9,9 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.topface.framework.imageloader.BitmapUtils
-import com.topface.framework.utils.Debug
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.topface.topface.R
-import com.topface.topface.utils.glide_utils.BlurTransformation
-import com.topface.topface.utils.glide_utils.GlideTransformationFactory
-import com.topface.topface.utils.glide_utils.GlideTransformationType
-import com.topface.topface.utils.rx.applySchedulers
-import com.topface.topface.utils.rx.shortSubscription
-import org.jetbrains.anko.backgroundDrawable
 import rx.Observable
-import rx.Subscription
 
 /**
  * Упрощалуи для работы с виьюхами
@@ -50,15 +41,15 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
         it.onNext(with(Glide.with(context)
                 .load(link)
                 .asBitmap()
-                .transform(BlurTransformation(context, 10))
+                .transform(jp.wasabeef.glide.transformations.BlurTransformation(context, 10), CenterCrop(context))
                 .placeholder(R.drawable.bg_blur)
-//                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .into(getMeasuredWidth(), getMeasuredHeight())
+                .into(measuredWidth, measuredHeight)
                 .get()) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                BitmapDrawable(this@loadBackground.getContext().getResources(), this)
+                BitmapDrawable(this@loadBackground.context.resources, this)
             } else {
+                @Suppress("DEPRECATION")
                 BitmapDrawable(this)
             }
         })

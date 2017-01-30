@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
@@ -64,7 +63,8 @@ import kotlin.properties.Delegates
 class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFeedNavigator, private val mApi: FeedApi,
                               private val mEmptySearchVisibility: IEmptySearchVisibility,
                               private val mController: AlbumLoadController,
-                              private val mUserSearchList: CachableSearchList<SearchUser>) : ILifeCycle, ViewPager.OnPageChangeListener,
+                              private val mUserSearchList: CachableSearchList<SearchUser>,
+                              private val mLoadBackground: (link: String) -> Unit) : ILifeCycle, ViewPager.OnPageChangeListener,
         OnUsersListEventsListener<SearchUser> {
 
     val name = ObservableField<String>()
@@ -72,10 +72,20 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
-    val statusText = ObservableField<String>()
+    val statusText = object : ObservableField<String>() {
+        override fun set(value: String?) {
+            super.set(value)
+            statusVisibility.set(if (value.isNullOrEmpty()) View.GONE else View.VISIBLE)
+        }
+    }
     val statusVisibility = ObservableField<Int>(View.GONE)
     val photoCounterVisibility = ObservableField<Int>(View.GONE)
-    val photoCounter = ObservableField<String>()
+    val photoCounter = object : ObservableField<String>() {
+        override fun set(value: String?) {
+            super.set(value)
+            photoCounterVisibility.set(if (value.isNullOrEmpty()) View.GONE else View.VISIBLE)
+        }
+    }
     val isVisible = ObservableInt(View.VISIBLE)
     val isChatButtonsEnable = ObservableBoolean(true)
     val isLikeButtonsEnable = ObservableBoolean(true)
@@ -84,7 +94,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val currentItem = ObservableInt(0)
     val albumData = ObservableField<Photos>()
     val isNeedAnimateLoader = ObservableBoolean(false)
-    val albumBackgroundLink = ObservableField<String>()
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
     @Inject lateinit internal var appState: TopfaceAppState
@@ -163,16 +172,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     init {
         App.get().inject(this)
-        statusText.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(obs: Observable?, p1: Int) {
-                statusVisibility.set(getVisibility(obs))
-            }
-        })
-        photoCounter.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(obs: Observable?, p1: Int) {
-                photoCounterVisibility.set(getVisibility(obs))
-            }
-        })
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mPreloadManager.checkConnectionType()
@@ -215,9 +214,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
     }
-
-    private fun getVisibility(obs: android.databinding.Observable?) =
-            if (((obs as? ObservableField<*>)?.get() as? String)?.isEmpty() ?: true) View.GONE else View.VISIBLE
 
     fun updatePhotosCounter(position: Int) = photoCounter.set("${position + 1}/${currentUser?.photosCount}")
 
@@ -430,13 +426,17 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun loadBluredBackground(position: Int) =
             albumData.get()?.get(position)?.getSuitableLink(Photo.SIZE_128)?.let {
-                albumBackgroundLink.set(it)
+                mLoadBackground(it)
             }
 
     override fun onPageScrollStateChanged(state: Int) {
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        // если true, значит viewPager ожил после переворота экрана и можно засетить текущую позицию
+        if (position == 0 && positionOffset == 0f && positionOffsetPixels == 0) {
+            currentItem.notifyChange()
+        }
     }
 
     private fun isNeedTakePhoto() = !App.getConfig().userConfig.isUserAvatarAvailable

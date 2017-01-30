@@ -51,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -474,39 +475,5 @@ public class BindingsAdapters {
     @BindingAdapter("foreground")
     public static void setForeground(FrameLayout view, Drawable drawable) {
         view.setForeground(drawable);
-    }
-
-    @BindingAdapter({"loadBlurBackground", "defaultBlur"})
-    public static void loadBlurBackground(final View view, final String link, final Drawable defaultBackground) {
-        if (TextUtils.isEmpty(link)) {
-            return;
-        }
-        ViewExtensionsKt.loadBackground(view, link)
-                .retry(2)
-                .compose(RxUtils.<BitmapDrawable>applySchedulers())
-                .subscribe(new RxUtils.ShortSubscription<BitmapDrawable>() {
-                    @Override
-                    public void onNext(BitmapDrawable bitmapDrawable) {
-                        super.onNext(bitmapDrawable);
-                        Drawable currentBackground = view.getBackground();
-                        Drawable firstState = defaultBackground;
-                        if (currentBackground instanceof TransitionDrawable) {
-                            firstState = ((TransitionDrawable) currentBackground).getDrawable(1);
-                        }
-                        Drawable[] res = new Drawable[]{firstState, bitmapDrawable};
-                        TransitionDrawable transition = new TransitionDrawable(res);
-                        setBackgroundDrawable(view, transition);
-                        transition.startTransition(500);
-                    }
-                });
-    }
-
-    @BindingAdapter("backgroundDrawable")
-    public static void setBackgroundDrawable(View view, Drawable bg) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            view.setBackground(bg);
-        } else {
-            view.setBackgroundDrawable(bg);
-        }
     }
 }
