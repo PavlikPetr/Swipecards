@@ -41,7 +41,7 @@
             android:minWidth="20dp"
             android:text="@{model.amount}"
             android:textAllCaps="true"
-            android:textColor="@color/message_was_read"
+            android:textColor="@color/bg_white"
             android:textSize="14sp"
             android:visibility="@{model.counterVisibility}"/>
 
@@ -54,7 +54,7 @@
             android:gravity="end"
             android:paddingRight="16dp"
             android:text="@string/write_them"
-            android:textColor="@color/dialogs_name"
+            android:textColor="@color/dialog_contacts_was_read"
             android:textSize="14sp"
             android:visibility="@{model.commandVisibility}">
         </TextView>
