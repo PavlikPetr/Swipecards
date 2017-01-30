@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.PhotoblogListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -34,7 +35,8 @@ class PhotoBlogListComponent(private val mContext: Context,
     private val mViewModel: PhotoBlogListViewModel by lazy {
         PhotoBlogListViewModel(mApi) {
             mPhotoblogListBinding?.let {
-                it.root.post { mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth)) }
+                it.root.post { mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth))
+                    Debug.error("!!!!!!!!!!!!!!!!!!!!!mPhotoblogListBinding sizes = ${mPhotoblogListBinding?.root?.measuredHeight}")}
             }
         }
     }

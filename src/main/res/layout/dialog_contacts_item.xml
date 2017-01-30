@@ -55,7 +55,7 @@
             android:paddingRight="16dp"
             android:text="@string/write_them"
             android:textColor="@color/dialog_contacts_was_read"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:visibility="@{model.commandVisibility}">
         </TextView>
 
