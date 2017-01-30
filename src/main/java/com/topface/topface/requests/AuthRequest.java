@@ -30,6 +30,7 @@ public class AuthRequest extends PrimalAuthRequest {
     public static final String timezone = TimeZone.getDefault().getID();
     private String mSid; // id пользователя в социальной сети
     private String mToken; // токен авторизации в соц сети
+    private String mEmail; // email из ВК для отправки
     private String mPlatform; // код социальной сети
     private String mLogin;  // логин для нашей авторизации
     private String mPassword; // пароль для нашей авторизации
@@ -64,7 +65,12 @@ public class AuthRequest extends PrimalAuthRequest {
             mSid = authTokenInfo.getUserSocialId();
             mToken = authTokenInfo.getTokenKey();
             mRefresh = authTokenInfo.getExpiresIn();
-        } else {
+        } else if (TextUtils.equals(mPlatform, AuthToken.SN_VKONTAKTE)) {
+            mSid = authTokenInfo.getUserSocialId();
+            mToken = authTokenInfo.getTokenKey();
+            mEmail = authTokenInfo.getmUserEmail();
+        }
+        else {
             mSid = authTokenInfo.getUserSocialId();
             mToken = authTokenInfo.getTokenKey();
         }
@@ -114,6 +120,7 @@ public class AuthRequest extends PrimalAuthRequest {
                 break;
             case AuthToken.SN_VKONTAKTE:
                 data.put("socialAppId", VkAuthorizer.getVkId());
+                data.put("email", mEmail);
                 break;
         }
         return data;
