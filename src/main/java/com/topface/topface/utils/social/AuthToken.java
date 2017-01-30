@@ -30,6 +30,7 @@ public class AuthToken {
     private SharedPreferences mPreferences;
     public static final String TOKEN_NETWORK = "sn_type";
     public static final String TOKEN_USER_SOCIAL_ID = "user_id";
+    public static final String TOKEN_USER_EMAIL = "email";
     public static final String TOKEN_TOKEN_KEY = "token_key";
     public static final String TOKEN_EXPIRES = "expires_in";
     public static final String TOKEN_LOGIN = "login";
@@ -140,6 +141,7 @@ public class AuthToken {
     public void loadToken() {
         mTokenInfo.mSnType = mPreferences.getString(TOKEN_NETWORK, Utils.EMPTY);
         mTokenInfo.mUserSocialId = mPreferences.getString(TOKEN_USER_SOCIAL_ID, Utils.EMPTY);
+        mTokenInfo.mUserEmail = mPreferences.getString(TOKEN_USER_EMAIL, Utils.EMPTY);
         mTokenInfo.mTokenKey = mPreferences.getString(TOKEN_TOKEN_KEY, Utils.EMPTY);
         mTokenInfo.mExpiresIn = mPreferences.getString(TOKEN_EXPIRES, Utils.EMPTY);
         mTokenInfo.mLogin = mPreferences.getString(TOKEN_LOGIN, Utils.EMPTY);
@@ -158,10 +160,11 @@ public class AuthToken {
         editor.apply();
     }
 
-    public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {
+    public void saveToken(String snType, String userSocialId, String tokenKey, String expiresIn, String userEmail) {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType = snType);
         editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId = userSocialId);
+        editor.putString(TOKEN_USER_EMAIL, mTokenInfo.mUserEmail = userEmail);
         editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey = tokenKey);
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn = expiresIn);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin = Utils.EMPTY);
@@ -174,7 +177,7 @@ public class AuthToken {
      * не дождавшисьответа от сервера. Дабы не получить залогиненое приложение с непрвильным токеном
      * fucking voodoo magic
      */
-    public void temporarilySaveToken(String snType, String userSocialId, String tokenKey, String expiresIn){
+    public void temporarilySaveToken(String snType, String userSocialId, String tokenKey, String expiresIn) {
         mTokenInfo.mSnType = snType;
         mTokenInfo.mUserSocialId = userSocialId;
         mTokenInfo.mTokenKey = tokenKey;
@@ -183,13 +186,23 @@ public class AuthToken {
         mTokenInfo.mPassword = Utils.EMPTY;
     }
 
+    public void temporarilySaveToken(String snType, String userSocialId, String tokenKey, String expiresIn, String userEmail) {
+        mTokenInfo.mSnType = snType;
+        mTokenInfo.mUserSocialId = userSocialId;
+        mTokenInfo.mTokenKey = tokenKey;
+        mTokenInfo.mExpiresIn = expiresIn;
+        mTokenInfo.mUserEmail = userEmail;
+        mTokenInfo.mLogin = Utils.EMPTY;
+        mTokenInfo.mPassword = Utils.EMPTY;
+    }
     /**
      * Сохранить тукущи  токен в кэше в префиренсах
      */
-    public void writeTokenInPreferences(){
+    public void writeTokenInPreferences() {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putString(TOKEN_NETWORK, mTokenInfo.mSnType);
         editor.putString(TOKEN_USER_SOCIAL_ID, mTokenInfo.mUserSocialId);
+        editor.putString(TOKEN_USER_EMAIL, mTokenInfo.mUserEmail);
         editor.putString(TOKEN_TOKEN_KEY, mTokenInfo.mTokenKey);
         editor.putString(TOKEN_EXPIRES, mTokenInfo.mExpiresIn);
         editor.putString(TOKEN_LOGIN, mTokenInfo.mLogin);
@@ -198,7 +211,7 @@ public class AuthToken {
     }
 
     public void removeToken() {
-        saveToken(Utils.EMPTY, Utils.EMPTY, Utils.EMPTY, Utils.EMPTY);
+        saveToken(Utils.EMPTY, Utils.EMPTY, Utils.EMPTY);
     }
 
     public boolean isEmpty() {
@@ -229,7 +242,7 @@ public class AuthToken {
         if (tokenInfo.getSocialNet().equals(SN_TOPFACE)) {
             saveToken(tokenInfo.getUserSocialId(), tokenInfo.getLogin(), tokenInfo.getPassword());
         } else {
-            saveToken(tokenInfo.getSocialNet(), tokenInfo.getUserSocialId(), tokenInfo.getTokenKey(), tokenInfo.getExpiresIn());
+            saveToken(tokenInfo.getSocialNet(), tokenInfo.getUserSocialId(), tokenInfo.getTokenKey(), tokenInfo.getExpiresIn(), tokenInfo.getmUserEmail());
         }
     }
 
@@ -244,6 +257,8 @@ public class AuthToken {
     public String getUserSocialId() {
         return mTokenInfo.getUserSocialId();
     }
+
+    public String getUserEmail() { return mTokenInfo.getmUserEmail(); }
 
     public String getUserTokenUniqueId() {
         return mTokenInfo.getUserTokenUniqueId();
@@ -262,12 +277,14 @@ public class AuthToken {
         return getClass().getName() +
                 Utils.AMPERSAND + getSocialNet() +
                 Utils.AMPERSAND + getUserSocialId() +
-                Utils.AMPERSAND + getTokenKey();
+                Utils.AMPERSAND + getTokenKey() +
+                Utils.AMPERSAND + getUserEmail();
     }
 
     public static class TokenInfo implements Cloneable, Parcelable {
         private String mSnType;
         private String mUserSocialId;
+        private String mUserEmail;
         private String mTokenKey;
         private String mExpiresIn;
 
@@ -277,6 +294,7 @@ public class AuthToken {
         private TokenInfo() {
             mSnType = Utils.EMPTY;
             mUserSocialId = Utils.EMPTY;
+            mUserEmail = Utils.EMPTY;
             mTokenKey = Utils.EMPTY;
             mExpiresIn = Utils.EMPTY;
             mLogin = Utils.EMPTY;
@@ -286,6 +304,7 @@ public class AuthToken {
         protected TokenInfo(Parcel in) {
             mSnType = in.readString();
             mUserSocialId = in.readString();
+            mUserEmail = in.readString();
             mTokenKey = in.readString();
             mExpiresIn = in.readString();
             mLogin = in.readString();
@@ -320,6 +339,10 @@ public class AuthToken {
             return mUserSocialId;
         }
 
+        public String getmUserEmail() {
+            return mUserEmail;
+        }
+
         public String getTokenKey() {
             if (getSocialNet().equals(AuthToken.SN_FACEBOOK)) {
                 return mTokenKey;
@@ -339,6 +362,7 @@ public class AuthToken {
             TokenInfo tokenInfoClone = new TokenInfo();
             tokenInfoClone.mSnType = mSnType;
             tokenInfoClone.mUserSocialId = mUserSocialId;
+            tokenInfoClone.mUserEmail = mUserEmail;
             tokenInfoClone.mTokenKey = mTokenKey;
             tokenInfoClone.mExpiresIn = mExpiresIn;
             tokenInfoClone.mLogin = mLogin;
@@ -363,6 +387,7 @@ public class AuthToken {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(mSnType);
             dest.writeString(mUserSocialId);
+            dest.writeString(mUserEmail);
             dest.writeString(mTokenKey);
             dest.writeString(mExpiresIn);
             dest.writeString(mLogin);
