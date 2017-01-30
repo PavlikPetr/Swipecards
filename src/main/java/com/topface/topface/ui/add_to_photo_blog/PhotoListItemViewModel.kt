@@ -42,11 +42,8 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
                     loadDataFromProfile()
                     mHasInitialData = false
                 } else {
-                    when {
-                        data.getList().last() is Photo -> {
-                            loadProfilePhotos()
-                        }
-                    }
+                    mLastLoadedPhotoPosition = if (data.isEmpty()) 0 else (data.getList().last() as Photo).getPosition()
+                    loadProfilePhotos()
                 }
             }
         }
