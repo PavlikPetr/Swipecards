@@ -31,8 +31,6 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivityViewModel;
-import com.topface.topface.ui.add_to_photo_blog.HeaderItemViewModel;
-import com.topface.topface.ui.add_to_photo_blog.PhotoItemViewModel;
 import com.topface.topface.ui.add_to_photo_blog.PhotoListItemViewModel;
 import com.topface.topface.ui.add_to_photo_blog.PlaceButtonItemViewModel;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
@@ -65,8 +63,8 @@ import com.topface.topface.ui.fragments.feed.fans.FansLockScreenViewModel;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragmentViewModel;
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyListViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyLockedViewModel;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyPopover;
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogAddButtonViewModel;
@@ -187,8 +185,6 @@ import dagger.Provides;
                 ProfileFormFragment.class,
                 CommonSlices.class,
                 PhotoListItemViewModel.class,
-                PhotoItemViewModel.class,
-                HeaderItemViewModel.class,
                 AddToPhotoBlogRedesignActivityViewModel.class,
                 PlaceButtonItemViewModel.class,
                 DialogsMenuPopupViewModel.class,
