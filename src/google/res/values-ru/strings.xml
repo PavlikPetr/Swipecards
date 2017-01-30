@@ -1250,4 +1250,13 @@
     <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
     
     <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
+    
+    <string name="buy_likes_get_more_likes">Получите больше симпатий!</string>
+    <string name="buy_likes_become_first_in_searchlist_female">Встаньте первой в поиске у мужчин, ищущих таких, как вы!</string>
+    <string name="buy_likes_become_first_in_searchlist_male">Встаньте первым в поиске у девушек, ищущих таких, как вы!</string>
+    <string name="buy_likes_become_popular_female">Стать популярной</string>
+    <string name="buy_likes_become_popular_male">Стать популярным</string>
+    
+    <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
+    <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
 </resources>
