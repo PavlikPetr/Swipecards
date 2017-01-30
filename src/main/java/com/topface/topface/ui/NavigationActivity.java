@@ -623,6 +623,8 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                     customViewModel.getSubTitle().set(settings.getSubtitle());
                 }
             }
+        }else if(getToolbarViewModel() instanceof DatingRedesignToolbarViewModel){
+            DatingRedesignToolbarViewModel toolbarViewModel = (DatingRedesignToolbarViewModel) getToolbarViewModel();
         }
     }
 }

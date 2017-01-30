@@ -223,6 +223,36 @@ public class BindingsAdapters {
         view.setOnLongClickListener(longClickListener);
     }
 
+    @BindingAdapter("android:layout_paddingTop")
+    public static void setPaddingTop(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, (int) padding, null, null);
+    }
+
+    @BindingAdapter("android:layout_paddingStart")
+    public static void setPaddingStart(View view, float padding) {
+        setPaddingLeft(view, padding);
+    }
+
+    @BindingAdapter("android:layout_paddingEnd")
+    public static void setPaddingEnd(View view, float padding) {
+        setPaddingRight(view, padding);
+    }
+
+    @BindingAdapter("android:layout_paddingLeft")
+    public static void setPaddingLeft(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, (int) padding, null, null, null);
+    }
+
+    @BindingAdapter("android:layout_paddingRight")
+    public static void setPaddingRight(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, null, (int) padding, null);
+    }
+
+    @BindingAdapter("android:layout_paddingBottom")
+    public static void setPaddingBottom(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, null, null, (int) padding);
+    }
+
     @BindingAdapter("android:layout_marginTop")
     public static void setMarginTop(View view, float padding) {
         ViewExtensionsKt.setMargins(view, null, (int) padding, null, null);
@@ -455,7 +485,6 @@ public class BindingsAdapters {
                     @Override
                     public void onNext(BitmapDrawable bitmapDrawable) {
                         super.onNext(bitmapDrawable);
-                        Debug.error("LOAD_BACKGROUND catch BitmapDrawable $it with size " + bitmapDrawable.getIntrinsicHeight() + "X" + bitmapDrawable.getIntrinsicWidth());
                         Drawable currentBackground = view.getBackground();
                         Drawable firstState = defaultBackground;
                         if (currentBackground instanceof TransitionDrawable) {
@@ -465,18 +494,6 @@ public class BindingsAdapters {
                         TransitionDrawable transition = new TransitionDrawable(res);
                         setBackgroundDrawable(view, transition);
                         transition.startTransition(500);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        Debug.error("LOAD_BACKGROUND error " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        Debug.error("LOAD_BACKGROUND complete");
                     }
                 });
     }

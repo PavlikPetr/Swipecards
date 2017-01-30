@@ -41,8 +41,11 @@ fun View.setMargins(left: Int? = null, top: Int? = null, right: Int? = null, bot
             else -> Unit
         }
 
+@JvmOverloads
+fun View.setPadding(left: Int? = null, top: Int? = null, right: Int? = null, bottom: Int? = null) =
+        setPadding(left ?: paddingLeft, top ?: paddingTop, right ?: paddingRight, bottom ?: paddingBottom)
+
 fun View.loadBackground(link: String): Observable<BitmapDrawable> {
-    Debug.error("LOAD_BACKGROUND link $link")
     return Observable.create<BitmapDrawable> {
         it.onNext(with(Glide.with(context)
                 .load(link)
@@ -53,13 +56,8 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
                 .centerCrop()
                 .into(getMeasuredWidth(), getMeasuredHeight())
                 .get()) {
-            Debug.error("LOAD_BACKGROUND catch bitmap $this size ${this.height} X ${this.width}")
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                Debug.error("LOAD_BACKGROUND api>=16 try to create drawableBitmap")
-                BitmapDrawable(this@loadBackground.getContext().getResources(), this).run {
-                    Debug.error("LOAD_BACKGROUND here DrawableBitmap $this with size ${this.intrinsicHeight} X ${this.intrinsicWidth}")
-                    this
-                }
+                BitmapDrawable(this@loadBackground.getContext().getResources(), this)
             } else {
                 BitmapDrawable(this)
             }

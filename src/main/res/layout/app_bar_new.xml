@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+            type="com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel"/>
     </data>
 
     <FrameLayout
@@ -23,10 +23,12 @@
             <FrameLayout
                 android:id="@+id/fragment_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:paddingTop="@{viewModel.contentMarginTop}"/>
 
             <include
-                layout="@layout/toolbar_shadow"/>
+                layout="@layout/toolbar_shadow"
+                bind:visibility="@{viewModel.shadowVisibility}"/>
         </FrameLayout>
 
         <include

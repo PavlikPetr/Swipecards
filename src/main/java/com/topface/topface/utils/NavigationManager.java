@@ -41,10 +41,10 @@ import com.topface.topface.utils.rx.RxUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -72,6 +72,8 @@ public class NavigationManager {
     private IActivityDelegate mActivityDelegate;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
+    private Subscription mTimerSubscription;
+    private Subscription mDrawerTimerSubscription;
     private Subscription mNavigationStateSubscription;
 
     public NavigationManager(IActivityDelegate activityDelegate, LeftMenuSettingsData settings) {
@@ -153,19 +155,17 @@ public class NavigationManager {
                                     && fragmentName.equals(fragmentLifreCycleData.getClassName());
                         }
                     })
-                    .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<FragmentLifreCycleData>() {
+                    .subscribe(new RxUtils.ShortSubscription<FragmentLifreCycleData>() {
                         @Override
-                        public void call(FragmentLifreCycleData fragmentLifreCycleData) {
+                        public void onNext(FragmentLifreCycleData fragmentLifreCycleData) {
                             sendNavigationFragmentSwitched(data);
                         }
-                    }, new Action1<Throwable>() {
+                    });
+            mTimerSubscription = Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS).first()
+                    .subscribe(new RxUtils.ShortSubscription<Long>() {
                         @Override
-                        public void call(Throwable throwable) {
-                            Debug.error("Fragment lifecycle observable error " + throwable);
-                            if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
-                                sendNavigationFragmentSwitched(data);
-                            }
+                        public void onNext(Long type) {
+                            sendNavigationFragmentSwitched(data);
                         }
                     });
         } else {
@@ -175,9 +175,8 @@ public class NavigationManager {
     }
 
     private void sendNavigationFragmentSwitched(WrappedNavigationData data) {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
+        RxUtils.safeUnsubscribe(mTimerSubscription);
         mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
     }
 
@@ -343,27 +342,25 @@ public class NavigationManager {
                         return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
                     }
                 })
-                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<DrawerLayoutStateData>() {
+                .subscribe(new RxUtils.ShortSubscription<DrawerLayoutStateData>() {
                     @Override
-                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
+                    public void onNext(DrawerLayoutStateData drawerLayoutStateData) {
                         drawerLayoutStateUsubscribe();
                         callback.onCall();
                     }
-                }, new Action1<Throwable>() {
+                });
+        mDrawerTimerSubscription = Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS).first()
+                .subscribe(new RxUtils.ShortSubscription<Long>() {
                     @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
+                    public void onNext(Long type) {
                         drawerLayoutStateUsubscribe();
-                        callback.onCall();
                     }
                 });
     }
 
     private void drawerLayoutStateUsubscribe() {
-        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
-            mDrawerLayoutStateSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mDrawerLayoutStateSubscription);
+        RxUtils.safeUnsubscribe(mDrawerTimerSubscription);
     }
 
     private void selectPreviousLeftMenuItem() {

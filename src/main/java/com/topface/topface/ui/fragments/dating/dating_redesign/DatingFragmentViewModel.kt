@@ -48,7 +48,6 @@ import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
-import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel.AGE_TEMPLATE
 import rx.Observer
@@ -56,7 +55,6 @@ import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
@@ -163,11 +161,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     init {
         App.get().inject(this)
-        currentItem.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                Debug.error("LOAD_BACKGROUND position =  ${(sender as? ObservableInt)?.get()}")
-            }
-        })
         statusText.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: Observable?, p1: Int) {
                 statusVisibility.set(getVisibility(obs))
