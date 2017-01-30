@@ -34,9 +34,7 @@ class PhotoBlogListComponent(private val mContext: Context,
     private val mViewModel: PhotoBlogListViewModel by lazy {
         PhotoBlogListViewModel(mApi) {
             mPhotoblogListBinding?.let {
-                it.root.post {
-                    mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth))
-                }
+                it.root.post { mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth)) }
             }
         }
     }
