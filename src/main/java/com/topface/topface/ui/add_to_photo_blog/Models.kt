@@ -8,12 +8,12 @@ package com.topface.topface.ui.add_to_photo_blog
 /**
  * Итем заголовка с аватаркой
  */
-class HeaderItem()
+class HeaderItem
 
 /**
  * Итем горизонтального списка фоток пользователя
  */
-data class PhotoListItem(val lastSelectedPhotoId: Int)
+class PhotoListItem
 
 /**
  * Итем кнопки "Разместить" с подписью о количестве монет
@@ -21,11 +21,6 @@ data class PhotoListItem(val lastSelectedPhotoId: Int)
 data class PlaceButtonItem(val price: Int)
 
 /**
- * Событие тапа по фотке
- */
-data class PhotoSelectedEvent(val id: Int)
-
-/**
  * Событие тапа по кнопке "разместить"
  */
-class PlaceButtonTapEvent()
+class PlaceButtonTapEvent
