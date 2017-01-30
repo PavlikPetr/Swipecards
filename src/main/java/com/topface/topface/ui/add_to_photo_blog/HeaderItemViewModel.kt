@@ -5,6 +5,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.topface.topface.App
 import com.topface.topface.data.Photo
+import com.topface.topface.utils.extensions.getPlaceholderRes
 
 /**
  * View model for header item
@@ -22,11 +23,12 @@ class HeaderItemViewModel(val lastSelectedPhotoId: ObservableInt) {
 
 
     init {
+        placeholderRes.set(App.get().profile.getPlaceholderRes())
         lastSelectedPhotoId.addOnPropertyChangedCallback(mOnPropertyChangedCallback)
         setPhotoById(lastSelectedPhotoId.get())
     }
 
-    private fun setPhotoById(id: Int) = if (id > 0) photo.set(App.get().profile.photos.find{ it.id == id }) else Unit
+    private fun setPhotoById(id: Int) = photo.set(if (id > 0) App.get().profile.photos.find{ it.id == id } else Photo())
 
     fun release() = lastSelectedPhotoId.removeOnPropertyChangedCallback(mOnPropertyChangedCallback)
 }

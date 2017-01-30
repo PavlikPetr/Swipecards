@@ -46,7 +46,7 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
         CompositeAdapter(TypeProvider()) { Bundle() }
                 .addAdapterComponent(HeaderComponent(mViewModel.lastSelectedPhotoId))
                 .addAdapterComponent(PhotoListComponent(mViewModel.lastSelectedPhotoId, mApi))
-                .addAdapterComponent(PlaceButtonComponent())
+                .addAdapterComponent(PlaceButtonComponent(mViewModel.lastSelectedPhotoId))
     }
 
     override fun getToolbarBinding(binding: AddToPhotoBlogRedesignLayoutBinding) = binding.toolbarInclude

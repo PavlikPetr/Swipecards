@@ -34,7 +34,7 @@ class PhotoListComponent(val lastSelectedPhotoId: ObservableInt, private val mAp
         }
 
         mAdapter?.let {
-            mViewModel = PhotoListItemViewModel(mApi, it.updateObservable)
+            mViewModel = PhotoListItemViewModel(mApi, it.updateObservable, lastSelectedPhotoId)
             binding.viewModel = mViewModel
         }
     }

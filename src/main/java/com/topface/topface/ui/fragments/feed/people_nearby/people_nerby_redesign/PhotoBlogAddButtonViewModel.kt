@@ -3,10 +3,10 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
-import com.topface.topface.data.User
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.getPlaceholderRes
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
@@ -21,13 +21,10 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
     private val mProfileSubscription: Subscription
     val photoBlogViewModel: PhotoBlogItemViewModel
 
-    private fun getPlaceholder(profile: Profile) =
-            if (profile.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small
-
     init {
         App.get().inject(this)
         photoBlogViewModel = PhotoBlogItemViewModel(profile.photo,
-                getPlaceholder(profile), R.drawable.place_in.getDrawable(), {
+                profile.getPlaceholderRes(), R.drawable.place_in.getDrawable(), {
             popoverControl.closeByUser()
             if (!App.getConfig().userConfig.isUserAvatarAvailable &&
                     with(App.get().profile.photo) { this == null || isEmpty }) {
@@ -44,7 +41,7 @@ class PhotoBlogAddButtonViewModel(private val mNavigator: IFeedNavigator, profil
                                 photoBlogViewModel.userPhoto.set(it)
                             }
                         }
-                        photoBlogViewModel.placeholder.set(getPlaceholder(it))
+                        photoBlogViewModel.placeholder.set(it.getPlaceholderRes())
                     }
                 })
     }

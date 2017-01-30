@@ -5,9 +5,11 @@ import android.databinding.Observable.OnPropertyChangedCallback
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.graphics.drawable.Drawable
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Photo
 import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.getPlaceholderRes
 
 /**
  * View model for one photo in list of user photos in experimental add-to-photo-blog screen
@@ -25,6 +27,7 @@ class PhotoItemViewModel(photo: Photo, val lastSelectedPhotoId: ObservableInt) {
     }
 
     init {
+        placeholderRes.set(App.get().profile.getPlaceholderRes())
         lastSelectedPhotoId.addOnPropertyChangedCallback(mOnPropertyChangedCallback)
         setSelected(lastSelectedPhotoId.get() == photo.id)
     }
