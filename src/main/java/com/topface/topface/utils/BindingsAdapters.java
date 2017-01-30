@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
@@ -424,8 +425,9 @@ public class BindingsAdapters {
     @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
     public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes) {
+        Context context = imageView.getContext().getApplicationContext();
         if (photo == null) {
-            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+            Glide.with(context).load(placeholderRes).into(imageView);
             return;
         }
         int size = Math.max(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
@@ -434,31 +436,32 @@ public class BindingsAdapters {
         String suitableLink = photo.getSuitableLink(width, height);
         String defaultLink = photo.getDefaultLink();
         if (suitableLink != null && size > 0) {
-            Glide.with(imageView.getContext())
+            Glide.with(context)
                     .load(suitableLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
                     .into(imageView);
         } else if (defaultLink != null) {
-            Glide.with(imageView.getContext())
+            Glide.with(context)
                     .load(defaultLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
                     .into(imageView);
         } else {
-            Glide.with(imageView.getContext()).load(placeholderRes).into(imageView);
+            Glide.with(context).load(placeholderRes).into(imageView);
         }
     }
 
     @SuppressWarnings("unchecked")
     @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
     public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
-        Glide.with(imageView.getContext())
+        Context context = imageView.getContext().getApplicationContext();
+        Glide.with(context)
                 .load(imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .bitmapTransform(new GlideTransformationFactory(imageView.getContext()).construct(type))
+                .bitmapTransform(new GlideTransformationFactory(context).construct(type))
                 .into(imageView);
     }
 

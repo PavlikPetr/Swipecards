@@ -26,6 +26,9 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.adapter_utils.DividerDecoration
+import com.topface.topface.utils.extensions.getColor
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
@@ -57,6 +60,12 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
     private val mDialogTypeProvider by lazy {
         DialogTypeProvider()
     }
+
+    private val mDecorator by lazy {
+        DividerDecoration(R.color.filter_divider_color.getColor(), R.dimen.divider_size.getDimen()
+                , R.dimen.avatar_marginLeft.getDimen() + R.dimen.avatar_marginRight.getDimen() + R.dimen.avatar_width.getDimen())
+    }
+
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mDialogTypeProvider) {
             Bundle().apply {
@@ -113,8 +122,10 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 
+
     private fun initList() = with(mBinding.dialogsList) {
         layoutManager = LinearLayoutManager(context)
+        addItemDecoration(mDecorator)
         adapter = mAdapter
     }
 

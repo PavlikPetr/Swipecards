@@ -80,8 +80,12 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     }
 
     fun callAlbumRequest(currentSearchUser: SearchUser, loadedPosition: Int): Observable<AlbumPhotos> {
+        return callAlbumRequest(currentSearchUser.id, loadedPosition, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW)
+    }
+
+    fun callAlbumRequest(uid: Int, loadedPosition: Int, mode: String, type: Int): Observable<AlbumPhotos> {
         return Observable.create {
-            val request = AlbumRequest(mContext, currentSearchUser.id, loadedPosition, AlbumRequest.MODE_SEARCH, AlbumLoadController.FOR_PREVIEW)
+            val request = AlbumRequest(mContext, uid, loadedPosition, mode, type)
             request.callback(object : DataApiHandler<AlbumPhotos>() {
                 override fun success(data: AlbumPhotos, response: IApiResponse) = it.onNext(data)
                 override fun parseResponse(response: ApiResponse) = AlbumPhotos(response)

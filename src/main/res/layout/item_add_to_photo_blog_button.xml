@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -21,6 +22,7 @@
         <Button
             style="@style/AddToPhotoBlogGreenButton"
             android:onClick="@{() -> viewModel.onClick()}"
+            app:enable="@{viewModel.isEnabled}"
             android:text="@string/add_to_photo_blog_button_place" />
 
         <TextView
