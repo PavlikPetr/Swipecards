@@ -50,10 +50,10 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
         it.onNext(with(Glide.with(context)
                 .load(link)
                 .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .transform(BlurTransformation(context, 40))
+                .transform(BlurTransformation(context, 10))
                 .placeholder(R.drawable.bg_blur)
-                .centerCrop()
+//                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(getMeasuredWidth(), getMeasuredHeight())
                 .get()) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

@@ -71,7 +71,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
-    val isDatingProgressBarVisible = ObservableField<Int>(View.GONE)
+    val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = ObservableField<String>()
     val statusVisibility = ObservableField<Int>(View.GONE)
     val photoCounterVisibility = ObservableField<Int>(View.GONE)
@@ -112,7 +112,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         currentItem.set(new)
     }
 
-    private var mIsDatingButtonAnable by Delegates.observable(true) { prop, old, new ->
+    private var mIsDatingButtonEnable by Delegates.observable(true) { prop, old, new ->
         isChatButtonsEnable.set(new)
         isLikeButtonsEnable.set(new)
         isSkipButtonsEnable.set(new)
@@ -158,6 +158,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             }
             albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
             mCurrentPosition = 0
+            hideProgress()
         }
 
     init {
@@ -243,7 +244,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             return
                         }
                     }
-                    mIsDatingButtonAnable = true
+                    mIsDatingButtonEnable = true
                 }
             })
         } else {
@@ -265,13 +266,13 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
                         override fun onError(e: Throwable?) {
                             it.rated = false
-                            mIsDatingButtonAnable = true
+                            mIsDatingButtonEnable = true
                         }
 
                         override fun onNext(rate: Rate?) {
                             it.rated = true
                             SearchCacheManager.markUserAsRatedInCache(it.id)
-                            mIsDatingButtonAnable = true
+                            mIsDatingButtonEnable = true
                         }
                     })
         } else {
@@ -288,7 +289,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             mCurrentPosition = data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0)
         }
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
-            mIsDatingButtonAnable = false
+            mIsDatingButtonEnable = false
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (data != null && data.extras != null) {
                 sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
@@ -450,16 +451,21 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         mUserSearchList.nextUser()?.let {
             mEmptySearchVisibility.hideEmptySearchDialog()
-            mIsDatingButtonAnable = true
+            mIsDatingButtonEnable = true
             setUser(it)
             currentUser = it
         }
     }
 
     private fun showProgress() {
+        isDatingProgressBarVisible.set(View.VISIBLE)
+        albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
+        isVisible.set(View.INVISIBLE)
     }
 
     private fun hideProgress() {
+        isDatingProgressBarVisible.set(View.GONE)
+        isVisible.set(View.VISIBLE)
     }
 
 
@@ -507,7 +513,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
         Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess) {
-            mIsDatingButtonAnable = false
+            mIsDatingButtonEnable = false
             if (isNeedRefresh) {
                 mUserSearchList.clear()
                 currentUser = null
@@ -523,7 +529,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 override fun onError(e: Throwable?) {
                     Debug.log("LOADER_INTEGRATION onError ${e?.message}")
                     mUpdateInProcess = false
-                    mIsDatingButtonAnable = true
+                    mIsDatingButtonEnable = true
                     e?.printStackTrace()
                 }
 
@@ -543,7 +549,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             mEmptySearchVisibility.showEmptySearchDialog()
                             isLastUser = true
                         }
-                        mIsDatingButtonAnable = true
+                        mIsDatingButtonEnable = true
                     } else {
                         if (!isAddition || mUserSearchList.isEmpty()) {
                             mEmptySearchVisibility.showEmptySearchDialog()
@@ -569,11 +575,11 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
             override fun onCompleted() {
                 mNewFilter = false
-                mIsDatingButtonAnable = false
+                mIsDatingButtonEnable = false
             }
 
             override fun onError(e: Throwable?) {
-                mIsDatingButtonAnable = false
+                mIsDatingButtonEnable = false
                 mNewFilter = false
                 mEmptySearchVisibility.showEmptySearchDialog()
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
