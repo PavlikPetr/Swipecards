@@ -28,6 +28,7 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getPermissionStatus
 import com.topface.topface.utils.extensions.isGrantedPermissions
 import com.topface.topface.utils.registerLifeCycleDelegate
@@ -126,7 +127,13 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
     }
 
     override fun size(size: Size) {
-        mPeopleNearbyListComponent.size(size.apply { height = mBinding.list.measuredHeight - height })
+        mPeopleNearbyListComponent.size(size.apply {height = mBinding.list.measuredHeight - (R.dimen.photoblog_item_avatar_height.getDimen().toInt()
+            +R.dimen.photoblog_item_margin_top.getDimen().toInt()
+            +R.dimen.photoblog_item_margin_bottom.getDimen().toInt()
+            +R.dimen.dialog_stroke_size.getDimen().toInt())
+        }
+        )
+
     }
 
     private val mViewModel by lazy {

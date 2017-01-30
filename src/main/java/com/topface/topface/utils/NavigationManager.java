@@ -195,9 +195,10 @@ public class NavigationManager {
                         new DatingFragment();
                 break;
             case FragmentIdData.GEO:
-                fragment = App.get().getOptions().peopleNearbyRedesignEnabled ?
-                        new com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment() :
-                        new PeopleNearbyFragment();
+                fragment =
+// App.get().getOptions().peopleNearbyRedesignEnabled ?
+                        new com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment() ;
+//                        new PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
                 fragment = BonusFragment.newInstance(true);

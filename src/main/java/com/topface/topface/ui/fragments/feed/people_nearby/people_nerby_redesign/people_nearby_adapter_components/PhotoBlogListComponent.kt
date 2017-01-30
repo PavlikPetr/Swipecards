@@ -34,7 +34,11 @@ class PhotoBlogListComponent(private val mContext: Context,
     private val mViewModel: PhotoBlogListViewModel by lazy {
         PhotoBlogListViewModel(mApi) {
             mPhotoblogListBinding?.let {
-                it.root.post { mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth)) }
+                it.root.post { mSize.size(Size(
+                        R.dimen.photoblog_item_avatar_height.getDimen().toInt()
+                        +R.dimen.photoblog_item_margin_top.getDimen().toInt()
+                        +R.dimen.photoblog_item_margin_bottom.getDimen().toInt()
+                        +R.dimen.dialog_stroke_size.getDimen().toInt(), it.root.measuredWidth))}
             }
         }
     }
