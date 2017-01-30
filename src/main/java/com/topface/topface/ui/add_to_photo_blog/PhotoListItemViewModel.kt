@@ -42,7 +42,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
                     loadDataFromProfile()
                     mHasInitialData = false
                 } else {
-                    mLastLoadedPhotoPosition = if (data.isEmpty()) 0 else (data.getList().last() as Photo).getPosition()
+                    mLastLoadedPhotoPosition = if (data.isEmpty()) 0 else (data.getList().last() as Photo).getPosition() + 1
                     loadProfilePhotos()
                 }
             }
@@ -70,8 +70,8 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
                     mUpdateInProgress = false
                     data?.let {
                         val profile = App.get().profile
-                        profile.photos.addAll(it)
-                        appState.setData(profile)
+                        it.removeAll(profile.photos)
+                        if (profile.photos.addAll(it)) appState.setData(profile)
                     }
                 }
             })
@@ -86,7 +86,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
                 val wasEmpty = data.isEmpty()
 
                 data.replaceData(arrayListOf<Any>().apply { addAll(cleanPhotos) })
-                if (wasEmpty && data.isNotEmpty()) lastSelectedPhotoId.set((data[0] as Photo).id)
+                if (wasEmpty && data.isNotEmpty() && lastSelectedPhotoId.get() == 0) lastSelectedPhotoId.set((data[0] as Photo).id)
             } else{
                 data.replaceData(ArrayList<Any>())
                 lastSelectedPhotoId.set(0)
