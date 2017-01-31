@@ -14,49 +14,48 @@
         android:id="@+id/dating_buttons_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginBottom="@dimen/dating_buttons_padding_bottom"
+        android:layout_marginTop="@dimen/dating_buttons_padding_top"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal"
         android:visibility="@{viewModel.isVisible}">
 
         <ImageButton
             style="@style/NewDatingMessage"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/dating_smaller_buttons_size"
+            android:layout_height="@dimen/dating_smaller_buttons_size"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="10dp"
             android:onClick="@{() -> viewModel.showChat()}"
             app:enable="@{viewModel.isChatButtonsEnable}"/>
 
         <ImageButton
             style="@style/NewDatingLike"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
+            android:layout_width="@dimen/dating_bigger_buttons_size"
+            android:layout_height="@dimen/dating_bigger_buttons_size"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:onClick="@{() -> viewModel.sendLike()}"
             app:enable="@{viewModel.isLikeButtonsEnable}"/>
 
         <ImageButton
             style="@style/NewDatingSkip"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
+            android:layout_width="@dimen/dating_bigger_buttons_size"
+            android:layout_height="@dimen/dating_bigger_buttons_size"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:onClick="@{() -> viewModel.skip()}"
             app:enable="@{viewModel.isSkipButtonsEnable}"/>
 
         <ImageButton
             style="@style/DatingProfile"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/dating_smaller_buttons_size"
+            android:layout_height="@dimen/dating_smaller_buttons_size"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="17dp"
-            android:layout_marginRight="17dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:onClick="@{() -> viewModel.showProfile()}"
             app:enable="@{viewModel.isProfileButtonsEnable}"/>
-
     </LinearLayout>
 </layout>

@@ -118,5 +118,6 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
         super.release()
         mNotificationSubscription.safeUnsubscribe()
         mFragmentLifecycleSubscription.safeUnsubscribe()
+        mSubscriptions.safeUnsubscribe()
     }
 }
