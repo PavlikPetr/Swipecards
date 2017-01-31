@@ -101,7 +101,7 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
                 .subscribe(shortSubscription {
                     when (it.state) {
                         RESUME, ATTACH, CREATE, CREATE_VIEW, VIEW_CREATED, START -> isDating = true
-                        PAUSE, DESTROY_VIEW, STOP, DESTROY, DETACH -> isDating = false
+                        DESTROY_VIEW, STOP, DESTROY, DETACH -> isDating = false
                     }
                 })
     }
