@@ -109,14 +109,8 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
         mLoadBackgroundSubscription.safeUnsubscribe()
     }
 
-    override fun onResume() {
-        super.onResume()
-        setFitSystemWindow(false)
-    }
-
     override fun onPause() {
         super.onPause()
-        setFitSystemWindow(true)
         if (LocaleConfig.localeChangeInitiated) {
             mUserSearchList.removeAllUsers()
             mUserSearchList.saveCache()
@@ -132,10 +126,6 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
 
     override fun onOptionsItemSelected(item: MenuItem?) =
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
-    private fun setFitSystemWindow(isNeedFit: Boolean) {
-        ((activity as? NavigationActivity)?.viewBinding as? AcNewNavigationBinding)?.viewModel?.fitSystemWindow?.set(isNeedFit)
-    }
 
     override fun showEmptySearchDialog() = mNavigator.showEmptyDating { mViewModel.update(false, false) }
 

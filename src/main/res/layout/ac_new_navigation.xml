@@ -7,11 +7,6 @@
         <variable
             name="toolbarViewModel"
             type="com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel"/>
-
-        <variable
-            name="viewModel"
-            type="com.topface.topface.viewModels.RedesignedNavigationActivityViewModel"/>
-
     </data>
 
     <com.topface.topface.ui.views.HackyDrawerLayout
@@ -19,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_white"
-        android:fitsSystemWindows="@{viewModel.fitSystemWindow}">
+        android:fitsSystemWindows="false">
 
         <include
             android:id="@+id/navigation_app_bar"

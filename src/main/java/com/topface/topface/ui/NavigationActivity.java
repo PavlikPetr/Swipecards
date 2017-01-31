@@ -68,7 +68,6 @@ import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
 import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
 import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.viewModels.RedesignedNavigationActivityViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -147,7 +146,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        setViewBinding();
         mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
             @Override
             public void call(AdjustAttributeData adjustAttributionData) {
@@ -224,14 +222,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 }
             }
         }));
-    }
-
-    private void setViewBinding() {
-        ViewDataBinding binding = getViewBinding();
-        if (binding instanceof AcNewNavigationBinding) {
-            ((AcNewNavigationBinding) binding).setViewModel(new RedesignedNavigationActivityViewModel());
-
-        }
     }
 
     @NotNull
@@ -623,7 +613,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                     customViewModel.getSubTitle().set(settings.getSubtitle());
                 }
             }
-        }else if(getToolbarViewModel() instanceof DatingRedesignToolbarViewModel){
+        } else if (getToolbarViewModel() instanceof DatingRedesignToolbarViewModel) {
             DatingRedesignToolbarViewModel toolbarViewModel = (DatingRedesignToolbarViewModel) getToolbarViewModel();
             CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
             if (customViewModel != null) {

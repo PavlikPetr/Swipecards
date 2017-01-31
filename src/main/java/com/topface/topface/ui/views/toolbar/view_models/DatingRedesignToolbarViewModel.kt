@@ -5,7 +5,6 @@ import android.databinding.ObservableField
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
@@ -19,7 +18,6 @@ import com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
@@ -41,16 +39,12 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
     private val mNotificationSubscription: Subscription
     private val mFragmentLifecycleSubscription: Subscription
     private val mSubscriptions = CompositeSubscription()
+    private var isEmptyContentMargin = true
     var isDating by Delegates.observable(false) { prop, old, new ->
-        contentMarginTop.set(if (new) 0 else binding.root.measuredHeight)
+        isEmptyContentMargin = new
         background.set(if (new) R.color.transparent else R.color.toolbar_background)
         redrawUpIcon()
         shadowVisibility.set(if (new) View.GONE else View.VISIBLE)
-        if (new) {
-            updateTopPadding()
-            title.set(Utils.EMPTY)
-            subTitle.set(Utils.EMPTY)
-        }
         extraViewModel?.apply {
             titleVisibility.set(if (!new && !TextUtils.isEmpty(title.get()))
                 View.VISIBLE
@@ -61,8 +55,22 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
             else
                 View.GONE)
         }
-
+        if (new) {
+            title.set(Utils.EMPTY)
+            subTitle.set(Utils.EMPTY)
+            contentMarginTop.set(0)
+        } else {
+            with(binding.root) {
+                post {
+                    if (!isEmptyContentMargin) {
+                        contentMarginTop.set(measuredHeight)
+                    }
+                }
+            }
+        }
+        updateTopPadding()
     }
+
     private var mHasNotification by Delegates.observable(false) { prop, old, new ->
         redrawUpIcon()
     }
