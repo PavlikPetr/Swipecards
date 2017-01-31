@@ -11,7 +11,7 @@
     <string name="notification_denied_popup_title">Włącz Powiadomienia, by nigdy nie przegapić żadnych nowych
         wiadomości, sympatii czy innych wieści</string>
     <string name="notification_popup_title">Pozwól nam wysyłać ci Powiadomienia, byś już zawsze był na bieżąco
-        z nowymi Polubieniami, Sympatiami i Wiadomościami</string>
+        z nowymi Sympatiami, Zachwytami i Wiadomościami</string>
     <string name="email_successfully_changed">E-mail został zakutalizowany</string>
     <string name="auth_vk_name">VKontakte</string>
     <string name="dating_switch_button">Jeszcze…</string>
@@ -38,6 +38,8 @@
     <string name="autorefill">Automatyczne uzupełnianie</string>
     <string name="coins">Monety</string>
     <string name="photo_info_deleted">Usunięte</string>
+    <string name="settings_block_main">Główne</string>
+    <string name="settings_block_additional">Dodatkowe</string>
     <string name="leaders_select_photo">Wybierz efektowne zdjęcie</string>
     <string name="locking_screen_button_answer">Odpowiedz</string>
     <string name="locking_screen_advice">Odpowiedz na wszystkie Sympatie</string>
@@ -223,9 +225,9 @@
         <item quantity="one">Aby móc wysłać zachwyt, kup jeszcze %d monetę.</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="few">Aby zobaczyć kto Cię polubił, kup jeszcze %d monety</item>
-        <item quantity="other">Aby zobaczyć kto Cię polubił, kup jeszcze %d monet</item>
-        <item quantity="one">Aby zobaczyć kto Cię polubił, kup jeszcze %d monetę</item>
+        <item quantity="few">Aby zobaczyć kto wysłał ci sympatię, kup jeszcze %d monety</item>
+        <item quantity="other">Aby zobaczyć kto wysłał ci sympatię, kup jeszcze %d monet</item>
+        <item quantity="one">Aby zobaczyć kto wysłał ci sympatię, kup jeszcze %d monetę</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="few">Aby być widocznym dla wszystkich, kup jeszcze %d monety</item>
@@ -237,7 +239,7 @@
         <item quantity="other">Brakuje Ci %d monet</item>
         <item quantity="one">Brakuje Ci %d monety</item>
     </plurals>
-    <string name="buying_default_message">Możesz wysyłać prezenty i podziwy za monety</string>
+    <string name="buying_default_message">Możesz wysyłać prezenty i zachwyty za monety</string>
     <string name="buying_money">Zakup monet</string>
     <string name="gifts_title">Wybierz prezent</string>
     <string name="gifts">Prezenty</string>
@@ -283,7 +285,7 @@
     <string name="settings_messages">Wiadomości</string>
     <string name="settings_guests">Goście</string>
     <string name="settings_help">Pomoc</string>
-    <string name="settings_account">Account</string>
+    <string name="settings_account">Konto</string>
     <string name="settings_feedback">Zostaw opiniję</string>
     <string name="settings_about">O programie</string>
     <string name="settings_version">Wersja</string>
@@ -293,7 +295,7 @@
     <string name="settings_logout">Wyloguj się</string>
     <string name="settings_logout_msg">Na pewno chcesz wyjść?</string>
     <string name="settings_error_message">Powiadomienie o błędzie</string>
-    <string name="settings_ask_developer">Pytanie dla producentów</string>
+    <string name="settings_ask_developer">Zapytaj deweloperów</string>
     <string name="settings_payment_problems">Problemy z opłaceniem</string>
     <string name="settings_cooperation">Współpraca</string>
     <string name="settings_feedback_success_msg">Dziękujemy, wiadomość została wysłana</string>
@@ -328,9 +330,11 @@
     <string name="filter_city_fail">Nie znaleziono żadnego miasta, nazwa którego zaczyna się na «%s»</string>
     <string name="age_filter_man">Interesują Cię mężczyźni</string>
     <string name="age_filter_girl">Interesują Cię kobiety</string>
+    <string name="rate_popup_title">Oceń naszą aplikację!</string>
     <string name="rate_popup_set_rate">Oceń</string>
     <string name="rate_popup_later">Zapytaj mnie później</string>
     <string name="rate_popup_cancel">Nie, dziękuję</string>
+    <string name="rate_popup_error">Powiedz nam, na ile gwiazdek zasługuje nasza aplikacja!</string>
     <string name="feedback_popup_title">Dałeś nam niską ocenę. Powiedz, co ci się nie spodobało
         w naszej aplikacji. Pomóż nam ją ulepszyć. Dziękujemy!</string>
     <string name="settings_melody">Melodia powiadomienia</string>
@@ -406,15 +410,16 @@
     <string name="email">E-mail</string>
     <string name="password">Hasło</string>
     <string name="error_login_password">Nieprawidłowa para login/hasło</string>
-    <string name="recover_password">Odtwarzanie hasła</string>
-    <string name="recovering_password">Odtwarzanie hasła</string>
-    <string name="send_password">Wysłać hasło</string>
+    <string name="recover_password">Odzyskaj hasło</string>
+    <string name="recovering_password">Odzyskaj hasło</string>
+    <string name="send_password">Wyślij hasło</string>
     <string name="boy">mężczyzna</string>
     <string name="girl">kobieta</string>
     <string name="start_communication">Zacznij rozmowę</string>
     <string name="birthdate">Urodziny</string>
     <string name="birthdate_confirm">Musisz podać swój wiek, aby móc poznawać
          ludzi.</string>
+    <string name="set_birthdate">Określ wiek</string>
     <string name="welcome_to_topface">Witamy w Topface!</string>
     <string name="im_boy">Jestem mężczyzną</string>
     <string name="im_girl">Jestem kobietą</string>
@@ -442,7 +447,7 @@
     </string>
     <string name="add_photo_before">Najpierw musisz dodać zdjęcie</string>
     <string name="change_email">Zmień adres e-mail</string>
-    <string name="send_confirmation_email">Wysłać potwierdzenie na e-mail</string>
+    <string name="send_confirmation_email">Wyślij potwierdzenie na e-mail</string>
     <string name="change_password">Zmień hasło</string>
     <string name="password_changing">Zmiana hasła</string>
     <string name="save">Zapisz</string>
@@ -593,11 +598,13 @@
     </string>
     <string name="confirm_email_for_dating_title">Nie tolerujemy Spamu</string>
     <string name="confirm_email_for_dating_desc">Potwierdź swój adres e-mail, aby móc umawiać się z innymi użytkownikami Topface!</string>
+    <string name="send_confirm_link">Wyślij link do potwierdzenia</string>
     <string name="complain_type_swearing_msg">Chamstwo, groźby, przekleństwa</string>
     <string name="general_exit">Wyloguj się</string>
-    <string name="likes_can_help_you">Polubienia ułatwiają poznanie nowych ludzi</string>
+    <string name="likes_can_help_you">Sympatie ułatwiają poznanie nowych ludzi</string>
     <string name="general_get_dating">Poznawaj</string>
     <string name="settings_select_language">Wybierz język aplikacji</string>
+    <string name="restart_to_change_locale">Aplikacja musi zostać uruchomiona ponownie, aby zmienić język.</string>
     <string name="locale_changing">Zmiana języka</string>
     <plurals name="you_were_liked">
         <item quantity="few">Podobasz się %d ludziom</item>
@@ -606,7 +613,7 @@
     </plurals>
     <string name="likes_buy_vip">By już teraz dowiedzieć się, kto cię lubi, aktywuj status VIP-a</string>
     <string name="or">lub</string>
-    <string name="chat_block_not_mutual">Możesz zacząć czatować z użykownikiem, jesli on/ona wyśle Tobie Polubienie lub jeśli posiadasz status VIP</string>
+    <string name="chat_block_not_mutual">Możesz zacząć czatować z użytkownikiem, jeśli on/ona wyśle Tobie Sympatię lub jeśli posiadasz status VIP</string>
     <string name="add_to_favorite_block_not_vip">Tylko użytkownicy VIP mogą dodawać Ulubionych z ekranu
         Randki</string>
     <string name="delete_account_are_you_sure">Jesteś pewien?</string>
@@ -615,13 +622,25 @@
     <string name="delete_account_error">Niestety nie udało się usunąć Twojego konta. Proszę spróbować ponownie.</string>
     <string name="delete_account_will_be_restored_are_you_sure">Próbujesz zalogować się do usuniętego konta. Kontynuuj jeżeli chcesz, żeby zostało ono przywrócone.</string>
     <string name="restore">Odzyskaj</string>
-    <string name="admiration_sended">Adoracja została wysłana.</string>
+    <string name="admiration_sended">Zachwyt został wysłany.</string>
     <string name="chat">Czatuj</string>
     <plurals name="number_of_sympathies">
         <item quantity="few">%d Sympatie</item>
         <item quantity="zero">%d Sympatii</item>
         <item quantity="other">%d Sympatii</item>
         <item quantity="one">%d Sympatia</item>
+    </plurals>
+    <plurals name="popup_vip_messages">
+        <item quantity="few">Masz %d nowe wiadomości ekspresowe</item>
+        <item quantity="zero">Nie masz nowych wiadomości ekspresowych</item>
+        <item quantity="other">Masz %d nowych wiadomości ekspresowych</item>
+        <item quantity="one">Masz %d nową wiadomość ekspresową</item>
+    </plurals>
+    <plurals name="popup_vip_visitors">
+        <item quantity="few">Odwiedziły cię %d osoby</item>
+        <item quantity="zero">Nikt cię nie odwiedził</item>
+        <item quantity="other">Odwiedziło cię %d osób</item>
+        <item quantity="one">Odwiedziła cię %d osoba</item>
     </plurals>
     <string name="general_attention">Ważne!</string>
     <string name="general_delete_messages">Usuń wiadomości</string>
@@ -632,8 +651,20 @@
     <string name="other_auth">Zaloguj się przez inny serwis</string>
     <string name="delete_visitors">Usuń odwiedzających</string>
     <string name="delete_admirations">Usuń zachwyt</string>
-    <string name="general_admirations">Uwielbienia</string>
+    <string name="general_admirations">Zachwyty</string>
+    <plurals name="popup_vip_admirations">
+        <item quantity="few">Wysłałeś zachwyty %d osobom</item>
+        <item quantity="zero">Nie wysłałeś jeszcze zachwytu żadnej osobie</item>
+        <item quantity="other">Wysłałeś zachwyty %d osobom</item>
+        <item quantity="one">Wysłałeś zachwyt %d osobie</item>
+    </plurals>
     <string name="select_all">Wybierz wszystkie</string>
+    <plurals name="selected">
+        <item quantity="few">%d wybrane</item>
+        <item quantity="zero">%d wybranych</item>
+        <item quantity="other">%d wybranych</item>
+        <item quantity="one">%d wybrany</item>
+    </plurals>
     <string name="photo_is_uploading">Przesyłanie zdjęcia.</string>
     <string name="default_ringtone">Domyślnie</string>
     <string name="locking_popup_button_answer">Odpowiedz na Sympatie</string>
@@ -658,8 +689,13 @@
     <string name="general_distance_km">%.02f km</string>
     <string name="general_distance_m">%d m</string>
     <string name="cannot_get_geo">Nie można ustalić lokalizacji</string>
+    <string name="press_back_more_to_close_app">By wyjść z Topface, naciśnij przycisk wstecz jeszcze raz</string>
     <string name="loading_photo_percent">Wysyłanie zdjęć %d%%</string>
     <string name="profile_update_error">Błąd podczas aktualizowania danych</string>
+    <string name="retry_cancel_editing">Wystąpił błąd połączenia sieciowego podczas wysyłania danych na
+         serwer. Wyjść bez zapisywania czy spróbować ponownie?</string>
+    <string name="retry_cancel_editing_bad_value">Podałeś nieprawidłowe dane. Spróbujesz ponownie czy wylogować
+        bez zapisywania?</string>
     <string name="feedback_subject_ban">Odwołaj się od nieuczciwej blokady</string>
     <string name="open_market_error">Nie można otworzyć strony aplikacji</string>
     <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
@@ -669,10 +705,12 @@
     <string name="maximum_number_of_users">Wybrano maksymalną liczbę użytkowników.</string>
     <string name="logout_if_email_already_registred">Istnieje już użytkownik o tym adresie e-mail. Jeśli
         należy on do ciebie, wyloguj się z obecnego konta i zaloguj się na konto %s.</string>
+    <string name="recover_password_instructions">E-mail został wysłany z instrukcjami
+        odzyskiwania hasła.</string>
     <string name="email_changing">Zmiana adresu e-mail</string>
     <string name="hint_faces_filter">Zmień swoje parametry wyszukiwania i poznaj nowych, interesujących ludzi.</string>
-    <string name="hint_faces_buy_like">Im więcej masz Polubień, tym częściej twój profil będzie oceniany.
-        Nie zapomnij uzupełnić swojego salda Polubień!</string>
+    <string name="hint_faces_buy_like">Im więcej masz sympatii, tym częściej twój profil będzie oceniany.
+        Nie zapomnij uzupełnić swojego salda sympatii!</string>
     <string name="hint_myprofile_buy_vip">Zdobądź status VIP-a i ciesz się Nielimitowaną Komunikacją</string>
     <string name="pull_to_refresh_pull_label">Pociągnij, by odświeżyć…</string>
     <string name="pull_to_refresh_release_label">Puść, by odświeżyć…</string>
@@ -684,8 +722,9 @@
     <string name="preload_photo_type_always_on">Zawsze włączone</string>
     <string name="preload_photo_type_preload_off">Wyłączone</string>
     <string name="enter_text">Wprowadź tekst</string>
+    <string name="send_feedback">Wyślij wiadomość</string>
     <string name="get_vip_free">Zdobądź status VIP-a</string>
-    <string name="buy_more_sympathies">Otrzymaj więcej polubień, stań się popularny/-na</string>
+    <string name="buy_more_sympathies">Otrzymaj więcej sympatii, stań się popularny/-na</string>
     <string name="google_wallet">Portfel Google</string>
     <string name="google_service_general_title">Przypomnienia są niedostępne</string>
     <string name="google_service_disabled_title">Masz wyłączone usługi Google Play. Włącz je,
@@ -704,10 +743,18 @@
     <string name="google_sign_in_account_button">Zaloguj się</string>
     <string name="google_unavailable_services_title">Niestety, ale Powiadomienia nie są dostępne
         na twoim urządzeniu.</string>
+    <string name="receive_message_notification">Zostań poinformowany o\nnowych wiadomościach</string>
+    <string name="receive_mutual_notification">Zostań poinformowany o\nnowych wzajemnych sympatiach</string>
+    <string name="receive_sympathy_notification">Zostań poinformowany o\nnowych sympatiach</string>
+    <string name="receive_guest_notification">Zostań poinformowany o\nnowych odwiedzających</string>
     <string name="on_phone">Na telefon</string>
     <string name="on_mail">Na e-mail</string>
     <string name="add_leader_hint">Twoje powitanie…</string>
     <string name="more">więcej</string>
+    <string name="premium_for_invitations">By otrzymać status VIP-a na 1 dzień, będziesz musiał
+        zdobyć 5 rejestracji.</string>
+    <string name="premium_for_invitations_current_status">Uzbierałeś już:\nZaproszenia:
+        %1$d\nRejestracje: %2$d</string>
     <string name="no_contacts_available">Urządzenie nie posiada kontaktów, które można by wyświetlić</string>
     <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
@@ -726,6 +773,8 @@
     <string name="invitation_sended_button">Wysłano</string>
     <string name="friends_empty_list_error">Twoja lista znajomych jest pusta</string>
     <string name="join_group_success">Dołączyłeś do grupy</string>
+    <string name="settings_auto_greeting_title">Automatyczne powitanie</string>
+    <string name="settings_auto_greeting_subtitle">Pozwól Topface automatycznie rozpoczynać rozmowę powitaniem, gdy ktoś wyśle Ci sympatię</string>
     <plurals name="free_minutes">
         <item quantity="few">%d minuty</item>
         <item quantity="zero">%d minut</item>
@@ -768,20 +817,24 @@
     <string name="album_main_photo">Główne zdjęcie profilowe</string>
     <string name="profile_ditance_to_her">Do niej %s</string>
     <string name="profile_ditance_to_him">Do niego %s</string>
+    <string name="rate_popup_we_need_your_opinion">Twoja opinia jest dla nas bardzo ważna</string>
+    <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Oceń naszą aplikację. To zajmie tylko chwilę.</string>
     <string name="mutual_sympathy_in_chat">To uczucie jest odwzajemnione!</string>
     <string name="mutual_sympathy">Wzajemna Sympatia</string>
     <string name="add_photo_feed_header_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś.</string>
     <string name="publish_photo">Opublikuj zdjęcie</string>
     <string name="dont_miss_a_beat">Nie przegap tego!</string>
+    <string name="push_alert_dating_title">Chcesz otrzymać powiadomienie, gdy %s</string>
+    <string name="push_alert_chat_title">Chcesz otrzymać powiadomienie, gdy %s odpowie?</string>
     <string name="photo_feed_no_conversations">Nie masz jeszcze żadnych wiadomości</string>
     <string name="photo_feed_start_dating">Zacznij randkować, by znaleźć nowych ludzi</string>
     <string name="mutual_write_them_first">Napisz do nich</string>
     <string name="mutual_no_mutuals">Nie masz jeszcze żadnych odwzajemnionych Sympatii</string>
     <string name="mutual_module_title">WZAJEMNIE</string>
     <string name="buy_vip_dating_only">Po prostu randkuj</string>
-    <string name="buy_vip_message">Nie czekaj na Polubienia profilu, rozpocznij rozmowę!</string>
+    <string name="buy_vip_message">Nie czekaj na innych, sam zacznij rozmowę!</string>
     <string name="buy_vip_write_tops">Pisz do posiadaczy Najpopularniejszych profili bez ograniczeń</string>
-    <string name="buy_vip_free_admirations">Prześlij Adoracje za darmo</string>
+    <string name="buy_vip_free_admirations">Prześlij Zachwyt za darmo</string>
     <string name="buy_vip_know_guests">Zobacz kto przeglądał Twój profil</string>
     <string name="vip_info_title">VIP-przywileje</string>
     <string name="chat_buy_vip_popular_male">%s jest bardzo popularny!</string>
@@ -789,20 +842,21 @@
     <string name="buy_vip_to_chat_male">Aby zacząć z nim rozmawiać, aktywuj status VIP</string>
     <string name="buy_vip_to_chat_female">Aby zacząć z nią rozmawiać, aktywuj status VIP</string>
     <string name="chat_activate_vip">Aktywuj VIP</string>
-    <string name="chat_no_mutual_symphaty">Obecnie nie masz wzajemnych Polubień!</string>
-    <string name="chat_with_no_mutual_buy_vip">Możesz zacząć czatować nie mając wzajemnych Polubień, lecz aby to zrobić musisz aktywować status VIP</string>
+    <string name="chat_no_mutual_symphaty">Obecnie nie masz wzajemnych sympatii!</string>
+    <string name="chat_with_no_mutual_buy_vip">Możesz zacząć czatować nie mając wzajemnych sympatii, lecz aby to zrobić musisz aktywować status VIP</string>
     <string name="about">O Tobie</string>
     <string name="moar_info">Dowiedz się więcej!</string>
     <string name="geo_switched_off_explanation">Aby sprawdzić, kto jest w pobliżu, włącz usługi geolokalizacji</string>
     <string name="geo_show_settings_explanation">Aby sprawdzić, kto jest w pobliżu, włącz w ustawieniach usługi geolokalizacji w swoim telefonie</string>
     <string name="buy_vip_button_text_admiration_purchase_popup">Wyślij za %d monet</string>
-    <string name="label1_text_admiration_purchase_popup">Odbiorcy \"Adoracji\" natychmiast wyświetli się powiadomienie</string>
-    <string name="label2_text_admiration_purchase_popup">Wyślij \"Adorację\" za darmo!</string>
+    <string name="label1_text_admiration_purchase_popup">Odbiorcy \"Zachwytu\" natychmiast wyświetli się powiadomienie</string>
+    <string name="label2_text_admiration_purchase_popup">Wyślij \"Zachwyt\" za darmo!</string>
     <string name="buy_vip_button_text">Zostań VIP</string>
+    <string name="send_first_gift">Podaruj pierwszy prezent!</string>
     <string name="ask_moar_info">Uzyskaj więcej informacji!</string>
     <string name="fill_own_profile_boy">Uzupełnij swój profil, by zobaczyć co napisał %s</string>
     <string name="fill_own_profile">Uzupełnij swój profil, by zobaczyć co napisała %s</string>
-    <string name="chat_mutual_symphaty">Wzajemne Polubienie!</string>
+    <string name="chat_mutual_symphaty">Wzajemna sympatia!</string>
     <string name="chat_mutual_start_conversation">Zacznij czatować!\nPrezent byłby idealny na początek</string>
     <string name="chat_send_message_button_title">Wyślij</string>
     <string name="know_your_guests_by_sight">Poznaj twarze twoich Fanów i gości</string>
@@ -811,9 +865,9 @@
     <string name="free_vip">Status VIP-a za darmo!</string>
     <string name="no_more_ad">Brak reklam w aplikacji</string>
     <string name="i_see_u_face">Dowiedz się, kto odwiedzał twoją stronę</string>
-    <string name="buy_vip_write_anyone">Napisz do każdej dziewczyny, nawet jeśli nie macie wzajemnych Polubień</string>
-    <string name="buy_vip_write_anyone_boy">Napisz do każdego chłopaka, nawet jeśli nie macie wzajemnych Polubień</string>
-    <string name="buy_vip_write_anyone_without_mutual">Napisz do każdej osoby, nawet jeśli nie macie wzajemnych Polubień</string>
+    <string name="buy_vip_write_anyone">Napisz do każdej dziewczyny, nawet jeśli nie odwzajemniacie swojej sympatii</string>
+    <string name="buy_vip_write_anyone_boy">Napisz do każdego chłopaka, nawet jeśli nie odwzajemniacie swojej sympatii</string>
+    <string name="buy_vip_write_anyone_without_mutual">Napisz do każdej osoby, nawet jeśli nie odwzajemniacie swojej sympatii</string>
     <string name="moar_messages">Czatuj z popularnymi użytkownikami</string>
     <string name="buy_vip_more_views">Uzyskaj 1,5 razy więcej odsłon profilu</string>
     <string name="description_experiment4_view1">Ze statusem VIP %1$s i %2$s będziesz widoczny!</string>
@@ -838,12 +892,15 @@
     <string name="fake_female_name_9">Aneta</string>
     <string name="fake_female_name_10">Maria</string>
     <string name="dialog_empty_title">Nie masz żadnych wiadomości</string>
+    <string name="popup_add_to_black_list">Dodaj do czarnej listy</string>
     <string name="popup_delete_dialog">Usuń konwersację</string>
     <string name="mutually">Wzajemnie</string>
     <string name="go_dating">Zacznij \nrandkować</string>
     <string name="no_mutual">Nie masz żadnych wzajemnych sympatii</string>
     <string name="buy_vip_button_title">Zostań VIP</string>
+    <string name="send_gift_start_dialog">Wyślij prezent i zacznij czatować już teraz!</string>
     <string name="likes_start_dating_button">Zacznij randkować</string>
-    <string name="likes_empty_title">Nie masz jeszcze żadnych Polubień\nPolubienia pomogą ci poznać nowych ludzi</string>
+    <string name="likes_empty_title">Nie masz jeszcze żadnych sympatii\nSympatie pomogą ci poznać nowych ludzi</string>
+    <string name="send_gift">Wyślij prezent</string>
     <string name="people_nearby_popover_text">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy</string>
 </resources>

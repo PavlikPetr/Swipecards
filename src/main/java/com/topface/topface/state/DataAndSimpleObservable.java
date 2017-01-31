@@ -1,10 +1,14 @@
 package com.topface.topface.state;
 
+import com.topface.framework.utils.Debug;
+
 import org.jetbrains.annotations.NotNull;
 
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -26,7 +30,32 @@ class DataAndSimpleObservable<DataType> extends DataAndObservable<DataType, Obse
             public void call(Subscriber<? super DataType> subscriber) {
                 mSubscriber = subscriber;
             }
-        }).onBackpressureDrop().subscribeOn(Schedulers.newThread())
+        })
+                .doOnSubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        Debug.error("DataAndSimpleObservable subscribe");
+                    }
+                })
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Debug.error("DataAndSimpleObservable failed");
+                    }
+                })
+                .doOnUnsubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        Debug.error("DataAndSimpleObservable unsubscribed");
+                    }
+                })
+                .doOnNext(new Action1<DataType>() {
+                    @Override
+                    public void call(DataType dataType) {
+                        Debug.error("DataAndSimpleObservable onNext " + dataType.toString());
+                    }
+                })
+                .onBackpressureDrop().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread()).share();
     }
 
