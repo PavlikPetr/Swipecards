@@ -9,9 +9,11 @@ import android.os.Handler
 import android.os.Message
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
@@ -131,6 +133,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
             +R.dimen.photoblog_item_margin_top.getDimen().toInt()
             +R.dimen.photoblog_item_margin_bottom.getDimen().toInt()
             +R.dimen.dialog_stroke_size.getDimen().toInt())
+            Debug.error("-------------------size() = " + mBinding.list.measuredHeight)
         }
         )
 
@@ -146,11 +149,6 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         mBinding.viewModel = mViewModel
         mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
         return mBinding.root
-    }
-
-    override fun onPause() {
-        overrideScrollFlags()
-        super.onPause()
     }
 
     override fun onResume() {
