@@ -14,6 +14,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.adapter_utils.DecoratorGenerator
 import com.topface.topface.utils.extensions.appContext
 
 /**
@@ -36,6 +37,7 @@ class PhotoListComponent(val lastSelectedPhotoId: ObservableInt, private val mAp
             mAdapter = CompositeAdapter(PhotoTypeProvider()) { Bundle() }
                     .addAdapterComponent(PhotoComponent(lastSelectedPhotoId))
             content.adapter = mAdapter
+            content.addItemDecoration(DecoratorGenerator.create16Left8TotalMargin())
         }
 
         mAdapter?.let {
