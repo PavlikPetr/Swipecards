@@ -2,6 +2,8 @@ package com.topface.topface.ui.add_to_photo_blog
 
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.os.Parcelable
+import android.support.v7.widget.RecyclerView
 import com.topface.topface.App
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
@@ -9,6 +11,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.requests.AlbumRequest
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.photosForPhotoBlog
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
@@ -23,7 +26,11 @@ import javax.inject.Inject
  * View model for list of users photos
  * Created by mbayutin on 12.01.17.
  */
-class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observable<Bundle>, val lastSelectedPhotoId: ObservableInt) {
+class PhotoListItemViewModel(private val mApi: FeedApi,
+                             updateObservable: Observable<Bundle>,
+                             val lastSelectedPhotoId: ObservableInt,
+                             private val mRecyclerView: RecyclerView,
+                             private var mSavedState: Parcelable?): ILifeCycle {
     val data = MultiObservableArrayList<Any>()
     @Inject lateinit var appState: TopfaceAppState
     private var mUpdateSubscription: Subscription
@@ -86,6 +93,16 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
                 val wasEmpty = data.isEmpty()
 
                 data.replaceData(arrayListOf<Any>().apply { addAll(cleanPhotos) })
+
+                if (data.isNotEmpty()) {
+                    mSavedState?.let {
+                        mRecyclerView.post {
+                            mRecyclerView.layoutManager.onRestoreInstanceState(it)
+                            mSavedState = null
+                        }
+                    }
+                }
+
                 if (wasEmpty && data.isNotEmpty() && lastSelectedPhotoId.get() == 0) lastSelectedPhotoId.set((data[0] as Photo).id)
             } else{
                 data.replaceData(ArrayList<Any>())
@@ -93,6 +110,11 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
             }
         }
     }
+
+    override fun onSavedInstanceState(state: Bundle) = state.putParcelable(
+            AddToPhotoBlogRedesignActivity.SELECTED_PHOTO_POSITION,
+            mRecyclerView.layoutManager.onSaveInstanceState()
+    )
 
     fun release() {
         mProfileSubscription.safeUnsubscribe()

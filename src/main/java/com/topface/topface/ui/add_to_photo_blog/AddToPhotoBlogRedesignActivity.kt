@@ -8,30 +8,28 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AddToPhotoBlogRedesignLayoutBinding
 import com.topface.topface.databinding.ToolbarBinding
-import com.topface.topface.requests.ApiRequest
+import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.HeaderComponent
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PhotoListComponent
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PlaceButtonComponent
-import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.extensions.photosForPhotoBlog
-import com.topface.topface.utils.http.IRequestClient
+import com.topface.topface.utils.registerLifeCycleDelegate
 
 /**
  * Experimental redesign of add-to-photo-blog screen
  * Created by mbayutin on 10.01.17.
  */
 
-class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRedesignLayoutBinding>(), IRequestClient {
-    private companion object {
+class AddToPhotoBlogRedesignActivity : BaseFragmentActivity<AddToPhotoBlogRedesignLayoutBinding>() {
+    companion object {
         const val SELECTED_PHOTO_ID = "selected_photo_id"
+        const val SELECTED_PHOTO_POSITION = "selected_photo_position"
     }
-
-    private val mRequests = mutableListOf<ApiRequest>()
 
     private val mFeedNavigator by lazy { FeedNavigator(this) }
     private val mViewModel by lazy { AddToPhotoBlogRedesignActivityViewModel(this, mFeedNavigator) }
@@ -45,8 +43,8 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(TypeProvider()) { Bundle() }
                 .addAdapterComponent(HeaderComponent(mViewModel.lastSelectedPhotoId))
-                .addAdapterComponent(PhotoListComponent(mViewModel.lastSelectedPhotoId, mApi))
                 .addAdapterComponent(PlaceButtonComponent(mViewModel.lastSelectedPhotoId))
+                .addAdapterComponent((this as Any).registerLifeCycleDelegate(PhotoListComponent(mViewModel.lastSelectedPhotoId, mApi)))
     }
 
     override fun getToolbarBinding(binding: AddToPhotoBlogRedesignLayoutBinding) = binding.toolbarInclude
@@ -71,7 +69,6 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
         super.onDestroy()
         mAdapter.releaseComponents()
         mViewModel.release()
-        removeAllRequests()
     }
 
     override fun onUpClick() = finish()
@@ -88,23 +85,6 @@ class AddToPhotoBlogRedesignActivity : TrackedLifeCycleActivity<AddToPhotoBlogRe
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(SELECTED_PHOTO_ID, mViewModel.lastSelectedPhotoId.get())
-    }
-
-    override fun registerRequest(request: ApiRequest?) {
-        request?.let {
-            if (!mRequests.contains(it)) mRequests.add(it)
-        }
-    }
-
-    override fun cancelRequest(request: ApiRequest?) {
-        request?.cancelFromUi()
-    }
-
-    private fun removeAllRequests() {
-        if (mRequests.size > 0) {
-            mRequests.forEach { cancelRequest(it) }
-            mRequests.clear()
-        }
     }
 
     fun restoreLastSelectedPhotoId(savedInstanceState: Bundle?) {
