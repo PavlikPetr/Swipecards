@@ -9,6 +9,7 @@ import com.topface.topface.App;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -47,22 +49,19 @@ public class FindAndSendCurrentLocation {
         mSubscription.add(mAppState.getObservable(Location.class)
                 .subscribeOn(Schedulers.newThread())
                 .skip(1)
-                .timeout(WAIT_LOCATION_DELAY, TimeUnit.SECONDS)
-                .subscribe(new Subscriber<Location>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        stop();
-                        sendLocation(GeoLocationManager.getCurrentLocation());
-                    }
-
+                .subscribe(new RxUtils.ShortSubscription<Location>() {
                     @Override
                     public void onNext(Location location) {
                         stop();
                         sendLocation(location);
+                    }
+                }));
+        mSubscription.add(Observable.timer(WAIT_LOCATION_DELAY, TimeUnit.SECONDS).first()
+                .subscribe(new RxUtils.ShortSubscription<Long>() {
+                    @Override
+                    public void onNext(Long type) {
+                        stop();
+                        sendLocation(GeoLocationManager.getCurrentLocation());
                     }
                 }));
     }
@@ -72,9 +71,7 @@ public class FindAndSendCurrentLocation {
             mGeoLocationManager.unregisterProvidersChangedActionReceiver();
             mGeoLocationManager.stopLocationListener();
         }
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
     }
 
     public void sendLocation(final @Nullable Location location) {

@@ -6,13 +6,17 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -29,6 +33,7 @@ import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
 import com.topface.topface.data.Photo;
+import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -40,11 +45,13 @@ import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
 import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -216,6 +223,36 @@ public class BindingsAdapters {
     @BindingAdapter("onLongItemClick")
     public static void onLongItemClick(View view, View.OnLongClickListener longClickListener) {
         view.setOnLongClickListener(longClickListener);
+    }
+
+    @BindingAdapter("android:layout_paddingTop")
+    public static void setPaddingTop(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, (int) padding, null, null);
+    }
+
+    @BindingAdapter("android:layout_paddingStart")
+    public static void setPaddingStart(View view, float padding) {
+        setPaddingLeft(view, padding);
+    }
+
+    @BindingAdapter("android:layout_paddingEnd")
+    public static void setPaddingEnd(View view, float padding) {
+        setPaddingRight(view, padding);
+    }
+
+    @BindingAdapter("android:layout_paddingLeft")
+    public static void setPaddingLeft(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, (int) padding, null, null, null);
+    }
+
+    @BindingAdapter("android:layout_paddingRight")
+    public static void setPaddingRight(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, null, (int) padding, null);
+    }
+
+    @BindingAdapter("android:layout_paddingBottom")
+    public static void setPaddingBottom(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, null, null, (int) padding);
     }
 
     @BindingAdapter("android:layout_marginTop")

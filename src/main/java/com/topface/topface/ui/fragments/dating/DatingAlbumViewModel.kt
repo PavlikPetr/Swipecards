@@ -19,8 +19,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscription

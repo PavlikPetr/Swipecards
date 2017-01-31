@@ -4,8 +4,7 @@ import android.os.Build
 import org.json.JSONObject
 
 data class TargetSettings @JvmOverloads constructor(var isEnabled: Boolean = false) {
-
-    fun parse(response: JSONObject){
+    fun parse(response: JSONObject) {
         isEnabled = response.optBoolean("datingRedesignEnabled")
     }
 
