@@ -72,8 +72,6 @@ public class NavigationManager {
     private IActivityDelegate mActivityDelegate;
     private LeftMenuSettingsData mFragmentSettings = new LeftMenuSettingsData(FragmentIdData.UNDEFINED);
     private Subscription mSubscription;
-    private Subscription mTimerSubscription;
-    private Subscription mDrawerTimerSubscription;
     private Subscription mNavigationStateSubscription;
 
     public NavigationManager(IActivityDelegate activityDelegate, LeftMenuSettingsData settings) {
@@ -147,24 +145,18 @@ public class NavigationManager {
              * ждем его загрузки не дольше CLOSE_LEFT_MENU_TIMEOUT мс
              * потом отписываемся и шлем ивент о том, что фрагмент свичнулся
              */
-            mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class)
+            mSubscription = Observable.merge(mLifeCycleState.getObservable(FragmentLifreCycleData.class)
                     .filter(new Func1<FragmentLifreCycleData, Boolean>() {
                         @Override
                         public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
                             return fragmentLifreCycleData.getState() == FragmentLifreCycleData.CREATE_VIEW
                                     && fragmentName.equals(fragmentLifreCycleData.getClassName());
                         }
-                    })
-                    .subscribe(new RxUtils.ShortSubscription<FragmentLifreCycleData>() {
+                    }), Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS))
+                    .first()
+                    .subscribe(new RxUtils.ShortSubscription<Object>() {
                         @Override
-                        public void onNext(FragmentLifreCycleData fragmentLifreCycleData) {
-                            sendNavigationFragmentSwitched(data);
-                        }
-                    });
-            mTimerSubscription = Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS).first()
-                    .subscribe(new RxUtils.ShortSubscription<Long>() {
-                        @Override
-                        public void onNext(Long type) {
+                        public void onNext(Object object) {
                             sendNavigationFragmentSwitched(data);
                         }
                     });
@@ -176,7 +168,6 @@ public class NavigationManager {
 
     private void sendNavigationFragmentSwitched(WrappedNavigationData data) {
         RxUtils.safeUnsubscribe(mSubscription);
-        RxUtils.safeUnsubscribe(mTimerSubscription);
         mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
     }
 
@@ -335,32 +326,20 @@ public class NavigationManager {
          * ждем когда будет закрыто левое меню, но не дольше CLOSE_LEFT_MENU_TIMEOUT мс
          * после этого отписываемся и шлем ивент о смене подсвеченного итема в левом меню
          */
-        mDrawerLayoutStateSubscription = mDrawerLayoutState.getObservable()
+        mDrawerLayoutStateSubscription = Observable.merge(mDrawerLayoutState.getObservable()
                 .filter(new Func1<DrawerLayoutStateData, Boolean>() {
                     @Override
                     public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
                         return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
                     }
-                })
-                .subscribe(new RxUtils.ShortSubscription<DrawerLayoutStateData>() {
+                }), Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS))
+                .first()
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
                     @Override
-                    public void onNext(DrawerLayoutStateData drawerLayoutStateData) {
-                        drawerLayoutStateUsubscribe();
+                    public void onNext(Object object) {
                         callback.onCall();
                     }
                 });
-        mDrawerTimerSubscription = Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS).first()
-                .subscribe(new RxUtils.ShortSubscription<Long>() {
-                    @Override
-                    public void onNext(Long type) {
-                        drawerLayoutStateUsubscribe();
-                    }
-                });
-    }
-
-    private void drawerLayoutStateUsubscribe() {
-        RxUtils.safeUnsubscribe(mDrawerLayoutStateSubscription);
-        RxUtils.safeUnsubscribe(mDrawerTimerSubscription);
     }
 
     private void selectPreviousLeftMenuItem() {
@@ -376,12 +355,8 @@ public class NavigationManager {
     public void onDestroy() {
         RxUtils.safeUnsubscribe(mNavigationStateSubscription);
         mActivityDelegate = null;
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
-            mDrawerLayoutStateSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
+        RxUtils.safeUnsubscribe(mDrawerLayoutStateSubscription);
         iNeedCloseMenuCallback = null;
     }
 }

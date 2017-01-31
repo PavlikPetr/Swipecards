@@ -3,6 +3,7 @@ package com.topface.topface.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Looper
 import android.text.TextUtils
 import bolts.AppLinks
 import com.facebook.FacebookSdk
@@ -66,7 +67,7 @@ object FBInvitesUtils {
      */
     private fun verifyAppLink(context: Context, link: String) {
         Debug.log("FbInvite:: verifying appLink $link")
-        ReferrerRequest(context, link).callback(object: ApiHandler() {
+        ReferrerRequest(context, link).callback(object : ApiHandler(Looper.getMainLooper()) {
             override fun fail(codeError: Int, response: IApiResponse?) {
                 Debug.log("FbInvite:: appLink check failed with code $codeError")
             }
