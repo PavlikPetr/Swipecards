@@ -12,9 +12,7 @@ import android.view.*
 import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
-import com.topface.topface.databinding.AcNewNavigationBinding
 import com.topface.topface.databinding.DatingReredesignBinding
-import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi

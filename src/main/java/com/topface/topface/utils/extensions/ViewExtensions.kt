@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.topface.topface.R
+import jp.wasabeef.glide.transformations.BlurTransformation
 import rx.Observable
 
 /**
@@ -41,7 +42,7 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
         it.onNext(with(Glide.with(context)
                 .load(link)
                 .asBitmap()
-                .transform(jp.wasabeef.glide.transformations.BlurTransformation(context, 10), CenterCrop(context))
+                .transform(BlurTransformation(context, 10), CenterCrop(context))
                 .placeholder(R.drawable.bg_blur)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(measuredWidth, measuredHeight)
