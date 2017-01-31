@@ -19,13 +19,14 @@
             android:id="@+id/mutualCounter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="21dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="21dp"
                 android:layout_marginLeft="16dp"
                 android:drawableLeft="@drawable/heart"
                 android:drawablePadding="6dp"
@@ -43,9 +44,9 @@
                 android:layout_marginLeft="3dp"
                 android:layout_toRightOf="@+id/title"
                 android:background="@drawable/dialog_mutual_counter_background"
-                android:gravity="center"
                 android:minHeight="20dp"
                 android:minWidth="20dp"
+                android:gravity="center"
                 android:text="@{model.amount}"
                 android:textAllCaps="true"
                 android:textColor="@color/bg_white"

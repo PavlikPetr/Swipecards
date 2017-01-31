@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="55dp"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:singleLine="true"
                         android:text="@{viewModel.name}"/>
                     <!--АХТУНГИ, ПАЦАНЫ!!!!!!!!!!!! Отсуп сверху на 55 и снизу на -55 нужны, чтобы гарантировать место под возраст и онлайн значок-->
                     <TextView
