@@ -73,11 +73,10 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val iconOnlineRes = ObservableField(0)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
-        override fun set(value: String?) {
-            Profile.normilizeStatus(value).let {
-                super.set(it)
-                statusVisibility.set(if (it.isNullOrEmpty()) View.GONE else View.VISIBLE)
-            }
+        override fun set(value: String?){
+            val status = Profile.normilizeStatus(value)
+            super.set(status)
+            statusVisibility.set(if (status.isNullOrEmpty()) View.GONE else View.VISIBLE)
         }
     }
     val statusVisibility = ObservableField<Int>(View.GONE)
