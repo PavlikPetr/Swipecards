@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
             android:fadingEdge="none"
+            app:restoreScrollState="@{viewModel.state}"
             app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}" />
 
         <View

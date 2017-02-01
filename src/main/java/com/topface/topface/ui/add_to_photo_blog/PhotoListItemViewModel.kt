@@ -1,9 +1,9 @@
 package com.topface.topface.ui.add_to_photo_blog
 
+import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v7.widget.RecyclerView
 import com.topface.topface.App
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
@@ -11,7 +11,6 @@ import com.topface.topface.data.Profile
 import com.topface.topface.requests.AlbumRequest
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.photosForPhotoBlog
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
@@ -29,10 +28,10 @@ import javax.inject.Inject
 class PhotoListItemViewModel(private val mApi: FeedApi,
                              updateObservable: Observable<Bundle>,
                              val lastSelectedPhotoId: ObservableInt,
-                             private val mRecyclerView: RecyclerView,
-                             private var mSavedState: Parcelable?): ILifeCycle {
+                             private var mSavedState: Parcelable?) {
     val data = MultiObservableArrayList<Any>()
     @Inject lateinit var appState: TopfaceAppState
+    val state = ObservableField<Parcelable>(null)
     private var mUpdateSubscription: Subscription
     private var mPhotosLoadSubscription: Subscription? = null
 
@@ -96,10 +95,8 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
 
                 if (data.isNotEmpty()) {
                     mSavedState?.let {
-                        mRecyclerView.post {
-                            mRecyclerView.layoutManager.onRestoreInstanceState(it)
-                            mSavedState = null
-                        }
+                        state.set(mSavedState)
+                        mSavedState = null
                     }
                 }
 
@@ -110,11 +107,6 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
             }
         }
     }
-
-    override fun onSavedInstanceState(state: Bundle) = state.putParcelable(
-            AddToPhotoBlogRedesignActivity.SELECTED_PHOTO_POSITION,
-            mRecyclerView.layoutManager.onSaveInstanceState()
-    )
 
     fun release() {
         mProfileSubscription.safeUnsubscribe()

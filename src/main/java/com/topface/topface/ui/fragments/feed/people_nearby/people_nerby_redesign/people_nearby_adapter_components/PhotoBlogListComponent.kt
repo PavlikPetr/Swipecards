@@ -13,7 +13,7 @@ import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.adapter_utils.DecoratorGenerator
+import com.topface.topface.utils.adapter_utils.create16Left8TotalMargin
 
 /**
  * Компонент фотоленты с горизонтальным скролом
@@ -50,7 +50,7 @@ class PhotoBlogListComponent(private val mContext: Context,
 
     override fun bind(binding: PhotoblogListBinding, data: PhotoBlogList?, position: Int) {
         with(binding) {
-            photoblogList.addItemDecoration(DecoratorGenerator.create16Left8TotalMargin())
+            photoblogList.addItemDecoration(create16Left8TotalMargin())
             mRecyclerView = photoblogList
             mPhotoblogListBinding = this
             photoblogList.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)
