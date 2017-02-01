@@ -47,7 +47,7 @@ import javax.inject.Inject
 
 @FlurryOpenEvent(name = PAGE_NAME)
 @RuntimePermissions
-class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
+class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
     @Inject lateinit var mEventBus: EventBus
 
@@ -66,9 +66,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
 
-    private val mFeedRequestFactory by lazy {
-        FeedRequestFactory(context)
-    }
+    private val mFeedRequestFactory by lazy { FeedRequestFactory(context) }
 
     private lateinit var mPhotoHelper: AddPhotoHelper
 
@@ -93,7 +91,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
                 .addAdapterComponent(activity.registerLifeCycleDelegate(PhotoBlogListComponent(context,
-                        mApi, mNavigator, this, this)))
+                        mApi, mNavigator, this)))
                 .addAdapterComponent(mPeopleNearbyListComponent)
     }
 
@@ -123,10 +121,6 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     override fun closeProgrammatically() {
         mPeopleNearbyPopover.closeProgrammatically()
-    }
-
-    override fun size(size: Size) {
-        mPeopleNearbyListComponent.size(size.apply { height = mBinding.list.measuredHeight - height })
     }
 
     private val mViewModel by lazy {

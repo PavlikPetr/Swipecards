@@ -1,13 +1,11 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.databinding.ObservableField
-import android.widget.ImageView
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.glide_utils.GlideTransformationType
 
 /**
  *  Вьюмодель для итема списка людей рядом
@@ -20,8 +18,8 @@ class PeopleNearbyListItemViewModel(private val mItem: FeedGeo, private val mNav
     }
 
     private val mFeedUser = mItem.user
-    val avatar = ObservableField(mFeedUser.photo.getSuitableLink(R.dimen.people_nearby_image_height,R.dimen.people_nearby_image_height))
-    val placeholderRes = ObservableField(if (mItem.user.sex == Profile.BOY) R.drawable.feed_banned_male_avatar else R.drawable.feed_banned_female_avatar)
+    val avatar = ObservableField(mFeedUser.photo.getSuitableLink(R.dimen.people_nearby_image_height, R.dimen.people_nearby_image_height))
+    val placeholderRes = ObservableField(if (mItem.user.sex == Profile.BOY) R.drawable.nearby_av_man else R.drawable.nearby_av_girl)
     val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
     val onlineImage = ObservableField(prepareImageForOnline())

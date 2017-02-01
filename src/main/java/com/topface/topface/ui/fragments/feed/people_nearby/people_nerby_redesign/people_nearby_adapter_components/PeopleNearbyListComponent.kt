@@ -11,6 +11,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.*
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getInt
 
 
@@ -20,12 +21,10 @@ import com.topface.topface.utils.extensions.getInt
 
 class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
                                 private val mNavigator: FeedNavigator,
-                                private val mPopoverControl: IPopoverControl) : AdapterComponent<PeopleNearbyListBinding, PeopleNearbyList>(),
-        IViewSize {
+                                private val mPopoverControl: IPopoverControl) : AdapterComponent<PeopleNearbyListBinding, PeopleNearbyList>() {
     private var mViewModel: PeopleNearbyListViewModel? = null
     private var mAdapter: CompositeAdapter? = null
     private var mRecyclerView: RecyclerView? = null
-    private var mSize: Size? = null
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
@@ -36,7 +35,6 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
     override fun bind(binding: PeopleNearbyListBinding, data: PeopleNearbyList?, position: Int) {
         with(binding) {
             mRecyclerView = peopleList
-            setRecyclerViewHeight()
             peopleList.layoutManager = StaggeredGridLayoutManager(R.integer.add_to_people_nearby_count.getInt(),
                     StaggeredGridLayoutManager.VERTICAL)
             mAdapter = CompositeAdapter(PeopleNearbyTypeProvider()) { Bundle() }
@@ -48,20 +46,13 @@ class PeopleNearbyListComponent(val context: Context, private val mApi: FeedApi,
             mViewModel = PeopleNearbyListViewModel(mApi)
             viewModel = mViewModel
             peopleList.addOnScrollListener(mScrollListener)
-        }
-    }
-
-    override fun size(size: Size) {
-        // сохраняем размер с той целью, чтобы засетить
-        mSize = size
-        setRecyclerViewHeight()
-    }
-
-    private fun setRecyclerViewHeight() {
-        mSize?.let {
-            mRecyclerView?.layoutParams?.apply {
-                height = it.height
-                mSize = null
+            root.post {
+                peopleList.layoutParams.apply {
+                    height = peopleList.measuredHeight - (R.dimen.photoblog_item_avatar_height.getDimen().toInt()
+                            + R.dimen.photoblog_item_margin_top.getDimen().toInt()
+                            + R.dimen.photoblog_item_margin_bottom.getDimen().toInt()
+                            + R.dimen.dialog_stroke_size.getDimen().toInt())
+                }
             }
         }
     }
