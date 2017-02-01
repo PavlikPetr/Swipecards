@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:bind="http://schemas.android.com/tools">
 
     <data>
@@ -10,23 +11,39 @@
             type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/albumRoot"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_blur"
-            android:gravity="bottom"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/description"
+            app:backgroundDrawable="@{viewModel.albumDefaultBackground}">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="@drawable/new_dating_shadow">
+
+                <com.topface.topface.ui.views.ImageSwitcher
+                    android:id="@+id/dating_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="@{()-> viewModel.onPhotoClick()}"
+                    app:currentItemImmediately="@{viewModel.currentItem}"
+                    app:data="@{viewModel.albumData}"
+                    app:needAnimateLoader="@{viewModel.isNeedAnimateLoader}"
+                    app:onPageChangeListener="@{viewModel}"/>
+            </FrameLayout>
 
             <!--Блок "статуса и каунтера фоток"-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@drawable/black_white_gradient"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:gravity="bottom"
                 android:orientation="vertical"
                 android:paddingBottom="16dp"
@@ -62,18 +79,20 @@
                         android:layout_marginLeft="16dp"
                         android:ellipsize="end"
                         android:maxLines="3"
-                        android:text="@{viewModel.statusText}"/>
+                        android:text="@{viewModel.statusText}"
+                        android:visibility="@{viewModel.photoCounterVisibility}"/>
 
                 </LinearLayout>
             </LinearLayout>
-
-        </LinearLayout>
-
+        </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="152dp"
+            android:layout_alignParentBottom="true"
             android:background="@color/bg_white"
+            android:gravity="center_vertical"
             android:orientation="vertical">
             <!--Блок "имени, онлайн-статуса и города"-->
             <LinearLayout
@@ -97,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="55dp"
                         android:ellipsize="end"
-                        android:maxLines="1"
+                        android:singleLine="true"
                         android:text="@{viewModel.name}"/>
                     <!--АХТУНГИ, ПАЦАНЫ!!!!!!!!!!!! Отсуп сверху на 55 и снизу на -55 нужны, чтобы гарантировать место под возраст и онлайн значок-->
                     <TextView
@@ -125,5 +144,16 @@
                 layout="@layout/dating_buttons"
                 bind:viewModel="@{viewModel}"/>
         </LinearLayout>
-    </LinearLayout>
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/albumRoot"
+            android:layout_marginBottom="-20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/loader_bg"
+            android:theme="@style/CircularProgress"
+            android:visibility="@{viewModel.isDatingProgressBarVisible}"/>
+    </RelativeLayout>
 </layout>

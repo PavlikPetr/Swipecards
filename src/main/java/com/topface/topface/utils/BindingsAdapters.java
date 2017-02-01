@@ -7,6 +7,7 @@ import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.graphics.drawable.Drawable;
+import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -216,6 +217,36 @@ public class BindingsAdapters {
     @BindingAdapter("onLongItemClick")
     public static void onLongItemClick(View view, View.OnLongClickListener longClickListener) {
         view.setOnLongClickListener(longClickListener);
+    }
+
+    @BindingAdapter("android:layout_paddingTop")
+    public static void setPaddingTop(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, (int) padding, null, null);
+    }
+
+    @BindingAdapter("android:layout_paddingStart")
+    public static void setPaddingStart(View view, float padding) {
+        setPaddingLeft(view, padding);
+    }
+
+    @BindingAdapter("android:layout_paddingEnd")
+    public static void setPaddingEnd(View view, float padding) {
+        setPaddingRight(view, padding);
+    }
+
+    @BindingAdapter("android:layout_paddingLeft")
+    public static void setPaddingLeft(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, (int) padding, null, null, null);
+    }
+
+    @BindingAdapter("android:layout_paddingRight")
+    public static void setPaddingRight(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, null, (int) padding, null);
+    }
+
+    @BindingAdapter("android:layout_paddingBottom")
+    public static void setPaddingBottom(View view, float padding) {
+        ViewExtensionsKt.setPadding(view, null, null, null, (int) padding);
     }
 
     @BindingAdapter("android:layout_marginTop")
@@ -438,5 +469,12 @@ public class BindingsAdapters {
     @BindingAdapter("foreground")
     public static void setForeground(FrameLayout view, Drawable drawable) {
         view.setForeground(drawable);
+    }
+
+    @BindingAdapter("restoreScrollState")
+    public static void restoreStateForLayoutManager(RecyclerView view, Parcelable state) {
+        if (state != null) {
+            view.getLayoutManager().onRestoreInstanceState(state);
+        }
     }
 }

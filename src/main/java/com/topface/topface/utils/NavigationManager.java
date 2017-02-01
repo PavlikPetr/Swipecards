@@ -41,10 +41,10 @@ import com.topface.topface.utils.rx.RxUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -145,27 +145,19 @@ public class NavigationManager {
              * ждем его загрузки не дольше CLOSE_LEFT_MENU_TIMEOUT мс
              * потом отписываемся и шлем ивент о том, что фрагмент свичнулся
              */
-            mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class)
+            mSubscription = Observable.merge(mLifeCycleState.getObservable(FragmentLifreCycleData.class)
                     .filter(new Func1<FragmentLifreCycleData, Boolean>() {
                         @Override
                         public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
                             return fragmentLifreCycleData.getState() == FragmentLifreCycleData.CREATE_VIEW
                                     && fragmentName.equals(fragmentLifreCycleData.getClassName());
                         }
-                    })
-                    .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<FragmentLifreCycleData>() {
+                    }), Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS))
+                    .first()
+                    .subscribe(new RxUtils.ShortSubscription<Object>() {
                         @Override
-                        public void call(FragmentLifreCycleData fragmentLifreCycleData) {
+                        public void onNext(Object object) {
                             sendNavigationFragmentSwitched(data);
-                        }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Debug.error("Fragment lifecycle observable error " + throwable);
-                            if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
-                                sendNavigationFragmentSwitched(data);
-                            }
                         }
                     });
         } else {
@@ -175,9 +167,7 @@ public class NavigationManager {
     }
 
     private void sendNavigationFragmentSwitched(WrappedNavigationData data) {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
         mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
     }
 
@@ -337,34 +327,20 @@ public class NavigationManager {
          * ждем когда будет закрыто левое меню, но не дольше CLOSE_LEFT_MENU_TIMEOUT мс
          * после этого отписываемся и шлем ивент о смене подсвеченного итема в левом меню
          */
-        mDrawerLayoutStateSubscription = mDrawerLayoutState.getObservable()
+        mDrawerLayoutStateSubscription = Observable.merge(mDrawerLayoutState.getObservable()
                 .filter(new Func1<DrawerLayoutStateData, Boolean>() {
                     @Override
                     public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
                         return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
                     }
-                })
-                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<DrawerLayoutStateData>() {
+                }), Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS))
+                .first()
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
                     @Override
-                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
-                        drawerLayoutStateUsubscribe();
-                        callback.onCall();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        drawerLayoutStateUsubscribe();
+                    public void onNext(Object object) {
                         callback.onCall();
                     }
                 });
-    }
-
-    private void drawerLayoutStateUsubscribe() {
-        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
-            mDrawerLayoutStateSubscription.unsubscribe();
-        }
     }
 
     private void selectPreviousLeftMenuItem() {
@@ -380,12 +356,8 @@ public class NavigationManager {
     public void onDestroy() {
         RxUtils.safeUnsubscribe(mNavigationStateSubscription);
         mActivityDelegate = null;
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
-            mDrawerLayoutStateSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
+        RxUtils.safeUnsubscribe(mDrawerLayoutStateSubscription);
         iNeedCloseMenuCallback = null;
     }
 }

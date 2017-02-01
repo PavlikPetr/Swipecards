@@ -66,6 +66,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    override fun showProfile(item: SearchUser?, from: String) =
+            item?.let {
+                if (!it.isEmpty) {
+                    mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, it.photo,
+                            it.id, null, false, true, Utils.getNameAndAge(it.firstName, it.age),
+                            it.city.getName(), from))
+                }
+            } ?: Unit
+
     /**
      * Show chat from feed
      */

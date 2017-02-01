@@ -2,11 +2,9 @@ package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesig
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.PhotoblogListBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -15,7 +13,7 @@ import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.adapter_utils.create16Left8TotalMargin
 
 /**
  * Компонент фотоленты с горизонтальным скролом
@@ -56,23 +54,7 @@ class PhotoBlogListComponent(private val mContext: Context,
 
     override fun bind(binding: PhotoblogListBinding, data: PhotoBlogList?, position: Int) {
         with(binding) {
-            photoblogList.addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-                    val itemPosition = (view?.layoutParams as? RecyclerView.LayoutParams)?.viewAdapterPosition ?: 0
-                    outRect?.apply {
-                        set(
-                                // нулевой итем имеет отступ отличный от остальных
-                                if (itemPosition == 0) {
-                                    R.dimen.photoblog_add_button_margin_left
-                                } else {
-                                    R.dimen.photoblog_item_margin_left
-                                }.getDimen().toInt(),
-                                R.dimen.photoblog_item_margin_top.getDimen().toInt(),
-                                R.dimen.photoblog_item_margin_right.getDimen().toInt(),
-                                R.dimen.photoblog_item_margin_bottom.getDimen().toInt())
-                    }
-                }
-            })
+            photoblogList.addItemDecoration(create16Left8TotalMargin())
             mRecyclerView = photoblogList
             mPhotoblogListBinding = this
             photoblogList.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false)

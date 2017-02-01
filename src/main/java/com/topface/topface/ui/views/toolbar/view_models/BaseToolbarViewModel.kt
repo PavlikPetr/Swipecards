@@ -51,15 +51,16 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
         // если включен новый дизайн диалогов, то надо добавить паддинг, что бы тулбар
         // был ниже прозрачного статус бара
         // учитывать topPadding надо только в тулбарах с прозрачным StatusBar'ом
-        if (App.get().options.newDatingDesign.isEnabled) topPadding.set(getStatusBarHeight(binding.appContext()))
+        if (App.get().options.datingRedesignEnabled) topPadding.set(getStatusBarHeight(binding.appContext()))
     }
+
     /**
      * Вычисляется высота системного statusBar, что бы мы могли подвинуть свой тулбар
      */
     fun getStatusBarHeight(context: Context) =
-        with(context.resources.getIdentifier("status_bar_height", "dimen", "android")) {
-            if (this > 0) {
-                context.resources.getDimensionPixelSize(this)
-            } else 0
-        }
+            with(context.resources.getIdentifier("status_bar_height", "dimen", "android")) {
+                if (this > 0) {
+                    context.resources.getDimensionPixelSize(this)
+                } else 0
+            }
 }

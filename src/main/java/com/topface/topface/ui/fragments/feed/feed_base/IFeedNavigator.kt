@@ -17,6 +17,7 @@ interface IFeedNavigator {
     fun showPurchaseCoins(from: String, itemType: Int = -1, price: Int = -1)
     fun showPurchaseVip(from: String)
     fun <T : FeedItem> showProfile(item: T?, from: String)
+    fun showProfile(item: SearchUser?, from: String)
     fun <T : FeedItem> showChat(item: T?)
     fun showChat(user: FeedUser?, answer: SendGiftAnswer?)
     fun showDating()

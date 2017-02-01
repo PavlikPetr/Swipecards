@@ -1,7 +1,9 @@
 package com.topface.topface.ui.add_to_photo_blog
 
+import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.os.Parcelable
 import com.topface.topface.App
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
@@ -23,9 +25,13 @@ import javax.inject.Inject
  * View model for list of users photos
  * Created by mbayutin on 12.01.17.
  */
-class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observable<Bundle>, val lastSelectedPhotoId: ObservableInt) {
+class PhotoListItemViewModel(private val mApi: FeedApi,
+                             updateObservable: Observable<Bundle>,
+                             val lastSelectedPhotoId: ObservableInt,
+                             private var mSavedState: Parcelable?) {
     val data = MultiObservableArrayList<Any>()
     @Inject lateinit var appState: TopfaceAppState
+    val state = ObservableField<Parcelable>(null)
     private var mUpdateSubscription: Subscription
     private var mPhotosLoadSubscription: Subscription? = null
 
@@ -86,6 +92,14 @@ class PhotoListItemViewModel(private val mApi: FeedApi, updateObservable: Observ
                 val wasEmpty = data.isEmpty()
 
                 data.replaceData(arrayListOf<Any>().apply { addAll(cleanPhotos) })
+
+                if (data.isNotEmpty()) {
+                    mSavedState?.let {
+                        state.set(mSavedState)
+                        mSavedState = null
+                    }
+                }
+
                 if (wasEmpty && data.isNotEmpty() && lastSelectedPhotoId.get() == 0) lastSelectedPhotoId.set((data[0] as Photo).id)
             } else{
                 data.replaceData(ArrayList<Any>())

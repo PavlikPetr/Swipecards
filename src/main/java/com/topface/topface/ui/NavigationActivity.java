@@ -45,6 +45,7 @@ import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ISimpleCallback;
@@ -226,7 +227,9 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return new NavigationToolbarViewModel(toolbar, this);
+        return mWeakStorage.getDatingRedesignEnabled() ?
+                new DatingRedesignToolbarViewModel(toolbar, this) :
+                new NavigationToolbarViewModel(toolbar, this);
     }
 
     private void initPopups() {
@@ -582,7 +585,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
-        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).toolbarInclude :
+        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }
 
@@ -598,6 +601,23 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
             if (customViewModel != null) {
                 if (toolbarViewModel.isScrimVisible().get()) {
+                    customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+                    customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+                }
+                Boolean isOnline = settings.isOnline();
+                customViewModel.isOnline().set(isOnline != null && isOnline);
+                if (settings.getTitle() != null) {
+                    customViewModel.getTitle().set(settings.getTitle());
+                }
+                if (settings.getSubtitle() != null) {
+                    customViewModel.getSubTitle().set(settings.getSubtitle());
+                }
+            }
+        } else if (getToolbarViewModel() instanceof DatingRedesignToolbarViewModel) {
+            DatingRedesignToolbarViewModel toolbarViewModel = (DatingRedesignToolbarViewModel) getToolbarViewModel();
+            CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
+            if (customViewModel != null) {
+                if (!toolbarViewModel.isDating()) {
                     customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
                     customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
                 }

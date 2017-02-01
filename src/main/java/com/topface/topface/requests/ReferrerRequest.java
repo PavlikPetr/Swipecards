@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
@@ -17,6 +18,7 @@ public class ReferrerRequest extends ApiRequest {
 
     private AdjustAttributeData mAttribution;
     private InstallReferrerData mReferrerTrack;
+    private String mFbInvite;
 
     public ReferrerRequest(@NotNull Context context, @NotNull AdjustAttributeData attribution) {
         super(context);
@@ -28,6 +30,11 @@ public class ReferrerRequest extends ApiRequest {
         mReferrerTrack = referrerTrack;
     }
 
+    public ReferrerRequest(@NotNull Context context, @NotNull String fbInvite) {
+        super(context);
+        mFbInvite = fbInvite;
+    }
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject jsonObject = new JSONObject();
@@ -36,6 +43,9 @@ public class ReferrerRequest extends ApiRequest {
         }
         if (!InstallReferrerData.isEmpty(mReferrerTrack)) {
             jsonObject.put("installReferrer", mReferrerTrack.getInstallReferrerTrackData());
+        }
+        if (!TextUtils.isEmpty(mFbInvite)) {
+            jsonObject.put("fbInvite", mFbInvite);
         }
         return jsonObject;
     }
