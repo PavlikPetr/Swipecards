@@ -9,9 +9,11 @@ import android.os.Handler
 import android.os.Message
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
@@ -47,7 +49,7 @@ import javax.inject.Inject
 
 @FlurryOpenEvent(name = PAGE_NAME)
 @RuntimePermissions
-class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
+class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
 
     @Inject lateinit var mEventBus: EventBus
 
@@ -66,9 +68,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
 
     private val mPeopleNearbyListComponent by lazy { PeopleNearbyListComponent(context, mApi, mNavigator, this) }
 
-    private val mFeedRequestFactory by lazy {
-        FeedRequestFactory(context)
-    }
+    private val mFeedRequestFactory by lazy { FeedRequestFactory(context) }
 
     private lateinit var mPhotoHelper: AddPhotoHelper
 
@@ -93,7 +93,7 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
                 .addAdapterComponent(PeopleNearbyPermissionsNeverAskAgainComponent())
                 .addAdapterComponent(PeopleNearbyLoaderComponent())
                 .addAdapterComponent(activity.registerLifeCycleDelegate(PhotoBlogListComponent(context,
-                        mApi, mNavigator, this, this)))
+                        mApi, mNavigator, this)))
                 .addAdapterComponent(mPeopleNearbyListComponent)
     }
 
@@ -125,10 +125,6 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         mPeopleNearbyPopover.closeProgrammatically()
     }
 
-    override fun size(size: Size) {
-        mPeopleNearbyListComponent.size(size.apply { height = mBinding.list.measuredHeight - height })
-    }
-
     private val mViewModel by lazy {
         PeopleNearbyFragmentViewModel(this)
     }
@@ -139,11 +135,6 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl, IViewSize {
         mBinding.viewModel = mViewModel
         mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
         return mBinding.root
-    }
-
-    override fun onPause() {
-        overrideScrollFlags()
-        super.onPause()
     }
 
     override fun onResume() {

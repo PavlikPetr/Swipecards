@@ -23,19 +23,11 @@ import com.topface.topface.utils.adapter_utils.create16Left8TotalMargin
 class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
-                             private val mPopoverControl: IPopoverControl,
-                             private val mSize: IViewSize) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(),
-        ILifeCycle {
+                             private val mPopoverControl: IPopoverControl) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
     private var mAdapter: CompositeAdapter? = null
     private var mPhotoblogListBinding: PhotoblogListBinding? = null
     private var mRecyclerView: RecyclerView? = null
-    private val mViewModel: PhotoBlogListViewModel by lazy {
-        PhotoBlogListViewModel(mApi) {
-            mPhotoblogListBinding?.let {
-                it.root.post { mSize.size(Size(it.root.measuredHeight, it.root.measuredWidth)) }
-            }
-        }
-    }
+    private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) }
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
