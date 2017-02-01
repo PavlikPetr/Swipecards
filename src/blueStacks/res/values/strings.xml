@@ -820,6 +820,13 @@
   <string name="mutual_sympathy">Mutual Like</string>
   <string name="add_photo_feed_header_description">Add a photo with a greeting and thousands of people will see you. Get noticed and start dating people now.</string>
   <string name="publish_photo">Publish photo</string>
+  <string name="add_to_photo_blog_title">Add to feed</string>
+  <string name="add_to_photo_blog_header">Upload a photo and\nthousands of people will see you.</string>
+  <string name="add_to_photo_blog_button_place">Upload</string>
+  <plurals name="add_to_photo_blog_coins">
+    <item quantity="other">Cost — %d Coins</item>
+    <item quantity="one">Cost — %d Coin</item>
+  </plurals>
   <string name="dont_miss_a_beat">Don\'t miss a beat!</string>
   <string name="push_alert_dating_title">Want to get a notification when %s sends a mutual reply?</string>
   <string name="push_alert_chat_title">Want to get a notification when %s replies?</string>

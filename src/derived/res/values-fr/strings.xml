@@ -928,6 +928,13 @@
     <string name="mutual_sympathy">Attraction mutuelle</string>
     <string name="add_photo_feed_header_description">Ajoutez une photo avec un message d\'accueil et soyez vu par des milliers de personnes. Faites-vous remarquer et commencez à rencontrer des gens dès maintenant.</string>
     <string name="publish_photo">Publier la photo</string>
+    <string name="add_to_photo_blog_title">Ajouter au fil</string>
+    <string name="add_to_photo_blog_header">Téléchargez une photo et\ndes milliers de personnes pourront vous voir.</string>
+    <string name="add_to_photo_blog_button_place">Télécharger</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="other">Coût — %d Pièces</item>
+        <item quantity="one">Coût — %d Pièce</item>
+    </plurals>
     <string name="dont_miss_a_beat">Tenez-vous au courant !</string>
     <string name="push_alert_dating_title">Vous voulez en être avisé lorsque %s enverra une réponse mutuelle ?</string>
     <string name="push_alert_chat_title">Vous voulez en être avisé lorsque %s vous répondra?</string>

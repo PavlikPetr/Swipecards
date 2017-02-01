@@ -70,7 +70,7 @@
     <string name="profile_gifts_empty">Ainda ninguém enviou presentes a este utilizador.</string>
     <string name="profile_mygifts_empty">Ainda ninguém lhe enviou presentes.</string>
     <string name="dating_people_unnoticed">Não te apercebeste de 10 pessoas!</string>
-    <string name="dating_continue">Continuar nos Encontros</string>
+    <string name="dating_continue">Continuar a namorar</string>
     <string name="dating_better_look">Olha com mais atenção!\nPodes estar a perder a tua oportunidade!</string>
     <string name="edit_my_photos">As minhas fotos</string>
     <string name="general_search_empty_title">Lamentamos, ninguém foi encontrado :(</string>
@@ -168,7 +168,7 @@
     <string name="general_boys">Rapazes</string>
     <string name="general_girls">Raparigas</string>
     <string name="general_city">Cidade</string>
-    <string name="general_dating">Encontros</string>
+    <string name="general_dating">Namorar</string>
     <string name="general_likes">Gostam de mim</string>
     <string name="general_photoblog">Feed de fotos</string>
     <string name="general_sympathies">Gostos</string>
@@ -381,8 +381,7 @@
         Negra\"
     </string>
     <string name="vip_info_vip">Com estatuto VIP irás destacar-te da multidão na secção
-        \"Encontros\" assim como no teu perfil.
-    </string>
+        \"Namorar\" assim como no teu perfil.</string>
     <string name="buying_vip_status">Obter estatuto VIP</string>
     <string name="edit_my_city">A minha cidade</string>
     <string name="my_location">A minha localização</string>
@@ -639,8 +638,7 @@
         tiver enviado um gosto ou se tiver um estatuto VIP
     </string>
     <string name="add_to_favorite_block_not_vip">Apenas os utilizadores VIP podem adicionar
-        favoritos a partir do ecrã Encontros
-    </string>
+        favoritos a partir do ecrã Namorar</string>
     <string name="delete_account_are_you_sure">Tens a certeza?</string>
     <string name="delete">Eliminar</string>
     <string name="delete_account_warning">Atenção! Estás a tentar eliminar o teu perfil no
@@ -921,11 +919,18 @@
     <string name="mutual_sympathy">Gosto Mútuo</string>
     <string name="add_photo_feed_header_description">Adiciona uma foto com uma saudação e milhares de pessoas irão ver-te. Destaca-te e começa a conhecer pessoas agora!</string>
     <string name="publish_photo">Publicar foto</string>
+    <string name="add_to_photo_blog_title">Adicionar ao feed</string>
+    <string name="add_to_photo_blog_header">Carrega uma foto e\nmilhares de</string>
+    <string name="add_to_photo_blog_button_place">Carregar</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="other">Custo - %d Moedas</item>
+        <item quantity="one">Custo - %d Moeda</item>
+    </plurals>
     <string name="dont_miss_a_beat">Não fiques de fora!</string>
     <string name="push_alert_dating_title">Queres receber uma notificação quando %s responder positivamente?</string>
     <string name="push_alert_chat_title">Queres receber uma notificação quando %s responder?</string>
     <string name="photo_feed_no_conversations">De momento não tens mensagens</string>
-    <string name="photo_feed_start_dating">Começa a ter encontros para conheceres novas pessoas</string>
+    <string name="photo_feed_start_dating">Começa a namorar para conheceres novas pessoas</string>
     <string name="mutual_write_them_first">Escreve-lhes uma mensagem</string>
     <string name="mutual_no_mutuals">De momento não têm Gostos mútuos</string>
     <string name="mutual_module_title">MÚTUO</string>

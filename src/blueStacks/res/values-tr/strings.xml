@@ -818,6 +818,13 @@
   <string name="mutual_sympathy">Karşılıklı Beğenme</string>
   <string name="add_photo_feed_header_description">Bir selam ile fotoğraf yükle ve binlerce kişi seni görsün. Dikkatleri üzerine çek ve insanlarla tanışmaya başla.</string>
   <string name="publish_photo">Fotoğrafı Yayınla</string>
+  <string name="add_to_photo_blog_title">Akışa ekle</string>
+  <string name="add_to_photo_blog_header">Bir fotoğraf yükle ve\nbinlerce insan seni görsün.</string>
+  <string name="add_to_photo_blog_button_place">Yükle</string>
+  <plurals name="add_to_photo_blog_coins">
+    <item quantity="other">Ücreti — %d Kredi</item>
+    <item quantity="one">Ücreti  — %d Kredi</item>
+  </plurals>
   <string name="dont_miss_a_beat">Her şeyden haberdar ol!</string>
   <string name="push_alert_dating_title">%s karşılık verdiğinde bildirim almak ister misin?</string>
   <string name="push_alert_chat_title">%s yanıt verdiğinde bildirim almak ister misin?</string>

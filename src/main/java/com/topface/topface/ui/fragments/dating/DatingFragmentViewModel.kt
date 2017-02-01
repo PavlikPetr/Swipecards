@@ -43,6 +43,7 @@ import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
+import rx.functions.Func2
 import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -78,7 +79,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     init {
         App.get().inject(this)
-        mProfileSubscription.add(state.getObservable(Profile::class.java).distinctUntilChanged { it.dating }.subscribe { profile ->
+        mProfileSubscription.add(state.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -96,8 +97,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             }
         })
         // слушаем изменения в анкете и статусе
-        mProfileSubscription.add(Observable.merge(state.getObservable(Profile::class.java).distinctUntilChanged { it.forms },
-                state.getObservable(Profile::class.java).distinctUntilChanged { it.status })
+        mProfileSubscription.add(Observable.merge(state.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.forms == t2.forms },
+                state.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.status == t2.status })
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .subscribe { profile ->
                     binding.root.post {

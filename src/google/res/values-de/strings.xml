@@ -864,6 +864,13 @@
     <string name="mutual_sympathy">Beidseitiges Like</string>
     <string name="add_photo_feed_header_description">Lade ein Foto mit einem Gruß hoch und tausende Leute werden dich sehen. Steche hervor und fange jetzt mit Dating an.</string>
     <string name="publish_photo">Foto veröffentlichen</string>
+    <string name="add_to_photo_blog_title">Dem Feed hinzufügen</string>
+    <string name="add_to_photo_blog_header">Lade ein Foto hoch und\ntausende Leute werden dich sehen</string>
+    <string name="add_to_photo_blog_button_place">Hochladen</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="other">Kosten - %d Coins</item>
+        <item quantity="one">Kosten - %d Coin</item>
+    </plurals>
     <string name="dont_miss_a_beat">Bleib aktuell!</string>
     <string name="push_alert_dating_title">Willst du eine Benachrichtigung erhalten, wenn %s eine gleichgesinnte Antwort schickt?</string>
     <string name="push_alert_chat_title">Willst du eine Benachrichtigung erhalten, wenn %s antwortet?</string>

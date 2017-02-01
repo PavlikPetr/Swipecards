@@ -73,9 +73,10 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val iconOnlineRes = ObservableField(0)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
-        override fun set(value: String?) {
-            super.set(value)
-            statusVisibility.set(if (value.isNullOrEmpty()) View.GONE else View.VISIBLE)
+        override fun set(value: String?){
+            val status = Profile.normilizeStatus(value)
+            super.set(status)
+            statusVisibility.set(if (status.isNullOrEmpty()) View.GONE else View.VISIBLE)
         }
     }
     val statusVisibility = ObservableField<Int>(View.GONE)
@@ -194,7 +195,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         LocalBroadcastManager.getInstance(mContext)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
-        mProfileSubscription = appState.getObservable(Profile::class.java).distinctUntilChanged { it.dating }.subscribe { profile ->
+        mProfileSubscription = appState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {

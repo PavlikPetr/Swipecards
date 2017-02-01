@@ -934,6 +934,14 @@
     <string name="mutual_sympathy">Узајамно свиђање</string>
     <string name="add_photo_feed_header_description">Додајте фотографију са поздравом и хиљаде људи ће Вас видети. Будите примећени и почните да се упознајете одмах.</string>
     <string name="publish_photo">Објавити фотографију</string>
+    <string name="add_to_photo_blog_title">Доспети у насловну траку</string>
+    <string name="add_to_photo_blog_header">Додајте фотографију и видеће Вас\nхиљаде људи.</string>
+    <string name="add_to_photo_blog_button_place">Додати</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="few">Цена — %d новчића</item>
+        <item quantity="other">Цена — %d новчића</item>
+        <item quantity="one">Цена — %d новчић</item>
+    </plurals>
     <string name="dont_miss_a_beat">Не пропустите важно!</string>
     <string name="push_alert_dating_title">Желите да добијете обавештење када %s узврати поруку?</string>
     <string name="push_alert_chat_title">Желите да добијете обавештење када %s одговори?</string>

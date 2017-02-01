@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/photoblogInGeoAvatar"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="@dimen/photoblog_item_avatar_width"
+            android:layout_height="@dimen/photoblog_item_avatar_height"
             android:onClick="@{() -> viewModel.avatarClickListener.invoke()}"
             app:glideTransformationPhoto="@{viewModel.userPhoto}"
             app:placeholderRes="@{viewModel.placeholder}"
