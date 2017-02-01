@@ -14,6 +14,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.adapter_utils.create16Left8TotalMargin
+import com.topface.topface.utils.extensions.getDimen
 
 /**
  * Компонент фотоленты с горизонтальным скролом
