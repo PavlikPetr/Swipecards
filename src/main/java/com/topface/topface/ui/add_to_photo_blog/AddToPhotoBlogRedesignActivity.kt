@@ -18,7 +18,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.extensions.photosForPhotoBlog
-import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.registerLifeCycleDelegate as registerLifeCycleDelegateExtension
 
 /**
  * Experimental redesign of add-to-photo-blog screen
@@ -44,7 +44,7 @@ class AddToPhotoBlogRedesignActivity : BaseFragmentActivity<AddToPhotoBlogRedesi
         CompositeAdapter(TypeProvider()) { Bundle() }
                 .addAdapterComponent(HeaderComponent(mViewModel.lastSelectedPhotoId))
                 .addAdapterComponent(PlaceButtonComponent(mViewModel.lastSelectedPhotoId))
-                .addAdapterComponent((this as Any).registerLifeCycleDelegate(PhotoListComponent(mViewModel.lastSelectedPhotoId, mApi)))
+                .addAdapterComponent(this.registerLifeCycleDelegateExtension(PhotoListComponent(mViewModel.lastSelectedPhotoId, mApi)))
     }
 
     override fun getToolbarBinding(binding: AddToPhotoBlogRedesignLayoutBinding) = binding.toolbarInclude
