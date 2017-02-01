@@ -862,7 +862,7 @@
   <string name="city_selector_your_city">Ваш город</string>
   <string name="photo_gallery_photo_deleted">Фотография удалена</string>
   <string name="photofeed_add_photo_to_feed_title">Подняться на первое место!</string>
-  <string name="photofeed_add_photo_to_feed_description">Разместите фото с приветствием, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас.</string>
+  <string name="photofeed_add_photo_to_feed_description">Разместите фото, и вас увидят тысячи людей. Привлеките внимание и познакомьтесь прямо сейчас!</string>
   <string name="offers_screen_title">Бонусы</string>
   <string name="offers_loading_text">Загружаем доступные для вас задания...</string>
   <string name="offers_empty_text">К сожалению, доступных заданий для вас нет, попробуйте позже!</string>
@@ -888,10 +888,10 @@
   <string name="add_to_photo_blog_header">Разместите фото и вас\nувидят тысячи людей.</string>
   <string name="add_to_photo_blog_button_place">Разместить</string>
   <plurals name="add_to_photo_blog_coins">
-    <item quantity="one">Стоимость - %d монета</item>
-    <item quantity="many">Стоимость - %d монет</item>
-    <item quantity="few">Стоимость - %d монеты</item>
-    <item quantity="other">Стоимость - %d монет</item>
+    <item quantity="one">Стоимость — %d монета</item>
+    <item quantity="many">Стоимость — %d монет</item>
+    <item quantity="few">Стоимость — %d монеты</item>
+    <item quantity="other">Стоимость — %d монет</item>
   </plurals>
   <string name="dont_miss_a_beat">Не пропустите важное!</string>
   <string name="push_alert_dating_title">Хотите получить уведомление, когда %s ответит взаимностью?</string>
@@ -1005,4 +1005,12 @@
   <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
   <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
   <string name="people_nearby_popover_text">Встаньте в ленту!\nВас увидят тысячи людей</string>
+  <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
+  <string name="buy_likes_get_more_likes">Получите больше симпатий!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Встаньте первой в поиске у мужчин, ищущих таких, как вы!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Встаньте первым в поиске у девушек, ищущих таких, как вы!</string>
+  <string name="buy_likes_become_popular_female">Стать популярной</string>
+  <string name="buy_likes_become_popular_male">Стать популярным</string>
+  <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
+  <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
 </resources>
