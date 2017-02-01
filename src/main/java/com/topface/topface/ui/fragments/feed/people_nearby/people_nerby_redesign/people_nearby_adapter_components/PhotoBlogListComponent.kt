@@ -14,7 +14,6 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.adapter_utils.create16Left8TotalMargin
-import com.topface.topface.utils.extensions.getDimen
 
 /**
  * Компонент фотоленты с горизонтальным скролом
@@ -24,23 +23,11 @@ import com.topface.topface.utils.extensions.getDimen
 class PhotoBlogListComponent(private val mContext: Context,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
-                             private val mPopoverControl: IPopoverControl,
-                             private val mSize: IViewSize) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(),
-        ILifeCycle {
+                             private val mPopoverControl: IPopoverControl) : AdapterComponent<PhotoblogListBinding, PhotoBlogList>(), ILifeCycle {
     private var mAdapter: CompositeAdapter? = null
     private var mPhotoblogListBinding: PhotoblogListBinding? = null
     private var mRecyclerView: RecyclerView? = null
-    private val mViewModel: PhotoBlogListViewModel by lazy {
-        PhotoBlogListViewModel(mApi) {
-            mPhotoblogListBinding?.let {
-                it.root.post { mSize.size(Size(
-                        R.dimen.photoblog_item_avatar_height.getDimen().toInt()
-                        +R.dimen.photoblog_item_margin_top.getDimen().toInt()
-                        +R.dimen.photoblog_item_margin_bottom.getDimen().toInt()
-                        +R.dimen.dialog_stroke_size.getDimen().toInt(), it.root.measuredWidth))}
-            }
-        }
-    }
+    private val mViewModel: PhotoBlogListViewModel by lazy { PhotoBlogListViewModel(mApi) }
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
