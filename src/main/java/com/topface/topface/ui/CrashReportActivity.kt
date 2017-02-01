@@ -1,13 +1,11 @@
-package com.topface.topface.ui;
+package com.topface.topface.ui
 
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-
 import com.topface.topface.R
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.hockey_app.HockeyAppCrashManager
-
 import net.hockeyapp.android.CrashManager
 import net.hockeyapp.android.metrics.MetricsManager
 
@@ -20,12 +18,12 @@ abstract class CrashReportActivity : AppCompatActivity(), IActivityDelegate {
 
     override fun onResume() {
         super.onResume()
-        checkForCrashes();
+        checkForCrashes()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MetricsManager.register(getApplication());
+        MetricsManager.register(application)
     }
 
     private fun checkForCrashes() =

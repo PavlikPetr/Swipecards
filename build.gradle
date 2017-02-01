@@ -381,7 +381,10 @@ dependencies {
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
-    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.5'
+    compile('io.reactivex:rxandroid:1.2.1') {
+        exclude module: 'rxjava'
+    }
     compile('io.reactivex:rxkotlin:0.60.0') {
         exclude module: 'kotlin-stdlib'
         exclude module: 'rxjava'

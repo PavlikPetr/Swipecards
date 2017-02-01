@@ -5,6 +5,7 @@ import android.databinding.ObservableField
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.CountersData
@@ -20,6 +21,7 @@ import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarVie
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import rx.Completable
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
@@ -95,10 +97,12 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
                 .subscribe(shortSubscription {
                     mHasNotification = it
                 })
+//        mFragmentLifecycleSubscription = Completable.
         mFragmentLifecycleSubscription = mLifeCycleReporter
                 .getObservable(FragmentLifreCycleData::class.java)
                 .filter { it.className == DatingFragment::class.java.name }
                 .subscribe(shortSubscription {
+                    Debug.error("LIFE_CYCLE catch class ${it.className} state ${it.state}")
                     when (it.state) {
                         RESUME, ATTACH, CREATE, CREATE_VIEW, VIEW_CREATED, START -> isDating = true
                         DESTROY_VIEW, STOP, DESTROY, DETACH -> isDating = false
