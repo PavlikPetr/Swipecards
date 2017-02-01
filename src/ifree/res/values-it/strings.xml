@@ -923,6 +923,13 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="mutual_sympathy">Mi piace reciproco</string>
     <string name="add_photo_feed_header_description">Carica una foto in cui saluti, migliaia di persone ti vedranno. Fatti notare e comincia subito a conoscere nuove persone.</string>
     <string name="publish_photo">Pubblica foto</string>
+    <string name="add_to_photo_blog_title">Aggiungi al feed</string>
+    <string name="add_to_photo_blog_header">Carica una foto e\n migliaia di persone ti vedranno.</string>
+    <string name="add_to_photo_blog_button_place">Carica</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="other">Costo - %d Monete</item>
+        <item quantity="one">Costo - %d Moneta</item>
+    </plurals>
     <string name="dont_miss_a_beat">Rimani aggiornato</string>
     <string name="push_alert_dating_title">Vuoi ricevere una notifica quando %s ti invia una risposta reciproca?</string>
     <string name="push_alert_chat_title">Vuoi ricevere una notifica quando %s risponde?</string>

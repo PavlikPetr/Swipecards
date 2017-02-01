@@ -282,17 +282,26 @@
     <string name="settings_vibration">Sygnał wibracją</string>
     <string name="settings_notifications_header">Zawiadomienia</string>
     <string name="settings_likes">Sympatie</string>
+    <string name="settings_mutual">Wzajemne sympatie</string>
     <string name="settings_messages">Wiadomości</string>
     <string name="settings_guests">Goście</string>
     <string name="settings_help">Pomoc</string>
+    <string name="settings_faq">Pytania i odpowiedzi</string>
+    <string name="settings_faq_title">Być może twój problem został już rozwiązany - zajrzyj do
+        FAQ</string>
     <string name="settings_account">Konto</string>
-    <string name="settings_feedback">Zostaw opiniję</string>
+    <string name="settings_feedback">Zostaw opinię</string>
     <string name="settings_about">O programie</string>
     <string name="settings_version">Wersja</string>
-    <string name="settings_copyright">Kopyrajt 2010-</string>
+    <string name="settings_copyright">Prawo autorskie 2010-</string>
     <string name="settings_rights_reserved">Topface \nWszystkie prawa zastrzeżone</string>
     <string name="settings_extra">Szczegółowa informacja jest dostępna na</string>
     <string name="settings_logout">Wyloguj się</string>
+    <string name="settings_code_confirmation">Wyślij kod potwierdzający</string>
+    <string name="settings_email_was_confirmed">Już potwierdzone</string>
+    <string name="settings_email_was_confirmed_textview_text">Jeśli potwierdziłeś już swój e-mail przez
+        Internet</string>
+    <string name="settings_code_confirmation_hint">Kod potwierdzający</string>
     <string name="settings_logout_msg">Na pewno chcesz wyjść?</string>
     <string name="settings_error_message">Powiadomienie o błędzie</string>
     <string name="settings_ask_developer">Zapytaj deweloperów</string>
@@ -338,6 +347,7 @@
     <string name="feedback_popup_title">Dałeś nam niską ocenę. Powiedz, co ci się nie spodobało
         w naszej aplikacji. Pomóż nam ją ulepszyć. Dziękujemy!</string>
     <string name="settings_melody">Melodia powiadomienia</string>
+    <string name="settings_loading_photo">Wstępne ładowanie zdjęć</string>
     <string name="edit_refresh_status">Odnów status</string>
     <string name="ban_title">Gratulacje! Zostałeś/-aś zablokowany/-a</string>
     <string name="ban_title_forever">Zostałeś/-aś na stałe zablokowany/-na</string>
@@ -492,7 +502,7 @@
     <string name="user_is_deleted">Użytkownik został usunięty</string>
     <string name="general_bookmarks">Ulubione</string>
     <string name="general_fans">Wielbicieli</string>
-    <string name="settings_edit_profile">Redaguj profil</string>
+    <string name="settings_edit_profile">Edytuj profil</string>
     <string name="general_bookmarks_delete">Usuń z ulubionych</string>
     <string name="general_bookmarks_add">Dodaj do ulubionych</string>
     <string name="buy_resources">Uzupełnij zasób</string>
@@ -604,6 +614,8 @@
     <string name="likes_can_help_you">Sympatie ułatwiają poznanie nowych ludzi</string>
     <string name="general_get_dating">Poznawaj</string>
     <string name="settings_select_language">Wybierz język aplikacji</string>
+    <string name="settings_select_preload_photo_type">Wybierz, kiedy wstępne ładowanie zdjęć
+        ma być włączone</string>
     <string name="restart_to_change_locale">Aplikacja musi zostać uruchomiona ponownie, aby zmienić język.</string>
     <string name="locale_changing">Zmiana języka</string>
     <plurals name="you_were_liked">
@@ -613,6 +625,7 @@
     </plurals>
     <string name="likes_buy_vip">By już teraz dowiedzieć się, kto cię lubi, aktywuj status VIP-a</string>
     <string name="or">lub</string>
+    <string name="settings_delete_account">Usuń swoje konto</string>
     <string name="chat_block_not_mutual">Możesz zacząć czatować z użytkownikiem, jeśli on/ona wyśle Tobie Sympatię lub jeśli posiadasz status VIP</string>
     <string name="add_to_favorite_block_not_vip">Tylko użytkownicy VIP mogą dodawać Ulubionych z ekranu
         Randki</string>
@@ -644,11 +657,14 @@
     </plurals>
     <string name="general_attention">Ważne!</string>
     <string name="general_delete_messages">Usuń wiadomości</string>
+    <string name="settings_feedback_transaction_number">Numer zamówienia</string>
+    <string name="settings_feedback_transaction_link">Gdzie mogę znaleźć numer zamówienia?</string>
     <string name="general_logout_error">Wystąpił błąd podczas wylogowywania. Spróbuj ponownie.</string>
     <string name="auth_btn_ok">Odnoklassniki</string>
     <string name="auth_btn_tf">Konto Topface</string>
     <string name="birthday">Urodziny</string>
     <string name="other_auth">Zaloguj się przez inny serwis</string>
+    <string name="settings_feedback_transaction_number_hint">Wprowadź swój numer zamówienia</string>
     <string name="delete_visitors">Usuń odwiedzających</string>
     <string name="delete_admirations">Usuń zachwyt</string>
     <string name="general_admirations">Zachwyty</string>
@@ -697,6 +713,7 @@
     <string name="retry_cancel_editing_bad_value">Podałeś nieprawidłowe dane. Spróbujesz ponownie czy wylogować
         bez zapisywania?</string>
     <string name="feedback_subject_ban">Odwołaj się od nieuczciwej blokady</string>
+    <string name="settings_led">Powiadomienie LED</string>
     <string name="open_market_error">Nie można otworzyć strony aplikacji</string>
     <string name="billing_item_already_owned">Prosimy poczekać, Twoje zamówienie jest w trakcie
      przetwarzania</string>
@@ -757,6 +774,9 @@
         %1$d\nRejestracje: %2$d</string>
     <string name="no_contacts_available">Urządzenie nie posiada kontaktów, które można by wyświetlić</string>
     <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
+    <string name="settings_check_vip_title">Sprawdź, czy status VIP-a jest aktywny</string>
+    <string name="settings_check_vip_cell">Sprawdź status VIP</string>
+    <string name="settings_check_vip_alert">Twoja prośba o sprawdzenie statusu VIP-a została wysłana.</string>
     <string name="novice_sympathy">Wysyłaj sympatie tym, kto Ci\nrzeczywiście się podoba,\naby
         zacząć miłą znajomość
     </string>
@@ -823,6 +843,15 @@
     <string name="mutual_sympathy">Wzajemna Sympatia</string>
     <string name="add_photo_feed_header_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś.</string>
     <string name="publish_photo">Opublikuj zdjęcie</string>
+    <string name="add_to_photo_blog_title">Dodaj do kanału</string>
+    <string name="add_to_photo_blog_header">Dodaj zdjęcie a\nzobaczą cię tysiące ludzi.</string>
+    <string name="add_to_photo_blog_button_place">Prześlij</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="few">Koszt — %d monety</item>
+        <item quantity="zero">Koszt — %d monet</item>
+        <item quantity="other">Koszt — %d monet</item>
+        <item quantity="one">Koszt — %d moneta</item>
+    </plurals>
     <string name="dont_miss_a_beat">Nie przegap tego!</string>
     <string name="push_alert_dating_title">Chcesz otrzymać powiadomienie, gdy %s</string>
     <string name="push_alert_chat_title">Chcesz otrzymać powiadomienie, gdy %s odpowie?</string>

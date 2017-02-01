@@ -1113,10 +1113,10 @@
     <string name="add_to_photo_blog_header">Разместите фото и вас\nувидят тысячи людей.</string>
     <string name="add_to_photo_blog_button_place">Разместить</string>
     <plurals name="add_to_photo_blog_coins">
-        <item quantity="one">Стоимость - %d монета</item>
-        <item quantity="many">Стоимость - %d монет</item>
-        <item quantity="few">Стоимость - %d монеты</item>
-        <item quantity="other">Стоимость - %d монет</item>
+        <item quantity="one">Стоимость &#8212; %d монета</item>
+        <item quantity="many">Стоимость &#8212; %d монет</item>
+        <item quantity="few">Стоимость &#8212; %d монеты</item>
+        <item quantity="other">Стоимость &#8212; %d монет</item>
     </plurals>
 
     <string name="dont_miss_a_beat">Не пропустите важное!</string>

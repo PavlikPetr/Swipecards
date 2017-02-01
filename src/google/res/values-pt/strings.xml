@@ -919,6 +919,13 @@
     <string name="mutual_sympathy">Gosto Mútuo</string>
     <string name="add_photo_feed_header_description">Adiciona uma foto com uma saudação e milhares de pessoas irão ver-te. Destaca-te e começa a conhecer pessoas agora!</string>
     <string name="publish_photo">Publicar foto</string>
+    <string name="add_to_photo_blog_title">Adicionar ao feed</string>
+    <string name="add_to_photo_blog_header">Carrega uma foto e\nmilhares de</string>
+    <string name="add_to_photo_blog_button_place">Carregar</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="other">Custo - %d Moedas</item>
+        <item quantity="one">Custo - %d Moeda</item>
+    </plurals>
     <string name="dont_miss_a_beat">Não fiques de fora!</string>
     <string name="push_alert_dating_title">Queres receber uma notificação quando %s responder positivamente?</string>
     <string name="push_alert_chat_title">Queres receber uma notificação quando %s responder?</string>
