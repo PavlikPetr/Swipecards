@@ -9,11 +9,9 @@ import android.os.Handler
 import android.os.Message
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
@@ -135,6 +133,11 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
         mBinding.viewModel = mViewModel
         mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }
         return mBinding.root
+    }
+
+    override fun onPause() {
+        overrideScrollFlags()
+        super.onPause()
     }
 
     override fun onResume() {
