@@ -62,7 +62,7 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
     }
 
     private val mDecorator by lazy {
-        DividerDecoration( mDialogTypeProvider, R.color.filter_divider_color.getColor(), R.dimen.divider_size.getDimen()
+        DividerDecoration(R.color.filter_divider_color.getColor(), R.dimen.divider_size.getDimen()
                 , R.dimen.avatar_marginLeft.getDimen() + R.dimen.avatar_marginRight.getDimen() + R.dimen.avatar_width.getDimen())
     }
 
