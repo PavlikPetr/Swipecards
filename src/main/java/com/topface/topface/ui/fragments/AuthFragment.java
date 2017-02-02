@@ -53,6 +53,7 @@ import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
+import com.topface.topface.ui.auth.AuthFragmentViewModel;
 import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
@@ -307,6 +308,7 @@ public class AuthFragment extends BaseAuthFragment {
         mLoginFragmentHandler.setOnAuthButtonsClickListener(mOnAuthButtonsClick);
         mBinding.setHandler(mLoginFragmentHandler);
         mBinding.btnOtherServices.setVisibility(isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
+        mBinding.setViewModel(new AuthFragmentViewModel(getContext()));
         initViews(root);
         if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
             setAllSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
