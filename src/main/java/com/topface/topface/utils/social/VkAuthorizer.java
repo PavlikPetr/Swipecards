@@ -69,7 +69,7 @@ public class VkAuthorizer extends Authorizer {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         {
-            if (data!=null && !VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
                 @Override
                 public void onResult(VKAccessToken res) {
                     if (res == null) {
