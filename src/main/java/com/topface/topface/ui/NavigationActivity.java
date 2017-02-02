@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -222,6 +223,10 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 }
             }
         }));
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarAlpha(0.25f);
     }
 
     @NotNull
