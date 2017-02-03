@@ -39,7 +39,7 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
     }
 
     override val mAdapter by lazy {
-        val adapter = DialogsAdapter(mNavigator, activity)
+        val adapter = DialogsAdapter(mNavigator)
         adapter
     }
 
