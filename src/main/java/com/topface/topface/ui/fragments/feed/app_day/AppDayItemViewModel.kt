@@ -27,10 +27,10 @@ class AppDayItemViewModel(private val mContext: Context, val image: AppDayImage,
             PRODUCT-> {
                 if (image.sku.isEmpty()) openLink(image) else {
                     with(mInstantPurchaseModel) {
-                        this.navigator.showPurchaseProduct(
+                        navigator.showPurchaseProduct(
                                 skuId = image.sku,
-                                from = this.from,
-                                isSubscription = this.isSubscription
+                                from = from,
+                                isSubscription = isSubscription
                         )
                     }
                 }
