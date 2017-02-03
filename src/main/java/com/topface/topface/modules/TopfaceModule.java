@@ -49,6 +49,7 @@ import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
+import com.topface.topface.ui.fragments.buy.GpMarketFragment;
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment;
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel;
@@ -197,7 +198,8 @@ import dagger.Provides;
                 PeopleNearbyLockedViewModel.class,
                 PeopleNearbyPopover.class,
                 DatingRedesignToolbarViewModel.class,
-                com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class
+                com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class,
+                GpMarketFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

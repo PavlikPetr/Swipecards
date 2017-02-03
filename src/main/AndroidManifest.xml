@@ -170,6 +170,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.fragments.buy.GpPurchaseActivity"
+            android:theme="@style/Theme.FullyTransparent"
+            android:parentActivityName=".ui.NavigationActivity"/>
+
         <!-- Facebook -->
         <activity
             android:name="com.facebook.FacebookActivity"

@@ -21,6 +21,7 @@ import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
@@ -164,4 +165,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
     }
 
+    override fun showPurchaseActivity(skuId: String, isSubscription: Boolean, from: String) {
+        mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, isSubscription, from), GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
+    }
 }

@@ -173,6 +173,17 @@
         <item name="android:windowBackground">@color/album_background</item>
     </style>
 
+    <style name="Theme.FullyTransparent" parent="Theme.Topface">
+        <item name="actionBarStyle">@style/Widget.Topface.TransparentActionBar</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
     <style name="Topface.Theme.Album" parent="Theme.Topface.Navigation">
         <item name="android:windowBackground">@color/album_background</item>
         <item name="windowActionBarOverlay">true</item>
