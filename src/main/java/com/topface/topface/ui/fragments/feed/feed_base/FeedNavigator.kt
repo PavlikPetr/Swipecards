@@ -165,7 +165,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
     }
 
-    override fun showPurchaseActivity(skuId: String, isSubscription: Boolean, from: String) {
+    override fun showPurchaseProduct(skuId: String, isSubscription: Boolean, from: String) {
         mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, isSubscription, from), GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
     }
 }
