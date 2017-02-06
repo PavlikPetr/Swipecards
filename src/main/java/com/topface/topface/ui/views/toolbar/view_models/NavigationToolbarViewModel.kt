@@ -11,16 +11,14 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.isHasNotification
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * Created by petrp on 09.10.2016.
@@ -30,7 +28,9 @@ import javax.inject.Inject
 class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation), IAppBarState {
 
-    @Inject lateinit var mState: TopfaceAppState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
     var extraViewModel: CustomToolbarViewModel? = null
     val isCollapsStyle = object : ObservableBoolean() {
         override fun set(value: Boolean) {
@@ -78,7 +78,6 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
     private var ownProfile: Profile = App.get().profile
 
     init {
-        App.get().inject(this)
         isCollapsStyle.set(false)
         title.set(Utils.EMPTY)
         subTitle.set(Utils.EMPTY)

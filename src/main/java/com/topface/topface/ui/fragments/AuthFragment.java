@@ -56,9 +56,9 @@ import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
@@ -66,8 +66,6 @@ import com.vk.sdk.dialogs.VKOpenAuthDialog;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -77,10 +75,8 @@ public class AuthFragment extends BaseAuthFragment {
     public static final String TF_BUTTONS = "tf_buttons";
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
 
-    @Inject
-    NavigationState mNavigationState;
-    @Inject
-    AuthState mAuthState;
+    private NavigationState mNavigationState;
+    private AuthState mAuthState;
 
     private Subscription mAuthStateSubscription;
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
@@ -301,6 +297,8 @@ public class AuthFragment extends BaseAuthFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
+        mAuthState = App.getAppComponent().authState();
+        mNavigationState = App.getAppComponent().navigationState();
         View root = inflater.inflate(R.layout.fragment_auth, null);
         mBinding = DataBindingUtil.bind(root);
         mLoginFragmentHandler = new LoginFragmentHandler(getContext());

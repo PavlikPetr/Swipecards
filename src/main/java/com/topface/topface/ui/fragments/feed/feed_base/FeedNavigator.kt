@@ -30,7 +30,6 @@ import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
-import javax.inject.Inject
 
 /**
  * Класс для управления переходами между эркраними в фидах
@@ -39,14 +38,12 @@ import javax.inject.Inject
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
 
-    @Inject lateinit var mNavigationState: NavigationState
+    private val mNavigationState by lazy {
+        App.getAppComponent().navigationState()
+    }
 
     private val mEmptyDatingFragment by lazy {
         DatingEmptyFragment.newInstance()
-    }
-
-    init {
-        App.get().inject(this)
     }
 
     override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity

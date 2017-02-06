@@ -11,17 +11,14 @@ import com.topface.topface.state.DrawerLayoutState;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
 public class DrawerLayoutManager<T extends DrawerLayout> {
 
-    @Inject
-    DrawerLayoutState mDrawerLayoutState;
+    private DrawerLayoutState mDrawerLayoutState;
 
     private T mDrawerLayout;
 
     public DrawerLayoutManager(@NotNull T drawerLayout) {
-        App.get().inject(this);
+        mDrawerLayoutState = App.getAppComponent().drawerLayoutState();
         mDrawerLayout = drawerLayout;
     }
 

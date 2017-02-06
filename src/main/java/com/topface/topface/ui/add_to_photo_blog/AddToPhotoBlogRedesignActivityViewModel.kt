@@ -12,14 +12,11 @@ import com.topface.topface.requests.AddPhotoFeedRequest
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.ErrorCodes
-import com.topface.topface.state.EventBus
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * VM for AddToPhotoBlogRedesignActivity
@@ -27,8 +24,12 @@ import javax.inject.Inject
  */
 class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDelegate?, val feedNavigator: FeedNavigator) {
     val isLockerVisible = ObservableBoolean(false)
-    @Inject lateinit var mAppState: TopfaceAppState
-    @Inject lateinit var mEventBus: EventBus
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
     private var mBalance: BalanceData? = null
     private val mSubscriptions = CompositeSubscription()
     // договаривались использовать цену из первой кнопки лидеров
@@ -37,7 +38,6 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
     val lastSelectedPhotoId = ObservableInt(0)
 
     init {
-        App.get().inject(this)
         mSubscriptions.add(mEventBus.getObservable(PlaceButtonTapEvent::class.java)
                 .subscribe { placeOrBuy() })
         mSubscriptions.add(mAppState.getObservable(BalanceData::class.java)

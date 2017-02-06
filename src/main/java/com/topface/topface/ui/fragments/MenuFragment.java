@@ -49,8 +49,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.inject.Inject;
-
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -69,12 +67,9 @@ public class MenuFragment extends Fragment {
     private static final String LIKES_ICON = "likes_icon";
     private static final String SELECTED_POSITION = "selected_position";
     private static final String BECOME_VIP_BAGE = "!";
-    @Inject
-    TopfaceAppState mAppState;
-    @Inject
-    NavigationState mNavigationState;
-    @Inject
-    DrawerLayoutState mDrawerLayoutState;
+    private TopfaceAppState mAppState;
+    private NavigationState mNavigationState;
+    private DrawerLayoutState mDrawerLayoutState;
     private LeftMenuRecyclerViewAdapter mAdapter;
     private CountersData mCountersData;
     private BalanceData mBalanceData;
@@ -227,7 +222,11 @@ public class MenuFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+
+        mAppState = App.getAppComponent().appState();
+        mDrawerLayoutState = App.getAppComponent().drawerLayoutState();
+        mNavigationState = App.getAppComponent().navigationState();
+
         if (savedInstanceState != null) {
             mSelectedPos = savedInstanceState.getInt(SELECTED_POSITION, EMPTY_POS);
         }

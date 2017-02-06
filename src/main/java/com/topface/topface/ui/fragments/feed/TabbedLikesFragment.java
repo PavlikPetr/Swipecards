@@ -17,12 +17,10 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.config.WeakStorage;
 
-import javax.inject.Inject;
-
 public class TabbedLikesFragment extends TabbedFeedFragment {
 
-    @Inject
-    WeakStorage mWeakStorage;
+    private WeakStorage mWeakStorage;
+
     @Override
     protected void onBeforeCountersUpdate(CountersData countersData) {
         updatePageCounter(LikesFragment.class.getName(), countersData.getLikes());
@@ -51,7 +49,7 @@ public class TabbedLikesFragment extends TabbedFeedFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        App.get().inject(this);
+        mWeakStorage = App.getAppComponent().weakStorage();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

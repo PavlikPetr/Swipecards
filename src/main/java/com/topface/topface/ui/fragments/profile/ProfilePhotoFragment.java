@@ -46,8 +46,6 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.rx.RxUtils;
 
-import javax.inject.Inject;
-
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import permissions.dispatcher.NeedsPermission;
@@ -64,8 +62,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     private static final String POSITION = "POSITION";
     private static final String FLIPPER_VISIBLE_CHILD = "FLIPPER_VISIBLE_CHILD";
     public static final String PAGE_NAME = "profile.photos";
-    @Inject
-    TopfaceAppState appState;
+    public TopfaceAppState mAppState;
     private OwnProfileRecyclerViewAdapter mOwnProfileRecyclerViewAdapter;
 
     private BroadcastReceiver mPhotosReceiver = new BroadcastReceiver() {
@@ -137,7 +134,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 if (mOwnProfileRecyclerViewAdapter != null) {
                     mOwnProfileRecyclerViewAdapter.addPhotos(data, data.more, false, false);
                     profile.photos = mOwnProfileRecyclerViewAdapter.getPhotos();
-                    appState.setData(profile);
+                    mAppState.setData(profile);
                 }
             }
 
@@ -181,7 +178,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        App.from(getContext()).inject(this);
+        mAppState = App.getAppComponent().appState();
         if (getActivity() instanceof TrackedFragmentActivity) {
             ((TrackedFragmentActivity) getActivity()).setBackPressedListener(this);
         }
@@ -233,7 +230,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mBinding.usedGrid.scrollToPosition(position);
             }
         });
-        mSubscription = appState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+        mSubscription = mAppState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
             @Override
             public void call(Profile profile) {
                 if (mOwnProfileRecyclerViewAdapter != null && profile.photos != null &&
@@ -271,7 +268,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                             public void success(IApiResponse response) {
                                 super.success(response);
                                 profile.photo = photo;
-                                appState.setData(profile);
+                                mAppState.setData(profile);
                                 CacheProfile.sendUpdateProfileBroadcast();
                             }
 
@@ -314,7 +311,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                                 //Декрементим общее количество фотографий
                                 profile.photosCount -= 1;
                                 profile.photos.remove(photo);
-                                appState.setData(profile);
+                                mAppState.setData(profile);
                                 if (position < profile.photo.position) {
                                     CacheProfile.incrementPhotoPosition(getActivity(), -1);
                                 }

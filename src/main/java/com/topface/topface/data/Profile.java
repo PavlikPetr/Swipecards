@@ -26,8 +26,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import javax.inject.Inject;
-
 import static com.topface.topface.utils.FormItem.DATA_TYPE.ABOUT_STATUS;
 import static com.topface.topface.utils.FormItem.DATA_TYPE.ALCOHOL;
 import static com.topface.topface.utils.FormItem.DATA_TYPE.ARCHIEVEMENTS;
@@ -97,8 +95,6 @@ public class Profile extends AbstractDataWithPhotos {
     @SerializedName("noviceLikes")
     public boolean giveNoviceLikes;
     public String notificationToken;
-    @Inject
-    transient TopfaceAppState mAppState;
     public boolean hasEmptyFields = false;
 
     public Profile() {
@@ -118,8 +114,7 @@ public class Profile extends AbstractDataWithPhotos {
     public Profile(JSONObject jsonObject, boolean isFromCache) {
         this.isFromCache = isFromCache;
         fillData(jsonObject);
-        App.from(App.getContext()).inject(this);
-        mAppState.setData(this);
+        App.getAppComponent().appState().setData(this);
     }
 
     protected void fillData(final JSONObject resp) {

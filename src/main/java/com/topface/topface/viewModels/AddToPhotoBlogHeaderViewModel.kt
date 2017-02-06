@@ -23,10 +23,9 @@ import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.FlurryManager.GET_LEAD
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.extensions.getFakePhotosCount
+import com.topface.topface.utils.rx.RxUtils
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 
 /**
@@ -38,17 +37,18 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
                                     , var mPhotoHelperVisualisator: IPhotoHelperVisualisator?, var mAdapterInteractor: IAdapterInteractor?) :
         BaseViewModel<AddToPhotoBlogHeaderLayoutBinding>(binding), View.OnClickListener {
 
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mAppState: TopfaceAppState by lazy {
+        App.getAppComponent().appState()
+    }
     private val mSubscriptions = CompositeSubscription()
     lateinit private var mBalance: BalanceData
     val inputText = ObservableField<String>()
 
     private companion object {
-        val MAX_SYMBOL_COUNT = 120
+        const val MAX_SYMBOL_COUNT = 120
     }
 
     init {
-        App.get().inject(this)
         mSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
             override fun onNext(balance: BalanceData?) = balance?.let {
                 mBalance = it
@@ -148,9 +148,6 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
         fun getSelectedPhotoId(): Int
         fun getItemCount(): Int
         fun getAdapterData(): Photos
-    }
-
-    fun tryInit(): Unit {
     }
 
 }

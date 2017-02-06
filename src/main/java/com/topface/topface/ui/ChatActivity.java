@@ -18,13 +18,11 @@ import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -37,8 +35,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     public static final String LAST_MESSAGE_USER_ID = "com.topface.topface.ui.ChatActivity_last_message_user_id";
     public static final String DISPATCHED_GIFTS = "com.topface.topface.ui.ChatActivity_dispatched_gifts";
 
-    @Inject
-    EventBus mEventBus;
+    private EventBus mEventBus;
     private Subscription mTakePhotoSubscription;
 
     @NotNull
@@ -55,7 +52,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        App.get().inject(this);
+        mEventBus = App.getAppComponent().eventBus();
         mTakePhotoSubscription = mEventBus.getObservable(TakePhotoActionHolder.class)
                 .filter(new Func1<TakePhotoActionHolder, Boolean>() {
                     @Override

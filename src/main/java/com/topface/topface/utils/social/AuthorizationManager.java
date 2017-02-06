@@ -35,8 +35,6 @@ import com.topface.topface.utils.popups.PopupManager;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 /**
  * AuthorizationManager has to be attached to some Activity (setted on getInstance(...))
  * onActivityResult(...) put to the parent Activity.onActivityResult(...)
@@ -52,12 +50,9 @@ public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
-    @Inject
-    TopfaceAppState mAppState;
-    @Inject
-    AuthState mAuthState;
-    @Inject
-    WeakStorage mWeakStorage;
+    private TopfaceAppState mAppState;
+    private AuthState mAuthState;
+    private WeakStorage mWeakStorage;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -90,7 +85,9 @@ public class AuthorizationManager {
         mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer());
         mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer());
         mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer());
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
+        mAuthState = App.getAppComponent().authState();
+        mWeakStorage = App.getAppComponent().weakStorage();
     }
 
     public static void saveAuthInfo(IApiResponse response) {

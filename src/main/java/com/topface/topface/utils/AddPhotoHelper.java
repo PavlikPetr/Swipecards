@@ -56,8 +56,6 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import permissions.dispatcher.NeedsPermission;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -94,10 +92,8 @@ public class AddPhotoHelper {
     private UserNotificationManager mNotificationManager;
     private File outputFile;
     private DialogInterface.OnCancelListener mOnDialogCancelListener;
-    @Inject
-    static TopfaceAppState mAppState;
-    @Inject
-    EventBus mEventBus;
+    private static TopfaceAppState mAppState;
+    private EventBus mEventBus;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -123,7 +119,8 @@ public class AddPhotoHelper {
     }
 
     public AddPhotoHelper(Activity activity) {
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
+        mEventBus = App.getAppComponent().eventBus();
         minPhotoSize = App.getAppOptions().getMinPhotoSize();
         mActivity = new WeakReference<>(activity);
         mContext = activity.getApplicationContext();

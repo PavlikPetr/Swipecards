@@ -75,7 +75,7 @@ public class NavigationManager {
     private Subscription mNavigationStateSubscription;
 
     public NavigationManager(IActivityDelegate activityDelegate, LeftMenuSettingsData settings) {
-        App.get().inject(this);
+        App.getAppComponent().inject(this);
         mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
         mNavigationStateSubscription = mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {

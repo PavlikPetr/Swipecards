@@ -16,8 +16,6 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkListener;
 import ru.ok.android.sdk.util.OkAuthType;
@@ -30,13 +28,12 @@ import rx.functions.Action1;
  */
 public class OkAuthorizer extends Authorizer {
 
-    @Inject
-    TopfaceAppState mAppState;
-    @Inject
-    AuthState mAuthState;
+    private TopfaceAppState mAppState;
+    private AuthState mAuthState;
 
     public OkAuthorizer() {
-        App.from(App.getContext()).inject(this);
+        mAppState = App.getAppComponent().appState();
+        mAuthState = App.getAppComponent().authState();
     }
 
     public static String getOkId() {

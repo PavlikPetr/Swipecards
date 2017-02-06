@@ -6,13 +6,10 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.Experiment4Binding
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
-import javax.inject.Inject
-
 
 /**
  * Базовая ВьюМодел для экспериментов4 (2-3)
@@ -29,7 +26,6 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
         const val FIFTH: Long = 400L
     }
 
-    @Inject lateinit var state: TopfaceAppState
     val profileSubscription: Subscription
 
     val avatar: ObservableField<String> = ObservableField()
@@ -41,11 +37,9 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
 
     init {
         setUrlAvatar(App.get().profile)
-        App.get().inject(this)
         setAvatarsForFakes()
-        profileSubscription = state.getObservable(Profile::class.java).subscribe { profile ->
-            setUrlAvatar(profile)
-        }
+        profileSubscription = App.getAppComponent().appState().getObservable(Profile::class.java)
+                .subscribe { setUrlAvatar(it) }
     }
 
     fun setFakeAvatar(profile: Profile) = if (profile.sex == Profile.BOY) R.drawable.upload_photo_male else R.drawable.upload_photo_female
@@ -57,11 +51,11 @@ abstract class Experiment4BaseViewModel(binding: Experiment4Binding) : BaseViewM
 
     fun setAvatarsForFakes() {
         val avat = fakeAvatars
-        binding.firstFakeAvatar.setImageResource(avat.get(0))
-        binding.secondFakeAvatar.setImageResource(avat.get(1))
-        binding.thirdFakeAvatar.setImageResource(avat.get(2))
-        binding.fourthFakeAvatar.setImageResource(avat.get(3))
-        binding.fifthFakeAvatar.setImageResource(avat.get(4))
+        binding.firstFakeAvatar.setImageResource(avat[0])
+        binding.secondFakeAvatar.setImageResource(avat[1])
+        binding.thirdFakeAvatar.setImageResource(avat[2])
+        binding.fourthFakeAvatar.setImageResource(avat[3])
+        binding.fifthFakeAvatar.setImageResource(avat[4])
     }
 
     override fun release() {

@@ -37,8 +37,6 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscription;
@@ -46,8 +44,7 @@ import rx.functions.Action1;
 
 public class PurchasesFragment extends BaseFragment {
 
-    @Inject
-    TopfaceAppState mAppState;
+    public TopfaceAppState mAppState;
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -120,7 +117,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+        mAppState = App.getAppComponent().appState();
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         if (savedInstanceState != null) {
             mSkipBonus = savedInstanceState.getBoolean(SKIP_BONUS, false);

@@ -9,7 +9,6 @@ import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Profile
 import com.topface.topface.requests.AlbumRequest
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.photosForPhotoBlog
@@ -19,7 +18,6 @@ import rx.Observable
 import rx.Subscriber
 import rx.Subscription
 import java.util.*
-import javax.inject.Inject
 
 /**
  * View model for list of users photos
@@ -30,29 +28,30 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
                              val lastSelectedPhotoId: ObservableInt,
                              private var mSavedState: Parcelable?) {
     val data = MultiObservableArrayList<Any>()
-    @Inject lateinit var appState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
     val state = ObservableField<Parcelable>(null)
     private var mUpdateSubscription: Subscription
     private var mPhotosLoadSubscription: Subscription? = null
 
     private var mProfileSubscription: Subscription? = null
 
-    private var  mHasInitialData = true
+    private var mHasInitialData = true
     private var mUpdateInProgress = false
     private var mLastLoadedPhotoPosition = 0
 
     init {
-        App.get().inject(this)
         mUpdateSubscription = updateObservable.subscribe {
-                if (mHasInitialData) {
-                    loadDataFromProfile()
-                    mHasInitialData = false
-                } else {
-                    mLastLoadedPhotoPosition = if (data.isEmpty()) 0 else (data.getList().last() as Photo).getPosition() + 1
-                    loadProfilePhotos()
-                }
+            if (mHasInitialData) {
+                loadDataFromProfile()
+                mHasInitialData = false
+            } else {
+                mLastLoadedPhotoPosition = if (data.isEmpty()) 0 else (data.getList().last() as Photo).getPosition() + 1
+                loadProfilePhotos()
             }
         }
+    }
 
     private fun loadProfilePhotos() {
         if (!mUpdateInProgress) {
@@ -62,7 +61,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
                     loadedPosition = mLastLoadedPhotoPosition,
                     mode = AlbumRequest.MODE_ALBUM,
                     type = AlbumLoadController.FOR_GALLERY
-            ).subscribe(object: Subscriber<AlbumPhotos>() {
+            ).subscribe(object : Subscriber<AlbumPhotos>() {
                 override fun onCompleted() {
                     mUpdateInProgress = false
                     unsubscribe()
@@ -77,7 +76,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
                     data?.let {
                         val profile = App.get().profile
                         it.removeAll(profile.photos)
-                        if (profile.photos.addAll(it)) appState.setData(profile)
+                        if (profile.photos.addAll(it)) mAppState.setData(profile)
                     }
                 }
             })
@@ -85,7 +84,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
     }
 
     private fun loadDataFromProfile() {
-        mProfileSubscription = appState.getObservable(Profile::class.java).subscribe {
+        mProfileSubscription = mAppState.getObservable(Profile::class.java).subscribe {
             if (it.photos.isNotEmpty()) {
                 mLastLoadedPhotoPosition = it.photos.last().position + 1
                 val cleanPhotos = it.photos.photosForPhotoBlog()
@@ -101,7 +100,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
                 }
 
                 if (wasEmpty && data.isNotEmpty() && lastSelectedPhotoId.get() == 0) lastSelectedPhotoId.set((data[0] as Photo).id)
-            } else{
+            } else {
                 data.replaceData(ArrayList<Any>())
                 lastSelectedPhotoId.set(0)
             }

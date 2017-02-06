@@ -38,6 +38,9 @@ import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.di.AppComponent;
+import com.topface.topface.di.AppModule;
+import com.topface.topface.di.DaggerAppComponent;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -98,8 +101,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import dagger.ObjectGraph;
-
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
 public class App extends ApplicationBase implements IStateDataUpdater {
@@ -113,12 +114,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
     @Inject
-    static RunningStateManager mStateManager;
-    @Inject
-    AdjustManager mAdjustManager;
+    RunningStateManager mStateManager;
     @Inject
     WeakStorage mWeakStorage;
-    private ObjectGraph mGraph;
+    private AdjustManager mAdjustManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
@@ -154,16 +153,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .addRequest(getProfileRequest())
                 .callback(handler)
                 .exec();
-    }
-
-    private void initObjectGraphForInjections() {
-        mGraph = ObjectGraph.create(getDaggerModules());
-        mGraph.injectStatics();
-        mGraph.inject(this);
-    }
-
-    public void inject(Object obj) {
-        mGraph.inject(obj);
     }
 
     public static App from(Context context) {
@@ -426,6 +415,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         request.exec();
     }
 
+    private static AppComponent appComponent;
+
+    public static AppComponent getAppComponent() {
+        return appComponent;
+    }
+
     @Override
     public void onCreate() {
         /**
@@ -436,7 +431,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             Class.forName("android.os.AsyncTask");
         } catch (Throwable ignore) {
         }
-
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(getApplicationContext()))
+                .build();
+        appComponent.inject(this);
         super.onCreate();
         mContext = getApplicationContext();
         LeakCanary.install(this);
@@ -447,8 +445,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
         }
         initVkSdk();
-        initObjectGraphForInjections();
-        inject(this);
+        mAdjustManager = getAppComponent().adjustManager();
         mAdjustManager.initAdjust();
         mProvider = new OptionsAndProfileProvider(this);
         // подписываемся на события о переходе приложения в состояние background/foreground

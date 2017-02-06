@@ -42,8 +42,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -62,8 +60,6 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  */
 public class OverflowMenu {
 
-    @Inject
-    TopfaceAppState mAppState;
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
     public static final String USER_ID_FOR_REMOVE = "user_id_for_remove";
     public static final String USER_ID_FOR_REMOVE_FROM_BLACK_LIST = "user_id_for_remove_from_black_list";
@@ -106,7 +102,6 @@ public class OverflowMenu {
     private IFragmentDelegate mFragmentDelegate;
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions) {
-        App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
         mContext = iFragmentDelegate.getActivity().getApplicationContext();
@@ -116,7 +111,7 @@ public class OverflowMenu {
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
         this(iFragmentDelegate, barActions);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
             @Override
             public void call(BalanceData balanceData) {
                 mBalanceData = balanceData;
