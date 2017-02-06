@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.dialogs
 import android.content.Intent
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
+import com.topface.billing.InstantPurchaseModel
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.LayoutEmptyDialogsBinding
@@ -39,7 +40,7 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
     }
 
     override val mAdapter by lazy {
-        val adapter = DialogsAdapter(mNavigator, activity)
+        val adapter = DialogsAdapter(InstantPurchaseModel(mNavigator, PAGE_NAME))
         adapter
     }
 

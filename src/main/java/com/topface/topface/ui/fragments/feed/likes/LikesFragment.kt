@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.likes
 
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
+import com.topface.billing.InstantPurchaseModel
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedLike
@@ -34,7 +35,7 @@ class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
     }
 
     override val mAdapter by lazy {
-        LikesFeedAdapter(mNavigator, mApi)
+        LikesFeedAdapter(InstantPurchaseModel(mNavigator, PAGE_NAME), mApi)
     }
     override val mViewModel by lazy {
         LikesFragmentViewModel(mBinding, mNavigator, mApi)
