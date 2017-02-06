@@ -20,7 +20,6 @@ public class AdsSettings implements Parcelable {
     public static final String VIP = "VIP";
     public static final String PRODUCT = "PRODUCT";
 
-
     /**
      * {Object} banner - информация о баннере для показа
      */
