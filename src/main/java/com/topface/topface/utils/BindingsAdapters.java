@@ -418,8 +418,10 @@ public class BindingsAdapters {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
-    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes) {
+    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"} ,requireAll = false)
+    public static void setPhotoWithTransformation(ImageView imageView,
+                                                  Photo photo, Long type, Integer placeholderRes,
+                                                  Float radiusOnline, Float outSideLine) {
         Context context = imageView.getContext().getApplicationContext();
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);
@@ -435,29 +437,18 @@ public class BindingsAdapters {
                     .load(suitableLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
                     .into(imageView);
         } else if (defaultLink != null) {
             Glide.with(context)
                     .load(defaultLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
                     .into(imageView);
         } else {
             Glide.with(context).load(placeholderRes).into(imageView);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
-    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
-        Context context = imageView.getContext().getApplicationContext();
-        Glide.with(context)
-                .load(imgUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .bitmapTransform(new GlideTransformationFactory(context).construct(type))
-                .into(imageView);
     }
 
     @BindingAdapter("viewConfigList")

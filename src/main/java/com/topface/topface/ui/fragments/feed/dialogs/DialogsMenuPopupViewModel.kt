@@ -10,6 +10,7 @@ import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogPopupEvent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.config.FeedsCache
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.glide_utils.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
@@ -30,6 +31,8 @@ class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val
     val userPhoto = ObservableField(mFeedDialog.user.photo)
     val type = ObservableField(if (mFeedDialog.user.online) GlideTransformationType.ONLINE_CIRCLE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
     val placeholderRes = ObservableField(if (mFeedDialog.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
+    val onLineCircle = ObservableField(R.dimen.popup_menu_circle_online.getDimen())
+    val strokeSize = ObservableField(R.dimen.popup_menu_stroke_outside.getDimen())
 
     fun deleteDialog() {
         mDeleteDialogsSubscriber = mApi.callDelete(FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS, ids = arrayListOf(mFeedDialog.user.id.toString())).subscribe(object : Subscriber<Boolean>() {
