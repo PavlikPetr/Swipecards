@@ -113,7 +113,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                 Utils.goToUrl(getActivity(), settings.banner.parameter);
                 break;
             case AdsSettings.PRODUCT:
-                mFeedNavigator.showPurchaseProduct(settings.banner.parameter, TAG);
+                mFeedNavigator.showPurchaseProduct(settings.banner.parameter, SCREEN_TYPE);
                 break;
             case AdsSettings.METHOD:
                 //прост
