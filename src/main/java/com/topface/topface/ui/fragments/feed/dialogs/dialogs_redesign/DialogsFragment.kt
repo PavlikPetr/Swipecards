@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.billing.InstantPurchaseModel
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
@@ -73,7 +74,7 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
                 putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
             }
         }
-                .addAdapterComponent(AppDayItemComponent(mApi))
+                .addAdapterComponent(AppDayItemComponent(mApi, InstantPurchaseModel(mNavigator, PAGE_NAME)))
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
                 .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))

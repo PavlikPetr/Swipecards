@@ -4,10 +4,10 @@ import android.databinding.ObservableInt
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.topface.billing.InstantPurchaseModel
 import com.topface.framework.utils.Debug
 import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.statistics.AppBannerStatistics
-import com.topface.topface.viewModels.BaseViewModel
 import org.jetbrains.anko.doAsync
 import java.util.*
 
@@ -15,8 +15,8 @@ import java.util.*
  * VM для ленты рекламы приложений дня
  * Created by siberia87 on 06.10.16.
  */
-class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>) :
-        RecyclerView.OnScrollListener() {
+class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDayImage>, private val mInstantPurchaseModel: InstantPurchaseModel)
+    : RecyclerView.OnScrollListener() {
 
     companion object {
         const val TAG_LOG = "app_of_the_day_banner_show"
@@ -26,7 +26,7 @@ class AppDayViewModel(binding: AppDayListBinding, private val array: List<AppDay
     private var mRes = mutableListOf<Int>()
 
     val mAdapter by lazy {
-        val adapter = AppDayAdapter()
+        val adapter = AppDayAdapter(mInstantPurchaseModel)
         adapter.addData(ArrayList(array))
         adapter
     }
