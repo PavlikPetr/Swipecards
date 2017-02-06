@@ -161,11 +161,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
-    override fun showDialogpopupMenu(item: FeedDialog) {
-        DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
-    }
+    override fun showDialogpopupMenu(item: FeedDialog) =
+            DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
 
-    override fun showPurchaseProduct(skuId: String, isSubscription: Boolean, from: String) {
-        mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, isSubscription, from), GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
-    }
+    override fun showPurchaseProduct(skuId: String, from: String) =
+            mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
+                    GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
+
 }

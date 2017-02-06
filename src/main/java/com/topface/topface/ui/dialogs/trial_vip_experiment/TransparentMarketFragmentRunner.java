@@ -66,8 +66,4 @@ public class TransparentMarketFragmentRunner {
             }
         }
     }
-
-    public interface IRunner {
-        void runMarketPopup();
-    }
 }

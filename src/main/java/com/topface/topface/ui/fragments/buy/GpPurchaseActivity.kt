@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.buy
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import com.google.gson.Gson
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
@@ -12,6 +11,7 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.SingleFragmentActivity
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
+import com.topface.topface.utils.extensions.isSubscription
 import org.onepf.oms.appstore.googleUtils.Purchase
 
 class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFrameBinding>() {
@@ -22,13 +22,19 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         const val ACTIVITY_REQUEST_CODE = 777
         const val FROM_DEFAULT = "UNDEFINED"
         const val PRODUCT = "success_purchased_product"
-        fun getIntent(skuId: String, isSubscription: Boolean, from: String) = if (skuId.isNullOrEmpty()) {
-            Intent()
-        } else {
-            Intent(App.getContext(), GpPurchaseActivity::class.java).apply {
-                putExtra(SKU_ID, skuId)
-                putExtra(FROM, from)
-                putExtra(IS_SUBSCRIPTION, isSubscription)
+
+        // если не нашли skuid в списке продуктов, значит и покупку не будем инициировать
+        fun getIntent(skuId: String, from: String): Intent {
+            val isSubscription = skuId.isSubscription()
+            return if (skuId.isNullOrEmpty() ||
+                    isSubscription == null) {
+                Intent()
+            } else {
+                Intent(App.getContext(), GpPurchaseActivity::class.java).apply {
+                    putExtra(SKU_ID, skuId)
+                    putExtra(FROM, from)
+                    putExtra(IS_SUBSCRIPTION, isSubscription)
+                }
             }
         }
     }
@@ -44,11 +50,11 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
                 }).apply {
             setOnPurchaseActions(object : GpMarketFragment.onPurchaseActions {
                 override fun onPurchaseSuccess(product: Purchase) {
-                    closeWithSuccess(Intent().putExtra(PRODUCT,JsonUtils.toJson(product)))
+                    closeWithSuccess(Intent().putExtra(PRODUCT, JsonUtils.toJson(product)))
                 }
 
                 override fun onPopupClosed() {
-                    closeWithFail()
+                    finish()
                 }
             })
         }
@@ -77,11 +83,6 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
 
     private fun closeWithSuccess(intent: Intent? = null) {
         setResult(Activity.RESULT_OK, intent)
-        finish()
-    }
-
-    private fun closeWithFail() {
-        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 }
