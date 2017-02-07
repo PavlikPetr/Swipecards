@@ -14,6 +14,7 @@ import com.topface.topface.data.AdsSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.IActivityDelegate;
