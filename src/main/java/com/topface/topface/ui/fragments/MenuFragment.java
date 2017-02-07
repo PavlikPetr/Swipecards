@@ -42,6 +42,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -75,6 +76,8 @@ public class MenuFragment extends Fragment {
     NavigationState mNavigationState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    WeakStorage mWeakStorage;
     private LeftMenuRecyclerViewAdapter mAdapter;
     private CountersData mCountersData;
     private BalanceData mBalanceData;
@@ -325,7 +328,13 @@ public class MenuFragment extends Fragment {
 
     @NotNull
     private HeaderFooterData<LeftMenuHeaderViewData> getHeaderData(@NotNull Profile profile) {
-        return new HeaderFooterData<>(new LeftMenuHeaderViewData(getValidatedUserPhotoInterface(profile), profile.firstName, profile.age, profile.city != null ? profile.city.getName() : Utils.EMPTY), mOnHeaderClick);
+        return new HeaderFooterData<>(new LeftMenuHeaderViewData(
+                getValidatedUserPhotoInterface(profile),
+                profile.firstName,
+                profile.age,
+                profile.city != null ? profile.city.getName() : Utils.EMPTY,
+                mWeakStorage.getDatingRedesignEnabled()
+        ), mOnHeaderClick);
     }
 
     @NotNull
