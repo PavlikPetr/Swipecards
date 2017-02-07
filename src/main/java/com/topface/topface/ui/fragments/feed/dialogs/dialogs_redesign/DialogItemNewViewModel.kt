@@ -8,6 +8,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.glide_utils.GlideTransformationType
@@ -54,6 +55,8 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
                 FeedDialog.GIFT -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) R.string.chat_gift_in.getString() else R.string.chat_gift_out.getString()
                 else -> item.text
             }
+
+    fun getTag() = item.getUserId().toString()
 
     fun onClick() = navigator.showChat(item)
 
