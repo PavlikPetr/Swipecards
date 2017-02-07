@@ -14,8 +14,9 @@ import com.topface.topface.data.AdsSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.buy.GpPurchaseActivity;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.Nullable;
@@ -31,6 +32,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     public static final String TAG = "OwnFullscreenPopup";
     @Nullable
     private AdsSettings mAdsSettings;
+    private FeedNavigator mFeedNavigator = new FeedNavigator((IActivityDelegate) getActivity());
     public static final String SCREEN_TYPE = "OwnFullscreenPopup";
 
     public static OwnFullscreenPopup newInstance(AdsSettings adsSettings) {
@@ -111,6 +113,9 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                 break;
             case AdsSettings.URL:
                 Utils.goToUrl(getActivity(), settings.banner.parameter);
+                break;
+            case AdsSettings.PRODUCT:
+                mFeedNavigator.showPurchaseProduct(settings.banner.parameter, SCREEN_TYPE);
                 break;
             case AdsSettings.METHOD:
                 //прост
