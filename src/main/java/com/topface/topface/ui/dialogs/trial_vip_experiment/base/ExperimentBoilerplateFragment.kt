@@ -157,11 +157,5 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
 
     override fun runMarketPopup() {
         mNavigator.showPurchaseProduct(App.get().options.trialVipExperiment.subscriptionSku, TAG)
-//        if (isAdded && mTimeForTransaction) {
-//            mMarketFragmentRunner.startTransparentMarketFragment {
-//                TrialVipExperimentStatistics.sendPurchaseCompleted()
-//                dismiss()
-//            }
-//        }
     }
 }
