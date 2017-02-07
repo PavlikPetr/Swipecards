@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -29,7 +30,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -46,6 +46,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -419,7 +421,7 @@ public class BindingsAdapters {
 
     @SuppressWarnings("unchecked")
     @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
-    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
+    public static <T extends IPhoto> void setPhotoWithTransformation(ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
         Context context = imageView.getContext().getApplicationContext();
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);
@@ -447,6 +449,23 @@ public class BindingsAdapters {
         } else {
             Glide.with(context).load(placeholderRes).into(imageView);
         }
+    }
+
+    @BindingAdapter({"app:glideBlurUrl", "app:blurRadius"})
+    public static void setBlurredImageByUrlWithRadius(ImageView imageView, String imgUrl, int blurRadius) {
+        Context context = imageView.getContext().getApplicationContext();
+        Glide.with(context)
+                .load(imgUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .bitmapTransform(new BlurTransformation(context, blurRadius))
+                .into(imageView);
+    }
+
+    @BindingAdapter("android:layout_height")
+    public static void setImageViewHeight(ImageView view, float height) {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = (int)height;
+        view.setLayoutParams(layoutParams);
     }
 
     @BindingAdapter("viewConfigList")

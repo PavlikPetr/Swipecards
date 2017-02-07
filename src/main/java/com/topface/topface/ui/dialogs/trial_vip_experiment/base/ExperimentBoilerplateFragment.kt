@@ -1,6 +1,8 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -13,16 +15,20 @@ import com.topface.topface.R
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
 import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
+import com.topface.topface.ui.dialogs.trial_vip_experiment.IRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
  * База для всех экспериментов
  * Created by tiberal on 15.11.16.
  */
-class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), TransparentMarketFragmentRunner.IRunner {
+class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunner {
 
     var cancelListener: DialogInterface.OnCancelListener? = null
     var dismissListener: DialogInterface.OnDismissListener? = null
@@ -45,6 +51,10 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
                     }
                     this
                 }
+    }
+
+    private val mNavigator by lazy {
+        FeedNavigator(activity as IActivityDelegate)
     }
 
     private val mType by lazy {
@@ -137,12 +147,15 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
         super.onDestroy()
     }
 
-    override fun runMarketPopup() {
-        if (isAdded && mTimeForTransaction) {
-            mMarketFragmentRunner.startTransparentMarketFragment {
-                TrialVipExperimentStatistics.sendPurchaseCompleted()
-                dismiss()
-            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GpPurchaseActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            TrialVipExperimentStatistics.sendPurchaseCompleted()
+            dismiss()
         }
+    }
+
+    override fun runMarketPopup() {
+        mNavigator.showPurchaseProduct(App.get().options.trialVipExperiment.subscriptionSku, TAG)
     }
 }

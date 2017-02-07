@@ -1,10 +1,15 @@
 package com.topface.topface.viewModels;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.databinding.ObservableField;
+import android.databinding.ObservableFloat;
+import android.databinding.ObservableInt;
 import android.view.View;
 
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.HeaderFooterData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuHeaderViewData;
@@ -19,7 +24,11 @@ public class LeftMenuHeaderViewModel {
     public ObservableField<String> userAge = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> userCity = new ObservableField<>(Utils.EMPTY);
     public ObservableField<String> background = new ObservableField<>(null);
+    public ObservableInt blurRadius = new ObservableInt(80);
+    public ObservableInt placeholderRes = new ObservableInt(0);
+    public ObservableFloat backgroundHeight = new ObservableFloat();
     public final static String AGE_TEMPLATE = ", %d";
+    public ObservableInt topMargin = new ObservableInt(0);
 
     private HeaderFooterData.OnViewClickListener<LeftMenuHeaderViewData> mOnClick;
     private HeaderFooterData<LeftMenuHeaderViewData> mData;
@@ -41,7 +50,9 @@ public class LeftMenuHeaderViewModel {
             setCity(data.getData().getCity());
         }
         mOnClick = data.getClickListener();
-
+        topMargin.set(mData.getData().isIsTranslucentEnabled() ? getStatusBarHeight(App.getContext()) : 0);
+        float h = App.get().getResources().getDimension(R.dimen.left_menu_header_height);
+        backgroundHeight.set(mData.getData().isIsTranslucentEnabled() ? h + topMargin.get() : h);
     }
 
     private void setPhoto(IPhoto photo) {
@@ -82,5 +93,16 @@ public class LeftMenuHeaderViewModel {
     // тэги для автоматизированного тестирования
     public String getTag(){
         return String.format(App.getCurrentLocale(), ITEM_TAG_TEMPLATE, FragmentIdData.PROFILE);
+    }
+
+    private int getStatusBarHeight(Context context) {
+        //todo использовать метод из утилит, когда он туда подтянется из предыдущей версии
+        Resources resources = context.getApplicationContext().getResources();
+        int result = 0;
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }

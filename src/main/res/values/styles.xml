@@ -1067,7 +1067,6 @@
 
     <style name="LeftMenuHeaderBackground">
         <item name="android:layout_width">@dimen/left_menu_width</item>
-        <item name="android:layout_height">@dimen/left_menu_header_height</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
 

@@ -36,4 +36,5 @@ interface IFeedNavigator {
     fun showTrialPopup(type: Long, args: Bundle)
 
     fun showDialogpopupMenu(item: FeedDialog)
+    fun showPurchaseProduct(skuId: String, from: String)
 }
