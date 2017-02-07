@@ -49,7 +49,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
                     retainInstance = true
                 }).apply {
             setOnPurchaseActions(object : GpMarketFragment.onPurchaseActions {
-                override fun onPurchaseSuccess(product: Purchase) {
+                override fun onPurchaseSuccess(product: Purchase?) {
                     closeWithSuccess(Intent().putExtra(PRODUCT, JsonUtils.toJson(product)))
                 }
 

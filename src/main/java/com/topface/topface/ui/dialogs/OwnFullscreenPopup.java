@@ -1,5 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ import com.topface.topface.data.AdsSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.Utils;
 
@@ -141,5 +144,13 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     private void cancel() {
         getDialog().cancel();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GpPurchaseActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            dismiss();
+        }
     }
 }

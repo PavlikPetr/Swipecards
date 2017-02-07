@@ -23,26 +23,20 @@ class AppDayItemViewModel(private val mContext: Context, val image: AppDayImage,
     val iconUrl = ObservableField(image.imgSrc)
 
     fun onBannerClick() {
-        when(image.showType) {
-            PRODUCT-> {
+        when (image.showType) {
+            PRODUCT -> {
                 if (image.sku.isEmpty()) openLink(image) else {
-                    with(mInstantPurchaseModel) {
-                        navigator.showPurchaseProduct(
-                                skuId = image.sku,
-                                from = from,
-                                isSubscription = isSubscription
-                        )
-                    }
+                    with(mInstantPurchaseModel) { navigator.showPurchaseProduct(image.sku, from) }
                 }
             }
-            // ранее тут должно было использоваться поле image.external {@link AppDayImage.external}
-            // но оно не использовалось
-            // видимо задел на будущее
-            // теперь для разделения надо будет использовать WEBVIEW и BROWSER
+        // ранее тут должно было использоваться поле image.external {@link AppDayImage.external}
+        // но оно не использовалось
+        // видимо задел на будущее
+        // теперь для разделения надо будет использовать WEBVIEW и BROWSER
             WEBVIEW, BROWSER -> {
                 openLink(image)
             }
-            // в непредвиденной ситуации попробуем тоже открыть линк
+        // в непредвиденной ситуации попробуем тоже открыть линк
             else -> openLink(image)
         }
         AppBannerStatistics.sendBannerClicked(image.id)
