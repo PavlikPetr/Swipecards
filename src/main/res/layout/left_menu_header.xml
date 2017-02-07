@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="com.topface.topface.utils.glide_utils.GlideTransformationType" />
+
         <variable
             name="viewModel"
             type="com.topface.topface.viewModels.LeftMenuHeaderViewModel" />
@@ -14,11 +16,11 @@
         android:layout_height="wrap_content"
         android:onClick="@{viewModel::onClick}">
 
-        <com.topface.topface.ui.views.ImageViewRemote
+        <ImageView
             style="@style/LeftMenuHeaderBackground"
-            app:blurRadius="10"
-            app:preProcessor="blur"
-            app:remoteSrc="@{viewModel.background}" />
+            android:layout_height="@{viewModel.backgroundHeight, default=wrap_content}"
+            app:blurRadius="@{viewModel.blurRadius}"
+            app:glideBlurUrl="@{viewModel.background}" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -28,18 +30,19 @@
             <ImageView
                 style="@style/LeftMenuHeaderBackground"
                 android:layout_height="86dp"
-                android:layout_marginTop="86dp"
+                android:layout_gravity="bottom"
                 android:background="@drawable/gradient_bg" />
 
             <LinearLayout
                 style="@style/LeftMenuHeader"
                 app:uiTestTag="@{viewModel.getTag}">
 
-                <com.topface.topface.ui.views.ImageViewRemote
+                <ImageView
                     android:layout_width="@dimen/left_menu_avatar_width"
                     android:layout_height="@dimen/left_menu_avatar_height"
-                    app:preProcessor="inscribedAvatar"
-                    app:setPhoto="@{viewModel.photo}" />
+                    app:glideTransformationPhoto="@{viewModel.photo}"
+                    app:placeholderRes="@{viewModel.placeholderRes}"
+                    app:typeTransformation="@{GlideTransformationType.CROP_CIRCLE_TYPE}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
