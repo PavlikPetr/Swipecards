@@ -7,6 +7,7 @@ import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
+import jp.wasabeef.glide.transformations.CropCircleTransformation
 
 /**
  * Трансформация круглая и кропнутая для того, чтобы накладыванием сверху заниматься
@@ -32,7 +33,7 @@ abstract class CropAndCircleTransformation(context: Context) : Transformation<Bi
     }
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
-        mRemoteBitmap = NewCircleCropTransformation(mContext).transform(resource, outWidth, outHeight).get()
+        mRemoteBitmap = CropCircleTransformation(mContext).transform(resource, outWidth, outHeight).get()
         val coordinates = ((mRemoteBitmap.width - Math.min(mRemoteBitmap.width, mRemoteBitmap.height)) / 2).toFloat()
         mCanvas.drawBitmap(mRemoteBitmap, coordinates, coordinates, null)
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
