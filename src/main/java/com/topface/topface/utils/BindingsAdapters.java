@@ -418,10 +418,8 @@ public class BindingsAdapters {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"} ,requireAll = false)
-    public static void setPhotoWithTransformation(ImageView imageView,
-                                                  Photo photo, Long type, Integer placeholderRes,
-                                                  Float radiusOnline, Float outSideLine) {
+    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
+    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
         Context context = imageView.getContext().getApplicationContext();
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);

@@ -32,9 +32,9 @@ abstract class CropAndCircleTransformation(context: Context) : Transformation<Bi
     }
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
-        mRemoteBitmap = NewCircleCropTransformation(mContext).transform(resource,outWidth,outHeight).get()
+        mRemoteBitmap = NewCircleCropTransformation(mContext).transform(resource, outWidth, outHeight).get()
         val coordinates = ((mRemoteBitmap.width - Math.min(mRemoteBitmap.width, mRemoteBitmap.height)) / 2).toFloat()
-        mCanvas.drawBitmap(mRemoteBitmap, coordinates, coordinates,null)
+        mCanvas.drawBitmap(mRemoteBitmap, coordinates, coordinates, null)
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 

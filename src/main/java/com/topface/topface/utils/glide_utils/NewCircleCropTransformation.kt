@@ -6,11 +6,10 @@ import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.Resource
 import jp.wasabeef.glide.transformations.CropCircleTransformation
 
-open class NewCircleCropTransformation(val mContext: Context) : Transformation<Bitmap> {
+class NewCircleCropTransformation(val mContext: Context) : Transformation<Bitmap> {
 
-    override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
-        return CropCircleTransformation(mContext).transform(resource,outWidth,outHeight)
-    }
+    override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int) =
+            CropCircleTransformation(mContext).transform(resource, outWidth, outHeight)
 
     override fun getId() = "NewCircleCropTransformation"
 }
