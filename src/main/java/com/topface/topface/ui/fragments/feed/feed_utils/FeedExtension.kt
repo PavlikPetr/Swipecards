@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.feed_utils
 
+import com.topface.topface.App
 import com.topface.topface.data.FeedItem
 import com.topface.topface.utils.extensions.toLongSafe
 import org.jetbrains.anko.collections.forEachReversedByIndex
@@ -110,4 +111,8 @@ fun List<Int>.convertFeedIdList(): ArrayList<String> {
     return list
 }
 
-
+// для UI тестирования ТЭГ
+fun <T : FeedItem> T?.getUITestTag(feedType: String = "undefined"):String {
+    val TAG_TEMPLATE = "%s_%d_%s"
+    return if (this != null && user != null) String.format(App.getCurrentLocale(), TAG_TEMPLATE, user.id, this.getUserId(), feedType) else "herVam"
+}

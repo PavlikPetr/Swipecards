@@ -4,12 +4,11 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 import android.databinding.ObservableField
 import android.graphics.Typeface
 import android.view.View
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
+import com.topface.topface.ui.fragments.feed.feed_utils.getUITestTag
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.glide_utils.GlideTransformationType
@@ -29,8 +28,8 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     val dialogMessageIcon: ObservableField<Int> = ObservableField(prepareMessageIcon())
     val dialogTime: ObservableField<String> = ObservableField(item.createdRelative)
     val text: ObservableField<String> = ObservableField(prepareDialogText())
-    val TAG_TEMPLATE = "%s_%d_%s"
-    open val feed_type: String = "Dialog_redesign"
+
+    val feed_type: String = "Dialog_redesign"
 
     private fun prepareMessageIcon() =
             when (item.type) {
@@ -59,7 +58,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
                 else -> item.text
             }
 
-    fun getTag() = String.format(App.getCurrentLocale(), TAG_TEMPLATE, item.id, item.getUserId(), feed_type)
+    fun getTag() = item.getUITestTag(feed_type)
 
     fun onClick() = navigator.showChat(item)
 
