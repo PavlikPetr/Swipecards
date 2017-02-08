@@ -114,5 +114,5 @@ fun List<Int>.convertFeedIdList(): ArrayList<String> {
 // для UI тестирования ТЭГ
 fun <T : FeedItem> T?.getUITestTag(feedType: String = "undefined"):String {
     val TAG_TEMPLATE = "%s_%d_%s"
-    return if (this != null && user != null) String.format(App.getCurrentLocale(), TAG_TEMPLATE, user.id, this.getUserId(), feedType) else "herVam"
+    return if (this != null && user != null) String.format(App.getCurrentLocale(), TAG_TEMPLATE, user.id, this.getUserId(), feedType) else "undefined"
 }
