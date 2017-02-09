@@ -12,7 +12,9 @@ import android.view.ViewGroup
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.data.Profile
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
+import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IRunner
@@ -22,7 +24,12 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
+import javax.inject.Inject
 
 /**
  * База для всех экспериментов
@@ -34,6 +41,8 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
     var dismissListener: DialogInterface.OnDismissListener? = null
     var onFragmentFinishDelegate: IOnFragmentFinishDelegate? = null
     private lateinit var mArgs: Bundle
+    @Inject lateinit internal var appState: TopfaceAppState
+    private lateinit var mPremiumStatusSubscription: Subscription
 
     companion object {
         const val TAG = "TrialVipPopup"
@@ -102,6 +111,16 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
         mArgs = savedInstanceState ?: arguments
     }
 
+    init {
+        App.get().inject(this)
+        mPremiumStatusSubscription = appState.getObservable(Profile::class.java)
+                .filter { it.premium }
+                .applySchedulers()
+                .subscribe(shortSubscription {
+                    dismiss()
+                })
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putAll(mArgs)
@@ -144,6 +163,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
         cancelListener = null
         dismissListener = null
         onFragmentFinishDelegate = null
+        mPremiumStatusSubscription.safeUnsubscribe()
         super.onDestroy()
     }
 
