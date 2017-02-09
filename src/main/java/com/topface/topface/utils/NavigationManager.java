@@ -18,6 +18,8 @@ import com.topface.topface.data.leftMenu.IntegrationSettingsData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.experiments.feed_design.DialogsFeedFactory;
+import com.topface.topface.experiments.feed_design.LikesFeedFactory;
 import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.statistics.FBInvitesStatistics;
@@ -28,10 +30,7 @@ import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragment;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
-import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
@@ -216,10 +215,10 @@ public class NavigationManager {
                 fragment = new PhotoblogFragment();
                 break;
             case FragmentIdData.TABBED_LIKES:
-                fragment = new TabbedLikesFragment();
+                fragment = (new LikesFeedFactory()).construct();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = mWeakStorage.getProfileDialogRedesignEnabled() ? new DialogsFragment() : new TabbedDialogsFragment();
+                fragment = (new DialogsFeedFactory()).construct();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();

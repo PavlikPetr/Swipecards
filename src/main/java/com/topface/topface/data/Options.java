@@ -22,7 +22,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
-import com.topface.topface.ui.fragments.dating.dating_redesign.TargetSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
@@ -202,7 +201,17 @@ public class Options extends AbstractData {
     /**
      * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
      */
+    @Deprecated
     private boolean dialogRedesignEnabled;
+
+    /**
+     * {Integer} dialogRedesign - версия дизайна лайков/сообщений
+     * 0 - дефолт (старые диалоги)
+     * 1 - новые диалоги (замена для флажка dialogRedesignEnabled, который останется для старых клиентов)
+     * 2 - новый экран диалогов + убрать табы в симпатиях, оставить только одну, основную, страничку
+     * 3 - новый экран диалогов + вернуть все табы в симпатиях
+     */
+    private int dialogRedesign;
 
     /**
      * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
@@ -392,6 +401,7 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+            dialogRedesign = response.optInt("dialogRedesign");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
 
@@ -469,6 +479,8 @@ public class Options extends AbstractData {
     public boolean getDialogRedesignEnabled() {
         return dialogRedesignEnabled;
     }
+
+    public int getDialogDesignVersion() { return dialogRedesign; }
 
     public boolean containsBannerType(String bannerType) {
         for (PageInfo page : pages.values()) {
