@@ -22,7 +22,6 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
-import com.topface.topface.ui.fragments.dating.dating_redesign.TargetSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
