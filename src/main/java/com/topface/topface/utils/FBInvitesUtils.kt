@@ -1,9 +1,7 @@
 package com.topface.topface.utils
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.os.Looper
 import android.text.TextUtils
 import bolts.AppLinks
 import com.facebook.FacebookSdk
@@ -13,9 +11,6 @@ import com.facebook.share.widget.AppInviteDialog
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.Options
-import com.topface.topface.requests.IApiResponse
-import com.topface.topface.requests.ReferrerRequest
-import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.utils.social.AuthToken
 
 object FBInvitesUtils {
@@ -48,12 +43,12 @@ object FBInvitesUtils {
             val context = App.getContext()
             FacebookSdk.sdkInitialize(context)
             AppLinks.getTargetUrlFromInboundIntent(context, intent)?.let {
-                verifyAppLink(context, it.toString())
+                verifyAppLink(it.toString())
             } ?:
                     AppLinkData.fetchDeferredAppLinkData(context) { appLinkData ->
                         val appLink = appLinkData?.targetUri?.toString()
                         if (appLink != null && appLink.isNotEmpty() && appLink != "null") {
-                            verifyAppLink(context, appLink)
+                            verifyAppLink(appLink)
                         }
                     }
         }
@@ -65,21 +60,15 @@ object FBInvitesUtils {
      * Если ссылка валидная: вернется CompletedResponse
      * Если ссылка не валидная: выкинется ошибка IncorrectValueLogicException (код 23)
      */
-    private fun verifyAppLink(context: Context, link: String) {
+    private fun verifyAppLink(link: String) {
         Debug.log("FbInvite:: verifying appLink $link")
-        ReferrerRequest(context, link).callback(object : ApiHandler(Looper.getMainLooper()) {
-            override fun fail(codeError: Int, response: IApiResponse?) {
-                Debug.log("FbInvite:: appLink check failed with code $codeError")
+        if (App.getAppOptions().invites.isLinkValid(link)) {
+            Debug.log("FbInvite:: appLink ok, saving")
+            with(App.getAppConfig()) {
+                fbInviteAppLink = link
+                saveConfig()
             }
-
-            override fun success(response: IApiResponse?) {
-                Debug.log("FbInvite:: appLink ok, saving")
-                with(App.getAppConfig()) {
-                    fbInviteAppLink = link
-                    saveConfig()
-                }
-            }
-        }).exec()
+        }
     }
 
     fun getAppLinkToSend() =

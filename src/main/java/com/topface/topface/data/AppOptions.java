@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import android.text.TextUtils;
+
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
@@ -8,6 +10,8 @@ import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Application options
@@ -31,6 +35,7 @@ public class AppOptions extends AbstractData {
     private int sessionTimeout;
     private int maxPartialRequestsCount;
     private Boolean scruffy = null;
+    private Invites invites;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -48,6 +53,7 @@ public class AppOptions extends AbstractData {
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
             scruffy = item.optBoolean("scruffy", false);
             minPhotoSize = JsonUtils.fromJson(item.optString("minPhotoSize"), MinPhotoSize.class);
+            invites = JsonUtils.fromJson(item.optString("invites"), Invites.class);
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
@@ -129,6 +135,11 @@ public class AppOptions extends AbstractData {
         return  conditions.userStatusMaxLength;
     }
 
+    public Invites getInvites() {
+        if (invites == null) invites = new Invites();
+        return invites;
+    }
+
     public boolean isScruffyEnabled() {
         return scruffy != null ? scruffy : false;
     }
@@ -188,6 +199,34 @@ public class AppOptions extends AbstractData {
         public int width = 200;
 
         MinPhotoSize() {
+        }
+    }
+
+    public class Invites {
+        private ArrayList<String> facebookInvites;
+
+        public boolean isLinkValid(String link) {
+            if (!TextUtils.isEmpty(link) && !facebookInvites.isEmpty()) {
+                for (String template: facebookInvites) {
+                    String cleanTemplate = getCleanTemplate(template);
+                    if (link.matches(cleanTemplate)) return true;
+                }
+            }
+            return false;
+        }
+
+        private String getCleanTemplate(String template) {
+            // можно было бы занести в константы {{tf_uid_hash}} но что-то у меня сомнения в надежности
+            // данная строка настраивается руками в админке, мало ли опечатаются
+            String mask = template.substring(template.indexOf("{{"), template.lastIndexOf("}}") + 2);
+            return template.replace(mask, ".*");
+        }
+
+        /**
+         * Construct empty invites if not found in options response
+         */
+        public Invites() {
+            facebookInvites = new ArrayList<>();
         }
     }
 }

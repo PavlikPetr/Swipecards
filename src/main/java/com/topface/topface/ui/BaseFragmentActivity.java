@@ -28,7 +28,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.fragments.dating.dating_redesign.TargetSettings;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FBInvitesUtils;
