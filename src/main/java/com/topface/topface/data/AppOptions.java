@@ -35,7 +35,7 @@ public class AppOptions extends AbstractData {
     private int sessionTimeout;
     private int maxPartialRequestsCount;
     private Boolean scruffy = null;
-    public Invites invites;
+    public Invites invites = new Invites();
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -203,8 +203,7 @@ public class AppOptions extends AbstractData {
         public boolean isLinkValid(String link) {
             if (!TextUtils.isEmpty(link) && !facebookInvites.isEmpty()) {
                 for (String template: facebookInvites) {
-                    String cleanTemplate = getCleanTemplate(template);
-                    if (link.matches(cleanTemplate)) return true;
+                    if (link.matches(getCleanTemplate(template))) return true;
                 }
             }
             return false;
