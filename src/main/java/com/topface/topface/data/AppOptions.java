@@ -35,7 +35,7 @@ public class AppOptions extends AbstractData {
     private int sessionTimeout;
     private int maxPartialRequestsCount;
     private Boolean scruffy = null;
-    private Invites invites;
+    public Invites invites;
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -53,7 +53,7 @@ public class AppOptions extends AbstractData {
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
             scruffy = item.optBoolean("scruffy", false);
             minPhotoSize = JsonUtils.fromJson(item.optString("minPhotoSize"), MinPhotoSize.class);
-            invites = JsonUtils.fromJson(item.optString("invites"), Invites.class);
+            invites = JsonUtils.optFromJson(item.optString("invites"), Invites.class, new Invites());
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
@@ -133,11 +133,6 @@ public class AppOptions extends AbstractData {
 
     public int getUserStatusMaxLength() {
         return  conditions.userStatusMaxLength;
-    }
-
-    public Invites getInvites() {
-        if (invites == null) invites = new Invites();
-        return invites;
     }
 
     public boolean isScruffyEnabled() {
@@ -225,7 +220,7 @@ public class AppOptions extends AbstractData {
         /**
          * Construct empty invites if not found in options response
          */
-        public Invites() {
+        Invites() {
             facebookInvites = new ArrayList<>();
         }
     }
