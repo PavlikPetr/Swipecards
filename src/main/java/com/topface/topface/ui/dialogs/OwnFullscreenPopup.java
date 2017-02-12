@@ -33,7 +33,6 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     public static final String TAG = "OwnFullscreenPopup";
     @Nullable
     private AdsSettings mAdsSettings;
-    private FeedNavigator mFeedNavigator = new FeedNavigator((IActivityDelegate) getActivity());
     public static final String SCREEN_TYPE = "OwnFullscreenPopup";
 
     public static OwnFullscreenPopup newInstance(AdsSettings adsSettings) {
@@ -116,6 +115,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                 Utils.goToUrl(getActivity(), settings.banner.parameter);
                 break;
             case AdsSettings.PRODUCT:
+                FeedNavigator mFeedNavigator = new FeedNavigator((IActivityDelegate) getActivity());
                 mFeedNavigator.showPurchaseProduct(settings.banner.parameter, SCREEN_TYPE);
                 break;
             case AdsSettings.METHOD:
