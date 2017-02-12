@@ -1396,6 +1396,16 @@
         <item name="textAllCaps">true</item>
     </style>
 
+    <style name="PopupGreenButtonNew">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/green_button_selector</item>
+        <item name="android:textColor">@color/popup_green_button_text</item>
+        <item name="android:textSize">@dimen/popup_button_text</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
     <style name="PopupBorderlessdButton" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
