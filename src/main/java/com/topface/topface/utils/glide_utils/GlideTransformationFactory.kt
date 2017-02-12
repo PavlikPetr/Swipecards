@@ -15,20 +15,20 @@ class GlideTransformationFactory(val mContext: Context) {
                 GlideTransformationType.ADMIRATION_TYPE -> arrayOf(AdmirationTransformation(mContext))
 
                 GlideTransformationType.CROP_CIRCLE_TYPE -> arrayOf(
-                        NewCropTransformation(mContext),
+                        CropAtImageViewTransformation(mContext),
                         CropCircleTransformation(mContext))
 
                 GlideTransformationType.ADMIRATION_AND_ONLINE_TYPE -> arrayOf(
-                        NewCropTransformation(mContext),
+                        CropAtImageViewTransformation(mContext),
                         CropCircleTransformation(mContext),
                         AdmirationTransformation(mContext),
                         NewOnlineTransformation(mContext, radiusOnline as Float, outSideLine as Float))
 
                 GlideTransformationType.ONLINE_CIRCLE_TYPE -> arrayOf(
-                        NewCropTransformation(mContext),
+                        CropAtImageViewTransformation(mContext),
                         CropCircleTransformation(mContext),
                         NewOnlineTransformation(mContext, radiusOnline as Float, outSideLine as Float))
 
-                else -> arrayOf(NewCropTransformation(mContext), CropCircleTransformation(mContext))
+                else -> arrayOf(CropAtImageViewTransformation(mContext), CropCircleTransformation(mContext))
             }
 }
