@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <com.topface.topface.ui.views.ZoomImageViewRemote
+    <com.topface.topface.ui.views.ZoomImageView
         android:id="@+id/ivPreView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
@@ -44,7 +42,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiv
 import com.topface.topface.ui.fragments.profile.photoswitcher.PhotosManager;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
-import com.topface.topface.ui.views.ImageSwitcher;
+import com.topface.topface.ui.views.image_switcher.ImageSwitcher1;
 import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
@@ -93,7 +91,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             int realPosition = calcRealPosition(position, mPhotoLinks.size());
             setCounter(realPosition);
             refreshButtonsState();
-            mPhotosManager.check(((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData(),
+            mPhotosManager.check(((ImageSwitcher1.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData(),
                     realPosition);
         }
 
@@ -147,7 +145,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         }
     };
     private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcherLooped mImageSwitcher;
+    private ImageSwitcher1 mImageSwitcher;
     private int mUid;
     private PhotosManager mPhotosManager = new PhotosManager(new IUploadAlbumPhotos() {
         @Override
@@ -325,7 +323,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // ViewPager becomes visible without data
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
-        mImageSwitcher = ((ImageSwitcherLooped) findViewById(R.id.galleryAlbum));
+        mImageSwitcher = ((ImageSwitcher1) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
