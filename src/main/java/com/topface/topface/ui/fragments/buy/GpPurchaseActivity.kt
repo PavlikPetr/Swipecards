@@ -11,6 +11,7 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.SingleFragmentActivity
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
+import com.topface.topface.utils.MarketApiManager
 import com.topface.topface.utils.extensions.isSubscription
 import org.onepf.oms.appstore.googleUtils.Purchase
 
@@ -26,8 +27,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         // если не нашли skuid в списке продуктов, значит и покупку не будем инициировать
         fun getIntent(skuId: String, from: String): Intent {
             val isSubscription = skuId.isSubscription()
-            return if (skuId.isNullOrEmpty() ||
-                    isSubscription == null) {
+            return if (!MarketApiManager().isMarketApiAvailable  || isSubscription == null) {
                 Intent()
             } else {
                 Intent(App.getContext(), GpPurchaseActivity::class.java).apply {

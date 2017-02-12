@@ -20,6 +20,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.experiments.feed_design.DialogsAndLikesFeedDesigned;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -60,8 +61,6 @@ import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
-    @Inject
-    static WeakStorage mWeakStorage;
     private Context mContext;
 
     public static final int GCM_TYPE_UNKNOWN = -1;
@@ -385,7 +384,7 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
-        boolean dialogRedesignEnabled = mWeakStorage.getProfileDialogRedesignEnabled();
+        boolean dialogRedesignEnabled = DialogsAndLikesFeedDesigned.getDesignVersionJava() != 0;
         Intent i = null;
         String pageName;
         switch (type) {
@@ -446,12 +445,12 @@ public class GCMUtils {
                 break;
             case GCM_TYPE_FAN_UPDATE_PROFILE:
                 lastNotificationType = GCM_TYPE_FAN_UPDATE_PROFILE;
-                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city,"gcm_type_fan_update_profile");
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city, "gcm_type_fan_update_profile");
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserFormFragment.class.getName());
                 break;
             case GCM_TYPE_FAN_ADD_PHOTO:
                 lastNotificationType = GCM_TYPE_FAN_ADD_PHOTO;
-                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city,"gcm_type_fan_add_photo");
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city, "gcm_type_fan_add_photo");
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserPhotoFragment.class.getName());
                 break;
             case GCM_TYPE_FAN_ONLINE:
