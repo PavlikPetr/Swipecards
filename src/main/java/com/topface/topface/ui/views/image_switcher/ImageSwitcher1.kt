@@ -309,13 +309,11 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
          */
         fun setPhotoToPosition(position: Int, ifLoaded: Boolean) {
             val realPosition = getRealPosition(position)
-            if (!ifLoaded) {
                 val baseLayout = this@ImageSwitcher1.findViewWithTag(VIEW_TAG + Integer.toString(position))
                 //Этот метод может вызываться до того, как создана страница для этой фотографии
                 baseLayout?.let {
                     setPhotoToView(position, it, it.findViewById(R.id.ivPreView) as ImageView)
                 }
-            }
         }
 
         fun getImageView(position: Int) =
