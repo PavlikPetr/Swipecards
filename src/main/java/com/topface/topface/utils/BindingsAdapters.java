@@ -427,7 +427,8 @@ public class BindingsAdapters {
     @SuppressWarnings("unchecked")
     @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
     public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
-        Context context = imageView.getContext().getApplicationContext();
+    Context context = imageView.getContext().getApplicationContext();
+        imageView.setImageResource(placeholderRes); /// Наговнякано, но работает
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);
             return;

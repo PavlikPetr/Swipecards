@@ -36,6 +36,7 @@ abstract class CropAndCircleTransformation(context: Context) : Transformation<Bi
         mRemoteBitmap = CropCircleTransformation(mContext).transform(resource, outWidth, outHeight).get()
         val coordinates = ((mRemoteBitmap.width - Math.min(mRemoteBitmap.width, mRemoteBitmap.height)) / 2).toFloat()
         mCanvas.drawBitmap(mRemoteBitmap, coordinates, coordinates, null)
+        mRemoteBitmap.recycle()
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 
