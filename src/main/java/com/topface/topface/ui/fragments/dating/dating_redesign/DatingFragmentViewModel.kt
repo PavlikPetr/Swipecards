@@ -9,12 +9,17 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
@@ -39,11 +44,13 @@ import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.views.image_switcher.ImageSwitcher
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -113,6 +120,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mNewFilter = false
     private var mUpdateInProcess = false
     private var isLastUser = false
+    private var mPreloadTarget: Target<Bitmap>? = null
     private var mIsOnline by Delegates.observable(false) { prop, old, new ->
         iconOnlineRes.set(if (new) R.drawable.im_list_online else 0)
     }
@@ -134,6 +142,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     private companion object {
+        private const val IS_PRELOAD_ENABLED = "is_preload_enabled"
         private const val PHOTOS_COUNTER = "photos_counter"
         private const val NAME = "name"
         private const val AGE = "age"
@@ -167,6 +176,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 mIsOnline = online
                 statusText.set(status)
             }
+            preload()
             albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
             mCurrentPosition = 0
             hideProgress()
@@ -216,6 +226,42 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
     }
+
+    private fun preload() {
+        Debug.error("${ImageSwitcher.TAG} preload user")
+        mUserSearchList.nextUser()?.let {
+            Debug.error("${ImageSwitcher.TAG} preload user != null")
+            // заюзать предзагрузку можно только если она отключена в ImageSwitcher
+            if (!isPreloadEnabled.get()) {
+                Debug.error("${ImageSwitcher.TAG} load link ${it.photos[0].defaultLink}")
+                mPreloadTarget.clear()
+                mPreloadTarget = Glide.with(mContext.applicationContext)
+                        .load(it.photos[0].defaultLink)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .listener(object : RequestListener<String, Bitmap> {
+                            override fun onException(e: Exception?, model: String?,
+                                                     target: Target<Bitmap>?,
+                                                     isFirstResource: Boolean): Boolean {
+                                isPreloadEnabled.set(true)
+                                Debug.error("${ImageSwitcher.TAG} preload user failed")
+                                return false
+                            }
+
+                            override fun onResourceReady(resource: Bitmap?, model: String?,
+                                                         target: Target<Bitmap>?,
+                                                         isFromMemoryCache: Boolean,
+                                                         isFirstResource: Boolean): Boolean {
+                                Debug.error("${ImageSwitcher.TAG} preload user success")
+                                isPreloadEnabled.set(true)
+                                return false
+                            }
+                        })
+                        .preload()
+            }
+        }
+    }
+
 
     fun updatePhotosCounter(position: Int) = photoCounter.set("${position + 1}/${currentUser?.photosCount}")
 
@@ -318,6 +364,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     override fun onSavedInstanceState(state: Bundle) = with(state) {
+        putBoolean(IS_PRELOAD_ENABLED, isPreloadEnabled.get())
         putBoolean(NEW_FILTER, mNewFilter)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
         putInt(LOADED_COUNT, mLoadedCount)
@@ -340,6 +387,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
+        isPreloadEnabled.set(getBoolean(IS_PRELOAD_ENABLED))
         albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
         currentUser = getParcelable(CURRENT_USER)
         mNewFilter = getBoolean(NEW_FILTER)
@@ -412,6 +460,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mUpdateSubscription.safeUnsubscribe()
         mLoadBackgroundSubscription.safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
+        mPreloadTarget.clear()
     }
 
     override fun onPageSelected(position: Int) {

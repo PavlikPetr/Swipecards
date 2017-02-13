@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:foreground="@drawable/new_dating_shadow">
 
-                <com.topface.topface.ui.views.ImageSwitcher1
+                <com.topface.topface.ui.views.image_switcher.ImageSwitcher
                     android:id="@+id/dating_album"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

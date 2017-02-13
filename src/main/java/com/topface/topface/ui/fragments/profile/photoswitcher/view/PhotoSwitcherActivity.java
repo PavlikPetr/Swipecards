@@ -41,7 +41,8 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
-import com.topface.topface.ui.views.image_switcher.ImageSwitcher1;
+import com.topface.topface.ui.views.image_switcher.ImageSwitcher;
+import com.topface.topface.ui.views.image_switcher.ImageSwitcherAdapter;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -141,7 +142,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         }
     };
     private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcher1 mImageSwitcher;
+    private ImageSwitcher mImageSwitcher;
     private int mUid;
     private TranslateAnimation mCurrentAnimation;
     private TranslateAnimation mAnimationHide = null;
@@ -252,7 +253,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 }
 
                 if (mImageSwitcher != null) {
-                    ((ImageSwitcher1.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).addPhotos(newPhotos);
+                    ((ImageSwitcherAdapter) mImageSwitcher.getAdapter()).addPhotos(newPhotos);
                 }
             }
 
@@ -316,7 +317,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // ViewPager becomes visible without data
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
-        mImageSwitcher = ((ImageSwitcher1) findViewById(R.id.galleryAlbum));
+        mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
             @Override
             public void sendRequest(int position) {
