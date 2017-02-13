@@ -61,13 +61,18 @@ object FBInvitesUtils {
     fun createFbInvitesAppLinkSubscription(eventBus: EventBus): Subscription = Observable.combineLatest(
             eventBus.getObservable(FbAppLinkReadyEvent::class.java),
             eventBus.getObservable(FbInviteTemplatesEvent::class.java)) { event1, event2 ->
-                if (event2.inviteTemplates.isLinkValid(event1.appLink)) {
-                    with(App.getAppConfig()) {
-                        fbInviteAppLink = event1.appLink
-                        saveConfig()
-                    }
+                object {
+                    val appLink = event1.appLink
+                    val templates = event2.inviteTemplates
                 }
-        }.first().subscribe()
+        }.first().subscribe({
+            if (it.templates.isLinkValid(it.appLink)) {
+                with(App.getAppConfig()) {
+                    fbInviteAppLink = it.appLink
+                    saveConfig()
+                }
+            }
+        })
 
     /**
      * Валидными считать линки вида: http://topface.com/landingtf/?uid=*
