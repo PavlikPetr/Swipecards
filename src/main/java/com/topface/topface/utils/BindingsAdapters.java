@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
@@ -27,6 +28,10 @@ import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
@@ -420,9 +425,10 @@ public class BindingsAdapters {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
-    public static <T extends IPhoto> void setPhotoWithTransformation(ImageView imageView, T photo, Long type, Integer placeholderRes) {
-        Context context = imageView.getContext().getApplicationContext();
+    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
+    public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
+    Context context = imageView.getContext().getApplicationContext();
+        imageView.setImageResource(placeholderRes); /// Наговнякано, но работает
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);
             return;
@@ -432,34 +438,29 @@ public class BindingsAdapters {
         int height = imageView.getLayoutParams().height;
         String suitableLink = photo.getSuitableLink(width, height);
         String defaultLink = photo.getDefaultLink();
+        SimpleTarget target = new SimpleTarget<GlideBitmapDrawable>(width, height) {
+            @Override
+            public void onResourceReady(GlideBitmapDrawable resource, GlideAnimation<? super GlideBitmapDrawable> glideAnimation) {
+                imageView.setImageBitmap(resource.getBitmap());
+            }
+        };
         if (suitableLink != null && size > 0) {
             Glide.with(context)
                     .load(suitableLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
-                    .into(imageView);
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
+                    .into(target);
         } else if (defaultLink != null) {
             Glide.with(context)
                     .load(defaultLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
-                    .into(imageView);
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
+                    .into(target);
         } else {
-            Glide.with(context).load(placeholderRes).into(imageView);
+            Glide.with(context).load(placeholderRes).into(target);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
-    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
-        Context context = imageView.getContext().getApplicationContext();
-        Glide.with(context)
-                .load(imgUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .bitmapTransform(new GlideTransformationFactory(context).construct(type))
-                .into(imageView);
     }
 
     @BindingAdapter({"app:glideBlurUrl", "app:blurRadius"})
@@ -475,7 +476,7 @@ public class BindingsAdapters {
     @BindingAdapter("android:layout_height")
     public static void setImageViewHeight(ImageView view, float height) {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = (int)height;
+        layoutParams.height = (int) height;
         view.setLayoutParams(layoutParams);
     }
 

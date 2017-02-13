@@ -13,6 +13,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.extensions.getColor
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.glide_utils.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
@@ -30,6 +31,8 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
     val placeholderRes = ObservableField(if (mItem.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
     val name = ObservableField(mItem.user.firstName)
     val nameTextColor = ObservableField(getNameColor())
+    val onLineCircle = ObservableField(R.dimen.dialog_online_circle.getDimen())
+    val strokeSize = ObservableField(R.dimen.dialog_stroke_size.getDimen())
 
     private var mItemUpdateEventSubscription: Subscription? = null
 

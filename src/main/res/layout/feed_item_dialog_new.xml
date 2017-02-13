@@ -33,7 +33,9 @@
                 android:layout_marginRight="@dimen/avatar_marginRight"
                 app:glideTransformationPhoto="@{model.userPhoto}"
                 app:placeholderRes="@{model.placeholderRes}"
-                app:typeTransformation="@{model.type}"/>
+                app:typeTransformation="@{model.type}"
+                app:radiusOnline="@{model.onLineCircle}"
+                app:outSideCircle="@{model.strokeSize}"/>
 
         </FrameLayout>
 
