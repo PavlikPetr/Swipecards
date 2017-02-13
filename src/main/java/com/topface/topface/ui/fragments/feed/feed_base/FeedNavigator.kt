@@ -43,7 +43,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     @Inject lateinit var mNavigationState: NavigationState
 
     private val mEmptyDatingFragment by lazy {
-        DatingEmptyFragment.newInstance()
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(DatingEmptyFragment.TAG)?.let { it as DatingEmptyFragment } ?: DatingEmptyFragment.newInstance()
     }
 
     init {
@@ -141,7 +141,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         if (onCancelFunction != null) {
             setOnCancelListener { onCancelFunction() }
         }
-        show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+        show(mActivityDelegate.supportFragmentManager, DatingEmptyFragment.TAG)
     }
 
     override fun closeEmptyDating() {
