@@ -279,6 +279,9 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         if (mUserProfileLoader != null) {
             mUserProfileLoader.release();
         }
+        if (mImageSwitcher != null) {
+            mImageSwitcher.release();
+        }
     }
 
     private void setPhotoAlbumControlVisibility(int state, boolean isAnimated) {

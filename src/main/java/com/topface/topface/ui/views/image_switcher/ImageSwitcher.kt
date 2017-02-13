@@ -171,4 +171,8 @@ class ImageSwitcher(context: Context, attrs: AttributeSet?) : ViewPager(context,
     fun addPhotos(photos: Photos?) {
         mImageSwitcherAdapter.addPhotos(photos)
     }
+
+    fun release() {
+        mImageSwitcherAdapter.release()
+    }
 }
