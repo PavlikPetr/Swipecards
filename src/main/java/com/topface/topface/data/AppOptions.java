@@ -12,6 +12,8 @@ import com.topface.topface.utils.http.HttpUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Application options
@@ -202,18 +204,19 @@ public class AppOptions extends AbstractData {
 
         public boolean isLinkValid(String link) {
             if (!TextUtils.isEmpty(link) && !facebookInvites.isEmpty()) {
+                // можно было бы занести в константы {{tf_uid_hash}} но что-то у меня сомнения в надежности
+                // данная строка настраивается руками в админке, мало ли опечатаются
+                Pattern replace = Pattern.compile("\\{\\{.*\\}\\}");
                 for (String template: facebookInvites) {
-                    if (link.matches(getCleanTemplate(template))) return true;
+                    Matcher replacer = replace.matcher(template);
+                    Pattern match = Pattern.compile(replacer.replaceAll(".*"));
+                    Matcher matcher = match.matcher(link);
+                    if (matcher.find()) {
+                        return true;
+                    }
                 }
             }
             return false;
-        }
-
-        private String getCleanTemplate(String template) {
-            // можно было бы занести в константы {{tf_uid_hash}} но что-то у меня сомнения в надежности
-            // данная строка настраивается руками в админке, мало ли опечатаются
-            String mask = template.substring(template.indexOf("{{"), template.lastIndexOf("}}") + 2);
-            return template.replace(mask, ".*");
         }
 
         /**

@@ -8,10 +8,14 @@ import com.facebook.FacebookSdk
 import com.facebook.applinks.AppLinkData
 import com.facebook.share.model.AppInviteContent
 import com.facebook.share.widget.AppInviteDialog
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.Options
+import com.topface.topface.state.EventBus
 import com.topface.topface.utils.social.AuthToken
+import com.topface.topface.utils.social.FbAppLinkReadyEvent
+import com.topface.topface.utils.social.FbInviteTemplatesEvent
+import rx.Observable
+import rx.Subscription
 
 object FBInvitesUtils {
     const val FB_APP_LINK_SENDED = "fb_app_link_sended"
@@ -54,6 +58,17 @@ object FBInvitesUtils {
         }
     }
 
+    fun createFbInvitesAppLinkSubscription(eventBus: EventBus): Subscription = Observable.combineLatest(
+            eventBus.getObservable(FbAppLinkReadyEvent::class.java),
+            eventBus.getObservable(FbInviteTemplatesEvent::class.java)) { event1, event2 ->
+                if (event2.inviteTemplates.isLinkValid(event1.appLink)) {
+                    with(App.getAppConfig()) {
+                        fbInviteAppLink = event1.appLink
+                        saveConfig()
+                    }
+                }
+        }.first().subscribe()
+
     /**
      * Валидными считать линки вида: http://topface.com/landingtf/?uid=*
      * Клиентским передавать ссылку в параметре fbInvite в запросе к методу: referral.track
@@ -61,14 +76,7 @@ object FBInvitesUtils {
      * Если ссылка не валидная: выкинется ошибка IncorrectValueLogicException (код 23)
      */
     private fun verifyAppLink(link: String) {
-        Debug.log("FbInvite:: verifying appLink $link")
-        if (App.getAppOptions().invites.isLinkValid(link)) {
-            Debug.log("FbInvite:: appLink ok, saving")
-            with(App.getAppConfig()) {
-                fbInviteAppLink = link
-                saveConfig()
-            }
-        }
+        App.get().onFbAppLinkReady(link)
     }
 
     fun getAppLinkToSend() =
