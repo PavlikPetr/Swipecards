@@ -43,7 +43,9 @@ class GpMarketFragment : GoogleMarketBuyingFragment() {
 
     override fun onInAppBillingSupported() {}
 
-    override fun onInAppBillingUnsupported() {}
+    override fun onInAppBillingUnsupported() {
+        mPurchaseActions?.onPopupClosed()
+    }
 
     override fun onOpenIabSetupFinished(normaly: Boolean) {
         super.onOpenIabSetupFinished(normaly)

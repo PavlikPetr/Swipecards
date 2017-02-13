@@ -1389,11 +1389,14 @@
     <style name="PopupGreenButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/green_button_bg</item>
         <item name="android:textColor">@color/popup_green_button_text</item>
         <item name="android:textSize">@dimen/popup_button_text</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="PopupGreenButton.Background">
+        <item name="android:background">@drawable/green_button_selector</item>
     </style>
 
     <style name="PopupBorderlessdButton" parent="@style/Widget.AppCompat.Button.Borderless">
@@ -1676,21 +1679,6 @@
 
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/dating_fab_skip</item>
-    </style>
-
-    <style name="AddToPhotoBlogGreenButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/btn_green_selector</item>
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:minHeight">10dp</item>
-        <item name="android:paddingTop">11dp</item>
-        <item name="android:paddingBottom">9dp</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
-        <item name="textAllCaps">true</item>
     </style>
 
 </resources>

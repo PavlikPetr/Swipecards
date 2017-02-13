@@ -12,7 +12,7 @@ import com.topface.topface.utils.http.IRequestClient
 /**
  * Фрагмент "ненайденных по фильтру" профайлов для экрана знакомств
  */
-class DatingEmptyFragment() : AbstractDialogFragment(), IDialogCloser {
+class DatingEmptyFragment : AbstractDialogFragment(), IDialogCloser {
 
     companion object {
         const val TAG = "empty_dating_fragment"

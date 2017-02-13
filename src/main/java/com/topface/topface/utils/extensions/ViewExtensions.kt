@@ -43,7 +43,7 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
         it.onNext(with(Glide.with(context)
                 .load(link)
                 .asBitmap()
-                .transform(BlurTransformation(context, 10), CenterCrop(context))
+                .transform(BlurTransformation(context, 20), CenterCrop(context))
                 .placeholder(R.drawable.bg_blur)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(measuredWidth, measuredHeight)

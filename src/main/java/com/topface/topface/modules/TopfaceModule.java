@@ -40,6 +40,7 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment41ViewModel
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4BaseViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithBlurViewModel;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment4WithoutBlurViewModel;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.modules.ExternalLibsInjectModule;
@@ -199,13 +200,13 @@ import dagger.Provides;
                 PeopleNearbyPopover.class,
                 DatingRedesignToolbarViewModel.class,
                 com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class,
-                GpMarketFragment.class
+                GpMarketFragment.class,
+                ExperimentBoilerplateFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
                 App.class,
-                AppodealProvider.class,
-                GCMUtils.class
+                AppodealProvider.class
         }
 )
 public class TopfaceModule {

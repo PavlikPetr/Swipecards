@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="ActionBarItemClick">
         <item name="android:background">@drawable/actionbar_pressed_animation</item>
@@ -217,6 +217,10 @@
         <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="PopupGreenButton.Background">
+        <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
 
 </resources>

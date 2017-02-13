@@ -476,7 +476,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     private fun loadBluredBackground(position: Int) =
-            albumData.get()?.get(position)?.getSuitableLink(Photo.SIZE_128)?.let {
+            albumData.get()?.getOrNull(position)?.getSuitableLink(Photo.SIZE_128)?.let {
                 mLoadBackground(it)
             }
 
