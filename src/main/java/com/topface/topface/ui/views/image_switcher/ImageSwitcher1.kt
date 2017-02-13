@@ -3,8 +3,6 @@ package com.topface.topface.ui.views.image_switcher
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.os.Handler
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.util.AttributeSet
@@ -12,26 +10,21 @@ import android.view.*
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.animation.GlideAnimation
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.utils.AnimationUtils
 import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getSuitableLink
-import com.topface.topface.utils.rx.applySchedulers
-import com.topface.topface.utils.rx.safeUnsubscribe
-import rx.Observable
-import rx.Subscription
 
 /**
+ * ImageSwitcher на Glide
  * Created by petrp on 08.02.2017.
  */
 
@@ -44,13 +37,14 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
 
     private var mOnClickListener: OnClickListener? = null
 
-    private var mUpdatedHandler: Handler? = null
     private val VIEW_TAG = "view_container"
     private var mCurrentPhotoPosition = 0
     private var mPreviousPhotoPosition = 0
     private var mPrev = 0
     private var mNext = 0
     private var mIsNeedAnimateLoader: Boolean = false
+    private var mUploadListener: IUploadAlbumPhotos? = null
+    private var mIsPreloadEnable = true
 
     private val mGestureDetector: GestureDetector by lazy {
         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
@@ -63,6 +57,10 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
 
     private val mImageSwitcherAdapter: ImageSwitcherAdapter by lazy {
         ImageSwitcherAdapter()
+    }
+
+    fun setUploadListener(listener: IUploadAlbumPhotos) {
+        mUploadListener = listener
     }
 
     init {
@@ -78,10 +76,6 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
         this.adapter = mImageSwitcherAdapter.apply {
             data = photoLinks
         }
-    }
-
-    fun setUpdateHandler(handler: Handler) {
-        mUpdatedHandler = handler
     }
 
     override fun canScrollHorizontally(direction: Int): Boolean {
@@ -102,30 +96,7 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
     override fun addOnPageChangeListener(finalListener: OnPageChangeListener) {
         super.addOnPageChangeListener(object : OnPageChangeListener {
 
-            internal var oldPosition = currentItem
-
             override fun onPageScrolled(i: Int, v: Float, i1: Int) {
-                //При WiFi подключении это не нужно, т.к. фотографию мы уже прелоадим заранее, но нужно при 3G
-                //Если показано больше 10% следующей фотографии, то начинаем ее грузить
-                if (v > 0.1 && v < 0.6) {
-                    if (i > oldPosition) {
-                        val next: Int
-                        next = i + 1
-                        //Проверяем, начали ли мы грузить следующую фотографию
-                        if (mNext != next) {
-                            mNext = next
-                            oldPosition = mNext
-                            mImageSwitcherAdapter.setPhotoToPosition(mNext, false)
-                        }
-                    } else if (i < oldPosition) {
-                        //Проверяем, не начали ли мы грузить предыдущую фотографию
-                        if (mPrev != i) {
-                            mPrev = i
-                            oldPosition = mPrev
-                            mImageSwitcherAdapter.setPhotoToPosition(mPrev, false)
-                        }
-                    }
-                }
                 finalListener.onPageScrolled(i, v, i1)
             }
 
@@ -150,44 +121,24 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
         private var mPreloadTarget: Target<Bitmap>? = null
         private var mLoadTarget: SimpleTarget<Bitmap>? = null
 
-        /**
-         * Создает слушателя загрузки фотки, через замыкание передавая позицию слушаемой фотографии
-
-         * @param position изображение, загрузку которого мы слушаем
-         * *
-         * @return listener
-         */
-        private fun getListener(position: Int): ImageLoadingListener {
-            return object : SimpleImageLoadingListener() {
-                override fun onLoadingComplete(imageUri: String?, view: View?, loadedImage: Bitmap?) {
-                    super.onLoadingComplete(imageUri, view, loadedImage)
-
-                    val currentItem = currentItem
-                    if (currentItem + 1 == position || currentItem - 1 == position) {
-                        setPhotoToPosition(position, true)
-                    }
-                }
-            }
-        }
-
         var data: Photos?
             get() = getPhotos()
             set(photos) {
                 Debug.error("$TAG new data")
                 resetAll()
                 fillData(photos)
-                preloadIfNeed()
                 notifyDataSetChanged()
             }
 
         private fun getPhotos() = Photos().apply {
             for (i in 0..mPreloadLinks.size - 1) {
-                add(mPreloadLinks.get(i)?.first)
+                add(mPreloadLinks[i]?.first)
             }
         }
 
-        private fun getPhoto(position: Int) = mPreloadLinks.get(position)?.first
+        private fun getPhoto(position: Int) = mPreloadLinks[position]?.first
 
+        @Suppress("unused")
         @Status.ImageLoaderStatus
         private fun getState(photo: Photo): Long {
             mPreloadLinks.forEach { if (it.value.first == photo) return it.value.second }
@@ -195,15 +146,16 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
         }
 
         @Status.ImageLoaderStatus
-        private fun getState(position: Int) = mPreloadLinks.get(position)?.second ?: Status.UNDEFINED
+        private fun getState(position: Int) = mPreloadLinks[position]?.second ?: Status.UNDEFINED
 
+        @Suppress("unused")
         private fun setState(photo: Photo, @Status.ImageLoaderStatus status: Long) =
                 getPosition(photo)?.let {
                     mPreloadLinks.put(it, Pair(photo, status))
                 }
 
         private fun setState(position: Int, @Status.ImageLoaderStatus status: Long) =
-                mPreloadLinks.get(position)?.first?.let {
+                mPreloadLinks[position]?.first?.let {
                     mPreloadLinks.put(position, Pair(it, status))
                 }
 
@@ -220,14 +172,14 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
         private fun getNextPreloadPosition(): Int? {
             with(mPreloadLinks.filter {
                 val state = it.value.second
-                state == Status.UNDEFINED || state == Status.NOT_LOADED
+                (state == Status.UNDEFINED || state == Status.NOT_LOADED) && state != Status.ALBUM_REQUEST_SENDED
             }) {
                 if (isNotEmpty()) {
                     return getFirstOverlapKey(this, listOf(
-                            listOf(mNext, mNext + 1, mNext + 2),
-                            listOf(mNext - 1, mNext - 2),
-                            (mNext..mPreloadLinks.size - 1).toList(),
-                            (0..mNext - 1).toList()
+                            listOf(currentItem, currentItem + 1, currentItem + 2),
+                            listOf(currentItem - 1, currentItem - 2),
+                            (currentItem..mPreloadLinks.size - 1).toList(),
+                            (0..currentItem - 1).toList()
                     ))
                 }
             }
@@ -258,9 +210,18 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
             mLoadTarget.clear()
         }
 
+        fun addPhotos(photos: Photos?) {
+            fillData(photos)
+        }
+
         private fun fillData(photoLinks: Photos?) {
+            var position: Int
             photoLinks?.forEachIndexed { i, photo ->
-                mPreloadLinks.put(i, Pair(photo, Status.NOT_LOADED))
+                position = if (photo.isFake || photo.isEmpty) i else photo.getPosition()
+                // меняем/добавляем только те линки, которых еще нет в списке/если пусто/если фэйк
+                if (mPreloadLinks[position]?.first?.let { it.isFake || it.isEmpty } ?: true) {
+                    mPreloadLinks.put(position, Pair(photo, Status.NOT_LOADED))
+                }
             }
         }
 
@@ -277,18 +238,12 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
             view.tag = VIEW_TAG + Integer.toString(position)
             val imageView = view.findViewById(R.id.ivPreView) as ImageView
             imageView.setOnClickListener { mOnClickListener?.onClick(this@ImageSwitcher1) }
-            //Первую фотографию грузим сразу, или если фотографию уже загружена, то сразу показываем ее
-            //Если это первая фото в списке или фотография уже загружена, то устанавливаем фото сразу
-            setPhotoToView(position, view, imageView)
-//            Glide.with(context.applicationContext).load(getPhotoLink(position)).preload()
-
-//            //Если фото еще не загружено, то пытаемся его загрузить через прелоадер
-//            if (!isLoadedPhoto && Glide.with(context.applicationContext).load(getPhotoLink(position)).preload() mPreloadManager ?. preloadPhoto (mPhotoLinks, realPosition, getListener(position)) ?: false) {
-//                //Добавляем его в список загруженых
-//                mLoadedPhotos?.put(realPosition, true)
-//            }
-
+            preloadIfPosible(realPosition)
             pager.addView(view)
+            // если создали текущую страницу, то надо вызвать ее отрисовку
+            if (position == currentItem) {
+                notifyDataSetChanged()
+            }
             return view
         }
 
@@ -309,17 +264,17 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
          */
         fun setPhotoToPosition(position: Int, ifLoaded: Boolean) {
             val realPosition = getRealPosition(position)
-                val baseLayout = this@ImageSwitcher1.findViewWithTag(VIEW_TAG + Integer.toString(position))
-                //Этот метод может вызываться до того, как создана страница для этой фотографии
-                baseLayout?.let {
-                    setPhotoToView(position, it, it.findViewById(R.id.ivPreView) as ImageView)
-                }
+            val baseLayout = this@ImageSwitcher1.findViewWithTag(VIEW_TAG + Integer.toString(position))
+            //Этот метод может вызываться до того, как создана страница для этой фотографии
+            baseLayout?.let {
+                setPhotoToView(realPosition, it, it.findViewById(R.id.ivPreView) as ImageView)
+            } ?: preloadIfPosible(realPosition)
         }
 
         fun getImageView(position: Int) =
                 findViewWithTag(VIEW_TAG + Integer.toString(position))?.findViewById(R.id.ivPreView) as? ImageView
 
-
+        @Suppress("unused")
         private fun getPhotoLink(position: Int) = getPhoto(getRealPosition(position))?.let {
             if (Math.max(layoutParams.height, layoutParams.width) > 0) {
                 it.getSuitableLink(layoutParams.height, layoutParams.width)
@@ -337,14 +292,13 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
                 if (mIsNeedAnimateLoader) {
                     AnimationUtils.createProgressBarAnimator(progressBar).start()
                 }
-                val realPosition = getRealPosition(position)
-                val state = getState(realPosition)
-                Debug.error("$TAG set photo state:$state position:$realPosition")
+                val state = getState(position)
+                Debug.error("$TAG set photo state:$state position:$position")
                 when (state) {
-                    Status.START_PRELOAD -> setState(realPosition, Status.SET_IMAGE_ON_SUCCESS_PRELOAD)
+                    Status.START_PRELOAD -> setState(position, Status.SET_IMAGE_ON_SUCCESS_PRELOAD)
                     else -> {
-                        loadImage(realPosition, imageView)
-                        setState(realPosition, Status.START_LOAD)
+                        mLoadTarget.clear()
+                        loadImage(position, imageView)
                     }
                 }
             }
@@ -352,7 +306,7 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
 
         private fun preloadIfNeed() {
             Debug.error("$TAG preload if need")
-            if (!isActivePreload()) {
+            if (!isActivePreload() && mIsPreloadEnable) {
                 getNextPreloadPosition()?.let {
                     Debug.error("$TAG preload photo $it")
                     preloadImage(it)
@@ -360,72 +314,91 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
             }
         }
 
-        private fun preloadImage(position: Int) = getPhoto(position)?.let {
-            val link = getImageView(position)?.getSuitableLink(it) ?: it.defaultLink
-            Debug.error("$TAG start preload $link")
-            mPreloadTarget = Glide.with(context.applicationContext)
-                    .load(link)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .listener(object : RequestListener<String, Bitmap> {
-                        override fun onException(e: Exception?, model: String?,
-                                                 target: Target<Bitmap>?,
-                                                 isFirstResource: Boolean): Boolean {
-                            Debug.error("$TAG preload failed exception:$e isFirstResource^$isFirstResource")
-                            setState(position, Status.PRELOAD_FAILED)
-                            return false
-                        }
+        private fun preloadIfPosible(position: Int) {
+            if (!isActivePreload() && mIsPreloadEnable) {
+                preloadImage(position)
+            }
+        }
 
-                        override fun onResourceReady(resource: Bitmap?, model: String?,
+
+        private fun preloadImage(position: Int) = getPhoto(position)?.let {
+            getImageView(position)?.getSuitableLink(it) ?: it.defaultLink?.let {
+                Debug.error("$TAG start preload $it")
+                setState(position, Status.START_PRELOAD)
+                mPreloadTarget = Glide.with(context.applicationContext)
+                        .load(it)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .listener(object : RequestListener<String, Bitmap> {
+                            override fun onException(e: Exception?, model: String?,
                                                      target: Target<Bitmap>?,
-                                                     isFromMemoryCache: Boolean,
                                                      isFirstResource: Boolean): Boolean {
-                            Debug.error("$TAG preload succesfull model:$model isFromCache:$isFromMemoryCache isFirst:$isFirstResource")
-                            if (getState(position) == Status.SET_IMAGE_ON_SUCCESS_PRELOAD) {
-                                getImageView(position)?.setImageBitmap(resource)
+                                Debug.error("$TAG preload failed exception:$e isFirstResource:$isFirstResource")
+                                setState(position, Status.PRELOAD_FAILED)
+                                return false
                             }
-                            setState(position, Status.PRELOAD_SUCCESS)
-                            preloadIfNeed()
-                            return false
-                        }
-                    })
-                    .preload()
+
+                            override fun onResourceReady(resource: Bitmap?, model: String?,
+                                                         target: Target<Bitmap>?,
+                                                         isFromMemoryCache: Boolean,
+                                                         isFirstResource: Boolean): Boolean {
+                                Debug.error("$TAG preload succesfull model:$model isFromCache:$isFromMemoryCache isFirst:$isFirstResource")
+                                if (getState(position) == Status.SET_IMAGE_ON_SUCCESS_PRELOAD) {
+                                    getImageView(position)?.setImageBitmap(resource)
+                                }
+                                setState(position, Status.PRELOAD_SUCCESS)
+                                preloadIfNeed()
+                                return false
+                            }
+                        })
+                        .preload()
+            } ?: needLoadLinks(position)
         }
 
         private fun loadImage(position: Int, imageView: ImageView) = getPhoto(position)?.let {
-            val link = imageView.getSuitableLink(it)
-            Debug.error("$TAG start load $link")
-            mLoadTarget = Glide.with(context.applicationContext).load(link)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                    .into(object : SimpleTarget<Bitmap>() {
-                        override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
-                            Debug.error("$TAG load successfull")
-                            resource?.let {
-                                setState(position, Status.LOAD_SUCCESS)
-                                imageView.setImageBitmap(resource)
-                                preloadIfNeed()
+            imageView.getSuitableLink(it)?.let {
+                Debug.error("$TAG start load $it")
+                setState(position, Status.START_LOAD)
+                mLoadTarget = Glide.with(context.applicationContext)
+                        .load(it)
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(object : SimpleTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                                Debug.error("$TAG load successfull")
+                                resource?.let {
+                                    setState(position, Status.LOAD_SUCCESS)
+                                    imageView.setImageBitmap(resource)
+                                    preloadIfNeed()
+                                }
                             }
-                        }
 
-                        override fun onLoadFailed(e: Exception?, errorDrawable: Drawable?) {
-                            Debug.error("$TAG load failed exception:$e")
-                            super.onLoadFailed(e, errorDrawable)
-                            setState(position, Status.LOAD_FAILED)
-                        }
+                            override fun onLoadFailed(e: Exception?, errorDrawable: Drawable?) {
+                                Debug.error("$TAG load failed exception:$e")
+                                super.onLoadFailed(e, errorDrawable)
+                                setState(position, Status.LOAD_FAILED)
+                            }
 
-                        override fun onLoadStarted(placeholder: Drawable?) {
-                            Debug.error("$TAG start load")
-                            super.onLoadStarted(placeholder)
-                            setState(position, Status.START_LOAD)
-                        }
-                    })
+                            override fun onLoadStarted(placeholder: Drawable?) {
+                                Debug.error("$TAG start load")
+                                super.onLoadStarted(placeholder)
+                                setState(position, Status.START_LOAD)
+                            }
+                        })
+
+            } ?: needLoadLinks(position)
             imageView.setTag(R.string.photo_is_set_tag, !it.isFake)
         }
 
         override fun notifyDataSetChanged() {
             super.notifyDataSetChanged()
-            setPhotoToPosition(getSelectedPosition(), true)
+            setPhotoToPosition(currentItem, true)
+        }
+
+        private fun needLoadLinks(position: Int) {
+            Debug.error("NewImageLoader1 needLoadLinks position:$position")
+            setState(position, Status.ALBUM_REQUEST_SENDED)
+            mUploadListener?.sendRequest(position)
         }
     }
 
@@ -487,5 +460,9 @@ class ImageSwitcher1(context: Context, attrs: AttributeSet?) : ViewPager(context
 
     fun getPreviousSelectedPosition(): Int {
         return mPreviousPhotoPosition
+    }
+
+    fun setPreloadEnable(isEnable: Boolean) {
+        mIsPreloadEnable = isEnable
     }
 }

@@ -28,7 +28,7 @@
                 android:layout_height="match_parent"
                 android:foreground="@drawable/new_dating_shadow">
 
-                <com.topface.topface.ui.views.ImageSwitcher
+                <com.topface.topface.ui.views.ImageSwitcher1
                     android:id="@+id/dating_album"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -36,7 +36,8 @@
                     app:currentItemImmediately="@{viewModel.currentItem}"
                     app:data="@{viewModel.albumData}"
                     app:needAnimateLoader="@{viewModel.isNeedAnimateLoader}"
-                    app:onPageChangeListener="@{viewModel}"/>
+                    app:onPageChangeListener="@{viewModel}"
+                    app:preloadEnable="@{viewModel.isPreloadEnabled}"/>
             </FrameLayout>
 
             <!--Блок "статуса и каунтера фоток"-->
@@ -150,8 +151,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/albumRoot"
-            android:layout_marginBottom="-20dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-20dp"
             android:background="@drawable/loader_bg"
             android:theme="@style/CircularProgress"
             android:visibility="@{viewModel.isDatingProgressBarVisible}"/>

@@ -39,11 +39,9 @@ import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos;
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
-import com.topface.topface.ui.fragments.profile.photoswitcher.PhotosManager;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.image_switcher.ImageSwitcher1;
-import com.topface.topface.ui.views.ImageSwitcherLooped;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -91,8 +89,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             int realPosition = calcRealPosition(position, mPhotoLinks.size());
             setCounter(realPosition);
             refreshButtonsState();
-            mPhotosManager.check(((ImageSwitcher1.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData(),
-                    realPosition);
         }
 
         @Override
@@ -147,12 +143,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     private Photos mDeletedPhotos = new Photos();
     private ImageSwitcher1 mImageSwitcher;
     private int mUid;
-    private PhotosManager mPhotosManager = new PhotosManager(new IUploadAlbumPhotos() {
-        @Override
-        public void sendRequest(int position) {
-            sendAlbumRequest(position);
-        }
-    });
     private TranslateAnimation mCurrentAnimation;
     private TranslateAnimation mAnimationHide = null;
     private TranslateAnimation mAnimationShow = null;
@@ -245,6 +235,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
             @Override
             protected void success(AlbumPhotos newPhotos, IApiResponse response) {
+                Debug.error("NewImageLoader1 request success:" + newPhotos);
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
@@ -261,17 +252,19 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 }
 
                 if (mImageSwitcher != null) {
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    ((ImageSwitcher1.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).addPhotos(newPhotos);
                 }
             }
 
             @Override
             protected AlbumPhotos parseResponse(ApiResponse response) {
+                Debug.error("NewImageLoader1 request parseResponse:" + response.toString());
                 return new AlbumPhotos(response);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
+                Debug.error("NewImageLoader1 request fail:" + codeError);
             }
         }).exec();
     }
@@ -324,10 +317,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageSwitcher1) findViewById(R.id.galleryAlbum));
+        mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
+            @Override
+            public void sendRequest(int position) {
+                Debug.error("NewImageLoader1 send request position:" + position);
+                sendAlbumRequest(position);
+            }
+        });
         mImageSwitcher.addOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
-        mImageSwitcher.setCurrentItem((ImageSwitcherLooped.ITEMS_HALF / mPhotoLinks.size() * mPhotoLinks.size()) + position, false);
+        mImageSwitcher.setCurrentItemImmediately(position);
 
         setCounter(position);
     }

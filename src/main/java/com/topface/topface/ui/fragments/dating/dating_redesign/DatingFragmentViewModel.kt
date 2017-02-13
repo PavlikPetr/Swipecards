@@ -71,9 +71,10 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
+    val isPreloadEnabled = ObservableBoolean(false)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
-        override fun set(value: String?){
+        override fun set(value: String?) {
             val status = Profile.normilizeStatus(value)
             super.set(status)
             statusVisibility.set(if (status.isNullOrEmpty()) View.GONE else View.VISIBLE)
