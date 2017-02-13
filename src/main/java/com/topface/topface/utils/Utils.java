@@ -227,6 +227,19 @@ public class Utils {
         return size;
     }
 
+    /**
+     * Вычисляется высота системного statusBar, что бы мы могли подвинуть свой тулбар
+     */
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     public static boolean isIntentAvailable(Context context, Intent intent) {
         final PackageManager packageManager = context.getPackageManager();
         if (packageManager != null) {

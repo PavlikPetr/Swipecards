@@ -319,6 +319,8 @@ dependencies {
         exclude module: 'support-v4'
         exclude module: 'recyclerview-v7'
     }
+    // used only for support translucent status bar on china devices
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     //Google play services
     compile "com.google.android.gms:play-services-gcm:$google_play_services_version"
     compile("com.google.android.gms:play-services-location:$google_play_services_version") {

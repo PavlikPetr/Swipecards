@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components
 
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.data.User
@@ -30,7 +31,11 @@ class PhotoBlogItemComponent(private val mNavigator: IFeedNavigator,
             binding.viewModel = PhotoBlogItemViewModel(it.user.photo,
                     if (it.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small) {
                 mPopoverControl.closeByUser()
-                mNavigator.showProfile(it, PLC)
+                if (App.get().profile.uid == it.user.id) {
+                    mNavigator.showOwnProfile()
+                } else {
+                    mNavigator.showProfile(it, PLC)
+                }
             }
         }
     }
