@@ -371,7 +371,7 @@
   <string name="general_buying_disabled">At the moment this purchase is unavailable.</string>
   <string name="ban_flood_detected">You are making requests to the server too often. Please wait a
         few moments before continuing.</string>
-  <string name="general_maintenance">The server is down for technical maintenance and your request
+  <string name="general_maintenance">The server is down for technical maintenance and your mRequest
         can not be processed. Please try again later.</string>
   <string name="virus_chat_btn">Get Likes</string>
   <string name="profile_ask_sent">Request has been sent.</string>
@@ -696,7 +696,7 @@
   <string name="get_vip_free">Get free VIP-status</string>
   <string name="buy_more_sympathies">Get more likes, become more popular</string>
   <string name="transaction_code_help">If you send us a transaction code, this will help us
-        complete your request by speeding up the processing time. Further information about an order
+        complete your mRequest by speeding up the processing time. Further information about an order
         can be found through %s.</string>
   <string name="google_wallet">Google Wallet</string>
   <string name="google_service_general_title">Reminders are not available</string>
@@ -740,7 +740,7 @@
   <string name="trial_vip_button_text">Get VIP</string>
   <string name="settings_check_vip_title">Check if VIP-status is active</string>
   <string name="settings_check_vip_cell">Check VIP-status</string>
-  <string name="settings_check_vip_alert">Your request to check VIP-status has been sent.</string>
+  <string name="settings_check_vip_alert">Your mRequest to check VIP-status has been sent.</string>
   <string name="novice_sympathy">Send Likes only to those\nwho really attract you.\nYou just might
         find someone special!</string>
   <string name="go_dating_message">Start dating and here will appear the names of those users who visited your profile.</string>

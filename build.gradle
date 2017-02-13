@@ -438,6 +438,7 @@ dependencies {
         exclude group: 'io.reactivex'
     }
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.bumptech.glide:recyclerview-integration:1.4.0@aar'
 
     // add hockeyApp sdk to the project
     compile 'net.hockeyapp.android:HockeySDK:4.1.1'

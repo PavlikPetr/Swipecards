@@ -41,6 +41,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
+import com.topface.topface.ui.views.image_switcher.ImageLoader;
 import com.topface.topface.ui.views.image_switcher.ImageSwitcher;
 import com.topface.topface.ui.views.image_switcher.ImageSwitcherAdapter;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
@@ -142,7 +143,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         }
     };
     private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcher mImageSwitcher;
+    private ImageLoader mImageSwitcher;
     private int mUid;
     private TranslateAnimation mCurrentAnimation;
     private TranslateAnimation mAnimationHide = null;
@@ -280,7 +281,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             mUserProfileLoader.release();
         }
         if (mImageSwitcher != null) {
-            mImageSwitcher.release();
+//            mImageSwitcher.release();
         }
     }
 
@@ -320,14 +321,14 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // ViewPager becomes visible without data
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
-        mImageSwitcher = ((ImageSwitcher) findViewById(R.id.galleryAlbum));
-        mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
-            @Override
-            public void sendRequest(int position) {
-                Debug.error("NewImageLoader1 send request position:" + position);
-                sendAlbumRequest(position);
-            }
-        });
+        mImageSwitcher = ((ImageLoader) findViewById(R.id.galleryAlbum));
+//        mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
+//            @Override
+//            public void sendRequest(int position) {
+//                Debug.error("NewImageLoader1 send request position:" + position);
+//                sendAlbumRequest(position);
+//            }
+//        });
         mImageSwitcher.addOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
