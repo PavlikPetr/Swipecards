@@ -219,4 +219,8 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="PopupGreenButton.Background">
+        <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
 </resources>
