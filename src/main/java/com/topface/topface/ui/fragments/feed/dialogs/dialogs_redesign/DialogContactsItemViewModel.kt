@@ -97,7 +97,10 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 }
     }
 
-    override fun onCallbackBinded() = data.addAll(mContactsStubItem.dialogContacts.items)
+    override fun onCallbackBinded() {
+        data.addAll(mContactsStubItem.dialogContacts.items)
+        amount.set(mContactsStubItem.dialogContacts.counter.toString())
+    }
 
     private fun getAmount(counter: Byte) =
             if (counter == MAX_COUNTER) {
