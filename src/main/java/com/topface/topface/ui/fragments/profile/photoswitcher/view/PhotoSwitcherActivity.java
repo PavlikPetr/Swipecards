@@ -42,8 +42,6 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiv
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.image_switcher.ImageLoader;
-import com.topface.topface.ui.views.image_switcher.ImageSwitcher;
-import com.topface.topface.ui.views.image_switcher.ImageSwitcherAdapter;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -254,7 +252,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 }
 
                 if (mImageSwitcher != null) {
-                    ((ImageSwitcherAdapter) mImageSwitcher.getAdapter()).addPhotos(newPhotos);
+                    mImageSwitcher.addPhotos(newPhotos);
                 }
             }
 
@@ -322,17 +320,17 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageLoader) findViewById(R.id.galleryAlbum));
-//        mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
-//            @Override
-//            public void sendRequest(int position) {
-//                Debug.error("NewImageLoader1 send request position:" + position);
-//                sendAlbumRequest(position);
-//            }
-//        });
-        mImageSwitcher.addOnPageChangeListener(mOnPageChangeListener);
+        mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
+            @Override
+            public void sendRequest(int position) {
+                Debug.error("NewImageLoader1 send request position:" + position);
+                sendAlbumRequest(position);
+            }
+        });
+//        mImageSwitcher.addOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
-        mImageSwitcher.setCurrentItemImmediately(position);
+//        mImageSwitcher.setCurrentItemImmediately(position);
 
         setCounter(position);
     }

@@ -36,8 +36,7 @@
                     app:currentItemImmediately="@{viewModel.currentItem}"
                     app:data="@{viewModel.albumData}"
                     app:needAnimateLoader="@{viewModel.isNeedAnimateLoader}"
-                    app:onPageChangeListener="@{viewModel}"
-                    app:preloadEnable="@{viewModel.isPreloadEnabled}"/>
+                    app:onPageChangeListener="@{viewModel}"/>
             </FrameLayout>
 
             <!--Блок "статуса и каунтера фоток"-->

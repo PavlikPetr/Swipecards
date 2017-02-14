@@ -202,17 +202,10 @@
 -dontwarn com.google.gson.**
 -dontnote com.google.gson.**
 
--keep public class * implements com.bumptech.glide.module.GlideModule
--keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+-keep public class * implements com.bumptech.mGlide.module.GlideModule
+-keep public enum com.bumptech.mGlide.load.resource.bitmap.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
 }
-
--keepnames class com.mypackage.MyGlideModule
-# or more generally:
-#-keep public class * implements com.bumptech.glide.module.GlideModule
-
-# for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 -keep class com.xxx.A$* { *; }

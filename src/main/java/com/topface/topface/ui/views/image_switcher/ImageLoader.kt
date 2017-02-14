@@ -1,28 +1,33 @@
 package com.topface.topface.ui.views.image_switcher
 
 import android.content.Context
-import android.support.v4.view.ViewPager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PagerSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.widget.AbsListView
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.Glide
-import com.bumptech.glide.ListPreloader
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.rx.shortSubscription
+import rx.Observable
+import java.util.concurrent.TimeUnit
 
 /**
+ * New album with glide
  * Created by ppavlik on 13.02.17.
  */
 
 class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
     constructor(context: Context) : this(context, null)
 
-    private var mLinks = mutableListOf<String>()
+    companion object {
+        const val PRELOAD_SIZE = 5
+    }
+
+    private var mLinks = arrayListOf<String>()
     private var mHeight = 0
     private var mWidth = 0
 
@@ -30,32 +35,29 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         PreloadingAdapter(mRequestBuilder)
     }
 
-    private val mScrollListener: AbsListView.OnScrollListener by lazy {
-        mPreloadingAdapter.preload(3)
+    private val mSnapHelper: PagerSnapHelper by lazy {
+        PagerSnapHelper()
     }
 
     private val mRequestBuilder: DrawableRequestBuilder<String> by lazy {
         Glide.with(context.applicationContext)
                 .fromString()
-                .fitCenter() // must be explicit, otherwise there's a conflict between
-                // into(ImageView) and into(Target) which may lead to cache misses
-                .listener(object : RequestListener<String, GlideDrawable> {
-                    override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?, isFirstResource: Boolean): Boolean {
-                        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                    override fun onResourceReady(resource: GlideDrawable?, model: String?, target: Target<GlideDrawable>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
-                        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                })
+                .fitCenter()
     }
 
+    private val mPreloader: RecyclerViewPreloader<String> by lazy {
+        RecyclerViewPreloader(mPreloadingAdapter, mPreloadingAdapter, PRELOAD_SIZE)
+    }
 
     init {
+        mSnapHelper.attachToRecyclerView(this)
+        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = mPreloadingAdapter
-        setOnScrollChangeListener(RecyclerToListViewScrollListe(mPreloadingAdapter.preload(3)))
-//        setOnScrollChangeListener(mPreloadingAdapter.preload(3))
+        addOnScrollListener(mPreloader)
+    }
+
+    override fun scrollToPosition(position: Int) {
+        super.scrollToPosition(position)
     }
 
     private fun getViewHeight(): Int {
@@ -78,7 +80,8 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
             mLinks.add(if (link.isNullOrEmpty()) Utils.EMPTY else link)
         } ?: mLinks.add(Utils.EMPTY)
     }.run {
-        mPreloadingAdapter.setData(mLinks)
+        mPreloadingAdapter.clearData()
+        mPreloadingAdapter.addData(mLinks)
         mPreloadingAdapter.notifyDataSetChanged()
     }
 
@@ -88,4 +91,27 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
             } else {
                 photo.defaultLink
             }
+
+    fun setUploadListener(listener: IUploadAlbumPhotos) {
+        mPreloadingAdapter.setUploadListener(listener)
+    }
+
+    private fun getLink(photos: Photos?, position: Int): String {
+        photos?.let {
+            it.find { it.getPosition() == position }?.let {
+                return getPhotoLink(it)
+            }
+        }
+        return Utils.EMPTY
+    }
+
+    fun addPhotos(photos: Photos?) {
+        mLinks.forEachIndexed { i, link ->
+            if (link.isEmpty()) {
+                mLinks.set(i, getLink(photos, i))
+            }
+        }
+        mPreloadingAdapter.clearData()
+        mPreloadingAdapter.addData(mLinks)
+    }
 }

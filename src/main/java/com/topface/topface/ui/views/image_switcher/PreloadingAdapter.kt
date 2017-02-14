@@ -1,63 +1,98 @@
 package com.topface.topface.ui.views.image_switcher
 
-import android.content.Context
-import android.databinding.ViewDataBinding
-import android.support.v4.view.PagerAdapter
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
+import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.widget.AbsListView
-import android.widget.BaseAdapter
-import android.widget.ImageView
+import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.GenericRequestBuilder
-import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.ListPreloader.PreloadModelProvider
-import com.bumptech.glide.integration.volley.VolleyGlideModule
-import com.bumptech.glide.util.ViewPreloadSizeProvider
+import com.bumptech.glide.ListPreloader.PreloadSizeProvider
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
-import com.topface.topface.ui.new_adapter.enhanced.ViewHolder
+import com.topface.topface.databinding.AlbumImageBinding
+import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.utils.Utils
 import java.util.*
 
 /**
+ * RV adapter for album
  * Created by ppavlik on 13.02.17.
  */
 
-class PreloadingAdapter(private val mRequest: GenericRequestBuilder<String, *, *, *>) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>(), PreloadModelProvider<String> {
-    override fun onBindViewHolder(holder: ViewHolder<ViewDataBinding>?, position: Int) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
+        PreloadModelProvider<String>, PreloadSizeProvider<String> {
+
+    companion object {
+        const val TAG = "PreloadingAdapter"
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder<ViewDataBinding> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private var stolenSize: IntArray? = null
+    private var mUploadListener: IUploadAlbumPhotos? = null
+    private var isFirstBind = true
+
+    override fun bindData(binding: AlbumImageBinding?, position: Int) {
+        binding?.let {
+            val target = mRequest.load(getDataItem(position))
+                    .listener(object : RequestListener<String, GlideDrawable> {
+                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
+                                                 isFirstResource: Boolean): Boolean {
+                            if (model.isNullOrEmpty()) {
+                                return true
+
+                            } else {
+                                it.pgrsAlbum.visibility = View.GONE
+                                return false
+                            }
+                        }
+
+                        override fun onResourceReady(resource: GlideDrawable?, model: String?,
+                                                     target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
+                                                     isFirstResource: Boolean): Boolean {
+                            it.pgrsAlbum.visibility = View.GONE
+                            return false
+                        }
+                    })
+                    .error(R.drawable.im_photo_error)
+                    .into(it.image)
+            if (stolenSize == null) {
+                target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
+            }
+        }
     }
 
-    override fun getItemCount() = mLinks.size
-
-    private var mLinks = mutableListOf<String>()
-    private val mSizeProvider: ViewPreloadSizeProvider<String> by lazy {
-        ViewPreloadSizeProvider<String>()
+    private fun preloadOnStart(position: Int) {
+        if (isFirstBind) {
+            isFirstBind = false
+            for (i: Int in position + 1..position + ImageLoader.PRELOAD_SIZE) {
+                data.getOrNull(i)?.let {
+                } ?: return
+            }
+        }
     }
 
-    fun setData(links: MutableList<String>) {
-        mLinks = links
-    }
+    override fun getItemLayout() = R.layout.album_image
+
+    override fun getUpdaterEmitObject() = Bundle()
 
     override fun getPreloadItems(position: Int): List<String> {
-        Debug.error("TEST_TEST getPreloadItems")
-        return Collections.singletonList(mLinks.getOrElse(position) { Utils.EMPTY })
+        Debug.error("$TAG preload position:$position")
+        if (data.getOrNull(position).isNullOrEmpty()) {
+            mUploadListener?.sendRequest(position)
+        }
+        return Collections.singletonList(data.getOrElse(position) { Utils.EMPTY })
     }
 
     override fun getPreloadRequestBuilder(item: String?): GenericRequestBuilder<String, *, *, *> {
-        Debug.error("TEST_TEST getPreloadRequestBuilder")
+        Debug.error("$TAG preload item:$item")
         return mRequest.load(item)
     }
 
-    fun preload(maxPreload: Int): AbsListView.OnScrollListener {
-        Debug.error("TEST_TEST preload")
-        return ListPreloader(this, mSizeProvider, maxPreload)
-    }
+    override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize
 
+    fun setUploadListener(listener: IUploadAlbumPhotos) {
+        mUploadListener = listener
+    }
 }
