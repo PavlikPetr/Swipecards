@@ -1,0 +1,86 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel"/>
+    </data>
+
+     <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+         
+         <ImageView
+             android:layout_width="14dp"
+             android:layout_height="14dp"
+             android:src="@drawable/skip"
+             android:layout_alignParentRight="true"
+             android:layout_alignParentTop="true"
+             android:layout_marginTop="20dp"
+             android:layout_marginRight="16dp"/>
+
+         <TextView
+             android:id="@+id/popupTitle"
+             style="@style/PopupTitle"
+             android:text="@string/you_liked_each_other"
+             android:layout_marginTop="86dp"
+             android:layout_centerHorizontal="true"/>
+
+         <ImageView
+             android:id="@+id/avatarUser"
+             android:layout_width="140dp"
+             android:layout_height="140dp"
+             android:layout_below="@+id/popupTitle"
+             android:layout_alignParentLeft="true"
+             android:layout_marginTop="66dp"
+             android:src="@drawable/man_blur_5"/>
+             <!--app:glideTransformationPhoto="@{model.userPhoto}"-->
+             <!--app:placeholderRes="@{model.placeholderRes}"-->
+             <!--app:typeTransformation="@{model.type}"/>-->
+
+         <ImageView
+             android:layout_width="140dp"
+             android:layout_height="140dp"
+             android:layout_alignParentRight="true"
+             android:layout_below="@+id/popupTitle"
+             android:layout_marginTop="66dp"
+             android:src="@drawable/girl_blur_6"/>
+             <!--app:glideTransformationPhoto="@{model.userPhoto}"-->
+             <!--app:placeholderRes="@{model.placeholderRes}"-->
+             <!--app:typeTransformation="@{model.type}"/>-->
+
+         <ImageView
+             android:id="@+id/mutualIC"
+             android:layout_width="74dp"
+             android:layout_height="74dp"
+             android:src="@drawable/ic_mutually"
+             android:layout_below="@+id/popupTitle"
+             android:layout_marginTop="176dp"
+             android:layout_centerHorizontal="true"
+             />
+
+         <Button
+             android:id="@+id/btnChangeFilterDating"
+             style="@style/PopupGreenButton.Background"
+             android:onClick="@{() -> viewModel.onChangeDatingFilter()}"
+             android:text="@string/start_dialog"
+             android:textSize="18sp"
+             android:textAllCaps="true"
+             android:layout_marginTop="78dp"
+             android:layout_below="@+id/avatarUser"
+             android:layout_centerHorizontal="true"/>
+
+         <Button
+             android:id="@+id/btnClearFilterDating"
+             style="@style/PopupBorderlessdButton"
+             android:onClick="@{() -> viewModel.onCleanDatingFilter()}"
+             android:text="@string/continue_to_meet"
+             android:layout_marginTop="18dp"
+             android:layout_below="@id/btnChangeFilterDating"
+             android:layout_centerHorizontal="true"/>
+
+     </RelativeLayout>
+
+</layout>
