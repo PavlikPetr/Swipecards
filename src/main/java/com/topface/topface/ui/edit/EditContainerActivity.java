@@ -13,7 +13,7 @@ import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.edit.filter.view.FilterFragment;
+import com.topface.topface.ui.edit.filter.view.DatingFilterFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -37,19 +37,22 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
                 // хак чтобы тень под тулбаром была на том же фоне, что и фрагмент, при этом с возможностью свитчить
                 // для разных фрагментов
                 getViewBinding().getRoot().setBackgroundColor(getResources().getColor(R.color.gray_bg));
-                mFragment = new FilterFragment();
+                mFragment = new DatingFilterFragment();
+//                mFragment = new FilterFragment();
                 break;
             default:
                 break;
         }
 
-        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
+//        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
+        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(DatingFilterFragment.TAG);
         if (fragmentByTag != null) {
             mFragment = fragmentByTag;
         }
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_content, mFragment, FilterFragment.TAG).commit();
+//                    .replace(R.id.fragment_content, mFragment, FilterFragment.TAG).commit();
+                    .replace(R.id.fragment_content, mFragment, DatingFilterFragment.TAG).commit();
         }
     }
 

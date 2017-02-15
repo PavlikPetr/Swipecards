@@ -33,6 +33,7 @@ import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
+import com.topface.topface.ui.edit.filter.view.DatingFilterFragment
 import com.topface.topface.ui.edit.filter.view.FilterFragment
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
@@ -289,7 +290,8 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             mIsDatingButtonEnable = false
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (data != null && data.extras != null) {
-                sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
+                sendFilterRequest(data.getParcelableExtra<FilterData>(DatingFilterFragment.INTENT_DATING_FILTER))
+//                sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
                 mNewFilter = true
                 FlurryManager.getInstance().sendFilterChangedEvent()
             }

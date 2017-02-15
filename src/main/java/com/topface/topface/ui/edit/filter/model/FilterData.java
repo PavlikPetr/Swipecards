@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
+import com.topface.topface.ui.edit.filter.viewModel.DatingFilterViewModel;
 import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,14 @@ public class FilterData implements Cloneable, Parcelable {
         ageEnd = model.ageEnd.get();
         isPrettyOnly = model.prettyOnly.get();
         sex = model.isMaleSelected.get() ? Profile.BOY : Profile.GIRL;
+    }
+
+    public FilterData(@NotNull DatingFilterViewModel model) {
+        city = model.getCity().get();
+        isOnlineOnly = model.getOnlineOnly().get();
+        ageStart = model.getAgeStart().get();
+        ageEnd = model.getAgeEnd().get();
+        sex = model.isMaleSelected().get() ? Profile.BOY : Profile.GIRL;
     }
 
     protected FilterData(Parcel in) {
