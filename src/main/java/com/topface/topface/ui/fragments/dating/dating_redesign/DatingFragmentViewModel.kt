@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.content.LocalBroadcastManager
@@ -17,8 +16,10 @@ import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
@@ -33,6 +34,7 @@ import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
+import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
@@ -45,6 +47,7 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.views.image_switcher.ImageClick
 import com.topface.topface.ui.views.image_switcher.PreloadingAdapter
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.ILifeCycle
@@ -54,8 +57,10 @@ import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.extensions.isNotEmpty
+import com.topface.topface.utils.extensions.loadLinkToSameCache
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel.AGE_TEMPLATE
 import rx.Observer
@@ -108,6 +113,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
     @Inject lateinit internal var appState: TopfaceAppState
+    @Inject lateinit var eventBus: EventBus
 
     private var mLoadedCount = 0
     private var mAlbumSubscription: Subscription? = null
@@ -119,10 +125,11 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mProfileSubscription: Subscription? = null
     private var mUpdateSubscription: Subscription? = null
     private var mLoadBackgroundSubscription: Subscription? = null
+    private var mOnImageClickSubscription: Subscription? = null
     private var mNewFilter = false
     private var mUpdateInProcess = false
     private var isLastUser = false
-    private var mPreloadTarget: Target<Bitmap>? = null
+    private var mPreloadTarget: SimpleTarget<GlideDrawable>? = null
     private var mIsOnline by Delegates.observable(false) { prop, old, new ->
         iconOnlineRes.set(if (new) R.drawable.im_list_online else 0)
     }
@@ -184,29 +191,45 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
 
     fun preloadPhoto() {
-        mUserSearchList.nextUser()?.photo?.defaultLink?.let {
+        mUserSearchList.getOrNull(mUserSearchList.searchPosition + 1)?.photo?.defaultLink?.let {
             mPreloadTarget.clear()
             mPreloadTarget = Glide.with(mContext.applicationContext)
-                    .load(it)
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .listener(object : RequestListener<String, Bitmap> {
-                        override fun onResourceReady(resource: Bitmap?, model: String?, target: Target<Bitmap>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
+                    .fromString()
+                    .loadLinkToSameCache(it)
+                    .listener(object : RequestListener<String, GlideDrawable> {
+                        override fun onResourceReady(resource: GlideDrawable?, model: String?,
+                                                     target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
+                                                     isFirstResource: Boolean): Boolean {
                             Debug.error("${PreloadingAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                             return false
                         }
 
-                        override fun onException(e: Exception?, model: String?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
+                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
+                                                 isFirstResource: Boolean): Boolean {
                             Debug.error("${PreloadingAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                             return false
                         }
                     })
-                    .preload()
+                    .into(object : SimpleTarget<GlideDrawable>() {
+                        override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
+                            mPreloadTarget.clear()
+                        }
+
+                    })
         }
     }
 
     init {
         App.get().inject(this)
+        mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+            with(currentUser) {
+                this?.photos?.let {
+                    if (it.isNotEmpty()) {
+                        mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
+                    }
+                }
+            }
+        })
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mPreloadManager.checkConnectionType()
@@ -346,14 +369,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
     }
 
-    fun onPhotoClick() = with(currentUser) {
-        this?.photos?.let {
-            if (it.isNotEmpty()) {
-                mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
-            }
-        }
-    }
-
     override fun onSavedInstanceState(state: Bundle) = with(state) {
         putBoolean(NEW_FILTER, mNewFilter)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
@@ -416,7 +431,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun sendAlbumRequest(position: Int) {
         mUserSearchList.currentUser?.let {
-            mAlbumSubscription = mApi.callAlbumRequest(it, position + 1).subscribe(object : Observer<AlbumPhotos> {
+            mAlbumSubscription = mApi.callAlbumRequest(it, position).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     preloadedData.set(newPhotos)
@@ -440,6 +455,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mLikeSubscription.safeUnsubscribe()
         mUpdateSubscription.safeUnsubscribe()
         mLoadBackgroundSubscription.safeUnsubscribe()
+        mOnImageClickSubscription.safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
         mPreloadTarget.clear()
     }

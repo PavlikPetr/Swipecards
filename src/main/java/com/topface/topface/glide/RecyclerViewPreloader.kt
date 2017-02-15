@@ -12,12 +12,16 @@ class RecyclerViewPreloader<T>(preloadModelProvider: PreloadModelProvider<T>,
 
     init {
         val listPreloader = ListPreloader<T>(preloadModelProvider,
-                preloadDimensionProvider, maxPreload);
+                preloadDimensionProvider, maxPreload)
         recyclerScrollListener = RecyclerToListViewScrollListener(listPreloader);
 
     }
 
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
         recyclerScrollListener.onScrolled(recyclerView, dx, dy)
+    }
+
+    fun startPreload(firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+        recyclerScrollListener.startPreload(firstVisibleItem, visibleItemCount, totalItemCount)
     }
 }

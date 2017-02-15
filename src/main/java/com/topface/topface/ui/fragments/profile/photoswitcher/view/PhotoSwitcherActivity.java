@@ -32,6 +32,7 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.UserProfileActivity;
@@ -41,6 +42,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
+import com.topface.topface.ui.views.image_switcher.ImageClick;
 import com.topface.topface.ui.views.image_switcher.ImageLoader;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
@@ -51,6 +53,7 @@ import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -58,6 +61,8 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding> {
 
@@ -83,6 +88,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     private static final int ANIMATION_TIME = 200;
     @Inject
     TopfaceAppState appState;
+    @Inject
+    EventBus eventBus;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -100,19 +107,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         }
     };
     private ViewGroup mPhotoAlbumControl;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            setPhotoAlbumControlVisibility(mPhotoAlbumControl != null
-                    && mPhotoAlbumControl.getVisibility() != View.VISIBLE
-                    ? View.VISIBLE
-                    : View.GONE, true);
-        }
-    };
     private ViewGroup mOwnPhotosControl;
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
+    private Subscription mOnImageClickSubscription;
     private IUserProfileReceiver mUserProfileReceiver = new IUserProfileReceiver() {
         @Override
         public void onReceiveUserProfile(User user) {
@@ -192,6 +191,15 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         App.get().inject(this);
+        mOnImageClickSubscription = eventBus.getObservable(ImageClick.class).subscribe(new RxUtils.ShortSubscription<ImageClick>() {
+            @Override
+            public void onNext(ImageClick type) {
+                setPhotoAlbumControlVisibility(mPhotoAlbumControl != null
+                        && mPhotoAlbumControl.getVisibility() != View.VISIBLE
+                        ? View.VISIBLE
+                        : View.GONE, true);
+            }
+        });
         mViewModel = new PhotoSwitcherViewModel(getViewBinding(), this);
         getViewBinding().setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
@@ -272,6 +280,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RxUtils.safeUnsubscribe(mOnImageClickSubscription);
         if (mViewModel != null) {
             mViewModel.release();
         }
@@ -328,7 +337,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             }
         });
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
-        mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItemImmediately(position);
 

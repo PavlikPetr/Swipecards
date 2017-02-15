@@ -52,14 +52,13 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         Glide.with(context.applicationContext)
                 .fromString()
                 .fitCenter()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
     }
 
     private val mLayoutManager: LinearLayoutManager by lazy {
         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    private val mPreloader: RecyclerView.OnScrollListener by lazy {
+    private val mPreloader: RecyclerViewPreloader<String> by lazy {
         RecyclerViewPreloader(mPreloadingAdapter, mPreloadingAdapter, PRELOAD_SIZE)
     }
 
@@ -116,6 +115,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
             }
             mPreloadingAdapter.addData(mLinks)
             mPreloadingAdapter.notifyDataSetChanged()
+//            mPreloader.startPreload(1, 2, mPreloadingAdapter.data.size)
         }
     }
 
@@ -147,10 +147,6 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         }
         mPreloadingAdapter.clearData()
         mPreloadingAdapter.addData(mLinks)
-    }
-
-    override fun setOnClickListener(l: OnClickListener?) {
-        mPreloadingAdapter.setOnClickListener(l)
     }
 
     fun setCurrentItemSmoothly(position: Int) {

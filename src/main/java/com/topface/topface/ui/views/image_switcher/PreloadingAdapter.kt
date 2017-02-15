@@ -2,20 +2,22 @@ package com.topface.topface.ui.views.image_switcher
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnClickListener
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.GenericRequestBuilder
 import com.bumptech.glide.ListPreloader.PreloadModelProvider
 import com.bumptech.glide.ListPreloader.PreloadSizeProvider
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.signature.StringSignature
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.AlbumImageBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
+import com.topface.topface.utils.extensions.clear
+import com.topface.topface.utils.extensions.loadLinkToSameCache
 
 /**
  * RV adapter for album
@@ -31,40 +33,55 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     private var stolenSize: IntArray? = null
     private var mUploadListener: IUploadAlbumPhotos? = null
-    private var mOnImageClickListener: OnClickListener? = null
+    private var mTargets = arrayListOf<Target<GlideDrawable>>()
 
     override fun bindData(binding: AlbumImageBinding?, position: Int) {
-        binding?.let {
-            val viewModel = AlbumImageViewModel(mOnImageClickListener)
-            it.viewModel = viewModel
-            val link = getDataItem(position)
-            val target = mRequest.load(link)
-                    .signature(StringSignature(link))
-                    .listener(object : RequestListener<String, GlideDrawable> {
-                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
-                                                 isFirstResource: Boolean): Boolean {
-                            Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
-                            if (model.isNullOrEmpty()) {
-                                return true
-                            } else {
+        binding?.let { bind ->
+            val viewModel = AlbumImageViewModel()
+            bind.viewModel = viewModel
+            getDataItem(position)?.let {
+                val target = mRequest.loadLinkToSameCache(it)
+                        .listener(object : RequestListener<String, GlideDrawable> {
+                            override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
+                                                     isFirstResource: Boolean): Boolean {
+                                Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                                if (model.isNullOrEmpty()) {
+                                    return true
+                                } else {
+                                    viewModel.isProgressVisible.set(View.GONE)
+                                    return false
+                                }
+                            }
+
+                            override fun onResourceReady(resource: GlideDrawable?, model: String?,
+                                                         target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
+                                                         isFirstResource: Boolean): Boolean {
+                                Debug.error("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                                 viewModel.isProgressVisible.set(View.GONE)
                                 return false
                             }
-                        }
+                        })
+                        .error(R.drawable.im_photo_error)
+                        .into(object : SimpleTarget<GlideDrawable>() {
+                            override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
+                                bind.image.setImageDrawable(resource)
+                                this.clear()
+                            }
 
-                        override fun onResourceReady(resource: GlideDrawable?, model: String?,
-                                                     target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
-                                                     isFirstResource: Boolean): Boolean {
-                            Debug.error("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
-                            viewModel.isProgressVisible.set(View.GONE)
-                            return false
-                        }
-                    })
-                    .error(R.drawable.im_photo_error)
-                    .into(it.image)
-            if (stolenSize == null) {
-                target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
+                        })
+//                        .into(bind.image)
+                if (stolenSize == null) {
+                    target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
+                }
+                mTargets.add(target)
             }
+        }
+    }
+
+    override fun clearData() {
+        super.clearData()
+        mTargets.forEach {
+            it.clear()
         }
     }
 
@@ -91,9 +108,5 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     fun setUploadListener(listener: IUploadAlbumPhotos) {
         mUploadListener = listener
-    }
-
-    fun setOnClickListener(l: OnClickListener?) {
-        mOnImageClickListener = l
     }
 }

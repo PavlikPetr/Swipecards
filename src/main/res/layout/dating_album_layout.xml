@@ -18,7 +18,6 @@
             android:id="@+id/dating_album"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="@{()-> model.onPhotoClick()}"
             app:currentItemImmediately="@{model.currentItem}"
             app:data="@{model.albumData}"
             app:onPageChangeListener="@{model}"

@@ -8,24 +8,29 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
+import com.topface.topface.App
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.views.image_switcher.ImageClick
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscription
 import java.util.*
+import javax.inject.Inject
 
 
 /**
@@ -38,6 +43,8 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                            private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView) :
         BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener, IUploadAlbumPhotos {
+
+    @Inject lateinit var eventBus: EventBus
 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
@@ -63,6 +70,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     private var mNeedMore = false
 
     private var mAlbumSubscription: Subscription? = null
+    private var mOnImageClickSubscription: Subscription? = null
 
     private companion object {
         const val PHOTOS_COUNTER = "photos_counter"
@@ -78,12 +86,17 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val NEED_MORE = "need_more"
     }
 
-    fun onPhotoClick() = with(currentUser) {
-        this?.photos?.let {
-            if (it.isNotEmpty()) {
-                mNavigator.showAlbum(0, id, photosCount, it)
+    init {
+        App.get().inject(this)
+        mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+            with(currentUser) {
+                this?.photos?.let {
+                    if (it.isNotEmpty()) {
+                        mNavigator.showAlbum(0, id, photosCount, it)
+                    }
+                }
             }
-        }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -173,6 +186,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     override fun release() {
         super.release()
         mAlbumSubscription.safeUnsubscribe()
+        mOnImageClickSubscription.safeUnsubscribe()
     }
 
     override fun onPageSelected(position: Int) {
