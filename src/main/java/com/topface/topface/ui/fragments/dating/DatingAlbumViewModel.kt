@@ -19,6 +19,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
@@ -40,7 +41,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
-    val albumData = ObservableField<Photos>()
+    val albumData = ObservableField<Photos?>()
     val isOnline = ObservableBoolean()
     val isPhotosCounterVisible = ObservableBoolean(false)
     val isNeedAnimateLoader = ObservableBoolean(false)
@@ -78,9 +79,10 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     }
 
     fun onPhotoClick() = with(currentUser) {
-        if (this != null && photos != null && photos.isNotEmpty()) {
-            mNavigator.showAlbum(0,
-                    id, photosCount, photos)
+        this?.photos?.let {
+            if (it.isNotEmpty()) {
+                mNavigator.showAlbum(0, id, photosCount, it)
+            }
         }
     }
 
@@ -155,7 +157,9 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         photosCounter.set(getString(PHOTOS_COUNTER))
         nameAgeOnline.set(getString(NAME_AGE_ONLINE))
-        albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
+        (getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)?.let {
+            albumData.set(it)
+        }
         isOnline.set(getBoolean(ONLINE, false))
         isPhotosCounterVisible.set(getBoolean(PHOTOS_COUNTER_VISIBLE, false))
         isNeedAnimateLoader.set(getBoolean(NEED_ANIMATE_LOADER, false))
@@ -193,12 +197,14 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     fun setUser(user: SearchUser?) = user?.let {
         currentUser = user.apply {
-            mLoadedCount = photos.realPhotosCount
-            albumData.set(photos)
+            mLoadedCount = photos?.realPhotosCount ?: 0
+            photos?.let {
+                albumData.set(it)
+            }
             mNeedMore = photosCount > mLoadedCount
-            val rest = photosCount - photos.count()
+            val rest = photosCount - (photos?.count() ?: 0)
             for (i in 0..rest - 1) {
-                photos.add(Photo.createFakePhoto())
+                photos?.add(Photo.createFakePhoto())
             }
         }
     }

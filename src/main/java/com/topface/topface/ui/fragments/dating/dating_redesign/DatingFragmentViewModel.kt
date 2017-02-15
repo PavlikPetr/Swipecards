@@ -18,7 +18,6 @@ import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
@@ -46,7 +45,6 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.views.image_switcher.ImageSwitcher
 import com.topface.topface.ui.views.image_switcher.PreloadingAdapter
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.ILifeCycle
@@ -55,6 +53,7 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.social.AuthToken
@@ -81,7 +80,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
-    val isPreloadEnabled = ObservableBoolean(false)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
         override fun set(value: String?) {
@@ -146,7 +144,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     private companion object {
-        private const val IS_PRELOAD_ENABLED = "is_preload_enabled"
         private const val PHOTOS_COUNTER = "photos_counter"
         private const val NAME = "name"
         private const val AGE = "age"
@@ -236,7 +233,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
-                        albumData.set(it.photos)
+                        it.photos?.let {
+                            albumData.set(it)
+                        }
                         currentUser = it
                         //todo
 //                        binding.root.post {
@@ -252,42 +251,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
     }
-
-    private fun preload() {
-        Debug.error("${ImageSwitcher.TAG} preload user")
-        mUserSearchList.nextUser()?.let {
-            Debug.error("${ImageSwitcher.TAG} preload user != null")
-            // заюзать предзагрузку можно только если она отключена в ImageSwitcher
-            if (!isPreloadEnabled.get()) {
-                Debug.error("${ImageSwitcher.TAG} load link ${it.photos[0].defaultLink}")
-                mPreloadTarget.clear()
-                mPreloadTarget = Glide.with(mContext.applicationContext)
-                        .load(it.photos[0].defaultLink)
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .listener(object : RequestListener<String, Bitmap> {
-                            override fun onException(e: Exception?, model: String?,
-                                                     target: Target<Bitmap>?,
-                                                     isFirstResource: Boolean): Boolean {
-                                isPreloadEnabled.set(true)
-                                Debug.error("${ImageSwitcher.TAG} preload user failed")
-                                return false
-                            }
-
-                            override fun onResourceReady(resource: Bitmap?, model: String?,
-                                                         target: Target<Bitmap>?,
-                                                         isFromMemoryCache: Boolean,
-                                                         isFirstResource: Boolean): Boolean {
-                                Debug.error("${ImageSwitcher.TAG} preload user success")
-                                isPreloadEnabled.set(true)
-                                return false
-                            }
-                        })
-                        .preload()
-            }
-        }
-    }
-
 
     fun updatePhotosCounter(position: Int) = photoCounter.set("${position + 1}/${currentUser?.photosCount}")
 
@@ -384,13 +347,14 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     fun onPhotoClick() = with(currentUser) {
-        if (this != null && photos != null && photos.isNotEmpty()) {
-            mNavigator.showAlbum(mCurrentPosition, id, photosCount, photos)
+        this?.photos?.let {
+            if (it.isNotEmpty()) {
+                mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
+            }
         }
     }
 
     override fun onSavedInstanceState(state: Bundle) = with(state) {
-        putBoolean(IS_PRELOAD_ENABLED, isPreloadEnabled.get())
         putBoolean(NEW_FILTER, mNewFilter)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
         putInt(LOADED_COUNT, mLoadedCount)
@@ -413,8 +377,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
-        isPreloadEnabled.set(getBoolean(IS_PRELOAD_ENABLED))
-        albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
+        (getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)?.let {
+            albumData.set(it)
+        }
         currentUser = getParcelable(CURRENT_USER)
         mNewFilter = getBoolean(NEW_FILTER)
         mCanSendAlbumReq = getBoolean(CAN_SEND_ALBUM_REQUEST)
@@ -437,12 +402,14 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun setUser(user: SearchUser?) = user?.let {
         currentUser = user.apply {
-            mLoadedCount = photos.realPhotosCount
-            albumData.set(photos)
+            mLoadedCount = photos?.realPhotosCount ?: 0
+            photos?.let {
+                albumData.set(it)
+            }
             mNeedMore = photosCount > mLoadedCount
-            val rest = photosCount - photos.count()
+            val rest = photosCount - (photos?.count() ?: 0)
             for (i in 0..rest - 1) {
-                photos.add(Photo.createFakePhoto())
+                photos?.add(Photo.createFakePhoto())
             }
         }
     }
@@ -599,7 +566,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
-                            albumData.set(user.photos)
+                            user.photos?.let {
+                                albumData.set(it)
+                            }
                             currentUser = user
                             Debug.log("LOADER_INTEGRATION onNext onDataReceived")
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {

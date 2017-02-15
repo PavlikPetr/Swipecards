@@ -104,17 +104,19 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         return mWidth
     }
 
-    fun setData(photos: Photos) {
-        mLinks.clear()
-        mPreloadingAdapter.clearData()
-        photos.forEach {
-            it?.let {
-                val link = getPhotoLink(it)
-                mLinks.add(if (link.isNullOrEmpty()) Utils.EMPTY else link)
-            } ?: mLinks.add(Utils.EMPTY)
+    fun setData(photos: Photos?) {
+        photos?.let {
+            mLinks.clear()
+            mPreloadingAdapter.clearData()
+            it.forEach {
+                it?.let {
+                    val link = getPhotoLink(it)
+                    mLinks.add(if (link.isNullOrEmpty()) Utils.EMPTY else link)
+                } ?: mLinks.add(Utils.EMPTY)
+            }
+            mPreloadingAdapter.addData(mLinks)
+            mPreloadingAdapter.notifyDataSetChanged()
         }
-        mPreloadingAdapter.addData(mLinks)
-        mPreloadingAdapter.notifyDataSetChanged()
     }
 
     private fun getPhotoLink(photo: Photo) = photo.defaultLink

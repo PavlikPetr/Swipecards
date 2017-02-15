@@ -10,6 +10,7 @@ import com.bumptech.glide.ListPreloader.PreloadSizeProvider
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.StringSignature
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.AlbumImageBinding
@@ -36,7 +37,9 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
         binding?.let {
             val viewModel = AlbumImageViewModel(mOnImageClickListener)
             it.viewModel = viewModel
-            val target = mRequest.load(getDataItem(position))
+            val link = getDataItem(position)
+            val target = mRequest.load(link)
+                    .signature(StringSignature(link))
                     .listener(object : RequestListener<String, GlideDrawable> {
                         override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
                                                  isFirstResource: Boolean): Boolean {
