@@ -53,14 +53,14 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     TabLayout mTabLayout;
     private CountersDataProvider mCountersDataProvider;
     private TabbedFeedPageAdapter mBodyPagerAdapter;
-    protected static int mVisitorsastOpenedPage = 0;
+    protected static int mVisitorsLastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
     protected CountersData mCountersData = new CountersData();
     private TabLayoutCreator mTabLayoutCreator;
 
     public static void setTabsDefaultPosition() {
-        mVisitorsastOpenedPage = 0;
+        mVisitorsLastOpenedPage = 0;
         mLikesLastOpenedPage = 0;
         mDialogsLastOpenedPage = 0;
     }
