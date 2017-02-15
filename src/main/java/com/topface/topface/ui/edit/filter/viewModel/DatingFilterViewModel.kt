@@ -73,7 +73,6 @@ class DatingFilterViewModel(private val mBinding: DatingFilterBinding, private v
                 notifyChange()
             }
 
-
     fun onFemaleCheckBoxClick() =
             with(isMaleSelected) {
                 set(false)

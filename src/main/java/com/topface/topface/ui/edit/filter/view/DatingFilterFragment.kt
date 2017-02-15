@@ -64,7 +64,6 @@ class DatingFilterFragment() : AbstractEditFragment() {
         return mFilter
     }
 
-
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putParcelable(CURRENT_FILTER_VALUE, FilterData(mViewModel))
@@ -75,7 +74,7 @@ class DatingFilterFragment() : AbstractEditFragment() {
         mViewModel.release()
     }
 
-    override fun hasChanges(): Boolean = (mFilter != FilterData(mViewModel))
+    override fun hasChanges(): Boolean = mFilter != FilterData(mViewModel)
 
     override fun saveChanges(handler: Handler) {
         if (hasChanges()) {
