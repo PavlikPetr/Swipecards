@@ -437,7 +437,13 @@ dependencies {
         exclude group: 'com.squareup.retrofit2'
         exclude group: 'io.reactivex'
     }
+    /*________________________GLIDE__________________________________*/
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //норм либка с  трансформациями для glide, работает шустро
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    //лоадер для glide
+//    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    /*_______________________________________________________________*/
 
     // add hockeyApp sdk to the project
     compile 'net.hockeyapp.android:HockeySDK:4.1.1'
@@ -457,9 +463,6 @@ dependencies {
     }
     //наша статистика
     kapt files("libs/processor.jar")
-
-    //норм либка с  трансформациями для glide, работает шустро
-    compile 'jp.wasabeef:glide-transformations:2.0.1'
 }
 
 task processorTask(type: Exec) {

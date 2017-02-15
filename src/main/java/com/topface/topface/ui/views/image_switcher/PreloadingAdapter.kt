@@ -2,6 +2,7 @@ package com.topface.topface.ui.views.image_switcher
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.OnClickListener
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.GenericRequestBuilder
 import com.bumptech.glide.ListPreloader.PreloadModelProvider
@@ -14,8 +15,6 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AlbumImageBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
-import com.topface.topface.utils.Utils
-import java.util.*
 
 /**
  * RV adapter for album
@@ -31,19 +30,21 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     private var stolenSize: IntArray? = null
     private var mUploadListener: IUploadAlbumPhotos? = null
-    private var isFirstBind = true
+    private var mOnImageClickListener: OnClickListener? = null
 
     override fun bindData(binding: AlbumImageBinding?, position: Int) {
         binding?.let {
+            val viewModel = AlbumImageViewModel(mOnImageClickListener)
+            it.viewModel = viewModel
             val target = mRequest.load(getDataItem(position))
                     .listener(object : RequestListener<String, GlideDrawable> {
                         override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
                                                  isFirstResource: Boolean): Boolean {
+                            Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                             if (model.isNullOrEmpty()) {
                                 return true
-
                             } else {
-                                it.pgrsAlbum.visibility = View.GONE
+                                viewModel.isProgressVisible.set(View.GONE)
                                 return false
                             }
                         }
@@ -51,7 +52,8 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                         override fun onResourceReady(resource: GlideDrawable?, model: String?,
                                                      target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
                                                      isFirstResource: Boolean): Boolean {
-                            it.pgrsAlbum.visibility = View.GONE
+                            Debug.error("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                            viewModel.isProgressVisible.set(View.GONE)
                             return false
                         }
                     })
@@ -59,16 +61,6 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                     .into(it.image)
             if (stolenSize == null) {
                 target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
-            }
-        }
-    }
-
-    private fun preloadOnStart(position: Int) {
-        if (isFirstBind) {
-            isFirstBind = false
-            for (i: Int in position + 1..position + ImageLoader.PRELOAD_SIZE) {
-                data.getOrNull(i)?.let {
-                } ?: return
             }
         }
     }
@@ -82,7 +74,9 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
         if (data.getOrNull(position).isNullOrEmpty()) {
             mUploadListener?.sendRequest(position)
         }
-        return Collections.singletonList(data.getOrElse(position) { Utils.EMPTY })
+        val link = data.getOrNull(position)
+        // если ссылки на фото нет, то не буудем выполнять предзагрузку
+        return if (link.isNullOrEmpty()) listOf<String>() else listOf(link!!)
     }
 
     override fun getPreloadRequestBuilder(item: String?): GenericRequestBuilder<String, *, *, *> {
@@ -94,5 +88,9 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     fun setUploadListener(listener: IUploadAlbumPhotos) {
         mUploadListener = listener
+    }
+
+    fun setOnClickListener(l: OnClickListener?) {
+        mOnImageClickListener = l
     }
 }

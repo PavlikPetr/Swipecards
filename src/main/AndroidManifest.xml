@@ -71,6 +71,9 @@
         android:logo="@drawable/ic_home_topface_white"
         android:supportsRtl="false"
         android:theme="@style/Theme.Topface">
+        <!--<meta-data-->
+            <!--android:name="com.topface.topface.glide.module.CustomizedOkHttpGlideModule"-->
+            <!--android:value="GlideModule"/>-->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"

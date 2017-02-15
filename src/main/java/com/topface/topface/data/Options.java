@@ -371,7 +371,7 @@ public class Options extends AbstractData {
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
             datingRedesignEnabled = response.optBoolean("datingRedesignEnabled");
-            datingRedesignEnabled = false;
+            datingRedesignEnabled = true;
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());

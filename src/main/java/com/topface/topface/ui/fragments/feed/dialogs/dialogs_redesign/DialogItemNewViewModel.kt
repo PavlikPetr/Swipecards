@@ -12,7 +12,7 @@ import com.topface.topface.ui.fragments.feed.feed_utils.getUITestTag
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА

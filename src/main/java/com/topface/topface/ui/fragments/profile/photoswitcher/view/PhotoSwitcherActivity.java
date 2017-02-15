@@ -252,7 +252,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 }
 
                 if (mImageSwitcher != null) {
-                    mImageSwitcher.addPhotos(newPhotos);
+                    mImageSwitcher.setPhotos(newPhotos);
                 }
             }
 
@@ -327,10 +327,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 sendAlbumRequest(position);
             }
         });
-//        mImageSwitcher.addOnPageChangeListener(mOnPageChangeListener);
+        mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
-//        mImageSwitcher.setCurrentItemImmediately(position);
+        mImageSwitcher.setCurrentItemImmediately(position);
 
         setCounter(position);
     }

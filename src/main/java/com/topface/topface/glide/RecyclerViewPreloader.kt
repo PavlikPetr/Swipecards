@@ -1,4 +1,4 @@
-package com.topface.topface.ui.views.image_switcher
+package com.topface.topface.glide
 
 import android.support.v7.widget.RecyclerView
 import com.bumptech.glide.ListPreloader

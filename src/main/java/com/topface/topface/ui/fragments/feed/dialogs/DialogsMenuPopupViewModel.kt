@@ -11,7 +11,7 @@ import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogPopu
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription

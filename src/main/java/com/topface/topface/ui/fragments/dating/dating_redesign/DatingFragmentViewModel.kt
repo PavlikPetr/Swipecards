@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
@@ -43,8 +44,10 @@ import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageSwitcher
+import com.topface.topface.ui.views.image_switcher.PreloadingAdapter
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.PreloadManager
@@ -72,7 +75,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                               private val mController: AlbumLoadController,
                               private val mUserSearchList: CachableSearchList<SearchUser>,
                               private val mLoadBackground: (link: String) -> Unit) : ILifeCycle, ViewPager.OnPageChangeListener,
-        OnUsersListEventsListener<SearchUser> {
+        OnUsersListEventsListener<SearchUser>, IUploadAlbumPhotos {
 
     val name = ObservableField<String>()
     val feedAge = ObservableField<String>()
@@ -102,6 +105,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val isProfileButtonsEnable = ObservableBoolean(true)
     val currentItem = ObservableInt(0)
     val albumData = ObservableField<Photos>()
+    val preloadedData = ObservableField<Photos>()
     val isNeedAnimateLoader = ObservableBoolean(false)
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
@@ -176,11 +180,33 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 mIsOnline = online
                 statusText.set(status)
             }
-            preload()
             albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
             mCurrentPosition = 0
+            preloadPhoto()
             hideProgress()
         }
+
+    fun preloadPhoto() {
+        mUserSearchList.nextUser()?.photo?.defaultLink?.let {
+            mPreloadTarget.clear()
+            mPreloadTarget = Glide.with(mContext.applicationContext)
+                    .load(it)
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .listener(object : RequestListener<String, Bitmap> {
+                        override fun onResourceReady(resource: Bitmap?, model: String?, target: Target<Bitmap>?, isFromMemoryCache: Boolean, isFirstResource: Boolean): Boolean {
+                            Debug.error("${PreloadingAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                            return false
+                        }
+
+                        override fun onException(e: Exception?, model: String?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
+                            Debug.error("${PreloadingAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                            return false
+                        }
+                    })
+                    .preload()
+        }
+    }
 
     init {
         App.get().inject(this)
@@ -421,27 +447,15 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
     }
 
-    private fun sendAlbumRequest(data: Photos) {
-        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
-            return
-        }
+    private fun sendAlbumRequest(position: Int) {
         mUserSearchList.currentUser?.let {
-            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
+            mAlbumSubscription = mApi.callAlbumRequest(it, position + 1).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
+                    preloadedData.set(newPhotos)
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
                         mNeedMore = newPhotos.more
-                        var i = 0
-                        for (photo in newPhotos) {
-                            if (mLoadedCount + i < data.size) {
-                                data[mLoadedCount + i] = photo
-                                i++
-                            }
-                        }
                         mLoadedCount += newPhotos.size
-                        if (mCurrentPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
-                            sendAlbumRequest(data)
-                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -465,14 +479,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     override fun onPageSelected(position: Int) {
         mCurrentPosition = position
-        if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-            with(albumData.get()) {
-                if (mNeedMore && mCanSendAlbumReq && !isEmpty()) {
-                    mCanSendAlbumReq = false
-                    sendAlbumRequest(this)
-                }
-            }
-        }
     }
 
     private fun loadBluredBackground(position: Int) =
@@ -636,5 +642,12 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
             }
         })
+    }
+
+    override fun sendRequest(position: Int) {
+        if (mCanSendAlbumReq) {
+            mCanSendAlbumReq = false
+            sendAlbumRequest(position)
+        }
     }
 }

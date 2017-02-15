@@ -16,8 +16,8 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -36,7 +36,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                            private val mUserSearchList: CachableSearchList<SearchUser>,
                            private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView) :
-        BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
+        BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener, IUploadAlbumPhotos {
 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
@@ -79,7 +79,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     fun onPhotoClick() = with(currentUser) {
         if (this != null && photos != null && photos.isNotEmpty()) {
-            mNavigator.showAlbum(binding.datingAlbum.selectedPosition,
+            mNavigator.showAlbum(0,
                     id, photosCount, photos)
         }
     }
@@ -103,32 +103,30 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         }
     }
 
-    private fun sendAlbumRequest(data: Photos) {
-        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
-            return
-        }
+    private fun sendAlbumRequest(position: Int) {
         mUserSearchList.currentUser?.let {
-            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
+            mAlbumSubscription = mApi.callAlbumRequest(it, position).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
+                        binding.datingAlbum.setPhotos(newPhotos)
                         mNeedMore = newPhotos.more
-                        var i = 0
-                        for (photo in newPhotos) {
-                            if (mLoadedCount + i < data.size) {
-                                data[mLoadedCount + i] = photo
-                                i++
-                            }
-                        }
+//                        var i = 0
+//                        for (photo in newPhotos) {
+//                            if (mLoadedCount + i < data.size) {
+//                                data[mLoadedCount + i] = photo
+//                                i++
+//                            }
+//                        }
                         mLoadedCount += newPhotos.size
-                        binding.datingAlbum?.let {
-                            if (it.selectedPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
-                                sendAlbumRequest(data)
-                            }
-                            if (it.adapter != null) {
-                                it.adapter.notifyDataSetChanged()
-                            }
-                        }
+//                        binding.datingAlbum?.let {
+//                            if (it.getSelectedPosition() > mLoadedCount + mController.itemsOffsetByConnectionType) {
+//                                sendAlbumRequest(data)
+//                            }
+//                            if (it.adapter != null) {
+//                                it.adapter.notifyDataSetChanged()
+//                            }
+//                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -147,7 +145,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         putBoolean(ONLINE, isOnline.get())
         putBoolean(PHOTOS_COUNTER_VISIBLE, isPhotosCounterVisible.get())
         putBoolean(NEED_ANIMATE_LOADER, isNeedAnimateLoader.get())
-        putInt(CURRENT_ITEM, binding.datingAlbum.selectedPosition)
+        putInt(CURRENT_ITEM, binding.datingAlbum.getSelectedPosition())
         putParcelable(CURRENT_USER, currentUser)
         putInt(LOADED_COUNT, mLoadedCount)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
@@ -175,16 +173,16 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     override fun onPageSelected(position: Int) {
         updatePhotosCounter(position)
-        binding.datingAlbum?.let {
-            if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
-                    if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
-                        mCanSendAlbumReq = false
-                        sendAlbumRequest(it)
-                    }
-                }
-            }
-        }
+//        binding.datingAlbum?.let {
+//            if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
+//                (it.adapter as PreloadingAdapter).data?.let {
+//                    if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
+//                        mCanSendAlbumReq = false
+////                        sendAlbumRequest(it)
+//                    }
+//                }
+//            }
+//        }
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -205,4 +203,10 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         }
     }
 
+    override fun sendRequest(position: Int) {
+        if (mCanSendAlbumReq) {
+            mCanSendAlbumReq = false
+            sendAlbumRequest(position)
+        }
+    }
 }
