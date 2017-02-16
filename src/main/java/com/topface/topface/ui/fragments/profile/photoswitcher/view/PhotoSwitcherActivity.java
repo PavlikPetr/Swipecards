@@ -52,6 +52,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.GlideExtensionKt;
 import com.topface.topface.utils.extensions.PhotosExtensionsKt;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.rx.RxUtils;
@@ -79,6 +80,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     public static final String INTENT_PRELOAD_PHOTO = "preload_photo";
     public static final String INTENT_FILL_PROFILE_ON_BACK = "fill_profile_on_back";
     public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
+    public static final String CURRENT_PHOTO_POSITION = "current_photo_position";
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
@@ -281,15 +283,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        GlideExtensionKt.clearGlideCache(this);
         RxUtils.safeUnsubscribe(mOnImageClickSubscription);
         if (mViewModel != null) {
             mViewModel.release();
         }
         if (mUserProfileLoader != null) {
             mUserProfileLoader.release();
-        }
-        if (mImageSwitcher != null) {
-//            mImageSwitcher.release();
         }
     }
 
@@ -370,6 +370,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_PHOTO_POSITION, mCurrentPosition);
         if (mPhotoAlbumControl != null) {
             outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
             outState.putInt(OWN_PHOTOS_CONTROL_VISIBILITY, mOwnPhotosControl.getVisibility());
@@ -389,6 +390,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
         mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
         mDeletedPhotos = JsonUtils.fromJson(savedInstanceState.getString(DELETED_PHOTOS), Photos.class);
+        setCounter(savedInstanceState.getInt(CURRENT_PHOTO_POSITION));
     }
 
     @Override

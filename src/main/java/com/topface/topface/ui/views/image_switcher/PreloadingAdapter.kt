@@ -1,7 +1,6 @@
 package com.topface.topface.ui.views.image_switcher
 
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.GenericRequestBuilder
@@ -9,8 +8,6 @@ import com.bumptech.glide.ListPreloader.PreloadModelProvider
 import com.bumptech.glide.ListPreloader.PreloadSizeProvider
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
@@ -65,14 +62,6 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                         })
                         .error(R.drawable.im_photo_error)
                         .into(bind.image)
-//                        .into(object : SimpleTarget<GlideDrawable>() {
-//                            override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
-//                                bind.image.setImageDrawable(resource)
-//                                this.clear()
-//                            }
-//
-//                        })
-//                        .into(bind.image)
                 if (stolenSize == null) {
                     target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
                 }
@@ -109,7 +98,7 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     override fun getPreloadRequestBuilder(item: String?): GenericRequestBuilder<String, *, *, *> {
         Debug.error("$TAG preload item:$item")
-        return mRequest.load(item)
+        return mRequest.loadLinkToSameCache(item.orEmpty())
     }
 
     override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize

@@ -118,6 +118,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mLikeSubscription: Subscription? = null
     private var mProfileSubscription: Subscription? = null
     private var mUpdateSubscription: Subscription? = null
+    private var mFilterRequestSubscription: Subscription? = null
     private var mLoadBackgroundSubscription: Subscription? = null
     private var mOnImageClickSubscription: Subscription? = null
     private var mNewFilter = false
@@ -424,6 +425,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
                         albumData.addData(newPhotos)
+                        loadBluredBackground(mCurrentPosition)
                         mNeedMore = newPhotos.more
                         mLoadedCount += newPhotos.size
                     }
@@ -468,6 +470,8 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mUpdateSubscription.safeUnsubscribe()
         mLoadBackgroundSubscription.safeUnsubscribe()
         mOnImageClickSubscription.safeUnsubscribe()
+        mProfileSubscription.safeUnsubscribe()
+        mFilterRequestSubscription.safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
         mPreloadTarget.clear()
     }
@@ -496,6 +500,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun showNextUser() {
         if (mUserSearchList.searchPosition == mUserSearchList.size - 1 && mUserSearchList.isNeedPreload) {
+            mContext.clearGlideCache()
             showProgress()
             return
         } else {
@@ -575,7 +580,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 override fun onCompleted() {
                     mUpdateInProcess = false
                     Debug.log("LOADER_INTEGRATION onCompleted $mUpdateInProcess")
-                    mUpdateSubscription.safeUnsubscribe()
                 }
 
                 override fun onError(e: Throwable?) {
@@ -617,7 +621,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     private fun sendFilterRequest(filter: FilterData) {
-        mApi.callFilterRequest(filter).subscribe(object : Subscriber<DatingFilter>() {
+        mFilterRequestSubscription = mApi.callFilterRequest(filter).subscribe(object : Subscriber<DatingFilter>() {
             override fun onNext(filter: DatingFilter?) {
                 val profile = App.get().profile
                 profile.dating = filter
@@ -643,6 +647,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     override fun sendRequest(position: Int) {
         if (mCanSendAlbumReq) {
+            Debug.error("${PreloadingAdapter.TAG} sendRequest pos:$position")
             mCanSendAlbumReq = false
             sendAlbumRequest(position)
         }

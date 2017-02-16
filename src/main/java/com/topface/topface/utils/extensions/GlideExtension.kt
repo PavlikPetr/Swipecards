@@ -1,7 +1,7 @@
 package com.topface.topface.utils.extensions
 
+import android.content.Context
 import android.graphics.Point
-import com.bumptech.glide.BitmapTypeRequest
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -9,6 +9,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.StringSignature
 import com.topface.topface.App
 import com.topface.topface.utils.Utils
+import kotlin.concurrent.thread
 
 /**
  * Плюшки для glide
@@ -26,6 +27,16 @@ fun DrawableRequestBuilder<String>.loadLinkToSameCache(link: String) = apply {
             .signature(StringSignature(link))
             .override(ScreenSize.width, ScreenSize.height)
             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+}
+
+fun Context.clearGlideCache() = with(Glide.get(this)) {
+//    clearMemory()
+//    val thread = thread {
+//        clearDiskCache()
+//    }
+//    if (!thread.isAlive) {
+//        thread.start()
+//    }
 }
 
 object ScreenSize {
