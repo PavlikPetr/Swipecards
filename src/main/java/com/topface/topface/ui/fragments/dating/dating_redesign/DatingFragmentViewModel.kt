@@ -46,7 +46,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
-import com.topface.topface.ui.views.image_switcher.PreloadingAdapter
+import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
+import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.PreloadManager
@@ -74,7 +75,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                               private val mController: AlbumLoadController,
                               private val mUserSearchList: CachableSearchList<SearchUser>,
                               private val mLoadBackground: (link: String) -> Unit) : ILifeCycle, ViewPager.OnPageChangeListener,
-        OnUsersListEventsListener<SearchUser>, IUploadAlbumPhotos {
+        OnUsersListEventsListener<SearchUser> {
 
     val name = ObservableField<String>()
     val feedAge = ObservableField<String>()
@@ -121,6 +122,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mFilterRequestSubscription: Subscription? = null
     private var mLoadBackgroundSubscription: Subscription? = null
     private var mOnImageClickSubscription: Subscription? = null
+    private var mLoadLinksSubscription: Subscription? = null
     private var mNewFilter = false
     private var mUpdateInProcess = false
     private var isLastUser = false
@@ -196,23 +198,17 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         override fun onResourceReady(resource: GlideDrawable?, model: String?,
                                                      target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
                                                      isFirstResource: Boolean): Boolean {
-                            Debug.error("${PreloadingAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                            Debug.error("${PhotoAlbumAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                             return false
                         }
 
                         override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
                                                  isFirstResource: Boolean): Boolean {
-                            Debug.error("${PreloadingAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                            Debug.error("${PhotoAlbumAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                             return false
                         }
                     })
                     .preload()
-//                    .into(object : SimpleTarget<GlideDrawable>() {
-//                        override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
-//                            mPreloadTarget.clear()
-//                        }
-//
-//                    })
         }
     }
 
@@ -442,6 +438,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     override fun onPause() {
         super.onPause()
         mOnImageClickSubscription.safeUnsubscribe()
+        mLoadLinksSubscription.safeUnsubscribe()
     }
 
     override fun onResume() {
@@ -461,6 +458,18 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 }
             })
         }
+        if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
+            mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto::class.java)
+                    .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
+                    .subscribe(shortSubscription {
+                        if (mCanSendAlbumReq) {
+                            Debug.error("${PhotoAlbumAdapter.TAG} sendRequest pos:${it.position}")
+                            mCanSendAlbumReq = false
+                            sendAlbumRequest(it.position)
+                        }
+
+                    })
+        }
     }
 
     fun release() {
@@ -472,6 +481,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         mOnImageClickSubscription.safeUnsubscribe()
         mProfileSubscription.safeUnsubscribe()
         mFilterRequestSubscription.safeUnsubscribe()
+        mLoadLinksSubscription.safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
         mPreloadTarget.clear()
     }
@@ -643,13 +653,5 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
             }
         })
-    }
-
-    override fun sendRequest(position: Int) {
-        if (mCanSendAlbumReq) {
-            Debug.error("${PreloadingAdapter.TAG} sendRequest pos:$position")
-            mCanSendAlbumReq = false
-            sendAlbumRequest(position)
-        }
     }
 }

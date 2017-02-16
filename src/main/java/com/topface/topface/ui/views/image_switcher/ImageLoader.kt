@@ -9,11 +9,9 @@ import android.support.v7.widget.SnapHelper
 import android.util.AttributeSet
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.glide.RecyclerViewPreloader
-import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.utils.Utils
 import kotlin.properties.Delegates
 
@@ -39,8 +37,8 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         }
     }
 
-    private val mPreloadingAdapter: PreloadingAdapter by lazy {
-        PreloadingAdapter(mRequestBuilder)
+    private val mPreloadingAdapter: PhotoAlbumAdapter by lazy {
+        PhotoAlbumAdapter(mRequestBuilder)
     }
 
     private val mSnapHelper: SnapHelper by lazy {
@@ -123,10 +121,6 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
 //            } else {
 //                photo.defaultLink
 //            }
-
-    fun setUploadListener(listener: IUploadAlbumPhotos) {
-        mPreloadingAdapter.setUploadListener(listener)
-    }
 
     private fun getLink(photos: Photos?, position: Int): String {
         photos?.let {

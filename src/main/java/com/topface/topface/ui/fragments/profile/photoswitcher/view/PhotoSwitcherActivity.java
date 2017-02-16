@@ -44,6 +44,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
 import com.topface.topface.ui.views.image_switcher.ImageClick;
 import com.topface.topface.ui.views.image_switcher.ImageLoader;
+import com.topface.topface.ui.views.image_switcher.PreloadPhoto;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -65,6 +66,7 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import rx.Subscription;
+import rx.functions.Func2;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding> {
 
@@ -114,6 +116,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
+    private Subscription mLoadLinksSubscription;
     private Subscription mOnImageClickSubscription;
     private IUserProfileReceiver mUserProfileReceiver = new IUserProfileReceiver() {
         @Override
@@ -203,6 +206,20 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                         : View.GONE, true);
             }
         });
+        mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto.class)
+                .distinctUntilChanged(new Func2<PreloadPhoto, PreloadPhoto, Boolean>() {
+                    @Override
+                    public Boolean call(PreloadPhoto preloadPhoto, PreloadPhoto preloadPhoto2) {
+                        return preloadPhoto.getPosition() == preloadPhoto2.getPosition();
+                    }
+                })
+                .subscribe(new RxUtils.ShortSubscription<PreloadPhoto>() {
+                    @Override
+                    public void onNext(PreloadPhoto type) {
+                        Debug.error("NewImageLoader1 send request position:" + type.getPosition());
+                        sendAlbumRequest(type.getPosition());
+                    }
+                });
         mViewModel = new PhotoSwitcherViewModel(getViewBinding(), this);
         getViewBinding().setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
@@ -285,6 +302,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         super.onDestroy();
         GlideExtensionKt.clearGlideCache(this);
         RxUtils.safeUnsubscribe(mOnImageClickSubscription);
+        RxUtils.safeUnsubscribe(mLoadLinksSubscription);
         if (mViewModel != null) {
             mViewModel.release();
         }
@@ -330,13 +348,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageLoader) findViewById(R.id.galleryAlbum));
-        mImageSwitcher.setUploadListener(new IUploadAlbumPhotos() {
-            @Override
-            public void sendRequest(int position) {
-                Debug.error("NewImageLoader1 send request position:" + position);
-                sendAlbumRequest(position);
-            }
-        });
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItemImmediately(position);

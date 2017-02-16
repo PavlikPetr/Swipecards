@@ -10,28 +10,35 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AlbumImageBinding
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
-import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.loadLinkToSameCache
+import javax.inject.Inject
 
 /**
  * RV adapter for album
  * Created by ppavlik on 13.02.17.
  */
 
-class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
+class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
         PreloadModelProvider<String>, PreloadSizeProvider<String> {
 
     companion object {
         const val TAG = "PreloadingAdapter"
     }
 
+    @Inject lateinit var eventBus: EventBus
+
     private var stolenSize: IntArray? = null
-    private var mUploadListener: IUploadAlbumPhotos? = null
     private var mTargets = arrayListOf<Target<GlideDrawable>>()
+
+    init {
+     App.get().inject(this)
+    }
 
     override fun bindData(binding: AlbumImageBinding?, position: Int) {
         binding?.let { bind ->
@@ -44,7 +51,7 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                                                      isFirstResource: Boolean): Boolean {
                                 Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                                 if (model.isNullOrEmpty()) {
-                                    mUploadListener?.sendRequest(position)
+                                    askToPreloadLinks(position)
                                     return true
                                 } else {
                                     viewModel.isProgressVisible.set(View.GONE)
@@ -88,10 +95,10 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     override fun getPreloadItems(position: Int): List<String> {
         Debug.error("$TAG preload position:$position")
-        if (data.getOrNull(position).isNullOrEmpty()) {
-            mUploadListener?.sendRequest(position)
-        }
         val link = data.getOrNull(position)
+        if (link.isNullOrEmpty()) {
+            askToPreloadLinks(position)
+        }
         // если ссылки на фото нет, то не буудем выполнять предзагрузку
         return if (link.isNullOrEmpty()) listOf<String>() else listOf(link!!)
     }
@@ -103,7 +110,5 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
 
     override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize
 
-    fun setUploadListener(listener: IUploadAlbumPhotos) {
-        mUploadListener = listener
-    }
+    private fun askToPreloadLinks(position: Int) = eventBus.setData(PreloadPhoto(position))
 }

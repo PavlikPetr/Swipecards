@@ -79,6 +79,7 @@ import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.image_switcher.AlbumImageViewModel;
+import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter;
 import com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
@@ -205,7 +206,8 @@ import dagger.Provides;
                 GpMarketFragment.class,
                 ExperimentBoilerplateFragment.class,
                 AlbumImageViewModel.class,
-                DatingAlbumViewModel.class
+                DatingAlbumViewModel.class,
+                PhotoAlbumAdapter.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

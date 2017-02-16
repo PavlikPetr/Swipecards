@@ -18,9 +18,9 @@ import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
+import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.addData
 import com.topface.topface.utils.extensions.isNotEmpty
@@ -43,7 +43,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                            private val mUserSearchList: CachableSearchList<SearchUser>,
                            private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView) :
-        BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener, IUploadAlbumPhotos {
+        BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
 
     @Inject lateinit var eventBus: EventBus
 
@@ -72,6 +72,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     private var mAlbumSubscription: Subscription? = null
     private var mOnImageClickSubscription: Subscription? = null
+    private var mLoadLinksSubscription: Subscription? = null
 
     private companion object {
         const val PHOTOS_COUNTER = "photos_counter"
@@ -171,8 +172,8 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         subscribeIfNeeded()
     }
 
-    private fun subscribeIfNeeded(){
-        if(mOnImageClickSubscription?.isUnsubscribed?:true){
+    private fun subscribeIfNeeded() {
+        if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
             mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
                 with(currentUser) {
                     this?.photos?.let {
@@ -183,12 +184,23 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                 }
             })
         }
+        if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
+            mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto::class.java)
+                    .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
+                    .subscribe(shortSubscription {
+                        if (mCanSendAlbumReq) {
+                            mCanSendAlbumReq = false
+                            sendAlbumRequest(it.position)
+                        }
+                    })
+        }
     }
 
     override fun release() {
         super.release()
         mAlbumSubscription.safeUnsubscribe()
         mOnImageClickSubscription.safeUnsubscribe()
+        mLoadLinksSubscription.safeUnsubscribe()
     }
 
     override fun onPageSelected(position: Int) {
@@ -212,13 +224,6 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
             for (i in 0..rest - 1) {
                 photos?.add(Photo.createFakePhoto())
             }
-        }
-    }
-
-    override fun sendRequest(position: Int) {
-        if (mCanSendAlbumReq) {
-            mCanSendAlbumReq = false
-            sendAlbumRequest(position)
         }
     }
 }

@@ -34,8 +34,7 @@
                     android:layout_height="match_parent"
                     app:currentItemImmediately="@{viewModel.currentItem}"
                     app:data="@{viewModel.albumData}"
-                    app:onPageChangeListener="@{viewModel}"
-                    app:uploadListener="@{viewModel}"/>
+                    app:onPageChangeListener="@{viewModel}"/>
             </FrameLayout>
 
             <!--Блок "статуса и каунтера фоток"-->
