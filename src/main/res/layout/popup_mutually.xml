@@ -24,7 +24,7 @@
          <TextView
              android:id="@+id/popupTitle"
              style="@style/PopupTitle"
-             android:text="@string/you_liked_each_other"
+             android:text="@string/mutual_popup_you_get_mutual"
              android:layout_marginTop="86dp"
              android:layout_centerHorizontal="true"/>
 
