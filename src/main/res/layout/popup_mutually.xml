@@ -29,6 +29,16 @@
              android:layout_centerHorizontal="true"/>
 
          <ImageView
+             android:layout_width="20dp"
+             android:layout_height="16dp"
+             android:src="@drawable/envelop"/>
+         
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/stroke_1"/>
+
+         <ImageView
              android:id="@+id/avatarUser"
              android:layout_width="140dp"
              android:layout_height="140dp"
@@ -50,6 +60,16 @@
              <!--app:glideTransformationPhoto="@{model.userPhoto}"-->
              <!--app:placeholderRes="@{model.placeholderRes}"-->
              <!--app:typeTransformation="@{model.type}"/>-->
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/arrow_to_left"/>
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/pen"/>
 
          <ImageView
              android:id="@+id/mutualIC"
