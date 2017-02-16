@@ -16,6 +16,8 @@ import com.topface.topface.ui.edit.filter.viewModel.DatingFilterViewModel
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
+import org.jetbrains.anko.layoutInflater
+import kotlin.properties.Delegates
 
 /**
  * Created by mbulgakov on 15.02.17.
@@ -25,13 +27,13 @@ class DatingFilterFragment() : AbstractEditFragment() {
     companion object {
         const val TAG = "DATING_filter_fragment_tag"
         const val INTENT_DATING_FILTER = "topface_dating_filter"
-        private val CURRENT_FILTER_VALUE = "current_filter_value"
-        private val PAGE_NAME = "Filter"
+        const val CURRENT_FILTER_VALUE = "current_filter_value"
+        const val PAGE_NAME = "Filter"
     }
 
-    private lateinit var mBinding: DatingFilterBinding
-    private lateinit var mViewModel: DatingFilterViewModel
-    private lateinit var mFilter: FilterData
+    private var mFilter by Delegates.notNull<FilterData>()
+    private val mBinding by lazy { DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false) }
+    private val mViewModel by lazy { DatingFilterViewModel<DatingFilterBinding>(mBinding, activity as IActivityDelegate, initFilter()) }
 
     // оставлено, чтобы в статистику не лезть, пока не примут данный вариант фильтра
     override fun getScreenName(): String = PAGE_NAME
@@ -41,8 +43,6 @@ class DatingFilterFragment() : AbstractEditFragment() {
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER_VALUE)) {
             mFilter = savedInstanceState.getParcelable<FilterData>(CURRENT_FILTER_VALUE)
         }
-        mBinding = DataBindingUtil.inflate<DatingFilterBinding>(inflater, R.layout.dating_filter, container, false)
-        mViewModel = DatingFilterViewModel(mBinding, activity as IActivityDelegate, initFilter())
         mBinding.viewModel = mViewModel
         return mBinding.root
     }
@@ -52,17 +52,12 @@ class DatingFilterFragment() : AbstractEditFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        item?.let {
-            activity.finish()
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        activity.finish()
         return true
     }
 
-    private fun initFilter(): FilterData {
-        mFilter = FilterData(App.get().profile.dating?.clone() ?: DatingFilter())
-        return mFilter
-    }
+    private fun initFilter() = (FilterData(App.get().profile.dating?.clone() ?: DatingFilter())).apply { mFilter = this }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)

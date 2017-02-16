@@ -16,7 +16,7 @@ import com.topface.topface.ui.views.RangeSeekBar
 import com.topface.topface.utils.IActivityDelegate
 import java.util.*
 
-class DatingFilterViewModel(private val mBinding: DatingFilterBinding, private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) {
+class DatingFilterViewModel<T : DatingFilterBinding>(val binding: T, private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) {
 
     companion object {
         const val MIN_AGE = 16
@@ -47,7 +47,7 @@ class DatingFilterViewModel(private val mBinding: DatingFilterBinding, private v
     }
 
     private fun initRangeSeekBar() {
-        mBinding.rangeSeekBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Int> {
+        binding.rangeSeekBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Int> {
             override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<*>?, minValue: Int, maxValue: Int, thumbId: RangeSeekBar.Thumb?) {
                 if (thumbId != null) {
                     when (thumbId) {
