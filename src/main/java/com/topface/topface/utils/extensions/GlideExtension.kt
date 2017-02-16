@@ -25,7 +25,7 @@ fun DrawableRequestBuilder<String>.loadLinkToSameCache(link: String) = apply {
     load(link)
             .signature(StringSignature(link))
             .override(ScreenSize.width, ScreenSize.height)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
 }
 
 object ScreenSize {

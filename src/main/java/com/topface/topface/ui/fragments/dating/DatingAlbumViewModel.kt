@@ -22,6 +22,7 @@ import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.addData
 import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -48,7 +49,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
-    val albumData = ObservableField<Photos?>()
+    val albumData = ObservableField<Photos>()
     val isOnline = ObservableBoolean()
     val isPhotosCounterVisible = ObservableBoolean(false)
     val isNeedAnimateLoader = ObservableBoolean(false)
@@ -88,15 +89,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     init {
         App.get().inject(this)
-        mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
-            with(currentUser) {
-                this?.photos?.let {
-                    if (it.isNotEmpty()) {
-                        mNavigator.showAlbum(0, id, photosCount, it)
-                    }
-                }
-            }
-        })
+        subscribeIfNeeded()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -124,24 +117,9 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
-                        binding.datingAlbum.setPhotos(newPhotos)
+                        albumData.addData(newPhotos)
                         mNeedMore = newPhotos.more
-//                        var i = 0
-//                        for (photo in newPhotos) {
-//                            if (mLoadedCount + i < data.size) {
-//                                data[mLoadedCount + i] = photo
-//                                i++
-//                            }
-//                        }
                         mLoadedCount += newPhotos.size
-//                        binding.datingAlbum?.let {
-//                            if (it.getSelectedPosition() > mLoadedCount + mController.itemsOffsetByConnectionType) {
-//                                sendAlbumRequest(data)
-//                            }
-//                            if (it.adapter != null) {
-//                                it.adapter.notifyDataSetChanged()
-//                            }
-//                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -183,6 +161,30 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         mNeedMore = getBoolean(NEED_MORE, false)
     }
 
+    override fun onPause() {
+        super.onPause()
+        mOnImageClickSubscription.safeUnsubscribe()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeIfNeeded()
+    }
+
+    private fun subscribeIfNeeded(){
+        if(mOnImageClickSubscription?.isUnsubscribed?:true){
+            mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+                with(currentUser) {
+                    this?.photos?.let {
+                        if (it.isNotEmpty()) {
+                            mNavigator.showAlbum(0, id, photosCount, it)
+                        }
+                    }
+                }
+            })
+        }
+    }
+
     override fun release() {
         super.release()
         mAlbumSubscription.safeUnsubscribe()
@@ -191,16 +193,6 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     override fun onPageSelected(position: Int) {
         updatePhotosCounter(position)
-//        binding.datingAlbum?.let {
-//            if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-//                (it.adapter as PreloadingAdapter).data?.let {
-//                    if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
-//                        mCanSendAlbumReq = false
-////                        sendAlbumRequest(it)
-//                    }
-//                }
-//            }
-//        }
     }
 
     override fun onPageScrollStateChanged(state: Int) {

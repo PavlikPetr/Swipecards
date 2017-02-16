@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import com.topface.topface.R
 import com.topface.topface.databinding.AppBarBinding
 import com.topface.topface.ui.fragments.BaseFragment
@@ -53,7 +54,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         setupToolbar(toolbarSize)
         with(mAppBarBinding) {
             anchorFrame.addView(mAnchorBinding.root)
-            collapseFrame.addView(mCollapseBinding.root)
+            collapseFrame.addView(mCollapseBinding.root.apply { layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) })
             appbar.addOnOffsetChangedListener(mAppBarModel)
         }
         return super.onCreateView(inflater, container, savedInstanceState)

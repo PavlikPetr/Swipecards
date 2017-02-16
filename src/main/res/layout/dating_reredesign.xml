@@ -28,7 +28,6 @@
                 android:layout_height="match_parent"
                 android:foreground="@drawable/new_dating_shadow">
 
-
                 <com.topface.topface.ui.views.image_switcher.ImageLoader
                     android:id="@+id/dating_album"
                     android:layout_width="match_parent"
@@ -36,7 +35,6 @@
                     app:currentItemImmediately="@{viewModel.currentItem}"
                     app:data="@{viewModel.albumData}"
                     app:onPageChangeListener="@{viewModel}"
-                    app:photos="@{viewModel.preloadedData}"
                     app:uploadListener="@{viewModel}"/>
             </FrameLayout>
 

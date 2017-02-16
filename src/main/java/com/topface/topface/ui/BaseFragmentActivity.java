@@ -186,7 +186,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if(!App.get().getOptions().datingRedesignEnabled) {
+        if (!App.get().getOptions().datingRedesignEnabled) {
             if (Utils.isKitKatWithNoTranslucent()) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме
@@ -339,6 +339,9 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onPause() {
         super.onPause();
+        for (ILifeCycle saver : stateSavers) {
+            saver.onPause();
+        }
         removeAllRequests();
         if (mProfileLoadReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);

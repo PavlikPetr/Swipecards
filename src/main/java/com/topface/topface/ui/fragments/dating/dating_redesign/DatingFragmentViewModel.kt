@@ -18,8 +18,6 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.animation.GlideAnimation
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
@@ -54,10 +52,7 @@ import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
-import com.topface.topface.utils.extensions.clear
-import com.topface.topface.utils.extensions.getDrawable
-import com.topface.topface.utils.extensions.isNotEmpty
-import com.topface.topface.utils.extensions.loadLinkToSameCache
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -108,7 +103,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val isProfileButtonsEnable = ObservableBoolean(true)
     val currentItem = ObservableInt(0)
     val albumData = ObservableField<Photos>()
-    val preloadedData = ObservableField<Photos>()
     val isNeedAnimateLoader = ObservableBoolean(false)
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
@@ -129,7 +123,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mNewFilter = false
     private var mUpdateInProcess = false
     private var isLastUser = false
-    private var mPreloadTarget: SimpleTarget<GlideDrawable>? = null
+    private var mPreloadTarget: Target<GlideDrawable>? = null
     private var mIsOnline by Delegates.observable(false) { prop, old, new ->
         iconOnlineRes.set(if (new) R.drawable.im_list_online else 0)
     }
@@ -195,6 +189,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             mPreloadTarget.clear()
             mPreloadTarget = Glide.with(mContext.applicationContext)
                     .fromString()
+                    .fitCenter()
                     .loadLinkToSameCache(it)
                     .listener(object : RequestListener<String, GlideDrawable> {
                         override fun onResourceReady(resource: GlideDrawable?, model: String?,
@@ -210,26 +205,19 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             return false
                         }
                     })
-                    .into(object : SimpleTarget<GlideDrawable>() {
-                        override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
-                            mPreloadTarget.clear()
-                        }
-
-                    })
+                    .preload()
+//                    .into(object : SimpleTarget<GlideDrawable>() {
+//                        override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
+//                            mPreloadTarget.clear()
+//                        }
+//
+//                    })
         }
     }
 
     init {
         App.get().inject(this)
-        mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
-            with(currentUser) {
-                this?.photos?.let {
-                    if (it.isNotEmpty()) {
-                        mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
-                    }
-                }
-            }
-        })
+        subscribeIfNeeded()
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mPreloadManager.checkConnectionType()
@@ -434,8 +422,8 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             mAlbumSubscription = mApi.callAlbumRequest(it, position).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
-                    preloadedData.set(newPhotos)
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
+                        albumData.addData(newPhotos)
                         mNeedMore = newPhotos.more
                         mLoadedCount += newPhotos.size
                     }
@@ -444,6 +432,30 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
                 override fun onError(e: Throwable?) {
                     mCanSendAlbumReq = true
+                }
+            })
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mOnImageClickSubscription.safeUnsubscribe()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeIfNeeded()
+    }
+
+    private fun subscribeIfNeeded() {
+        if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
+            mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+                with(currentUser) {
+                    this?.photos?.let {
+                        if (it.isNotEmpty()) {
+                            mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
+                        }
+                    }
                 }
             })
         }

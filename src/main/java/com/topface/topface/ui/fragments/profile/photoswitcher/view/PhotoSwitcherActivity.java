@@ -52,6 +52,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.PhotosExtensionsKt;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.rx.RxUtils;
 
@@ -260,7 +261,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 }
 
                 if (mImageSwitcher != null) {
-                    mImageSwitcher.setPhotos(newPhotos);
+                    mImageSwitcher.setData(PhotosExtensionsKt.addData(mPhotoLinks, newPhotos));
                 }
             }
 

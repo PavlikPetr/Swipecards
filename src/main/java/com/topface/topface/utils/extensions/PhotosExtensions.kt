@@ -1,6 +1,8 @@
 package com.topface.topface.utils.extensions
 
+import android.databinding.ObservableField
 import com.topface.framework.utils.Debug
+import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.utils.Utils
@@ -40,6 +42,24 @@ fun Photos.getFakePhotosCount(): Int {
     return count
 }
 
+fun ObservableField<Photos>.addData(newPhotos: AlbumPhotos?) =
+        apply {
+            set(
+                    get().addData(newPhotos)
+            )
+            notifyChange()
+        }
+
+fun Photos.addData(newPhotos: AlbumPhotos?) =
+        apply {
+            forEachIndexed { i, photo ->
+                if (photo.isFake || photo.isEmpty) {
+                    newPhotos?.find { it.getPosition() == i }?.let {
+                        set(i, it)
+                    }
+                }
+            }
+        }
 
 
 

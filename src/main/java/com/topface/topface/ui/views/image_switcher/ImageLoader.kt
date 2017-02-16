@@ -29,7 +29,6 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         const val PRELOAD_SIZE = 5
     }
 
-    private var mLinks = arrayListOf<String>()
     private var mHeight = 0
     private var mWidth = 0
     private var mOnPageChangeListener: ViewPager.OnPageChangeListener? = null
@@ -105,17 +104,16 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
 
     fun setData(photos: Photos?) {
         photos?.let {
-            mLinks.clear()
+            val links = arrayListOf<String>()
             mPreloadingAdapter.clearData()
             it.forEach {
                 it?.let {
                     val link = getPhotoLink(it)
-                    mLinks.add(if (link.isNullOrEmpty()) Utils.EMPTY else link)
-                } ?: mLinks.add(Utils.EMPTY)
+                    links.add(if (link.isNullOrEmpty()) Utils.EMPTY else link)
+                } ?: links.add(Utils.EMPTY)
             }
-            mPreloadingAdapter.addData(mLinks)
+            mPreloadingAdapter.addData(links)
             mPreloadingAdapter.notifyDataSetChanged()
-//            mPreloader.startPreload(1, 2, mPreloadingAdapter.data.size)
         }
     }
 
@@ -137,16 +135,6 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
             }
         }
         return Utils.EMPTY
-    }
-
-    fun setPhotos(photos: Photos?) {
-        mLinks.forEachIndexed { i, link ->
-            if (link.isEmpty()) {
-                mLinks.set(i, getLink(photos, i))
-            }
-        }
-        mPreloadingAdapter.clearData()
-        mPreloadingAdapter.addData(mLinks)
     }
 
     fun setCurrentItemSmoothly(position: Int) {

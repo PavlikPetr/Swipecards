@@ -1,6 +1,7 @@
 package com.topface.topface.ui.views.image_switcher
 
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.GenericRequestBuilder
@@ -46,6 +47,7 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                                                      isFirstResource: Boolean): Boolean {
                                 Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                                 if (model.isNullOrEmpty()) {
+                                    mUploadListener?.sendRequest(position)
                                     return true
                                 } else {
                                     viewModel.isProgressVisible.set(View.GONE)
@@ -62,13 +64,14 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                             }
                         })
                         .error(R.drawable.im_photo_error)
-                        .into(object : SimpleTarget<GlideDrawable>() {
-                            override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
-                                bind.image.setImageDrawable(resource)
-                                this.clear()
-                            }
-
-                        })
+                        .into(bind.image)
+//                        .into(object : SimpleTarget<GlideDrawable>() {
+//                            override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
+//                                bind.image.setImageDrawable(resource)
+//                                this.clear()
+//                            }
+//
+//                        })
 //                        .into(bind.image)
                 if (stolenSize == null) {
                     target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
@@ -76,6 +79,11 @@ class PreloadingAdapter(private val mRequest: DrawableRequestBuilder<String>) : 
                 mTargets.add(target)
             }
         }
+    }
+
+    override fun onViewRecycled(holder: ItemViewHolder?) {
+        super.onViewRecycled(holder)
+
     }
 
     override fun clearData() {
