@@ -9,14 +9,14 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.City
 import com.topface.topface.data.Profile
-import com.topface.topface.databinding.DatingFilterBinding
 import com.topface.topface.ui.dialogs.CitySearchPopup
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.views.RangeSeekBar
+import com.topface.topface.ui.views.RangeSeekBar.OnRangeSeekBarChangeListener
 import com.topface.topface.utils.IActivityDelegate
 import java.util.*
 
-class DatingFilterViewModel<T : DatingFilterBinding>(val binding: T, private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) {
+class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) : OnRangeSeekBarChangeListener<Int>{
 
     companion object {
         const val MIN_AGE = 16
@@ -35,7 +35,6 @@ class DatingFilterViewModel<T : DatingFilterBinding>(val binding: T, private var
 
     init {
         setStartingValue(filter)
-        initRangeSeekBar()
     }
 
     private fun setStartingValue(filter: FilterData) {
@@ -46,20 +45,16 @@ class DatingFilterViewModel<T : DatingFilterBinding>(val binding: T, private var
         ageEnd.set(filter.ageEnd)
     }
 
-    private fun initRangeSeekBar() {
-        binding.rangeSeekBar.setOnRangeSeekBarChangeListener(object : RangeSeekBar.OnRangeSeekBarChangeListener<Int> {
-            override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<*>?, minValue: Int, maxValue: Int, thumbId: RangeSeekBar.Thumb?) {
-                if (thumbId != null) {
-                    when (thumbId) {
-                        RangeSeekBar.Thumb.MAX -> ageEnd.set(maxValue)
-                        RangeSeekBar.Thumb.MIN -> ageStart.set(minValue)
-                    }
-                } else {
-                    ageEnd.set(maxValue)
-                    ageStart.set(minValue)
-                }
+    override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<*>?, minValue: Int, maxValue: Int, thumbId: RangeSeekBar.Thumb?) {
+        if (thumbId != null) {
+            when (thumbId) {
+                RangeSeekBar.Thumb.MAX -> ageEnd.set(maxValue)
+                RangeSeekBar.Thumb.MIN -> ageStart.set(minValue)
             }
-        })
+        } else {
+            ageEnd.set(maxValue)
+            ageStart.set(minValue)
+        }
     }
 
     private fun prepareDefaultCityList(): MutableList<City> {

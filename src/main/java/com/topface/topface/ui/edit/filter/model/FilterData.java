@@ -39,7 +39,7 @@ public class FilterData implements Cloneable, Parcelable {
         sex = model.isMaleSelected.get() ? Profile.BOY : Profile.GIRL;
     }
 
-    public FilterData(@NotNull DatingFilterViewModel<DatingFilterBinding> model) {
+    public FilterData(@NotNull DatingFilterViewModel model) {
         city = model.getCity().get();
         isOnlineOnly = model.getOnlineOnly().get();
         ageStart = model.getAgeStart().get();

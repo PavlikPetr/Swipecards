@@ -32,8 +32,12 @@ class DatingFilterFragment() : AbstractEditFragment() {
     }
 
     private var mFilter by Delegates.notNull<FilterData>()
-    private val mBinding by lazy { DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false) }
-    private val mViewModel by lazy { DatingFilterViewModel<DatingFilterBinding>(mBinding, activity as IActivityDelegate, initFilter()) }
+
+    private val mBinding by lazy {
+        DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false) }
+
+    private val mViewModel by lazy {
+        DatingFilterViewModel(activity as IActivityDelegate, initFilter()) }
 
     // оставлено, чтобы в статистику не лезть, пока не примут данный вариант фильтра
     override fun getScreenName(): String = PAGE_NAME
