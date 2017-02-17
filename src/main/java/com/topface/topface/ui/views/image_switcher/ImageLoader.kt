@@ -9,6 +9,7 @@ import android.support.v7.widget.SnapHelper
 import android.util.AttributeSet
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.Glide
+import com.topface.framework.utils.Debug
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.glide.RecyclerViewPreloader
@@ -37,8 +38,8 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         }
     }
 
-    private val mPreloadingAdapter: PhotoAlbumAdapter by lazy {
-        PhotoAlbumAdapter(mRequestBuilder)
+    private val mPhotoAlbumAdapter: PhotoAlbumAdapter by lazy {
+        PhotoAlbumAdapter(mRequestBuilder, mPreloader)
     }
 
     private val mSnapHelper: SnapHelper by lazy {
@@ -46,7 +47,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     private val mRequestBuilder: DrawableRequestBuilder<String> by lazy {
-        Glide.with(context.applicationContext)
+        Glide.with(context)
                 .fromString()
                 .fitCenter()
     }
@@ -56,13 +57,13 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     private val mPreloader: RecyclerViewPreloader<String> by lazy {
-        RecyclerViewPreloader(mPreloadingAdapter, mPreloadingAdapter, PRELOAD_SIZE)
+        RecyclerViewPreloader(mPhotoAlbumAdapter, mPhotoAlbumAdapter, PRELOAD_SIZE)
     }
 
     init {
         mSnapHelper.attachToRecyclerView(this)
         layoutManager = mLayoutManager
-        adapter = mPreloadingAdapter
+        adapter = mPhotoAlbumAdapter
         addOnScrollListener(mPreloader)
     }
 
@@ -75,10 +76,10 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         super.onScrollStateChanged(state)
         mOnPageChangeListener?.onPageScrollStateChanged(state)
         if (state == SCROLL_STATE_IDLE) {
-            mSelectedPosition = mLayoutManager.findFirstVisibleItemPosition()
+            mSelectedPosition = mLayoutManager.findFirstVisibleItemPosition().apply { Debug.error("${PhotoAlbumAdapter.TAG} position:$this SCROLL_STATE_IDLE") }
         }
         if (state == SCROLL_STATE_SETTLING) {
-            mSelectedPosition = if (mScrollDx >= 0) mLayoutManager.findLastVisibleItemPosition() else mLayoutManager.findFirstVisibleItemPosition()
+            mSelectedPosition = if (mScrollDx >= 0) mLayoutManager.findLastVisibleItemPosition().apply { Debug.error("${PhotoAlbumAdapter.TAG} position:$this mScrollDx >= 0") } else mLayoutManager.findFirstVisibleItemPosition().apply { Debug.error("${PhotoAlbumAdapter.TAG} position:$this mScrollDx < 0") }
         }
     }
 
@@ -103,24 +104,24 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     fun setData(photos: Photos?) {
         photos?.let {
             val links = arrayListOf<String>()
-            mPreloadingAdapter.clearData()
+            mPhotoAlbumAdapter.clearData()
             it.forEach {
                 it?.let {
                     val link = getPhotoLink(it)
                     links.add(if (link.isNullOrEmpty()) Utils.EMPTY else link)
                 } ?: links.add(Utils.EMPTY)
             }
-            mPreloadingAdapter.addData(links)
-            mPreloadingAdapter.notifyDataSetChanged()
+            mPhotoAlbumAdapter.addData(links)
+            mPhotoAlbumAdapter.notifyDataSetChanged()
         }
     }
 
-    private fun getPhotoLink(photo: Photo) = photo.defaultLink
-//            if (Math.max(getViewHeight(), getViewWidth()) > 0) {
-//                photo.getSuitableLink(getViewHeight(), getViewWidth())
-//            } else {
-//                photo.defaultLink
-//            }
+    private fun getPhotoLink(photo: Photo) =
+            if (Math.max(getViewHeight(), getViewWidth()) > 0) {
+                photo.getSuitableLink(getViewHeight(), getViewWidth())
+            } else {
+                photo.defaultLink
+            }
 
     private fun getLink(photos: Photos?, position: Int): String {
         photos?.let {
@@ -137,6 +138,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
 
     fun setCurrentItemImmediately(position: Int) {
         mSelectedPosition = position
+        Debug.error("${PhotoAlbumAdapter.TAG} position:$position setCurrentItemImmediately")
         scrollToPosition(position)
     }
 
@@ -145,4 +147,8 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     fun getSelectedPosition() = mSelectedPosition
+
+    fun setIsSecondImagePreloadAvailable(isAvailable: Boolean) {
+        mPhotoAlbumAdapter.setIsSecondImagePreloadAvailable(isAvailable)
+    }
 }

@@ -1,19 +1,22 @@
 package com.topface.topface.glide
 
 import android.support.v7.widget.RecyclerView
-import com.bumptech.glide.ListPreloader
 import com.bumptech.glide.ListPreloader.PreloadSizeProvider
 import com.bumptech.glide.ListPreloader.PreloadModelProvider
+import com.topface.topface.glide.module.ListPreloader
 
 
 class RecyclerViewPreloader<T>(preloadModelProvider: PreloadModelProvider<T>,
                                preloadDimensionProvider: PreloadSizeProvider<T>, maxPreload: Int) : RecyclerView.OnScrollListener() {
     private var recyclerScrollListener: RecyclerToListViewScrollListener
 
-    init {
-        val listPreloader = ListPreloader<T>(preloadModelProvider,
+    private val mListPreloader: ListPreloader<T> by lazy {
+        ListPreloader<T>(preloadModelProvider,
                 preloadDimensionProvider, maxPreload)
-        recyclerScrollListener = RecyclerToListViewScrollListener(listPreloader);
+    }
+
+    init {
+        recyclerScrollListener = RecyclerToListViewScrollListener(mListPreloader);
 
     }
 
@@ -21,7 +24,7 @@ class RecyclerViewPreloader<T>(preloadModelProvider: PreloadModelProvider<T>,
         recyclerScrollListener.onScrolled(recyclerView, dx, dy)
     }
 
-    fun startPreload(firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
-        recyclerScrollListener.startPreload(firstVisibleItem, visibleItemCount, totalItemCount)
+    fun startPreloadSecondItem() {
+        mListPreloader.preloadSecondImage()
     }
 }

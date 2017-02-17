@@ -43,7 +43,6 @@ import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
 import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
@@ -134,7 +133,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
         updatePhotosCounter(new)
         loadBluredBackground(new)
-        currentItem.set(new)
     }
 
     private var mIsDatingButtonEnable by Delegates.observable(true) { prop, old, new ->
@@ -182,7 +180,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 statusText.set(status)
             }
             albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
-            mCurrentPosition = 0
+            setCurrentUser(0)
             preloadPhoto()
             hideProgress()
         }
@@ -190,7 +188,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     fun preloadPhoto() {
         mUserSearchList.getOrNull(mUserSearchList.searchPosition + 1)?.photo?.defaultLink?.let {
             mPreloadTarget.clear()
-            mPreloadTarget = Glide.with(mContext.applicationContext)
+            mPreloadTarget = Glide.with(mContext)
                     .fromString()
                     .fitCenter()
                     .loadLinkToSameCache(it)
@@ -327,7 +325,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && data != null) {
-            mCurrentPosition = data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0)
+            setCurrentUser(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
         }
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mIsDatingButtonEnable = false
@@ -397,7 +395,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         isLikeButtonsEnable.set(getBoolean(LIKE_BUTTONS_ENABLE))
         isSkipButtonsEnable.set(getBoolean(SKIP_BUTTONS_ENABLE))
         isProfileButtonsEnable.set(getBoolean(PROFILE_BUTTONS_ENABLE))
-        mCurrentPosition = getInt(CURRENT_POSITION)
+        setCurrentUser(getInt(CURRENT_POSITION))
     }
 
     private fun setUser(user: SearchUser?) = user?.let {
@@ -510,7 +508,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun showNextUser() {
         if (mUserSearchList.searchPosition == mUserSearchList.size - 1 && mUserSearchList.isNeedPreload) {
-            mContext.clearGlideCache()
             showProgress()
             return
         } else {
@@ -653,5 +650,11 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
             }
         })
+    }
+
+    private fun setCurrentUser(position: Int) {
+        currentItem.set(position)
+        currentItem.notifyChange()
+        mCurrentPosition = position
     }
 }

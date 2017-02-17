@@ -8,30 +8,24 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
-import com.topface.topface.App
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.views.image_switcher.ImageClick
-import com.topface.topface.ui.views.image_switcher.PreloadPhoto
+import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.addData
 import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
-import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscription
 import java.util.*
-import javax.inject.Inject
 
 
 /**
@@ -44,8 +38,6 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                            private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView) :
         BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
-
-    @Inject lateinit var eventBus: EventBus
 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
@@ -71,8 +63,6 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     private var mNeedMore = false
 
     private var mAlbumSubscription: Subscription? = null
-    private var mOnImageClickSubscription: Subscription? = null
-    private var mLoadLinksSubscription: Subscription? = null
 
     private companion object {
         const val PHOTOS_COUNTER = "photos_counter"
@@ -88,9 +78,12 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val NEED_MORE = "need_more"
     }
 
-    init {
-        App.get().inject(this)
-        subscribeIfNeeded()
+    fun onPhotoClick() = with(currentUser) {
+        this?.photos?.let {
+            if (it.isNotEmpty()) {
+                mNavigator.showAlbum(binding.datingAlbum.selectedPosition, id, photosCount, it)
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -112,15 +105,32 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         }
     }
 
-    private fun sendAlbumRequest(position: Int) {
+    private fun sendAlbumRequest(data: Photos) {
+        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
+            return
+        }
         mUserSearchList.currentUser?.let {
-            mAlbumSubscription = mApi.callAlbumRequest(it, position).subscribe(object : Observer<AlbumPhotos> {
+            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
-                        albumData.addData(newPhotos)
                         mNeedMore = newPhotos.more
+                        var i = 0
+                        for (photo in newPhotos) {
+                            if (mLoadedCount + i < data.size) {
+                                data[mLoadedCount + i] = photo
+                                i++
+                            }
+                        }
                         mLoadedCount += newPhotos.size
+                        binding.datingAlbum?.let {
+                            if (it.selectedPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
+                                sendAlbumRequest(data)
+                            }
+                            if (it.adapter != null) {
+                                it.adapter.notifyDataSetChanged()
+                            }
+                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -139,7 +149,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         putBoolean(ONLINE, isOnline.get())
         putBoolean(PHOTOS_COUNTER_VISIBLE, isPhotosCounterVisible.get())
         putBoolean(NEED_ANIMATE_LOADER, isNeedAnimateLoader.get())
-        putInt(CURRENT_ITEM, binding.datingAlbum.getSelectedPosition())
+        putInt(CURRENT_ITEM, binding.datingAlbum.selectedPosition)
         putParcelable(CURRENT_USER, currentUser)
         putInt(LOADED_COUNT, mLoadedCount)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
@@ -149,9 +159,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
         photosCounter.set(getString(PHOTOS_COUNTER))
         nameAgeOnline.set(getString(NAME_AGE_ONLINE))
-        (getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)?.let {
-            albumData.set(it)
-        }
+        albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
         isOnline.set(getBoolean(ONLINE, false))
         isPhotosCounterVisible.set(getBoolean(PHOTOS_COUNTER_VISIBLE, false))
         isNeedAnimateLoader.set(getBoolean(NEED_ANIMATE_LOADER, false))
@@ -162,49 +170,23 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         mNeedMore = getBoolean(NEED_MORE, false)
     }
 
-    override fun onPause() {
-        super.onPause()
-        mOnImageClickSubscription.safeUnsubscribe()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        subscribeIfNeeded()
-    }
-
-    private fun subscribeIfNeeded() {
-        if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
-            mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
-                with(currentUser) {
-                    this?.photos?.let {
-                        if (it.isNotEmpty()) {
-                            mNavigator.showAlbum(0, id, photosCount, it)
-                        }
-                    }
-                }
-            })
-        }
-        if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
-            mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto::class.java)
-                    .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
-                    .subscribe(shortSubscription {
-                        if (mCanSendAlbumReq) {
-                            mCanSendAlbumReq = false
-                            sendAlbumRequest(it.position)
-                        }
-                    })
-        }
-    }
-
     override fun release() {
         super.release()
         mAlbumSubscription.safeUnsubscribe()
-        mOnImageClickSubscription.safeUnsubscribe()
-        mLoadLinksSubscription.safeUnsubscribe()
     }
 
     override fun onPageSelected(position: Int) {
         updatePhotosCounter(position)
+        binding.datingAlbum?.let {
+            if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
+                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
+                    if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
+                        mCanSendAlbumReq = false
+                        sendAlbumRequest(it)
+                    }
+                }
+            }
+        }
     }
 
     override fun onPageScrollStateChanged(state: Int) {

@@ -38,7 +38,6 @@ import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos;
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
@@ -53,7 +52,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.extensions.GlideExtensionKt;
 import com.topface.topface.utils.extensions.PhotosExtensionsKt;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.rx.RxUtils;
@@ -300,7 +298,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GlideExtensionKt.clearGlideCache(this);
         RxUtils.safeUnsubscribe(mOnImageClickSubscription);
         RxUtils.safeUnsubscribe(mLoadLinksSubscription);
         if (mViewModel != null) {
@@ -348,6 +345,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageLoader) findViewById(R.id.galleryAlbum));
+//        mImageSwitcher.setGlide(Glide.with(this));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItemImmediately(position);
