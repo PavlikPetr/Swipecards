@@ -17,6 +17,7 @@
     <style name="PopupMutualRootContainer" parent="PopupRootContainerBase">
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingTop">0dp</item>
+        <item name="android:background">@color/bg_white</item>
     </style>
 
     <style name="PopupTitle" parent="PopupTitleBase">

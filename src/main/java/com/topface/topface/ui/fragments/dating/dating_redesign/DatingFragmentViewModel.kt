@@ -259,6 +259,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
+//                            if (it.isMutualPossible){
+                                mNavigator.showMutualPopup(mNavigator,it)   /////////////////////////////////////////////////////////////////////////////
+//                            }
                         }
 
                         override fun onError(e: Throwable?) {

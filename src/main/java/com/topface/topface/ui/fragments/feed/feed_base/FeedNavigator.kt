@@ -8,6 +8,7 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
@@ -26,6 +27,7 @@ import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -159,6 +161,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showTrialPopup(type: Long, args: Bundle) {
         ExperimentBoilerplateFragment.newInstance(type, args = args)
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
+    }
+
+    override fun showMutualPopup(navigator: IFeedNavigator, mutualUser: FeedUser) {
+        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.newInstance(navigator, mutualUser)
+        mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 
     override fun showDialogpopupMenu(item: FeedDialog) =

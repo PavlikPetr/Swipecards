@@ -56,6 +56,7 @@ import com.topface.topface.ui.fragments.dating.DatingEmptyFragment;
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel;
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel;
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel;
+import com.topface.topface.ui.fragments.dating.dating_redesign.PopupMutualViewModel;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.DialogsMenuPopupViewModel;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsItemViewModel;
@@ -201,7 +202,8 @@ import dagger.Provides;
                 DatingRedesignToolbarViewModel.class,
                 com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class,
                 GpMarketFragment.class,
-                ExperimentBoilerplateFragment.class
+                ExperimentBoilerplateFragment.class,
+                PopupMutualViewModel.class
         },
         staticInjections = {
                 AddPhotoHelper.class,

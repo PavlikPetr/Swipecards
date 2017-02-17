@@ -4,14 +4,15 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.topface.topface.ui.fragments.dating.PopupMutualViewModel"/>
+            name="model"
+            type="com.topface.topface.ui.fragments.dating.dating_redesign.PopupMutualViewModel"/>
     </data>
 
     <LinearLayout
         style="@style/PopupMutualRootContainer">
 
         <FrameLayout
+            android:layout_marginTop="20dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -25,10 +26,10 @@
                     android:id="@+id/icCircle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/avatarUser"
+                    android:layout_above="@+id/avatarUser"
                     android:layout_marginBottom="20dp"
                     android:layout_marginRight="90dp"
-                    android:layout_toLeftOf="@id/icPen"
+                    android:layout_toLeftOf="@+id/icPen"
                     android:src="@drawable/stroke_1"/>
 
                 <ImageView
@@ -41,8 +42,8 @@
 
                 <!--Ты сам-->
                 <ImageView
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
+                    android:layout_width="@dimen/mutual_popup_avatar"
+                    android:layout_height="@dimen/mutual_popup_avatar"
                     android:layout_above="@id/icArrow"
                     android:layout_marginBottom="16dp"
                     android:layout_marginLeft="56dp"
@@ -50,13 +51,14 @@
                     android:src="@drawable/girl_blur_6"
                     app:glideTransformationPhoto="@{model.userPhoto}"
                     app:placeholderRes="@{model.userPlaceholderRes}"
-                    app:typeTransformation="@{model.type}"/>
+                    app:typeTransformation="@{model.type}"
+                    app:animationSrc="@{@anim/mutual_popup_right}"/>
 
                 <!--Кто-то, кому ты не безразличен-->
                 <ImageView
                     android:id="@+id/avatarUser"
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
+                    android:layout_width="@dimen/mutual_popup_avatar"
+                    android:layout_height="@dimen/mutual_popup_avatar"
                     android:layout_above="@id/icArrow"
                     android:layout_marginBottom="16dp"
                     android:layout_marginRight="24dp"
@@ -65,7 +67,8 @@
                     app:glideTransformationPhoto="@{model.mutualUserPhoto}"
                     app:placeholderRes="@{model.mutualPlaceholderRes}"
                     app:typeTransformation="@{model.mutualType}"
-                    app:outSideCircle="@{model.outsideCircle}"/>
+                    app:outSideCircle="@{model.outsideCircle}"
+                    app:animationSrc="@{@anim/mutual_popup_left}"/>
 
                 <ImageView
                     android:id="@+id/icArrow"
@@ -102,22 +105,20 @@
         <LinearLayout
             style="@style/PopupLandRightContainer">
 
-
             <ImageView
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_gravity="right"
                 android:layout_marginTop="18dp"
-                android:onClick="@{() -> viewModel.closePopup()}"
+                android:onClick="@{() -> model.closePopup()}"
                 android:src="@drawable/skip"/>
 
             <TextView
                 android:id="@+id/popupTitle"
                 style="@style/PopupTitle"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="83dp"
+                android:layout_marginTop="49dp"
                 android:ellipsize="end"
-                android:singleLine="true"
                 android:text="@string/mutual_popup_you_get_mutual"/>
 
             <Button
@@ -126,7 +127,7 @@
                 android:layout_below="@+id/avatarUser"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="32dp"
-                android:onClick="@{() -> viewModel.startDialog()}"
+                android:onClick="@{() -> model.startDialog()}"
                 android:text="@string/start_dialog"
                 android:textAllCaps="true"
                 android:textSize="18sp"/>
@@ -136,7 +137,7 @@
                 style="@style/PopupBorderlessdButton"
                 android:layout_below="@id/btnChangeFilterDating"
                 android:layout_centerHorizontal="true"
-                android:onClick="@{() -> viewModel.closePopup()}"
+                android:onClick="@{() -> model.closePopup()}"
                 android:text="@string/continue_to_meet"/>
         </LinearLayout>
 
