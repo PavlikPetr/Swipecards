@@ -23,14 +23,16 @@ import kotlin.concurrent.thread
 fun <T> Target<T>?.clear() = this?.let { Glide.clear(it) }
 
 fun DrawableRequestBuilder<String>.loadLinkToSameCache(link: String) = apply {
-    load(link)
-            .signature(StringSignature(link))
-            .override(ScreenSize.width, ScreenSize.height)
-            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+    load(link).skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
+            .thumbnail(0.1f)
+//            .signature(StringSignature(link))
+    //.thumbnail(0.3)
+//            .override(ScreenSize.width, ScreenSize.height)
+//            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
 }
 
 fun Context.clearGlideCache() = with(Glide.get(this)) {
-//    clearMemory()
+    //    clearMemory()
 //    val thread = thread {
 //        clearDiskCache()
 //    }
@@ -44,6 +46,6 @@ object ScreenSize {
         Utils.getSrceenSize(App.getContext())
     }
 
-    val height = mScreenSize.y
-    val width = mScreenSize.x
+    val height = mScreenSize.y / 2
+    val width = mScreenSize.x / 2
 }

@@ -24,7 +24,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     constructor(context: Context) : this(context, null)
 
     companion object {
-        const val PRELOAD_SIZE = 5
+        const val PRELOAD_SIZE = 3
     }
 
     private var mHeight = 0
@@ -136,6 +136,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     fun setCurrentItemImmediately(position: Int) {
+        mSelectedPosition = position
         scrollToPosition(position)
     }
 
