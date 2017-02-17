@@ -2,6 +2,7 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -17,16 +18,15 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
-import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import static com.topface.topface.statistics.BuyScreenStatistics.PLC;
-
-public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
+public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> implements ITabLayoutHolder {
 
     public static final int INTENT_USER_PROFILE = 6;
     public static final String FROM = "from";
@@ -111,5 +111,19 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
+    }
+
+    @Nullable
+    @Override
+    public TabLayout getTabLayout() {
+        return (TabLayout) getViewBinding().getRoot().findViewById(R.id.toolbarInternalTabs);
+    }
+
+    @Override
+    public void showTabLayout(boolean show) {
+        TabLayout tabLayout = getTabLayout();
+        if (tabLayout != null) {
+            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 }

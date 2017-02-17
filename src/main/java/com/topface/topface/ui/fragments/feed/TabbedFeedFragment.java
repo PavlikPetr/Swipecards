@@ -157,7 +157,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         if (tabLayout != null) {
             mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, tabLayout, mPagesTitles, mPagesCounters, mPagesClassNames);
         } else {
-            throw new IllegalStateException("TabbedFeedFragment:: activity must implement ITabLayoutHolder");
+            throw new IllegalStateException("TabbedFeedFragment:: activity must have TabLayout");
         }
     }
 

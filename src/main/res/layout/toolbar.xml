@@ -35,11 +35,19 @@
                 android:layout_height="wrap_content" />
         </android.support.v7.widget.Toolbar>
 
-        <include
-            layout="@layout/toolbar_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_elevation"
-            android:layout_marginTop="?actionBarSize"
-            bind:visibility="@{viewModel.shadowVisibility}" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="?actionBarSize">
+
+            <include layout="@layout/merge_tab_layout" />
+
+            <include
+                layout="@layout/toolbar_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_elevation"
+                bind:visibility="@{viewModel.shadowVisibility}" />
+        </LinearLayout>
     </FrameLayout>
 </layout>
