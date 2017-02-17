@@ -29,6 +29,11 @@ class GlideTransformationFactory(val mContext: Context) {
                         CropCircleTransformation(mContext),
                         NewOnlineTransformation(mContext, radiusOnline as Float, outSideLine as Float))
 
+                GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND -> arrayOf(
+                        CropAtImageViewTransformation(mContext),
+                        CropCircleTransformation(mContext),
+                        DrawCircleUnderAvatar(mContext, outSideLine as Float))
+
                 else -> arrayOf(CropAtImageViewTransformation(mContext), CropCircleTransformation(mContext))
             }
 }

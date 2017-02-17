@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.PopupMutualViewModel"/>
     </data>
 
      <RelativeLayout
@@ -19,7 +19,8 @@
              android:layout_alignParentRight="true"
              android:layout_alignParentTop="true"
              android:layout_marginTop="20dp"
-             android:layout_marginRight="16dp"/>
+             android:layout_marginRight="16dp"
+             android:onClick="@{() -> viewModel.closePopup()}"/>
 
          <TextView
              android:id="@+id/popupTitle"
@@ -34,49 +35,44 @@
              android:src="@drawable/stroke_1"
              android:layout_toLeftOf="@id/mutualIC"
              android:layout_marginRight="17dp"
-             android:layout_alignTop="@id/popupTitle"
-             android:layout_marginTop="35dp"/>
+             android:layout_above="@id/avatarUser"
+             android:layout_marginBottom="22dp"/>
 
          <ImageView
              android:layout_width="20dp"
              android:layout_height="16dp"
              android:src="@drawable/envelop"
              android:layout_toLeftOf="@id/icPen"
-             android:layout_alignTop="@id/popupTitle"
-             android:layout_marginTop="34dp"
-             />
+             android:layout_above="@id/avatarUser"
+             android:layout_marginBottom="22dp"/>
 
-         <!--<ImageView-->
-             <!--android:id="@+id/avatarUser"-->
-             <!--android:layout_width="140dp"-->
-             <!--android:layout_height="140dp"-->
-             <!--android:layout_below="@+id/popupTitle"-->
-             <!--android:layout_alignParentLeft="true"-->
-             <!--android:layout_marginTop="66dp"-->
-             <!--android:src="@drawable/man_blur_5"/>-->
-             <!--app:glideTransformationPhoto="@{model.userPhoto}"-->
-             <!--app:placeholderRes="@{model.placeholderRes}"-->
-             <!--app:typeTransformation="@{model.type}"/>-->
-         <ImageView
-             android:id="@+id/avatarUser"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_centerHorizontal="true"
-             android:layout_centerVertical="true"
-             android:paddingLeft="70dp"
-             android:src="@drawable/man_blur_5"/>
-
-
+         <!--Ты сам-->
          <ImageView
              android:layout_width="140dp"
              android:layout_height="140dp"
-             android:layout_alignParentRight="true"
-             android:layout_below="@+id/popupTitle"
-             android:layout_marginTop="66dp"
-             android:src="@drawable/girl_blur_6"/>
-             <!--app:glideTransformationPhoto="@{model.userPhoto}"-->
-             <!--app:placeholderRes="@{model.placeholderRes}"-->
-             <!--app:typeTransformation="@{model.type}"/>-->
+             android:src="@drawable/girl_blur_6"
+             android:layout_toRightOf="@id/icArrow"
+             android:layout_marginLeft="24dp"
+             android:layout_above="@id/icArrow"
+             android:layout_marginBottom="16dp"
+             app:glideTransformationPhoto="@{model.userPhoto}"
+             app:placeholderRes="@{model.userPlaceholderRes}"
+             app:typeTransformation="@{model.type}"/>
+
+         <!--Кто-то, кому ты не безразличен-->
+         <ImageView
+             android:id="@+id/avatarUser"
+             android:layout_width="140dp"
+             android:layout_height="140dp"
+             android:layout_toLeftOf="@id/icPen"
+             android:layout_marginRight="24dp"
+             android:layout_above="@id/icArrow"
+             android:layout_marginBottom="16dp"
+             android:src="@drawable/man_blur_5"
+             app:glideTransformationPhoto="@{model.mutualUserPhoto}"
+             app:placeholderRes="@{model.mutualPlaceholderRes}"
+             app:typeTransformation="@{model.mutualType}"
+             app:outSideCircle="@{model.outsideCircle}"/>
 
          <ImageView
              android:id="@+id/icArrow"
@@ -85,8 +81,8 @@
              android:src="@drawable/arrow_to_left"
              android:layout_toLeftOf="@id/mutualIC"
              android:layout_marginRight="33dp"
-             android:layout_alignTop="@+id/mutualIC"
-             android:layout_marginTop="46dp"/>
+             android:layout_alignBottom="@+id/mutualIC"
+             android:layout_marginBottom="10dp"/>
 
          <ImageView
              android:id="@+id/mutualIC"
@@ -110,7 +106,7 @@
          <Button
              android:id="@+id/btnChangeFilterDating"
              style="@style/PopupGreenButton.Background"
-             android:onClick="@{() -> viewModel.onChangeDatingFilter()}"
+             android:onClick="@{() -> viewModel.startDialog()}"
              android:text="@string/start_dialog"
              android:textSize="18sp"
              android:textAllCaps="true"
@@ -121,9 +117,8 @@
          <Button
              android:id="@+id/btnClearFilterDating"
              style="@style/PopupBorderlessdButton"
-             android:onClick="@{() -> viewModel.onCleanDatingFilter()}"
+             android:onClick="@{() -> viewModel.closePopup()}"
              android:text="@string/continue_to_meet"
-             android:layout_marginTop="18dp"
              android:layout_below="@id/btnChangeFilterDating"
              android:layout_centerHorizontal="true"/>
 
