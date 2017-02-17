@@ -22,16 +22,7 @@
             android:orientation="vertical"
             android:paddingTop="@{viewModel.contentMarginTop}">
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/toolbarTabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/tab_divider"
-                android:visibility="gone"
-                app:tabContentStart="@dimen/tablayout_padding"
-                app:tabGravity="fill"
-                app:tabIndicatorColor="@color/tab_text_color_selected"
-                app:tabMode="scrollable" />
+            <include layout="@layout/merge_tab_layout" />
 
             <FrameLayout
                 android:layout_width="match_parent"
