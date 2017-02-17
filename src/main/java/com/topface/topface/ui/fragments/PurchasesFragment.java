@@ -159,10 +159,6 @@ public class PurchasesFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         setResourceInfoText(mBalanceData.premium ? null : getInfoText());
-        Activity activity = getActivity();
-        if (activity instanceof ITabLayoutHolder) {
-            ((ITabLayoutHolder) activity).showTabLayout(true);
-        }
     }
 
     @Override
@@ -177,12 +173,13 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     @Override
+    protected boolean isTabbedFragment() {
+        return true;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        Activity activity = getActivity();
-        if (activity instanceof ITabLayoutHolder) {
-            ((ITabLayoutHolder) activity).showTabLayout(false);
-        }
         mBalanceSubscription.unsubscribe();
     }
 

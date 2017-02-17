@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -24,9 +23,8 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> implements ITabLayoutHolder {
+public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_USER_PROFILE = 6;
     public static final String FROM = "from";
@@ -113,17 +111,8 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
         overridePendingTransition(0, 0);
     }
 
-    @Nullable
     @Override
-    public TabLayout getTabLayout() {
-        return (TabLayout) getViewBinding().getRoot().findViewById(R.id.toolbarInternalTabs);
-    }
-
-    @Override
-    public void showTabLayout(boolean show) {
-        TabLayout tabLayout = getTabLayout();
-        if (tabLayout != null) {
-            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
     }
 }

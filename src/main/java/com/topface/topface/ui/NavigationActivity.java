@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.ViewDataBinding;
 import android.os.BadParcelableException;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -84,7 +83,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> implements ITabLayoutHolder {
+public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
@@ -230,16 +229,8 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     }
 
     @Override
-    public TabLayout getTabLayout() {
-        return (TabLayout) getViewBinding().getRoot().findViewById(R.id.toolbarTabs);
-    }
-
-    @Override
-    public void showTabLayout(boolean show) {
-        TabLayout tabLayout = getTabLayout();
-        if (tabLayout != null) {
-            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+    public int getTabLayoutResId() {
+        return R.id.toolbarTabs;
     }
 
     @Override

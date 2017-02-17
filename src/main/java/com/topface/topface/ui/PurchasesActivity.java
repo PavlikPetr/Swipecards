@@ -5,10 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
-import android.view.View;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -59,8 +57,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding>
-        implements ITabLayoutHolder {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> {
 
     /**
      * Constant keys for different fragments
@@ -428,17 +425,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         return R.layout.ac_fragment_frame;
     }
 
-    @Nullable
     @Override
-    public TabLayout getTabLayout() {
-        return (TabLayout) getViewBinding().getRoot().findViewById(R.id.toolbarInternalTabs);
-    }
-
-    @Override
-    public void showTabLayout(boolean show) {
-        TabLayout tabLayout = getTabLayout();
-        if (tabLayout != null) {
-            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
     }
 }

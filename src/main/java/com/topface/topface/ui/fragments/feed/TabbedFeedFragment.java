@@ -217,10 +217,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         if (mBannersController != null) {
             mBannersController.onDestroy();
         }
-        Activity activity = getActivity();
-        if (activity instanceof ITabLayoutHolder) {
-            ((ITabLayoutHolder) activity).showTabLayout(false);
-        }
     }
 
     @Override
@@ -229,10 +225,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         if (mRefresher != null) {
             mRefresher.refreshBanner();
         }
-        Activity activity = getActivity();
-        if (activity instanceof ITabLayoutHolder) {
-            ((ITabLayoutHolder) activity).showTabLayout(true);
-        }
+    }
+
+    @Override
+    protected boolean isTabbedFragment() {
+        return true;
     }
 
     @Override

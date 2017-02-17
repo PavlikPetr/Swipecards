@@ -22,6 +22,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.analytics.TrackedFragment;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
@@ -71,6 +72,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     protected boolean needOptionsMenu() {
         return true;
+    }
+
+    protected boolean isTabbedFragment() {
+        return false;
     }
 
     @Override
@@ -163,6 +168,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                 .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         checkProfileLoad();
         refreshActionBarTitles();
+
+        if (isTabbedFragment()) {
+            Activity activity = getActivity();
+            if (activity instanceof ITabLayoutHolder) {
+                ((ITabLayoutHolder) activity).showTabLayout(true);
+            }
+        }
     }
 
     @Override
@@ -212,6 +224,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (rootView != null) {
             unbindDrawables(getView());
             System.gc();
+        }
+
+        if (isTabbedFragment()) {
+            Activity activity = getActivity();
+            if (activity instanceof ITabLayoutHolder) {
+                ((ITabLayoutHolder) activity).showTabLayout(false);
+            }
         }
     }
 

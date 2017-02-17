@@ -10,4 +10,5 @@ import android.support.design.widget.TabLayout
 interface ITabLayoutHolder {
     fun getTabLayout(): TabLayout?
     fun showTabLayout(show: Boolean)
+    fun getTabLayoutResId(): Int
 }

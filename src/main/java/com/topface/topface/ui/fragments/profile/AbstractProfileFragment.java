@@ -167,12 +167,8 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Activity activity = getActivity();
-        if (activity instanceof ITabLayoutHolder) {
-            ((ITabLayoutHolder) activity).showTabLayout(true);
-        }
+    protected boolean isTabbedFragment() {
+        return true;
     }
 
     protected void onProfileUpdated() {
@@ -181,10 +177,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Activity activity = getActivity();
-        if (activity instanceof ITabLayoutHolder) {
-            ((ITabLayoutHolder) activity).showTabLayout(false);
-        }
         mBodyPager = null;
         mFormFragment = null;
         mUserPhotoFragment = null;

@@ -10,6 +10,7 @@ import android.databinding.ViewDataBinding;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +24,7 @@ import android.widget.FrameLayout;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
+import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
@@ -41,13 +43,15 @@ import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T> implements IRequestClient, IStateSaverRegistrator {
+public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T>
+        implements IRequestClient, IStateSaverRegistrator, ITabLayoutHolder {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
@@ -502,4 +506,24 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     public boolean isRunning() {
         return mRunning;
     }
+
+    @Override
+    public int getTabLayoutResId() {
+        return 0;
+    }
+
+    @Nullable
+    @Override
+    public TabLayout getTabLayout() {
+        return (TabLayout) getViewBinding().getRoot().findViewById(getTabLayoutResId());
+    }
+
+    @Override
+    public void showTabLayout(boolean show) {
+        TabLayout tabLayout = getTabLayout();
+        if (tabLayout != null) {
+            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
 }
