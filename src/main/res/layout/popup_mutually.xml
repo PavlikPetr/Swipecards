@@ -29,26 +29,43 @@
              android:layout_centerHorizontal="true"/>
 
          <ImageView
-             android:layout_width="20dp"
-             android:layout_height="16dp"
-             android:src="@drawable/envelop"/>
-         
-         <ImageView
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:src="@drawable/stroke_1"/>
+             android:src="@drawable/stroke_1"
+             android:layout_toLeftOf="@id/mutualIC"
+             android:layout_marginRight="17dp"
+             android:layout_alignTop="@id/popupTitle"
+             android:layout_marginTop="35dp"/>
 
          <ImageView
-             android:id="@+id/avatarUser"
-             android:layout_width="140dp"
-             android:layout_height="140dp"
-             android:layout_below="@+id/popupTitle"
-             android:layout_alignParentLeft="true"
-             android:layout_marginTop="66dp"
-             android:src="@drawable/man_blur_5"/>
+             android:layout_width="20dp"
+             android:layout_height="16dp"
+             android:src="@drawable/envelop"
+             android:layout_toLeftOf="@id/icPen"
+             android:layout_alignTop="@id/popupTitle"
+             android:layout_marginTop="34dp"
+             />
+
+         <!--<ImageView-->
+             <!--android:id="@+id/avatarUser"-->
+             <!--android:layout_width="140dp"-->
+             <!--android:layout_height="140dp"-->
+             <!--android:layout_below="@+id/popupTitle"-->
+             <!--android:layout_alignParentLeft="true"-->
+             <!--android:layout_marginTop="66dp"-->
+             <!--android:src="@drawable/man_blur_5"/>-->
              <!--app:glideTransformationPhoto="@{model.userPhoto}"-->
              <!--app:placeholderRes="@{model.placeholderRes}"-->
              <!--app:typeTransformation="@{model.type}"/>-->
+         <ImageView
+             android:id="@+id/avatarUser"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerHorizontal="true"
+             android:layout_centerVertical="true"
+             android:paddingLeft="70dp"
+             android:src="@drawable/man_blur_5"/>
+
 
          <ImageView
              android:layout_width="140dp"
@@ -62,14 +79,14 @@
              <!--app:typeTransformation="@{model.type}"/>-->
 
          <ImageView
+             android:id="@+id/icArrow"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:src="@drawable/arrow_to_left"/>
-
-         <ImageView
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:src="@drawable/pen"/>
+             android:src="@drawable/arrow_to_left"
+             android:layout_toLeftOf="@id/mutualIC"
+             android:layout_marginRight="33dp"
+             android:layout_alignTop="@+id/mutualIC"
+             android:layout_marginTop="46dp"/>
 
          <ImageView
              android:id="@+id/mutualIC"
@@ -78,8 +95,17 @@
              android:src="@drawable/ic_mutually"
              android:layout_below="@+id/popupTitle"
              android:layout_marginTop="176dp"
-             android:layout_centerHorizontal="true"
-             />
+             android:layout_centerHorizontal="true"/>
+
+         <ImageView
+             android:id="@+id/icPen"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@drawable/pen"
+             android:layout_toRightOf="@+id/mutualIC"
+             android:layout_marginLeft="20dp"
+             android:layout_alignTop="@+id/mutualIC"
+             android:layout_marginTop="46dp"/>
 
          <Button
              android:id="@+id/btnChangeFilterDating"
