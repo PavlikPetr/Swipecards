@@ -216,8 +216,9 @@ public class ListPreloader<T> implements AbsListView.OnScrollListener {
                 + "getRequestBuilder()");
     }
 
-    public void preloadSecondImage() {
-        preload(0, true);
+    public void preloadSecondImage(int totalCount) {
+        totalItemCount = totalCount;
+        preload(1, true);
     }
 
     private void preload(int start, boolean increasing) {

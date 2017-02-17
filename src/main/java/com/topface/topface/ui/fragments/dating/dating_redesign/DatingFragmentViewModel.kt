@@ -80,6 +80,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
+    val isNeedPreloadOnStart = ObservableBoolean(false)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
         override fun set(value: String?) {
@@ -196,12 +197,20 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         override fun onResourceReady(resource: GlideDrawable?, model: String?,
                                                      target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
                                                      isFirstResource: Boolean): Boolean {
+                            isNeedPreloadOnStart.apply {
+                                set(true)
+                                notifyChange()
+                            }
                             Debug.error("${PhotoAlbumAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                             return false
                         }
 
                         override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
                                                  isFirstResource: Boolean): Boolean {
+                            isNeedPreloadOnStart.apply {
+                                set(true)
+                                notifyChange()
+                            }
                             Debug.error("${PhotoAlbumAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                             return false
                         }

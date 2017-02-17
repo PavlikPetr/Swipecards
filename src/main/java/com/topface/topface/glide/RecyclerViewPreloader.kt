@@ -24,7 +24,7 @@ class RecyclerViewPreloader<T>(preloadModelProvider: PreloadModelProvider<T>,
         recyclerScrollListener.onScrolled(recyclerView, dx, dy)
     }
 
-    fun startPreloadSecondItem() {
-        mListPreloader.preloadSecondImage()
+    fun startPreloadSecondItem(totalCount: Int) {
+        mListPreloader.preloadSecondImage(totalCount)
     }
 }

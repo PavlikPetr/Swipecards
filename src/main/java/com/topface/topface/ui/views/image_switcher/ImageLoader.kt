@@ -32,6 +32,8 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     private var mWidth = 0
     private var mOnPageChangeListener: ViewPager.OnPageChangeListener? = null
     private var mScrollDx = 0
+    private var mIsReadyToPreload = false
+    private var mIsNeedToPreloadOnStart = true
     private var mSelectedPosition by Delegates.observable(0) { prop, old, new ->
         if (old != new) {
             mOnPageChangeListener?.onPageSelected(new)
@@ -39,7 +41,10 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     private val mPhotoAlbumAdapter: PhotoAlbumAdapter by lazy {
-        PhotoAlbumAdapter(mRequestBuilder, mPreloader)
+        PhotoAlbumAdapter(mRequestBuilder) {
+            mIsReadyToPreload = true
+            preload()
+        }
     }
 
     private val mSnapHelper: SnapHelper by lazy {
@@ -148,7 +153,15 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
 
     fun getSelectedPosition() = mSelectedPosition
 
-    fun setIsSecondImagePreloadAvailable(isAvailable: Boolean) {
-        mPhotoAlbumAdapter.setIsSecondImagePreloadAvailable(isAvailable)
+    fun setNecessityPreloadOnStart(isNeedToPreloadOnStart: Boolean) {
+        mIsNeedToPreloadOnStart = isNeedToPreloadOnStart
+        preload()
+    }
+
+    private fun preload() {
+        if(mIsReadyToPreload && mIsNeedToPreloadOnStart) {
+            mIsNeedToPreloadOnStart = false
+            mPreloader.startPreloadSecondItem(mPhotoAlbumAdapter.itemCount)
+        }
     }
 }

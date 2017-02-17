@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:bind="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel" />
     </data>
 
     <RelativeLayout
@@ -34,7 +34,8 @@
                     android:layout_height="match_parent"
                     app:currentItemImmediately="@{viewModel.currentItem}"
                     app:data="@{viewModel.albumData}"
-                    app:onPageChangeListener="@{viewModel}"/>
+                    app:necessityPreloadOnStart="@{viewModel.isNeedPreloadOnStart}"
+                    app:onPageChangeListener="@{viewModel}" />
             </FrameLayout>
 
             <!--Блок "статуса и каунтера фоток"-->
@@ -55,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/foto_alpha"
                     android:drawablePadding="16dp"
-                    android:text="@{viewModel.photoCounter}"/>
+                    android:text="@{viewModel.photoCounter}" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -68,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="2dp"
-                        android:src="@drawable/status_new"/>
+                        android:src="@drawable/status_new" />
 
                     <TextView
                         style="@style/DatingStausAndPhotoCount"
@@ -78,7 +79,7 @@
                         android:ellipsize="end"
                         android:maxLines="3"
                         android:text="@{viewModel.statusText}"
-                        android:visibility="@{viewModel.photoCounterVisibility}"/>
+                        android:visibility="@{viewModel.photoCounterVisibility}" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -115,7 +116,7 @@
                         android:layout_marginRight="55dp"
                         android:ellipsize="end"
                         android:singleLine="true"
-                        android:text="@{viewModel.name}"/>
+                        android:text="@{viewModel.name}" />
                     <!--АХТУНГИ, ПАЦАНЫ!!!!!!!!!!!! Отсуп сверху на 55 и снизу на -55 нужны, чтобы гарантировать место под возраст и онлайн значок-->
                     <TextView
                         style="@style/DatingNameAndAge"
@@ -126,7 +127,7 @@
                         android:drawableRight="@{viewModel.iconOnlineRes}"
                         android:ellipsize="none"
                         android:maxLines="1"
-                        android:text="@{viewModel.feedAge}"/>
+                        android:text="@{viewModel.feedAge}" />
                 </LinearLayout>
 
                 <TextView
@@ -135,12 +136,12 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="8dp"
                     android:gravity="center_vertical"
-                    android:text="@{viewModel.feedCity}"/>
+                    android:text="@{viewModel.feedCity}" />
             </LinearLayout>
             <!--Блок кнопок-->
             <include
                 layout="@layout/dating_buttons"
-                bind:viewModel="@{viewModel}"/>
+                bind:viewModel="@{viewModel}" />
         </LinearLayout>
 
         <ProgressBar
@@ -152,6 +153,6 @@
             android:layout_marginBottom="-20dp"
             android:background="@drawable/loader_bg"
             android:theme="@style/CircularProgress"
-            android:visibility="@{viewModel.isDatingProgressBarVisible}"/>
+            android:visibility="@{viewModel.isDatingProgressBarVisible}" />
     </RelativeLayout>
 </layout>

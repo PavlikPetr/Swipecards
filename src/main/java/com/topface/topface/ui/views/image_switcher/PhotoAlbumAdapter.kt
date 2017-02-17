@@ -18,11 +18,12 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AlbumImageBinding
-import com.topface.topface.glide.RecyclerViewPreloader
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.extensions.loadLinkToSameCache
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -30,7 +31,7 @@ import javax.inject.Inject
  * Created by ppavlik on 13.02.17.
  */
 
-class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, private val mPreloader: RecyclerViewPreloader<String>) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
+class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, private val readyToPreload: () -> Unit) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
         PreloadModelProvider<String>, PreloadSizeProvider<String> {
 
     companion object {
@@ -40,9 +41,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
     @Inject lateinit var eventBus: EventBus
 
     private var stolenSize: IntArray? = null
-    private var mRecyclerView: RecyclerView? = null
-    private var mIsOnlyOneItemBind = false
-    private var mIsSecondItemPreloadAvailable = true
+    private var mIsRecyclerViewAttached = false
 
     init {
         App.get().inject(this)
@@ -50,19 +49,15 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
-        mRecyclerView = recyclerView
+        mIsRecyclerViewAttached = true
     }
 
     override fun bindData(binding: AlbumImageBinding?, position: Int) {
-        mIsOnlyOneItemBind = position != 0
-        if (mIsOnlyOneItemBind && mIsSecondItemPreloadAvailable) {
-            mPreloader.startPreloadSecondItem()
-        }
         binding?.let { bind ->
             val viewModel = AlbumImageViewModel()
             bind.viewModel = viewModel
             getDataItem(position)?.let {
-                val target = Glide.with(binding.image.context)
+                val target = mRequest
                         .loadLinkToSameCache(it)
                         .listener(object : RequestListener<String, GlideDrawable> {
                             override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
@@ -112,6 +107,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                         })
                 if (stolenSize == null) {
                     target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
+                    readyToPreload.invoke()
                 }
             }
         }
@@ -148,10 +144,4 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
     override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize
 
     private fun askToPreloadLinks(position: Int) = eventBus.setData(PreloadPhoto(position))
-
-    fun setIsSecondImagePreloadAvailable(isAvailable: Boolean) {
-        if (mIsOnlyOneItemBind) {
-            mPreloader.startPreloadSecondItem()
-        }
-    }
 }

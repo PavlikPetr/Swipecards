@@ -44,9 +44,6 @@ class RecyclerToListViewScrollListener(private val scrollListener: AbsListView.O
         }
     }
 
-    fun startPreload(firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) =
-            scrollListener.onScroll(null, firstVisibleItem, visibleItemCount, totalItemCount)
-
     companion object {
         val UNKNOWN_SCROLL_STATE = Integer.MIN_VALUE
     }
