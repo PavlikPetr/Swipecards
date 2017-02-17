@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
+import android.view.View;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -35,8 +37,8 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
-import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +59,8 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding>
+        implements ITabLayoutHolder {
 
     /**
      * Constant keys for different fragments
@@ -423,5 +426,19 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @Override
     public int getLayout() {
         return R.layout.ac_fragment_frame;
+    }
+
+    @Nullable
+    @Override
+    public TabLayout getTabLayout() {
+        return (TabLayout) getViewBinding().getRoot().findViewById(R.id.toolbarInternalTabs);
+    }
+
+    @Override
+    public void showTabLayout(boolean show) {
+        TabLayout tabLayout = getTabLayout();
+        if (tabLayout != null) {
+            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 }

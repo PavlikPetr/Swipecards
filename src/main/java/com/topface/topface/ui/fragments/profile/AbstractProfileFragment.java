@@ -137,7 +137,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             tabLayout = ((ITabLayoutHolder) activity).getTabLayout();
         }
         if (tabLayout != null) {
-            mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, tabLayout, BODY_PAGES_TITLES, null, BODY_PAGES_CLASS_NAMES);
+            mTabLayoutCreator = new TabLayoutCreator(activity, mBodyPager, tabLayout, BODY_PAGES_TITLES, null, BODY_PAGES_CLASS_NAMES);
             mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
         } else {
             throw new IllegalStateException("AbstractProfileFragment:: activity must have TabLayout");
