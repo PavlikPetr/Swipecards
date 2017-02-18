@@ -371,7 +371,6 @@ public class Options extends AbstractData {
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
             datingRedesignEnabled = response.optBoolean("datingRedesignEnabled");
-            datingRedesignEnabled = true;
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
@@ -481,7 +480,9 @@ public class Options extends AbstractData {
         return dialogRedesignEnabled;
     }
 
-    public int getDialogDesignVersion() { return dialogRedesign; }
+    public int getDialogDesignVersion() {
+        return dialogRedesign;
+    }
 
     public boolean containsBannerType(String bannerType) {
         for (PageInfo page : pages.values()) {
