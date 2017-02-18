@@ -736,12 +736,12 @@ public class Utils {
     public static ArrayList<Integer> getLocationInWindow(View view) {
         int[] position = new int[2];
         view.getLocationInWindow(position);
-        return new ArrayList<Integer>(Arrays.asList(position[0], position[1]));
+        return new ArrayList<>(Arrays.asList(position[0], position[1]));
     }
 
-    public static boolean isKitKatWithNoTranslucent() {
+    public static boolean isKitKatWithNoTranslucent(boolean isDatingRedesignEnabled) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
                 && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-                && !App.get().getOptions().datingRedesignEnabled;
+                && !isDatingRedesignEnabled;
     }
 }

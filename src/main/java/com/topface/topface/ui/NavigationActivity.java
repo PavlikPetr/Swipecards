@@ -224,6 +224,11 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         tintManager.setStatusBarAlpha(0.25f);
     }
 
+    @Override
+    protected boolean isDatingRedesignEnabled() {
+        return mWeakStorage.getDatingRedesignEnabled();
+    }
+
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {

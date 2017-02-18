@@ -26,7 +26,7 @@ public class DrawerLayoutManager<T extends DrawerLayout> {
     }
 
     public void initLeftMneuDrawerLayout() {
-        mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
+        mDrawerLayout.setScrimColor(Color.argb(77, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
