@@ -4,8 +4,6 @@ import com.topface.statistics.android.StatisticsTracker
 import com.topface.topface.App
 import com.topface.topface.BuildConfig
 import com.topface.topface.data.Options
-import com.topface.topface.state.TopfaceAppState
-import javax.inject.Inject
 
 /**
  * Добавляем дефолтный набор срезов в клиентскую статистику
@@ -14,7 +12,9 @@ import javax.inject.Inject
  */
 
 class CommonSlices private constructor() {
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
 
     private object Holder {
         val INSTANCE = CommonSlices()
@@ -27,7 +27,6 @@ class CommonSlices private constructor() {
     }
 
     init {
-        App.get().inject(this)
         StatisticsTracker.getInstance().setPredefinedSlice(CommonSlices.DEFAULT_SLICES)
         mAppState.getObservable(Options::class.java).distinctUntilChanged().subscribe {
             StatisticsTracker.getInstance().setPredefinedSlice(it.statisticsSlices.apply {

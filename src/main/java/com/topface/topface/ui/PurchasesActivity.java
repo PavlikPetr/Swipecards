@@ -35,8 +35,8 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
-import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,8 +44,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -95,10 +93,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     }
 
 
-    @Inject
-    static TopfaceAppState mAppState;
-    @Inject
-    EventBus mEventBus;
+    private static TopfaceAppState mAppState;
+    private EventBus mEventBus;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
@@ -112,7 +108,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        App.from(this).inject(this);
+
+        mAppState = App.getAppComponent().appState();
+        mEventBus = App.getAppComponent().eventBus();
+
         mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
         if (TFOfferwallSDK.isInitialized()) {
             mIsOfferwallsReady = TFCredentials.getAdId() != null;

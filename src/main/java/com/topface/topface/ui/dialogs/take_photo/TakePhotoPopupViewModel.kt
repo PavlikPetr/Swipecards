@@ -1,15 +1,11 @@
 package com.topface.topface.ui.dialogs.take_photo
 
 import android.databinding.ObservableInt
-import android.os.Bundle
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.TakePhotoDialogBinding
-import com.topface.topface.state.EventBus
 import com.topface.topface.viewModels.BaseViewModel
-import javax.inject.Inject
 
 /**
  * Вью-моделька для работы с попапом загрузки фото

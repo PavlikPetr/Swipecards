@@ -28,7 +28,6 @@ import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -54,7 +53,6 @@ import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
 import java.util.*
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 /**
@@ -73,7 +71,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val iconOnlineRes = ObservableField(0)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
-        override fun set(value: String?){
+        override fun set(value: String?) {
             val status = Profile.normilizeStatus(value)
             super.set(status)
             statusVisibility.set(if (status.isNullOrEmpty()) View.GONE else View.VISIBLE)
@@ -97,7 +95,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val isNeedAnimateLoader = ObservableBoolean(false)
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
-    @Inject lateinit internal var appState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
 
     private var mLoadedCount = 0
     private var mAlbumSubscription: Subscription? = null
@@ -172,7 +172,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
 
     init {
-        App.get().inject(this)
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mPreloadManager.checkConnectionType()
@@ -195,7 +194,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         LocalBroadcastManager.getInstance(mContext)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
-        mProfileSubscription = appState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
+        mProfileSubscription = mAppState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -568,7 +567,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             override fun onNext(filter: DatingFilter?) {
                 val profile = App.get().profile
                 profile.dating = filter
-                appState.setData(profile)
+                mAppState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
                 update(false, false)
                 mNewFilter = false

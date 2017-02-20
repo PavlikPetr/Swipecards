@@ -10,20 +10,17 @@ import com.topface.topface.requests.VisitorsMarkReadedRequest;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.Utils;
 
-import javax.inject.Inject;
-
 public class PromoKey71Dialog extends PromoDialog {
 
     private final static String POPUP_NAME = "promo.express.visitors";
 
     private boolean counterUpdated;
-    @Inject
-    TopfaceAppState mAppState;
+    private TopfaceAppState mAppState;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+        mAppState = App.getAppComponent().appState();
     }
 
     @Override

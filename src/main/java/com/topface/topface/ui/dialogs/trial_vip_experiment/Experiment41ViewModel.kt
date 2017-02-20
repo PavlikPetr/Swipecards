@@ -6,16 +6,12 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.LayoutExperiment41Binding
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDrawableListFromArrayId
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
-import java.util.*
-import javax.inject.Inject
-
 
 /**
  * модель для эксперимента 4_1
@@ -34,12 +30,10 @@ class Experiment41ViewModel(binding: LayoutExperiment41Binding) :
     val randomRightPhoto: ObservableField<Int> = ObservableField()
     val vipBannerText: ObservableField<String> = ObservableField()
     var profileSubscription: Subscription
-    @Inject lateinit var state: TopfaceAppState
 
     init {
         setUrlAvatar(App.get().profile)
-        App.get().inject(this)
-        profileSubscription = state.getObservable(Profile::class.java).subscribe {
+        profileSubscription = App.getAppComponent().appState().getObservable(Profile::class.java).subscribe {
             setUrlAvatar(it)
             setRandomUserAvatar(it)
             setRandomUserName(it)

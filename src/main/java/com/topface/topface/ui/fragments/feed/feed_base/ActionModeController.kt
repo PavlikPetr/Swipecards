@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
-import android.content.Context
 import android.support.annotation.LayoutRes
 import android.support.v7.view.ActionMode
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import android.widget.TextView
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.utils.Utils
-import javax.inject.Inject
 
 /**
  * Меню открывающееся при лонг тапу по фиду
@@ -20,17 +18,12 @@ import javax.inject.Inject
 class ActionModeController(private val mMenuInflater: MenuInflater, private val mActionModeMenu: Int,
                            private val mActionModeEventsListener: OnActionModeEventsListener) : ActionMode.Callback {
 
-    @Inject lateinit internal var context: Context
     private var mActionMode: ActionMode? = null
     private val mActionModeTitle: TextView by lazy {
-        LayoutInflater.from(context).inflate(actionModeTitleRes, null) as TextView
+        LayoutInflater.from(App.getContext()).inflate(actionModeTitleRes, null) as TextView
     }
     @LayoutRes var actionModeTitleRes = R.layout.action_mode_text
     var isActionClicked: Boolean = false
-
-    init {
-        App.get().inject(this)
-    }
 
     override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?) = false
 

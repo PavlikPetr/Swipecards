@@ -4,14 +4,11 @@ import android.app.Application;
 
 import com.topface.topface.App;
 import com.topface.topface.data.Products;
-import com.topface.topface.modules.DialogModule;
-import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GooglePlayProductsRequest;
 import com.topface.topface.requests.IApiResponse;
-import com.topface.topface.ui.fragments.feed.feed_di.FeedModule;
 
 /**
  * Created by ppetr on 22.07.15.
@@ -38,10 +35,6 @@ public class ApplicationBase extends Application {
             }
         });
         return request;
-    }
-
-    public Object[] getDaggerModules() {
-        return new Object[]{new TopfaceModule(), new FeedModule(getApplicationContext()), new DialogModule()};
     }
 
 }

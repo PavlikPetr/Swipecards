@@ -42,7 +42,6 @@ import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * VM for dating buttons
@@ -87,7 +86,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
      */
     private var mLockDatingButtonsVisibility = true
 
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
     private val mBalanceDataSubscriptions = CompositeSubscription()
     private var mBalance: BalanceData? = null
 
@@ -103,7 +104,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     init {
-        App.get().inject(this)
         mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
             override fun onNext(balance: BalanceData?) = balance.let {
                 mBalance = it

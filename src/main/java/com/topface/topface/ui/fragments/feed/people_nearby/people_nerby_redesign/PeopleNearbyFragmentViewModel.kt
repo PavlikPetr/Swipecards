@@ -5,19 +5,16 @@ import android.databinding.ObservableBoolean
 import android.support.v4.widget.SwipeRefreshLayout
 import com.topface.statistics.generated.PeopleNearbyStatisticsGeneratedStatistics
 import com.topface.topface.App
-import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.PeopleNearbyStatistics
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.extensions.PermissionsExtensions
 import com.topface.topface.utils.extensions.PermissionsExtensions.PermissionState
-import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * VM для нового дизайна "Люди рядом"
@@ -34,10 +31,11 @@ class PeopleNearbyFragmentViewModel(private val mPopoverControl: IPopoverControl
     val data = SingleObservableArrayList<Any>()
     private var mSubscriptions = CompositeSubscription()
 
-    @Inject lateinit var mEventBus: EventBus
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     init {
-        App.get().inject(this)
         // отслеживаем изменения ptr
         isRefreshing.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) {

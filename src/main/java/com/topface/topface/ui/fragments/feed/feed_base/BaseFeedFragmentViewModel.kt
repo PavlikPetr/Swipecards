@@ -20,26 +20,24 @@ import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.handlers.ErrorCodes
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RunningStateManager
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.debug.FuckingVoodooMagic
 import com.topface.topface.utils.extensions.registerReceiver
-import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.extensions.unregisterReceiver
 import com.topface.topface.utils.gcmutils.GCMUtils
+import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Базовая VM для всех фидов
@@ -50,7 +48,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                                                        private val mApi: FeedApi) :
         BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
-    @Inject lateinit var mState: TopfaceAppState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
     var isRefreshing = object : ObservableBoolean() {
         override fun set(value: Boolean) {
             super.set(value)
@@ -97,20 +97,19 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     private var mStateManager = RunningStateManager()
 
     companion object {
-        val FROM = "from"
-        val TO = "to"
-        val SERVICE = "service"
-        val LEAVE = "leave"
-        val HISTORY_LOAD_FLAG = "history_load_flag"
-        val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
-        val UNREAD_STATE = "unread_state"
+        const val FROM = "from"
+        const val TO = "to"
+        const val SERVICE = "service"
+        const val LEAVE = "leave"
+        const val HISTORY_LOAD_FLAG = "history_load_flag"
+        const val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
+        const val UNREAD_STATE = "unread_state"
     }
 
     private lateinit var mReadItemReceiver: BroadcastReceiver
     private lateinit var mGcmReceiver: BroadcastReceiver
 
     init {
-        App.get().inject(this)
         if (isNeedCacheItems) {
             mCache.restoreFromCache(itemClass)?.let {
                 mAdapter?.let { adapter ->

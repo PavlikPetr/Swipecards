@@ -35,11 +35,9 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 
@@ -48,8 +46,7 @@ import rx.Subscription;
  * Profile fragment for current authorized client with ui for customization of user settings
  */
 public class OwnProfileFragment extends OwnAvatarFragment {
-    @Inject
-    TopfaceAppState mAppState;
+
     private AddPhotoHelper mAddPhotoHelper;
     private BroadcastReceiver mAddPhotoReceiver;
     private BroadcastReceiver mUpdateProfileReceiver;
@@ -66,12 +63,6 @@ public class OwnProfileFragment extends OwnAvatarFragment {
 
     public static OwnProfileFragment newInstance() {
         return new OwnProfileFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        App.get().inject(this);
     }
 
     @Override
@@ -93,7 +84,7 @@ public class OwnProfileFragment extends OwnAvatarFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mProfileSubscription = mAppState.getObservable(Profile.class).subscribe(new RxUtils.ShortSubscription<Profile>() {
+        mProfileSubscription = App.getAppComponent().appState().getObservable(Profile.class).subscribe(new RxUtils.ShortSubscription<Profile>() {
             @Override
             public void onNext(Profile profile) {
                 ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(profile.getNameAndAge(), profile.city.name, null, true));

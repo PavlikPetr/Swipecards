@@ -61,8 +61,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding> {
 
     public static final int PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE = 87;
@@ -85,8 +83,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
     private static final String PAGE_NAME = "photoswitcher";
     private static final int ANIMATION_TIME = 200;
-    @Inject
-    TopfaceAppState appState;
+    private TopfaceAppState mAppState;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -203,7 +200,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
         mViewModel = new PhotoSwitcherViewModel(getViewBinding(), this);
         getViewBinding().setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
@@ -259,7 +256,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 if (mUid == App.get().getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
                     Profile profile = App.get().getProfile();
                     profile.photos = mPhotoLinks;
-                    appState.setData(profile);
+                    mAppState.setData(profile);
                 }
 
                 if (mImageSwitcher != null) {
@@ -487,7 +484,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             public void success(IApiResponse response) {
                 mDeletedPhotos.clear();
                 //удалили фоточки обнивить профиль
-                appState.setData(profile);
+                mAppState.setData(profile);
             }
 
             @Override
@@ -510,7 +507,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             public void success(IApiResponse response) {
                 Profile profile = App.get().getProfile();
                 profile.photo = currentPhoto;
-                appState.setData(profile);
+                mAppState.setData(profile);
                 CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
                 Utils.showToastNotification(R.string.avatar_set_successfully, Toast.LENGTH_SHORT);

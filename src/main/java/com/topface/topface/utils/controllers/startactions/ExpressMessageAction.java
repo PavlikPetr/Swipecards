@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import com.topface.topface.App;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
-import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.promo.dialogs.SimplePromoDialogEventsListener;
@@ -13,8 +12,6 @@ import com.topface.topface.utils.popups.PopupManager;
 import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
 
 import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
 
@@ -24,14 +21,11 @@ import static com.topface.topface.data.Options.PromoPopupEntity.AIR_MESSAGES;
  */
 
 public class ExpressMessageAction implements IStartAction {
-    @Inject
-    NavigationState mNavigationState;
     private int mPriority;
     private FragmentManager mFragmentManager;
     private String mFrom;
 
     public ExpressMessageAction(@NotNull FragmentManager fragmentManager, int priority, String from) {
-        App.get().inject(this);
         mFragmentManager = fragmentManager;
         mPriority = priority;
         mFrom = from;
@@ -53,7 +47,9 @@ public class ExpressMessageAction implements IStartAction {
 
             @Override
             public void onVipBought() {
-                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS), WrappedNavigationData.SELECT_EXTERNALY));
+                App.getAppComponent().navigationState()
+                        .emmitNavigationState(new WrappedNavigationData(
+                                new LeftMenuSettingsData(FragmentIdData.TABBED_DIALOGS), WrappedNavigationData.SELECT_EXTERNALY));
             }
         });
         popup.show(mFragmentManager, PromoExpressMessages.TAG);

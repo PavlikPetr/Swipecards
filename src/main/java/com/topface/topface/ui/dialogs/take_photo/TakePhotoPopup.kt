@@ -15,7 +15,6 @@ import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.extensions.getString
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
-import javax.inject.Inject
 
 /**
  * Выбираем фоточку, показывается если нет ни одной
@@ -42,7 +41,7 @@ class TakePhotoPopup : AbstractDialogFragment() {
     @IntDef(ACTION_UNDEFINED, ACTION_CAMERA_CHOSEN, ACTION_GALLERY_CHOSEN, ACTION_CANCEL)
     annotation class TakePhotoPopupAction
 
-    @Inject lateinit var mEventBus: EventBus
+    lateinit var mEventBus: EventBus
     private var mArgs: Bundle? = null
     private lateinit var mBinding: TakePhotoDialogBinding
     private val mViewModel by lazy {
@@ -63,7 +62,7 @@ class TakePhotoPopup : AbstractDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.get().inject(this)
+        mEventBus = App.getAppComponent().eventBus()
         mArgs = arguments
         mArgs = if (mArgs == null) savedInstanceState else mArgs
     }

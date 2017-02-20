@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
-import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -37,7 +36,6 @@ import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnNeverAskAgain
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
-import javax.inject.Inject
 
 
 /**
@@ -48,8 +46,6 @@ import javax.inject.Inject
 @FlurryOpenEvent(name = PAGE_NAME)
 @RuntimePermissions
 class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
-
-    @Inject lateinit var mEventBus: EventBus
 
     companion object {
         const val PAGE_NAME = "PeopleNearby"
@@ -128,7 +124,6 @@ class PeopleNearbyFragment : BaseFragment(), IPopoverControl {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        App.get().inject(this)
         initList()
         mBinding.viewModel = mViewModel
         mPeopleNearbyPopover = PeopleNearbyPopover(context, mNavigator) { mBinding.root.findViewById(R.id.photoblogInGeoAvatar) }

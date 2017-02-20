@@ -10,7 +10,6 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
@@ -25,7 +24,6 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
-import javax.inject.Inject
 
 /**
  * Моедь итема хедера
@@ -45,7 +43,9 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     private val mPushHandler = FeedPushHandler(this, mContext)
     private var mContactsItemReadSubscription: Subscription? = null
 
-    @Inject lateinit var mEventBus: EventBus
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     companion object {
         private const val MAX_COUNTER: Byte = 100
@@ -53,7 +53,6 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     }
 
     init {
-        App.get().inject(this)
         mUpdateSubscription = updateObservable.subscribe {
             if (mHasInitialData) {
                 data.onCallbackBinded = this

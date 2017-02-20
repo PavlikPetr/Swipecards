@@ -47,7 +47,7 @@ buildscript {
     ext {
         retrofit_version = '2.1.0'
         google_play_services_version = '9.4.0'
-        kotlin_version = '1.0.5'
+        kotlin_version = '1.0.6'
         anko_version = '0.9'
         permissionsdispatcher_version = '2.2.0'
         hockeyAppReleaseAppId = '817b00ae731c4a663272b4c4e53e4b61'
@@ -306,7 +306,7 @@ dependencies {
         exclude module: 'anko-support-v4'
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt 'com.android.databinding:compiler:2.2.0'
+    kapt 'com.android.databinding:compiler:2.2.3'
     //Android Support libs
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'
@@ -389,10 +389,12 @@ dependencies {
         exclude module: 'kotlin-stdlib'
         exclude module: 'rxjava'
     }
-    //Dagger
-    compile 'com.squareup.dagger:dagger:1.2.2'
-    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
-    kapt 'com.squareup.dagger:dagger-compiler:1.2.2'
+
+    compile 'com.google.dagger:dagger:2.8'
+    annotationProcessor "com.google.dagger:dagger-compiler:2.8"
+    kapt 'com.google.dagger:dagger-compiler:2.8'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.1') {
         exclude group: 'com.android.support'

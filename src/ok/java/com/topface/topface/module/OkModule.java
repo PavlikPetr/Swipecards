@@ -1,6 +1,5 @@
 package com.topface.topface.module;
 
-import com.topface.topface.modules.TopfaceModule;
 import com.topface.topface.ui.OkApplication;
 
 import dagger.Module;
