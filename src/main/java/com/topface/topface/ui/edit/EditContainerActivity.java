@@ -1,8 +1,6 @@
 package com.topface.topface.ui.edit;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,20 +36,17 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
                 // для разных фрагментов
                 getViewBinding().getRoot().setBackgroundColor(getResources().getColor(R.color.gray_bg));
                 mFragment = new DatingFilterFragment();
-//                mFragment = new FilterFragment();
                 break;
             default:
                 break;
         }
 
-//        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
         Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(DatingFilterFragment.TAG);
         if (fragmentByTag != null) {
             mFragment = fragmentByTag;
         }
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.fragment_content, mFragment, FilterFragment.TAG).commit();
                     .replace(R.id.fragment_content, mFragment, DatingFilterFragment.TAG).commit();
         }
     }

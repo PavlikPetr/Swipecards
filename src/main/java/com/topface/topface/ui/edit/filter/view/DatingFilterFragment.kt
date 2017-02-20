@@ -39,7 +39,6 @@ class DatingFilterFragment() : AbstractEditFragment() {
     private val mViewModel by lazy {
         DatingFilterViewModel(activity as IActivityDelegate, initFilter()) }
 
-    // оставлено, чтобы в статистику не лезть, пока не примут данный вариант фильтра
     override fun getScreenName(): String = PAGE_NAME
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
