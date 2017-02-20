@@ -357,11 +357,6 @@ public class BindingsAdapters {
         view.setCurrentMinimalValue(value);
     }
 
-    @BindingAdapter("setRangeSeekBarListener")
-    public static void setRangeSeekBarListener(RangeSeekBar view, RangeSeekBar.OnRangeSeekBarChangeListener listener){
-        view.setOnRangeSeekBarChangeListener(listener);
-    }
-
     @BindingAdapter("currentMaxValue")
     public static void setRangeSeekBarCurrentMaximalValue(RangeSeekBar view, int value) {
         view.setCurrentMaximalValue(value);

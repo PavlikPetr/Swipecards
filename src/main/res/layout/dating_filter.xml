@@ -89,7 +89,7 @@
                     app:maxValueTitle="@{viewModel.MAX_AGE_TITLE}"
                     app:minValue="@{viewModel.MIN_AGE}"
                     app:minValueTitle="@{viewModel.MIN_AGE_TITLE}"
-                    app:setRangeSeekBarListener="@{viewModel}"
+                    app:setOnRangeSeekBarChangeListener="@{viewModel}"
                     app:range="5"
                     app:textColor="@color/filter_item_text_color"
                     app:textPadding="@dimen/filter_value_padding"
