@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="com.topface.topface.utils.glide_utils.GlideTransformationType" />
+
+        <import type="com.topface.topface.glide.tranformation.GlideTransformationType"/>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.add_to_photo_blog.HeaderItemViewModel" />
+            type="com.topface.topface.ui.add_to_photo_blog.HeaderItemViewModel"/>
     </data>
 
     <RelativeLayout
@@ -25,7 +26,7 @@
             android:layout_marginTop="19dp"
             app:glideTransformationPhoto="@{viewModel.photo}"
             app:placeholderRes="@{viewModel.placeholderRes}"
-            app:typeTransformation="@{GlideTransformationType.CROP_CIRCLE_TYPE}" />
+            app:typeTransformation="@{GlideTransformationType.CROP_CIRCLE_TYPE}"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,7 +36,7 @@
             android:layout_toRightOf="@+id/ifp_avatar_image"
             android:text="@string/add_to_photo_blog_header"
             android:textColor="@color/dark_primary_text"
-            android:textSize="15sp" />
+            android:textSize="15sp"/>
 
         <View
             android:layout_width="match_parent"
@@ -43,6 +44,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/forms_divider_color" />
+            android:background="@color/forms_divider_color"/>
     </RelativeLayout>
 </layout>

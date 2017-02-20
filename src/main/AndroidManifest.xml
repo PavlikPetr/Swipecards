@@ -72,6 +72,9 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.Topface">
         <meta-data
+            android:name="com.topface.topface.glide.config.GlideConfig"
+            android:value="GlideModule"/>
+        <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"
             tools:replace="value"/>
@@ -172,8 +175,8 @@
 
         <activity
             android:name=".ui.fragments.buy.GpPurchaseActivity"
-            android:theme="@style/Theme.FullyTransparent"
-            android:parentActivityName=".ui.NavigationActivity"/>
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/Theme.FullyTransparent"/>
 
         <!-- Facebook -->
         <activity

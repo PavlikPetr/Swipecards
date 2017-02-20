@@ -95,6 +95,14 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        val stateSaverRegistrator = activity
+        if (stateSaverRegistrator is IStateSaverRegistrator) {
+            stateSaverRegistrator.unregisterLifeCycleDelegate(mViewModel)
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mViewModel.onActivityResult(requestCode, resultCode, data)
         mAddPhotoHelper.processActivityResult(requestCode, resultCode, data)

@@ -480,7 +480,9 @@ public class Options extends AbstractData {
         return dialogRedesignEnabled;
     }
 
-    public int getDialogDesignVersion() { return dialogRedesign; }
+    public int getDialogDesignVersion() {
+        return dialogRedesign;
+    }
 
     public boolean containsBannerType(String bannerType) {
         for (PageInfo page : pages.values()) {
