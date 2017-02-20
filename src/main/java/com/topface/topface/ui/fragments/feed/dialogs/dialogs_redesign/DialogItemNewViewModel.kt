@@ -8,9 +8,11 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_utils.getUITestTag
 import com.topface.topface.utils.extensions.getColor
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 
 /**
  * Created by mbulgakov on 28.11.16. НОВЫЙ ВАРИАНТ ИТЕМА
@@ -20,6 +22,8 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     val userPhoto = ObservableField(item.user.photo)
     val type = ObservableField(if (item.user.online) GlideTransformationType.ONLINE_CIRCLE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
     val placeholderRes = ObservableField(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
+    val onLineCircle = ObservableField(R.dimen.dialog_online_circle.getDimen())
+    val strokeSize = ObservableField(R.dimen.dialog_stroke_size.getDimen())
     val counterVisibility: ObservableField<Int> = ObservableField(if (item.unread) View.VISIBLE else View.GONE)
     val name: ObservableField<String> = ObservableField(item.user.firstName)
     val dialogTextColor: ObservableField<Int> = ObservableField(if (item.unread) R.color.message_unread.getColor() else R.color.message_was_read.getColor())
@@ -27,6 +31,8 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     val dialogMessageIcon: ObservableField<Int> = ObservableField(prepareMessageIcon())
     val dialogTime: ObservableField<String> = ObservableField(item.createdRelative)
     val text: ObservableField<String> = ObservableField(prepareDialogText())
+
+    val feed_type: String = "Dialog_redesign"
 
     private fun prepareMessageIcon() =
             when (item.type) {
@@ -54,6 +60,8 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
                 FeedDialog.GIFT -> if (item.target == FeedDialog.INPUT_FRIEND_MESSAGE) R.string.chat_gift_in.getString() else R.string.chat_gift_out.getString()
                 else -> item.text
             }
+
+    fun getTag() = item.getUITestTag(feed_type)
 
     fun onClick() = navigator.showChat(item)
 

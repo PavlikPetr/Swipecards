@@ -1,22 +1,21 @@
 package com.topface.topface.utils
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.os.Looper
 import android.text.TextUtils
 import bolts.AppLinks
 import com.facebook.FacebookSdk
 import com.facebook.applinks.AppLinkData
 import com.facebook.share.model.AppInviteContent
 import com.facebook.share.widget.AppInviteDialog
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.Options
-import com.topface.topface.requests.IApiResponse
-import com.topface.topface.requests.ReferrerRequest
-import com.topface.topface.requests.handlers.ApiHandler
+import com.topface.topface.state.EventBus
 import com.topface.topface.utils.social.AuthToken
+import com.topface.topface.utils.social.FbAppLinkReadyEvent
+import com.topface.topface.utils.social.FbInviteTemplatesEvent
+import rx.Observable
+import rx.Subscription
 
 object FBInvitesUtils {
     const val FB_APP_LINK_SENDED = "fb_app_link_sended"
@@ -48,16 +47,32 @@ object FBInvitesUtils {
             val context = App.getContext()
             FacebookSdk.sdkInitialize(context)
             AppLinks.getTargetUrlFromInboundIntent(context, intent)?.let {
-                verifyAppLink(context, it.toString())
+                verifyAppLink(it.toString())
             } ?:
                     AppLinkData.fetchDeferredAppLinkData(context) { appLinkData ->
                         val appLink = appLinkData?.targetUri?.toString()
                         if (appLink != null && appLink.isNotEmpty() && appLink != "null") {
-                            verifyAppLink(context, appLink)
+                            verifyAppLink(appLink)
                         }
                     }
         }
     }
+
+    fun createFbInvitesAppLinkSubscription(eventBus: EventBus): Subscription = Observable.combineLatest(
+            eventBus.getObservable(FbAppLinkReadyEvent::class.java),
+            eventBus.getObservable(FbInviteTemplatesEvent::class.java)) { event1, event2 ->
+                object {
+                    val appLink = event1.appLink
+                    val templates = event2.inviteTemplates
+                }
+        }.first().subscribe({
+            if (it.templates.isLinkValid(it.appLink)) {
+                with(App.getAppConfig()) {
+                    fbInviteAppLink = it.appLink
+                    saveConfig()
+                }
+            }
+        })
 
     /**
      * Валидными считать линки вида: http://topface.com/landingtf/?uid=*
@@ -65,21 +80,8 @@ object FBInvitesUtils {
      * Если ссылка валидная: вернется CompletedResponse
      * Если ссылка не валидная: выкинется ошибка IncorrectValueLogicException (код 23)
      */
-    private fun verifyAppLink(context: Context, link: String) {
-        Debug.log("FbInvite:: verifying appLink $link")
-        ReferrerRequest(context, link).callback(object : ApiHandler(Looper.getMainLooper()) {
-            override fun fail(codeError: Int, response: IApiResponse?) {
-                Debug.log("FbInvite:: appLink check failed with code $codeError")
-            }
-
-            override fun success(response: IApiResponse?) {
-                Debug.log("FbInvite:: appLink ok, saving")
-                with(App.getAppConfig()) {
-                    fbInviteAppLink = link
-                    saveConfig()
-                }
-            }
-        }).exec()
+    private fun verifyAppLink(link: String) {
+        App.get().onFbAppLinkReady(link)
     }
 
     fun getAppLinkToSend() =

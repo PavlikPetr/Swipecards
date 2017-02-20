@@ -39,7 +39,7 @@
 
             <Button
                 app:uiTestTag="@{viewModel.buttonTag}"
-                style="@style/PopupGreenButton"
+                style="@style/PopupGreenButton.Background"
                 android:onClick="@{() -> viewModel.onButtonClick()}"
                 android:text="@{viewModel.button}"/>
         </LinearLayout>

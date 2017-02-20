@@ -1,4 +1,4 @@
-package com.topface.topface.utils.glide_utils
+package com.topface.topface.glide.tranformation
 
 import android.content.Context
 import android.graphics.*
@@ -9,14 +9,12 @@ import com.topface.topface.R
 
 /**
  * Этот transformation может рисовать восхищенеи на аватарке
- * Created by siberia87 on 30.11.16.
  */
-class AdmirationTransformation(mContext: Context) : BaseGlideTransformation(mContext) {
+class AdmirationTransformation(mContext: Context) : CropAndCircleTransformation(mContext) {
 
     override fun transform(resource: Resource<Bitmap>, outWidth: Int, outHeight: Int): Resource<Bitmap> {
         super.transform(resource, outWidth, outHeight)
         drawTopCircleAdmiration()
-        // этот super вызывается, чтобы верхние круги восхищений оказались под аватаркой
         super.transform(resource, outWidth, outHeight)
         drawHeardAdmiration()
         drawBottomCircleAdmiration()

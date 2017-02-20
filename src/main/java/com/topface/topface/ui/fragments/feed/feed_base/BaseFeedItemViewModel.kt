@@ -14,6 +14,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData
 import com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder
+import com.topface.topface.ui.fragments.feed.feed_utils.getUITestTag
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.Utils
 import com.topface.topface.viewModels.BaseViewModel
@@ -39,7 +40,7 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
         }
     }
 
-    fun getTag() = String.format(App.getCurrentLocale(), TAG_TEMPLATE, item.id, item.getUserId(), feed_type)
+    fun getTag() = item.getUITestTag(feed_type)
 
     open fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(
             if (TextUtils.isEmpty(feedUser.firstName))

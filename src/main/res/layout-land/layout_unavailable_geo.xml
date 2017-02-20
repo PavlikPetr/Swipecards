@@ -48,7 +48,7 @@
                     style="@style/PopupArrow"/>
 
                 <Button
-                    style="@style/PopupGreenButton"
+                    style="@style/PopupGreenButton.Background"
                     android:onClick="@{() -> viewModel.onButtonClick()}"
                     android:text="@{viewModel.button}"
                     app:uiTestTag="@{viewModel.buttonTag}"/>

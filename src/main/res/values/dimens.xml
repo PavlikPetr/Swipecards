@@ -241,9 +241,18 @@
     <dimen name="avatar_marginRight">16dp</dimen>
     <dimen name="divider_size">1dp</dimen>
 
+    <!--Попап меню удаления и добавления в черный список-->
+    <dimen name="popup_menu_circle_online">3dp</dimen>
+    <dimen name="popup_menu_stroke_outside">1dp</dimen>
+
     <!--Редизайн знакомств, метрики-->
     <dimen name="dating_buttons_padding_top">15dp</dimen>
     <dimen name="dating_buttons_padding_bottom">13dp</dimen>
     <dimen name="dating_smaller_buttons_size">60dp</dimen>
     <dimen name="dating_bigger_buttons_size">76dp</dimen>
+    
+    <!-- Material Elevation -->
+    <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
+    <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
+    <dimen name="material_elevation_nav_drawer">16dp</dimen>
 </resources>

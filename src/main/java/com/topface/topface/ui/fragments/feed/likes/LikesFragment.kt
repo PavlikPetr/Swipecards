@@ -2,13 +2,17 @@ package com.topface.topface.ui.fragments.feed.likes
 
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
+import com.topface.billing.InstantPurchaseModel
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedLike
 import com.topface.topface.databinding.LayoutEmptyLikesBinding
+import com.topface.topface.experiments.feed_design.DialogsAndLikesFeedDesigned
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.viewModels.BaseViewModel
 
 /**
@@ -34,7 +38,7 @@ class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
     }
 
     override val mAdapter by lazy {
-        LikesFeedAdapter(mNavigator, mApi)
+        LikesFeedAdapter(InstantPurchaseModel(mNavigator, PAGE_NAME), mApi)
     }
     override val mViewModel by lazy {
         LikesFragmentViewModel(mBinding, mNavigator, mApi)
@@ -45,4 +49,11 @@ class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
     }
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_likes
+
+    override fun onResume() {
+        super.onResume()
+        if (DialogsAndLikesFeedDesigned.getDesignVersion() == DialogsAndLikesFeedDesigned.NEW_DIALOG_NO_TAB) {
+            ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.general_sympathies)))
+        }
+    }
 }

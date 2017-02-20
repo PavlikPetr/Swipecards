@@ -20,7 +20,7 @@
         android:paddingTop="24dp">
 
         <Button
-            style="@style/AddToPhotoBlogGreenButton"
+            style="@style/PopupGreenButton.Background"
             android:onClick="@{() -> viewModel.onClick()}"
             app:enable="@{viewModel.isEnabled}"
             android:text="@string/add_to_photo_blog_button_place" />

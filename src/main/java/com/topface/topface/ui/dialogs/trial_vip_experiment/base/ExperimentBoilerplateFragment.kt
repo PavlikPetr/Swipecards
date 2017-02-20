@@ -1,6 +1,8 @@
 package com.topface.topface.ui.dialogs.trial_vip_experiment.base
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.annotation.IdRes
@@ -10,24 +12,37 @@ import android.view.ViewGroup
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.data.Profile
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
+import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
+import com.topface.topface.ui.dialogs.trial_vip_experiment.IRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
+import javax.inject.Inject
 
 /**
  * База для всех экспериментов
  * Created by tiberal on 15.11.16.
  */
-class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), TransparentMarketFragmentRunner.IRunner {
+class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunner {
 
     var cancelListener: DialogInterface.OnCancelListener? = null
     var dismissListener: DialogInterface.OnDismissListener? = null
     var onFragmentFinishDelegate: IOnFragmentFinishDelegate? = null
     private lateinit var mArgs: Bundle
+    @Inject lateinit internal var appState: TopfaceAppState
+    private lateinit var mPremiumStatusSubscription: Subscription
 
     companion object {
         const val TAG = "TrialVipPopup"
@@ -45,6 +60,10 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
                     }
                     this
                 }
+    }
+
+    private val mNavigator by lazy {
+        FeedNavigator(activity as IActivityDelegate)
     }
 
     private val mType by lazy {
@@ -92,6 +111,16 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
         mArgs = savedInstanceState ?: arguments
     }
 
+    init {
+        App.get().inject(this)
+        mPremiumStatusSubscription = appState.getObservable(Profile::class.java)
+                .filter { it.premium }
+                .applySchedulers()
+                .subscribe(shortSubscription {
+                    dismiss()
+                })
+    }
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putAll(mArgs)
@@ -134,15 +163,19 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), Trans
         cancelListener = null
         dismissListener = null
         onFragmentFinishDelegate = null
+        mPremiumStatusSubscription.safeUnsubscribe()
         super.onDestroy()
     }
 
-    override fun runMarketPopup() {
-        if (isAdded && mTimeForTransaction) {
-            mMarketFragmentRunner.startTransparentMarketFragment {
-                TrialVipExperimentStatistics.sendPurchaseCompleted()
-                dismiss()
-            }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GpPurchaseActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            TrialVipExperimentStatistics.sendPurchaseCompleted()
+            dismiss()
         }
+    }
+
+    override fun runMarketPopup() {
+        mNavigator.showPurchaseProduct(App.get().options.trialVipExperiment.subscriptionSku, TAG)
     }
 }

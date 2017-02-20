@@ -34,18 +34,18 @@ import com.topface.topface.requests.PhotoDeleteRequest;
 import com.topface.topface.requests.PhotoMainRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.BasePhotoRecyclerViewAdapter;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
-import com.topface.topface.ui.fragments.profile.photoswitcher.IUploadAlbumPhotos;
 import com.topface.topface.ui.fragments.profile.photoswitcher.IUserProfileReceiver;
-import com.topface.topface.ui.fragments.profile.photoswitcher.PhotosManager;
 import com.topface.topface.ui.fragments.profile.photoswitcher.UserProfileLoader;
 import com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel;
-import com.topface.topface.ui.views.ImageSwitcher;
-import com.topface.topface.ui.views.ImageSwitcherLooped;
+import com.topface.topface.ui.views.image_switcher.ImageClick;
+import com.topface.topface.ui.views.image_switcher.ImageLoader;
+import com.topface.topface.ui.views.image_switcher.PreloadPhoto;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -54,12 +54,17 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.PreloadManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.PhotosExtensionsKt;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+
+import rx.Subscription;
+import rx.functions.Func2;
 
 public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding> {
 
@@ -75,6 +80,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     public static final String INTENT_PRELOAD_PHOTO = "preload_photo";
     public static final String INTENT_FILL_PROFILE_ON_BACK = "fill_profile_on_back";
     public static final String CONTROL_VISIBILITY = "CONTROL_VISIBILITY";
+    public static final String CURRENT_PHOTO_POSITION = "current_photo_position";
     public static final String OWN_PHOTOS_CONTROL_VISIBILITY = "OWN_PHOTOS_CONTROL_VISIBILITY";
     public static final String DELETED_PHOTOS = "DELETED_PHOTOS";
     public static final int DEFAULT_PRELOAD_ALBUM_RANGE = 3;
@@ -84,14 +90,13 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     private static final String PAGE_NAME = "photoswitcher";
     private static final int ANIMATION_TIME = 200;
     private TopfaceAppState mAppState;
+    private EventBus mEventBus;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
             int realPosition = calcRealPosition(position, mPhotoLinks.size());
             setCounter(realPosition);
             refreshButtonsState();
-            mPhotosManager.check(((ImageSwitcher.ImageSwitcherAdapter) mImageSwitcher.getAdapter()).getData(),
-                    realPosition);
         }
 
         @Override
@@ -103,19 +108,12 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         }
     };
     private ViewGroup mPhotoAlbumControl;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            setPhotoAlbumControlVisibility(mPhotoAlbumControl != null
-                    && mPhotoAlbumControl.getVisibility() != View.VISIBLE
-                    ? View.VISIBLE
-                    : View.GONE, true);
-        }
-    };
     private ViewGroup mOwnPhotosControl;
     private int mPhotoAlbumControlVisibility = View.VISIBLE;
     private int mOwnPhotosControlVisibility = View.GONE;
     private Photos mPhotoLinks;
+    private Subscription mLoadLinksSubscription;
+    private Subscription mOnImageClickSubscription;
     private IUserProfileReceiver mUserProfileReceiver = new IUserProfileReceiver() {
         @Override
         public void onReceiveUserProfile(User user) {
@@ -144,14 +142,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         }
     };
     private Photos mDeletedPhotos = new Photos();
-    private ImageSwitcherLooped mImageSwitcher;
+    private ImageLoader mImageSwitcher;
     private int mUid;
-    private PhotosManager mPhotosManager = new PhotosManager(new IUploadAlbumPhotos() {
-        @Override
-        public void sendRequest(int position) {
-            sendAlbumRequest(position);
-        }
-    });
     private TranslateAnimation mCurrentAnimation;
     private TranslateAnimation mAnimationHide = null;
     private TranslateAnimation mAnimationShow = null;
@@ -201,6 +193,29 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAppState = App.getAppComponent().appState();
+        mOnImageClickSubscription = eventBus.getObservable(ImageClick.class).subscribe(new RxUtils.ShortSubscription<ImageClick>() {
+            @Override
+            public void onNext(ImageClick type) {
+                setPhotoAlbumControlVisibility(mPhotoAlbumControl != null
+                        && mPhotoAlbumControl.getVisibility() != View.VISIBLE
+                        ? View.VISIBLE
+                        : View.GONE, true);
+            }
+        });
+        mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto.class)
+                .distinctUntilChanged(new Func2<PreloadPhoto, PreloadPhoto, Boolean>() {
+                    @Override
+                    public Boolean call(PreloadPhoto preloadPhoto, PreloadPhoto preloadPhoto2) {
+                        return preloadPhoto.getPosition() == preloadPhoto2.getPosition();
+                    }
+                })
+                .subscribe(new RxUtils.ShortSubscription<PreloadPhoto>() {
+                    @Override
+                    public void onNext(PreloadPhoto type) {
+                        Debug.error("NewImageLoader1 send request position:" + type.getPosition());
+                        sendAlbumRequest(type.getPosition());
+                    }
+                });
         mViewModel = new PhotoSwitcherViewModel(getViewBinding(), this);
         getViewBinding().setViewModel(mViewModel);
         overridePendingTransition(R.anim.fade_in, 0);
@@ -260,7 +275,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 }
 
                 if (mImageSwitcher != null) {
-                    mImageSwitcher.getAdapter().notifyDataSetChanged();
+                    mImageSwitcher.setData(PhotosExtensionsKt.addData(mPhotoLinks, newPhotos));
                 }
             }
 
@@ -278,6 +293,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RxUtils.safeUnsubscribe(mOnImageClickSubscription);
+        RxUtils.safeUnsubscribe(mLoadLinksSubscription);
         if (mViewModel != null) {
             mViewModel.release();
         }
@@ -322,11 +339,10 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // ViewPager becomes visible without data
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
-        mImageSwitcher = ((ImageSwitcherLooped) findViewById(R.id.galleryAlbum));
+        mImageSwitcher = ((ImageLoader) findViewById(R.id.galleryAlbum));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
-        mImageSwitcher.setOnClickListener(mOnClickListener);
         mImageSwitcher.setData(mPhotoLinks);
-        mImageSwitcher.setCurrentItem((ImageSwitcherLooped.ITEMS_HALF / mPhotoLinks.size() * mPhotoLinks.size()) + position, false);
+        mImageSwitcher.setCurrentItemImmediately(position);
 
         setCounter(position);
     }
@@ -357,6 +373,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_PHOTO_POSITION, mCurrentPosition);
         if (mPhotoAlbumControl != null) {
             outState.putInt(CONTROL_VISIBILITY, mPhotoAlbumControl.getVisibility());
             outState.putInt(OWN_PHOTOS_CONTROL_VISIBILITY, mOwnPhotosControl.getVisibility());
@@ -376,6 +393,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         mPhotoAlbumControlVisibility = savedInstanceState.getInt(CONTROL_VISIBILITY, View.GONE);
         mOwnPhotosControlVisibility = savedInstanceState.getInt(OWN_PHOTOS_CONTROL_VISIBILITY, View.GONE);
         mDeletedPhotos = JsonUtils.fromJson(savedInstanceState.getString(DELETED_PHOTOS), Photos.class);
+        setCounter(savedInstanceState.getInt(CURRENT_PHOTO_POSITION));
     }
 
     @Override

@@ -12,6 +12,7 @@ public class LeftMenuHeaderViewData {
     private String mName;
     private int mAge;
     private String mCity;
+    private boolean mIsTranslucentEnabled;
 
     /**
      * Create new data object for left menu header
@@ -20,11 +21,12 @@ public class LeftMenuHeaderViewData {
      * @param name  users name
      * @param city  users city
      */
-    public LeftMenuHeaderViewData(IPhoto photo, String name, int age, String city) {
+    public LeftMenuHeaderViewData(IPhoto photo, String name, int age, String city, boolean isTranslucentEnabled) {
         mPhoto = photo;
         mName = name;
         mAge = age;
         mCity = city;
+        mIsTranslucentEnabled = isTranslucentEnabled;
     }
 
     /**
@@ -98,6 +100,12 @@ public class LeftMenuHeaderViewData {
     public void setCity(String city) {
         mCity = city;
     }
+
+    /**
+     * Get tarnslucent enabled flag
+     * @return true if translucent enabled
+     */
+    public boolean isIsTranslucentEnabled() { return mIsTranslucentEnabled; }
 
     @SuppressWarnings("SimplifiableIfStatement")
     @Override

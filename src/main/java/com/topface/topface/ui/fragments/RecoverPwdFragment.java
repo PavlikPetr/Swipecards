@@ -159,7 +159,9 @@ public class RecoverPwdFragment extends BaseFragment {
     }
 
     private void redAlert(int resId) {
-        redAlert(getString(resId));
+        if(isAdded()) {
+            redAlert(getString(resId));
+        }
     }
 
     private void removeRedAlert() {
