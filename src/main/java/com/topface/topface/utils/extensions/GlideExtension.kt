@@ -56,6 +56,6 @@ object ScreenSize {
         Utils.getSrceenSize(App.getContext())
     }
 
-    val height = mScreenSize.y / 2
-    val width = mScreenSize.x / 2
+    val height = mScreenSize.y
+    val width = mScreenSize.x
 }
