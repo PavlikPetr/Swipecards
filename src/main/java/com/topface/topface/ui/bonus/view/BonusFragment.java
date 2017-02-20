@@ -64,7 +64,8 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     @Override
     public void onResume() {
         super.onResume();
-        if (getArguments().getBoolean(NEED_SHOW_TITLE)) {
+        Bundle arg = getArguments();
+        if (arg != null && arg.getBoolean(NEED_SHOW_TITLE)) {
             ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.general_bonus)));
         }
     }

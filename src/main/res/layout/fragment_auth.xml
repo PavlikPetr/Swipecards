@@ -7,6 +7,9 @@
         <variable
             name="handler"
             type="com.topface.topface.ui.fragments.AuthFragment.LoginFragmentHandler"/>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.auth.AuthFragmentViewModel"/>
     </data>
 
     <FrameLayout
@@ -23,6 +26,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@{viewModel.topMargin}"
             android:orientation="vertical">
 
             <ScrollView

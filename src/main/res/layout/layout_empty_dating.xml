@@ -38,7 +38,7 @@
 
             <Button
                 android:id="@+id/btnChangeFilterDating"
-                style="@style/PopupGreenButton"
+                style="@style/PopupGreenButton.Background"
                 android:onClick="@{() -> viewModel.onChangeDatingFilter()}"
                 android:text="@string/dating_empty_change_settings"/>
 

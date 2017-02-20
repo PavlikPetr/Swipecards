@@ -28,7 +28,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
-import com.topface.topface.ui.fragments.dating.dating_redesign.TargetSettings;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FBInvitesUtils;
@@ -168,6 +167,9 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
+    protected boolean isDatingRedesignEnabled() {
+        return false;
+    }
 
     /**
      * Установка флагов Window
@@ -187,8 +189,8 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if(!App.get().getOptions().datingRedesignEnabled) {
-            if (Utils.isKitKatWithNoTranslucent()) {
+        if(!isDatingRedesignEnabled()) {
+            if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -340,6 +342,9 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onPause() {
         super.onPause();
+        for (ILifeCycle saver : stateSavers) {
+            saver.onPause();
+        }
         removeAllRequests();
         if (mProfileLoadReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);

@@ -17,6 +17,11 @@ data class AppDay(val firstPosition: Int, val repeat: Int, val maxCount: Int, va
  * @param id {Number} уникальный идентификатор рекламы
  * @param imgSrc {String} ссылка на картинку/банер
  * @param url {String} ссылка
- * @param external {Boolean} Открывать ли URL во внешнем приложении или в модальном окне внутри ТФ.
+ * @param external @Deprecated {Boolean} Открывать ли URL во внешнем приложении или в модальном окне внутри ТФ.
+ * @param showType {Int} - тип приложения определяющий действие по тапу
+ * (1 - WEBVIEW , 2 - BROWSER, 3 - PRODUCT ), для 3 должен быть открыт экран покупки продукта
+ * @param sku {String} - идентификатор продукта, поле не пустое если showType == 3.
+ * Стоит обезопасится и предусмотреть случай когда в списке продуктов будет отсутствовать указанный продукт,
+ * при правильных настройках такого быть не должно, но все же.
  */
-data class AppDayImage(val id: String, val imgSrc: String, val url: String, val external: Boolean)
+data class AppDayImage(val id: String, val imgSrc: String, val url: String, val external: Boolean, val showType: Int, val sku: String)

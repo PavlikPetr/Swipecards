@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.topface.billing.InstantPurchaseModel
 import com.topface.topface.R
 import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.ui.fragments.feed.app_day.AppDayAdapter
@@ -19,7 +20,8 @@ import java.util.*
  * Компоненет итема приложения дня
  * Created by siberia87 on 06.12.16.
  */
-class AppDayItemComponent(var mApi: FeedApi) : AdapterComponent<AppDayListBinding, AppDayStubItem>() {
+class AppDayItemComponent(var mApi: FeedApi, private val mInstantPurchaseModel: InstantPurchaseModel)
+    : AdapterComponent<AppDayListBinding, AppDayStubItem>() {
     override val itemLayout: Int
         get() = R.layout.app_day_list
     override val bindingClass: Class<AppDayListBinding>
@@ -46,7 +48,7 @@ class AppDayItemComponent(var mApi: FeedApi) : AdapterComponent<AppDayListBindin
                 }
             })
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = AppDayAdapter().apply {
+            adapter = AppDayAdapter(mInstantPurchaseModel).apply {
                 addData(it.list as ArrayList<AppDayImage>)
             }
             recycledViewPool = pool

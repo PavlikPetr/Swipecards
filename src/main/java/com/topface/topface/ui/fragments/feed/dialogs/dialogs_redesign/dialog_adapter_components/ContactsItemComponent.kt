@@ -62,6 +62,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
 
     override fun recycle(binding: DialogContactsItemBinding, data: DialogContactsStubItem?, position: Int) {
         super.recycle(binding, data, position)
+        mModel?.release()
         binding.dialogsList.removeItemDecoration(mDecorator)
     }
 
