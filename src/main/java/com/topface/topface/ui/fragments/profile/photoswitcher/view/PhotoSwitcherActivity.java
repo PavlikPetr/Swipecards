@@ -345,7 +345,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         // and its post init hangs app
         getViewBinding().galleryAlbumStub.getViewStub().inflate();
         mImageSwitcher = ((ImageLoader) findViewById(R.id.galleryAlbum));
-//        mImageSwitcher.setGlide(Glide.with(this));
         mImageSwitcher.setOnPageChangeListener(mOnPageChangeListener);
         mImageSwitcher.setData(mPhotoLinks);
         mImageSwitcher.setCurrentItemImmediately(position);

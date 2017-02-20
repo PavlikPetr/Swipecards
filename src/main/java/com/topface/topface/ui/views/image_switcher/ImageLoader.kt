@@ -88,23 +88,17 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         }
     }
 
-    override fun scrollToPosition(position: Int) {
-        super.scrollToPosition(position)
-    }
+    private fun getViewHeight() =
+            if (mHeight == 0) {
+                mHeight = measuredHeight
+                mHeight
+            } else mHeight
 
-    private fun getViewHeight(): Int {
-        if (mHeight == 0) {
-            mHeight = measuredHeight
-        }
-        return mHeight
-    }
-
-    private fun getViewWidth(): Int {
-        if (mWidth == 0) {
-            mWidth = measuredHeight
-        }
-        return mWidth
-    }
+    private fun getViewWidth() =
+            if (mWidth == 0) {
+                mWidth = measuredHeight
+                mWidth
+            } else mWidth
 
     fun setData(photos: Photos?) {
         photos?.let {
@@ -128,14 +122,11 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
                 photo.defaultLink
             }
 
-    private fun getLink(photos: Photos?, position: Int): String {
-        photos?.let {
-            it.find { it.getPosition() == position }?.let {
-                return getPhotoLink(it)
-            }
+    private fun getLink(photos: Photos?, position: Int) = photos?.let {
+        it.find { it.getPosition() == position }?.let {
+            getPhotoLink(it)
         }
-        return Utils.EMPTY
-    }
+    } ?: Utils.EMPTY
 
     fun setCurrentItemSmoothly(position: Int) {
         smoothScrollToPosition(position)

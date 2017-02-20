@@ -252,13 +252,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                             albumData.set(it)
                         }
                         currentUser = it
-                        //todo
-//                        binding.root.post {
-//                            //если есть currentUser, например после востановления стейта, то работаем с ним
-//                            (if (currentUser == null) it else currentUser)?.let {
-//                                mDatingButtonsView.unlockControls()
-//                            }
-//                        }
                     }
                 }
             }
@@ -444,8 +437,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     override fun onPause() {
         super.onPause()
-        mOnImageClickSubscription.safeUnsubscribe()
-        mLoadLinksSubscription.safeUnsubscribe()
+        arrayOf(mOnImageClickSubscription, mLoadLinksSubscription).safeUnsubscribe()
     }
 
     override fun onResume() {
@@ -479,15 +471,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     fun release() {
-        mAlbumSubscription.safeUnsubscribe()
-        mSkipSubscription.safeUnsubscribe()
-        mLikeSubscription.safeUnsubscribe()
-        mUpdateSubscription.safeUnsubscribe()
-        mLoadBackgroundSubscription.safeUnsubscribe()
-        mOnImageClickSubscription.safeUnsubscribe()
-        mProfileSubscription.safeUnsubscribe()
-        mFilterRequestSubscription.safeUnsubscribe()
-        mLoadLinksSubscription.safeUnsubscribe()
+        arrayOf(mAlbumSubscription, mSkipSubscription, mLikeSubscription, mUpdateSubscription,
+                mLoadBackgroundSubscription, mOnImageClickSubscription, mProfileSubscription,
+                mFilterRequestSubscription, mLoadLinksSubscription).safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
         mPreloadTarget.clear()
     }

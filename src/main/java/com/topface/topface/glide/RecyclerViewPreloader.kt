@@ -3,7 +3,7 @@ package com.topface.topface.glide
 import android.support.v7.widget.RecyclerView
 import com.bumptech.glide.ListPreloader.PreloadSizeProvider
 import com.bumptech.glide.ListPreloader.PreloadModelProvider
-import com.topface.topface.glide.module.ListPreloader
+import com.topface.topface.glide.config.ListPreloader
 
 
 class RecyclerViewPreloader<T>(preloadModelProvider: PreloadModelProvider<T>,

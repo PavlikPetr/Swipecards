@@ -72,7 +72,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.Topface">
         <meta-data
-            android:name="com.topface.topface.glide.module.CustomGlideModule"
+            android:name="com.topface.topface.glide.config.GlideConfig"
             android:value="GlideModule"/>
         <meta-data
             android:name="com.google.android.gms.version"

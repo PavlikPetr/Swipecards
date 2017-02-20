@@ -17,15 +17,12 @@ class RecyclerToListViewScrollListener(private val scrollListener: AbsListView.O
     private var lastItemCount = -1
 
     override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-        val listViewState: Int
-        when (newState) {
-            RecyclerView.SCROLL_STATE_DRAGGING -> listViewState = AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
-            RecyclerView.SCROLL_STATE_IDLE -> listViewState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE
-            RecyclerView.SCROLL_STATE_SETTLING -> listViewState = AbsListView.OnScrollListener.SCROLL_STATE_FLING
-            else -> listViewState = UNKNOWN_SCROLL_STATE
-        }
-
-        scrollListener.onScrollStateChanged(null /*view*/, listViewState)
+        scrollListener.onScrollStateChanged(null, when (newState) {
+            RecyclerView.SCROLL_STATE_DRAGGING -> AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
+            RecyclerView.SCROLL_STATE_IDLE -> AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+            RecyclerView.SCROLL_STATE_SETTLING -> AbsListView.OnScrollListener.SCROLL_STATE_FLING
+            else -> UNKNOWN_SCROLL_STATE
+        })
     }
 
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -45,6 +42,6 @@ class RecyclerToListViewScrollListener(private val scrollListener: AbsListView.O
     }
 
     companion object {
-        val UNKNOWN_SCROLL_STATE = Integer.MIN_VALUE
+        const val UNKNOWN_SCROLL_STATE = Integer.MIN_VALUE
     }
 }

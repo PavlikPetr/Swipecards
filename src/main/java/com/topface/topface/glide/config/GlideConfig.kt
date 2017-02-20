@@ -1,4 +1,4 @@
-package com.topface.topface.glide.module
+package com.topface.topface.glide.config
 
 import android.content.Context
 import com.bumptech.glide.Glide
@@ -14,7 +14,7 @@ import com.bumptech.glide.module.GlideModule
  * Кастомизируем настройки glide
  * Created by petrp on 17.02.2017.
  */
-class CustomGlideModule : GlideModule {
+class GlideConfig : GlideModule {
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         // размер дискового кеша возьмем 100Мб
         val yourSizeInBytes = 104857600

@@ -1,4 +1,4 @@
-package com.topface.topface.glide.module
+package com.topface.topface.glide.config
 
 import android.content.Context
 import com.bumptech.glide.load.data.DataFetcher

@@ -47,9 +47,7 @@ fun Photos.getFakePhotosCount(): Int {
  */
 fun ObservableField<Photos>.addData(newPhotos: AlbumPhotos?) =
         apply {
-            set(
-                    get().addData(newPhotos)
-            )
+            set(get().addData(newPhotos))
             notifyChange()
         }
 

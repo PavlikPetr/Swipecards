@@ -19,7 +19,5 @@ class AlbumImageViewModel {
         App.get().inject(this)
     }
 
-    fun onClick() {
-        eventBus.setData(ImageClick())
-    }
+    fun onClick() = eventBus.setData(ImageClick())
 }
