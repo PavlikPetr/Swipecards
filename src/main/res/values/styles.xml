@@ -1229,6 +1229,39 @@
         <item name="textAllCaps">true</item>
     </style>
 
+    <style name="DatingFilterItemTextStyle">
+        <item name="android:textSize">@dimen/filter_item_text_size</item>
+        <item name="android:textColor">@color/dark_primary_text</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="DatingFilterItemTextStyle.Title">
+        <item name="android:textSize">@dimen/dating_parent_item_subtitle_size</item>
+        <item name="android:textColor">@color/gray_forms_color</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:gravity">bottom</item>
+    </style>
+
+    <style name="DatingFilterCheckBox" parent="topfaceCheckbox">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:drawablePadding">12dp</item>
+        <item name="android:textColor">@color/dark_primary_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:drawableLeft">@drawable/dating_filter_checkbox</item>
+    </style>
+
+    <style name="DatingFilterItemView">
+        <item name="android:background">@color/bg_white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/filter_item_height</item>
+    </style>
+
     <style name="FilterSwitch">
         <item name="android:button">@null</item>
         <item name="android:drawableLeft">@null</item>
@@ -1240,6 +1273,22 @@
         <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="DatingFilterSwitch">
+        <item name="android:button">@null</item>
+        <item name="android:drawableLeft">@null</item>
+        <item name="android:drawableRight">@drawable/edit_switch</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/filter_item_height</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
+        <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">@dimen/filter_item_text_size</item>
+        <item name="android:textColor">@color/dark_primary_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 
     <style name="FilterDivider">
         <item name="android:layout_width">match_parent</item>
