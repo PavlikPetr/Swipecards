@@ -163,4 +163,10 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
             mPreloader.startPreloadSecondItem(mPhotoAlbumAdapter.itemCount)
         }
     }
+
+    override fun onDetachedFromWindow() {
+        mPhotoAlbumAdapter.release()
+        adapter = null
+        super.onDetachedFromWindow()
+    }
 }

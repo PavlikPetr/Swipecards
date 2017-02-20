@@ -20,6 +20,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AlbumImageBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.extensions.loadLinkToSameCache
 import javax.inject.Inject
@@ -40,6 +41,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
 
     private var stolenSize: IntArray? = null
     private var mIsRecyclerViewAttached = false
+    private var mTargets = hashMapOf<Int, SimpleTarget<GlideDrawable>>()
 
     init {
         App.get().inject(this)
@@ -55,6 +57,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
             val viewModel = AlbumImageViewModel()
             bind.viewModel = viewModel
             getDataItem(position)?.let {
+                mTargets[position].clear()
                 val target = mRequest
                         .loadLinkToSameCache(it)
                         .listener(object : RequestListener<String, GlideDrawable> {
@@ -103,11 +106,23 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                             }
 
                         })
+                mTargets.put(position, target)
                 if (stolenSize == null) {
                     target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
                     readyToPreload.invoke()
                 }
             }
+        }
+    }
+
+    override fun clearData() {
+        super.clearData()
+        release()
+    }
+
+    fun release(){
+        mTargets.forEach {
+            it.value.clear()
         }
     }
 
