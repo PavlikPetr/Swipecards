@@ -83,7 +83,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> implements INavigationFragmentsListener {
+public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
@@ -92,7 +92,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
     private Intent mPendingNextIntent;
-    private boolean mIsActionBarHidden;
     private View mContentFrame;
     private DrawerLayoutManager<HackyDrawerLayout> mDrawerLayout;
     private FullscreenController mFullscreenController;
@@ -227,6 +226,11 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
+    }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarTabs;
     }
 
     @Override
@@ -534,13 +538,11 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     }
 
     private void toggleDrawerLayout() {
-        if (!mIsActionBarHidden) {
-            if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
-                if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
-                    mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
-                } else {
-                    mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
-                }
+        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
+            if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
+                mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
+            } else {
+                mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
             }
         }
     }
@@ -566,24 +568,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             params.topMargin = actionbarOverlay ? 0 : mInitialTopMargin;
             mContentFrame.requestLayout();
             mActionBarOverlayed = actionbarOverlay;
-        }
-    }
-
-    @Override
-    public void onHideActionBar() {
-        mIsActionBarHidden = true;
-        setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-    }
-
-    @Override
-    public void onShowActionBar() {
-        mIsActionBarHidden = false;
-        setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().show();
         }
     }
 
