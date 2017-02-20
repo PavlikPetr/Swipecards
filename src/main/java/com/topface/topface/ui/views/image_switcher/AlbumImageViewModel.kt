@@ -12,12 +12,10 @@ import javax.inject.Inject
  */
 
 class AlbumImageViewModel {
-    @Inject lateinit var eventBus: EventBus
+    private val mEventBus: EventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
     val isProgressVisible = ObservableInt()
 
-    init {
-        App.get().inject(this)
-    }
-
-    fun onClick() = eventBus.setData(ImageClick())
+    fun onClick() = mEventBus.setData(ImageClick())
 }

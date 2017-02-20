@@ -15,8 +15,6 @@ import android.widget.Toast;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AlbumPhotos;
@@ -90,7 +88,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     private static final String PAGE_NAME = "photoswitcher";
     private static final int ANIMATION_TIME = 200;
     private TopfaceAppState mAppState;
-    private EventBus mEventBus;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -193,6 +190,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAppState = App.getAppComponent().appState();
+        EventBus eventBus = App.getAppComponent().eventBus();
         mOnImageClickSubscription = eventBus.getObservable(ImageClick.class).subscribe(new RxUtils.ShortSubscription<ImageClick>() {
             @Override
             public void onNext(ImageClick type) {

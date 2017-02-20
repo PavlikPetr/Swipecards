@@ -22,7 +22,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.UniversalUserFactory;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.fragments.OkProfileFragment;

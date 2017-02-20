@@ -37,15 +37,14 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
         const val TAG = "PreloadingAdapter"
     }
 
-    @Inject lateinit var eventBus: EventBus
+    private val mEventBus: EventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     private var stolenSize: IntArray? = null
     private var mIsRecyclerViewAttached = false
     private var mTargets = hashMapOf<Int, SimpleTarget<GlideDrawable>>()
 
-    init {
-        App.get().inject(this)
-    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -120,7 +119,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
         release()
     }
 
-    fun release(){
+    fun release() {
         mTargets.forEach {
             it.value.clear()
         }
@@ -155,5 +154,5 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
 
     override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize
 
-    private fun askToPreloadLinks(position: Int) = eventBus.setData(PreloadPhoto(position))
+    private fun askToPreloadLinks(position: Int) = mEventBus.setData(PreloadPhoto(position))
 }

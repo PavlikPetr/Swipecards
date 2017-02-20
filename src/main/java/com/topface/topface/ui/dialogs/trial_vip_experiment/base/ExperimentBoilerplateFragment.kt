@@ -29,7 +29,6 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
 import rx.Subscription
-import javax.inject.Inject
 
 /**
  * База для всех экспериментов
@@ -41,8 +40,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
     var dismissListener: DialogInterface.OnDismissListener? = null
     var onFragmentFinishDelegate: IOnFragmentFinishDelegate? = null
     private lateinit var mArgs: Bundle
-    @Inject lateinit internal var appState: TopfaceAppState
-    private lateinit var mPremiumStatusSubscription: Subscription
+    private var mPremiumStatusSubscription: Subscription
 
     companion object {
         const val TAG = "TrialVipPopup"
@@ -60,6 +58,10 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
                     }
                     this
                 }
+    }
+
+    private val mAppState: TopfaceAppState by lazy {
+        App.getAppComponent().appState()
     }
 
     private val mNavigator by lazy {
@@ -92,10 +94,6 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
                 dialogData = mDialogDataFactory)
     }
 
-    private val mMarketFragmentRunner by lazy {
-        TransparentMarketFragmentRunner(activity, mArgs.getInt(FRAGMENT_CONTAINER_ID))
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NewProductsKeysGeneratedStatistics.sendNow_TRIAL_VIP_POPUP_SHOW(activity.applicationContext)
@@ -112,8 +110,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
     }
 
     init {
-        App.get().inject(this)
-        mPremiumStatusSubscription = appState.getObservable(Profile::class.java)
+        mPremiumStatusSubscription = mAppState.getObservable(Profile::class.java)
                 .filter { it.premium }
                 .applySchedulers()
                 .subscribe(shortSubscription {

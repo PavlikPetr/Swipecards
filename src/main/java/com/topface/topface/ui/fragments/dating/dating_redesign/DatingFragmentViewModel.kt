@@ -32,7 +32,6 @@ import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
-import com.topface.topface.state.EventBus
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -448,7 +447,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun subscribeIfNeeded() {
         if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
-            mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+            mOnImageClickSubscription = mEventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
                 with(currentUser) {
                     this?.photos?.let {
                         if (it.isNotEmpty()) {
@@ -459,7 +458,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             })
         }
         if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
-            mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto::class.java)
+            mLoadLinksSubscription = mEventBus.getObservable(PreloadPhoto::class.java)
                     .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
                     .subscribe(shortSubscription {
                         if (mCanSendAlbumReq) {
@@ -627,7 +626,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             override fun onNext(filter: DatingFilter?) {
                 val profile = App.get().profile
                 profile.dating = filter
-                appState.setData(profile)
+                mAppState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
                 update(false, false)
                 mNewFilter = false
