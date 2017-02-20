@@ -42,6 +42,9 @@ fun Photos.getFakePhotosCount(): Int {
     return count
 }
 
+/**
+ * заменить фейковые фотки новыми "реальными" линками и обновить observable
+ */
 fun ObservableField<Photos>.addData(newPhotos: AlbumPhotos?) =
         apply {
             set(
@@ -50,6 +53,9 @@ fun ObservableField<Photos>.addData(newPhotos: AlbumPhotos?) =
             notifyChange()
         }
 
+/**
+ * выполняем поиск "реальных" фоточек, которые пришли на смену фэйкам и подменяем их
+ */
 fun Photos.addData(newPhotos: AlbumPhotos?) =
         apply {
             forEachIndexed { i, photo ->

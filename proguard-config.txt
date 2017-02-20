@@ -202,8 +202,8 @@
 -dontwarn com.google.gson.**
 -dontnote com.google.gson.**
 
--keep public class * implements com.bumptech.mGlide.module.GlideModule
--keep public enum com.bumptech.mGlide.load.resource.bitmap.ImageHeaderParser$** {
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
   **[] $VALUES;
   public *;
 }

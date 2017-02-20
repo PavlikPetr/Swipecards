@@ -58,6 +58,9 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
     }
 }
 
+/**
+ * Выбираем линку для загрузки исходя из размеров view, в которую будем сетить
+ */
 fun View.getSuitableLink(photo: Photo?) =
         if (photo != null && !photo.isFake()) {
             if (Math.max(layoutParams.height, layoutParams.width) > 0) {

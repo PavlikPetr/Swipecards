@@ -1,7 +1,6 @@
 package com.topface.topface.data;
 
 
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 

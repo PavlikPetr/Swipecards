@@ -21,9 +21,7 @@ import com.topface.topface.databinding.AlbumImageBinding
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.utils.extensions.getDrawable
-import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.extensions.loadLinkToSameCache
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -116,7 +114,6 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
     override fun onViewRecycled(holder: ItemViewHolder?) {
         super.onViewRecycled(holder)
         (holder?.binding as? AlbumImageBinding)?.let {
-            Debug.error("$TAG onViewRecycled")
             Glide.clear(it.image)
             it.unbind()
         }
@@ -127,7 +124,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
     override fun getUpdaterEmitObject() = Bundle()
 
     override fun getPreloadItems(position: Int): List<String> {
-        Debug.error("$TAG preload position:$position")
+        Debug.log("$TAG preload position:$position")
         val link = data.getOrNull(position)
         if (link.isNullOrEmpty()) {
             askToPreloadLinks(position)
@@ -137,7 +134,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
     }
 
     override fun getPreloadRequestBuilder(item: String?): GenericRequestBuilder<String, *, *, *> {
-        Debug.error("$TAG preload item:$item")
+        Debug.log("$TAG preload item:$item")
         return mRequest.loadLinkToSameCache(item.orEmpty())
     }
 

@@ -11,6 +11,8 @@ import okhttp3.OkHttpClient
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
 
+// ПУСТЬ БУДЕТ КАК ПРИМЕР КАСТОМИЗАЦИИ okhttp3 ДЛЯ ИСПОЛЬЗОВАНИЯ С GLIDE
+
 /**
  * A simple model loader for fetching media over http/https using OkHttp.
  * Created by ppavlik on 15.02.17.

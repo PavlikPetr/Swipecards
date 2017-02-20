@@ -201,7 +201,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                                 set(true)
                                 notifyChange()
                             }
-                            Debug.error("${PhotoAlbumAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                            Debug.log("${PhotoAlbumAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                             return false
                         }
 
@@ -211,7 +211,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                                 set(true)
                                 notifyChange()
                             }
-                            Debug.error("${PhotoAlbumAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                            Debug.log("${PhotoAlbumAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                             return false
                         }
                     })
@@ -470,7 +470,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                     .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
                     .subscribe(shortSubscription {
                         if (mCanSendAlbumReq) {
-                            Debug.error("${PhotoAlbumAdapter.TAG} sendRequest pos:${it.position}")
                             mCanSendAlbumReq = false
                             sendAlbumRequest(it.position)
                         }

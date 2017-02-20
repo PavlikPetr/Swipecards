@@ -24,22 +24,33 @@ import kotlin.concurrent.thread
  */
 fun <T> Target<T>?.clear() = this?.let { Glide.clear(it) }
 
+/**
+ * load image by url and save to same storage like any other link loaded pictures
+ */
 fun DrawableRequestBuilder<String>.loadLinkToSameCache(link: String) =
         load(link)
                 .signature(StringSignature(link))
                 .sameCacheSettings()
 
+/**
+ * load image by url and save to same storage like any other link loaded pictures
+ */
 fun RequestManager.loadLinkToSameCache(link: String) =
         load(link)
                 .signature(StringSignature(link))
                 .sameCacheSettings()
 
-
+/**
+ * Cache storage settings
+ */
 private fun DrawableRequestBuilder<String>.sameCacheSettings() =
-        thumbnail(0.1f)
-                .override(ScreenSize.width, ScreenSize.height)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+        thumbnail(0.1f) // пока будет отрисовываться картинка в максимальном качестве можем показать превью с качеством в 10%
+                .override(ScreenSize.width, ScreenSize.height) // картинки грузятся в размер экрана
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE) // храним только оригиналы
 
+/**
+ * Синглтон на получение размеров экрана устройства
+ */
 object ScreenSize {
     private val mScreenSize: Point by lazy {
         Utils.getSrceenSize(App.getContext())

@@ -9,7 +9,6 @@ import android.support.v7.widget.SnapHelper
 import android.util.AttributeSet
 import com.bumptech.glide.DrawableRequestBuilder
 import com.bumptech.glide.Glide
-import com.topface.framework.utils.Debug
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.glide.RecyclerViewPreloader
@@ -25,7 +24,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     constructor(context: Context) : this(context, null)
 
     companion object {
-        const val PRELOAD_SIZE = 3
+        const val PRELOAD_SIZE = 3 // указываем кол-во фоток которые будем предзагружать в кеш
     }
 
     private var mHeight = 0
@@ -33,6 +32,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     private var mOnPageChangeListener: ViewPager.OnPageChangeListener? = null
     private var mScrollDx = 0
     private var mIsReadyToPreload = false
+    // по умолчанию загрузку пачки фото на старте 1..PRELOAD_SIZE разрешаем
     private var mIsNeedToPreloadOnStart = true
     private var mSelectedPosition by Delegates.observable(0) { prop, old, new ->
         if (old != new) {
@@ -81,10 +81,10 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
         super.onScrollStateChanged(state)
         mOnPageChangeListener?.onPageScrollStateChanged(state)
         if (state == SCROLL_STATE_IDLE) {
-            mSelectedPosition = mLayoutManager.findFirstVisibleItemPosition().apply { Debug.error("${PhotoAlbumAdapter.TAG} position:$this SCROLL_STATE_IDLE") }
+            mSelectedPosition = mLayoutManager.findFirstVisibleItemPosition()
         }
         if (state == SCROLL_STATE_SETTLING) {
-            mSelectedPosition = if (mScrollDx >= 0) mLayoutManager.findLastVisibleItemPosition().apply { Debug.error("${PhotoAlbumAdapter.TAG} position:$this mScrollDx >= 0") } else mLayoutManager.findFirstVisibleItemPosition().apply { Debug.error("${PhotoAlbumAdapter.TAG} position:$this mScrollDx < 0") }
+            mSelectedPosition = if (mScrollDx >= 0) mLayoutManager.findLastVisibleItemPosition() else mLayoutManager.findFirstVisibleItemPosition()
         }
     }
 
@@ -143,7 +143,6 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
 
     fun setCurrentItemImmediately(position: Int) {
         mSelectedPosition = position
-        Debug.error("${PhotoAlbumAdapter.TAG} position:$position setCurrentItemImmediately")
         scrollToPosition(position)
     }
 
@@ -159,7 +158,7 @@ class ImageLoader(context: Context, attrs: AttributeSet?) : RecyclerView(context
     }
 
     private fun preload() {
-        if(mIsReadyToPreload && mIsNeedToPreloadOnStart) {
+        if (mIsReadyToPreload && mIsNeedToPreloadOnStart) {
             mIsNeedToPreloadOnStart = false
             mPreloader.startPreloadSecondItem(mPhotoAlbumAdapter.itemCount)
         }
