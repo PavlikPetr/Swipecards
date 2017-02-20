@@ -33,6 +33,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
+import com.topface.topface.glide.tranformation.GlideTransformationFactory;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -43,7 +44,6 @@ import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
-import com.topface.topface.glide.tranformation.GlideTransformationFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -425,7 +425,7 @@ public class BindingsAdapters {
     @SuppressWarnings("unchecked")
     @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
     public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
-    Context context = imageView.getContext().getApplicationContext();
+        Context context = imageView.getContext().getApplicationContext();
         imageView.setImageResource(placeholderRes); /// Наговнякано, но работает
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);
