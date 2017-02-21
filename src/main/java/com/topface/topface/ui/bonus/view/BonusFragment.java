@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.FragmentBonusBinding;
+import com.topface.topface.mvp.IPresenterFactory;
+import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.adapters.ItemEventListener;
 import com.topface.topface.ui.bonus.models.IOfferwallBaseModel;
@@ -22,16 +25,23 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends BaseFragment implements IBonusView {
     public static final String NEED_SHOW_TITLE = "need_show_title";
     public static final String PAGE_NAME = "bonus";
+    public static final String TAG = BonusFragment.class.getSimpleName();
 
     private FragmentBonusBinding mBinding;
     private IBonusPresenter mPresenter;
     private OfferwallsAdapter mAdapter;
+    @Inject
+    PresenterCache mPresenterCache;
 
     public static BonusFragment newInstance(boolean needShowTitle) {
         BonusFragment fragment = new BonusFragment();
@@ -49,7 +59,14 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mPresenter = new BonusPresenter();
+        App.get().inject(this);
+        mPresenter = mPresenterCache.getPresenter(TAG, new IPresenterFactory<IBonusPresenter>() {
+            @NotNull
+            @Override
+            public IBonusPresenter createPresenter() {
+                return new BonusPresenter();
+            }
+        });
         mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.fragment_bonus, null));
         BonusFragmentViewModel viewModel = new BonusFragmentViewModel();
         mPresenter.setViewModel(viewModel);

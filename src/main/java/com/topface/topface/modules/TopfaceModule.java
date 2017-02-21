@@ -14,6 +14,7 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.data.leftMenu.NavigationState;
+import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.promo.dialogs.PromoDialog;
 import com.topface.topface.promo.dialogs.PromoExpressMessages;
 import com.topface.topface.promo.dialogs.PromoKey71Dialog;
@@ -34,6 +35,7 @@ import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivityVi
 import com.topface.topface.ui.add_to_photo_blog.PhotoListItemViewModel;
 import com.topface.topface.ui.add_to_photo_blog.PlaceButtonItemViewModel;
 import com.topface.topface.ui.bonus.presenter.BonusPresenter;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.DatingLockPopup;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.Experiment41ViewModel;
@@ -201,7 +203,8 @@ import dagger.Provides;
                 DatingRedesignToolbarViewModel.class,
                 com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class,
                 GpMarketFragment.class,
-                ExperimentBoilerplateFragment.class
+                ExperimentBoilerplateFragment.class,
+                BonusFragment.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
@@ -328,6 +331,12 @@ public class TopfaceModule {
     @Singleton
     EventBus providesEventBus() {
         return new EventBus();
+    }
+
+    @Provides
+    @Singleton
+    PresenterCache providesPresenterCache() {
+        return new PresenterCache();
     }
 
     @Provides

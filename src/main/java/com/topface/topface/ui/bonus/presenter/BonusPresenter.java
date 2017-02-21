@@ -57,6 +57,10 @@ public class BonusPresenter implements IBonusPresenter {
     @Override
     public void unbindView() {
         mIBonusView = null;
+    }
+
+    @Override
+    public void release() {
         RxUtils.safeUnsubscribe(mSubscription);
     }
 
@@ -88,8 +92,12 @@ public class BonusPresenter implements IBonusPresenter {
     @Override
     public void loadOfferwalls() {
         if (App.get().getOptions().offerwallsSettings.isEnable()) {
-            showLoader();
-            getOfferwalls();
+            if (mOffers.isEmpty()) {
+                showLoader();
+                getOfferwalls();
+            } else {
+                showOffers();
+            }
         } else {
             showEmptyView();
         }

@@ -22,10 +22,12 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -98,6 +100,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @Inject
     static TopfaceAppState mAppState;
     @Inject
+    PresenterCache mPresenterCache;
+    @Inject
     EventBus mEventBus;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
@@ -141,6 +145,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
             mTopfaceOfferwallRedirect.setComplited(false);
         }
         RxUtils.safeUnsubscribe(mEventBusSubscriber);
+
+        if (isFinishing()) {
+            mPresenterCache.removePresenter(BonusFragment.TAG);
+        }
         super.onDestroy();
     }
 
