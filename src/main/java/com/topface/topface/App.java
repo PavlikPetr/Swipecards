@@ -15,7 +15,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
-import com.comscore.analytics.comScore;
+import com.comscore.Analytics;
+import com.comscore.PublisherConfiguration;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
@@ -649,9 +650,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     private void initComScore() {
-        comScore.setAppContext(mContext);
-        comScore.setCustomerC2(COMSCORE_C2);
-        comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
+        PublisherConfiguration publisher = new PublisherConfiguration.Builder()
+                .publisherSecret(COMSCORE_SECRET_KEY)
+                .publisherId(COMSCORE_C2)
+                .build();
+        Analytics.getConfiguration().addClient(publisher);
+        Analytics.start(getApplicationContext());
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
