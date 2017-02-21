@@ -245,7 +245,7 @@
     <dimen name="popup_menu_circle_online">3dp</dimen>
     <dimen name="popup_menu_stroke_outside">1dp</dimen>
     <dimen name="mutual_popup_stroke_outside">9dp</dimen>
-    <dimen name="mutual_popup_avatar">140dp</dimen>
+    <dimen name="mutual_popup_avatar">150dp</dimen>
 
     <!--Редизайн знакомств, метрики-->
     <dimen name="dating_buttons_padding_top">15dp</dimen>

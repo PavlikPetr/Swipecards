@@ -3,6 +3,7 @@ package com.topface.topface.glide.tranformation
 import android.content.Context
 import android.graphics.Bitmap
 import com.bumptech.glide.load.Transformation
+import com.topface.topface.utils.glide_utils.DrawCircleUnderAvatar
 import jp.wasabeef.glide.transformations.CropCircleTransformation
 
 /**

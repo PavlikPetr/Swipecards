@@ -1,18 +1,18 @@
 package com.topface.topface.ui.fragments.dating.dating_redesign
 
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.PopupMutuallyBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
+import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import kotlin.properties.Delegates
 
 /**
- * Created by mbulgakov on 17.02.17.
+ * Попап Взаимных симпатий
  */
-class MutualPopupFragment(private val mNavigator: IFeedNavigator, private val mMutualUser: FeedUser) : AbstractDialogFragment() {
+class MutualPopupFragment(private val mNavigator: IFeedNavigator, private val mMutualUser: FeedUser) : AbstractDialogFragment(), IDialogCloser {
 
     companion object {
         const val TAG = "mutual_popup_fragment"
@@ -20,7 +20,7 @@ class MutualPopupFragment(private val mNavigator: IFeedNavigator, private val mM
     }
 
     private val mViewModel by lazy {
-        PopupMutualViewModel(mNavigator, mMutualUser)
+        PopupMutualViewModel(mNavigator, mMutualUser, this)
     }
 
     private var mBinding by Delegates.notNull<PopupMutuallyBinding>()
@@ -33,4 +33,7 @@ class MutualPopupFragment(private val mNavigator: IFeedNavigator, private val mM
     override fun isModalDialog() = false
 
     override fun getDialogLayoutRes() = R.layout.popup_mutually
+
+    override fun closeIt() = dialog.cancel()
+
 }

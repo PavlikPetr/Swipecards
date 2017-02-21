@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/avatarUser"
-            android:layout_marginBottom="22dp"
+            android:layout_marginBottom="13dp"
             android:layout_marginRight="17dp"
             android:layout_toLeftOf="@+id/mutualIC"
             android:src="@drawable/stroke_1"/>
@@ -43,7 +43,7 @@
             android:layout_width="20dp"
             android:layout_height="16dp"
             android:layout_above="@+id/avatarUser"
-            android:layout_marginBottom="22dp"
+            android:layout_marginBottom="13dp"
             android:layout_toLeftOf="@+id/icPen"
             android:src="@drawable/envelop"/>
 
@@ -53,11 +53,12 @@
             android:layout_height="@dimen/mutual_popup_avatar"
             android:layout_above="@+id/icArrow"
             android:layout_marginBottom="16dp"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="14dp"
             android:layout_toRightOf="@+id/icArrow"
             android:src="@drawable/girl_blur_6"
             app:glideTransformationPhoto="@{model.userPhoto}"
             app:placeholderRes="@{model.userPlaceholderRes}"
+            app:outSideCircle="@{model.outsideCircle}"
             app:typeTransformation="@{model.type}"
             app:animationSrc="@{@anim/mutual_popup_right}"/>
 
@@ -68,13 +69,13 @@
             android:layout_height="@dimen/mutual_popup_avatar"
             android:layout_above="@+id/icArrow"
             android:layout_marginBottom="16dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="14dp"
             android:layout_toLeftOf="@+id/icPen"
             android:src="@drawable/man_blur_5"
             app:glideTransformationPhoto="@{model.mutualUserPhoto}"
             app:outSideCircle="@{model.outsideCircle}"
             app:placeholderRes="@{model.mutualPlaceholderRes}"
-            app:typeTransformation="@{model.mutualType}"
+            app:typeTransformation="@{model.type}"
             app:animationSrc="@{@anim/mutual_popup_left}"/>
 
         <ImageView

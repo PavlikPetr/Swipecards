@@ -114,6 +114,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mAlbumSubscription: Subscription? = null
     private var mNeedMore = false
     private var mCanSendAlbumReq = true
+    private var mIsMutualPopupEnabled = App.get().options.mutualPopupEnabled
     private val mUpdateActionsReceiver: BroadcastReceiver
     private var mSkipSubscription: Subscription? = null
     private var mLikeSubscription: Subscription? = null
@@ -303,9 +304,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
-//                            if (it.isMutualPossible){
-                                mNavigator.showMutualPopup(mNavigator,it)   /////////////////////////////////////////////////////////////////////////////
-//                            }
+                            if (it.isMutualPossible && mIsMutualPopupEnabled){
+                                mNavigator.showMutualPopup(mNavigator,it)
+                            }
                         }
 
                         override fun onError(e: Throwable?) {
