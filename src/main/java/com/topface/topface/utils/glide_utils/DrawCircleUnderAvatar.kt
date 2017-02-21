@@ -35,10 +35,12 @@ open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: F
             style = Paint.Style.FILL
         })
         mCanvas.drawBitmap(bitmapForCircle, 0F, 0F, Paint().apply { isAntiAlias = true })
+        bitmapForCircle.recycle()
         val sizeForAvatar = (resWidth - outSideStrokeSize).toInt()
         val croppedAvatar = CropCircleTransformation(mContext).transform(resource, sizeForAvatar, sizeForAvatar).get()
         val resizeAvatar = Bitmap.createScaledBitmap(croppedAvatar, sizeForAvatar, sizeForAvatar, true)
         mCanvas.drawBitmap(resizeAvatar, outSideStrokeSize/2, outSideStrokeSize/2, null)
+        resizeAvatar.recycle()
         return BitmapResource.obtain(mMainBitmap, mBitmapPool)
     }
 

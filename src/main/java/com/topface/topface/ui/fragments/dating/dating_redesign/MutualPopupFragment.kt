@@ -16,7 +16,7 @@ class MutualPopupFragment(private val mNavigator: IFeedNavigator, private val mM
 
     companion object {
         const val TAG = "mutual_popup_fragment"
-        fun newInstance(mNavigator: IFeedNavigator, mMutualUser: FeedUser) = MutualPopupFragment(mNavigator, mMutualUser)
+//        fun newInstance(mNavigator: IFeedNavigator, mMutualUser: FeedUser) = MutualPopupFragment(mNavigator, mMutualUser)
     }
 
     private val mViewModel by lazy {
