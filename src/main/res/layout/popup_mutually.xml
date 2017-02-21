@@ -37,7 +37,8 @@
             android:layout_marginBottom="13dp"
             android:layout_marginRight="17dp"
             android:layout_toLeftOf="@+id/mutualIC"
-            android:src="@drawable/stroke_1"/>
+            android:src="@drawable/stroke_1"
+            />
 
         <ImageView
             android:layout_width="20dp"
