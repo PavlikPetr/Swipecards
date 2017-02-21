@@ -15,6 +15,10 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.ViewPager
 import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
@@ -28,6 +32,7 @@ import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
+import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
@@ -39,14 +44,18 @@ import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.views.image_switcher.ImageClick
+import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
+import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
-import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.LeftMenuHeaderViewModel.AGE_TEMPLATE
 import rx.Observer
@@ -71,9 +80,10 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
     val iconOnlineRes = ObservableField(0)
+    val isNeedPreloadOnStart = ObservableBoolean(false)
     val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
-        override fun set(value: String?){
+        override fun set(value: String?) {
             val status = Profile.normilizeStatus(value)
             super.set(status)
             statusVisibility.set(if (status.isNullOrEmpty()) View.GONE else View.VISIBLE)
@@ -98,6 +108,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
     @Inject lateinit internal var appState: TopfaceAppState
+    @Inject lateinit var eventBus: EventBus
 
     private var mLoadedCount = 0
     private var mAlbumSubscription: Subscription? = null
@@ -108,10 +119,14 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mLikeSubscription: Subscription? = null
     private var mProfileSubscription: Subscription? = null
     private var mUpdateSubscription: Subscription? = null
+    private var mFilterRequestSubscription: Subscription? = null
     private var mLoadBackgroundSubscription: Subscription? = null
+    private var mOnImageClickSubscription: Subscription? = null
+    private var mLoadLinksSubscription: Subscription? = null
     private var mNewFilter = false
     private var mUpdateInProcess = false
     private var isLastUser = false
+    private var mPreloadTarget: Target<GlideDrawable>? = null
     private var mIsOnline by Delegates.observable(false) { prop, old, new ->
         iconOnlineRes.set(if (new) R.drawable.im_list_online else 0)
     }
@@ -119,7 +134,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
         updatePhotosCounter(new)
         loadBluredBackground(new)
-        currentItem.set(new)
     }
 
     private var mIsDatingButtonEnable by Delegates.observable(true) { prop, old, new ->
@@ -167,12 +181,47 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 statusText.set(status)
             }
             albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
-            mCurrentPosition = 0
+            setCurrentUser(0)
+            preloadPhoto()
             hideProgress()
         }
 
+    fun preloadPhoto() {
+        mUserSearchList.getOrNull(mUserSearchList.searchPosition + 1)?.photo?.defaultLink?.let {
+            mPreloadTarget.clear()
+            mPreloadTarget = Glide.with(mContext)
+                    .fromString()
+                    .fitCenter()
+                    .loadLinkToSameCache(it)
+                    .listener(object : RequestListener<String, GlideDrawable> {
+                        override fun onResourceReady(resource: GlideDrawable?, model: String?,
+                                                     target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
+                                                     isFirstResource: Boolean): Boolean {
+                            isNeedPreloadOnStart.apply {
+                                set(true)
+                                notifyChange()
+                            }
+                            Debug.log("${PhotoAlbumAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                            return false
+                        }
+
+                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
+                                                 isFirstResource: Boolean): Boolean {
+                            isNeedPreloadOnStart.apply {
+                                set(true)
+                                notifyChange()
+                            }
+                            Debug.log("${PhotoAlbumAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                            return false
+                        }
+                    })
+                    .preload()
+        }
+    }
+
     init {
         App.get().inject(this)
+        subscribeIfNeeded()
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 mPreloadManager.checkConnectionType()
@@ -199,15 +248,10 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
-                        albumData.set(it.photos)
+                        it.photos?.let {
+                            albumData.set(it)
+                        }
                         currentUser = it
-                        //todo
-//                        binding.root.post {
-//                            //если есть currentUser, например после востановления стейта, то работаем с ним
-//                            (if (currentUser == null) it else currentUser)?.let {
-//                                mDatingButtonsView.unlockControls()
-//                            }
-//                        }
                     }
                 }
             }
@@ -286,7 +330,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && data != null) {
-            mCurrentPosition = data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0)
+            setCurrentUser(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
         }
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mIsDatingButtonEnable = false
@@ -313,12 +357,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
     }
 
-    fun onPhotoClick() = with(currentUser) {
-        if (this != null && photos != null && photos.isNotEmpty()) {
-            mNavigator.showAlbum(mCurrentPosition, id, photosCount, photos)
-        }
-    }
-
     override fun onSavedInstanceState(state: Bundle) = with(state) {
         putBoolean(NEW_FILTER, mNewFilter)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
@@ -342,7 +380,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     override fun onRestoreInstanceState(state: Bundle) = with(state) {
-        albumData.set(getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)
+        (getParcelableArrayList<Parcelable>(ALBUM_DATA) as? Photos)?.let {
+            albumData.set(it)
+        }
         currentUser = getParcelable(CURRENT_USER)
         mNewFilter = getBoolean(NEW_FILTER)
         mCanSendAlbumReq = getBoolean(CAN_SEND_ALBUM_REQUEST)
@@ -360,42 +400,33 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         isLikeButtonsEnable.set(getBoolean(LIKE_BUTTONS_ENABLE))
         isSkipButtonsEnable.set(getBoolean(SKIP_BUTTONS_ENABLE))
         isProfileButtonsEnable.set(getBoolean(PROFILE_BUTTONS_ENABLE))
-        mCurrentPosition = getInt(CURRENT_POSITION)
+        setCurrentUser(getInt(CURRENT_POSITION))
     }
 
     private fun setUser(user: SearchUser?) = user?.let {
         currentUser = user.apply {
-            mLoadedCount = photos.realPhotosCount
-            albumData.set(photos)
+            mLoadedCount = photos?.realPhotosCount ?: 0
+            photos?.let {
+                albumData.set(it)
+            }
             mNeedMore = photosCount > mLoadedCount
-            val rest = photosCount - photos.count()
+            val rest = photosCount - (photos?.count() ?: 0)
             for (i in 0..rest - 1) {
-                photos.add(Photo.createFakePhoto())
+                photos?.add(Photo.createFakePhoto())
             }
         }
     }
 
-    private fun sendAlbumRequest(data: Photos) {
-        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
-            return
-        }
+    private fun sendAlbumRequest(position: Int) {
         mUserSearchList.currentUser?.let {
-            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
+            mAlbumSubscription = mApi.callAlbumRequest(it, position).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
+                        albumData.addData(newPhotos)
+                        loadBluredBackground(mCurrentPosition)
                         mNeedMore = newPhotos.more
-                        var i = 0
-                        for (photo in newPhotos) {
-                            if (mLoadedCount + i < data.size) {
-                                data[mLoadedCount + i] = photo
-                                i++
-                            }
-                        }
                         mLoadedCount += newPhotos.size
-                        if (mCurrentPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
-                            sendAlbumRequest(data)
-                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -407,25 +438,51 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        arrayOf(mOnImageClickSubscription, mLoadLinksSubscription).safeUnsubscribe()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        subscribeIfNeeded()
+    }
+
+    private fun subscribeIfNeeded() {
+        if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
+            mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+                with(currentUser) {
+                    this?.photos?.let {
+                        if (it.isNotEmpty()) {
+                            mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
+                        }
+                    }
+                }
+            })
+        }
+        if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
+            mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto::class.java)
+                    .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
+                    .subscribe(shortSubscription {
+                        if (mCanSendAlbumReq) {
+                            mCanSendAlbumReq = false
+                            sendAlbumRequest(it.position)
+                        }
+
+                    })
+        }
+    }
+
     fun release() {
-        mAlbumSubscription.safeUnsubscribe()
-        mSkipSubscription.safeUnsubscribe()
-        mLikeSubscription.safeUnsubscribe()
-        mUpdateSubscription.safeUnsubscribe()
-        mLoadBackgroundSubscription.safeUnsubscribe()
+        arrayOf(mAlbumSubscription, mSkipSubscription, mLikeSubscription, mUpdateSubscription,
+                mLoadBackgroundSubscription, mOnImageClickSubscription, mProfileSubscription,
+                mFilterRequestSubscription, mLoadLinksSubscription).safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
+        mPreloadTarget.clear()
     }
 
     override fun onPageSelected(position: Int) {
         mCurrentPosition = position
-        if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-            with(albumData.get()) {
-                if (mNeedMore && mCanSendAlbumReq && !isEmpty()) {
-                    mCanSendAlbumReq = false
-                    sendAlbumRequest(this)
-                }
-            }
-        }
     }
 
     private fun loadBluredBackground(position: Int) =
@@ -527,7 +584,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 override fun onCompleted() {
                     mUpdateInProcess = false
                     Debug.log("LOADER_INTEGRATION onCompleted $mUpdateInProcess")
-                    mUpdateSubscription.safeUnsubscribe()
                 }
 
                 override fun onError(e: Throwable?) {
@@ -546,7 +602,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
-                            albumData.set(user.photos)
+                            user.photos?.let {
+                                albumData.set(it)
+                            }
                             currentUser = user
                             Debug.log("LOADER_INTEGRATION onNext onDataReceived")
                         } else if (mUserSearchList.isEmpty() || mUserSearchList.isEnded) {
@@ -567,7 +625,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     private fun sendFilterRequest(filter: FilterData) {
-        mApi.callFilterRequest(filter).subscribe(object : Subscriber<DatingFilter>() {
+        mFilterRequestSubscription = mApi.callFilterRequest(filter).subscribe(object : Subscriber<DatingFilter>() {
             override fun onNext(filter: DatingFilter?) {
                 val profile = App.get().profile
                 profile.dating = filter
@@ -589,5 +647,11 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 Utils.showToastNotification(R.string.general_server_error, Toast.LENGTH_LONG)
             }
         })
+    }
+
+    private fun setCurrentUser(position: Int) {
+        currentItem.set(position)
+        currentItem.notifyChange()
+        mCurrentPosition = position
     }
 }

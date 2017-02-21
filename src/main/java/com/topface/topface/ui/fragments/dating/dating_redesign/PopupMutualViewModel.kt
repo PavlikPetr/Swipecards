@@ -11,7 +11,7 @@ import com.topface.topface.data.User
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import rx.Subscription
 import javax.inject.Inject
 

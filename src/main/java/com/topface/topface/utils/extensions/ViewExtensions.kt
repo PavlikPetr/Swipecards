@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.topface.topface.R
+import com.topface.topface.data.Photo
 import jp.wasabeef.glide.transformations.BlurTransformation
 import rx.Observable
 
@@ -56,3 +57,15 @@ fun View.loadBackground(link: String): Observable<BitmapDrawable> {
         })
     }
 }
+
+/**
+ * Выбираем линку для загрузки исходя из размеров view, в которую будем сетить
+ */
+fun View.getSuitableLink(photo: Photo?) =
+        if (photo != null && !photo.isFake()) {
+            if (Math.max(layoutParams.height, layoutParams.width) > 0) {
+                photo.getSuitableLink(layoutParams.height, layoutParams.width)
+            } else {
+                photo.defaultLink
+            }
+        } else null

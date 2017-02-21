@@ -51,6 +51,7 @@ import com.topface.topface.ui.fragments.OkProfileFragment;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 import com.topface.topface.ui.fragments.buy.GpMarketFragment;
+import com.topface.topface.ui.fragments.dating.DatingAlbumViewModel;
 import com.topface.topface.ui.fragments.dating.DatingButtonsViewModel;
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment;
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel;
@@ -78,6 +79,8 @@ import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.DrawerLayoutManager;
+import com.topface.topface.ui.views.image_switcher.AlbumImageViewModel;
+import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter;
 import com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
@@ -203,7 +206,10 @@ import dagger.Provides;
                 com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel.class,
                 GpMarketFragment.class,
                 ExperimentBoilerplateFragment.class,
-                PopupMutualViewModel.class
+                PopupMutualViewModel.class,
+                AlbumImageViewModel.class,
+                DatingAlbumViewModel.class,
+                PhotoAlbumAdapter.class
         },
         staticInjections = {
                 AddPhotoHelper.class,
