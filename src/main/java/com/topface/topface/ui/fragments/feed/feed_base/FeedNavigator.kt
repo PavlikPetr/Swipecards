@@ -153,8 +153,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
                     PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE)
 
-    override fun showTrialPopup(type: Long, args: Bundle) {
-        ExperimentBoilerplateFragment.newInstance(type, args = args)
+    override fun showTrialPopup(args: Bundle) {
+        ExperimentBoilerplateFragment.newInstance(args = args)
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 

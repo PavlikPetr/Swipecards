@@ -15,12 +15,10 @@ object TrialVipExperimentStatistics {
     private const val TRIAL_VIP_POPUP_PURCHASE_BUTTON_PRESSED = "trial_vip_popup_purchase_button_pressed"
     private const val TRIAL_VIP_POPUP_PURCHASE_COMPLETED = "trial_vip_popup_purchase_completed"
     private const val SHOW_COUNT = "int"
-    private const val TRIAL_TYPE = "plc"
 
     private fun send(command: String, showCount: Int) =
             StatisticsTracker.getInstance().sendEvent(command, 1, with(Slices()) {
                 putSlice(SHOW_COUNT, showCount.toString())
-                putSlice(TRIAL_TYPE, App.get().options.trialVipExperiment.androidTrialPopupExp.toString())
             })
 
     @JvmStatic @JvmOverloads fun sendPopupShow(showCount: Int = getShowCountFromConfig()) =

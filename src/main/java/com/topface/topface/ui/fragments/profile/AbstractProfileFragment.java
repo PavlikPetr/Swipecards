@@ -114,7 +114,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
                     //noinspection WrongConstant
-                    ExperimentBoilerplateFragment mTrialVipPopup = ExperimentBoilerplateFragment.newInstance(TrialVipPopupAction.getTrialVipType());
+                    ExperimentBoilerplateFragment mTrialVipPopup = ExperimentBoilerplateFragment.newInstance();
                     mTrialVipPopup.show(getActivity().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
                     App.isNeedShowTrial = false;
                 }

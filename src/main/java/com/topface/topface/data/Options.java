@@ -23,7 +23,6 @@ import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 
 import org.json.JSONArray;
@@ -797,23 +796,9 @@ public class Options extends AbstractData {
     }
 
     public class TrialVipExperiment {
-        private long androidTrialPopupExp;
         public boolean enabled = false;
         public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
         public int maxShowCount = TRIAL_VIP_MAX_SHOW_COUNT;
-
-        public long getAndroidTrialPopupExp() {
-            if (App.get().getProfile().isEditor()) {
-                long typeFromConfig = App.getAppConfig().getTrialVipPopupType();
-                if (typeFromConfig == AppConfig.TRIAL_VIP_UNDEFINED) {
-                    return androidTrialPopupExp;
-                } else {
-                    return typeFromConfig;
-                }
-            } else {
-                return androidTrialPopupExp;
-            }
-        }
     }
 
     public int getMaxShowCountTrialVipPopup() {

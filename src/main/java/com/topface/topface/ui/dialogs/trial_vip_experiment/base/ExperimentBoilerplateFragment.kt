@@ -18,9 +18,7 @@ import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IRunner
-import com.topface.topface.ui.dialogs.trial_vip_experiment.TransparentMarketFragmentRunner
 import com.topface.topface.ui.dialogs.trial_vip_experiment.TrialVipExperimentStatistics
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType.EXPERIMENT_TYPE
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
@@ -46,13 +44,10 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
         const val TAG = "TrialVipPopup"
         const val SKIP_SHOWING_CONDITION = "skip_showing_condition"
         const val FRAGMENT_CONTAINER_ID = "fragment_container_id"
-        @JvmOverloads @JvmStatic fun newInstance(@ExperimentsType.ExperimentsType type: Long =
-                                                 App.get().options.trialVipExperiment.androidTrialPopupExp,
-                                                 @IdRes fragmentContainerId: Int = R.id.fragment_content,
+        @JvmOverloads @JvmStatic fun newInstance(@IdRes fragmentContainerId: Int = R.id.fragment_content,
                                                  skipShowingCondition: Boolean = false, args: Bundle = Bundle()) =
                 with(ExperimentBoilerplateFragment()) {
                     arguments = args.apply {
-                        putLong(EXPERIMENT_TYPE, type)
                         putBoolean(SKIP_SHOWING_CONDITION, skipShowingCondition)
                         putInt(FRAGMENT_CONTAINER_ID, fragmentContainerId)
                     }
@@ -68,20 +63,16 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
         FeedNavigator(activity as IActivityDelegate)
     }
 
-    private val mType by lazy {
-        mArgs.getLong(EXPERIMENT_TYPE)
-    }
-
     private val mDialogMetricsFactory by lazy {
-        MetricsFactory(mArgs).construct(mType)
+        MetricsFactory(mArgs).createBoilerplateDialogMetrics()
     }
 
     private val mDialogDataFactory by lazy {
-        BoilerplateDataFactory(context.applicationContext, mBinding.content, mArgs).construct(mType)
+        BoilerplateDataFactory(mBinding.content, mArgs).createBoilerplateData()
     }
 
     private val mContentBinding by lazy {
-        ContentViewFactory(context.applicationContext, mBinding.content, mArgs).construct(mType)
+        ContentViewFactory(context.applicationContext, mBinding.content, mArgs).createTrialView()
     }
 
     private val mBinding by lazy {
@@ -91,7 +82,9 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
 
     private val mBoilerplateViewModel by lazy {
         ExperimentBoilerplateViewModel(mPopupRunner = this, dialogMetrics = mDialogMetricsFactory,
-                dialogData = mDialogDataFactory)
+                dialogData = mDialogDataFactory) {
+            dismiss()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
