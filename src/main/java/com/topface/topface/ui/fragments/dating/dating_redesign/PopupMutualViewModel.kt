@@ -16,8 +16,7 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val userPlaceholderRes = ObservableField((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_small
-    else R.drawable.dialogues_av_girl_small))
-    val onLineCircle = ObservableField(R.dimen.dialog_online_circle.getDimen())
+                                                                                else R.drawable.dialogues_av_girl_small))
 
     val mutualUserPhoto = ObservableField(mutualUser.photo)
     val mutualPlaceholderRes = ObservableField(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
