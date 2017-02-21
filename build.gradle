@@ -70,7 +70,7 @@ buildscript {
 allprojects {
     repositories {
         maven {
-            url  "http://comscore.bintray.com/Analytics"
+            url "http://comscore.bintray.com/Analytics"
         }
         maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
         maven { url 'https://bitbucket.org/atm13/artifacts/raw/master/' }
@@ -456,8 +456,8 @@ dependencies {
     //норм либка с  трансформациями для glide, работает шустро
     compile 'jp.wasabeef:glide-transformations:2.0.1'
     //лоадер для glide
-    //пусть пока болтается, скоро понадобится
-//    compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+    compile 'com.github.bumptech.glide:okhttp-integration:1.4.0@aar'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
     /*_______________________________________________________________*/
 
     // add hockeyApp sdk to the project

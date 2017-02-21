@@ -23,7 +23,6 @@ import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.extensions.loadLinkToSameCache
-import javax.inject.Inject
 
 /**
  * RV adapter for album
@@ -62,7 +61,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                         .listener(object : RequestListener<String, GlideDrawable> {
                             override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
                                                      isFirstResource: Boolean): Boolean {
-                                Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                                Debug.log("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                                 if (model.isNullOrEmpty()) {
                                     askToPreloadLinks(position)
                                     return true
@@ -74,7 +73,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                             override fun onResourceReady(resource: GlideDrawable?, model: String?,
                                                          target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
                                                          isFirstResource: Boolean): Boolean {
-                                Debug.error("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                                Debug.log("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                                 return false
                             }
                         })
