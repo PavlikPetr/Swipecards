@@ -8,7 +8,6 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
@@ -163,8 +162,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
-    override fun showMutualPopup(navigator: IFeedNavigator, mutualUser: FeedUser) {
-        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment(navigator, mutualUser)
+    override fun showMutualPopup(mutualUser: FeedUser) {
+        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser)
         mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 

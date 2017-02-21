@@ -7,11 +7,11 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.ui.fragments.dating.IDialogCloser
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getDimen
 
 
-class PopupMutualViewModel(val navigator: IFeedNavigator, val mutualUser: FeedUser, val iDialogCloser: IDialogCloser) {
+class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUser, val iDialogCloser: IDialogCloser) {
 
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
