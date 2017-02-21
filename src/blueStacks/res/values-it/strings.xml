@@ -811,7 +811,7 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="city_selector_your_city">La tua città</string>
   <string name="photo_gallery_photo_deleted">La foto è stata eliminata</string>
   <string name="photofeed_add_photo_to_feed_title">Ottieni il 1° posto!</string>
-  <string name="photofeed_add_photo_to_feed_description">Carica una foto in cui saluti, migliaia di persone ti vedranno. Fatti notare e comincia subito a conoscere nuove persone.</string>
+  <string name="photofeed_add_photo_to_feed_description">Carica una foto in cui saluti, migliaia di persone ti vedranno. Fatti notare e comincia subito a conoscere nuove persone!</string>
   <string name="offers_screen_title">Bonus</string>
   <string name="offers_loading_text">Caricamento dei compiti disponibili…</string>
   <string name="offers_empty_text">Sfortunatamente, adesso non ci sono compiti disponibile per te, controlla più tardi!</string>
@@ -952,4 +952,13 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="write_him_without_symphaty">Scrivigli senza un Like Reciproco!</string>
   <string name="write_her_without_symphaty">Scrivile senza un Like Reciproco!</string>
   <string name="people_nearby_popover_text">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
+  <string name="photo_feed_add_photo">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
+  <string name="buy_likes_get_more_likes">Ottieni più Like!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Fatti notare subito dai ragazzi che cercano ragazze come te!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Fatti notare subito dai ragazze che cercano ragazzi come te!</string>
+  <string name="buy_likes_become_popular_female">Diventa popolare</string>
+  <string name="buy_likes_become_popular_male">Diventa popolare</string>
+  <string name="you_are_not_shown">Non ti si vede molto nella sezione \&quot;Appuntamenti\&quot;</string>
+  <string name="you_are_not_shown_answer">Rispondi ad alcuni dei Like che hai ricevuto per apparire nella sezione.</string>
+  <string name="mutual_popup_you_get_mutual">Vi piacete!</string>
 </resources>

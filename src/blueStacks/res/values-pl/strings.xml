@@ -463,6 +463,7 @@
   <string name="reselect_city">Wybierz inne miasto:</string>
   <string name="choose_cool_photo">Wybierz najlepsze zdjęcie i status, które odzwierciadlają Twój
         nastrój!</string>
+  <string name="sympathy_sended">Sympatia wysłana.</string>
   <string name="general_photo_deleted">Twoje zdjęcie nie przestrzegało zasad i zostało usunięte</string>
   <string name="general_change">Zmień</string>
   <string name="user_does_not_have_gifts">Ten użytkownik na razie nie ma prezentów. Zostań
@@ -595,6 +596,7 @@
   <string name="delete_account_will_be_restored_are_you_sure">Próbujesz zalogować się do usuniętego konta. Kontynuuj jeżeli chcesz, żeby zostało ono przywrócone.</string>
   <string name="restore">Odzyskaj</string>
   <string name="admiration_sended">Zachwyt został wysłany.</string>
+  <string name="skip">Pomiń</string>
   <string name="chat">Czatuj</string>
   <plurals name="number_of_sympathies">
     <item quantity="few">%d Sympatie</item>
@@ -616,6 +618,7 @@
   </plurals>
   <string name="general_attention">Ważne!</string>
   <string name="general_delete_messages">Usuń wiadomości</string>
+  <string name="skip_all">Pomiń wszystko</string>
   <string name="settings_feedback_transaction_number">Numer zamówienia</string>
   <string name="settings_feedback_transaction_link">Gdzie mogę znaleźć numer zamówienia?</string>
   <string name="general_logout_error">Wystąpił błąd podczas wylogowywania. Spróbuj ponownie.</string>
@@ -634,6 +637,7 @@
     <item quantity="one">Wysłałeś zachwyt %d osobie</item>
   </plurals>
   <string name="select_all">Wybierz wszystkie</string>
+  <string name="silent_ringtone">Tryb cichy</string>
   <plurals name="selected">
     <item quantity="few">%d wybrane</item>
     <item quantity="zero">%d wybranych</item>
@@ -659,6 +663,8 @@
     <item quantity="other">i %d</item>
     <item quantity="one">i %d</item>
   </plurals>
+  <string name="subscriptions_can_be_changed">Zostałeś subskrybentem. Ustawienia subskrypcji zmienić możesz w opcjach
+        Google Play.</string>
   <string name="people_nearby">Ludzie w okolicy</string>
   <string name="nobody_nearby">Nie ma nikogo w pobliżu!</string>
   <string name="general_distance_km">%.02f km</string>
@@ -722,6 +728,7 @@
   <string name="receive_message_notification">Zostań poinformowany o\nnowych wiadomościach</string>
   <string name="receive_mutual_notification">Zostań poinformowany o\nnowych wzajemnych sympatiach</string>
   <string name="receive_sympathy_notification">Zostań poinformowany o\nnowych sympatiach</string>
+  <string name="receive_rate_notification">.</string>
   <string name="receive_guest_notification">Zostań poinformowany o\nnowych odwiedzających</string>
   <string name="on_phone">Na telefon</string>
   <string name="on_mail">Na e-mail</string>
@@ -732,6 +739,11 @@
   <string name="premium_for_invitations_current_status">Uzbierałeś już:\nZaproszenia:
         %1$d\nRejestracje: %2$d</string>
   <string name="no_contacts_available">Urządzenie nie posiada kontaktów, które można by wyświetlić</string>
+  <string name="sms_invite_title">Zdobądź VIP-a na dzień!</string>
+  <string name="status_can_send_confirmation">Zaproś</string>
+  <string name="status_invilid_phone_number">Nieprawidłowy numer</string>
+  <string name="status_confirmation_was_sent">Oczekiwania na rejestrację</string>
+  <string name="status_user_registered">Już zarejestrowany</string>
   <string name="balance">Bilans (%1$d{{balance_coins}} %2$d{{balance_sympathies}})</string>
   <string name="settings_check_vip_title">Sprawdź, czy status VIP-a jest aktywny</string>
   <string name="settings_check_vip_cell">Sprawdź status VIP</string>
@@ -741,6 +753,7 @@
   <string name="go_dating_message">Zacznij randkować, a pojawią się tutaj nazwy użytkowników,
         którzy odwiedzili twój profil.</string>
   <string name="photo_not_from_main_album">Moderator zadecydował, że to zdjęcie nie może być użyte jako zdjęcie profilowe.</string>
+  <string name="sidebar_vk_profile">Profil VK</string>
   <string name="fb_invite_friends_menu_item">Zaproś znajomych</string>
   <string name="foreign_profile_empty_gifts_title">Wyślij upominek a znajdziesz się w centrum uwagi</string>
   <string name="chat_auto_reply_title">Tekst wiadomości jest ukryty</string>
@@ -780,7 +793,7 @@
   <string name="city_selector_your_city">Twoje miasto</string>
   <string name="photo_gallery_photo_deleted">Zdjęcie zostało usunięte</string>
   <string name="photofeed_add_photo_to_feed_title">Wejdź na szczyt!</string>
-  <string name="photofeed_add_photo_to_feed_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś.</string>
+  <string name="photofeed_add_photo_to_feed_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś!</string>
   <string name="offers_screen_title">Premie</string>
   <string name="offers_loading_text">Ładowanie dostępnych zadań…</string>
   <string name="offers_empty_text">Niestety, ale w tej chwili nie ma dla ciebie dostępnych żadnych zadań. Spróbuj ponownie za jakiś czas!</string>
@@ -798,6 +811,7 @@
   <string name="rate_popup_we_need_your_opinion">Twoja opinia jest dla nas bardzo ważna</string>
   <string name="rate_popup_rate_app_this_take_few_seconds_of_your_time">Oceń naszą aplikację. To zajmie tylko chwilę.</string>
   <string name="mutual_sympathy_in_chat">To uczucie jest odwzajemnione!</string>
+  <string name="start_chat_with_gift">Prezent to dobry początek!</string>
   <string name="mutual_sympathy">Wzajemna Sympatia</string>
   <string name="add_photo_feed_header_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś.</string>
   <string name="publish_photo">Opublikuj zdjęcie</string>
@@ -835,6 +849,7 @@
   <string name="moar_info">Dowiedz się więcej!</string>
   <string name="geo_switched_off_explanation">Aby sprawdzić, kto jest w pobliżu, włącz usługi geolokalizacji</string>
   <string name="geo_show_settings_explanation">Aby sprawdzić, kto jest w pobliżu, włącz w ustawieniach usługi geolokalizacji w swoim telefonie</string>
+  <string name="show_geo_settings">Otwórz ustawienia</string>
   <string name="buy_vip_button_text_admiration_purchase_popup">Wyślij za %d monet</string>
   <string name="label1_text_admiration_purchase_popup">Odbiorcy \&quot;Zachwytu\&quot; natychmiast wyświetli się powiadomienie</string>
   <string name="label2_text_admiration_purchase_popup">Wyślij \&quot;Zachwyt\&quot; za darmo!</string>
@@ -849,6 +864,7 @@
   <string name="know_your_guests_by_sight">Poznaj twarze twoich Fanów i gości</string>
   <string name="know_your_guests">Dowiedz się, kto cię odwiedza!</string>
   <string name="get_more_visitors">Zdobądź więcej wyświetleń profilu!</string>
+  <string name="seven_days_free">7 darmowych dni</string>
   <string name="free_vip">Status VIP-a za darmo!</string>
   <string name="no_more_ad">Brak reklam w aplikacji</string>
   <string name="i_see_u_face">Dowiedz się, kto odwiedzał twoją stronę</string>
@@ -857,6 +873,7 @@
   <string name="buy_vip_write_anyone_without_mutual">Napisz do każdej osoby, nawet jeśli nie odwzajemniacie swojej sympatii</string>
   <string name="moar_messages">Czatuj z popularnymi użytkownikami</string>
   <string name="buy_vip_more_views">Uzyskaj 1,5 razy więcej odsłon profilu</string>
+  <string name="special_offer">Oferta specjalna</string>
   <string name="description_experiment4_view1">Ze statusem VIP %1$s i %2$s będziesz widoczny!</string>
   <string name="fake_male_name_1">Kacper</string>
   <string name="fake_male_name_2">Adam</string>
@@ -883,6 +900,7 @@
   <string name="popup_delete_dialog">Usuń konwersację</string>
   <string name="mutually">Wzajemnie</string>
   <string name="go_dating">Zacznij \nrandkować</string>
+  <string name="start_dating">Zacznij randkować</string>
   <string name="no_mutual">Nie masz żadnych wzajemnych sympatii</string>
   <string name="buy_vip_button_title">Zostań VIP</string>
   <string name="send_gift_start_dialog">Wyślij prezent i zacznij czatować już teraz!</string>
@@ -890,4 +908,11 @@
   <string name="likes_empty_title">Nie masz jeszcze żadnych sympatii\nSympatie pomogą ci poznać nowych ludzi</string>
   <string name="send_gift">Wyślij prezent</string>
   <string name="people_nearby_popover_text">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy</string>
+  <string name="photo_feed_add_photo">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy.</string>
+  <string name="buy_likes_get_more_likes">Zdobądź więcej sympatii!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Bądź pierwsza na listach facetów, którzy szukają dziewczyny takiej jak ty!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Bądź pierwszy na listach kobiet, które szukają faceta takiego jak ty!</string>
+  <string name="buy_likes_become_popular_female">Stań się popularna</string>
+  <string name="buy_likes_become_popular_male">Stań się popularny</string>
+  <string name="mutual_popup_you_get_mutual">Lubicie się nawzajem!</string>
 </resources>

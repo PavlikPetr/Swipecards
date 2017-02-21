@@ -814,7 +814,7 @@
     <string name="city_selector_your_city">Şehriniz</string>
     <string name="photo_gallery_photo_deleted">Fotoğraf silindi</string>
     <string name="photofeed_add_photo_to_feed_title">1. yeri kap!</string>
-    <string name="photofeed_add_photo_to_feed_description">Bir selam ile fotoğraf yükle ve binlerce kişi seni görsün. Dikkatleri üzerine çek ve insanlarla tanışmaya başla.</string>
+    <string name="photofeed_add_photo_to_feed_description">Bir selam ile fotoğraf yükle ve binlerce kişi seni görsün. Dikkatleri üzerine çek ve insanlarla tanışmaya başla!</string>
     <string name="offers_screen_title">Bonus</string>
     <string name="offers_loading_text">Mevcut görevler yükleniyor…</string>
     <string name="offers_empty_text">Maalesef şu an sizin için görevimiz yok, lütfen daha sonra tekrar denetin!</string>
@@ -955,4 +955,13 @@
     <string name="write_him_without_symphaty">Ortak Beğeni olmadan ona yaz</string>
     <string name="write_her_without_symphaty">Ortak Beğeni olmadan ona yaz</string>
     <string name="people_nearby_popover_text">Fotoğraf akışında özellikli ol!\nBinlerce insan seni görecek</string>
+    <string name="photo_feed_add_photo">Fotoğraf akışında özellikli ol!\nBinlerce insan seni görecek</string>
+    <string name="buy_likes_get_more_likes">Daha çok Beğeni alın!</string>
+    <string name="buy_likes_become_first_in_searchlist_female">Sizin gibi kızları arayan erkeklere ilk gösterilen olun!</string>
+    <string name="buy_likes_become_first_in_searchlist_male">Sizin gibi erkekleri arayan kızlara ilk gösterilen olun!</string>
+    <string name="buy_likes_become_popular_female">Popüler olun</string>
+    <string name="buy_likes_become_popular_male">Popüler olun</string>
+    <string name="you_are_not_shown">“Tanışma”da neredeyse gösterilmiyorsun</string>
+    <string name="you_are_not_shown_answer">Gelen Beğenilerin bazılarına cevap ver ve daha sık gösterilirsin.</string>
+    <string name="mutual_popup_you_get_mutual">Birbirinizi beğeniyorsunuz!</string>
 </resources>

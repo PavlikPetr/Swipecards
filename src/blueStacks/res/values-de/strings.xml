@@ -782,7 +782,7 @@
   <string name="city_selector_your_city">Deine Stadt</string>
   <string name="photo_gallery_photo_deleted">Das Foto wurde gelöscht</string>
   <string name="photofeed_add_photo_to_feed_title">Erreiche den ersten Platz!</string>
-  <string name="photofeed_add_photo_to_feed_description">Lade ein Foto mit einem Gruß hoch und tausende Leute werden dich sehen. Steche hervor und fange jetzt mit Dating an.</string>
+  <string name="photofeed_add_photo_to_feed_description">Lade ein Foto mit einem Gruß hoch und tausende Leute werden dich sehen. Steche hervor und fange jetzt mit Dating an!</string>
   <string name="offers_screen_title">Boni</string>
   <string name="offers_loading_text">Aufgaben laden…</string>
   <string name="offers_empty_text">Leider sind gerade keine Aufgaben für dich verfügbar, versuche es später wieder!</string>
@@ -923,4 +923,13 @@
   <string name="write_him_without_symphaty">Schreibe ihm ohne ein beidseitiges Like!</string>
   <string name="write_her_without_symphaty">Schreibe ihr ohne ein beidseitiges Like!</string>
   <string name="people_nearby_popover_text">Erhalte einen Platz in der Foto-Galerie!\nTausende Leute werden dich sehen</string>
+  <string name="photo_feed_add_photo">Erhalte einen Platz in der Foto-Galerie!\nTausende Leute werden dich sehen.</string>
+  <string name="buy_likes_get_more_likes">Erhalte mehr Likes!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Werde als erste angezeigt für Typen, die nach Mädels wie dir suchen!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Werde als erster angezeigt für Mädels, die nach Typen wie dir suchen!</string>
+  <string name="buy_likes_become_popular_female">Werde beliebt</string>
+  <string name="buy_likes_become_popular_male">Werde beliebt</string>
+  <string name="you_are_not_shown">Du wirst kaum in \&quot;Dating\&quot; gezeigt</string>
+  <string name="you_are_not_shown_answer">Antworte auf ein paar erhaltene Likes, und du wirst öfter gezeigt werden.</string>
+  <string name="mutual_popup_you_get_mutual">Ihr mögt euch!</string>
 </resources>
