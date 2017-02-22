@@ -6,6 +6,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Products
+import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -19,7 +20,7 @@ import javax.inject.Inject
 /**
  * ВьюМодель попапа успешной покупки.
  */
-class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, val goTo: String, val sku: String, val iDialogCloser: IDialogCloser) {
+class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, val goTo: Int, val sku: String, val iDialogCloser: IDialogCloser) {
 
     @Inject lateinit var state: TopfaceAppState
     val mBalanceSubscription: Subscription? = null
@@ -64,7 +65,7 @@ class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, va
 
     fun onButtonClick() {
         when (goTo) {
-            "Vip" -> mFeedNavigator.showDating()
+            FragmentIdData.DATING -> mFeedNavigator.showDating()
 
         // todo переходы, согласно тому, что придет в конструкторе
         }

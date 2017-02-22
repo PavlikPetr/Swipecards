@@ -19,9 +19,9 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
         const val TAG = "purchase_successfull_ragment"
         const val GO_TO = "go_to"
         const val SKU = "product_type"
-        fun getInstance(goTo: String, sku: String) = PurchaseSuccessfullFragment().apply {
+        fun getInstance(goTo: Int, sku: String) = PurchaseSuccessfullFragment().apply {
                         arguments = Bundle().apply {
-                                putString(GO_TO, goTo)
+                                putInt(GO_TO, goTo)
                                 putString(SKU, sku)
                             }
                     }
@@ -33,7 +33,7 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
     private var mBinding by Delegates.notNull<BasePurchaseSuccessfullBinding>()
 
     private val mViewModel by lazy {
-                PurchaseSuccessfullViewModel(mNavigator, arguments.getString(GO_TO), arguments.getString(SKU), this)
+                PurchaseSuccessfullViewModel(mNavigator, arguments.getInt(GO_TO), arguments.getString(SKU), this)
             }
     override fun initViews(root: View?) {
         mBinding = BasePurchaseSuccessfullBinding.bind(root)
