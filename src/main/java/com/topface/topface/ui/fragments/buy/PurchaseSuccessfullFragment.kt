@@ -17,23 +17,20 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
 
     companion object{
         const val TAG = "purchase_successfull_ragment"
-        const val GO_TO = "go_to"
+        const val BUTTON_TEXT = "text_for_button"
         const val SKU = "product_type"
-        fun getInstance(goTo: Int, sku: String) = PurchaseSuccessfullFragment().apply {
+        fun getInstance(textForButton: String, sku: String) = PurchaseSuccessfullFragment().apply {
                         arguments = Bundle().apply {
-                                putInt(GO_TO, goTo)
+                                putString(BUTTON_TEXT, textForButton)
                                 putString(SKU, sku)
                             }
                     }
     }
 
-
-    private val mNavigator by lazy { FeedNavigator (activity as IActivityDelegate) }
-
     private var mBinding by Delegates.notNull<BasePurchaseSuccessfullBinding>()
 
     private val mViewModel by lazy {
-                PurchaseSuccessfullViewModel(mNavigator, arguments.getInt(GO_TO), arguments.getString(SKU), this)
+                PurchaseSuccessfullViewModel( arguments.getString(BUTTON_TEXT), arguments.getString(SKU), this)
             }
     override fun initViews(root: View?) {
         mBinding = BasePurchaseSuccessfullBinding.bind(root)

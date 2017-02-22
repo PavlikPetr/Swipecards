@@ -37,5 +37,5 @@ interface IFeedNavigator {
 
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
-    fun showPurchaseSuccessfullFragment(goTo: String, sku: String)
+    fun showPurchaseSuccessfullFragment(textForButton: String, sku: String)
 }

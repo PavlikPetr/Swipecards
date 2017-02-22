@@ -20,11 +20,10 @@ import javax.inject.Inject
 /**
  * ВьюМодель попапа успешной покупки.
  */
-class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, val goTo: Int, val sku: String, val iDialogCloser: IDialogCloser) {
+class PurchaseSuccessfullViewModel(val textForButton: String, val sku: String, val iDialogCloser: IDialogCloser) {
 
     @Inject lateinit var state: TopfaceAppState
     val mBalanceSubscription: Subscription? = null
-
 
     val popupImage = ObservableInt()
     val popupText = ObservableField<String>()
@@ -43,34 +42,20 @@ class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, va
                         preparePopupText(balanceData)
                     }
                 }
-
                 override fun onError(e: Throwable?) = super.onError(e)
                 override fun onCompleted() = super.onCompleted()
             })
             popupImage.set(preparePopupImage())
-            buttonText.set(prepareButtonText())
+            buttonText.set(textForButton)
         }
     }
 
     fun preparePopupText(balanceData: BalanceData) = popupText.set(if (sku.equals(Products.ProductType.COINS)) Utils.getQuantityString(R.plurals.you_have_some_coins, balanceData.money)
                                                                                     else Utils.getQuantityString(R.plurals.you_have_some_sympathies, balanceData.likes))
 
-    fun prepareButtonText() =
-            when (goTo) {
-            // todo Тексты согласно goTo
-                else -> Utils.EMPTY
-            }
-
     fun preparePopupImage() = if (sku.equals(Products.ProductType.COINS)) R.drawable.pic_coins else R.drawable.pic_coins  // todo вставить картинку для симпатий
 
-    fun onButtonClick() {
-        when (goTo) {
-            FragmentIdData.DATING -> mFeedNavigator.showDating()
-
-        // todo переходы, согласно тому, что придет в конструкторе
-        }
-        iDialogCloser.closeIt()
-    }
+    fun onButtonClick() = iDialogCloser.closeIt()
 
     fun unsubscribe() = mBalanceSubscription?.safeUnsubscribe()
 
