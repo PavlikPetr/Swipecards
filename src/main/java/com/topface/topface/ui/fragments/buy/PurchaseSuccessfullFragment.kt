@@ -15,10 +15,8 @@ import kotlin.properties.Delegates
 class PurchaseSuccessfullFragment : AbstractDialogFragment() {
 
     companion object{
-
         const val GO_TO = "go_to"
         const val SKU = "product_type"
-
         fun getInstance(goTo: String, sku: String) = PurchaseSuccessfullFragment().apply {
                         arguments = Bundle().apply {
                                 putString(GO_TO, goTo)
