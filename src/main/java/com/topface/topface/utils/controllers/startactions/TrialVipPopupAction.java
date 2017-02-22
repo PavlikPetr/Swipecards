@@ -41,26 +41,12 @@ public class TrialVipPopupAction implements IStartAction, IOnFragmentFinishDeleg
     @SuppressWarnings("WrongConstant")
     private void chooseShowTrialVipPopup() {
         ExperimentBoilerplateFragment popup = ExperimentBoilerplateFragment
-                .newInstance(getTrialVipType(), R.id.fragment_content, true);
+                .newInstance( R.id.fragment_content, true);
         popup.setOnFragmentFinishDelegate(this);
         popup.show(mActivity.get().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
         UserConfig userConfig = App.getUserConfig();
         userConfig.setTrialLastTime(System.currentTimeMillis());
         userConfig.saveConfig();
-    }
-
-    /**
-     * Get customized trial vip popup type
-     *
-     * @return experiment number
-     */
-    public static long getTrialVipType() {
-        long typeFromServer = App.get().getOptions().trialVipExperiment.getAndroidTrialPopupExp();
-        // если сервер прислал 4-й эксперимент, то для очереди и после выхода с экрана покупок показать вью из 1-го
-        if (typeFromServer == 4 || typeFromServer == 3) {
-            return 1;
-        }
-        return typeFromServer;
     }
 
     @Override

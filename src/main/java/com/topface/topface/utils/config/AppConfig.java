@@ -40,7 +40,6 @@ public class AppConfig extends AbstractConfig {
      * Это обязательно делать, если вы например поменяли URL API или версию API
      */
     public static final int APP_CONFIG_VERSION = 1;
-    public static final long TRIAL_VIP_UNDEFINED = -1L;
 
     public static final String BASE_CONFIG_SETTINGS = "base_config_settings";
     public static final String DATA_API_URL = "data_api_url";
@@ -76,7 +75,6 @@ public class AppConfig extends AbstractConfig {
     private static final String APP_FIRST_AUTH = "mobile_first_auth";
     private static final String DEVICE_ACTIVATED = "mobile_device_activated";
     private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
-    private static final String TRIAL_VIP_POPUP_TYPE = "trial_vip_popup_type";
     private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
     private static final String FB_APP_LINK = "fb_app_link";
     private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
@@ -147,8 +145,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
         // ключ, который устанавливает статус первого просмотра экрана логина
         addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, false);
-        // храним последний выбранный тип попапа триального вип
-        addField(settingsMap, TRIAL_VIP_POPUP_TYPE, TRIAL_VIP_UNDEFINED);
         // был ли обнаружен переход по приглашению из FB
         addField(settingsMap, FB_APP_LINK, "");
         // счетчик показов экрана "Люди рядом" с разблокированными пермишинами
@@ -598,16 +594,6 @@ public class AppConfig extends AbstractConfig {
     // получение ранее отпраленных лайков для данной установки
     public int getDeviceActivationCounter() {
         return getIntegerField(getSettingsMap(), DEVICE_ACTIVATION_COUNTER);
-    }
-
-    // установка количество отправленных лайков для данной установки
-    public void setTrialVipPopupType(long type) {
-        setField(getSettingsMap(), TRIAL_VIP_POPUP_TYPE, type);
-    }
-
-    // получение ранее отпраленных лайков для данной установки
-    public long getTrialVipPopupType() {
-        return getLongField(getSettingsMap(), TRIAL_VIP_POPUP_TYPE);
     }
 
     /* Тут устанавливаю статус первого просмотра экрана логина (просмотрен) */

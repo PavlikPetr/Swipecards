@@ -33,7 +33,6 @@ import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.statistics.AuthStatistics
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
@@ -295,7 +294,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     fun sendLike() = sendSomething {
         if (!it.rated) {
-            tryShowTrialPopup(navigator = mNavigator)
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH)
                     .subscribeOn(Schedulers.io())

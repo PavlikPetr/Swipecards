@@ -10,13 +10,12 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 /**
  * Created by tiberal on 09.09.16.
  */
-class VisitorsLockController(stub: ViewStubProxy,private val mShower: ITrialShower) :
+class VisitorsLockController(stub: ViewStubProxy) :
         BaseFeedLockerController<LayoutEmptyVisitorsBinding, VisitorsLockScreenViewModel>(stub) {
 
     override fun initLockedFeedStub(errorCode: Int) {
         mStubModel?.let {
             with(it) {
-                mShower.showTrial()
                 buttonText.set(App.getContext().getString(R.string.buying_vip_status))
                 title.set(App.getContext().getString(R.string.with_vip_find_your_visitors))
                 setOnButtonClickListener(View.OnClickListener {

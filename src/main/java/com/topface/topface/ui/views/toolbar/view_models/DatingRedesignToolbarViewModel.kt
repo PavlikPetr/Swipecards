@@ -2,6 +2,7 @@ package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,7 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
         App.getAppComponent().lifeCycleState()
     }
     var extraViewModel: CustomToolbarViewModel? = null
-    val contentMarginTop = ObservableField(0)
+    val contentMarginTop = ObservableInt(0)
     private val mNotificationSubscription: Subscription
     private val mFragmentLifecycleSubscription: Subscription
     private val mSubscriptions = CompositeSubscription()
