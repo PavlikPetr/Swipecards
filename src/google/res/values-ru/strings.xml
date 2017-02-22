@@ -1261,4 +1261,21 @@
     <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
     <string name="people_nearby_popover_text">Встаньте в ленту!\nВас увидят тысячи людей</string>
     <string name="basic_information">Основная информация</string>
+
+    <string name="purchase_successfull">Покупка успешно завершена!</string>
+    <string name="now_you_have_VIP">Теперь у вас VIP-статус</string>
+
+    <plurals name="you_have_some_coins">
+        <item quantity="one">Теперь у вас %d монета</item>
+        <item quantity="few">Теперь у вас %d монеты</item>
+        <item quantity="many">Теперь у вас %d монет</item>
+        <item quantity="other">Теперь у вас %d монет</item>
+    </plurals>
+
+    <plurals name="you_have_some_sympathies">
+        <item quantity="one">Теперь у вас %d симпатия</item>
+        <item quantity="few">Теперь у вас %d симпатии</item>
+        <item quantity="many">Теперь у вас %d симпатий</item>
+        <item quantity="other">Теперь у вас %d симпатий</item>
+    </plurals>
 </resources>

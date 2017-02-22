@@ -1378,6 +1378,23 @@
 
     <style name="PopupTitle" parent="PopupTitleBase"/>
 
+    <style name="PurchasePopupTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_marginLeft">16dp</item>
+        <item name="layout_marginRight">16dp</item>
+        <item name="textAllCaps">true</item>
+        <item name="textSize">20sp</item>
+    </style>
+
+    <style name="PurchasePopupText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="layout_marginLeft">16dp</item>
+        <item name="layout_marginRight">16dp</item>
+        <item name="textSize">16sp</item>
+    </style>
+
     <style name="PopupAnimatedBackground">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
