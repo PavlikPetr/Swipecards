@@ -7,6 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Products
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
@@ -16,9 +17,9 @@ import rx.Subscription
 import javax.inject.Inject
 
 /**
- * Created by mbulgakov on 22.02.17.
+ * ВьюМодель попапа успешной покупки.
  */
-class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, val goTo: String, val sku: String) {
+class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, val goTo: String, val sku: String, val iDialogCloser: IDialogCloser) {
 
     @Inject lateinit var state: TopfaceAppState
     val mBalanceSubscription: Subscription? = null
@@ -67,6 +68,7 @@ class PurchaseSuccessfullViewModel(private val mFeedNavigator: FeedNavigator, va
 
         // todo переходы, согласно тому, что придет в конструкторе
         }
+        iDialogCloser.closeIt()
     }
 
     fun unsubscribe() = mBalanceSubscription?.safeUnsubscribe()
