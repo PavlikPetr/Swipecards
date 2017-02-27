@@ -19,9 +19,6 @@ import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
 import kotlin.properties.Delegates
 
-/**
- * Created by mbulgakov on 15.02.17.
- */
 class DatingFilterFragment() : AbstractEditFragment() {
 
     companion object {
