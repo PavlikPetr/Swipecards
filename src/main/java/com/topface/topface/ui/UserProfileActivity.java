@@ -17,14 +17,12 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.AbstractProfileFragment;
 import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel;
-import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
-import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.topface.topface.statistics.BuyScreenStatistics.PLC;
 
 public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, AcFragmentFrameBinding> {
 
@@ -111,5 +109,10 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
     }
 }

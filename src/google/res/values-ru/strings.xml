@@ -1263,4 +1263,5 @@
     <string name="mutual_popup_you_get_mutual">Вы понравились друг другу!</string>
     <string name="start_dialog">Начать диалог</string>
     <string name="continue_to_meet">Продолжить знакомиться</string>
+    <string name="basic_information">Основная информация</string>
 </resources>

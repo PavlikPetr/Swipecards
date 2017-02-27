@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.views.TabLayoutCreator;
@@ -80,8 +82,6 @@ public class PurchasesFragment extends BaseFragment {
         }
     };
     private Subscription mBalanceSubscription;
-    @BindView(R.id.purchasesTabs)
-    TabLayout mTabLayout;
     private TabLayoutCreator mTabLayoutCreator;
     private ArrayList<String> mPagesTitle = new ArrayList<>();
 
@@ -133,9 +133,19 @@ public class PurchasesFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.purchases_fragment, null);
         ButterKnife.bind(this, root);
         initViews(root, savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitle, null, null);
-        mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
+        Activity activity = getActivity();
+        LocalBroadcastManager.getInstance(activity).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
+        TabLayout tabLayout = null;
+        if (activity instanceof ITabLayoutHolder) {
+            tabLayout = ((ITabLayoutHolder) activity).getTabLayout();
+        }
+        if (tabLayout != null) {
+            mTabLayoutCreator = new TabLayoutCreator(activity, mPager, tabLayout, mPagesTitle, null, null);
+            mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
+        } else {
+            throw new IllegalStateException("PurchasesFragment:: activity must have TabLayout");
+        }
+
         return root;
     }
 
@@ -160,6 +170,11 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected boolean isTabbedFragment() {
+        return true;
     }
 
     @Override

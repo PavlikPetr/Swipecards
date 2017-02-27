@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/dating_filter_accept"
+        android:icon="@drawable/check_gray"
+        android:title="@string/dating_empty_change_settings"
+        appcompat:showAsAction="always" />
+</menu>

@@ -2,6 +2,7 @@ package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,6 @@ import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarVie
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
-import rx.Completable
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
@@ -42,11 +42,14 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
     private val mFragmentLifecycleSubscription: Subscription
     private val mSubscriptions = CompositeSubscription()
     private var isEmptyContentMargin = true
+    val contentShadowVisibility = ObservableInt(View.VISIBLE)
+
     var isDating by Delegates.observable(false) { prop, old, new ->
         isEmptyContentMargin = new
         background.set(if (new) R.color.transparent else R.color.toolbar_background)
         redrawUpIcon()
-        shadowVisibility.set(if (new) View.GONE else View.VISIBLE)
+        shadowVisibility.set(View.GONE)
+        contentShadowVisibility.set(if (new) View.GONE else View.VISIBLE)
         extraViewModel?.apply {
             titleVisibility.set(if (!new && !TextUtils.isEmpty(title.get()))
                 View.VISIBLE
@@ -97,7 +100,6 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
                 .subscribe(shortSubscription {
                     mHasNotification = it
                 })
-//        mFragmentLifecycleSubscription = Completable.
         mFragmentLifecycleSubscription = mLifeCycleReporter
                 .getObservable(FragmentLifreCycleData::class.java)
                 .filter { it.className == DatingFragment::class.java.name }
