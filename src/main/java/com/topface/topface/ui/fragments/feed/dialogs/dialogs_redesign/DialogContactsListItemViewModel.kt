@@ -14,7 +14,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
 import javax.inject.Inject

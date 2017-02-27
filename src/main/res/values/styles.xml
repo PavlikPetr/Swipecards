@@ -740,6 +740,12 @@
         <item name="android:indeterminateDrawable">@drawable/progress_small_holo</item>
     </style>
 
+    <style name="SmallWhiteProgressBar" parent="TopFaceProgressBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminateDrawable">@drawable/white_progress</item>
+    </style>
+
     <style name="FilterCheckBox" parent="topfaceCheckbox">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
