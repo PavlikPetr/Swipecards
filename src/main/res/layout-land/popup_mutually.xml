@@ -113,7 +113,7 @@
 
             <TextView
                 android:id="@+id/popupTitle"
-                style="@style/PopupTitle"
+                style="@style/MutualPopupTitle"
                 android:layout_marginTop="83dp"
                 android:ellipsize="end"
                 android:text="@string/mutual_popup_you_get_mutual"/>
