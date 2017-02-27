@@ -22,7 +22,10 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
     val mutualPlaceholderRes = ObservableField(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
 
-    fun startDialog() = navigator.showChat(mutualUser, null)
+    fun startDialog() {
+        navigator.showChat(mutualUser, null)
+        iDialogCloser.closeIt()
+    }
 
     fun closePopup() = iDialogCloser.closeIt()
 
