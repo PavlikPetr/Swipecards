@@ -19,6 +19,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.ImageSwitcher
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.isNotEmpty
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
@@ -78,9 +79,10 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     }
 
     fun onPhotoClick() = with(currentUser) {
-        if (this != null && photos != null && photos.isNotEmpty()) {
-            mNavigator.showAlbum(binding.datingAlbum.selectedPosition,
-                    id, photosCount, photos)
+        this?.photos?.let {
+            if (it.isNotEmpty()) {
+                mNavigator.showAlbum(binding.datingAlbum.selectedPosition, id, photosCount, it)
+            }
         }
     }
 
@@ -195,14 +197,15 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     fun setUser(user: SearchUser?) = user?.let {
         currentUser = user.apply {
-            mLoadedCount = photos.realPhotosCount
-            albumData.set(photos)
+            mLoadedCount = photos?.realPhotosCount ?: 0
+            photos?.let {
+                albumData.set(it)
+            }
             mNeedMore = photosCount > mLoadedCount
-            val rest = photosCount - photos.count()
+            val rest = photosCount - (photos?.count() ?: 0)
             for (i in 0..rest - 1) {
-                photos.add(Photo.createFakePhoto())
+                photos?.add(Photo.createFakePhoto())
             }
         }
     }
-
 }
