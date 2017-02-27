@@ -952,6 +952,7 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="write_him_without_symphaty">Scrivigli senza un Like Reciproco!</string>
   <string name="write_her_without_symphaty">Scrivile senza un Like Reciproco!</string>
   <string name="people_nearby_popover_text">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
+  <string name="mutual_popup_you_get_mutual">Vi piacete!</string>
   <string name="photo_feed_add_photo">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
   <string name="buy_likes_get_more_likes">Ottieni più Like!</string>
   <string name="buy_likes_become_first_in_searchlist_female">Fatti notare subito dai ragazzi che cercano ragazze come te!</string>
@@ -960,5 +961,4 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="buy_likes_become_popular_male">Diventa popolare</string>
   <string name="you_are_not_shown">Non ti si vede molto nella sezione \&quot;Appuntamenti\&quot;</string>
   <string name="you_are_not_shown_answer">Rispondi ad alcuni dei Like che hai ricevuto per apparire nella sezione.</string>
-  <string name="mutual_popup_you_get_mutual">Vi piacete!</string>
 </resources>

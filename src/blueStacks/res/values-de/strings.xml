@@ -923,6 +923,7 @@
   <string name="write_him_without_symphaty">Schreibe ihm ohne ein beidseitiges Like!</string>
   <string name="write_her_without_symphaty">Schreibe ihr ohne ein beidseitiges Like!</string>
   <string name="people_nearby_popover_text">Erhalte einen Platz in der Foto-Galerie!\nTausende Leute werden dich sehen</string>
+  <string name="mutual_popup_you_get_mutual">Ihr mögt euch!</string>
   <string name="photo_feed_add_photo">Erhalte einen Platz in der Foto-Galerie!\nTausende Leute werden dich sehen.</string>
   <string name="buy_likes_get_more_likes">Erhalte mehr Likes!</string>
   <string name="buy_likes_become_first_in_searchlist_female">Werde als erste angezeigt für Typen, die nach Mädels wie dir suchen!</string>
@@ -931,5 +932,4 @@
   <string name="buy_likes_become_popular_male">Werde beliebt</string>
   <string name="you_are_not_shown">Du wirst kaum in \&quot;Dating\&quot; gezeigt</string>
   <string name="you_are_not_shown_answer">Antworte auf ein paar erhaltene Likes, und du wirst öfter gezeigt werden.</string>
-  <string name="mutual_popup_you_get_mutual">Ihr mögt euch!</string>
 </resources>

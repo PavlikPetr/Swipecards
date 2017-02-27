@@ -956,6 +956,7 @@
   <string name="write_him_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
   <string name="write_her_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
   <string name="people_nearby_popover_text">¡Aparece en el feed de fotos!\nTe verán miles de personas</string>
+  <string name="mutual_popup_you_get_mutual">¡Os gustáis entre vosotros!</string>
   <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
   <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
   <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>
@@ -964,5 +965,4 @@
   <string name="buy_likes_become_popular_male">Hazte popular</string>
   <string name="you_are_not_shown">Casi no apareces en \&quot;Citas\&quot;</string>
   <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
-  <string name="mutual_popup_you_get_mutual">¡Os gustáis entre vosotros!</string>
 </resources>

@@ -1047,6 +1047,7 @@
     <string name="write_him_without_symphaty">Écrivez-lui sans Attraction mutuelle !</string>
     <string name="write_her_without_symphaty">Écrivez-lui sans Attraction mutuelle !</string>
     <string name="people_nearby_popover_text">Apparaissez dans le fil des photos !\nDes milliers de personnes vous verront</string>
+    <string name="mutual_popup_you_get_mutual">Vous vous appréciez l\'un et l\'autre !</string>
     <string name="photo_feed_add_photo">Apparaissez dans le fil des photos !\nDes milliers de personnes vous verront.</string>
     <string name="buy_likes_get_more_likes">Obtenez plus de J\'aime !</string>
     <string name="buy_likes_become_first_in_searchlist_female">Apparaissez en premier aux garçons qui recherchent des filles comme vous !</string>
@@ -1055,5 +1056,4 @@
     <string name="buy_likes_become_popular_male">Devenez populaire</string>
     <string name="you_are_not_shown">Vous apparaissez difficilement dans les \"Rencontres\"</string>
     <string name="you_are_not_shown_answer">Envoyez un J\'aime en réponse à plusieurs J\'aime reçus et apparaissez ainsi plus souvent.</string>
-    <string name="mutual_popup_you_get_mutual">Vous vous appréciez l\'un et l\'autre !</string>
 </resources>

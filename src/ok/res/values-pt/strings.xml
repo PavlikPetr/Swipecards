@@ -1038,6 +1038,7 @@
     <string name="write_him_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
     <string name="write_her_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
     <string name="people_nearby_popover_text">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te</string>
+    <string name="mutual_popup_you_get_mutual">Vocês gostam um do outro!</string>
     <string name="photo_feed_add_photo">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te.</string>
     <string name="buy_likes_get_more_likes">Obtém mais Gostos!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Aparece primeiro a homens à procura de mulheres como tu!</string>
@@ -1046,5 +1047,4 @@
     <string name="buy_likes_become_popular_male">Torna-te popular</string>
     <string name="you_are_not_shown">Quase não apareces em \"Namorar\"</string>
     <string name="you_are_not_shown_answer">Responde a alguns dos Gostos que recebes e irás aparecer mais frequentemente.</string>
-    <string name="mutual_popup_you_get_mutual">Vocês gostam um do outro!</string>
 </resources>
