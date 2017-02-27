@@ -3,6 +3,7 @@ package com.topface.topface.glide.tranformation
 import android.content.Context
 import android.graphics.Bitmap
 import com.bumptech.glide.load.Transformation
+import com.topface.topface.utils.glide_utils.DrawCircleUnderAvatar
 import jp.wasabeef.glide.transformations.CropCircleTransformation
 
 /**
@@ -28,6 +29,11 @@ class GlideTransformationFactory(val mContext: Context) {
                         CropAtImageViewTransformation(mContext),
                         CropCircleTransformation(mContext),
                         NewOnlineTransformation(mContext, radiusOnline as Float, outSideLine as Float))
+
+                GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND -> arrayOf(
+                        CropAtImageViewTransformation(mContext),
+                        CropCircleTransformation(mContext),
+                        DrawCircleUnderAvatar(mContext, outSideLine as Float))
 
                 else -> arrayOf(CropAtImageViewTransformation(mContext), CropCircleTransformation(mContext))
             }

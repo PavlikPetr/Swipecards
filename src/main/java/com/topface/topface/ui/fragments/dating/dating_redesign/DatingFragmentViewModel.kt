@@ -35,7 +35,7 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
-import com.topface.topface.ui.edit.filter.view.FilterFragment
+import com.topface.topface.ui.edit.filter.view.DatingFilterFragment
 import com.topface.topface.ui.fragments.dating.DatingFragmentViewModel
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -114,6 +114,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mAlbumSubscription: Subscription? = null
     private var mNeedMore = false
     private var mCanSendAlbumReq = true
+    private var mIsMutualPopupEnabled = App.get().options.mutualPopupEnabled
     private val mUpdateActionsReceiver: BroadcastReceiver
     private var mSkipSubscription: Subscription? = null
     private var mLikeSubscription: Subscription? = null
@@ -301,6 +302,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
+                            if (it.isMutualPossible && mIsMutualPopupEnabled){
+                                mNavigator.showMutualPopup(it)
+                            }
                         }
 
                         override fun onError(e: Throwable?) {
@@ -331,7 +335,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             mIsDatingButtonEnable = false
             mEmptySearchVisibility.hideEmptySearchDialog()
             if (data != null && data.extras != null) {
-                sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
+                sendFilterRequest(data.getParcelableExtra<FilterData>(DatingFilterFragment.INTENT_DATING_FILTER))
                 mNewFilter = true
                 FlurryManager.getInstance().sendFilterChangedEvent()
             }

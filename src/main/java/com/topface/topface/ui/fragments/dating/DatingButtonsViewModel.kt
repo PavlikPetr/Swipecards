@@ -90,7 +90,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
     private val mBalanceDataSubscriptions = CompositeSubscription()
     private var mBalance: BalanceData? = null
-
+    private val mIsMutualPopupEnabled = App.get().options.mutualPopupEnabled
     private val mUpdateActionsReceiver: BroadcastReceiver
 
     companion object {
@@ -172,6 +172,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
+                            if (it.isMutualPossible && mIsMutualPopupEnabled){
+                                mNavigator.showMutualPopup(it)
+                            }
                         }
 
                         override fun onError(e: Throwable?) {

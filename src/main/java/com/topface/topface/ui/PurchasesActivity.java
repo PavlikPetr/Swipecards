@@ -423,4 +423,9 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     public int getLayout() {
         return R.layout.ac_fragment_frame;
     }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
+    }
 }

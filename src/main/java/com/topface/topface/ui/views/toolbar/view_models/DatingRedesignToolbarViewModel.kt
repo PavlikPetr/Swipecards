@@ -43,11 +43,14 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
     private val mFragmentLifecycleSubscription: Subscription
     private val mSubscriptions = CompositeSubscription()
     private var isEmptyContentMargin = true
+    val contentShadowVisibility = ObservableInt(View.VISIBLE)
+
     var isDating by Delegates.observable(false) { prop, old, new ->
         isEmptyContentMargin = new
         background.set(if (new) R.color.transparent else R.color.toolbar_background)
         redrawUpIcon()
-        shadowVisibility.set(if (new) View.GONE else View.VISIBLE)
+        shadowVisibility.set(View.GONE)
+        contentShadowVisibility.set(if (new) View.GONE else View.VISIBLE)
         extraViewModel?.apply {
             titleVisibility.set(if (!new && !TextUtils.isEmpty(title.get()))
                 View.VISIBLE
