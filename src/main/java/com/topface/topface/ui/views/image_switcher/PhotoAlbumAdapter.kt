@@ -23,7 +23,6 @@ import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.extensions.loadLinkToSameCache
-import javax.inject.Inject
 
 /**
  * RV adapter for album
@@ -37,15 +36,14 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
         const val TAG = "PreloadingAdapter"
     }
 
-    @Inject lateinit var eventBus: EventBus
+    private val mEventBus: EventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     private var stolenSize: IntArray? = null
     private var mIsRecyclerViewAttached = false
     private var mTargets = hashMapOf<Int, SimpleTarget<GlideDrawable>>()
 
-    init {
-        App.get().inject(this)
-    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -63,7 +61,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                         .listener(object : RequestListener<String, GlideDrawable> {
                             override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
                                                      isFirstResource: Boolean): Boolean {
-                                Debug.error("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                                Debug.log("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
                                 if (model.isNullOrEmpty()) {
                                     askToPreloadLinks(position)
                                     return true
@@ -75,7 +73,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                             override fun onResourceReady(resource: GlideDrawable?, model: String?,
                                                          target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
                                                          isFirstResource: Boolean): Boolean {
-                                Debug.error("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                                Debug.log("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
                                 return false
                             }
                         })
@@ -120,7 +118,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
         release()
     }
 
-    fun release(){
+    fun release() {
         mTargets.forEach {
             it.value.clear()
         }
@@ -155,5 +153,5 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
 
     override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize
 
-    private fun askToPreloadLinks(position: Int) = eventBus.setData(PreloadPhoto(position))
+    private fun askToPreloadLinks(position: Int) = mEventBus.setData(PreloadPhoto(position))
 }

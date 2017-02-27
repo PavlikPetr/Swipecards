@@ -793,7 +793,7 @@
   <string name="city_selector_your_city">Twoje miasto</string>
   <string name="photo_gallery_photo_deleted">Zdjęcie zostało usunięte</string>
   <string name="photofeed_add_photo_to_feed_title">Wejdź na szczyt!</string>
-  <string name="photofeed_add_photo_to_feed_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś.</string>
+  <string name="photofeed_add_photo_to_feed_description">Dodaj zdjęcie z powitaniem a zobaczą cię tysiące ludzi. Zostań zauważony i zacznij randkować już dziś!</string>
   <string name="offers_screen_title">Premie</string>
   <string name="offers_loading_text">Ładowanie dostępnych zadań…</string>
   <string name="offers_empty_text">Niestety, ale w tej chwili nie ma dla ciebie dostępnych żadnych zadań. Spróbuj ponownie za jakiś czas!</string>
@@ -908,4 +908,11 @@
   <string name="likes_empty_title">Nie masz jeszcze żadnych sympatii\nSympatie pomogą ci poznać nowych ludzi</string>
   <string name="send_gift">Wyślij prezent</string>
   <string name="people_nearby_popover_text">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy</string>
+  <string name="mutual_popup_you_get_mutual">Lubicie się nawzajem!</string>
+  <string name="photo_feed_add_photo">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy.</string>
+  <string name="buy_likes_get_more_likes">Zdobądź więcej sympatii!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Bądź pierwsza na listach facetów, którzy szukają dziewczyny takiej jak ty!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Bądź pierwszy na listach kobiet, które szukają faceta takiego jak ty!</string>
+  <string name="buy_likes_become_popular_female">Stań się popularna</string>
+  <string name="buy_likes_become_popular_male">Stań się popularny</string>
 </resources>

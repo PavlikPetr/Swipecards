@@ -40,7 +40,6 @@ import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.notifications.MessageStack;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 
@@ -51,8 +50,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.inject.Inject;
 
 import static com.topface.topface.data.leftMenu.FragmentIdData.GEO;
 import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_DIALOGS;

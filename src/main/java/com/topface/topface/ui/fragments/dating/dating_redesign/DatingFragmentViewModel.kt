@@ -32,10 +32,7 @@ import com.topface.topface.data.search.UsersList
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
-import com.topface.topface.state.EventBus
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.DatingFilterFragment
@@ -63,7 +60,6 @@ import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
 import java.util.*
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 /**
@@ -107,8 +103,12 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val isNeedAnimateLoader = ObservableBoolean(false)
     val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
-    @Inject lateinit internal var appState: TopfaceAppState
-    @Inject lateinit var eventBus: EventBus
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     private var mLoadedCount = 0
     private var mAlbumSubscription: Subscription? = null
@@ -221,7 +221,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     }
 
     init {
-        App.get().inject(this)
         subscribeIfNeeded()
         mUpdateActionsReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
@@ -245,7 +244,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         LocalBroadcastManager.getInstance(mContext)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
-        mProfileSubscription = appState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
+        mProfileSubscription = mAppState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -296,7 +295,6 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     fun sendLike() = sendSomething {
         if (!it.rated) {
-            tryShowTrialPopup(navigator = mNavigator)
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH)
                     .subscribeOn(Schedulers.io())
@@ -451,7 +449,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     private fun subscribeIfNeeded() {
         if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
-            mOnImageClickSubscription = eventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+            mOnImageClickSubscription = mEventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
                 with(currentUser) {
                     this?.photos?.let {
                         if (it.isNotEmpty()) {
@@ -462,7 +460,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             })
         }
         if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
-            mLoadLinksSubscription = eventBus.getObservable(PreloadPhoto::class.java)
+            mLoadLinksSubscription = mEventBus.getObservable(PreloadPhoto::class.java)
                     .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
                     .subscribe(shortSubscription {
                         if (mCanSendAlbumReq) {
@@ -630,7 +628,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             override fun onNext(filter: DatingFilter?) {
                 val profile = App.get().profile
                 profile.dating = filter
-                appState.setData(profile)
+                mAppState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
                 update(false, false)
                 mNewFilter = false

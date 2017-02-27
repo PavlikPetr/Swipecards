@@ -7,7 +7,6 @@ import android.os.Looper;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.topface.App;
 import com.topface.topface.requests.SettingsRequest;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.rx.RxUtils;
 
@@ -15,10 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import rx.Observable;
-import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -30,23 +26,19 @@ public class FindAndSendCurrentLocation {
 
     private final static int WAIT_LOCATION_DELAY = 20;
 
-    @Inject
-    TopfaceAppState mAppState;
     private GeoLocationManager mGeoLocationManager;
     private CompositeSubscription mSubscription = new CompositeSubscription();
 
     public FindAndSendCurrentLocation() {
-        App.get().inject(this);
-        if (mAppState == null ||
-                !PermissionsExtensionsKt.isGrantedPermissions(App.getContext(), Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
+        if (!PermissionsExtensionsKt.isGrantedPermissions(App.getContext(), Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION)) {
             return;
         }
         mGeoLocationManager = new GeoLocationManager();
         mGeoLocationManager.registerProvidersChangedActionReceiver();
         // пропускаем эмит из SharedPreff (BehaviorSubject), ждем WAIT_LOCATION_DELAY и отправляем
         // getLastKnownLocation если ранее не было получено значение от LocationManager
-        mSubscription.add(mAppState.getObservable(Location.class)
+        mSubscription.add(App.getAppComponent().appState().getObservable(Location.class)
                 .subscribeOn(Schedulers.newThread())
                 .skip(1)
                 .subscribe(new RxUtils.ShortSubscription<Location>() {

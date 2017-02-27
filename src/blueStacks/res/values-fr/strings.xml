@@ -815,7 +815,7 @@
   <string name="city_selector_your_city">Votre ville</string>
   <string name="photo_gallery_photo_deleted">La photo a été supprimée</string>
   <string name="photofeed_add_photo_to_feed_title">Placez-vous en première position !</string>
-  <string name="photofeed_add_photo_to_feed_description">Ajoutez une photo avec un message d\'accueil et soyez vu par des milliers de personnes. Faites-vous remarquer et commencez à rencontrer des gens dès maintenant.</string>
+  <string name="photofeed_add_photo_to_feed_description">Ajoutez une photo avec un message d\'accueil et soyez vu par des milliers de personnes. Faites-vous remarquer et commencez à rencontrer des gens dès maintenant !</string>
   <string name="offers_screen_title">Bonus</string>
   <string name="offers_loading_text">Chargement des tâches disponibles…</string>
   <string name="offers_empty_text">Malheureusement, il n\'y a pas de tâches disponibles pour vous dès maintenant, revenez bientôt !</string>
@@ -956,4 +956,13 @@
   <string name="write_him_without_symphaty">Écrivez-lui sans Attraction mutuelle !</string>
   <string name="write_her_without_symphaty">Écrivez-lui sans Attraction mutuelle !</string>
   <string name="people_nearby_popover_text">Apparaissez dans le fil des photos !\nDes milliers de personnes vous verront</string>
+  <string name="mutual_popup_you_get_mutual">Vous vous appréciez l\'un et l\'autre !</string>
+  <string name="photo_feed_add_photo">Apparaissez dans le fil des photos !\nDes milliers de personnes vous verront.</string>
+  <string name="buy_likes_get_more_likes">Obtenez plus de J\'aime !</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Apparaissez en premier aux garçons qui recherchent des filles comme vous !</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Apparaissez en premier aux filles qui recherchent des garçons comme vous !</string>
+  <string name="buy_likes_become_popular_female">Devenez populaire</string>
+  <string name="buy_likes_become_popular_male">Devenez populaire</string>
+  <string name="you_are_not_shown">Vous apparaissez difficilement dans les \&quot;Rencontres\&quot;</string>
+  <string name="you_are_not_shown_answer">Envoyez un J\'aime en réponse à plusieurs J\'aime reçus et apparaissez ainsi plus souvent.</string>
 </resources>

@@ -12,14 +12,11 @@ import com.topface.topface.state.TopfaceAppState;
 
 import org.json.JSONObject;
 
-import javax.inject.Inject;
-
 import rx.functions.Action1;
 
 public class CountersManager {
     public static final String CHANGED_BY_GCM = "";
-    @Inject
-    TopfaceAppState mAppState;
+    private TopfaceAppState mAppState;
     public static final String UPDATE_VIP_STATUS = "com.topface.topface.UPDATE_VIP_STATUS";
 
     private Context mContext;
@@ -46,15 +43,13 @@ public class CountersManager {
 
     private CountersManager(Context context) {
         mContext = context;
-        App.get().inject(this);
-        if (mAppState != null) {
-            mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
-                @Override
-                public void call(BalanceData balanceData) {
-                    mCachedBalanceData = balanceData;
-                }
-            });
-        }
+        mAppState = App.getAppComponent().appState();
+        mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+            @Override
+            public void call(BalanceData balanceData) {
+                mCachedBalanceData = balanceData;
+            }
+        });
     }
 
     public void setLastRequestMethod(String lastRequestMeethod) {

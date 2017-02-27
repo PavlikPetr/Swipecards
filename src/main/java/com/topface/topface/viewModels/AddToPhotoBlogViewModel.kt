@@ -20,7 +20,6 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * Модель для экрана постановки в фотоблог
@@ -29,14 +28,15 @@ import javax.inject.Inject
 class AddToPhotoBlogViewModel(binding: AddToPhotoBlogLayoutBinding, private val mPhotoHelper: AddPhotoHelper) :
         BaseViewModel<AddToPhotoBlogLayoutBinding>(binding) {
 
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
     private val mSubscriptions = CompositeSubscription()
     lateinit private var mBalance: BalanceData
     private val mAdapter: LeadersRecyclerViewAdapter? by lazy { binding.userPhotosGrid.adapter as LeadersRecyclerViewAdapter }
 
     init {
         Log.e("LEADER_PHOTO", "init AddToPhotoBlogViewModel")
-        App.get().inject(this)
         mSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
             override fun onNext(balance: BalanceData?) = balance?.let {
                 mBalance = it

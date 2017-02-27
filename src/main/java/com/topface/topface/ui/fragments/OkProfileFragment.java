@@ -22,8 +22,6 @@ import com.topface.topface.utils.social.CurrentUserRequest;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
 
-import javax.inject.Inject;
-
 import rx.Subscription;
 import rx.functions.Action0;
 import rx.functions.Action1;
@@ -33,8 +31,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
 
     public static final String PAGE_NAME = "profile.ok";
 
-    @Inject
-    TopfaceAppState mAppState;
+    private TopfaceAppState mAppState;
     private OkProfileHandler mHandler;
     private Subscription mSubscription;
     private Action1<OkUserData> mSubscriber = new Action1<OkUserData>() {
@@ -58,7 +55,7 @@ public class OkProfileFragment extends ProfileInnerFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+        mAppState = App.getAppComponent().appState();
     }
 
     @Override

@@ -40,8 +40,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import static com.topface.topface.ui.dialogs.BaseEditDialog.EditingFinishedListener;
 
 @FlurryOpenEvent(name = ProfileFormFragment.PAGE_NAME)
@@ -49,8 +47,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     public static final String PAGE_NAME = "profile.form";
 
-    @Inject
-    public TopfaceAppState appState;
+    private TopfaceAppState mAppState;
 
     private FragmentManager mFragmentManager;
     private boolean mIsProfileWasUpdated;
@@ -81,7 +78,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                                 if (mProfileFormListAdapter != null) {
                                     Profile profile = App.get().getProfile();
                                     profile.forms = mProfileFormListAdapter.getFormItems();
-                                    appState.setData(profile);
+                                    mAppState.setData(profile);
                                 }
                             }
 
@@ -172,7 +169,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         mFragmentManager = getActivity().getSupportFragmentManager();
     }

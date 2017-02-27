@@ -8,8 +8,6 @@ import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Options
 import com.topface.topface.requests.handlers.ErrorCodes
-import com.topface.topface.state.EventBus
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.PurchasesFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -21,7 +19,6 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * ViewModel блокировки экрана "Люди рядом"
@@ -38,8 +35,12 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
     val unlockByPremiumButtonText = ObservableField<String>()
     val unlockByPremiumButtonVisibility = ObservableInt(View.GONE)
 
-    @Inject lateinit var mState: TopfaceAppState
-    @Inject lateinit var mEventBus: EventBus
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     companion object {
         private const val BUY_COINS_FROM = "PeoplePaidNearby"
@@ -53,7 +54,6 @@ class PeopleNearbyLockedViewModel(private val mApi: FeedApi, private val mNaviga
     private var mBalanceData: BalanceData? = null
 
     init {
-        App.get().inject(this)
         unlockByCoinsText.addOnPropertyChangedCallback(object : android.databinding.Observable
         .OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) =

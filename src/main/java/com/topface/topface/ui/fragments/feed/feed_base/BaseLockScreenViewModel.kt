@@ -3,11 +3,10 @@ package com.topface.topface.ui.fragments.feed.feed_base
 import android.databinding.ViewDataBinding
 import com.topface.topface.App
 import com.topface.topface.data.BalanceData
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
-import javax.inject.Inject
 
 /**
  * Created by ppavlik on 28.09.16.
@@ -15,12 +14,13 @@ import javax.inject.Inject
  */
 abstract class BaseLockScreenViewModel<T : ViewDataBinding>(binding: T, private val mIFeedUnlocked: IFeedUnlocked) :
         BaseViewModel<T>(binding) {
-    @Inject lateinit var mState: TopfaceAppState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
     private var mBalanceSubscription: Subscription? = null
     private var mBalance: BalanceData? = null
 
     init {
-        App.get().inject(this)
         mBalanceSubscription = mState.getObservable(BalanceData::class.java)
                 .subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
                     override fun onNext(balanceData: BalanceData?) {
@@ -40,6 +40,6 @@ abstract class BaseLockScreenViewModel<T : ViewDataBinding>(binding: T, private 
 
     override fun release() {
         super.release()
-        RxUtils.safeUnsubscribe(mBalanceSubscription)
+        mBalanceSubscription.safeUnsubscribe()
     }
 }

@@ -815,7 +815,7 @@
   <string name="city_selector_your_city">Tu ciudad</string>
   <string name="photo_gallery_photo_deleted">La fotografía ha sido eliminada</string>
   <string name="photofeed_add_photo_to_feed_title">¡Subir al primer puesto!</string>
-  <string name="photofeed_add_photo_to_feed_description">Añade una foto y te verán miles de personas. Hazte notar y empieza a tener citas ahora.</string>
+  <string name="photofeed_add_photo_to_feed_description">Añade una foto y te verán miles de personas. ¡Hazte notar y empieza a tener citas ahora!</string>
   <string name="offers_screen_title">Bonificaciones</string>
   <string name="offers_loading_text">Estamos cargando las tareas disponibles para ti…</string>
   <string name="offers_empty_text">Desgraciadamente, no hay tareas disponibles para ti, ¡inténtalo más tarde!</string>
@@ -956,4 +956,13 @@
   <string name="write_him_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
   <string name="write_her_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
   <string name="people_nearby_popover_text">¡Aparece en el feed de fotos!\nTe verán miles de personas</string>
+  <string name="mutual_popup_you_get_mutual">¡Os gustáis entre vosotros!</string>
+  <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
+  <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">¡Aparece antes para las chicas que buscan a chicos como tú!</string>
+  <string name="buy_likes_become_popular_female">Hazte popular</string>
+  <string name="buy_likes_become_popular_male">Hazte popular</string>
+  <string name="you_are_not_shown">Casi no apareces en \&quot;Citas\&quot;</string>
+  <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
 </resources>

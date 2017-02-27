@@ -3,11 +3,16 @@ package com.topface.topface.glide.config
 import android.content.Context
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
+import com.bumptech.glide.integration.okhttp.OkHttpUrlLoader
 import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory
 import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
+import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.GlideModule
+import com.squareup.okhttp.OkHttpClient
+import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -29,6 +34,11 @@ class GlideConfig : GlideModule {
     }
 
     override fun registerComponents(context: Context, glide: Glide) {
-        // register ModelLoaders here.
+        glide.register(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(OkHttpClient().apply {
+            setConnectTimeout(20, TimeUnit.SECONDS)
+            setWriteTimeout(20, TimeUnit.SECONDS)
+            setReadTimeout(20, TimeUnit.SECONDS)
+            setRetryOnConnectionFailure(true)
+        }))
     }
 }

@@ -912,7 +912,7 @@
     <string name="city_selector_your_city">Ваш град</string>
     <string name="photo_gallery_photo_deleted">Фотографија је избрисана</string>
     <string name="photofeed_add_photo_to_feed_title">Доспејте на прво место!</string>
-    <string name="photofeed_add_photo_to_feed_description">Додајте фотографију са поздравом и хиљаде људи ће Вас видети. Привуците пажњу и почните да се упознајете одмах.</string>
+    <string name="photofeed_add_photo_to_feed_description">Додајте фотографију и видеће Вас хиљаде људи. Привуците пажњу и почните да се упознајете одмах!</string>
     <string name="offers_screen_title">Бонуси</string>
     <string name="offers_loading_text">Учитавам доступне задатке…</string>
     <string name="offers_empty_text">На жалост, тренутно нема доступних задатака, проверите касније!</string>
@@ -1054,4 +1054,13 @@
     <string name="write_him_without_symphaty">Пишите му без узајамног свиђања!</string>
     <string name="write_her_without_symphaty">Пишите јој без узајамног свиђања!</string>
     <string name="people_nearby_popover_text">Нађите се у листи фотографија!\nХиљаде људи ће Вас видети</string>
+    <string name="mutual_popup_you_get_mutual">Свидели сте се једно другоме!</string>
+    <string name="photo_feed_add_photo">Нађите се у листи фотографија!\nХиљаде људи ће Вас видети.</string>
+    <string name="buy_likes_get_more_likes">Добијте више свиђања!</string>
+    <string name="buy_likes_become_first_in_searchlist_female">Будите први приказани момцима који траже девојке као што сте Ви!</string>
+    <string name="buy_likes_become_first_in_searchlist_male">Будите први приказани девојкама које траже момке као што сте Ви!</string>
+    <string name="buy_likes_become_popular_female">Постати популарна</string>
+    <string name="buy_likes_become_popular_male">Постати популаран</string>
+    <string name="you_are_not_shown">Скоро да Вас и не приказују у \"Познанствима\"</string>
+    <string name="you_are_not_shown_answer">Одговорите на нека пристигла свиђања и бићете чешће приказивани.</string>
 </resources>

@@ -11,7 +11,6 @@ import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.History
 import com.topface.topface.requests.FeedRequest
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
@@ -32,7 +31,6 @@ import rx.Subscriber
 import rx.Subscription
 import rx.functions.Func1
 import java.util.concurrent.atomic.AtomicBoolean
-import javax.inject.Inject
 
 /**
  * VM for new and improved dialogs
@@ -51,7 +49,9 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private val mPushHandler = FeedPushHandler(this, context)
     private var isTopFeedsLoading = AtomicBoolean(false)
 
-    @Inject lateinit var mEventBus: EventBus
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     val data = SingleObservableArrayList<FeedDialog>()
 
@@ -61,7 +61,6 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private var mUpdateFromPopupMenuSubscription: Subscription? = null
 
     init {
-        App.get().inject(this)
         bindUpdater()
         mContentAvailableSubscription = Observable.combineLatest(mEventBus.getObservable(DialogContactsEvent::class.java),
                 mEventBus.getObservable(DialogItemsEvent::class.java)) { item1, item2 ->

@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -38,15 +36,14 @@ public class BonusPresenter implements IBonusPresenter {
 
     private static final int OFFERS_DELAY = 500; //увеличиваем время показа лоадера
 
-    @Inject
-    EventBus mEvenBus;
+    private EventBus mEvenBus;
     private IBonusView mIBonusView;
     private ArrayList<IOfferwallBaseModel> mOffers = new ArrayList<>();
     private BonusFragmentViewModel mViewModel;
     private Subscription mSubscription;
 
     public BonusPresenter() {
-        App.get().inject(this);
+        mEvenBus = App.getAppComponent().eventBus();
     }
 
     @Override

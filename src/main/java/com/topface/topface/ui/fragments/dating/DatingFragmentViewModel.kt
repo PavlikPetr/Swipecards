@@ -20,7 +20,6 @@ import com.topface.topface.data.search.OnUsersListEventsListener
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
@@ -43,10 +42,8 @@ import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
-import rx.functions.Func2
 import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /** Бизнеслогика для дейтинга
  * Created by tiberal on 12.10.16.
@@ -58,7 +55,9 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                               private val mEmptySearchVisibility: IEmptySearchVisibility) :
         BaseViewModel<FragmentDatingLayoutBinding>(binding), OnUsersListEventsListener<SearchUser> {
 
-    @Inject lateinit var state: TopfaceAppState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
 
     private var mProfileSubscription = CompositeSubscription()
     private var mUpdateSubscription: Subscription? = null
@@ -78,8 +77,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     init {
-        App.get().inject(this)
-        mProfileSubscription.add(state.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
+        mProfileSubscription.add(mState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
             if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                 if (currentUser == null) {
                     mUserSearchList.currentUser?.let {
@@ -97,8 +95,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             }
         })
         // слушаем изменения в анкете и статусе
-        mProfileSubscription.add(Observable.merge(state.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.forms == t2.forms },
-                state.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.status == t2.status })
+        mProfileSubscription.add(Observable.merge(mState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.forms == t2.forms },
+                mState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.status == t2.status })
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .subscribe { profile ->
                     binding.root.post {
@@ -243,7 +241,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             override fun onNext(filter: DatingFilter?) {
                 val profile = App.get().profile
                 profile.dating = filter
-                state.setData(profile)
+                mState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
                 update(false, false)
                 mNewFilter = false

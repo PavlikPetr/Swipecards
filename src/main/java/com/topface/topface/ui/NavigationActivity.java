@@ -125,12 +125,12 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        App.getAppComponent().inject(this);
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
             config.saveConfig();
         }
-        App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
         try {
             if (intent.getBooleanExtra(INTENT_EXIT, false)) {

@@ -14,7 +14,6 @@ import com.topface.topface.databinding.LayoutEmptyLikesBinding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.IStateDataUpdater
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
@@ -23,7 +22,6 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
-import javax.inject.Inject
 
 /**
  * Моделька для заглушки лайков
@@ -33,7 +31,9 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
                                private val mNavigator: IFeedNavigator, private val dataUpdater: IStateDataUpdater,
                                private val mIFeedUnlocked: IFeedUnlocked) : BaseViewModel<LayoutEmptyLikesBinding>(binding) {
 
-    @Inject lateinit var mState: TopfaceAppState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
     lateinit private var mBalanceData: BalanceData
     private var mBalanceSubscription: Subscription
     private var mOptionsSubscription: Subscription
@@ -42,8 +42,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
     private var mBlockSympathy = dataUpdater.options.blockSympathy
 
     init {
-        //выпилить со вторым даггером
-        App.get().inject(this)
         mBalanceSubscription = mState.getObservable(BalanceData::class.java).subscribe {
             mBalanceData = it
         }

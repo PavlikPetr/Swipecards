@@ -7,7 +7,6 @@ import com.topface.topface.App
 import com.topface.topface.data.FeedListData
 import com.topface.topface.data.FeedPhotoBlog
 import com.topface.topface.requests.FeedRequest
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
@@ -21,7 +20,6 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * ViewMdel для элемента списка, который содержит фотоленту с горизонтальным скролом
@@ -29,7 +27,9 @@ import javax.inject.Inject
  */
 class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
     val data = MultiObservableArrayList<Any>()
-    @Inject lateinit var mEventBus: EventBus
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
     private var mSubscriptions = CompositeSubscription()
     private var isRefreshing = ObservableBoolean()
 
@@ -39,7 +39,6 @@ class PhotoBlogListViewModel(private val mApi: FeedApi) : ILifeCycle {
     }
 
     init {
-        App.get().inject(this)
         mSubscriptions.add(mEventBus.getObservable(PeopleNearbyRefreshStatus::class.java)
                 .subscribe(shortSubscription {
                     if (it?.isRefreshing ?: false) {

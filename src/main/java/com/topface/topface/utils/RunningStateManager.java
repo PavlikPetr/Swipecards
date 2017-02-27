@@ -12,8 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.inject.Inject;
-
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -22,14 +20,13 @@ import rx.functions.Func1;
  * We need it to detect moment when app go background/foreground
  */
 public class RunningStateManager {
-    @Inject
-    LifeCycleState mLifeCycleState;
+    private LifeCycleState mLifeCycleState;
     private ConcurrentHashMap<String, Long> mActivitiesState;
     private List<OnAppChangeStateListener> mOnAppChangeStateListeners;
     private long mAppStartTime;
 
     public RunningStateManager() {
-        App.get().inject(this);
+        mLifeCycleState = App.getAppComponent().lifeCycleState();
         mLifeCycleState.getObservable(ActivityLifreCycleData.class)
                 .filter(new Func1<ActivityLifreCycleData, Boolean>() {
                     @Override

@@ -9,14 +9,12 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData
 import com.topface.topface.databinding.PeopleNearbyPopoverBinding
-import com.topface.topface.state.DrawerLayoutState
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
 import rx.Subscription
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Поповер для экрана Люди Рядом
@@ -24,7 +22,9 @@ import javax.inject.Inject
  */
 class PeopleNearbyPopover(private val mContext: Context, private val mNavigator: FeedNavigator,
                           private val anchorView: () -> View) : IPopoverControl {
-    @Inject lateinit var mDrawerLayoutState: DrawerLayoutState
+    private val mDrawerLayoutState by lazy {
+        App.getAppComponent().drawerLayoutState()
+    }
 
     companion object {
         private const val POPOVER_SHOW_DELAY = 24 * 60 * 60 * 1000
@@ -45,7 +45,6 @@ class PeopleNearbyPopover(private val mContext: Context, private val mNavigator:
     private var mDrawerLayoutData: DrawerLayoutStateData? = null
 
     init {
-        App.get().inject(this)
         mDrawerStateSubscription = mDrawerLayoutState
                 .observable
                 .subscribe(shortSubscription {

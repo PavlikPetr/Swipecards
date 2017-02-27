@@ -42,17 +42,13 @@ import com.topface.topface.utils.social.AuthorizationManager;
 
 import org.json.JSONException;
 
-import javax.inject.Inject;
-
 /**
  * Base authorization logic
  */
 public abstract class BaseAuthFragment extends BaseFragment {
 
-    @Inject
-    AdjustManager mAdjustManager;
-    @Inject
-    AuthState mAuthState;
+    private AdjustManager mAdjustManager;
+    private AuthState mAuthState;
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
@@ -77,7 +73,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+        mAuthState = App.getAppComponent().authState();
+        mAdjustManager = App.getAppComponent().adjustManager();
     }
 
     protected void initViews(View root) {
@@ -131,6 +128,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     protected void auth(final AuthToken token) {
+        if(mAdjustManager == null){
+            mAdjustManager = App.getAppComponent().adjustManager();
+        }
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         showProgress();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());

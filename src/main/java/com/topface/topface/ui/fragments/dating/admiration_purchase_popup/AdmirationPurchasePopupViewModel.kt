@@ -12,17 +12,15 @@ import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.viewModels.BaseViewModel
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
- * VM для попапа покупки випа или минет
+ * VM для попапа покупки випа или монет
  * Created by siberia87 on 01.11.16.
  */
 class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
@@ -41,7 +39,9 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
 
     val userAvatar = ObservableField(currentUser?.photo)
 
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
     private val mBalanceDataSubscriptions = CompositeSubscription()
     private var mBalance: BalanceData? = null
 
@@ -54,7 +54,6 @@ class AdmirationPurchasePopupViewModel(binding: AdmirationPurchasePopupBinding,
     }
 
     init {
-        App.get().inject(this)
         mBalanceDataSubscriptions
                 .add(mAppState.getObservable(BalanceData::class.java)
                         .subscribe(object : RxUtils.ShortSubscription<BalanceData>() {

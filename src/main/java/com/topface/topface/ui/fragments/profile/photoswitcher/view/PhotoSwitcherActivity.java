@@ -61,8 +61,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import rx.Subscription;
 import rx.functions.Func2;
 
@@ -89,10 +87,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
     private static final String PAGE_NAME = "photoswitcher";
     private static final int ANIMATION_TIME = 200;
-    @Inject
-    TopfaceAppState appState;
-    @Inject
-    EventBus eventBus;
+    private TopfaceAppState mAppState;
     ViewPager.OnPageChangeListener mOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
@@ -194,7 +189,8 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
+        EventBus eventBus = App.getAppComponent().eventBus();
         mOnImageClickSubscription = eventBus.getObservable(ImageClick.class).subscribe(new RxUtils.ShortSubscription<ImageClick>() {
             @Override
             public void onNext(ImageClick type) {
@@ -261,7 +257,6 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
             @Override
             protected void success(AlbumPhotos newPhotos, IApiResponse response) {
-                Debug.error("NewImageLoader1 request success:" + newPhotos);
                 for (Photo photo : newPhotos) {
                     mPhotoLinks.set(photo.getPosition(), photo);
                 }
@@ -274,7 +269,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                 if (mUid == App.get().getProfile().uid && !isContainsFakePhoto(mPhotoLinks)) {
                     Profile profile = App.get().getProfile();
                     profile.photos = mPhotoLinks;
-                    appState.setData(profile);
+                    mAppState.setData(profile);
                 }
 
                 if (mImageSwitcher != null) {
@@ -284,13 +279,11 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
             @Override
             protected AlbumPhotos parseResponse(ApiResponse response) {
-                Debug.error("NewImageLoader1 request parseResponse:" + response.toString());
                 return new AlbumPhotos(response);
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
-                Debug.error("NewImageLoader1 request fail:" + codeError);
             }
         }).exec();
     }
@@ -507,7 +500,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             public void success(IApiResponse response) {
                 mDeletedPhotos.clear();
                 //удалили фоточки обнивить профиль
-                appState.setData(profile);
+                mAppState.setData(profile);
             }
 
             @Override
@@ -530,7 +523,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
             public void success(IApiResponse response) {
                 Profile profile = App.get().getProfile();
                 profile.photo = currentPhoto;
-                appState.setData(profile);
+                mAppState.setData(profile);
                 CacheProfile.sendUpdateProfileBroadcast();
                 refreshButtonsState();
                 Utils.showToastNotification(R.string.avatar_set_successfully, Toast.LENGTH_SHORT);
