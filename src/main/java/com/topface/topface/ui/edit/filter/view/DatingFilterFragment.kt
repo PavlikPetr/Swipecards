@@ -19,7 +19,7 @@ import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
 import kotlin.properties.Delegates
 
-class DatingFilterFragment() : AbstractEditFragment() {
+class DatingFilterFragment : AbstractEditFragment() {
 
     companion object {
         const val TAG = "DATING_filter_fragment_tag"
@@ -30,6 +30,9 @@ class DatingFilterFragment() : AbstractEditFragment() {
 
     private var mFilter: FilterData? = null
 
+    private val preFilter by lazy{
+        FilterData(App.get().profile.dating)
+    }
     private val mBinding by lazy {
         DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false)
     }
@@ -70,7 +73,7 @@ class DatingFilterFragment() : AbstractEditFragment() {
         mViewModel.release()
     }
 
-    override fun hasChanges(): Boolean = mFilter != null && mFilter != FilterData(mViewModel)
+    override fun hasChanges() = mFilter != null && FilterData(mViewModel)!= preFilter
 
     override fun saveChanges(handler: Handler) {
         if (hasChanges()) {
