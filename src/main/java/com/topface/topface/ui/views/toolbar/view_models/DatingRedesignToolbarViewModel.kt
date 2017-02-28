@@ -14,8 +14,6 @@ import com.topface.topface.data.FragmentLifreCycleData
 import com.topface.topface.data.FragmentLifreCycleData.*
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
-import com.topface.topface.state.LifeCycleState
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
@@ -25,7 +23,6 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 import kotlin.properties.Delegates
 
 /**
@@ -34,10 +31,14 @@ import kotlin.properties.Delegates
 class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation) {
 
-    @Inject lateinit var mState: TopfaceAppState
-    @Inject lateinit var mLifeCycleReporter: LifeCycleState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
+    private val mLifeCycleReporter by lazy {
+        App.getAppComponent().lifeCycleState()
+    }
     var extraViewModel: CustomToolbarViewModel? = null
-    val contentMarginTop = ObservableField(0)
+    val contentMarginTop = ObservableInt(0)
     private val mNotificationSubscription: Subscription
     private val mFragmentLifecycleSubscription: Subscription
     private val mSubscriptions = CompositeSubscription()
@@ -81,7 +82,6 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
     }
 
     init {
-        App.get().inject(this)
         title.set(Utils.EMPTY)
         subTitle.set(Utils.EMPTY)
         isDating = false

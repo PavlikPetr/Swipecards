@@ -15,8 +15,6 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.FlurryManager;
 
-import javax.inject.Inject;
-
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -31,14 +29,13 @@ public class AdjustManager {
     private static final String PURCHASE_TOKEN = "trfawd";
     private static final String FIRST_PAY_TOKEN = "h75za2";
 
-    @Inject
-    TopfaceAppState mAppState;
-    @Inject
-    LifeCycleState mLifeCycleState;
+    private TopfaceAppState mAppState;
+    private LifeCycleState mLifeCycleState;
     private boolean mIsInitialized;
 
     public AdjustManager() {
-        App.from(App.getContext()).inject(this);
+        mAppState = App.getAppComponent().appState();
+        mLifeCycleState = App.getAppComponent().lifeCycleState();
     }
 
     public void initAdjust() {

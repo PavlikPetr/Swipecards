@@ -4,8 +4,6 @@ import android.location.Location
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.requests.handlers.ErrorCodes
-import com.topface.topface.state.EventBus
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
@@ -19,15 +17,15 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * ВьюМодель Листа "Людей рядом"
  */
 class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
 
-    @Inject lateinit var mState: TopfaceAppState
-    @Inject lateinit var mEventBus: EventBus
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
     private var mSubscribtionLocation: Subscription
     private var mSubscriptionPeopleNearbyList: Subscription? = null
     private var mSubscriptionPTR: Subscription
@@ -44,9 +42,8 @@ class PeopleNearbyListViewModel(val api: FeedApi) : ILifeCycle {
     }
 
     init {
-        App.get().inject(this)
         geolocationManagerInit()
-        mSubscribtionLocation = mState.getObservable(Location::class.java)
+        mSubscribtionLocation = App.getAppComponent().appState().getObservable(Location::class.java)
                 .filter { it.isValidLocation() }
                 .subscribe(shortSubscription {
                     it?.let {

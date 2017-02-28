@@ -5,25 +5,20 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogPopupEvent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription
-import javax.inject.Inject
-
 
 class DialogsMenuPopupViewModel(private val mFeedDialog: FeedDialog, private val mApi: FeedApi, private val iDialogCloser: IDialogCloser) {
 
-    @Inject lateinit var mEventBus: EventBus
-
-    init {
-        App.get().inject(this)
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
     }
 
     private var mBlackListSubscriber: Subscription? = null

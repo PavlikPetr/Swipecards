@@ -25,7 +25,6 @@ import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules.tryShowTrialPopup
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
@@ -42,7 +41,6 @@ import rx.Subscriber
 import rx.Subscription
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import javax.inject.Inject
 
 /**
  * VM for dating buttons
@@ -87,10 +85,12 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
      */
     private var mLockDatingButtonsVisibility = true
 
-    @Inject lateinit internal var mAppState: TopfaceAppState
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
     private val mBalanceDataSubscriptions = CompositeSubscription()
     private var mBalance: BalanceData? = null
-
+    private val mIsMutualPopupEnabled = App.get().options.mutualPopupEnabled
     private val mUpdateActionsReceiver: BroadcastReceiver
 
     companion object {
@@ -103,7 +103,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     init {
-        App.get().inject(this)
         mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
             override fun onNext(balance: BalanceData?) = balance.let {
                 mBalance = it
@@ -166,7 +165,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     fun sendLike() = sendSomething {
         if (!it.rated) {
-            tryShowTrialPopup(navigator = mNavigator)
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH)
                     .subscribeOn(Schedulers.io())
@@ -174,6 +172,9 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
+                            if (it.isMutualPossible && mIsMutualPopupEnabled){
+                                mNavigator.showMutualPopup(it)
+                            }
                         }
 
                         override fun onError(e: Throwable?) {

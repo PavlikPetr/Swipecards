@@ -3,23 +3,16 @@ package com.topface.topface.state;
 import com.topface.topface.App;
 import com.topface.topface.data.CountersData;
 
-import javax.inject.Inject;
-
 import rx.Subscriber;
-import rx.Subscription;
 import rx.functions.Action1;
 
 public class CountersDataProvider extends Subscriber<CountersData> {
 
-    private Subscription mSubscription;
     private ICountersUpdater mUpdater;
-    @Inject
-    TopfaceAppState mAppState;
 
     public CountersDataProvider(ICountersUpdater updater) {
         mUpdater = updater;
-        App.get().inject(this);
-        mSubscription = mAppState.getObservable(CountersData.class)
+        App.getAppComponent().appState().getObservable(CountersData.class)
                 .doOnError(new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {

@@ -50,8 +50,6 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 /**
  * Абстрактный фрагмент, реализующий процесс покупки черес библиотеку OpenIAB
  * Если вам нужны покупки через GP, Amazon, Nokia и все остальное, что поддерживает OpenIAB, то
@@ -81,7 +79,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
 
-    @Inject
     AdjustManager mAdjustManager;
 
     private boolean mHasDeferredPurchase = false;
@@ -129,7 +126,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
         mUserConfig = App.getUserConfig();
         App.getOpenIabHelperManager().addOpenIabEventListener(getActivity(), this);
     }
@@ -439,6 +435,9 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         // Отправлем покупку на сервер для проверки и начисления
         final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
         if (validateRequest != null) {
+            if(mAdjustManager == null){
+                mAdjustManager = App.getAppComponent().adjustManager();
+            }
             validateRequest.callback(new DataApiHandler<Verify>() {
                 @Override
                 protected void success(Verify verify, IApiResponse response) {

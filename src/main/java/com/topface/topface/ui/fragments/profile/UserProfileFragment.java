@@ -39,26 +39,20 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
-import com.topface.topface.ui.CrashReportActivity;
 import com.topface.topface.ui.GiftsActivity;
-import com.topface.topface.ui.dialogs.trial_vip_experiment.base.TrialExperimentsRules;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
+import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -90,8 +84,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private String mUserNameAndAge;
     private String mUserCity;
     private Photo mPhoto;
-    @Inject
-    TopfaceAppState mState;
     Subscription mBalanceSubscription;
 
     @Override
@@ -114,9 +106,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.get().inject(this);
         View root = super.onCreateView(inflater, container, savedInstanceState);
-        mBalanceSubscription = mState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
             @Override
             public void call(BalanceData balanceData) {
                 if (!isAddToFavoriteAvailable() && balanceData.premium) {
@@ -156,13 +147,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        TrialExperimentsRules.INSTANCE.tryShowTrialPopup(this, App.get().getOptions().trialVipExperiment.getAndroidTrialPopupExp()
-                , new FeedNavigator((CrashReportActivity) getActivity()));
-    }
-
-    @Override
     protected boolean isNeedShowOverflowMenu() {
         return true;
     }
@@ -170,7 +154,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        TrialExperimentsRules.INSTANCE.release();
         RxUtils.safeUnsubscribe(mBalanceSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mGiftReceiver);
     }

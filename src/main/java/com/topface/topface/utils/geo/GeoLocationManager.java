@@ -15,8 +15,6 @@ import com.topface.topface.state.TopfaceAppState;
 
 import org.jetbrains.annotations.Nullable;
 
-import javax.inject.Inject;
-
 import static android.location.LocationManager.GPS_PROVIDER;
 import static android.location.LocationManager.NETWORK_PROVIDER;
 
@@ -25,10 +23,9 @@ import static android.location.LocationManager.NETWORK_PROVIDER;
  * На каждый из обнаруженных регистрируем лисентер в PeopleNearbyFragment. Отписываем  лисентеры
  * там же, если выходим из экрана ближайших или находясь в этом экране выключаем ВСЮ навигацию
  */
+@SuppressWarnings("MissingPermission")
 public class GeoLocationManager {
 
-    @Inject
-    TopfaceAppState mAppState;
     private static final int UPDATE_TIME = 1000 * 60 * 2;
     private static final float UPDATE_RANGE = 10f;
     private LocationManager mLocationManager;
@@ -68,7 +65,6 @@ public class GeoLocationManager {
     };
 
     public GeoLocationManager() {
-        App.get().inject(this);
         mLocationManager = (LocationManager) App.getContext().getSystemService(Context.LOCATION_SERVICE);
         startLocationListener();
     }
@@ -148,7 +144,7 @@ public class GeoLocationManager {
     private void setBestLocation(@Nullable Location location) {
         if (isValidLocation(location)) {
             mBestLocation = location;
-            mAppState.setData(mBestLocation);
+            App.getAppComponent().appState().setData(mBestLocation);
         }
     }
 

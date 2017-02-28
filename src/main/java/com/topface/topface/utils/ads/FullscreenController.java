@@ -20,7 +20,6 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.App;
-import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
@@ -48,8 +47,6 @@ import com.topface.topface.utils.popups.PopupManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
-
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
@@ -59,9 +56,6 @@ import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER
 /**
  */
 public class FullscreenController {
-
-    @Inject
-    WeakStorage mWeakStorage;
 
     private static final String TAG = "FullscreenController";
     private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
@@ -191,7 +185,7 @@ public class FullscreenController {
                 break;
             case APPODEAL_NEW:
                 Debug.log("BANNER_SETTINGS : new segment " + settings.banner.adAppId);
-                mWeakStorage.setAppodealFullscreenSegmentName(settings.banner.adAppId);
+                App.getAppComponent().weakStorage().setAppodealFullscreenSegmentName(settings.banner.adAppId);
                 AppodealProvider.setCustomSegment();
                 requestAppodealFullscreen();
         }
@@ -233,7 +227,6 @@ public class FullscreenController {
     private Application.ActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
     public FullscreenController(Activity activity) {
-        App.get().inject(this);
         mActivity = activity;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             mActivityLifecycleCallbacks = new Utils.ActivityLifecycleCallbacksAdapter() {

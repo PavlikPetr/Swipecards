@@ -25,8 +25,6 @@ import com.topface.topface.utils.rx.RxUtils;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.inject.Inject;
-
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -44,16 +42,15 @@ public class PromoExpressMessages extends PromoDialog {
 
     private Random mRandom;
 
-    @Inject
-    NavigationState mNavigationState;
-    @Inject
-    TopfaceAppState mAppState;
+    private NavigationState mNavigationState;
+    private TopfaceAppState mAppState;
     private Subscription mBalanceSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
+        mNavigationState = App.getAppComponent().navigationState();
+        mAppState = App.getAppComponent().appState();
     }
 
     @Override

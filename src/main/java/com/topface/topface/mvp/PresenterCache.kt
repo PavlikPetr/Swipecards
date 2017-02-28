@@ -8,12 +8,9 @@ import android.support.v4.util.SimpleArrayMap
 class PresenterCache {
     private val mPresenters = SimpleArrayMap<String, IPresenter>()
 
+    @Suppress("UNCHECKED_CAST")
     fun <T : IPresenter> getPresenter(clazz: String, factory: IPresenterFactory<T>): T {
-        var presenter: T? = null
-        try {
-            presenter = mPresenters[clazz] as T
-        } catch (e: ClassCastException) {
-        }
+        var presenter = mPresenters[clazz] as? T
 
         if (presenter == null) {
             presenter = factory.createPresenter()

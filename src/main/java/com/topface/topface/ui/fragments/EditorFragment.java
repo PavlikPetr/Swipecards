@@ -124,7 +124,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
         initNavigationBar();
         initApiUrl(root);
-        initTrialVipType(root);
         initDebugMode(root);
         initProfileId(root);
         initEditorMode(root);
@@ -265,31 +264,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private void setInfoText(View rootLayout, int fieldId, String text) {
         TextView textView = (TextView) rootLayout.findViewById(fieldId);
         textView.setText(textView.getText() + " " + text);
-    }
-
-    private void initTrialVipType(View rootLayout) {
-        Spinner trialType = (Spinner) rootLayout.findViewById(R.id.trialType);
-        //Создаем стандартный адаптер
-        @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(
-                getActivity(),
-                android.R.layout.simple_spinner_item,
-                new ArrayList(Arrays.asList(getActivity().getResources().getStringArray(R.array.trial_vip_types)))
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        trialType.setAdapter(adapter);
-        trialType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mAppConfig.setTrialVipPopupType(i - 1);
-                mAppConfig.saveConfig();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        trialType.setSelection((int) mAppConfig.getTrialVipPopupType() + 1);
     }
 
     private void initApiUrl(View rootLayout) {

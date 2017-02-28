@@ -56,7 +56,6 @@ import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
-import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
@@ -121,21 +120,17 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(options.startPage));
-        if (App.getUserConfig().getDatingMessage().equals(options
-                .instantMessageFromSearch.getText())) {
-            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
-        }
         activity.startActivity(intent);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        App.getAppComponent().inject(this);
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
             config.saveConfig();
         }
-        App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
         try {
             if (intent.getBooleanExtra(INTENT_EXIT, false)) {

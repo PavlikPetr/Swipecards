@@ -346,6 +346,9 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     protected void onPause() {
         super.onPause();
+        for (ILifeCycle saver : stateSavers) {
+            saver.onPause();
+        }
         removeAllRequests();
         if (mProfileLoadReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);

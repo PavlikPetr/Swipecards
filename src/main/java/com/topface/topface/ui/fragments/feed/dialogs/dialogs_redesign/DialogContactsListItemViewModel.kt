@@ -6,7 +6,6 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.User
 import com.topface.topface.requests.response.DialogContactsItem
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -14,10 +13,9 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
-import javax.inject.Inject
 
 /**
  * VM итема хедера в диалогах
@@ -25,7 +23,9 @@ import javax.inject.Inject
  */
 class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNavigator: IFeedNavigator
                                       , private var mItem: DialogContactsItem) : ILifeCycle {
-    @Inject lateinit var mEventBus: EventBus
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
     val userPhoto = ObservableField(mItem.user.photo)
     val type = ObservableField(getTransformType())
     val placeholderRes = ObservableField(if (mItem.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
@@ -35,10 +35,6 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
     val strokeSize = ObservableField(R.dimen.dialog_stroke_size.getDimen())
 
     private var mItemUpdateEventSubscription: Subscription? = null
-
-    init {
-        App.get().inject(this)
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

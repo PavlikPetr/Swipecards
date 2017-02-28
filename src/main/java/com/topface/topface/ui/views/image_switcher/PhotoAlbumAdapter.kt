@@ -1,0 +1,157 @@
+package com.topface.topface.ui.views.image_switcher
+
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.support.v7.widget.RecyclerView
+import android.view.View
+import com.bumptech.glide.DrawableRequestBuilder
+import com.bumptech.glide.GenericRequestBuilder
+import com.bumptech.glide.Glide
+import com.bumptech.glide.ListPreloader.PreloadModelProvider
+import com.bumptech.glide.ListPreloader.PreloadSizeProvider
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.target.Target
+import com.topface.framework.utils.Debug
+import com.topface.topface.App
+import com.topface.topface.R
+import com.topface.topface.databinding.AlbumImageBinding
+import com.topface.topface.state.EventBus
+import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.utils.extensions.clear
+import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.loadLinkToSameCache
+
+/**
+ * RV adapter for album
+ * Created by ppavlik on 13.02.17.
+ */
+
+class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, private val readyToPreload: () -> Unit) : BaseRecyclerViewAdapter<AlbumImageBinding, String>(),
+        PreloadModelProvider<String>, PreloadSizeProvider<String> {
+
+    companion object {
+        const val TAG = "PreloadingAdapter"
+    }
+
+    private val mEventBus: EventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
+
+    private var stolenSize: IntArray? = null
+    private var mIsRecyclerViewAttached = false
+    private var mTargets = hashMapOf<Int, SimpleTarget<GlideDrawable>>()
+
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mIsRecyclerViewAttached = true
+    }
+
+    override fun bindData(binding: AlbumImageBinding?, position: Int) {
+        binding?.let { bind ->
+            val viewModel = AlbumImageViewModel()
+            bind.viewModel = viewModel
+            getDataItem(position)?.let {
+                mTargets[position].clear()
+                val target = mRequest
+                        .loadLinkToSameCache(it)
+                        .listener(object : RequestListener<String, GlideDrawable> {
+                            override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
+                                                     isFirstResource: Boolean): Boolean {
+                                Debug.log("$TAG =======================onException========================\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                                if (model.isNullOrEmpty()) {
+                                    askToPreloadLinks(position)
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            }
+
+                            override fun onResourceReady(resource: GlideDrawable?, model: String?,
+                                                         target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
+                                                         isFirstResource: Boolean): Boolean {
+                                Debug.log("$TAG =======================onResourceReady========================\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                                return false
+                            }
+                        })
+                        .into(object : SimpleTarget<GlideDrawable>() {
+                            override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
+                                resource?.let {
+                                    viewModel.isProgressVisible.set(View.GONE)
+                                    binding.image.setImageDrawable(it)
+                                }
+                            }
+
+                            override fun onLoadFailed(e: Exception?, errorDrawable: Drawable?) {
+                                super.onLoadFailed(e, errorDrawable)
+                                viewModel.isProgressVisible.set(View.GONE)
+                                binding.image.setImageDrawable(R.drawable.im_photo_error.getDrawable())
+                            }
+
+                            override fun onLoadStarted(placeholder: Drawable?) {
+                                super.onLoadStarted(placeholder)
+                                viewModel.isProgressVisible.set(View.VISIBLE)
+                                binding.image.setImageDrawable(null)
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                                super.onLoadCleared(placeholder)
+                                viewModel.isProgressVisible.set(View.VISIBLE)
+                                binding.image.setImageDrawable(null)
+                            }
+
+                        })
+                mTargets.put(position, target)
+                if (stolenSize == null) {
+                    target.getSize { width, height -> stolenSize = intArrayOf(width, height) }
+                    readyToPreload.invoke()
+                }
+            }
+        }
+    }
+
+    override fun clearData() {
+        super.clearData()
+        release()
+    }
+
+    fun release() {
+        mTargets.forEach {
+            it.value.clear()
+        }
+    }
+
+    override fun onViewRecycled(holder: ItemViewHolder?) {
+        super.onViewRecycled(holder)
+        (holder?.binding as? AlbumImageBinding)?.let {
+            Glide.clear(it.image)
+            it.unbind()
+        }
+    }
+
+    override fun getItemLayout() = R.layout.album_image
+
+    override fun getUpdaterEmitObject() = Bundle()
+
+    override fun getPreloadItems(position: Int): List<String> {
+        Debug.log("$TAG preload position:$position")
+        val link = data.getOrNull(position)
+        if (link.isNullOrEmpty()) {
+            askToPreloadLinks(position)
+        }
+        // если ссылки на фото нет, то не буудем выполнять предзагрузку
+        return if (link.isNullOrEmpty()) listOf<String>() else listOf(link!!)
+    }
+
+    override fun getPreloadRequestBuilder(item: String?): GenericRequestBuilder<String, *, *, *> {
+        Debug.log("$TAG preload item:$item")
+        return mRequest.loadLinkToSameCache(item.orEmpty())
+    }
+
+    override fun getPreloadSize(item: String, adapterPosition: Int, perItemPosition: Int) = stolenSize
+
+    private fun askToPreloadLinks(position: Int) = mEventBus.setData(PreloadPhoto(position))
+}

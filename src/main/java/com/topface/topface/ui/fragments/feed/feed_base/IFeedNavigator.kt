@@ -33,8 +33,9 @@ interface IFeedNavigator {
 
     fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos)
     //todo придумать свой навигатор для попапов
-    fun showTrialPopup(type: Long, args: Bundle)
+    fun showTrialPopup(args: Bundle)
 
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
+    fun showMutualPopup(mutualUser: FeedUser)
 }

@@ -7,58 +7,17 @@ import com.topface.topface.R
  * Фабрика метрик, для разных типов попопов триал эксперимента
  * Created by tiberal on  16.11.16.
  */
-class MetricsFactory(val args: Bundle) : IBoilerplateFactory<BoilerplateDialogMetrics> {
+class MetricsFactory(val args: Bundle) {
 
-
-    override fun construct(@ExperimentsType.ExperimentsType type: Long) =
-            when (type) {
-                ExperimentsType.EXPERIMENT_0 -> BoilerplateDialogMetrics.create {
-                    popupBackground = R.drawable.trial_vip_background
-                    getVipButtonBackground = R.drawable.btn_blue_selector
-                    contentBottomMargin = R.dimen.toolbar_title_padding_left
-                    initStandardMetrics(this)
-                }
-                ExperimentsType.EXPERIMENT_1, ExperimentsType.EXPERIMENT_3 -> BoilerplateDialogMetrics.create {
-                    initStandardMetrics(this)
-                }
-                ExperimentsType.EXPERIMENT_2 -> BoilerplateDialogMetrics.create {
-                    isSpecialOffer = true
-                    getVipTopMargin = R.dimen.experiment_2_get_vip_top_margin
-                    initStandardMetrics(this)
-                }
-                ExperimentsType.EXPERIMENT_4 -> BoilerplateDialogMetrics.create {
-                    titleTopMargin = R.dimen.experiment_4_title_top_margin
-                    titleBottomMargin = R.dimen.experiment_4_title_bottom_margin
-                    contentBottomMargin = R.dimen.experiment_4_content_bottom_margin
-                    getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
-                    descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
-                }
-                ExperimentsType.EXPERIMENT_5 -> BoilerplateDialogMetrics.create {
-                    titleTopMargin = R.dimen.experiment_5_title_top_margin
-                    titleBottomMargin = R.dimen.experiment_5_title_bottom_margin
-                    contentBottomMargin = R.dimen.experiment_5_content_bottom_margin
-                    getVipBottomMargin = R.dimen.experiment_5_get_vip_bottom_margin
-                    descriptionBottomMargin = R.dimen.experiment_5_description_bottom_margin
-
-                }
-                else -> BoilerplateDialogMetrics.create {
-                    titleTopMargin = R.dimen.experiment_6_title_top_margin
-                    titleBottomMargin = R.dimen.experiment_6_title_bottom_margin
-                    contentBottomMargin = R.dimen.experiment_6_content_bottom_margin
-                    getVipBottomMargin = R.dimen.experiment_6_get_vip_bottom_margin
-                    descriptionBottomMargin = R.dimen.experiment_6_description_bottom_margin
-                    popupBackground = R.drawable.trial_vip_popup_bg
-                }
+    fun createBoilerplateDialogMetrics() =
+            BoilerplateDialogMetrics.create {
+                popupBackground = R.drawable.trial_vip_background
+                getVipButtonBackground = R.drawable.btn_blue_selector
+                contentBottomMargin = R.dimen.toolbar_title_padding_left
+                titleTopMargin = R.dimen.experiment_1_2_3_title_top_margin
+                titleBottomMargin = R.dimen.experiment_1_2_3_title_bottom_margin
+                contentBottomMargin = R.dimen.experiment_1_2_3_content_bottom_margin
+                getVipBottomMargin = R.dimen.experiment_1_2_3_get_vip_bottom_margin
+                descriptionBottomMargin = R.dimen.experiment_1_2_3_description_bottom_margin
             }
-
-
-    private fun initStandardMetrics(builder: BoilerplateDialogMetrics.Builder): BoilerplateDialogMetrics.Builder {
-        builder.titleTopMargin = R.dimen.experiment_1_2_3_title_top_margin
-        builder.titleBottomMargin = R.dimen.experiment_1_2_3_title_bottom_margin
-        builder.contentBottomMargin = R.dimen.experiment_1_2_3_content_bottom_margin
-        builder.getVipBottomMargin = R.dimen.experiment_1_2_3_get_vip_bottom_margin
-        builder.descriptionBottomMargin = R.dimen.experiment_1_2_3_description_bottom_margin
-        return builder
-    }
-
 }

@@ -29,8 +29,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 @FlurryOpenEvent(name = BonusFragment.PAGE_NAME)
 public class BonusFragment extends BaseFragment implements IBonusView {
     public static final String NEED_SHOW_TITLE = "need_show_title";
@@ -40,8 +38,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     private FragmentBonusBinding mBinding;
     private IBonusPresenter mPresenter;
     private OfferwallsAdapter mAdapter;
-    @Inject
-    PresenterCache mPresenterCache;
+    private PresenterCache mPresenterCache;
 
     public static BonusFragment newInstance(boolean needShowTitle) {
         BonusFragment fragment = new BonusFragment();
@@ -59,7 +56,7 @@ public class BonusFragment extends BaseFragment implements IBonusView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        App.get().inject(this);
+        mPresenterCache = App.getAppComponent().presenterCache();
         mPresenter = mPresenterCache.getPresenter(TAG, new IPresenterFactory<IBonusPresenter>() {
             @NotNull
             @Override

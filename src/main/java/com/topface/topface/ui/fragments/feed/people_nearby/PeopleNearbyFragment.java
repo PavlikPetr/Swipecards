@@ -57,8 +57,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 import permissions.dispatcher.NeedsPermission;
@@ -84,8 +82,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
         }
     };
 
-    @Inject
-    TopfaceAppState mAppState;
+    private TopfaceAppState mAppState;
     private boolean mIsHistoryLoad = false;
     private boolean mIsMakeItemsRead = false;
     private GeoLocationManager mGeoLocationManager;
@@ -110,7 +107,7 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        App.from(getActivity()).inject(this);
+        mAppState = App.getAppComponent().appState();
         mSubscriptionLocation = mAppState.getObservable(Location.class).subscribe(mLocationAction);
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         super.onCreate(savedInstanceState);

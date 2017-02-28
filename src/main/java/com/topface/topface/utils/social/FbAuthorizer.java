@@ -20,13 +20,10 @@ import com.facebook.login.LoginResult;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.AuthTokenStateData;
-import com.topface.topface.state.AuthState;
 import com.topface.topface.utils.config.SessionConfig;
 
 import java.util.Arrays;
 import java.util.Collection;
-
-import javax.inject.Inject;
 
 /**
  * Class that starts Facebook authorization
@@ -38,9 +35,6 @@ public class FbAuthorizer extends Authorizer {
     private static final String IS_FB_AUTHORIZED = "is_fb_authorized";
     private static final String FACEBOOK_REGISTRATION_METHOD = "Facebook";
 
-    @Inject
-    AuthState mAuthState;
-
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
 
@@ -48,7 +42,6 @@ public class FbAuthorizer extends Authorizer {
 
     public FbAuthorizer() {
         super();
-        App.from(App.getContext()).inject(this);
         initFB();
         mCallbackManager = CallbackManager.Factory.create();
         mProfileTracker = new ProfileTracker() {
@@ -93,7 +86,7 @@ public class FbAuthorizer extends Authorizer {
     }
 
     private void sendTokenIntent(@AuthTokenStateData.AuthTokenStatus int tokenStatus) {
-        mAuthState.setData(new AuthTokenStateData(tokenStatus));
+        App.getAppComponent().authState().setData(new AuthTokenStateData(tokenStatus));
     }
 
     private void sendFaceBookEvent() {
