@@ -81,7 +81,7 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
 
     AdjustManager mAdjustManager;
-    KochavaManager kochavaManager;
+    KochavaManager mKochavaManager;
 
     private boolean mHasDeferredPurchase = false;
     private BuyButton mDeferredPurchaseButton;
@@ -440,13 +440,13 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
             if (mAdjustManager == null) {
                 mAdjustManager = App.getAppComponent().adjustManager();
             }
-            if (kochavaManager == null) {
-                kochavaManager = App.getAppComponent().kochavaManager();
+            if (mKochavaManager == null) {
+                mKochavaManager = App.getAppComponent().kochavaManager();
             }
             validateRequest.callback(new DataApiHandler<Verify>() {
                 @Override
                 protected void success(Verify verify, IApiResponse response) {
-                    kochavaManager.purchaseEvent((float) verify.revenue, 1f, purchase.getSku());
+                    mKochavaManager.purchaseEvent((float) verify.revenue, 1f, purchase.getSku());
                     AdWords adWords = new AdWords();
                     boolean isTrialPurchase = PurchasesUtils.isTrial(purchase);
                     boolean isTestPurchase = PurchasesUtils.isTestPurchase(purchase);

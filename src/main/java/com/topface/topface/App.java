@@ -128,7 +128,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     @Inject
     EventBus mEventBus;
     private AdjustManager mAdjustManager;
-    private KochavaManager mKochavaManager;
+    @Inject
+    KochavaManager mKochavaManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;

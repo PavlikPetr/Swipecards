@@ -15,14 +15,16 @@ import com.topface.topface.utils.social.AuthToken
  * Created by ppavlik on 28.02.17.
  */
 
-class KochavaManager private constructor() {
+class KochavaManager {
+
+    companion object {
+        private const val APP_GUID = "kotopface-android-s07"
+        private const val TAG = "KochavaManager"
+    }
+
     val kochavaTracker by lazy {
         Feature(App.getContext(), hashMapOf(Pair<String, Any>(Feature.INPUTITEMS.KOCHAVA_APP_ID, APP_GUID),
                 Pair<String, Any>(Feature.INPUTITEMS.REQUEST_ATTRIBUTION, true)))
-    }
-
-    private val mRunningStateManager by lazy {
-        App.getAppComponent().runningStateManager()
     }
 
     /**
@@ -46,17 +48,18 @@ class KochavaManager private constructor() {
         // turn on kochava logs for debug/qa builds and editors users
         Feature.setErrorDebug(!Debug.isDebugLogsEnabled())
         // register running state manager reporter and send event about session start/end to kochava
-        mRunningStateManager.registerAppChangeStateListener(object : RunningStateManager.OnAppChangeStateListener {
-            override fun onAppForeground(timeOnStart: Long) {
-                Debug.log("$TAG send start session event")
-                kochavaTracker.startSession()
-            }
+        App.getAppComponent().runningStateManager()
+                .registerAppChangeStateListener(object : RunningStateManager.OnAppChangeStateListener {
+                    override fun onAppForeground(timeOnStart: Long) {
+                        Debug.log("$TAG send start session event")
+                        kochavaTracker.startSession()
+                    }
 
-            override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
-                Debug.log("$TAG send end session event")
-                kochavaTracker.endSession()
-            }
-        })
+                    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
+                        Debug.log("$TAG send end session event")
+                        kochavaTracker.endSession()
+                    }
+                })
     }
 
     /**
@@ -83,25 +86,16 @@ class KochavaManager private constructor() {
         kochavaTracker.eventStandard(EventParameters(EventType.RegistrationComplete))
     }
 
-    fun sendReferralTrack() {
-        if (!AuthToken.getInstance().isEmpty) {
-            val attrData = Feature.getAttributionData()
-            if (attrData.isNotEmpty()) {
-                Debug.log("$TAG send kochava referrerTrack request with $attrData")
-                ReferrerRequest(App.getContext(), attrData).exec()
+    fun sendReferralTrack() =
+            if (!AuthToken.getInstance().isEmpty) {
+                val attrData = Feature.getAttributionData()
+                if (attrData.isNotEmpty()) {
+                    Debug.log("$TAG send kochava referrerTrack request with $attrData")
+                    ReferrerRequest(App.getContext(), attrData).exec()
+                } else {
+                    Debug.log("$TAG send kochava referrerTrack request impossible, attributionData are empty")
+                }
             } else {
-                Debug.log("$TAG send kochava referrerTrack request impossible, attributionData are empty")
+                Debug.log("$TAG send kochava referrerTrack request impossible, user has not yet authorized")
             }
-        } else {
-            Debug.log("$TAG send kochava referrerTrack request impossible, user has not yet authorized")
-        }
-    }
-
-    companion object {
-        private const val APP_GUID = "kotopface-android-s07"
-        private const val TAG = "KochavaManager"
-        val instance by lazy {
-            KochavaManager()
-        }
-    }
 }

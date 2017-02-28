@@ -19,5 +19,5 @@ class GarbageModule {
 
     @Provides
     @Singleton
-    fun providesKochavaManager() = KochavaManager.instance
+    fun providesKochavaManager() = KochavaManager()
 }
