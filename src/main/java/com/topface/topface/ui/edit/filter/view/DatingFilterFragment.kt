@@ -30,7 +30,7 @@ class DatingFilterFragment : AbstractEditFragment() {
 
     private var mFilter: FilterData? = null
 
-    private val preFilter by lazy{
+    private val preFilter by lazy {
         FilterData(App.get().profile.dating)
     }
     private val mBinding by lazy {
@@ -73,7 +73,7 @@ class DatingFilterFragment : AbstractEditFragment() {
         mViewModel.release()
     }
 
-    override fun hasChanges() = mFilter != null && FilterData(mViewModel)!= preFilter
+    override fun hasChanges() = mFilter != null && FilterData(mViewModel) != preFilter
 
     override fun saveChanges(handler: Handler) {
         if (hasChanges()) {
