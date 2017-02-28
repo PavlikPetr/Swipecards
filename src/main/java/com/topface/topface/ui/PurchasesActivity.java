@@ -22,10 +22,12 @@ import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -35,7 +37,6 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
-import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -95,6 +96,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
     private static TopfaceAppState mAppState;
     private EventBus mEventBus;
+    private PresenterCache mPresenterCache;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
@@ -111,6 +113,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
         mAppState = App.getAppComponent().appState();
         mEventBus = App.getAppComponent().eventBus();
+        mPresenterCache = App.getAppComponent().presenterCache();
 
         mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
         if (TFOfferwallSDK.isInitialized()) {
@@ -140,6 +143,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
             mTopfaceOfferwallRedirect.setComplited(false);
         }
         RxUtils.safeUnsubscribe(mEventBusSubscriber);
+
+        if (isFinishing()) {
+            mPresenterCache.removePresenter(BonusFragment.TAG);
+        }
         super.onDestroy();
     }
 

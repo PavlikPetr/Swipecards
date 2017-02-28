@@ -2,6 +2,7 @@ package com.topface.topface.di
 
 import com.topface.topface.App
 import com.topface.topface.data.leftMenu.NavigationState
+import com.topface.topface.mvp.PresenterCache
 import com.topface.topface.state.*
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.external_libs.AdjustManager
@@ -24,6 +25,7 @@ interface AppComponent {
     fun weakStorage(): WeakStorage
     fun lifeCycleState(): LifeCycleState
     fun authState(): AuthState
+    fun presenterCache(): PresenterCache
 
     fun adjustManager(): AdjustManager
 

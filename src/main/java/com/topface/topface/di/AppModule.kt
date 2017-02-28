@@ -8,6 +8,7 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.NavigationState
+import com.topface.topface.mvp.PresenterCache
 import com.topface.topface.state.*
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData
 import com.topface.topface.utils.CacheProfile
@@ -156,6 +157,10 @@ class AppModule(private val mContext: Context) {
     @Provides
     @Singleton
     fun providesWeakStorage() = WeakStorage()
+
+    @Provides
+    @Singleton
+    fun providesPresenterCache() = PresenterCache()
 
 
 }
