@@ -30,6 +30,7 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.AuthState;
 import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
@@ -48,6 +49,7 @@ import org.json.JSONException;
 public abstract class BaseAuthFragment extends BaseFragment {
 
     private AdjustManager mAdjustManager;
+    private KochavaManager mKochavaManager;
     private AuthState mAuthState;
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
@@ -128,8 +130,11 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     protected void auth(final AuthToken token) {
-        if(mAdjustManager == null){
+        if (mAdjustManager == null) {
             mAdjustManager = App.getAppComponent().adjustManager();
+        }
+        if (mKochavaManager == null) {
+            mKochavaManager = App.getAppComponent().kochavaManager();
         }
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         showProgress();
@@ -147,6 +152,8 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
                 App.sendReferrerTrack(appConfig.getReferrerTrackData());
                 mAdjustManager.sendRegistrationEvent(token.getSocialNet());
+                mKochavaManager.registration();
+                mKochavaManager.sendReferralTrack();
                 //Отправляем статистику в AppsFlyer
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
