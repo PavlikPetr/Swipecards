@@ -16,6 +16,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 
 /**
@@ -39,9 +40,9 @@ class AddToPhotoBlogRedesignActivityViewModel(var activityDelegate: IActivityDel
 
     init {
         mSubscriptions.add(mEventBus.getObservable(PlaceButtonTapEvent::class.java)
-                .subscribe { placeOrBuy() })
+                .subscribe(shortSubscription { placeOrBuy() }))
         mSubscriptions.add(mAppState.getObservable(BalanceData::class.java)
-                .subscribe({ mBalance = it }))
+                .subscribe(shortSubscription { mBalance = it }))
     }
 
     fun release() {

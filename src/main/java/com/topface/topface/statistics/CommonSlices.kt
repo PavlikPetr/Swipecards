@@ -4,6 +4,7 @@ import com.topface.statistics.android.StatisticsTracker
 import com.topface.topface.App
 import com.topface.topface.BuildConfig
 import com.topface.topface.data.Options
+import com.topface.topface.utils.rx.shortSubscription
 
 /**
  * Добавляем дефолтный набор срезов в клиентскую статистику
@@ -28,10 +29,10 @@ class CommonSlices private constructor() {
 
     init {
         StatisticsTracker.getInstance().setPredefinedSlice(CommonSlices.DEFAULT_SLICES)
-        mAppState.getObservable(Options::class.java).distinctUntilChanged().subscribe {
+        mAppState.getObservable(Options::class.java).distinctUntilChanged().subscribe(shortSubscription {
             StatisticsTracker.getInstance().setPredefinedSlice(it.statisticsSlices.apply {
                 putAll(CommonSlices.DEFAULT_SLICES)
             })
-        }
+        })
     }
 }

@@ -230,9 +230,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mBinding.usedGrid.scrollToPosition(position);
             }
         });
-        mSubscription = mAppState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+        mSubscription = mAppState.getObservable(Profile.class).subscribe(new RxUtils.ShortSubscription<Profile>() {
             @Override
-            public void call(Profile profile) {
+            public void onNext(Profile profile) {
+                super.onNext(profile);
                 if (mOwnProfileRecyclerViewAdapter != null && profile.photos != null &&
                         mOwnProfileRecyclerViewAdapter.getPhotos().size() != profile.photos.size()) {
 

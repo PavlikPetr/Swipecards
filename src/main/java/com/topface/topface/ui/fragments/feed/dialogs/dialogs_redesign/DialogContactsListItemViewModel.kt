@@ -5,6 +5,7 @@ import android.databinding.ObservableField
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.User
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ChatFragment
@@ -13,8 +14,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 
 /**
@@ -43,13 +44,13 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (mItem.user.id == userId && !data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
                     if (mItem.unread) {
-                        sendReadRequest(mItem).first().subscribe {
+                        sendReadRequest(mItem).first().subscribe(shortSubscription {
                             if (it.completed) {
                                 mItem.unread = false
                                 nameTextColor.set(getNameColor())
                                 mEventBus.setData(ContactsItemsReadEvent(mItem))
                             }
-                        }
+                        })
                     }
                 }
             }

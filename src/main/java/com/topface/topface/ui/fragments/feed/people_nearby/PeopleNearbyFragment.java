@@ -51,6 +51,7 @@ import com.topface.topface.utils.extensions.PermissionsExtensions;
 import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.geo.GeoLocationManager;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -89,17 +90,19 @@ public class PeopleNearbyFragment extends NoFilterFeedFragment<FeedGeo> {
     private Subscription mSubscriptionLocation;
     private CountDownTimer mWaitLocationTimer;
     private int mCoins;
-    private Action1<Location> mLocationAction = new Action1<Location>() {
+    private RxUtils.ShortSubscription<Location> mLocationAction = new RxUtils.ShortSubscription<Location>() {
         @Override
-        public void call(Location location) {
+        public void onNext(Location location) {
+            super.onNext(location);
             if (isGeoEnabled() && GeoLocationManager.isValidLocation(location)) {
                 sendPeopleNearbyRequest(location, mIsHistoryLoad, mIsMakeItemsRead);
             }
         }
     };
-    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+    private RxUtils.ShortSubscription<BalanceData> mBalanceAction = new RxUtils.ShortSubscription<BalanceData>() {
         @Override
-        public void call(BalanceData balanceData) {
+        public void onNext(BalanceData balanceData) {
+            super.onNext(balanceData);
             mCoins = balanceData.money;
         }
     };

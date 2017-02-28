@@ -17,6 +17,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.ExpandableItem
 import com.topface.topface.ui.new_adapter.ExpandableItemDelegate
+import com.topface.topface.utils.rx.shortSubscription
 import java.util.*
 
 
@@ -63,12 +64,12 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                             .distinct {
                                 it?.getInt(BaseFeedFragmentViewModel.TO, -1)
                             }
-                            .subscribe {
+                            .subscribe(shortSubscription {
                                 Debug.log("GIFTS_BUGS loadGifts ${data.data?.userId} count ${giftsModel.gifts.count} moar ${giftsModel.gifts.more}")
                                 if (giftsModel.gifts.more) {
                                     mViewModel?.loadGifts(it.getInt(BaseFeedFragmentViewModel.TO, -1))
                                 }
-                            }
+                            })
                     binding.model = mViewModel
                 }
             }
