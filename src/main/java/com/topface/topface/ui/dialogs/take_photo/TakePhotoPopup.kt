@@ -112,6 +112,12 @@ class TakePhotoPopup : AbstractDialogFragment() {
         dialog.cancel()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mToolbarViewModel.release()
+        mViewModel.release()
+    }
+
     @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
     fun onNeverAskAgain() {
         activity?.let { PermissionAlertDialogFactory().constructNeverAskAgain(it) }
