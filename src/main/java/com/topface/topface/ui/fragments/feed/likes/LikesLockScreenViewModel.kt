@@ -19,6 +19,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
@@ -42,15 +43,15 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
     private var mBlockSympathy = dataUpdater.options.blockSympathy
 
     init {
-        mBalanceSubscription = mState.getObservable(BalanceData::class.java).subscribe {
+        mBalanceSubscription = mState.getObservable(BalanceData::class.java).subscribe(shortSubscription {
             mBalanceData = it
-        }
-        mOptionsSubscription = mState.getObservable(Options::class.java).subscribe {
+        })
+        mOptionsSubscription = mState.getObservable(Options::class.java).subscribe(shortSubscription {
             mBlockSympathy = it.blockSympathy.apply {
                 message.set(it.blockSympathy.text ?: context.getString(R.string.likes_buy_vip))
                 buttonMessage.set(it.blockSympathy.buttonText ?: context.getString(R.string.buying_vip_status))
             }
-        }
+        })
     }
 
     /*

@@ -11,6 +11,7 @@ import com.facebook.share.widget.AppInviteDialog
 import com.topface.topface.App
 import com.topface.topface.data.Options
 import com.topface.topface.state.EventBus
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.utils.social.FbAppLinkReadyEvent
 import com.topface.topface.utils.social.FbInviteTemplatesEvent
@@ -65,7 +66,7 @@ object FBInvitesUtils {
                     val appLink = event1.appLink
                     val templates = event2.inviteTemplates
                 }
-        }.first().subscribe({
+        }.first().subscribe(shortSubscription{
             if (it.templates.isLinkValid(it.appLink)) {
                 with(App.getAppConfig()) {
                     fbInviteAppLink = it.appLink

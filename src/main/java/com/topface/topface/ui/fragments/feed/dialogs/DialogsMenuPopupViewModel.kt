@@ -5,12 +5,12 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
+import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogPopupEvent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription

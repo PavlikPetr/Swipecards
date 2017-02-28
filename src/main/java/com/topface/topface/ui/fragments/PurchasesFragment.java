@@ -35,6 +35,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,7 +43,6 @@ import java.util.Iterator;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.functions.Action1;
 
 public class PurchasesFragment extends BaseFragment {
 
@@ -72,9 +72,10 @@ public class PurchasesFragment extends BaseFragment {
     private boolean mIsVip;
     private String mResourceInfoText;
     private BalanceData mBalanceData;
-    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+    private RxUtils.ShortSubscription<BalanceData> mBalanceAction = new RxUtils.ShortSubscription<BalanceData>() {
         @Override
-        public void call(BalanceData balanceData) {
+        public void onNext(BalanceData balanceData) {
+            super.onNext(balanceData);
             mBalanceData = balanceData;
         }
     };

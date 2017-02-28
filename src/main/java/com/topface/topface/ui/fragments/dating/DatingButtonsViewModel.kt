@@ -23,7 +23,6 @@ import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
@@ -34,8 +33,8 @@ import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
@@ -103,8 +102,8 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     init {
-        mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
-            override fun onNext(balance: BalanceData?) = balance.let {
+        mBalanceDataSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(shortSubscription {
+            it?.let {
                 mBalance = it
             }
         }))
@@ -172,7 +171,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
-                            if (it.isMutualPossible && mIsMutualPopupEnabled){
+                            if (it.isMutualPossible && mIsMutualPopupEnabled) {
                                 mNavigator.showMutualPopup(it)
                             }
                         }

@@ -24,7 +24,7 @@ import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.FlurryManager.GET_LEAD
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getFakePhotosCount
-import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 
 
@@ -49,10 +49,10 @@ class AddToPhotoBlogHeaderViewModel(binding: AddToPhotoBlogHeaderLayoutBinding, 
     }
 
     init {
-        mSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
-            override fun onNext(balance: BalanceData?) = balance?.let {
+        mSubscriptions.add(mAppState.getObservable(BalanceData::class.java).subscribe(shortSubscription {
+            it?.let {
                 mBalance = it
-            } ?: Unit
+            }
         }))
         addButtons(binding.buttonsContainer)
     }

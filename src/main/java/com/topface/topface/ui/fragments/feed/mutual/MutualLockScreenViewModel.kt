@@ -6,6 +6,7 @@ import com.topface.topface.databinding.LayoutEmptyMutualBinding
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 
@@ -20,11 +21,13 @@ class MutualLockScreenViewModel(binding: LayoutEmptyMutualBinding,
     private var mBalanceSubscription: Subscription? = null
 
     init {
-        mBalanceSubscription = App.getAppComponent().appState().getObservable(CountersData::class.java).subscribe {
-            if (it.admirations > 0) {
-                mIFeedUnlocked.onFeedUnlocked()
-            }
-        }
+        mBalanceSubscription = App.getAppComponent().appState()
+                .getObservable(CountersData::class.java)
+                .subscribe(shortSubscription {
+                    if (it?.let { it.admirations > 0 } ?: false) {
+                        mIFeedUnlocked.onFeedUnlocked()
+                    }
+                })
     }
 
     fun onGoToDatingClick() = mNavigator.showDating()

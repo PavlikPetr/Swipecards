@@ -60,6 +60,7 @@ class KochavaManager {
                         kochavaTracker.endSession()
                     }
                 })
+        Debug.log("$TAG kochava device id ${Feature.getKochavaDeviceId()}")
     }
 
     /**
