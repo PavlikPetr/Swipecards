@@ -2,7 +2,6 @@ package com.topface.topface.statistics
 
 import com.topface.statistics.processor.annotations.GenerateStatistics
 import com.topface.statistics.processor.annotations.SendNow
-import com.topface.topface.App
 
 /**
  * Ключи для отправки статистики приглашений в приложение через FB
