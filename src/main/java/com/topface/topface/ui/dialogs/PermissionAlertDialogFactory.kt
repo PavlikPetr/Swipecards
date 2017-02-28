@@ -12,12 +12,9 @@ import com.topface.topface.utils.extensions.showAppSettings
  * Created by m.bayutin on 28.02.17.
  */
 class PermissionAlertDialogFactory {
-    private fun constructAlert(context: Context,
-                               @StringRes positiveButtonTextResId: Int,
-                               @StringRes negativeButtonResId: Int,
-                               @StringRes messageResId: Int,
-                               positiveAction: () -> Unit) {
-        return AlertDialog.Builder(context)
+    private fun constructAlert(context: Context, @StringRes positiveButtonTextResId: Int,
+                               @StringRes negativeButtonResId: Int, @StringRes messageResId: Int,
+                               positiveAction: () -> Unit) = AlertDialog.Builder(context)
                 .setPositiveButton(positiveButtonTextResId) { dialog, which ->
                     positiveAction()
                 }
@@ -28,7 +25,6 @@ class PermissionAlertDialogFactory {
                 .setCancelable(false)
                 .create()
                 .show()
-    }
 
     fun constructNeverAskAgain(context: Context) = constructAlert(context,
             R.string.permission_alert_button_allow,
