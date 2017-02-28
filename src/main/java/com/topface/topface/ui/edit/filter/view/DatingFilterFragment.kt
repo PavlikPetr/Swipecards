@@ -17,7 +17,6 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
-import kotlin.properties.Delegates
 
 class DatingFilterFragment : AbstractEditFragment() {
 
@@ -37,7 +36,7 @@ class DatingFilterFragment : AbstractEditFragment() {
         DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false)
     }
 
-    private var mViewModel by Delegates.notNull<DatingFilterViewModel>()
+    private val mViewModel by lazy { DatingFilterViewModel(activity as IActivityDelegate, mFilter ?: initFilter()) }
 
     override fun getScreenName(): String = PAGE_NAME
 
@@ -46,7 +45,6 @@ class DatingFilterFragment : AbstractEditFragment() {
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER_VALUE)) {
             mFilter = savedInstanceState.getParcelable<FilterData>(CURRENT_FILTER_VALUE)
         }
-        mViewModel = DatingFilterViewModel(activity as IActivityDelegate, mFilter ?: initFilter())
         mBinding.viewModel = mViewModel
         return mBinding.root
     }
