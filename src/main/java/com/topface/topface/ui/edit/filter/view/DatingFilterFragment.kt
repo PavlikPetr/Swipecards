@@ -17,9 +17,8 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
-import kotlin.properties.Delegates
 
-class DatingFilterFragment() : AbstractEditFragment() {
+class DatingFilterFragment : AbstractEditFragment() {
 
     companion object {
         const val TAG = "DATING_filter_fragment_tag"
@@ -28,13 +27,16 @@ class DatingFilterFragment() : AbstractEditFragment() {
         const val PAGE_NAME = "Filter"
     }
 
-    private var mFilter by Delegates.notNull<FilterData>()
+    private var mFilter: FilterData? = null
 
+    private val preFilter by lazy {
+        FilterData(App.get().profile.dating)
+    }
     private val mBinding by lazy {
-        DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false) }
+        DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false)
+    }
 
-    private val mViewModel by lazy {
-        DatingFilterViewModel(activity as IActivityDelegate, initFilter()) }
+    private val mViewModel by lazy { DatingFilterViewModel(activity as IActivityDelegate, mFilter ?: initFilter()) }
 
     override fun getScreenName(): String = PAGE_NAME
 
@@ -57,11 +59,11 @@ class DatingFilterFragment() : AbstractEditFragment() {
         return true
     }
 
-    private fun initFilter() = (FilterData(App.get().profile.dating?.clone() ?: DatingFilter())).apply { mFilter = this }
+    private fun initFilter() = FilterData(App.get().profile.dating?.clone() ?: DatingFilter()).apply { mFilter = this }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putParcelable(CURRENT_FILTER_VALUE, FilterData(mViewModel))
+        outState.putParcelable(CURRENT_FILTER_VALUE, FilterData(mViewModel))
     }
 
     override fun onDestroyView() {
@@ -69,7 +71,7 @@ class DatingFilterFragment() : AbstractEditFragment() {
         mViewModel.release()
     }
 
-    override fun hasChanges(): Boolean = mFilter != FilterData(mViewModel)
+    override fun hasChanges() = mFilter != null && FilterData(mViewModel) != preFilter
 
     override fun saveChanges(handler: Handler) {
         if (hasChanges()) {
