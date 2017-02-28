@@ -6,8 +6,6 @@ import com.topface.topface.R
 import com.topface.topface.databinding.BasePurchaseSuccessfullBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import com.topface.topface.ui.fragments.dating.IDialogCloser
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.utils.IActivityDelegate
 import kotlin.properties.Delegates
 
 /**
@@ -15,23 +13,22 @@ import kotlin.properties.Delegates
  */
 class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
 
-    companion object{
+    companion object {
         const val TAG = "purchase_successfull_ragment"
-        const val BUTTON_TEXT = "text_for_button"
         const val SKU = "product_type"
-        fun getInstance(textForButton: String, sku: String) = PurchaseSuccessfullFragment().apply {
-                        arguments = Bundle().apply {
-                                putString(BUTTON_TEXT, textForButton)
-                                putString(SKU, sku)
-                            }
-                    }
+        fun getInstance(sku: String) = PurchaseSuccessfullFragment().apply {
+            arguments = Bundle().apply {
+                putString(SKU, sku)
+            }
+        }
     }
 
     private var mBinding by Delegates.notNull<BasePurchaseSuccessfullBinding>()
 
     private val mViewModel by lazy {
-                PurchaseSuccessfullViewModel( arguments.getString(BUTTON_TEXT), arguments.getString(SKU), this)
-            }
+        PurchaseSuccessfullViewModel(arguments.getString(SKU), this)
+    }
+
     override fun initViews(root: View?) {
         mBinding = BasePurchaseSuccessfullBinding.bind(root)
         mBinding.setViewModel(mViewModel)
@@ -43,7 +40,7 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mViewModel.unsubscribe()
+        mViewModel.release()
     }
 
     override fun closeIt() = dialog.cancel()

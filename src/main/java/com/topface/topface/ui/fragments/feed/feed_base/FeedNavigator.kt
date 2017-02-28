@@ -12,7 +12,6 @@ import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
-import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
@@ -172,10 +171,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
-    override fun showPurchaseSuccessfullFragment(textForButton: String, sku: String) {
-        val mPurchaseSuccessfullFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
+    override fun showPurchaseSuccessfullFragment(sku: String) {
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
             it as PurchaseSuccessfullFragment
-        } ?: PurchaseSuccessfullFragment.getInstance(textForButton, sku)
-        mPurchaseSuccessfullFragment.show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+        } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 }
