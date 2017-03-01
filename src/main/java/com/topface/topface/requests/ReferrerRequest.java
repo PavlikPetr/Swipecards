@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
@@ -17,6 +18,7 @@ public class ReferrerRequest extends ApiRequest {
 
     private AdjustAttributeData mAttribution;
     private InstallReferrerData mReferrerTrack;
+    private String mKochavaAttributionData;
 
     public ReferrerRequest(@NotNull Context context, @NotNull AdjustAttributeData attribution) {
         super(context);
@@ -28,6 +30,11 @@ public class ReferrerRequest extends ApiRequest {
         mReferrerTrack = referrerTrack;
     }
 
+    public ReferrerRequest(@NotNull Context context, @NotNull String attributionData) {
+        super(context);
+        mKochavaAttributionData = attributionData;
+    }
+
     @Override
     protected JSONObject getRequestData() throws JSONException {
         JSONObject jsonObject = new JSONObject();
@@ -37,12 +44,15 @@ public class ReferrerRequest extends ApiRequest {
         if (!InstallReferrerData.isEmpty(mReferrerTrack)) {
             jsonObject.put("installReferrer", mReferrerTrack.getInstallReferrerTrackData());
         }
+        if (!TextUtils.isEmpty(mKochavaAttributionData)) {
+            jsonObject.put("kochava", mKochavaAttributionData);
+        }
         return jsonObject;
     }
 
     @Override
     public void exec() {
-        if (mAttribution == null && InstallReferrerData.isEmpty(mReferrerTrack)) {
+        if (mAttribution == null && InstallReferrerData.isEmpty(mReferrerTrack) && TextUtils.isEmpty(mKochavaAttributionData)) {
             Debug.error("Request data is empty");
             return;
         }

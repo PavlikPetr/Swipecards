@@ -940,6 +940,9 @@
   <string name="write_her_without_symphaty">Write to her without a Mutual Like!</string>
   <string name="people_nearby_popover_text">Get featured in the photo feed!\nThousands of people will see you</string>
   <string name="mutual_popup_you_get_mutual">You like each other!</string>
+  <string name="start_dialog">Start Conversation</string>
+  <string name="continue_to_meet">Continue Dating</string>
+  <string name="basic_information">Basic Information</string>
   <string name="photo_feed_add_photo">Get featured in the photo feed!\nThousands of people will see you.</string>
   <string name="buy_likes_get_more_likes">Get more Likes!</string>
   <string name="buy_likes_become_first_in_searchlist_female">Get shown first to guys looking for girls like you!</string>

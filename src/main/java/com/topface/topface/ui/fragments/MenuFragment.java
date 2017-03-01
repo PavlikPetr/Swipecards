@@ -43,6 +43,7 @@ import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClick
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.WeakStorage;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -261,9 +262,10 @@ public class MenuFragment extends Fragment {
                                 || mBalanceData.premium != balanceData.premium;
                     }
                 })
-                .subscribe(new Action1<BalanceData>() {
+                .subscribe(new RxUtils.ShortSubscription<BalanceData>() {
                     @Override
-                    public void call(BalanceData balanceData) {
+                    public void onNext(BalanceData balanceData) {
+                        super.onNext(balanceData);
                         mBalanceData = balanceData;
                         updateBalance();
                         updateBecomeVipItem(balanceData.premium);

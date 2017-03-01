@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.feed_base
 import android.content.Intent
 import android.databinding.ViewDataBinding
 import android.support.v4.content.LocalBroadcastManager
-import android.view.View
 import android.widget.Toast
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
@@ -17,10 +16,10 @@ import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.ads.AdmobInterstitialUtils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.rx.RxUtils
 import rx.Subscriber
 import rx.Subscription
 

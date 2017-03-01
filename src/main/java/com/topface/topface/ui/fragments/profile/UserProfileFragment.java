@@ -107,9 +107,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
-        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
-            public void call(BalanceData balanceData) {
+            public void onNext(BalanceData balanceData) {
+                super.onNext(balanceData);
                 if (!isAddToFavoriteAvailable() && balanceData.premium) {
                     setIsAddToFavoritsAvailable(balanceData.premium);
                 }

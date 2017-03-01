@@ -67,6 +67,7 @@ import com.topface.topface.utils.popups.start_actions.OldVersionStartAction;
 import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
 import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -141,9 +142,10 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
+        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new RxUtils.ShortSubscription<AdjustAttributeData>() {
             @Override
-            public void call(AdjustAttributeData adjustAttributionData) {
+            public void onNext(AdjustAttributeData adjustAttributionData) {
+                super.onNext(adjustAttributionData);
                 App.sendAdjustAttributeData(adjustAttributionData);
             }
         }));
@@ -170,9 +172,10 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 throwable.printStackTrace();
             }
         }));
-        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
+        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new RxUtils.ShortSubscription<DrawerLayoutStateData>() {
             @Override
-            public void call(DrawerLayoutStateData drawerLayoutStateData) {
+            public void onNext(DrawerLayoutStateData drawerLayoutStateData) {
+                super.onNext(drawerLayoutStateData);
                 if (drawerLayoutStateData.getState() != DrawerLayoutStateData.UNDEFINED && mDrawerLayout != null &&
                         mDrawerLayout.getDrawer() != null) {
                     Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
@@ -197,9 +200,10 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         initFullscreen();
         initAppsFlyer();
         isPhotoAsked = false;
-        mSubscription.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        mSubscription.add(mAppState.getObservable(City.class).subscribe(new RxUtils.ShortSubscription<City>() {
             @Override
-            public void call(final City city) {
+            public void onNext(final City city) {
+                super.onNext(city);
                 if (city != null) {
                     SettingsRequest request = new SettingsRequest(App.getContext());
                     request.cityid = city.id;
