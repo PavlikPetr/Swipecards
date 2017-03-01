@@ -27,7 +27,7 @@
         app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
-            android:id="@+id/uiTestTagIdFansGuests"
+            android:id="@+id/fans_frame_avatar"
             app:uiTestTag = "@{model.getTag()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
