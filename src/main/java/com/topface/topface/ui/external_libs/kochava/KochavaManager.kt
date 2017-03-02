@@ -1,6 +1,7 @@
 package com.topface.topface.ui.external_libs.kochava
 
 import android.os.Handler
+import android.util.Log
 import com.kochava.android.tracker.EventParameters
 import com.kochava.android.tracker.EventType
 import com.kochava.android.tracker.Feature
@@ -38,29 +39,36 @@ class KochavaManager {
         Feature.setAttributionHandler(Handler(Handler.Callback { msg ->
             // check attributionData to minimize of kochava instance using
             msg?.data?.getString(Feature.ATTRIBUTION_DATA)?.let {
+                Log.e(TAG, "catch attribution data $it")
+//                Debug.log("$TAG catch attribution data $it")
                 sendReferralTrack()
             }
             false
         }))
-        kochavaTracker.run {
-            Debug.log("$TAG init kochava. Create instance of tracker.")
-        }
         // turn on kochava logs for debug/qa builds and editors users
         Feature.setErrorDebug(!Debug.isDebugLogsEnabled())
+        Feature.enableDebug(true)
+        kochavaTracker.run {
+            Log.e(TAG, "init kochava. Create instance of tracker.")
+//            Debug.log("$TAG init kochava. Create instance of tracker.")
+        }
         // register running state manager reporter and send event about session start/end to kochava
         App.getAppComponent().runningStateManager()
                 .registerAppChangeStateListener(object : RunningStateManager.OnAppChangeStateListener {
                     override fun onAppForeground(timeOnStart: Long) {
-                        Debug.log("$TAG send start session event")
+                        Log.e(TAG, "send start session event")
+//                        Debug.log("$TAG send start session event")
                         kochavaTracker.startSession()
                     }
 
                     override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
-                        Debug.log("$TAG send end session event")
+                        Log.e(TAG, "send end session event")
+//                        Debug.log("$TAG send end session event")
                         kochavaTracker.endSession()
                     }
                 })
-        Debug.log("$TAG kochava device id ${Feature.getKochavaDeviceId()}")
+        Log.e(TAG, "kochava device id ${Feature.getKochavaDeviceId()}")
+//        Debug.log("$TAG kochava device id ${Feature.getKochavaDeviceId()}")
     }
 
     /**
@@ -71,7 +79,8 @@ class KochavaManager {
      * @param skuId the name of product
      */
     fun purchaseEvent(price: Float, quantity: Float, skuId: String) {
-        Debug.log("$TAG send purchase event. Product : $skuId quantity : $quantity price : $price")
+        Log.e(TAG, "send purchase event. Product : $skuId quantity : $quantity price : $price")
+//        Debug.log("$TAG send purchase event. Product : $skuId quantity : $quantity price : $price")
         kochavaTracker.eventStandard(EventParameters(EventType.Purchase).apply {
             name(skuId)
             quantity(quantity)
@@ -83,7 +92,8 @@ class KochavaManager {
      * Send event registration
      */
     fun registration() {
-        Debug.log("$TAG send registration event")
+        Log.e(TAG, "send registration event")
+//        Debug.log("$TAG send registration event")
         kochavaTracker.eventStandard(EventParameters(EventType.RegistrationComplete))
     }
 
@@ -91,12 +101,15 @@ class KochavaManager {
             if (!AuthToken.getInstance().isEmpty) {
                 val attrData = Feature.getAttributionData()
                 if (attrData.isNotEmpty()) {
-                    Debug.log("$TAG send kochava referrerTrack request with $attrData")
+                    Log.e(TAG, "send kochava referrerTrack request with $attrData")
+//                    Debug.log("$TAG send kochava referrerTrack request with $attrData")
                     ReferrerRequest(App.getContext(), attrData).exec()
                 } else {
-                    Debug.log("$TAG send kochava referrerTrack request impossible, attributionData are empty")
+                    Log.e(TAG, "send kochava referrerTrack request impossible, attributionData are empty")
+//                    Debug.log("$TAG send kochava referrerTrack request impossible, attributionData are empty")
                 }
             } else {
-                Debug.log("$TAG send kochava referrerTrack request impossible, user has not yet authorized")
+                Log.e(TAG, "send kochava referrerTrack request impossible, user has not yet authorized")
+//                Debug.log("$TAG send kochava referrerTrack request impossible, user has not yet authorized")
             }
 }

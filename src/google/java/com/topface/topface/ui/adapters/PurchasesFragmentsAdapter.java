@@ -16,6 +16,7 @@ import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
+import com.topface.topface.ui.fragments.buy.pn_purchase.PnMarketBuyingFragment;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -66,7 +67,8 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         String text = mArguments.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
         switch (mTabs.get(position).type) {
             case PurchasesTabData.GPLAY:
-                fragment = !mIsVip ? MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
+                fragment = PnMarketBuyingFragment.Companion.newInstance(mIsVip, text, from);
+//                fragment = !mIsVip ? MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.AMAZON:
                 fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
@@ -79,6 +81,10 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 break;
             case PurchasesTabData.PWALL_MOBILE:
                 fragment = !mIsVip ? PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE, text) : VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE, text);
+                break;
+            case PurchasesTabData.PAYMENT_NINJA:
+                fragment = PnMarketBuyingFragment.Companion.newInstance(mIsVip, text, from);
+                break;
             default:
                 Debug.error("PurchasesFragmentsAdapter wrong position");
                 break;
@@ -105,6 +111,9 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
             case PurchasesTabData.PWALL:
             case PurchasesTabData.PWALL_MOBILE:
                 cls = !mIsVip ? PaymentWallBuyingFragment.class : VipPaymentWallBuyFragment.class;
+                break;
+            case PurchasesTabData.PAYMENT_NINJA:
+                cls = PnMarketBuyingFragment.class;
                 break;
         }
         return cls != null ? cls.getName() : null;

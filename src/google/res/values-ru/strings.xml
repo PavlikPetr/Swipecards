@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification"/>
+    <string name="receive_rate_notification" />
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1272,4 +1272,7 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+
+    <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
+    <string name="get_other_card">Использовать другую карту</string>
 </resources>

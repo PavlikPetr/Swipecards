@@ -274,6 +274,9 @@ public class PurchasesFragment extends BaseFragment {
             case PurchasesTabData.PWALL_MOBILE:
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
                 break;
+            case PurchasesTabData.PAYMENT_NINJA:
+                products = CacheProfile.getMarketProducts();
+                break;
         }
         return products;
     }
