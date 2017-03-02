@@ -1752,6 +1752,7 @@
 
     <style name="NinjaErrorTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/ninja_error_text</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="NinjaHintTextAppearance" parent="@android:style/TextAppearance">
