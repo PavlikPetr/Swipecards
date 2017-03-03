@@ -244,18 +244,20 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
         LocalBroadcastManager.getInstance(mContext)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
-        mProfileSubscription = mAppState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
-            if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
-                if (currentUser == null) {
-                    mUserSearchList.currentUser?.let {
-                        it.photos?.let {
-                            albumData.set(it)
+        mProfileSubscription = mAppState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }
+                .subscribe(shortSubscription {
+                    if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
+                        if (currentUser == null) {
+                            mUserSearchList.currentUser?.let {
+                                it.photos?.let {
+                                    albumData.set(it)
+                                }
+                                currentUser = it
+                            }
                         }
-                        currentUser = it
                     }
-                }
-            }
-        }
+                })
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
     }
@@ -302,7 +304,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         override fun onCompleted() {
                             mLikeSubscription.safeUnsubscribe()
                             validateDeviceActivation()
-                            if (it.isMutualPossible && mIsMutualPopupEnabled){
+                            if (it.isMutualPossible && mIsMutualPopupEnabled) {
                                 mNavigator.showMutualPopup(it)
                             }
                         }

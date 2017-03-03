@@ -61,6 +61,11 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
     }
 
     @Override
+    public void onUpClick() {
+        super.finish();
+    }
+
+    @Override
     public boolean isTrackable() {
         return false;
     }

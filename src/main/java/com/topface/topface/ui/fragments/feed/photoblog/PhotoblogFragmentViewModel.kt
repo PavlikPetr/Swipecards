@@ -12,6 +12,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxUtils
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
@@ -36,8 +37,8 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
 
     init {
         mRefreshIntervalSubscription = Observable.interval(UPDATE_DELAY, UPDATE_DELAY, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(object : RxUtils.ShortSubscription<Long>() {
-            override fun onNext(type: Long?) = loadTopFeeds()
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(shortSubscription {
+            loadTopFeeds()
         })
     }
 

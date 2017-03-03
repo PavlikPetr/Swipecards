@@ -14,6 +14,7 @@ import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.photosForPhotoBlog
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
@@ -42,7 +43,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
     private var mLastLoadedPhotoPosition = 0
 
     init {
-        mUpdateSubscription = updateObservable.subscribe {
+        mUpdateSubscription = updateObservable.subscribe(shortSubscription {
             if (mHasInitialData) {
                 loadDataFromProfile()
                 mHasInitialData = false
@@ -50,7 +51,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
                 mLastLoadedPhotoPosition = if (data.isEmpty()) 0 else (data.getList().last() as Photo).getPosition() + 1
                 loadProfilePhotos()
             }
-        }
+        })
     }
 
     private fun loadProfilePhotos() {
@@ -84,7 +85,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
     }
 
     private fun loadDataFromProfile() {
-        mProfileSubscription = mAppState.getObservable(Profile::class.java).subscribe {
+        mProfileSubscription = mAppState.getObservable(Profile::class.java).subscribe(shortSubscription {
             if (it.photos.isNotEmpty()) {
                 mLastLoadedPhotoPosition = it.photos.last().position + 1
                 val cleanPhotos = it.photos.photosForPhotoBlog()
@@ -104,7 +105,7 @@ class PhotoListItemViewModel(private val mApi: FeedApi,
                 data.replaceData(ArrayList<Any>())
                 lastSelectedPhotoId.set(0)
             }
-        }
+        })
     }
 
     fun release() {

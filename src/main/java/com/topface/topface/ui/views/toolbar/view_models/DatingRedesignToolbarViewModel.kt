@@ -91,8 +91,10 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
             extraViewModel = CustomToolbarViewModel(this)
             viewModel = extraViewModel
         }
-        mSubscriptions.add(title.filedObservable.subscribe { extraViewModel?.title?.set(it) })
-        mSubscriptions.add(subTitle.filedObservable.subscribe { extraViewModel?.subTitle?.set(it) })
+        mSubscriptions.add(title.filedObservable
+                .subscribe(shortSubscription { it?.let { extraViewModel?.title?.set(it) } }))
+        mSubscriptions.add(subTitle.filedObservable
+                .subscribe(shortSubscription { it?.let { extraViewModel?.subTitle?.set(it) } }))
         mNotificationSubscription = mState.getObservable(CountersData::class.java)
                 .distinctUntilChanged()
                 .flatMap { Observable.just(it.dialogs > 0 || it.mutual > 0 || it.likes > 0) }

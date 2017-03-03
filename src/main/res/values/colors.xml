@@ -208,6 +208,7 @@
     <color name="white_hint_text">#80FFFFFF</color>
     <color name="white_disabled_button">#4DFFFFFF</color>
     <color name="white_divider">#1FFFFFFF</color>
+    <color name="gray_primary_text">#9A9999</color>
 
     <color name="city_pressed">#eceff1</color>
 
@@ -300,5 +301,9 @@
     <color name="circle_around_online_circle">@color/bg_white</color>
 
     <color name="dating_filter_background"> #f5f5f5 </color>
+
+    <!-- Payment Ninja -->
+    <color name="ninja_error_text">#F45430</color>
+    <color name="ninja_color_accent">#499AFF</color>
 
 </resources>

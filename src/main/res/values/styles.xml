@@ -1384,6 +1384,24 @@
 
     <style name="PopupTitle" parent="PopupTitleBase"/>
 
+    <style name="PurchasePopupTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="PurchasePopupText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="PopupAnimatedBackground">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -1734,6 +1752,39 @@
 
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/dating_fab_skip</item>
+    </style>
+
+    <!-- Styles for Payment Ninja -->
+    <style name="NinjaAutoPayDescription">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/gray_primary_text</item>
+        <item name="android:paddingLeft">28dp</item>
+        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="NinjaAutoPayDescription.TopMargin">
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+
+    <style name="NinjaErrorTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/ninja_error_text</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="NinjaHintTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/gray_primary_text</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="NinjaInputTextEdit">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textColor">@color/dark_primary_text</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

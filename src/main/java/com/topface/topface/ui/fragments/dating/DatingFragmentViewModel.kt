@@ -36,6 +36,7 @@ import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.utils.social.AuthToken
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observable
@@ -77,34 +78,36 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     init {
-        mProfileSubscription.add(mState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }.subscribe { profile ->
-            if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
-                if (currentUser == null) {
-                    mUserSearchList.currentUser?.let {
-                        currentUser = it
-                        mDatingViewModelEvents.onDataReceived(it)
-                        binding.root.post {
-                            //если есть currentUser, например после востановления стейта, то работаем с ним
-                            (if (currentUser == null) it else currentUser)?.let {
-                                prepareFormsData(it, profile)
-                                mDatingButtonsView.unlockControls()
+        mProfileSubscription.add(mState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }
+                .subscribe(shortSubscription { profile ->
+                    if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
+                        if (currentUser == null) {
+                            mUserSearchList.currentUser?.let {
+                                currentUser = it
+                                mDatingViewModelEvents.onDataReceived(it)
+                                binding.root.post {
+                                    //если есть currentUser, например после востановления стейта, то работаем с ним
+                                    (if (currentUser == null) it else currentUser)?.let {
+                                        prepareFormsData(it, profile)
+                                        mDatingButtonsView.unlockControls()
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
-        })
+                }))
         // слушаем изменения в анкете и статусе
         mProfileSubscription.add(Observable.merge(mState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.forms == t2.forms },
                 mState.getObservable(Profile::class.java).distinctUntilChanged { t1, t2 -> t1.status == t2.status })
                 .debounce(100, TimeUnit.MILLISECONDS)
-                .subscribe { profile ->
+                .subscribe(shortSubscription { profile ->
                     binding.root.post {
                         currentUser?.let {
                             prepareFormsData(it, profile)
                         }
                     }
-                })
+                }))
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()

@@ -349,6 +349,17 @@
                 android:value=".ui.NavigationActivity"/>
         </activity>
 
+        <activity
+            android:name="com.topface.billing.ninja.NinjaAddCardActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NinjaTheme"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity"/>
+        </activity>
+
         <!-- ADS -->
 
         <activity
@@ -450,6 +461,15 @@
         <receiver
             android:name="com.yandex.metrica.MetricaEventHandler"
             android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+        <!--kochava receiver-->
+        <receiver
+            android:name="com.kochava.android.tracker.ReferralCapture"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>

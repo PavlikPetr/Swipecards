@@ -7,6 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 
 class HeaderPhotoBlogViewModel(private val mNavigator: IFeedNavigator) {
@@ -16,7 +17,7 @@ class HeaderPhotoBlogViewModel(private val mNavigator: IFeedNavigator) {
     init {
         setUrlAvatar(App.get().profile)
         profileSubscription = App.getAppComponent().appState().getObservable(Profile::class.java)
-                .subscribe { profile -> setUrlAvatar(profile) }
+                .subscribe(shortSubscription { it?.let { setUrlAvatar(it) } })
     }
 
     fun showAddToLeader() =

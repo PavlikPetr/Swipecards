@@ -1,6 +1,7 @@
 package com.topface.topface.di
 
 import com.topface.topface.ui.external_libs.AdjustManager
+import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -15,4 +16,8 @@ class GarbageModule {
     @Provides
     @Singleton
     fun providesAdjustManager() = AdjustManager()
+
+    @Provides
+    @Singleton
+    fun providesKochavaManager() = KochavaManager()
 }
