@@ -1304,5 +1304,10 @@
     <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
     <string name="ninja_text_link">правилами оказания услуги</string>
     <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
+    <string name="ninja_error_dialog_title">Произошла ошибка</string>
+    <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберете другой способ оплаты.</string>
+    <string name="ninja_error_dialog_message_single">Попробуйте ещё раз.</string>
+    <string name="ninja_error_dialog_button_retry">Попробовать еще раз</string>
+    <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
 
 </resources>
