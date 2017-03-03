@@ -1272,4 +1272,17 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+    <!-- Payment Ninja -->
+    <string name="ninja_hint_card_number">Номер карты</string>
+    <string name="ninja_hint_card_expires">Действует до</string>
+    <string name="ninja_hint_cvv">CVV/CVC</string>
+    <string name="ninja_button_buy">Купить</string>
+    <string name="ninja_checkbox_auto_pay">Автопополнение счета</string>
+    <string name="ninja_text_1">Безопасный платеж</string>
+    <string name="ninja_text_2">128-bit SSL Secured</string>
+    <string name="ninja_text_3">Услуга позволяет пополнять баланс монет автоматически, при достижении на нём суммы в 5 монет.</string>
+    <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
+    <string name="ninja_text_link">правилами оказания услуги</string>
+    <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
+
 </resources>
