@@ -1264,6 +1264,22 @@
     <string name="start_dialog">Начать диалог</string>
     <string name="continue_to_meet">Продолжить знакомиться</string>
     <string name="basic_information">Основная информация</string>
+    <string name="purchase_successfull">Покупка успешно завершена!</string>
+    <string name="now_you_have_VIP">Теперь у вас VIP-статус</string>
+
+    <plurals name="you_have_some_coins">
+        <item quantity="one">Теперь у вас %d монета</item>
+        <item quantity="few">Теперь у вас %d монеты</item>
+        <item quantity="many">Теперь у вас %d монет</item>
+        <item quantity="other">Теперь у вас %d монет</item>
+    </plurals>
+
+    <plurals name="you_have_some_sympathies">
+        <item quantity="one">Теперь у вас %d симпатия</item>
+        <item quantity="few">Теперь у вас %d симпатии</item>
+        <item quantity="many">Теперь у вас %d симпатий</item>
+        <item quantity="other">Теперь у вас %d симпатий</item>
+    </plurals>
     <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
     <string name="buy_likes_get_more_likes">Получите больше симпатий!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Встаньте первой в поиске у мужчин, ищущих таких, как вы!</string>
