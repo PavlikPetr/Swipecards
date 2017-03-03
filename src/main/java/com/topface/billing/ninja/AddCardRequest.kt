@@ -45,5 +45,5 @@ class AddCardRequest {
                         emitter.onCompleted()
                     }
                 }).exec()
-            }, Emitter.BackpressureMode.NONE)
+            }, Emitter.BackpressureMode.LATEST)
 }
