@@ -3,13 +3,14 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.buy.pn_purchase.components.BuyButtonComponent
+import com.topface.topface.ui.fragments.buy.pn_purchase.components.*
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import org.jetbrains.anko.layoutInflater
 
@@ -43,7 +44,7 @@ class PnMarketBuyingFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        PnMarketBuyingFragmentViewModel(false, mText)
+        PnMarketBuyingFragmentViewModel(mIsPremiumProducts)
     }
 
     private val mPnBuyingTypeProvider by lazy {
@@ -53,6 +54,10 @@ class PnMarketBuyingFragment : BaseFragment() {
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent())
+                .addAdapterComponent(BuyScreenTitleComponent(mText))
+                .addAdapterComponent(BuyScreenCoinsSectionComponent())
+                .addAdapterComponent(BuyScreenLikesSectionComponent())
+                .addAdapterComponent(BuyScreenUnavailableComponent())
     }
 
     private fun initList() = with(mBinding.buttonsRecyclerView) {
@@ -72,5 +77,10 @@ class PnMarketBuyingFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         initList()
         return mBinding.apply { viewModel = mViewModel }.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.release()
     }
 }

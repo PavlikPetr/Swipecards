@@ -10,6 +10,10 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 class PnBuyingTypeProvider : ITypeProvider {
     override fun getType(java: Class<*>) = when (java) {
         BuyButtonData::class.java -> 1
+        BuyScreenTitle::class.java -> 2
+        BuyScreenLikesSection::class.java -> 3
+        BuyScreenCoinsSection::class.java -> 4
+        BuyScreenProductUnavailable::class.java -> 5
         else -> 0
     }
 }

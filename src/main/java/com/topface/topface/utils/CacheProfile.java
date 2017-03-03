@@ -18,6 +18,7 @@ import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList;
 import com.topface.topface.utils.config.SessionConfig;
 
 import org.json.JSONException;
@@ -79,6 +80,7 @@ public class CacheProfile {
     private static ProductsDetails mProductsDetails;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
+    private static PaymentNinjaProductsList mPaymentNinjaProductsList;
 
     /**
      * Данные из сервиса googleplay.getProducts
@@ -101,6 +103,17 @@ public class CacheProfile {
             }
         }
         return mMarketProducts;
+    }
+
+    public static PaymentNinjaProductsList getmPaymentNinjaProductsList() {
+        if (mPaymentNinjaProductsList == null) {
+            SessionConfig config = App.getSessionConfig();
+            String productsCache = config.getPaymentNinjaProductsData();
+            if (!TextUtils.isEmpty(productsCache)) {
+                mPaymentNinjaProductsList = JsonUtils.fromJson(productsCache, PaymentNinjaProductsList.class);
+            }
+        }
+        return mPaymentNinjaProductsList;
     }
 
     public static ProductsDetails getMarketProductsDetails() {

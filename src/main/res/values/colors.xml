@@ -301,4 +301,8 @@
 
     <color name="dating_filter_background"> #f5f5f5 </color>
 
+    <!--Покупки с Payment Ninja-->
+    <color name="payment_ninja_card_info">#9a9999</color>
+    <color name="payment_ninja_get_other_card">#499aff</color>
+
 </resources>

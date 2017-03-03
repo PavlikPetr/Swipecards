@@ -480,7 +480,6 @@ dependencies {
     kapt files("libs/processor.jar")
 
     compile 'com.comscore:android-analytics:5.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
 }
 
 task processorTask(type: Exec) {

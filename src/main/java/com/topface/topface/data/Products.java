@@ -10,6 +10,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.extensions.Constants;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -31,13 +32,13 @@ public class Products extends AbstractData {
     public static final String USD = "USD";
 
     public enum ProductType {
-        COINS("coins"),
-        LIKES("likes"),
-        PREMIUM("premium", true),
-        LEADER("leader"),
-        OTHERS("others"),
-        COINS_SUBSCRIPTION("coinsSubscription", true),
-        COINS_SUBSCRIPTION_MASKED("coinsSubscriptionMasked", true);
+        COINS(Constants.COINS),
+        LIKES(Constants.LIKES),
+        PREMIUM(Constants.PREMIUM, true),
+        LEADER(Constants.LEADER),
+        OTHERS(Constants.OTHERS),
+        COINS_SUBSCRIPTION(Constants.COINS_SUBSCRIPTION, true),
+        COINS_SUBSCRIPTION_MASKED(Constants.COINS_SUBSCRIPTION_MASKED, true);
 
         private String mTypeName;
         private boolean mIsSubscription;

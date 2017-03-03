@@ -24,8 +24,10 @@ class BuyButtonComponent : AdapterComponent<BuyButtonVer1Binding, BuyButtonData>
             binding.handler = BuyButtonVer1.BuyButtonBuilder()
                     .discount(it.discount > 0)
                     .tag(it.getTag())
-                    .showType(it.showType).title(it.title)
+                    .showType(it.showType)
+                    .title(it.title)
                     .onClick {
+                        // здесь надо будет вызвать метод из навигатора
                     }
                     .build(binding.appContext())
                     .mBtnHandler
