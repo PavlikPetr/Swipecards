@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1264,6 +1264,22 @@
     <string name="start_dialog">Начать диалог</string>
     <string name="continue_to_meet">Продолжить знакомиться</string>
     <string name="basic_information">Основная информация</string>
+    <string name="purchase_successfull">Покупка успешно завершена!</string>
+    <string name="now_you_have_VIP">Теперь у вас VIP-статус</string>
+
+    <plurals name="you_have_some_coins">
+        <item quantity="one">Теперь у вас %d монета</item>
+        <item quantity="few">Теперь у вас %d монеты</item>
+        <item quantity="many">Теперь у вас %d монет</item>
+        <item quantity="other">Теперь у вас %d монет</item>
+    </plurals>
+
+    <plurals name="you_have_some_sympathies">
+        <item quantity="one">Теперь у вас %d симпатия</item>
+        <item quantity="few">Теперь у вас %d симпатии</item>
+        <item quantity="many">Теперь у вас %d симпатий</item>
+        <item quantity="other">Теперь у вас %d симпатий</item>
+    </plurals>
     <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
     <string name="buy_likes_get_more_likes">Получите больше симпатий!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Встаньте первой в поиске у мужчин, ищущих таких, как вы!</string>
@@ -1272,6 +1288,23 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+
+    <string name="permission_alert_button_allow">Перейти</string>
+    <string name="permission_alert_button_disallow">Отклонить</string>
+    <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>
+    <!-- Payment Ninja -->
+    <string name="ninja_hint_card_number">Номер карты</string>
+    <string name="ninja_hint_card_expires">Действует до</string>
+    <string name="ninja_hint_cvv">CVV/CVC</string>
+    <string name="ninja_button_buy">Купить</string>
+    <string name="ninja_checkbox_auto_pay">Автопополнение счета</string>
+    <string name="ninja_text_1">Безопасный платеж</string>
+    <string name="ninja_text_2">128-bit SSL Secured</string>
+    <string name="ninja_text_3">Услуга позволяет пополнять баланс монет автоматически, при достижении на нём суммы в 5 монет.</string>
+    <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
+    <string name="ninja_text_link">правилами оказания услуги</string>
+    <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
+
 
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
     <string name="get_other_card">Использовать другую карту</string>

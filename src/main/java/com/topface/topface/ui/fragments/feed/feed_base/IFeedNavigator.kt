@@ -38,6 +38,7 @@ interface IFeedNavigator {
 
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
+    fun showPurchaseSuccessfullFragment(sku: String)
     fun showMutualPopup(mutualUser: FeedUser)
     fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct)
 }
