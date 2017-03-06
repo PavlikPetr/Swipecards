@@ -11,21 +11,23 @@ import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.buy.pn_purchase.components.*
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
  * Fragment to buy payment ninja products
  * Created by petrp on 02.03.2017.
  */
-class PnMarketBuyingFragment : BaseFragment() {
+class PaymentNinjaMarketBuyingFragment : BaseFragment() {
 
     companion object {
         private const val FROM = "payment_ninja_market_buying_fragment_from"
         private const val TEXT = "payment_ninja_market_buying_fragment_text"
         private const val IS_PREMIUM_PRODUCTS = "payment_ninja_market_buying_fragment_is_premium_products"
         fun newInstance(isPremiumProducts: Boolean, text: String?, from: String?) =
-                PnMarketBuyingFragment().apply {
+                PaymentNinjaMarketBuyingFragment().apply {
                     arguments = Bundle().apply {
                         putBoolean(IS_PREMIUM_PRODUCTS, isPremiumProducts)
                         putString(TEXT, text)
@@ -44,16 +46,20 @@ class PnMarketBuyingFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        PnMarketBuyingFragmentViewModel(mIsPremiumProducts)
+        PaymentNinjaMarketBuyingFragmentViewModel(mIsPremiumProducts)
     }
 
     private val mPnBuyingTypeProvider by lazy {
-        PnBuyingTypeProvider()
+        PaymentNinjaBuyingTypeProvider()
+    }
+
+    private val mFeedNavigator by lazy {
+        FeedNavigator(activity as IActivityDelegate)
     }
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
-                .addAdapterComponent(BuyButtonComponent())
+                .addAdapterComponent(BuyButtonComponent(mFeedNavigator))
                 .addAdapterComponent(BuyScreenTitleComponent(mText))
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())
                 .addAdapterComponent(BuyScreenLikesSectionComponent())

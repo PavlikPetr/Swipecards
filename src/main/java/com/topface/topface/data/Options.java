@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.topface.topface.data.PurchasesTabData.PAYMENT_NINJA;
 import static com.topface.topface.data.leftMenu.FragmentIdData.DATING;
 import static com.topface.topface.data.leftMenu.FragmentIdData.UNDEFINED;
 
@@ -268,7 +267,6 @@ public class Options extends AbstractData {
             if (payments != null) {
                 this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
             }
-            this.payments.other.list.add(0, new PurchasesTabData("БАНКОВСКАЯ КАРТА", PAYMENT_NINJA));
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
             if (contactsInvite != null) {

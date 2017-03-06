@@ -22,6 +22,7 @@ import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
@@ -171,4 +172,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
+    override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct) {
+        // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
+    }
 }

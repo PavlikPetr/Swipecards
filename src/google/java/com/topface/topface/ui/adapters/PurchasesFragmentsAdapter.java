@@ -16,7 +16,7 @@ import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
-import com.topface.topface.ui.fragments.buy.pn_purchase.PnMarketBuyingFragment;
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragment;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -82,7 +82,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 fragment = !mIsVip ? PaymentWallBuyingFragment.newInstance(from, PaymentWallProducts.TYPE.MOBILE, text) : VipPaymentWallBuyFragment.newInstance(true, from, PaymentWallProducts.TYPE.MOBILE, text);
                 break;
             case PurchasesTabData.PAYMENT_NINJA:
-                fragment = PnMarketBuyingFragment.Companion.newInstance(mIsVip, text, from);
+                fragment = PaymentNinjaMarketBuyingFragment.Companion.newInstance(mIsVip, text, from);
                 break;
             default:
                 Debug.error("PurchasesFragmentsAdapter wrong position");
@@ -112,7 +112,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
                 cls = !mIsVip ? PaymentWallBuyingFragment.class : VipPaymentWallBuyFragment.class;
                 break;
             case PurchasesTabData.PAYMENT_NINJA:
-                cls = PnMarketBuyingFragment.class;
+                cls = PaymentNinjaMarketBuyingFragment.class;
                 break;
         }
         return cls != null ? cls.getName() : null;

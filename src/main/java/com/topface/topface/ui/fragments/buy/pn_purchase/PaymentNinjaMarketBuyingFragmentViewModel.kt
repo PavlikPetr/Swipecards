@@ -7,6 +7,9 @@ import com.topface.topface.App
 import com.topface.topface.data.Options
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.databinding.SingleObservableArrayList
+import com.topface.topface.utils.extensions.getCoinsProducts
+import com.topface.topface.utils.extensions.getLikesProducts
+import com.topface.topface.utils.extensions.getVipProducts
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
@@ -15,12 +18,12 @@ import rx.Subscription
  * Buy buttons view model
  * Created by petrp on 02.03.2017.
  */
-class PnMarketBuyingFragmentViewModel(private val mIsVipPurchaseProducts: Boolean) {
+class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProducts: Boolean) {
     val cardInfoVisibility = ObservableInt(View.GONE)
     val cardInfo = ObservableField("")
     val data = SingleObservableArrayList<Any>().apply {
         if (mIsVipPurchaseProducts) {
-            with(CacheProfile.getMarketProducts().premium) {
+            with(CacheProfile.getmPaymentNinjaProductsList().getVipProducts()) {
                 if (size > 0) {
                     this@apply.observableList.add(BuyScreenTitle())
                     this@apply.observableList.addAll(this)
@@ -30,14 +33,14 @@ class PnMarketBuyingFragmentViewModel(private val mIsVipPurchaseProducts: Boolea
             }
 
         } else {
-            with(Pair(CacheProfile.getMarketProducts().likes, CacheProfile.getMarketProducts().coins)) {
-                if (first.size > 0 || second.size > 0) {
+            with(Pair(CacheProfile.getmPaymentNinjaProductsList().getLikesProducts(), CacheProfile.getmPaymentNinjaProductsList().getCoinsProducts())) {
+                if (first.isNotEmpty() || second.isNotEmpty()) {
                     this@apply.observableList.add(BuyScreenTitle())
-                    if (this@with.first.size > 0) {
+                    if (this@with.first.isNotEmpty()) {
                         this@apply.observableList.add(BuyScreenLikesSection())
                         this@apply.observableList.addAll(this.first)
                     } else Unit
-                    if (this@with.second.size > 0) {
+                    if (this@with.second.isNotEmpty()) {
                         this@apply.observableList.add(BuyScreenCoinsSection())
                         this@apply.observableList.addAll(this.second)
                     } else Unit

@@ -7,9 +7,9 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
  * Type provider for payment ninja list data
  * Created by ppavlik on 02.03.17.
  */
-class PnBuyingTypeProvider : ITypeProvider {
+class PaymentNinjaBuyingTypeProvider : ITypeProvider {
     override fun getType(java: Class<*>) = when (java) {
-        BuyButtonData::class.java -> 1
+        PaymentNinjaProduct::class.java -> 1
         BuyScreenTitle::class.java -> 2
         BuyScreenLikesSection::class.java -> 3
         BuyScreenCoinsSection::class.java -> 4

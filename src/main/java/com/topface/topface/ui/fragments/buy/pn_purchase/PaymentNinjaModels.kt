@@ -1,5 +1,11 @@
 package com.topface.topface.ui.fragments.buy.pn_purchase
 
+import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
+import com.topface.framework.JsonUtils
+import com.topface.topface.ui.new_adapter.ExpandableItem
+
 /**
  * Модельки для экрана покупок продуктов Payment Ninja
  * Created by ppavlik on 03.03.17.
@@ -37,13 +43,78 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
                                var isSubscription: Boolean, var period: Int, var price: Int, var type: String,
                                var value: Int, var trialPeriod: Int, var displayOnBuyScreen: Boolean,
                                var durationTitle: String, var divider: Float, var typeOfSubscription: Int,
-                               var infoOfSubscription: PaymentNinjaSubscriptionInfo)
+                               var infoOfSubscription: PaymentNinjaSubscriptionInfo) : Parcelable {
+
+    constructor(source: Parcel) : this(
+            source.readString(),
+            source.readInt(),
+            source.readString(),
+            source.readString(),
+            source.readByte().toInt() == 1,
+            source.readInt(),
+            source.readInt(),
+            source.readString(),
+            source.readInt(),
+            source.readInt(),
+            source.readByte().toInt() == 1,
+            source.readString(),
+            source.readFloat(),
+            source.readInt(),
+            source.readParcelable(PaymentNinjaSubscriptionInfo::class.java.classLoader)
+    )
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) =
+            dest?.let {
+                it.writeString(id)
+                it.writeInt(showType)
+                it.writeString(titleTemplate)
+                it.writeString(totalPriceTemplate)
+                it.writeByte((if (isSubscription) 1 else 0).toByte())
+                it.writeInt(period)
+                it.writeInt(price)
+                it.writeString(type)
+                it.writeInt(value)
+                it.writeInt(trialPeriod)
+                it.writeByte((if (displayOnBuyScreen) 1 else 0).toByte())
+                it.writeString(durationTitle)
+                it.writeFloat(divider)
+                it.writeInt(typeOfSubscription)
+                it.writeParcelable(infoOfSubscription, flags)
+            } ?: Unit
+
+    override fun describeContents() = 0
+
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<PaymentNinjaProduct> = object : Parcelable.Creator<PaymentNinjaProduct> {
+            override fun createFromParcel(source: Parcel): PaymentNinjaProduct = PaymentNinjaProduct(source)
+            override fun newArray(size: Int): Array<PaymentNinjaProduct?> = arrayOfNulls(size)
+        }
+    }
+}
 
 /**
  * @param text - Текст с опяснением услуги автопополнения
  * @param url - Ссылка на документацию о правилах по оказанию услуги
  */
-data class PaymentNinjaSubscriptionInfo(var text: String, var url: String)
+data class PaymentNinjaSubscriptionInfo(var text: String, var url: String) : Parcelable {
+
+    constructor(source: Parcel) : this(source.readString(), source.readString())
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) =
+            dest?.let {
+                it.writeString(text)
+                it.writeString(url)
+            } ?: Unit
+
+    override fun describeContents() = 0
+
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<PaymentNinjaSubscriptionInfo> = object : Parcelable.Creator<PaymentNinjaSubscriptionInfo> {
+            override fun createFromParcel(source: Parcel): PaymentNinjaSubscriptionInfo = PaymentNinjaSubscriptionInfo(source)
+            override fun newArray(size: Int): Array<PaymentNinjaSubscriptionInfo?> = arrayOfNulls(size)
+        }
+    }
+}
 
 /**
  * @param products - Список продуктов
