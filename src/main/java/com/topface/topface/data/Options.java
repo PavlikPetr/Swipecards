@@ -21,6 +21,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -222,6 +223,11 @@ public class Options extends AbstractData {
      */
     public FBInviteSettings fbInviteSettings = new FBInviteSettings();
 
+    /**
+     * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
+     */
+    public PaymentInfo paymentNinjaInfo = new PaymentInfo();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -402,6 +408,11 @@ public class Options extends AbstractData {
             if (fbInvitesJsonObject != null) {
                 fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
             }
+            if (response.has("paymentNinjaInfo")) {
+                paymentNinjaInfo = JsonUtils.fromJson(response.optJSONObject("paymentNinjaInfo").toString(), PaymentInfo.class);
+            }
+            paymentNinjaInfo.setEnable(true);
+            paymentNinjaInfo.setLastDigit("1234");
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
