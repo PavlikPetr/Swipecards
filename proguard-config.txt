@@ -209,3 +209,6 @@
 }
 
 -keep class com.xxx.A$* { *; }
+
+# Glide
+-keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule

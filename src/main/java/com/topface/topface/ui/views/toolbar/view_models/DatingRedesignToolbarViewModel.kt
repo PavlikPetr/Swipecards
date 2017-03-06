@@ -2,6 +2,7 @@ package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -37,16 +38,19 @@ class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarB
         App.getAppComponent().lifeCycleState()
     }
     var extraViewModel: CustomToolbarViewModel? = null
-    val contentMarginTop = ObservableField(0)
+    val contentMarginTop = ObservableInt(0)
     private val mNotificationSubscription: Subscription
     private val mFragmentLifecycleSubscription: Subscription
     private val mSubscriptions = CompositeSubscription()
     private var isEmptyContentMargin = true
+    val contentShadowVisibility = ObservableInt(View.VISIBLE)
+
     var isDating by Delegates.observable(false) { prop, old, new ->
         isEmptyContentMargin = new
         background.set(if (new) R.color.transparent else R.color.toolbar_background)
         redrawUpIcon()
-        shadowVisibility.set(if (new) View.GONE else View.VISIBLE)
+        shadowVisibility.set(View.GONE)
+        contentShadowVisibility.set(if (new) View.GONE else View.VISIBLE)
         extraViewModel?.apply {
             titleVisibility.set(if (!new && !TextUtils.isEmpty(title.get()))
                 View.VISIBLE

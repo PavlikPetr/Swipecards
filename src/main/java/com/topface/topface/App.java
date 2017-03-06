@@ -15,7 +15,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
-import com.comscore.analytics.comScore;
+import com.comscore.Analytics;
+import com.comscore.PublisherConfiguration;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
@@ -58,6 +59,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.IStateDataUpdater;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.statistics.AppStateStatistics;
@@ -71,6 +73,7 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
@@ -88,7 +91,9 @@ import com.topface.topface.utils.gcmutils.RegistrationService;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.FbAppLinkReadyEvent;
 import com.topface.topface.utils.social.FbAuthorizer;
+import com.topface.topface.utils.social.FbInviteTemplatesEvent;
 import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
@@ -100,6 +105,8 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
 
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
@@ -117,6 +124,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     RunningStateManager mStateManager;
     @Inject
     WeakStorage mWeakStorage;
+    @Inject
+    EventBus mEventBus;
     private AdjustManager mAdjustManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -498,10 +507,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 }
             });
         }
-        // Settings extenede image loader to send statistics
+        // Settings extended image loader to send statistics
         ImageLoaderStaticFactory.setExtendedImageLoader(ExtendedImageLoader.getInstance());
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
+
+        Subscription fbInviteAppLinkSubscription = FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
 
         sendUnauthorizedRequests();
 
@@ -589,13 +600,21 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
             @Override
             protected AppOptions parseResponse(ApiResponse response) {
-                return new AppOptions(response.jsonResult);
+                AppOptions appOptions = new AppOptions(response.jsonResult);
+                mEventBus.setData(new FbInviteTemplatesEvent(appOptions.invites));
+                return appOptions;
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
             }
         });
+    }
+
+    public void onFbAppLinkReady(String appLink) {
+        if (!TextUtils.isEmpty(appLink)) {
+            mEventBus.setData(new FbAppLinkReadyEvent(appLink));
+        }
     }
 
     public ApiRequest createAppSocialAppsIdsRequest(final ApiHandler handler) {
@@ -631,9 +650,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     private void initComScore() {
-        comScore.setAppContext(mContext);
-        comScore.setCustomerC2(COMSCORE_C2);
-        comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
+        PublisherConfiguration publisher = new PublisherConfiguration.Builder()
+                .publisherSecret(COMSCORE_SECRET_KEY)
+                .publisherId(COMSCORE_C2)
+                .build();
+        Analytics.getConfiguration().addClient(publisher);
+        Analytics.start(getApplicationContext());
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)

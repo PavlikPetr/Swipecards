@@ -30,12 +30,12 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
 
     @Override
     protected int getLastOpenedPage() {
-        return mVisitorsastOpenedPage;
+        return mVisitorsLastOpenedPage;
     }
 
     @Override
     protected void setLastOpenedPage(int lastOpenedPage) {
-        mVisitorsastOpenedPage = lastOpenedPage;
+        mVisitorsLastOpenedPage = lastOpenedPage;
     }
 
     @Override

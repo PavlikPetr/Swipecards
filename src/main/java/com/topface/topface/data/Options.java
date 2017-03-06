@@ -23,7 +23,6 @@ import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 
 import org.json.JSONArray;
@@ -165,7 +164,7 @@ public class Options extends AbstractData {
     public AppOfTheDay appOfTheDay;
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
-
+    public boolean mutualPopupEnabled;
     public boolean showRefillBalanceInSideMenu;
     public boolean enableFacebookInvite;
     public boolean unlockAllForPremium;
@@ -196,7 +195,17 @@ public class Options extends AbstractData {
     /**
      * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
      */
+    @Deprecated
     private boolean dialogRedesignEnabled;
+
+    /**
+     * {Integer} dialogRedesign - версия дизайна лайков/сообщений
+     * 0 - дефолт (старые диалоги)
+     * 1 - новые диалоги (замена для флажка dialogRedesignEnabled, который останется для старых клиентов)
+     * 2 - новый экран диалогов + убрать табы в симпатиях, оставить только одну, основную, страничку
+     * 3 - новый экран диалогов + вернуть все табы в симпатиях
+     */
+    private int dialogRedesign;
 
     /**
      * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
@@ -385,9 +394,10 @@ public class Options extends AbstractData {
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
+            dialogRedesign = response.optInt("dialogRedesign");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
-
+            mutualPopupEnabled = response.optBoolean("mutualPopupEnabled");
             JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
             if (fbInvitesJsonObject != null) {
                 fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
@@ -461,6 +471,10 @@ public class Options extends AbstractData {
 
     public boolean getDialogRedesignEnabled() {
         return dialogRedesignEnabled;
+    }
+
+    public int getDialogDesignVersion() {
+        return dialogRedesign;
     }
 
     public boolean containsBannerType(String bannerType) {
@@ -782,23 +796,9 @@ public class Options extends AbstractData {
     }
 
     public class TrialVipExperiment {
-        private long androidTrialPopupExp;
         public boolean enabled = false;
         public String subscriptionSku = "com.topface.topface.sub.trial.vip.13";
         public int maxShowCount = TRIAL_VIP_MAX_SHOW_COUNT;
-
-        public long getAndroidTrialPopupExp() {
-            if (App.get().getProfile().isEditor()) {
-                long typeFromConfig = App.getAppConfig().getTrialVipPopupType();
-                if (typeFromConfig == AppConfig.TRIAL_VIP_UNDEFINED) {
-                    return androidTrialPopupExp;
-                } else {
-                    return typeFromConfig;
-                }
-            } else {
-                return androidTrialPopupExp;
-            }
-        }
     }
 
     public int getMaxShowCountTrialVipPopup() {

@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -26,10 +27,13 @@ import android.widget.ViewFlipper;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
+import com.topface.topface.glide.tranformation.GlideTransformationFactory;
 import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -40,12 +44,13 @@ import com.topface.topface.utils.databinding.SingleObservableArrayList;
 import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 import com.topface.topface.utils.extensions.ViewExtensionsKt;
-import com.topface.topface.utils.glide_utils.GlideTransformationFactory;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Сюда складывать все BindingAdapter
@@ -418,9 +423,10 @@ public class BindingsAdapters {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationPhoto", "typeTransformation", "placeholderRes"})
-    public static void setPhotoWithTransformation(ImageView imageView, Photo photo, Long type, Integer placeholderRes) {
+    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
+    public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
         Context context = imageView.getContext().getApplicationContext();
+        imageView.setImageResource(placeholderRes); /// Наговнякано, но работает
         if (photo == null) {
             Glide.with(context).load(placeholderRes).into(imageView);
             return;
@@ -428,36 +434,48 @@ public class BindingsAdapters {
         int size = Math.max(imageView.getLayoutParams().width, imageView.getLayoutParams().height);
         int width = imageView.getLayoutParams().width;
         int height = imageView.getLayoutParams().height;
-        String suitableLink = photo.getSuitableLink(width, height);
+        String suitableLink = photo.getSuitableLink(height, width);
         String defaultLink = photo.getDefaultLink();
+        SimpleTarget target = new SimpleTarget<GlideBitmapDrawable>(width, height) {
+            @Override
+            public void onResourceReady(GlideBitmapDrawable resource, GlideAnimation<? super GlideBitmapDrawable> glideAnimation) {
+                imageView.setImageBitmap(resource.getBitmap());
+            }
+        };
         if (suitableLink != null && size > 0) {
             Glide.with(context)
                     .load(suitableLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
-                    .into(imageView);
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
+                    .into(target);
         } else if (defaultLink != null) {
             Glide.with(context)
                     .load(defaultLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type))
-                    .into(imageView);
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
+                    .into(target);
         } else {
-            Glide.with(context).load(placeholderRes).into(imageView);
+            Glide.with(context).load(placeholderRes).into(target);
         }
     }
 
-    @SuppressWarnings("unchecked")
-    @BindingAdapter({"glideTransformationUrl", "typeTransformation"})
-    public static void setImageByUrlWithTransformation(ImageView imageView, String imgUrl, Long type) {
+    @BindingAdapter({"app:glideBlurUrl", "app:blurRadius"})
+    public static void setBlurredImageByUrlWithRadius(ImageView imageView, String imgUrl, int blurRadius) {
         Context context = imageView.getContext().getApplicationContext();
         Glide.with(context)
                 .load(imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .bitmapTransform(new GlideTransformationFactory(context).construct(type))
+                .bitmapTransform(new BlurTransformation(context, blurRadius))
                 .into(imageView);
+    }
+
+    @BindingAdapter("android:layout_height")
+    public static void setImageViewHeight(ImageView view, float height) {
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.height = (int) height;
+        view.setLayoutParams(layoutParams);
     }
 
     @BindingAdapter("viewConfigList")

@@ -21,10 +21,12 @@ import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -43,7 +45,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     private val mEmptyDatingFragment by lazy {
-        DatingEmptyFragment.newInstance()
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(DatingEmptyFragment.TAG)?.let { it as DatingEmptyFragment } ?: DatingEmptyFragment.newInstance()
     }
 
     override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
@@ -137,7 +139,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         if (onCancelFunction != null) {
             setOnCancelListener { onCancelFunction() }
         }
-        show(mActivityDelegate.supportFragmentManager, "DATING_EMPTY_FRAGMENT")
+        show(mActivityDelegate.supportFragmentManager, DatingEmptyFragment.TAG)
     }
 
     override fun closeEmptyDating() {
@@ -152,13 +154,21 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
                     PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE)
 
-    override fun showTrialPopup(type: Long, args: Bundle) {
-        ExperimentBoilerplateFragment.newInstance(type, args = args)
+    override fun showTrialPopup(args: Bundle) {
+        ExperimentBoilerplateFragment.newInstance(args = args)
                 .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
     }
 
-    override fun showDialogpopupMenu(item: FeedDialog) {
-        DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
+    override fun showMutualPopup(mutualUser: FeedUser) {
+        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser)
+        mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
+
+    override fun showDialogpopupMenu(item: FeedDialog) =
+            DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
+
+    override fun showPurchaseProduct(skuId: String, from: String) =
+            mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
+                    GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
 }

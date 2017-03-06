@@ -798,7 +798,7 @@
   <string name="city_selector_your_city">Your city</string>
   <string name="photo_gallery_photo_deleted">Photo has been deleted</string>
   <string name="photofeed_add_photo_to_feed_title">Get to 1st place!</string>
-  <string name="photofeed_add_photo_to_feed_description">Add a photo with a greeting and thousands of people will see you. Get noticed and start dating people now.</string>
+  <string name="photofeed_add_photo_to_feed_description">Add a photo with a greeting and thousands of people will see you. Get noticed and start dating people now!</string>
   <string name="offers_screen_title">Bonuses</string>
   <string name="offers_loading_text">Loading available tasks…</string>
   <string name="offers_empty_text">Unfortunately there are no tasks available for you right now, check back soon!</string>
@@ -939,4 +939,13 @@
   <string name="write_him_without_symphaty">Write to him without a Mutual Like!</string>
   <string name="write_her_without_symphaty">Write to her without a Mutual Like!</string>
   <string name="people_nearby_popover_text">Get featured in the photo feed!\nThousands of people will see you</string>
+  <string name="mutual_popup_you_get_mutual">You like each other!</string>
+  <string name="photo_feed_add_photo">Get featured in the photo feed!\nThousands of people will see you.</string>
+  <string name="buy_likes_get_more_likes">Get more Likes!</string>
+  <string name="buy_likes_become_first_in_searchlist_female">Get shown first to guys looking for girls like you!</string>
+  <string name="buy_likes_become_first_in_searchlist_male">Get shown first to girls looking for guys like you!</string>
+  <string name="buy_likes_become_popular_female">Become popular</string>
+  <string name="buy_likes_become_popular_male">Become popular</string>
+  <string name="you_are_not_shown">You are hardly being shown in \&quot;Dating\&quot;</string>
+  <string name="you_are_not_shown_answer">Respond to some incoming Likes and you will be shown more often.</string>
 </resources>

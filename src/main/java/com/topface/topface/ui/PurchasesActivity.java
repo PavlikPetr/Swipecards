@@ -320,7 +320,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
                 && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                 && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
             //noinspection WrongConstant
-            mTrialVipPopup = ExperimentBoilerplateFragment.newInstance(TrialVipPopupAction.getTrialVipType());
+            mTrialVipPopup = ExperimentBoilerplateFragment.newInstance();
             mTrialVipPopup.setDismissListener(dismissListener);
             mTrialVipPopup.show(getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
             App.isNeedShowTrial = false;
@@ -422,5 +422,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     @Override
     public int getLayout() {
         return R.layout.ac_fragment_frame;
+    }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
     }
 }

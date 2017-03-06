@@ -4,7 +4,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableLong
 import android.graphics.drawable.Drawable
 import com.topface.topface.data.Photo
-import com.topface.topface.utils.glide_utils.GlideTransformationType
+import com.topface.topface.glide.tranformation.GlideTransformationType
 
 /**
  * VM итема фотоленты

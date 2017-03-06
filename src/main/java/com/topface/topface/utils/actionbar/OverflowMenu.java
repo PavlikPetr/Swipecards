@@ -27,7 +27,6 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;

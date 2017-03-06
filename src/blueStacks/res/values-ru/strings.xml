@@ -1005,6 +1005,10 @@
   <string name="write_him_without_symphaty">Напиши ему без взаимной симпатии!</string>
   <string name="write_her_without_symphaty">Напиши ей без взаимной симпатии!</string>
   <string name="people_nearby_popover_text">Встаньте в ленту!\nВас увидят тысячи людей</string>
+  <string name="mutual_popup_you_get_mutual">Вы понравились друг другу!</string>
+  <string name="start_dialog">Начать диалог</string>
+  <string name="continue_to_meet">Продолжить знакомиться</string>
+  <string name="basic_information">Основная информация</string>
   <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
   <string name="buy_likes_get_more_likes">Получите больше симпатий!</string>
   <string name="buy_likes_become_first_in_searchlist_female">Встаньте первой в поиске у мужчин, ищущих таких, как вы!</string>

@@ -167,6 +167,7 @@
     <!--Toolbar sizes-->
     <dimen name="toolbar_title_size">20sp</dimen>
     <dimen name="toolbar_elevation">10dp</dimen>
+    <dimen name="toolbar_elevation_negative">-10dp</dimen>
     <dimen name="toolbar_title_padding_left">15dp</dimen>
     <dimen name="collapsing_scrim_size">100dp</dimen>
     <dimen name="online_icon_padding">3dp</dimen>
@@ -241,9 +242,20 @@
     <dimen name="avatar_marginRight">16dp</dimen>
     <dimen name="divider_size">1dp</dimen>
 
+    <!--Попап меню удаления и добавления в черный список-->
+    <dimen name="popup_menu_circle_online">3dp</dimen>
+    <dimen name="popup_menu_stroke_outside">1dp</dimen>
+    <dimen name="mutual_popup_stroke_outside">9dp</dimen>
+    <dimen name="mutual_popup_avatar">150dp</dimen>
+
     <!--Редизайн знакомств, метрики-->
     <dimen name="dating_buttons_padding_top">15dp</dimen>
     <dimen name="dating_buttons_padding_bottom">13dp</dimen>
     <dimen name="dating_smaller_buttons_size">60dp</dimen>
     <dimen name="dating_bigger_buttons_size">76dp</dimen>
+    
+    <!-- Material Elevation -->
+    <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
+    <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
+    <dimen name="material_elevation_nav_drawer">16dp</dimen>
 </resources>

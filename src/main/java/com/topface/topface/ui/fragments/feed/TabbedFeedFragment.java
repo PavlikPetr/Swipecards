@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +27,7 @@ import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.TabLayoutCreator;
@@ -34,8 +36,6 @@ import com.topface.topface.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import butterknife.BindView;
 
 /**
  * base class for feeds with tabs
@@ -49,18 +49,16 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     private ArrayList<String> mPagesTitles = new ArrayList<>();
     private ArrayList<Integer> mPagesCounters = new ArrayList<>();
     private BannersController mBannersController;
-    @BindView(R.id.feedTabs)
-    TabLayout mTabLayout;
     private CountersDataProvider mCountersDataProvider;
     private TabbedFeedPageAdapter mBodyPagerAdapter;
-    protected static int mVisitorsastOpenedPage = 0;
+    protected static int mVisitorsLastOpenedPage = 0;
     protected static int mLikesLastOpenedPage = 0;
     protected static int mDialogsLastOpenedPage = 0;
     protected CountersData mCountersData = new CountersData();
     private TabLayoutCreator mTabLayoutCreator;
 
     public static void setTabsDefaultPosition() {
-        mVisitorsastOpenedPage = 0;
+        mVisitorsLastOpenedPage = 0;
         mLikesLastOpenedPage = 0;
         mDialogsLastOpenedPage = 0;
     }
@@ -150,7 +148,17 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 mPagesCounters);
         mPager.setAdapter(mBodyPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitles, mPagesCounters, mPagesClassNames);
+
+        Activity activity = getActivity();
+        TabLayout tabLayout = null;
+        if (activity instanceof ITabLayoutHolder) {
+            tabLayout = ((ITabLayoutHolder) activity).getTabLayout();
+        }
+        if (tabLayout != null) {
+            mTabLayoutCreator = new TabLayoutCreator(activity, mPager, tabLayout, mPagesTitles, mPagesCounters, mPagesClassNames);
+        } else {
+            throw new IllegalStateException("TabbedFeedFragment:: activity must have TabLayout");
+        }
     }
 
     @Override
@@ -226,6 +234,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         if (mRefresher != null) {
             mRefresher.refreshBanner();
         }
+    }
+
+    @Override
+    protected boolean isTabbedFragment() {
+        return true;
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
+import com.topface.topface.experiments.feed_design.DialogsAndLikesFeedDesigned;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -380,7 +381,7 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
-        boolean dialogRedesignEnabled = App.getAppComponent().weakStorage().getProfileDialogRedesignEnabled();
+        boolean dialogRedesignEnabled = DialogsAndLikesFeedDesigned.getDesignVersionJava() != 0;
         Intent i = null;
         String pageName;
         switch (type) {

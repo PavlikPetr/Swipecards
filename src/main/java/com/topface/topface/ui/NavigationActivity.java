@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.appodeal.ads.Appodeal;
 import com.appsflyer.AppsFlyerLib;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -59,7 +60,6 @@ import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
-import com.topface.topface.utils.controllers.DatingInstantMessageController;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
@@ -87,7 +87,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> implements INavigationFragmentsListener {
+public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
@@ -96,7 +96,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
     private Intent mPendingNextIntent;
-    private boolean mIsActionBarHidden;
     private View mContentFrame;
     private DrawerLayoutManager<HackyDrawerLayout> mDrawerLayout;
     private FullscreenController mFullscreenController;
@@ -126,10 +125,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(options.startPage));
-        if (App.getUserConfig().getDatingMessage().equals(options
-                .instantMessageFromSearch.getText())) {
-            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
-        }
         activity.startActivity(intent);
     }
 
@@ -234,6 +229,20 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 }
             }
         }));
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarAlpha(0.25f);
+    }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarTabs;
+    }
+
+    @Override
+    protected boolean isDatingRedesignEnabled() {
+        return mWeakStorage.getDatingRedesignEnabled();
     }
 
     @NotNull
@@ -538,13 +547,11 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     }
 
     private void toggleDrawerLayout() {
-        if (!mIsActionBarHidden) {
-            if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
-                if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
-                    mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
-                } else {
-                    mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
-                }
+        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
+            if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
+                mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
+            } else {
+                mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
             }
         }
     }
@@ -570,24 +577,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             params.topMargin = actionbarOverlay ? 0 : mInitialTopMargin;
             mContentFrame.requestLayout();
             mActionBarOverlayed = actionbarOverlay;
-        }
-    }
-
-    @Override
-    public void onHideActionBar() {
-        mIsActionBarHidden = true;
-        setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-    }
-
-    @Override
-    public void onShowActionBar() {
-        mIsActionBarHidden = false;
-        setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().show();
         }
     }
 

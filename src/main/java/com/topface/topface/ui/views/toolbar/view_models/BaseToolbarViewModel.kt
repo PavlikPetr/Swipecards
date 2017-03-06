@@ -1,12 +1,12 @@
 package com.topface.topface.ui.views.toolbar.view_models
 
-import android.content.Context
 import android.databinding.ObservableInt
 import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
+import com.topface.topface.utils.Utils.getStatusBarHeight
 import com.topface.topface.utils.extensions.appContext
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getString
@@ -53,14 +53,4 @@ abstract class BaseToolbarViewModel(binding: ToolbarBinding,
         // учитывать topPadding надо только в тулбарах с прозрачным StatusBar'ом
         if (App.get().options.datingRedesignEnabled) topPadding.set(getStatusBarHeight(binding.appContext()))
     }
-
-    /**
-     * Вычисляется высота системного statusBar, что бы мы могли подвинуть свой тулбар
-     */
-    fun getStatusBarHeight(context: Context) =
-            with(context.resources.getIdentifier("status_bar_height", "dimen", "android")) {
-                if (this > 0) {
-                    context.resources.getDimensionPixelSize(this)
-                } else 0
-            }
 }

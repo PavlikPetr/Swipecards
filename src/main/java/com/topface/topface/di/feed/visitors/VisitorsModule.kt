@@ -15,10 +15,6 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by tiberal on 12.02.17.
- */
-
 @Module(includes = arrayOf(BaseFeedModule::class))
 class VisitorsModule(private val mFragment: VisitorsFragment) {
 
@@ -49,7 +45,7 @@ class VisitorsModule(private val mFragment: VisitorsFragment) {
     @Provides
     @FragmentScope
     fun providesVisitorsLockController(lockerFactory: BaseFeedLockerController.ILockScreenVMFactory): BaseFeedLockerController<*> {
-        return VisitorsLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy, mShower = mFragment).apply {
+        return VisitorsLockController(mFragment.mBinding.emptyFeedStub as ViewStubProxy).apply {
             lockScreenFactory = lockerFactory
             setLockerLayout(emptyFeedLayout)
         }

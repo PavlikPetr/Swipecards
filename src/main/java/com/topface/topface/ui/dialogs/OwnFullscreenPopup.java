@@ -1,5 +1,7 @@
 package com.topface.topface.ui.dialogs;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +14,10 @@ import com.topface.topface.data.AdsSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.Nullable;
@@ -109,6 +114,10 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
             case AdsSettings.URL:
                 Utils.goToUrl(getActivity(), settings.banner.parameter);
                 break;
+            case AdsSettings.PRODUCT:
+                FeedNavigator mFeedNavigator = new FeedNavigator((IActivityDelegate) getActivity());
+                mFeedNavigator.showPurchaseProduct(settings.banner.parameter, SCREEN_TYPE);
+                break;
             case AdsSettings.METHOD:
                 //прост
                 break;
@@ -141,5 +150,13 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
 
     private void cancel() {
         getDialog().cancel();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GpPurchaseActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            dismiss();
+        }
     }
 }
