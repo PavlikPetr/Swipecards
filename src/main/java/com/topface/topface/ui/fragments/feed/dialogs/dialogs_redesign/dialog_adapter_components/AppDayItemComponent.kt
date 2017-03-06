@@ -10,7 +10,6 @@ import com.topface.topface.ui.fragments.feed.app_day.AppDayAdapter
 import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayStubItem
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayViewModel
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.utils.extensions.getDimen
 import java.util.*
@@ -19,7 +18,7 @@ import java.util.*
  * Компоненет итема приложения дня
  * Created by siberia87 on 06.12.16.
  */
-class AppDayItemComponent(var mApi: FeedApi) : AdapterComponent<AppDayListBinding, AppDayStubItem>() {
+class AppDayItemComponent : AdapterComponent<AppDayListBinding, AppDayStubItem>() {
     override val itemLayout: Int
         get() = R.layout.app_day_list
     override val bindingClass: Class<AppDayListBinding>

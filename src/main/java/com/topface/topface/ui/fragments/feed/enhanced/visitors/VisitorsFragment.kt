@@ -1,0 +1,77 @@
+package com.topface.topface.ui.fragments.feed.enhanced.visitors
+
+import android.os.Bundle
+import com.topface.topface.App
+import com.topface.topface.banners.PageInfo
+import com.topface.topface.data.Visitor
+import com.topface.topface.di.ComponentManager
+import com.topface.topface.di.feed.base.BaseFeedModule
+import com.topface.topface.di.feed.visitors.DaggerVisitorsModelsComponent
+import com.topface.topface.di.feed.visitors.VisitorsComponent
+import com.topface.topface.di.feed.visitors.VisitorsModelsComponent
+import com.topface.topface.di.feed.visitors.VisitorsModule
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent
+import com.topface.topface.statistics.FlurryOpenEvent
+import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentsType
+import com.topface.topface.ui.dialogs.trial_vip_experiment.experiment_1_2_3.Experiment1_2_3_Adapter
+import com.topface.topface.ui.dialogs.trial_vip_experiment.getBundle
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
+import com.topface.topface.ui.fragments.feed.enhanced.visitors.ITrialShower
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+
+
+@FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
+class VisitorsFragment : BaseFeedFragment<Visitor>(), ITrialShower, IOnFragmentFinishDelegate {
+
+    companion object {
+        const val SCREEN_TYPE = "Visitors"
+    }
+
+    override val mViewModel by lazy {
+        ComponentManager.obtainComponent(VisitorsModelsComponent::class.java) {
+            DaggerVisitorsModelsComponent.builder().appComponent(App.getAppComponent()).build()
+        }.visitorsViewModel()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ComponentManager.obtainComponent(VisitorsComponent::class.java) {
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
+                    .add(VisitorsModule(this@VisitorsFragment), BaseFeedModule(this@VisitorsFragment)).apply {
+                inject(this@VisitorsFragment)
+            }
+        }
+    }
+
+    override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
+        compositeAdapter.addAdapterComponent(
+                VisitorAdapterComponent({ itemClick(it) }, { itemLongClick(it) }))
+    }
+
+    override fun showTrial() = App.get().options.trialVipExperiment.androidTrialPopupExp.run {
+        if (App.getUserConfig().canShowInVisitors(this) && isAdded) {
+            val popup = ExperimentBoilerplateFragment
+                    .newInstance(type = this, skipShowingCondition = true, args = this.getBundle(Experiment1_2_3_Adapter.GUESTS_FIRST, ExperimentsType.SUBTYPE_4_3))
+            popup.onFragmentFinishDelegate = this@VisitorsFragment
+            popup.show(activity.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
+        }
+    }
+
+    override fun terminateImmortalComponent() {
+        super.terminateImmortalComponent()
+        ComponentManager.releaseComponent(VisitorsModelsComponent::class.java)
+    }
+
+    override fun onDestroyView() {
+        ComponentManager.releaseComponent(VisitorsComponent::class.java)
+        super.onDestroyView()
+    }
+
+    override fun closeFragmentByForm() = onFeedUnlocked()
+
+    override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
+
+
+}

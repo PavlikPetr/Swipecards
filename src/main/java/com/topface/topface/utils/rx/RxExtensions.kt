@@ -38,4 +38,7 @@ fun <T> shortSubscription(next: (T) -> Unit) = object : Subscriber<T>() {
     override fun onNext(type: T) = next(type)
 }
 
+inline fun <T> Observable<T>.shortSubscribe(crossinline next: (T) -> Unit): Subscription
+        = subscribe(shortSubscription { next(it) })
+
 

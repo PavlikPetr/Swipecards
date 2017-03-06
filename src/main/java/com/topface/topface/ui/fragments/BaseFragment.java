@@ -41,7 +41,6 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient, IOnBackPressed, IFragmentDelegate {
 
-    private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
     private ActionBar mSupportActionBar;

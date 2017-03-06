@@ -1,15 +1,13 @@
-package com.topface.topface.ui.fragments.feed.fans
+package com.topface.topface.ui.fragments.feed.enhanced.fans
 
 import android.databinding.ObservableField
 import android.view.View
-import com.topface.topface.databinding.LayoutEmptyFansBinding
-import com.topface.topface.ui.fragments.feed.feed_base.BaseLockScreenViewModel
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseLockScreenViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 
 
-class FansLockScreenViewModel(binding: LayoutEmptyFansBinding, val mNavigator: IFeedNavigator, mIFeedUnlocked: IFeedUnlocked) :
-        BaseLockScreenViewModel<LayoutEmptyFansBinding>(binding, mIFeedUnlocked) {
+class FansLockScreenViewModel(mIFeedUnlocked: IFeedUnlocked) :
+        BaseLockScreenViewModel(mIFeedUnlocked) {
 
     private var onButtonClickListener: View.OnClickListener? = null
     val title = ObservableField<String>("")
@@ -20,7 +18,7 @@ class FansLockScreenViewModel(binding: LayoutEmptyFansBinding, val mNavigator: I
     }
 
     fun setOnButtonClickListener(listener: View.OnClickListener) {
-        onButtonClickListener = listener;
+        onButtonClickListener = listener
     }
 
     override fun release() {

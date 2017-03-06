@@ -25,7 +25,7 @@ import javax.inject.Singleton
  * Created by tiberal on 02.02.17.
  */
 
-@Module()
+@Module
 class AppModule(private val mContext: Context) {
 
     @Provides

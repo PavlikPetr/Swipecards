@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appodeal.ads.Appodeal;
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -30,6 +31,9 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.di.ComponentManager;
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
+import com.topface.topface.di.navigation_activity.NavigationActivityModule;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -78,6 +82,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import kotlin.jvm.functions.Function0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -130,7 +135,14 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        App.getAppComponent().inject(this);
+        NavigationActivityComponent component = ComponentManager.INSTANCE
+                .obtainComponent(NavigationActivityComponent.class, new Function0<NavigationActivityComponent>() {
+                    @Override
+                    public NavigationActivityComponent invoke() {
+                        return App.getAppComponent().add(new NavigationActivityModule(NavigationActivity.this));
+                    }
+                });
+        component.inject(this);
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
@@ -391,6 +403,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         super.onResume();
         //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
         PopupManager.INSTANCE.init(this);
+        Appodeal.onResume(this, Appodeal.INTERSTITIAL);
     }
 
     @Override
@@ -498,6 +511,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     protected void onDestroy() {
+        ComponentManager.INSTANCE.releaseComponent(NavigationActivityComponent.class);
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }

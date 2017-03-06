@@ -88,6 +88,7 @@ allprojects {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -389,9 +390,8 @@ dependencies {
         exclude module: 'kotlin-stdlib'
         exclude module: 'rxjava'
     }
-
+    //DI
     compile 'com.google.dagger:dagger:2.8'
-    annotationProcessor "com.google.dagger:dagger-compiler:2.8"
     kapt 'com.google.dagger:dagger-compiler:2.8'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 

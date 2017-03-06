@@ -38,7 +38,7 @@ public class AppodealProvider extends AbstractAdsProvider {
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
-        UserSettings userSettings = Appodeal.getUserSettings(activity);
+        UserSettings userSettings = Appodeal.getUserSettings(activity.getApplicationContext());
         userSettings.setGender(
                 App.get().getProfile().sex == Profile.BOY ?
                         UserSettings.Gender.MALE :
@@ -155,9 +155,9 @@ public class AppodealProvider extends AbstractAdsProvider {
     }
 
     public static void setCustomSegment() {
-        String fullscreenSegment = mWeakStorage.getAppodealFullscreenSegmentName();
+        String fullscreenSegment = App.getAppComponent().weakStorage().getAppodealFullscreenSegmentName();
         if (TextUtils.isEmpty(fullscreenSegment)) {
-            String bannerSegment = mWeakStorage.getAppodealBannerSegmentName();
+            String bannerSegment = App.getAppComponent().weakStorage().getAppodealBannerSegmentName();
             Debug.log("BANNER_SETTINGS : set segment " + bannerSegment);
             Appodeal.setCustomRule(bannerSegment, 0);
         } else {

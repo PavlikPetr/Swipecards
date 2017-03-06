@@ -11,7 +11,9 @@ import com.topface.topface.utils.Utils
  * Created by siberia87 on 06.10.16.
  */
 class AppDayItemViewModel(private val mContext: Context, val image: AppDayImage) {
-    val TAG_LOG = "app_of_the_day_banner_clicked"
+    companion object{
+        const val TAG_LOG = "app_of_the_day_banner_clicked"
+    }
 
     val iconUrl = ObservableField(image.imgSrc)
     fun onBannerClick() {

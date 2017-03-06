@@ -9,7 +9,7 @@ import javax.inject.Singleton
  * Отстойник для всякого шлака
  * Created by tiberal on 06.02.17.
  */
-@Module()
+@Module
 class GarbageModule {
 
     @Provides

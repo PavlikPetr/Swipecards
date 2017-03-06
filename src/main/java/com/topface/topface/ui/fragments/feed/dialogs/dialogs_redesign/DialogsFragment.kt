@@ -73,7 +73,7 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
                 putString(FeedRequestFactory.TO, if (last != null) last.id else Utils.EMPTY)
             }
         }
-                .addAdapterComponent(AppDayItemComponent(mApi))
+                .addAdapterComponent(AppDayItemComponent())
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
                 .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))

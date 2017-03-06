@@ -325,9 +325,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     fun loadTopFeeds() {
-        val from = mAdapter?.data?.getFirst()?.let {
-            it.id
-        } ?: Utils.EMPTY
+        val from = mAdapter?.data?.getFirst()?.id ?: Utils.EMPTY
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
         mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
