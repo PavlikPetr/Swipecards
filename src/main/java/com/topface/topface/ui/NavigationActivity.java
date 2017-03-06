@@ -38,7 +38,6 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
@@ -142,13 +141,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new RxUtils.ShortSubscription<AdjustAttributeData>() {
-            @Override
-            public void onNext(AdjustAttributeData adjustAttributionData) {
-                super.onNext(adjustAttributionData);
-                App.sendAdjustAttributeData(adjustAttributionData);
-            }
-        }));
         mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData wrappedNavigationData) {
