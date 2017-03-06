@@ -145,7 +145,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-//        mKochavaManager.getKochavaTracker().deepLinkEvent(intent.getData().toString());
         mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new RxUtils.ShortSubscription<AdjustAttributeData>() {
             @Override
             public void onNext(AdjustAttributeData adjustAttributionData) {
