@@ -23,6 +23,8 @@ class BuyScreenCoinsSection
 class BuyScreenProductUnavailable
 
 /**
+ * Модель продукта Payment Ninja
+ *
  * @param id - id мобильного продукта
  * @param showType -Тип отображения 0 - обычная кнопка покупки 1 - выделенная кнопка покупки 2 - неактивная кнопка покупки
  * @param titleTemplate - Шаблон текста на кнопке
@@ -93,6 +95,8 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
 }
 
 /**
+ * Модель с описанием функционала автопополнения
+ *
  * @param text - Текст с опяснением услуги автопополнения
  * @param url - Ссылка на документацию о правилах по оказанию услуги
  */
@@ -117,6 +121,8 @@ data class PaymentNinjaSubscriptionInfo(var text: String, var url: String) : Par
 }
 
 /**
+ * Полный список продуктов Payment Ninja
+ *
  * @param products - Список продуктов
  */
 data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct>)

@@ -1305,7 +1305,6 @@
     <string name="ninja_text_link">правилами оказания услуги</string>
     <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
 
-
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
     <string name="get_other_card">Использовать другую карту</string>
 </resources>
