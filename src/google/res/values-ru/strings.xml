@@ -1307,7 +1307,7 @@
     <string name="ninja_error_dialog_title">Произошла ошибка</string>
     <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберете другой способ оплаты.</string>
     <string name="ninja_error_dialog_message_single">Попробуйте ещё раз.</string>
-    <string name="ninja_error_dialog_button_retry">Попробовать еще раз</string>
+    <string name="ninja_error_dialog_button_retry">Попробовать другую карту</string>
     <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
 
 </resources>
