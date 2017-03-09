@@ -2,6 +2,7 @@ package com.topface.topface.ui.settings.payment_ninja
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,7 @@ class SettingsPaymentsNinja : BaseFragment() {
         CompositeAdapter(mTypeProvider) { Bundle() }
     }
 
-    private fun initList() = with(mBinding.list) {
+    private fun initList() = with(mBinding.screenContent.list) {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
     }

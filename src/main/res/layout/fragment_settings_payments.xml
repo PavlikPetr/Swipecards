@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.settings.payment_ninja.SettingsPaymentNinjaViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -12,10 +15,14 @@
         android:layout_height="match_parent">
 
         <!-- подключение основного контента -->
-        <include layout="@layout/fragment_settings_payments_content"/>
+        <include
+            android:id="@+id/screenContent"
+            layout="@layout/fragment_settings_payments_content"/>
 
         <!-- подключение нижнего экрана -->
-        <include layout="@layout/payments_bottom_sheet"/>
+        <include
+            android:id="@+id/bottomSheet"
+            layout="@layout/payments_bottom_sheet"/>
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>
