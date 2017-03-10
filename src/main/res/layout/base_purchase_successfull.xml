@@ -59,6 +59,5 @@
                 android:text="@{viewModel.popupText}" />
 
         </RelativeLayout>
-
     </android.support.v4.widget.NestedScrollView>
 </layout>
