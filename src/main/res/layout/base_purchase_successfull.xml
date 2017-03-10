@@ -9,13 +9,16 @@
     </data>
 
     <android.support.v4.widget.NestedScrollView
-        style="@style/PopupScroll">
+        style="@style/PopupScroll"
+        android:fillViewport="true">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/close_image"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_alignParentRight="true"
@@ -58,5 +61,6 @@
                 android:text="@{viewModel.popupText}"/>
 
         </RelativeLayout>
+
     </android.support.v4.widget.NestedScrollView>
 </layout>
