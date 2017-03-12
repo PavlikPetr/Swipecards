@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.settings.payment_ninja.view_models.CardViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/payment_ninja_payments_items_height">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/payment_ninja_payments_item_icon_padding_left"
+            android:layout_marginStart="@dimen/payment_ninja_payments_item_icon_padding_left"
+            tools:src="@drawable/ic_crown_left_menu" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingEnd="@dimen/payment_ninja_payments_item_text_padding_right"
+            android:paddingLeft="@dimen/payment_ninja_payments_item_text_padding_left"
+            android:paddingRight="@dimen/payment_ninja_payments_item_text_padding_right"
+            android:paddingStart="@dimen/payment_ninja_payments_item_text_padding_left"
+            android:textColor="@color/ninja_payments_screen_item_title_color"
+            android:textSize="@dimen/ninja_payments_screen_item_title_size"
+            tools:ignore="RtlSymmetry"
+
+            tools:text="Test title" />
+    </RelativeLayout>
+</layout>

@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification"/>
+    <string name="receive_rate_notification" />
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1304,5 +1304,10 @@
     <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
     <string name="ninja_text_link">правилами оказания услуги</string>
     <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
-
+    <string name="ninja_settings_toolbar">Платежи</string>
+    <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
+    <string name="ninja_cancel_vip_status">Отменить подписку</string>
+    <string name="ninja_resume_vip_status">Возобновить подписку</string>
+    <string name="ninja_use_another_card">Использовать другую карту</string>
+    <string name="ninja_delete_card">Удалить карту</string>
 </resources>
