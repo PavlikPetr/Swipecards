@@ -17,10 +17,6 @@ import com.topface.topface.utils.extensions.getString
  * Created by petrp on 09.03.2017.
  */
 class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSheetBase<V>() {
-    companion object {
-        const val CARD_NAME_TEMPLATE = "%s **%s"
-    }
-
     private val mTypeProvider by lazy {
         SettingsPaymentNinjaBottomSheetTypeProvider()
     }
@@ -42,14 +38,11 @@ class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSh
                 .addAdapterComponent(BottomSheetItemComponent())
     }
 
-    private fun getCardName() =
-            // TODO добавить данные о карте
-            String.format(App.getCurrentLocale(), CARD_NAME_TEMPLATE, "card type", "card name")
-
     fun showCardBottomSheet() {
         with(mData.observableList) {
             clear()
-            add(BottomSheetTitle(getCardName()))
+            //TODO дернуть extension
+            add(BottomSheetTitle(""))
             add(BOTTOM_SHEET_ITEMS_POOL.USE_ANOTHER_CARD.textRes.getString())
             add(BOTTOM_SHEET_ITEMS_POOL.DELETE_CARD.textRes.getString())
         }
