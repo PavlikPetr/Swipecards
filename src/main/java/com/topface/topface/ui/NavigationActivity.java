@@ -145,13 +145,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new RxUtils.ShortSubscription<AdjustAttributeData>() {
-            @Override
-            public void onNext(AdjustAttributeData adjustAttributionData) {
-                super.onNext(adjustAttributionData);
-                App.sendAdjustAttributeData(adjustAttributionData);
-            }
-        }));
         mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData wrappedNavigationData) {

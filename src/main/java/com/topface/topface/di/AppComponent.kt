@@ -5,7 +5,6 @@ import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.mvp.PresenterCache
 import com.topface.topface.state.*
 import com.topface.topface.ui.NavigationActivity
-import com.topface.topface.ui.external_libs.AdjustManager
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.NavigationManager
 import com.topface.topface.utils.RunningStateManager
@@ -31,7 +30,6 @@ interface AppComponent {
     fun runningStateManager(): RunningStateManager
 
     fun kochavaManager(): KochavaManager
-    fun adjustManager(): AdjustManager
 
     fun inject(app: App)
     fun inject(manager: NavigationManager)

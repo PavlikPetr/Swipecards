@@ -63,6 +63,7 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -743,5 +744,11 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
                 && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
                 && !isDatingRedesignEnabled;
+    }
+
+    public static String convertToHex(final byte[] bytes) {
+        final BigInteger bigInt = new BigInteger(1, bytes);
+        final String formatString = "%0" + (bytes.length << 1) + "x";
+        return String.format(Locale.US, formatString, bigInt);
     }
 }
