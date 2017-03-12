@@ -255,7 +255,7 @@ public class PurchasesFragment extends BaseFragment {
             } else {
                 boolean isNeedRemoveTab;
                 if (tab.type.equals(PurchasesTabData.PAYMENT_NINJA)) {
-                    PaymentNinjaProductsList productsList = CacheProfile.getmPaymentNinjaProductsList();
+                    PaymentNinjaProductsList productsList = CacheProfile.getPaymentNinjaProductsList();
                     if (isVip) {
                         isNeedRemoveTab = ProductExtensionKt.getVipProducts(productsList).isEmpty();
                     } else {

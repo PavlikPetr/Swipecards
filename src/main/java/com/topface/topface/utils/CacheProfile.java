@@ -105,7 +105,7 @@ public class CacheProfile {
         return mMarketProducts;
     }
 
-    public static PaymentNinjaProductsList getmPaymentNinjaProductsList() {
+    public static PaymentNinjaProductsList getPaymentNinjaProductsList() {
         if (mPaymentNinjaProductsList == null) {
             SessionConfig config = App.getSessionConfig();
             String productsCache = config.getPaymentNinjaProductsData();
