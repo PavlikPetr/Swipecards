@@ -253,10 +253,23 @@
     <dimen name="dating_buttons_padding_bottom">13dp</dimen>
     <dimen name="dating_smaller_buttons_size">60dp</dimen>
     <dimen name="dating_bigger_buttons_size">76dp</dimen>
-    
+
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
     <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
     <dimen name="material_elevation_nav_drawer">16dp</dimen>
 
+    <!--Buy screen metrics-->
+    <dimen name="buy_screen_title_text_size">16sp</dimen>
+    <dimen name="pay_reason_margin_bottom">6dp</dimen>
+    <dimen name="pay_reason_padding_bottom">2dp</dimen>
+    <dimen name="pay_reason_padding_top">16dp</dimen>
+    <dimen name="pay_reason_padding_left">16dp</dimen>
+    <dimen name="pay_reason_padding_right">16dp</dimen>
+    <dimen name="buy_screen_products_unavailable_margins">5dp</dimen>
+    <dimen name="buy_screen_products_likes_section_padding_top">5dp</dimen>
+    <dimen name="buy_screen_products_likes_section_padding_bottom">2dp</dimen>
+    <dimen name="buy_screen_products_coins_section_padding_top">10dp</dimen>
+    <dimen name="buy_screen_products_coins_section_padding_bottom">2dp</dimen>
+    <dimen name="buy_screen_products_list_padding">10dp</dimen>
 </resources>

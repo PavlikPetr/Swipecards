@@ -23,7 +23,6 @@ class PermissionAlertDialogFactory {
                 }
                 .setMessage(messageResId)
                 .setCancelable(false)
-                .create()
                 .show()
 
     fun constructNeverAskAgain(context: Context) = constructAlert(context,

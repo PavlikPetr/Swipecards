@@ -6,14 +6,13 @@ import com.topface.topface.R
 import com.topface.topface.data.BlackListItem
 import com.topface.topface.databinding.LayoutEmptyBlacklistBinding
 import com.topface.topface.statistics.FlurryOpenEvent
-import com.topface.topface.ui.fragments.feed.bookmarks.BookmarksFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.feed_utils.convertFeedIdList
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserIdList
 import java.util.*
 
-@FlurryOpenEvent(name = BookmarksFragment.PAGE_NAME)
+@FlurryOpenEvent(name = BlackListFragment.PAGE_NAME)
 class BlackListFragment : BaseFeedFragment<BlackListItem, LayoutEmptyBlacklistBinding>() {
     override fun getDeleteItemsList(mSelected: MutableList<BlackListItem>): ArrayList<String> {
         return mSelected.getUserIdList().convertFeedIdList()

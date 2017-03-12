@@ -6,7 +6,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragment;
-import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 public class FeedScreensIntent {
