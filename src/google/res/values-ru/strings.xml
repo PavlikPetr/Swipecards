@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1310,4 +1310,10 @@
     <string name="ninja_resume_vip_status">Возобновить подписку</string>
     <string name="ninja_use_another_card">Использовать другую карту</string>
     <string name="ninja_delete_card">Удалить карту</string>
+    <string name="ninja_error_dialog_title">Произошла ошибка</string>
+    <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберете другой способ оплаты.</string>
+    <string name="ninja_error_dialog_message_single">Попробуйте ещё раз.</string>
+    <string name="ninja_error_dialog_button_retry">Попробовать другую карту</string>
+    <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
+
 </resources>

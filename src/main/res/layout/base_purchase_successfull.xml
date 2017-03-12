@@ -1,15 +1,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.buy.PurchaseSuccessfullViewModel"/>
+            type="com.topface.topface.ui.fragments.buy.PurchaseSuccessfullViewModel" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
-        style="@style/PopupScroll">
+        style="@style/PopupScroll"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,31 +24,31 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="18dp"
                 android:onClick="@{() -> viewModel.closeDialog()}"
-                android:src="@drawable/skip"/>
+                android:src="@drawable/skip" />
 
             <TextView
                 style="@style/PurchasePopupTitle"
                 android:layout_above="@+id/centerImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="24dp"
-                android:text="@string/purchase_successfull"/>
+                android:text="@string/purchase_successfull" />
 
             <ImageView
                 android:id="@+id/centerImage"
                 android:layout_width="210dp"
                 android:layout_height="210dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/unavailable_geo_bigger_circle"/>
+                android:src="@drawable/unavailable_geo_bigger_circle" />
 
             <ImageView
                 style="@style/PopupAnimatedBackground"
-                app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
+                app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}" />
 
             <ImageView
                 android:layout_width="106dp"
                 android:layout_height="102dp"
                 android:layout_centerInParent="true"
-                android:src="@{viewModel.popupImage}"/>
+                android:src="@{viewModel.popupImage}" />
 
             <TextView
                 android:id="@+id/popupText"
@@ -55,8 +56,9 @@
                 android:layout_below="@+id/centerImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="22dp"
-                android:text="@{viewModel.popupText}"/>
+                android:text="@{viewModel.popupText}" />
 
         </RelativeLayout>
+
     </android.support.v4.widget.NestedScrollView>
 </layout>

@@ -1389,6 +1389,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
+        <item name="android:textColor">@color/popup_message</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
         <item name="android:textSize">20sp</item>
@@ -1399,6 +1400,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
+        <item name="android:textColor">@color/popup_message</item>
         <item name="android:textSize">16sp</item>
     </style>
 
