@@ -1310,4 +1310,6 @@
     <string name="ninja_error_dialog_button_retry">Попробовать другую карту</string>
     <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
 
+    <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
+    <string name="get_other_card">Использовать другую карту</string>
 </resources>

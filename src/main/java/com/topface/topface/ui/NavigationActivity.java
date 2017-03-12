@@ -39,6 +39,7 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
@@ -106,6 +107,8 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     DrawerLayoutState mDrawerLayoutState;
     @Inject
     WeakStorage mWeakStorage;
+    @Inject
+    KochavaManager mKochavaManager;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();

@@ -38,15 +38,17 @@ class KochavaManager {
         Feature.setAttributionHandler(Handler(Handler.Callback { msg ->
             // check attributionData to minimize of kochava instance using
             msg?.data?.getString(Feature.ATTRIBUTION_DATA)?.let {
+                Debug.log("$TAG catch attribution data $it")
                 sendReferralTrack()
             }
             false
         }))
+        // turn on kochava logs for debug/qa builds and editors users
+        Feature.setErrorDebug(!Debug.isDebugLogsEnabled())
+        Feature.enableDebug(true)
         kochavaTracker.run {
             Debug.log("$TAG init kochava. Create instance of tracker.")
         }
-        // turn on kochava logs for debug/qa builds and editors users
-        Feature.setErrorDebug(!Debug.isDebugLogsEnabled())
         // register running state manager reporter and send event about session start/end to kochava
         App.getAppComponent().runningStateManager()
                 .registerAppChangeStateListener(object : RunningStateManager.OnAppChangeStateListener {

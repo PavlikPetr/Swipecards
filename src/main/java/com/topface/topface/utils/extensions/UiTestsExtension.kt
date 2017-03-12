@@ -3,9 +3,11 @@ package com.topface.topface.utils.extensions
 import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.R.id.amount
 import com.topface.topface.data.BuyButtonData
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Products
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 
 /**
  * Created by ppavlik on 29.09.16.
@@ -32,6 +34,24 @@ fun BuyButtonData.getTag(): String {
                     else -> "other"
                 },
                 periodInDays, trialPeriodInDays)
+    }
+}
+
+fun PaymentNinjaProduct.getTag(): String {
+    with(this) {
+        return String.format(App.getCurrentLocale(), if (isSubscription)
+            if (trialPeriod > 0) BUY_TRIAL_SUBSCRIPTION_BUTTON_TEMPLATE
+            else BUY_SUBSCRIPTION_BUTTON_TEMPLATE
+        else BUY_BUTTON_TEMPLATE,
+                amount,
+                when (type) {
+                    Constants.COINS, Constants.COINS_SUBSCRIPTION, Constants.COINS_SUBSCRIPTION_MASKED -> "coins"
+                    Constants.LEADER -> "leader"
+                    Constants.LIKES -> "likes"
+                    Constants.PREMIUM -> "premium"
+                    else -> "other"
+                },
+                period, trialPeriod)
     }
 }
 
