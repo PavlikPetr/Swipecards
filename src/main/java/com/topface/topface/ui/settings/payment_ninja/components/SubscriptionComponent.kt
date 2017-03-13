@@ -23,7 +23,7 @@ import com.topface.topface.utils.extensions.getString
 class SubscriptionComponent(private val mBottomSheetInterface: ISettingsPaymentNinjaBottomSheetInterface) : AdapterComponent<PaymentNinjaPurchaseItemWithSubtitleBinding, SubscriptionInfo>() {
 
     override val itemLayout: Int
-        get() = R.layout.bottom_sheet_title
+        get() = R.layout.payment_ninja_purchase_item_with_subtitle
     override val bindingClass: Class<PaymentNinjaPurchaseItemWithSubtitleBinding>
         get() = PaymentNinjaPurchaseItemWithSubtitleBinding::class.java
 

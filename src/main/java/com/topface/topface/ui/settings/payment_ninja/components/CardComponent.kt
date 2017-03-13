@@ -14,7 +14,7 @@ import com.topface.topface.ui.settings.payment_ninja.view_models.CardViewModel
 class CardComponent(private val mBottomSheetInterface: ISettingsPaymentNinjaBottomSheetInterface) : AdapterComponent<PaymentNinjaPurchaseItemTitleOnlyBinding, CardInfo>() {
 
     override val itemLayout: Int
-        get() = R.layout.bottom_sheet_title
+        get() = R.layout.payment_ninja_purchase_item_title_only
     override val bindingClass: Class<PaymentNinjaPurchaseItemTitleOnlyBinding>
         get() = PaymentNinjaPurchaseItemTitleOnlyBinding::class.java
 

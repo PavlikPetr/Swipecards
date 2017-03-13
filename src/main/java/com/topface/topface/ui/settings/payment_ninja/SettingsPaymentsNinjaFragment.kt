@@ -10,7 +10,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.FragmentSettingsPaymentsBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components.LoaderComponent
+import com.topface.topface.ui.settings.payment_ninja.components.LoaderComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheet
 import com.topface.topface.ui.settings.payment_ninja.components.CardComponent
@@ -61,11 +61,15 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
     private fun initList() = with(mBinding.paymentsContent.list) {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
+        addItemDecoration(PurchasesItemDecorator())
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         initList()
-        return mBinding.apply { viewModel = mViewModel }.root
+        return mBinding.apply {
+            viewModel = mViewModel
+            bottomSheetViewMDel = mBottomSheet.viewModel
+        }.root
     }
 
     override fun onDestroyView() {

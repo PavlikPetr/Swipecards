@@ -2,6 +2,8 @@ package com.topface.topface.ui.settings.payment_ninja.bottom_sheet
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
@@ -16,48 +18,38 @@ import com.topface.topface.utils.extensions.getString
  * Конфигурируем bottom sheet для экрана покупок payment ninja
  * Created by petrp on 09.03.2017.
  */
-class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSheetBase<V>(), ISettingsPaymentNinjaBottomSheetInterface {
+class SettingsPaymentNinjaBottomSheet(private val mView: RecyclerView) : BottomSheetBase<RecyclerView>(), ISettingsPaymentNinjaBottomSheetInterface {
     private val mTypeProvider by lazy {
         SettingsPaymentNinjaBottomSheetTypeProvider()
     }
-    val mCompositedapter by lazy {
+    private val mAdapter by lazy {
         CompositeAdapter(mTypeProvider) { Bundle() }
-    }
-
-    override val mBottomSheetLayout: V
-        get() = mView
-
-    private val mData = SingleObservableArrayList<Any>()
-
-    override fun configurateBottomSheet(bottoSheet: BottomSheetBehavior<V>) {
-    }
-
-    init {
-        mCompositedapter
                 .addAdapterComponent(BottomSheetTitleComponent())
                 .addAdapterComponent(BottomSheetItemComponent())
     }
 
+    override val mBottomSheetLayout: RecyclerView
+        get() = mView
+
+    override fun configurateBottomSheet(bottoSheet: BottomSheetBehavior<RecyclerView>) {
+    }
+
+    val viewModel by lazy {
+        SettingsPaymentNinjaBottomSheetViewModel { show() }
+    }
+
     override fun showCardBottomSheet() {
-        with(mData.observableList) {
-            clear()
-            //TODO дернуть extension
-            add(BottomSheetTitle(""))
-            add(BOTTOM_SHEET_ITEMS_POOL.USE_ANOTHER_CARD.textRes.getString())
-            add(BOTTOM_SHEET_ITEMS_POOL.DELETE_CARD.textRes.getString())
-        }
-        show()
+        viewModel.showCardBottomSheet()
     }
 
     override fun showSubscriptionBottomSheet(isSubscriptionActive: Boolean) {
-        with(mData.observableList) {
-            clear()
-            add(BottomSheetTitle(R.string.ninja_vip_status_title.getString()))
-            add(if (isSubscriptionActive)
-                BOTTOM_SHEET_ITEMS_POOL.CANCEL_SUBSCRIPTION.textRes.getString()
-            else
-                BOTTOM_SHEET_ITEMS_POOL.RESUME_SUBSCRIPTION.textRes.getString())
+        viewModel.showSubscriptionBottomSheet(isSubscriptionActive)
+    }
+
+    init {
+        with(mView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
         }
-        show()
     }
 }

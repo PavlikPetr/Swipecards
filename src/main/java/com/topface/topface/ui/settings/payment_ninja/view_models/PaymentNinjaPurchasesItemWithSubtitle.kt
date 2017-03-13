@@ -18,14 +18,10 @@ import kotlin.properties.Delegates
  */
 
 class PaymentNinjaPurchasesItemWithSubtitle(private val mSubscription: SubscriptionInfo, val onClickListener: () -> Unit) {
-    companion object {
-
-    }
-
     val title = ObservableField(mSubscription.title)
     val subTitle = ObservableField(getSubtitleText())
     val subTitleColor = ObservableInt(getSubtitleTextColor())
-    val icon = ObservableInt(R.drawable.ic_crown_left_menu)
+    val icon = ObservableInt(getIcon())
 
     private fun getSubtitleText() =
             if (mSubscription.type == 0) {

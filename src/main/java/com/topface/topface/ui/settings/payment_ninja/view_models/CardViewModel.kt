@@ -12,7 +12,7 @@ import kotlin.properties.Delegates
  */
 class CardViewModel(private val cardInfo: CardInfo, val onClickListener: () -> Unit) {
     private val mViewModel by lazy {
-        PaymentNinjaPurchasesItemTitleOnlyViewModel()
+        PaymentNinjaPurchasesItemTitleOnlyViewModel(onClickListener)
     }
     var isCardAvailble by Delegates.observable(true) { prop, old, new ->
         with(mViewModel) {

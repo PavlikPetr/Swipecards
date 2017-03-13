@@ -1,10 +1,10 @@
 package com.topface.topface.ui.settings.payment_ninja
 
 import com.topface.topface.utils.databinding.MultiObservableArrayList
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
-import rx.Subscriber
 import rx.Subscription
 import java.util.concurrent.TimeUnit
 
@@ -28,6 +28,7 @@ class SettingsPaymentNinjaViewModel {
 
     private fun sendRequest() {
         mRequestSubscription = Observable.timer(2, TimeUnit.SECONDS)
+                .applySchedulers()
                 .subscribe(shortSubscription {
                     data.replaceData(arrayListOf<Any>(CardInfo("1234", "Maestro"),
                             SubscriptionInfo("some id", 0, "Подписка на ВИП", 1493683200, true),

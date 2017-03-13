@@ -15,8 +15,7 @@
 
         <ImageView
             style="@style/PaymentNinjaPurchasesItemIcon"
-            android:src="@{viewModel.icon}"
-            tools:src="@drawable/ic_crown_left_menu"/>
+            android:src="@{viewModel.icon}"/>
 
         <TextView
             style="@style/PaymentNinjaPurchasesItemTitle"
@@ -26,7 +25,6 @@
             android:paddingRight="@dimen/payment_ninja_payments_item_text_padding_right"
             android:paddingStart="@dimen/payment_ninja_payments_item_text_padding_left"
             android:text="@{viewModel.title}"
-            tools:ignore="RtlSymmetry"
-            tools:text="Test title"/>
+            tools:ignore="RtlSymmetry"/>
     </RelativeLayout>
 </layout>

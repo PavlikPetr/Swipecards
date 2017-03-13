@@ -29,10 +29,8 @@ import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
-import com.topface.topface.ui.settings.payment_ninja.CardInfo;
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.MarketApiManager;
-import com.topface.topface.utils.extensions.CreditCardExtensionKt;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -224,7 +222,9 @@ public class SettingsFragment extends ProfileInnerFragment {
         if (info.getEnable()) {
             frame.setVisibility(View.VISIBLE);
             ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.ninja_settings_toolbar);
-            ((TextView) frame.findViewWithTag("tvText")).setText(CreditCardExtensionKt.getCardName(new CardInfo(info.getLastDigit(), info.getType())));
+            TextView text = (TextView) frame.findViewWithTag("tvText");
+            text.setText(String.format(App.getCurrentLocale(), getString(R.string.payment_ninja_card_number), info.getLastDigit()));
+            text.setVisibility(View.VISIBLE);
         } else {
             frame.setVisibility(View.GONE);
         }

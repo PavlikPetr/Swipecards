@@ -20,7 +20,7 @@ import com.topface.topface.utils.extensions.getString
 class HelpComponent(private val mNavigator: FeedNavigator) : AdapterComponent<PaymentNinjaPurchaseItemTitleOnlyBinding, PaymentNinjaHelp>() {
 
     override val itemLayout: Int
-        get() = R.layout.bottom_sheet_title
+        get() = R.layout.payment_ninja_purchase_item_title_only
     override val bindingClass: Class<PaymentNinjaPurchaseItemTitleOnlyBinding>
         get() = PaymentNinjaPurchaseItemTitleOnlyBinding::class.java
 
