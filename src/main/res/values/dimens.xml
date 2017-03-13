@@ -270,6 +270,7 @@
     <dimen name="payment_ninja_payments_item_icon_padding_left">16dp</dimen>
     <dimen name="ninja_payments_screen_item_title_size">16sp</dimen>
     <dimen name="payment_ninja_payments_item_text_padding_right">10dp</dimen>
+    <dimen name="ninja_payments_screen_item_subtitle_size">13sp</dimen>
 
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->

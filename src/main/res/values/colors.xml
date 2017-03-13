@@ -311,5 +311,7 @@
     <color name="ninja_payments_screen_background">#f5f5f5</color>
     <color name="ninja_payments_screen_item_title_color">#de000000</color>
     <color name="ninja_payments_screen_item_subtitle_color">#9a9999</color>
+    <color name="ninja_payments_screen_item_subtitle_accent_color">#f45430</color>
+    <color name="ninja_payments_screen_item_background">#FFFFFF</color>
 
 </resources>

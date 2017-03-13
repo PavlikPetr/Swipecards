@@ -76,10 +76,27 @@ data class CardInfo(var lastDigit: String = Utils.EMPTY, var type: String = Util
 
 /**
  * Данные о подписке, для отображения на экране "Платежи"
+ *
+ * @param id - id подписки
+ * @param type - тип подписки. 0 - подписка VIP, 1 - подписка монеты, 2 - подписка на симпатии, 3- автопополнение
+ * @param title - название продукта
+ * @param expire - дата окончания действия
+ * @param enabled - информация об активности подписки/автопоплнения (false - отменено)
  */
-data class SubscriptionInfo(var hz4toZdesBudet: String)
+data class SubscriptionInfo(var id: String, var type: Int, var title: String, var expire: Long, var enabled: Boolean)
+
+/**
+ * Список подписок пользователя
+ * @param userSubscriptions - список подписок/автопоплнений пользователя
+ */
+data class UserSubscriptions(var userSubscriptions: Array<SubscriptionInfo>)
 
 /**
  * Итем "Поддержка" для списка на экране "Платежи"
  */
-class PaymentNinjaHelp
+data class PaymentNinjaHelp(private val mDiffTemp: Int = 0)
+
+/**
+ * Лоадер на время запроса
+ */
+data class PaymnetNinjaPurchasesLoader(private val mDiffTemp: Int = 0)

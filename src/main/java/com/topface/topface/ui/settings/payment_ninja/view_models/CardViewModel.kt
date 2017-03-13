@@ -1,29 +1,28 @@
 package com.topface.topface.ui.settings.payment_ninja.view_models
 
-import android.databinding.ObservableField
-import android.databinding.ObservableInt
 import com.topface.topface.R
 import com.topface.topface.ui.settings.payment_ninja.CardInfo
-import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getCardName
 import com.topface.topface.utils.extensions.getString
 import kotlin.properties.Delegates
 
 /**
  * Вью модель элемента "карта"
- * Created by petrp on 12.03.2017.
+ * Created by ppavlik on 13.03.17.
  */
-
-class CardViewModel() {
-    val title = ObservableField(Utils.EMPTY)
-    val icon = ObservableInt()
+class CardViewModel(private val cardInfo: CardInfo, val onClickListener: () -> Unit) {
+    private val mViewModel by lazy {
+        PaymentNinjaPurchasesItemTitleOnlyViewModel()
+    }
     var isCardAvailble by Delegates.observable(true) { prop, old, new ->
-        if (new) {
-            icon.set(getCardIcon())
-            title.set(getCardTitle())
-        } else {
-            icon.set(R.drawable.ic_warning)
-            title.set(R.string.ninja_no_card_title.getString())
+        with(mViewModel) {
+            if (new) {
+                icon.set(getCardIcon())
+                title.set(getCardTitle())
+            } else {
+                icon.set(R.drawable.ic_warning)
+                title.set(R.string.ninja_no_card_title.getString())
+            }
         }
     }
 
@@ -31,9 +30,10 @@ class CardViewModel() {
         isCardAvailble = true
     }
 
-    private fun getCardTitle() =
-            CardInfo("", "").getCardName()
+    private fun getCardTitle() = cardInfo.getCardName()
 
     private fun getCardIcon() =
             R.drawable.ic_warning
+
+    fun getViewModel() = mViewModel
 }

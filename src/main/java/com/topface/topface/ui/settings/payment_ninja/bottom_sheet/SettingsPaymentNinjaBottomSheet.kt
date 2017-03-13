@@ -16,7 +16,7 @@ import com.topface.topface.utils.extensions.getString
  * Конфигурируем bottom sheet для экрана покупок payment ninja
  * Created by petrp on 09.03.2017.
  */
-class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSheetBase<V>() {
+class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSheetBase<V>(), ISettingsPaymentNinjaBottomSheetInterface {
     private val mTypeProvider by lazy {
         SettingsPaymentNinjaBottomSheetTypeProvider()
     }
@@ -38,7 +38,7 @@ class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSh
                 .addAdapterComponent(BottomSheetItemComponent())
     }
 
-    fun showCardBottomSheet() {
+    override fun showCardBottomSheet() {
         with(mData.observableList) {
             clear()
             //TODO дернуть extension
@@ -49,7 +49,7 @@ class SettingsPaymentNinjaBottomSheet<V : View>(private val mView: V) : BottomSh
         show()
     }
 
-    fun showSubscriptionBottomSheet(isSubscriptionActive: Boolean) {
+    override fun showSubscriptionBottomSheet(isSubscriptionActive: Boolean) {
         with(mData.observableList) {
             clear()
             add(BottomSheetTitle(R.string.ninja_vip_status_title.getString()))

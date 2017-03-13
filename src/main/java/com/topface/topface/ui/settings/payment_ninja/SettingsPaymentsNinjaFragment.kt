@@ -3,7 +3,6 @@ package com.topface.topface.ui.settings.payment_ninja
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,12 @@ import com.topface.topface.R
 import com.topface.topface.databinding.FragmentSettingsPaymentsBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components.LoaderComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheet
+import com.topface.topface.ui.settings.payment_ninja.components.CardComponent
+import com.topface.topface.ui.settings.payment_ninja.components.HelpComponent
+import com.topface.topface.ui.settings.payment_ninja.components.SubscriptionComponent
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
@@ -24,7 +27,7 @@ import org.jetbrains.anko.layoutInflater
  * Created by ppavlik on 06.03.17.
  */
 
-class SettingsPaymentsNinja : BaseFragment() {
+class SettingsPaymentsNinjaFragment : BaseFragment() {
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentSettingsPaymentsBinding>(context.layoutInflater,
@@ -45,6 +48,10 @@ class SettingsPaymentsNinja : BaseFragment() {
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mTypeProvider) { Bundle() }
+                .addAdapterComponent(CardComponent(mBottomSheet))
+                .addAdapterComponent(HelpComponent(mFeedNavigator))
+                .addAdapterComponent(SubscriptionComponent(mBottomSheet))
+                .addAdapterComponent(LoaderComponent())
     }
 
     private val mBottomSheet by lazy {

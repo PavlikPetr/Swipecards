@@ -29,7 +29,10 @@ import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.ui.settings.payment_ninja.CardInfo;
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.MarketApiManager;
+import com.topface.topface.utils.extensions.CreditCardExtensionKt;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -124,6 +127,7 @@ public class SettingsFragment extends ProfileInnerFragment {
         boolean isAutoreplyAllow = App.get().getOptions().isAutoreplyAllow;
         mIsAllowedAutoReply = isAutoreplyAllow;
         setAutoReplySettings(isAutoreplyAllow);
+        initPurchases(view);
 
         // Init settings views
         /*
@@ -214,6 +218,18 @@ public class SettingsFragment extends ProfileInnerFragment {
         preloadPhotoName.setText(App.getUserConfig().getPreloadPhotoType().getName());
     }
 
+    private void initPurchases(View root) {
+        View frame = root.findViewById(R.id.loPurchases);
+        PaymentInfo info = App.get().getOptions().paymentNinjaInfo;
+        if (info.getEnable()) {
+            frame.setVisibility(View.VISIBLE);
+            ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.ninja_settings_toolbar);
+            ((TextView) frame.findViewWithTag("tvText")).setText(CreditCardExtensionKt.getCardName(new CardInfo(info.getLastDigit(), info.getType())));
+        } else {
+            frame.setVisibility(View.GONE);
+        }
+    }
+
     private void initAccountViews(View root) {
         ViewGroup frame = (ViewGroup) root.findViewById(R.id.loAccount);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
@@ -254,6 +270,14 @@ public class SettingsFragment extends ProfileInnerFragment {
             }
         });
         preloadPhotoSelectorDialog.show(getActivity().getSupportFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
+
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loPurchases)
+    protected void showPurchasesScreen() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_PURCHASES);
 
     }
 

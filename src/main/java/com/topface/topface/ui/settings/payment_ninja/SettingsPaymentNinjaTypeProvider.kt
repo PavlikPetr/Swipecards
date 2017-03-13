@@ -11,6 +11,7 @@ class SettingsPaymentNinjaTypeProvider : ITypeProvider {
         CardInfo::class.java -> 1
         SubscriptionInfo::class.java -> 2
         PaymentNinjaHelp::class.java -> 3
+        PaymnetNinjaPurchasesLoader::class.java -> 4
         else -> 0
     }
 }
