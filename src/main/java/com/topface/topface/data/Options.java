@@ -157,6 +157,8 @@ public class Options extends AbstractData {
 
     public Payments payments = new Payments();
 
+    public PaymentNinjaInfo paymentNinjaInfo = new PaymentNinjaInfo();
+
     /**
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
      */
@@ -267,6 +269,8 @@ public class Options extends AbstractData {
             if (payments != null) {
                 this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
             }
+
+            paymentNinjaInfo = JsonUtils.optFromJson(response.optString("paymentNinjaInfo"), PaymentNinjaInfo.class, new PaymentNinjaInfo());
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
             if (contactsInvite != null) {
@@ -688,6 +692,19 @@ public class Options extends AbstractData {
         public Payments() {
         }
 
+    }
+
+    public static class PaymentNinjaInfo {
+        /**
+         * enabled - {Boolean} использовать ли Payment Ninja в целом
+         * lastDigits - {String} пустая строка если карты нет, иначе последние 4ре цифры
+         * email - {String} мыло привязанное к карте
+         * publicKey - {String} публичный ключик нашего проекта
+         */
+        public boolean enabled;
+        public String lastDigits;
+        public String email;
+        public String publicKey;
     }
 
     public static class Offerwalls {
