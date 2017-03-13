@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.settings.payment_ninja.SettingsPaymentNinjaViewModel"/>
+            type="com.topface.topface.ui.settings.payment_ninja.SettingsPaymentNinjaViewModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -16,13 +16,13 @@
 
         <!-- подключение основного контента -->
         <include
-            android:id="@+id/screenContent"
-            layout="@layout/fragment_settings_payments_content"/>
+            android:id="@+id/paymentsContent"
+            layout="@layout/fragment_settings_payments_content" />
 
         <!-- подключение нижнего экрана -->
         <include
             android:id="@+id/bottomSheet"
-            layout="@layout/payments_bottom_sheet"/>
+            layout="@layout/payments_bottom_sheet" />
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

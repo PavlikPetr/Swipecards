@@ -18,9 +18,7 @@ import com.topface.topface.Ssid;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
-import com.topface.topface.experiments.feed_design.DialogsAndLikesFeedDesigned;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -28,10 +26,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.fragments.feed.admiration.AdmirationFragment;
-import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
-import com.topface.topface.ui.fragments.feed.mutual.MutualFragment;
 import com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
 import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
@@ -366,8 +361,6 @@ public class GCMUtils {
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
@@ -381,8 +374,7 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
-        boolean dialogRedesignEnabled = DialogsAndLikesFeedDesigned.getDesignVersionJava() != 0;
-        Intent i = null;
+                Intent i = null;
         String pageName;
         switch (type) {
             case GCM_TYPE_MESSAGE:
@@ -392,10 +384,8 @@ public class GCMUtils {
             case GCM_TYPE_MUTUAL:
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
-                    pageName = dialogRedesignEnabled ? DialogsFragment.class.getName() : MutualFragment.class.getName();
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(dialogRedesignEnabled ? TABBED_DIALOGS : TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                 }
                 break;
             case GCM_TYPE_LIKE:
@@ -409,10 +399,8 @@ public class GCMUtils {
             case GCM_TYPE_ADMIRATION:
                 if (showAdmirations) {
                     lastNotificationType = GCM_TYPE_ADMIRATION;
-                    pageName = dialogRedesignEnabled ? DialogsFragment.class.getName() : AdmirationFragment.class.getName();
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(dialogRedesignEnabled ? TABBED_DIALOGS : TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, pageName);
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                 }
                 break;
             case GCM_TYPE_GUESTS:
@@ -434,11 +422,6 @@ public class GCMUtils {
                 if (!Utils.isCallableIntent(i, context)) {
                     i = new Intent(context, NavigationActivity.class);
                 }
-                break;
-            case GCM_TYPE_DIALOGS:
-                lastNotificationType = GCM_TYPE_DIALOGS;
-                i = new Intent(context, NavigationActivity.class);
-                FeedScreensIntent.equipMessageAllIntent(i);
                 break;
             case GCM_TYPE_FAN_UPDATE_PROFILE:
                 lastNotificationType = GCM_TYPE_FAN_UPDATE_PROFILE;

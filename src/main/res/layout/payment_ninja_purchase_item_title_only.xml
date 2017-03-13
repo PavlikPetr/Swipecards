@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.settings.payment_ninja.view_models.CardViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/payment_ninja_payments_items_height">
+
+        <ImageView
+            style="@style/PaymentNinjaPurchasesItemIcon"
+            tools:src="@drawable/ic_crown_left_menu"/>
+
+        <TextView
+            style="@style/PaymentNinjaPurchasesItemTitle"
+            android:layout_centerVertical="true"
+            android:paddingEnd="@dimen/payment_ninja_payments_item_text_padding_right"
+            android:paddingLeft="@dimen/payment_ninja_payments_item_text_padding_left"
+            android:paddingRight="@dimen/payment_ninja_payments_item_text_padding_right"
+            android:paddingStart="@dimen/payment_ninja_payments_item_text_padding_left"
+            tools:ignore="RtlSymmetry"
+            tools:text="Test title"/>
+    </RelativeLayout>
+</layout>

@@ -300,10 +300,16 @@
     <color name="online_circle">#4cda65</color>
     <color name="circle_around_online_circle">@color/bg_white</color>
 
-    <color name="dating_filter_background"> #f5f5f5 </color>
+    <color name="dating_filter_background">#f5f5f5</color>
 
     <!-- Payment Ninja -->
     <color name="ninja_error_text">#F45430</color>
     <color name="ninja_color_accent">#499AFF</color>
+    <color name="ninja_bottom_sheet_title">#9a9999</color>
+    <color name="ninja_bottom_sheet_item">#3fd559</color>
+    <color name="ninja_bottom_sheet_item_background">#FFFFFF</color>
+    <color name="ninja_payments_screen_background">#f5f5f5</color>
+    <color name="ninja_payments_screen_item_title_color">#de000000</color>
+    <color name="ninja_payments_screen_item_subtitle_color">#9a9999</color>
 
 </resources>
