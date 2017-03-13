@@ -30,11 +30,13 @@ import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.ProductExtensionKt;
 import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.ArrayList;
@@ -251,18 +253,27 @@ public class PurchasesFragment extends BaseFragment {
             if (TextUtils.equals(tab.type, PurchasesTabData.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
             } else {
-                Products products = getProductsByTab(tab);
-                if (products != null) {
-                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
-                            (isVip && products.premium.isEmpty()) || !PurchasesTabData.markets.contains(tab.type)) {
-                        iterator.remove();
+                boolean isNeedRemoveTab;
+                if (tab.type.equals(PurchasesTabData.PAYMENT_NINJA)) {
+                    PaymentNinjaProductsList productsList = CacheProfile.getPaymentNinjaProductsList();
+                    if (isVip) {
+                        isNeedRemoveTab = ProductExtensionKt.getVipProducts(productsList).isEmpty();
+                    } else {
+                        isNeedRemoveTab = ProductExtensionKt.getCoinsProducts(productsList).isEmpty() && ProductExtensionKt.getLikesProducts(productsList).isEmpty();
                     }
+
+                } else {
+                    isNeedRemoveTab = isNeedRemoveTab(tab, isVip);
+                }
+                if (isNeedRemoveTab) {
+                    iterator.remove();
                 }
             }
         }
     }
 
-    private Products getProductsByTab(PurchasesTabData tab) {
+
+    private boolean isNeedRemoveTab(PurchasesTabData tab, boolean isVip) {
         Products products = null;
         switch (tab.type) {
             case PurchasesTabData.GPLAY:
@@ -275,7 +286,8 @@ public class PurchasesFragment extends BaseFragment {
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
                 break;
         }
-        return products;
+        return products != null && ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
+                (isVip && products.premium.isEmpty()) || !PurchasesTabData.markets.contains(tab.type));
     }
 
     private String getInfoText() {

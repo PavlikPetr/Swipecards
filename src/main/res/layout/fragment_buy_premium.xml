@@ -32,7 +32,7 @@
                     style="@style/TitleGrayText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:layout_margin="@dimen/buy_screen_products_unavailable_margins"
                     android:text="@string/general_buying_disabled"
                     android:visibility="gone" />
 

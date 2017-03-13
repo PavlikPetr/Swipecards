@@ -305,6 +305,7 @@
     <!-- Payment Ninja -->
     <color name="ninja_error_text">#F45430</color>
     <color name="ninja_color_accent">#499AFF</color>
+    <color name="payment_ninja_card_info">#9a9999</color>
     <color name="ninja_bottom_sheet_title">#9a9999</color>
     <color name="ninja_bottom_sheet_item">#3fd559</color>
     <color name="ninja_bottom_sheet_item_background">#FFFFFF</color>
