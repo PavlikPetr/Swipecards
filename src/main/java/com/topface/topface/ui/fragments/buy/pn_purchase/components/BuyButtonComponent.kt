@@ -1,0 +1,38 @@
+package com.topface.topface.ui.fragments.buy.pn_purchase.components
+
+import android.text.TextUtils
+import com.topface.topface.R
+import com.topface.topface.data.BuyButtonData
+import com.topface.topface.databinding.BuyButtonVer1Binding
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
+import com.topface.topface.ui.views.BuyButtonVer1
+import com.topface.topface.utils.extensions.appContext
+import com.topface.topface.utils.extensions.getTag
+
+/**
+ * Buy Paymnet Ninja product component
+ * Created by petrp on 02.03.2017.
+ */
+class BuyButtonComponent(private val mNavigator: FeedNavigator) : AdapterComponent<BuyButtonVer1Binding, PaymentNinjaProduct>() {
+    override val itemLayout: Int
+        get() = R.layout.buy_button_ver_1
+    override val bindingClass: Class<BuyButtonVer1Binding>
+        get() = BuyButtonVer1Binding::class.java
+
+    override fun bind(binding: BuyButtonVer1Binding, data: PaymentNinjaProduct?, position: Int) {
+        data?.let { product ->
+            binding.handler = BuyButtonVer1.BuyButtonBuilder()
+                    .discount(false)
+                    .tag(product.getTag())
+                    .showType(product.showType)
+                    .title(product.titleTemplate)
+                    .onClick {
+                        mNavigator.showPaymentNinjaPurchaseProduct(product)
+                    }
+                    .build(binding.appContext())
+                    .mBtnHandler
+        }
+    }
+}

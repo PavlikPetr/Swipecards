@@ -20,8 +20,6 @@ import retrofit2.http.QueryMap;
 import rx.Observable;
 import rx.functions.Func1;
 
-import static com.adjust.sdk.Util.convertToHex;
-
 public class FyberOffersRequest {
     private static final String BASE_FYBER_LINK = "http://api.fyber.com/";
     private static final String GET_OFFERS_LINK = "feed/v1/offers.json";
@@ -87,7 +85,7 @@ public class FyberOffersRequest {
     private String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         md.update(text.getBytes("iso-8859-1"), 0, text.length());
-        return convertToHex(md.digest());
+        return Utils.convertToHex(md.digest());
     }
 
     private String getSHA1(String text) {

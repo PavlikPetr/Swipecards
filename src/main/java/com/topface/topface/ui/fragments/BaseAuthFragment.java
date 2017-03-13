@@ -32,7 +32,6 @@ import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
 import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FBInvitesUtils;
@@ -48,7 +47,6 @@ import org.json.JSONException;
  */
 public abstract class BaseAuthFragment extends BaseFragment {
 
-    private AdjustManager mAdjustManager;
     private KochavaManager mKochavaManager;
     private AuthState mAuthState;
     private boolean mHasAuthorized = false;
@@ -76,7 +74,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuthState = App.getAppComponent().authState();
-        mAdjustManager = App.getAppComponent().adjustManager();
     }
 
     protected void initViews(View root) {
@@ -130,9 +127,6 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     protected void auth(final AuthToken token) {
-        if (mAdjustManager == null) {
-            mAdjustManager = App.getAppComponent().adjustManager();
-        }
         if (mKochavaManager == null) {
             mKochavaManager = App.getAppComponent().kochavaManager();
         }
@@ -149,9 +143,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
                 AppConfig appConfig = App.getAppConfig();
-                App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
                 App.sendReferrerTrack(appConfig.getReferrerTrackData());
-                mAdjustManager.sendRegistrationEvent(token.getSocialNet());
                 mKochavaManager.registration();
                 mKochavaManager.sendReferralTrack();
                 //Отправляем статистику в AppsFlyer

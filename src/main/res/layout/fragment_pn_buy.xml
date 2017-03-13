@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/buttonsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fadingEdge="none"
+            android:paddingEnd="@dimen/buy_screen_products_list_padding"
+            android:paddingLeft="@dimen/buy_screen_products_list_padding"
+            android:paddingRight="@dimen/buy_screen_products_list_padding"
+            android:paddingStart="@dimen/buy_screen_products_list_padding"
+            android:requiresFadingEdge="none"
+            app:bindDataToCompositeAdapter="@{viewModel.data}"
+            tools:targetApi="ice_cream_sandwich"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="1dp"
+            android:text="@{viewModel.cardInfo}"
+            android:textColor="@color/payment_ninja_card_info"
+            android:textSize="13sp"
+            android:visibility="@{viewModel.cardInfoVisibility}"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:text="@string/get_other_card"
+            android:textColor="@color/ninja_color_accent"
+            android:textSize="12sp"
+            android:visibility="@{viewModel.cardInfoVisibility}"/>
+    </LinearLayout>
+</layout>
