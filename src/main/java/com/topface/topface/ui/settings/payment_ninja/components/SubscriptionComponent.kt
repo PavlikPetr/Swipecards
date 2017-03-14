@@ -1,20 +1,12 @@
 package com.topface.topface.ui.settings.payment_ninja.components
 
+import android.util.Log
 import com.topface.topface.R
-import com.topface.topface.databinding.BottomSheetTitleBinding
-import com.topface.topface.databinding.PaymentNinjaPurchaseItemTitleOnlyBinding
 import com.topface.topface.databinding.PaymentNinjaPurchaseItemWithSubtitleBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
-import com.topface.topface.ui.settings.payment_ninja.CardInfo
-import com.topface.topface.ui.settings.payment_ninja.PaymentNinjaHelp
 import com.topface.topface.ui.settings.payment_ninja.SubscriptionInfo
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BottomSheetTitle
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ISettingsPaymentNinjaBottomSheetInterface
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheetItemViewModel
-import com.topface.topface.ui.settings.payment_ninja.view_models.CardViewModel
-import com.topface.topface.ui.settings.payment_ninja.view_models.PaymentNinjaPurchasesItemTitleOnlyViewModel
 import com.topface.topface.ui.settings.payment_ninja.view_models.PaymentNinjaPurchasesItemWithSubtitle
-import com.topface.topface.utils.extensions.getString
 
 /**
  * Компонент для отображения информации о подписке
@@ -29,10 +21,12 @@ class SubscriptionComponent(private val mBottomSheetInterface: ISettingsPaymentN
 
     override fun bind(binding: PaymentNinjaPurchaseItemWithSubtitleBinding, data: SubscriptionInfo?, position: Int) {
         data?.let {
-            binding.viewModel = PaymentNinjaPurchasesItemWithSubtitle(it) {
+            binding.viewModel = PaymentNinjaPurchasesItemWithSubtitle(mSubscription = it, onLongClickListener = {
                 mBottomSheetInterface.showSubscriptionBottomSheet(it.enabled)
-            }
+                true
+            },onClickListener = {
+                Log.e("","")
+            })
         }
     }
-
 }

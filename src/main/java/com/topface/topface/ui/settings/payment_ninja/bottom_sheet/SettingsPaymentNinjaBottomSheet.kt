@@ -11,6 +11,7 @@ import com.topface.topface.ui.bottom_sheet.BottomSheetBase
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.components.BottomSheetItemComponent
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.components.BottomSheetTitleComponent
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetViewModel
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.extensions.getString
 
@@ -18,7 +19,7 @@ import com.topface.topface.utils.extensions.getString
  * Конфигурируем bottom sheet для экрана покупок payment ninja
  * Created by petrp on 09.03.2017.
  */
-class SettingsPaymentNinjaBottomSheet(private val mView: RecyclerView) : BottomSheetBase<RecyclerView>(), ISettingsPaymentNinjaBottomSheetInterface {
+class SettingsPaymentNinjaBottomSheet(view: RecyclerView) : BottomSheetBase<RecyclerView>(view), ISettingsPaymentNinjaBottomSheetInterface {
     private val mTypeProvider by lazy {
         SettingsPaymentNinjaBottomSheetTypeProvider()
     }
@@ -28,10 +29,9 @@ class SettingsPaymentNinjaBottomSheet(private val mView: RecyclerView) : BottomS
                 .addAdapterComponent(BottomSheetItemComponent())
     }
 
-    override val mBottomSheetLayout: RecyclerView
-        get() = mView
-
     override fun configurateBottomSheet(bottoSheet: BottomSheetBehavior<RecyclerView>) {
+        bottoSheet.state = BottomSheetBehavior.STATE_HIDDEN
+        bottoSheet.isHideable = false
     }
 
     val viewModel by lazy {
@@ -47,7 +47,7 @@ class SettingsPaymentNinjaBottomSheet(private val mView: RecyclerView) : BottomS
     }
 
     init {
-        with(mView) {
+        with(view) {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }

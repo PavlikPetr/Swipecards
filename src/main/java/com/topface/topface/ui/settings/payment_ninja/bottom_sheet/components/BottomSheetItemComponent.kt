@@ -4,7 +4,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.BottomSheetTitleBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BOTTOM_SHEET_ITEMS_POOL
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheetItemViewModel
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetItemViewModel
 import com.topface.topface.utils.extensions.getString
 
 /**

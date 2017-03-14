@@ -1,5 +1,6 @@
 package com.topface.topface.ui.settings.payment_ninja.components
 
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.PaymentNinjaPurchaseItemTitleOnlyBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
@@ -20,7 +21,10 @@ class CardComponent(private val mBottomSheetInterface: ISettingsPaymentNinjaBott
 
     override fun bind(binding: PaymentNinjaPurchaseItemTitleOnlyBinding, data: CardInfo?, position: Int) {
         data?.let {
-            binding.viewModel = CardViewModel(it) { mBottomSheetInterface.showCardBottomSheet() }.getViewModel()
+            binding.viewModel = CardViewModel(it, onLongClickListener = {
+                mBottomSheetInterface.showCardBottomSheet()
+                true
+            }).getViewModel()
         }
     }
 

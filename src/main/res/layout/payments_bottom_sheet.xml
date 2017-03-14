@@ -13,5 +13,7 @@
         android:id="@+id/bottomSheetList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:bindDataToCompositeAdapter="@{viewModel.data}"/>
+        android:background="#6a000000"
+        app:bindDataToCompositeAdapter="@{viewModel.data}"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"/>
 </layout>

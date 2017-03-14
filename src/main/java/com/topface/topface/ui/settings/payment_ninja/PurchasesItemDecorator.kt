@@ -29,13 +29,6 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
         }
     }
 
-    private val mMarginPaint by lazy {
-        Paint().apply {
-            color = R.color.ninja_payments_screen_background.getColor()
-            strokeWidth = R.dimen.payment_ninja_payments_different_type_items_margin.getDimen()
-        }
-    }
-
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
         val params = view?.layoutParams as? RecyclerView.LayoutParams
         val position = params?.viewAdapterPosition
@@ -57,15 +50,17 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
             child?.let { child ->
                 isNeedDivider(parent, child)?.let { isNeedDivider ->
                     val startX = child.translationX
-                    val startY = child.bottom + child.translationY
+                    val startY = child.bottom + child.translationY + R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
                     c?.let {
+                        // разделитель рисуем только между итемами одинакового типа
                         if (isNeedDivider) {
+                            // рисуем белую линию
                             it.drawLine(startX, startY, R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX,
                                     startY, mDividerFirstPart)
-                            it.drawLine(R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX, startY+R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen(),
-                                    child.right.toFloat(), startY+R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen(), mDividerSecondPart)
-                        } else {
-                            it.drawLine(startX, startY, child.right.toFloat(), startY+R.dimen.payment_ninja_payments_different_type_items_margin.getDimen(), mMarginPaint)
+                            // рисуем серую линию
+                            // в итоге итемы на белом фоне отделены серым divider с отступом слева
+                            it.drawLine(R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX, startY,
+                                    child.right.toFloat(), startY, mDividerSecondPart)
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.topface.topface.ui.settings.payment_ninja.bottom_sheet
+package com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models
 
 /**
  * View model для элемента списка bottom sheet на экране платежей paymeent ninja

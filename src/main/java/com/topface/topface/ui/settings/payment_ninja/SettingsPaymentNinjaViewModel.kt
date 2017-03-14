@@ -30,7 +30,7 @@ class SettingsPaymentNinjaViewModel {
         mRequestSubscription = Observable.timer(2, TimeUnit.SECONDS)
                 .applySchedulers()
                 .subscribe(shortSubscription {
-                    data.replaceData(arrayListOf<Any>(CardInfo("1234", "Maestro"),
+                    data.replaceData(arrayListOf(CardInfo("1234", "Maestro"),
                             SubscriptionInfo("some id", 0, "Подписка на ВИП", 1493683200, true),
                             SubscriptionInfo("some id", 1, "Автопополнение монет", 1493683200, true),
                             PaymentNinjaHelp()))

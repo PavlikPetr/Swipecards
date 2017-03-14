@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,13 +12,15 @@
 
     <RelativeLayout
         style="@style/PaymentNinjaPurchasesItemContainer"
-        android:onClick="@{() -> viewModel.onClickListener.invoke()}">
+        android:onClick="@{() -> viewModel.onClickListener.invoke()}"
+        app:onLongClickListener="@{() -> viewModel.onLongClickListener.invoke()}">
 
         <ImageView
             style="@style/PaymentNinjaPurchasesItemIcon"
             android:src="@{viewModel.icon}"/>
 
         <TextView
+            android:id="@+id/text"
             style="@style/PaymentNinjaPurchasesItemTitle"
             android:layout_centerVertical="true"
             android:paddingEnd="@dimen/payment_ninja_payments_item_text_padding_right"

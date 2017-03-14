@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentSettingsPaymentsBinding
 import com.topface.topface.ui.fragments.BaseFragment

@@ -4,7 +4,7 @@ import com.topface.topface.R
 import com.topface.topface.databinding.BottomSheetTitleBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BottomSheetTitle
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheetItemViewModel
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetItemViewModel
 
 /**
  * Компонент для title bottom sheet экрана платежей payment ninja
