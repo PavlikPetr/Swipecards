@@ -38,7 +38,6 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
