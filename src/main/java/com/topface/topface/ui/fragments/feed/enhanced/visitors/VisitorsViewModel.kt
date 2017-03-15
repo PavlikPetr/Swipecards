@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.visitors
 
 import android.content.Context
 import com.topface.topface.api.FeedRequestFactory
+import com.topface.topface.api.IApi
 import com.topface.topface.api.responses.GetVisitorsListResponse
 import com.topface.topface.api.responses.Visitor
 import com.topface.topface.data.CountersData
@@ -9,7 +10,7 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-class VisitorsViewModel(context: Context) : BaseFeedFragmentModel<Visitor>(context) {
+class VisitorsViewModel(context: Context, api: IApi) : BaseFeedFragmentModel<Visitor>(context, api) {
     override val responseClass: Class<GetVisitorsListResponse>
         get() = GetVisitorsListResponse::class.java
     override val feedsType: FeedsCache.FEEDS_TYPE

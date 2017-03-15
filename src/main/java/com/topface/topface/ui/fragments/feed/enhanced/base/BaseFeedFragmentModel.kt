@@ -14,8 +14,8 @@ import com.topface.framework.utils.Debug
 import com.topface.scruffy.data.ApiError
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.api.Api
 import com.topface.topface.api.FeedRequestFactory
+import com.topface.topface.api.IApi
 import com.topface.topface.api.UnreadStatePair
 import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.IBaseFeedResponse
@@ -49,15 +49,11 @@ import java.util.concurrent.atomic.AtomicReference
  * и релизить на unbind
  * Created by tiberal on 09.02.17.
  */
-abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context) :
+abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context, private val mApi: IApi) :
         BaseViewModel(), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     var navigator: IFeedNavigator? = null
     var stubView: IFeedLockerView? = null
-
-
-    val apiNew = Api()
-
 
     private val mState by lazy {
         App.getAppComponent().appState()
@@ -92,7 +88,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
         CountersData()
     }
     private val mCache by lazy {
-        FeedCacheManager<T>(context, feedsType)
+        FeedCacheManager<T>(mContext, feedsType)
     }
     private var mAppDayRequestSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
@@ -190,9 +186,9 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        mReadItemReceiver.registerReceiver(context, filter)
+        mReadItemReceiver.registerReceiver(mContext, filter)
         gcmTypeUpdateAction?.let {
-            mGcmReceiver.registerReceiver(context, IntentFilter(it))
+            mGcmReceiver.registerReceiver(mContext, IntentFilter(it))
         }
     }
 
@@ -226,7 +222,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
                         updateBundle.getString(TO, Utils.EMPTY) != Utils.EMPTY || force) {
             isFeedProgressBarVisible.set(View.VISIBLE)
             val arg = constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(TO, Utils.EMPTY))
-            mAtomicUpdaterSubscription.set(apiNew.callGetList(arg, responseClass, itemClass).
+            mAtomicUpdaterSubscription.set(mApi.callGetList(arg, responseClass, itemClass).
                     subscribe(object : Subscriber<IBaseFeedResponse>() {
                         override fun onNext(data: IBaseFeedResponse?) {
                             data?.let {
@@ -333,7 +329,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
     fun loadTopFeeds() {
         val from = data.getFirst()?.id ?: Utils.EMPTY
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
-        mAtomicUpdaterSubscription.set(apiNew.callGetList(requestBundle, responseClass, itemClass)
+        mAtomicUpdaterSubscription.set(mApi.callGetList(requestBundle, responseClass, itemClass)
                 .subscribe(object : Observer<IBaseFeedResponse> {
                     override fun onCompleted() {
                         mAtomicUpdaterSubscription.get().safeUnsubscribe()
@@ -408,13 +404,13 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
     fun onDeleteFeedItems(items: MutableList<T>, idsList: ArrayList<String>) {
         val tempItems = items.toList()
         isLockViewVisible.set(View.VISIBLE)
-        mDeleteSubscription = apiNew.callDelete(feedsType, idsList).subscribe(createSubscriber(tempItems))
+        mDeleteSubscription = mApi.callDelete(feedsType, idsList).subscribe(createSubscriber(tempItems))
     }
 
     fun onAddToBlackList(items: MutableList<T>) {
         val tempItems = items.toList()
         isLockViewVisible.set(View.VISIBLE)
-        mBlackListSubscription = apiNew.callAddToBlackList(items).subscribe(createSubscriber(tempItems))
+        mBlackListSubscription = mApi.callAddToBlackList(items).subscribe(createSubscriber(tempItems))
     }
 
     private fun createSubscriber(items: List<T>) = object : Subscriber<Completed>() {
@@ -442,14 +438,14 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
         }
     }
 
-    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver(context)
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver(mContext)
 
     override fun onAppForeground(timeOnStart: Long) {
         gcmTypeUpdateAction?.let {
-            mGcmReceiver.registerReceiver(context, IntentFilter(it))
+            mGcmReceiver.registerReceiver(mContext, IntentFilter(it))
         }
         for (type in gcmType) {
-            GCMUtils.cancelNotification(context, type)
+            GCMUtils.cancelNotification(mContext, type)
         }
     }
 
@@ -462,7 +458,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
 
     override fun release() {
         unbind()
-        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(context)
+        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(mContext)
         arrayOf(mUpdaterSubscription, mDeleteSubscription, mBlackListSubscription, mCountersSubscription,
                 mAppDayRequestSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {

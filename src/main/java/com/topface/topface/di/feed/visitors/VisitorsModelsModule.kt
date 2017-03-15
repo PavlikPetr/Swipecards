@@ -1,6 +1,7 @@
 package com.topface.topface.di.feed.visitors
 
 import android.content.Context
+import com.topface.topface.api.Api
 import com.topface.topface.di.scope.ScreenScope
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsViewModel
 import dagger.Module
@@ -11,7 +12,7 @@ class VisitorsModelsModule {
 
     @Provides
     @ScreenScope
-    fun provideVisitorsViewModel(context: Context): VisitorsViewModel =
-            VisitorsViewModel(context)
+    fun provideVisitorsViewModel(context: Context, api: Api): VisitorsViewModel =
+            VisitorsViewModel(context, api)
 
 }

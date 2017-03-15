@@ -3,6 +3,7 @@ package com.topface.topface.di
 import android.content.Context
 import com.topface.scruffy.ScruffyManager
 import com.topface.topface.App
+import com.topface.topface.api.Api
 import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.di.api.ApiModule
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
@@ -23,6 +24,7 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun scruffyManager(): ScruffyManager
+    fun api(): Api
 
     fun context(): Context
     fun appState(): TopfaceAppState

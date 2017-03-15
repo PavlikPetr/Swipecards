@@ -29,6 +29,7 @@ import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
+import com.topface.scruffy.ScruffyManager;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
@@ -126,6 +127,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     WeakStorage mWeakStorage;
     @Inject
     EventBus mEventBus;
+    @Inject
+    ScruffyManager scruffyManager;
     private AdjustManager mAdjustManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -440,12 +443,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             Class.forName("android.os.AsyncTask");
         } catch (Throwable ignore) {
         }
+        super.onCreate();
+        mContext = getApplicationContext();
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(getApplicationContext()))
                 .build();
         appComponent.inject(this);
-        super.onCreate();
-        mContext = getApplicationContext();
         LeakCanary.install(this);
         FlurryManager.getInstance().init();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB

@@ -1,9 +1,16 @@
 package com.topface.topface.di.api
 
 import android.content.Context
+import com.google.gson.JsonObject
+import com.topface.scruffy.ICounterUpdater
 import com.topface.scruffy.IUserAgentProvider
 import com.topface.scruffy.ScruffyManager
+import com.topface.scruffy.utils.objectFromJson
 import com.topface.topface.App
+import com.topface.topface.api.Api
+import com.topface.topface.data.BalanceData
+import com.topface.topface.data.CountersData
+import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.http.HttpUtils
 import dagger.Module
 import dagger.Provides
@@ -26,8 +33,23 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideScruffyManager(context: Context, links: Array<String>, userAgent: String) =
+    fun provideScruffyManager(context: Context, links: Array<String>, userAgent: String, state: TopfaceAppState) =
             ScruffyManager(context, links, object : IUserAgentProvider {
                 override fun createUserAgent() = userAgent
-            })
+            }).apply {
+                counterUpdater = object : ICounterUpdater {
+                    override fun onCounters(unread: JsonObject) {
+                        state.setData(unread.objectFromJson(CountersData::class.java))
+                    }
+
+                    override fun onBalance(balance: JsonObject) {
+                        state.setData(balance.objectFromJson(BalanceData::class.java))
+                    }
+
+                }
+            }
+
+    @Provides
+    @Singleton
+    fun provideApi() = Api()
 }
