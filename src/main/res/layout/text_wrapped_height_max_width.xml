@@ -17,6 +17,7 @@
         android:layout_marginLeft="@{viewModel.marginLeft}"
         android:layout_marginRight="@{viewModel.marginRight}"
         android:layout_marginTop="@{viewModel.marginTop}"
+        android:background="@{viewModel.background}"
         android:onClick="@{() -> viewModel.onClickListener.invoke()}"
         android:paddingBottom="@{viewModel.paddingBottom}"
         android:paddingLeft="@{viewModel.paddingLeft}"
@@ -24,6 +25,7 @@
         android:paddingTop="@{viewModel.paddingTop}"
         android:text="@{viewModel.text}"
         android:visibility="@{viewModel.textVisibility}"
+        app:allCaps="@{viewModel.isAllCaps}"
         app:pxTextSize="@{viewModel.textSize}"
         app:textColor="@{viewModel.textColor}"
         tools:ignore="RtlHardcoded"/>

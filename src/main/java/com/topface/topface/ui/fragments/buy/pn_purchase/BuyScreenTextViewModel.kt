@@ -18,6 +18,8 @@ class BuyScreenTextViewModel(mText: String = "", val textColor: Int = R.color.bl
                              val marginLeft: Float = 0f, val marginTop: Float = 0f, val marginRight: Float = 0f,
                              val marginBottom: Float = 0f, val paddingLeft: Float = 0f, val paddingTop: Float = 0f,
                              val paddingRight: Float = 0f, val paddingBottom: Float = 0f,
+                             val background: Int = R.color.transparent,
+                             val isAllCaps: Boolean = false,
                              val onClickListener: () -> Unit = {}) {
     val textVisibility = ObservableInt(mTextVisibility)
     val text = ObservableField(mText)
@@ -67,5 +69,29 @@ class BuyScreenTextViewModel(mText: String = "", val textColor: Int = R.color.bl
                 marginLeft = R.dimen.buy_screen_products_unavailable_margins.getDimen(),
                 marginRight = R.dimen.buy_screen_products_unavailable_margins.getDimen(),
                 marginTop = R.dimen.buy_screen_products_unavailable_margins.getDimen())
+
+        // title view для bottomSheet экрана "Платежи"
+        fun PaymentNinjaBottomSheetTitle(text: String) = BuyScreenTextViewModel(
+                mText = text,
+                background = R.color.ninja_bottom_sheet_item_background,
+                paddingBottom = R.dimen.payment_ninja_bottom_sheet_title_padding_bottom.getDimen(),
+                paddingLeft = R.dimen.payment_ninja_bottom_sheet_title_padding_left.getDimen(),
+                paddingTop = R.dimen.payment_ninja_bottom_sheet_title_padding_top.getDimen(),
+                textColor = R.color.ninja_bottom_sheet_title.getColor(),
+                textSize = R.dimen.payment_ninja_bottom_sheet_title_text_size.getDimen().toInt()
+        )
+
+        // item view для bottomSheet экрана "Платежи"
+        fun PaymentNinjaBottomSheetItem(text: String, onClickListener: () -> Unit) = BuyScreenTextViewModel(
+                mText = text,
+                background = R.color.ninja_bottom_sheet_item_background,
+                paddingBottom = R.dimen.payment_ninja_bottom_sheet_item_padding_bottom.getDimen(),
+                paddingLeft = R.dimen.payment_ninja_bottom_sheet_item_padding_left.getDimen(),
+                paddingTop = R.dimen.payment_ninja_bottom_sheet_item_padding_top.getDimen(),
+                textColor = R.color.ninja_bottom_sheet_item.getColor(),
+                textSize = R.dimen.payment_ninja_bottom_sheet_item_text_size.getDimen().toInt(),
+                isAllCaps = true,
+                onClickListener = onClickListener
+        )
     }
 }

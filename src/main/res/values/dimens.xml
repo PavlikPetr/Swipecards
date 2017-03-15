@@ -259,7 +259,7 @@
     <dimen name="payment_ninja_bottom_sheet_title_padding_top">21dp</dimen>
     <dimen name="payment_ninja_bottom_sheet_title_padding_bottom">21dp</dimen>
     <dimen name="payment_ninja_bottom_sheet_title_text_size">16sp</dimen>
-    <dimen name="payment_ninja_bottom_sheet_item_padding_left">15dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_item_padding_left">16dp</dimen>
     <dimen name="payment_ninja_bottom_sheet_item_padding_top">22dp</dimen>
     <dimen name="payment_ninja_bottom_sheet_item_padding_bottom">22dp</dimen>
     <dimen name="payment_ninja_bottom_sheet_item_text_size">14sp</dimen>

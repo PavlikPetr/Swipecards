@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheetViewModel"/>
+            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetViewModel"/>
     </data>
 
     <android.support.v7.widget.RecyclerView

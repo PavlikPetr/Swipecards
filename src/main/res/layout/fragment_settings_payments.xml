@@ -10,7 +10,7 @@
 
         <variable
             name="bottomSheetViewMоdel"
-            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheetViewModel"/>
+            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetViewModel"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
