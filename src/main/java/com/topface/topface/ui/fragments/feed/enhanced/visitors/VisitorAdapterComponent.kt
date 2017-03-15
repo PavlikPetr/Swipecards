@@ -2,8 +2,8 @@ package com.topface.topface.ui.fragments.feed.enhanced.visitors
 
 import android.view.View
 import com.topface.topface.R
+import com.topface.topface.api.responses.Visitor
 import com.topface.topface.data.FeedItem
-import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.NewFeedItemSimpleTimeBinding
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.visitors.VisitorsComponent

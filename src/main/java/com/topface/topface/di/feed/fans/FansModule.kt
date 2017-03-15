@@ -2,7 +2,7 @@ package com.topface.topface.di.feed.fans
 
 import android.databinding.ViewStubProxy
 import com.topface.topface.R
-import com.topface.topface.data.FeedBookmark
+import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
@@ -15,9 +15,6 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by tiberal on 22.02.17.
- */
 @Module(includes = arrayOf(BaseFeedModule::class))
 class FansModule(private val mFragment: FansFragment) {
 

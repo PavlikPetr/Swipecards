@@ -91,7 +91,6 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
         super.onCreateView(inflater, container, savedInstanceState)
         mBinding.viewModel = mViewModel.apply {
             navigator = mNavigator
-            api = mApi
             stubView = mLockerControllerBase
         } as BaseFeedFragmentModel<FeedItem>
         mAdapter.apply {

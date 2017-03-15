@@ -2,7 +2,7 @@ package com.topface.topface.di.feed.visitors
 
 import android.databinding.ViewStubProxy
 import com.topface.topface.R
-import com.topface.topface.data.Visitor
+import com.topface.topface.api.responses.Visitor
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController

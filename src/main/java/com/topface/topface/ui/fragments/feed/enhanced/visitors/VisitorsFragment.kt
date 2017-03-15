@@ -2,8 +2,8 @@ package com.topface.topface.ui.fragments.feed.enhanced.visitors
 
 import android.os.Bundle
 import com.topface.topface.App
+import com.topface.topface.api.responses.Visitor
 import com.topface.topface.banners.PageInfo
-import com.topface.topface.data.Visitor
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.feed.visitors.DaggerVisitorsModelsComponent

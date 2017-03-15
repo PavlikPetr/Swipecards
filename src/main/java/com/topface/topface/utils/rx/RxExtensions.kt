@@ -18,7 +18,7 @@ fun Array<Subscription?>.safeUnsubscribe() {
 }
 
 fun <T> Observable<T>.applySchedulers(): Observable<T> = compose<T>(Observable.Transformer<T, T> {
-    subscribeOn(Schedulers.newThread())
+    subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 })
 

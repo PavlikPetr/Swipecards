@@ -2,7 +2,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.fans
 
 import android.view.View
 import com.topface.topface.R
-import com.topface.topface.data.FeedBookmark
+import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.NewFeedItemSimpleTimeBinding
 import com.topface.topface.di.ComponentManager

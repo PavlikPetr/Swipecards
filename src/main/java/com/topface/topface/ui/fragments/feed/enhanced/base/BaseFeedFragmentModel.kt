@@ -11,23 +11,23 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
 import com.topface.framework.utils.Debug
+import com.topface.scruffy.data.ApiError
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.api.Api
+import com.topface.topface.api.FeedRequestFactory
+import com.topface.topface.api.UnreadStatePair
+import com.topface.topface.api.responses.Completed
+import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
-import com.topface.topface.data.FeedListData
-import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
-import com.topface.topface.ui.fragments.feed.app_day.AppDay
-import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayStubItem
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ImprovedObservableList
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedCacheManager
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedLockerView
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.addAllFirst
-import com.topface.topface.ui.fragments.feed.feed_utils.addFirst
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.Utils
@@ -42,7 +42,6 @@ import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
-import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -54,8 +53,11 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
         BaseViewModel(), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     var navigator: IFeedNavigator? = null
-    var api: FeedApi? = null
     var stubView: IFeedLockerView? = null
+
+
+    val apiNew = Api()
+
 
     private val mState by lazy {
         App.getAppComponent().appState()
@@ -71,11 +73,12 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
     val isLockViewVisible = ObservableInt(View.INVISIBLE)
     val isFeedProgressBarVisible = ObservableInt(View.INVISIBLE)
     val isListVisible = ObservableInt(View.VISIBLE)
-    private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
+    private val mUnreadState = UnreadStatePair(true, false)
 
     abstract val feedsType: FeedsCache.FEEDS_TYPE
     abstract val itemClass: Class<T>
-    abstract val service: FeedRequest.FeedService
+    abstract val responseClass: Class<out IBaseFeedResponse>
+    abstract val service: FeedRequestFactory.FeedService
     abstract val gcmType: Array<Int>
     open val typeFeedFragment: String? = null
     open val gcmTypeUpdateAction: String? = null
@@ -222,53 +225,54 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
                 mAtomicUpdaterSubscription.get()?.isUnsubscribed ?: false &&
                         updateBundle.getString(TO, Utils.EMPTY) != Utils.EMPTY || force) {
             isFeedProgressBarVisible.set(View.VISIBLE)
-            mAtomicUpdaterSubscription.set(api?.callFeedUpdate(isForPremium, itemClass,
-                    constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(TO, Utils.EMPTY)))?.
-                    subscribe(object : Observer<FeedListData<T>> {
-                        override fun onCompleted() {
-                            mAtomicUpdaterSubscription.get().safeUnsubscribe()
-                            isFeedProgressBarVisible.set(View.INVISIBLE)
+            val arg = constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(TO, Utils.EMPTY))
+            mAtomicUpdaterSubscription.set(apiNew.callGetList(arg, responseClass, itemClass).
+                    subscribe(object : Subscriber<IBaseFeedResponse>() {
+                        override fun onNext(data: IBaseFeedResponse?) {
+                            data?.let {
+                                if (!data.more) mIsAllDataLoaded = true
+                                updateFeedsLoaded(data.getItemsList(), updateBundle)
+                            }
                         }
 
                         override fun onError(e: Throwable?) {
                             mAtomicUpdaterSubscription.get().safeUnsubscribe()
-                            e?.let {
-                                onErrorProcess(it)
-                            }
+                            onErrorProcess(e as? ApiError)
                             isFeedProgressBarVisible.set(View.INVISIBLE)
                         }
 
-                        override fun onNext(data: FeedListData<T>?) {
-                            if (data?.more == false) mIsAllDataLoaded = true
-                            updateFeedsLoaded(data, updateBundle)
+                        override fun onCompleted() {
+                            mAtomicUpdaterSubscription.get().safeUnsubscribe()
+                            isFeedProgressBarVisible.set(View.INVISIBLE)
                         }
                     }))
-
         }
     }
 
-    protected open fun updateFeedsLoaded(newData: FeedListData<T>?, updateBundle: Bundle) {
-        if (isDataFromCache || (data.isEmpty() && !(newData?.items?.isEmpty() ?: true))) {
-            typeFeedFragment?.let { getAppDayRequest(it) }
+    protected open fun updateFeedsLoaded(newData: ArrayList<out FeedItem>, updateBundle: Bundle) {
+        if (isDataFromCache || (data.isEmpty() && !(newData.isEmpty()))) {
+            typeFeedFragment?.let { /*getAppDayRequest(it)*/ }
         }
-        newData?.let {
-            if (isDataFromCache) {
-                data.clear()
-                isDataFromCache = false
-            }
-            handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
-            if (data.isEmpty() && it.items.isEmpty()) {
-                isListVisible.set(View.INVISIBLE)
-                stubView?.onEmptyFeed()
-            } else {
-                isListVisible.set(View.VISIBLE)
-                isLockViewVisible.set(View.GONE)
-                stubView?.onFilledFeed()
-            }
-            data.addAll(it.items)
+        if (isDataFromCache) {
+            data.clear()
+            isDataFromCache = false
+        }
+        handleUnreadState(newData, updateBundle.getBoolean(PULL_TO_REF_FLAG))
+        if (data.isEmpty() && newData.isEmpty()) {
+            isListVisible.set(View.INVISIBLE)
+            stubView?.onEmptyFeed()
+        } else {
+            isListVisible.set(View.VISIBLE)
+            isLockViewVisible.set(View.GONE)
+            stubView?.onFilledFeed()
+        }
+        (newData as? ArrayList<T>)?.let {
+            data.addAll(it)
         }
     }
 
+/*
+    передаю привет счастливчику
     fun getAppDayRequest(typeFeedFragment: String) {
         mAppDayRequestSubscription = api?.callAppDayRequest(typeFeedFragment)?.subscribe(object : Subscriber<AppDay>() {
             override fun onCompleted() {
@@ -284,17 +288,18 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
             } ?: Unit
         })
     }
+*/
 
-    private fun onErrorProcess(e: Throwable) {
-        e.printStackTrace()
-        val codeError = Integer.valueOf(e.message)
+    private fun onErrorProcess(apiError: ApiError?) = apiError?.let {
+        it.printStackTrace()
+        val codeError = Integer.valueOf(it.code)
         when (codeError) {
             ErrorCodes.PREMIUM_ACCESS_ONLY, ErrorCodes.BLOCKED_SYMPATHIES
                 , ErrorCodes.BLOCKED_PEOPLE_NEARBY -> {
                 isListVisible.set(View.INVISIBLE)
                 isFeedProgressBarVisible.set(View.INVISIBLE)
                 stubView?.onLockedFeed(codeError)
-                return
+                return@let
             }
             else -> {
                 if (data.isEmpty()) {
@@ -305,13 +310,13 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
         }
     }
 
-    private fun handleUnreadState(data: FeedListData<T>, isPullToRef: Boolean) {
-        if (!data.items.isEmpty()) {
+    private fun handleUnreadState(data: ArrayList<out FeedItem>, isPullToRef: Boolean) {
+        if (!data.isEmpty()) {
             if (!mUnreadState.wasFromInited || isPullToRef) {
-                mUnreadState.from = data.items.first.unread
+                mUnreadState.from = data.first().unread
                 mUnreadState.wasFromInited = true
             }
-            mUnreadState.to = data.items.last.unread
+            mUnreadState.to = data.last().unread
         }
     }
 
@@ -328,53 +333,53 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
     fun loadTopFeeds() {
         val from = data.getFirst()?.id ?: Utils.EMPTY
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
-        mAtomicUpdaterSubscription.set(api?.callFeedUpdate(isForPremium, itemClass, requestBundle)?.
-                subscribe(object : Subscriber<FeedListData<T>>() {
+        mAtomicUpdaterSubscription.set(apiNew.callGetList(requestBundle, responseClass, itemClass)
+                .subscribe(object : Observer<IBaseFeedResponse> {
                     override fun onCompleted() {
+                        mAtomicUpdaterSubscription.get().safeUnsubscribe()
                         if (isRefreshing.get()) {
                             isRefreshing.set(false)
                         }
                     }
 
                     override fun onError(e: Throwable?) {
-                        e?.let {
-                            onErrorProcess(it)
-                        }
+                        mAtomicUpdaterSubscription.get().safeUnsubscribe()
+                        onErrorProcess(e as? ApiError)
                         if (isRefreshing.get()) {
                             isRefreshing.set(false)
                         }
                     }
 
-                    override fun onNext(data: FeedListData<T>?) = topFeedsLoaded(data, requestBundle)
-
+                    override fun onNext(data: IBaseFeedResponse?) = data?.let {
+                        topFeedsLoaded(data.getItemsList(), requestBundle)
+                    } ?: Unit
                 }))
     }
 
-    protected open fun topFeedsLoaded(topFeedsData: FeedListData<T>?, requestBundle: Bundle) {
-        topFeedsData?.let {
-            if (!it.items.isEmpty()) {
-                if (this@BaseFeedFragmentModel.data.count() == 0) {
-                    isListVisible.set(View.VISIBLE)
-                    isLockViewVisible.set(View.GONE)
-                    stubView?.onFilledFeed()
-                }
-                handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
-                removeOldDuplicates(it)
-                data.addAllFirst(it.items)
-                this@BaseFeedFragmentModel.data.addAll(0, it.items)
-                if (isRefreshing.get()) {
-                    isRefreshing.set(false)
+    protected open fun topFeedsLoaded(topFeedsData: ArrayList<out FeedItem>, requestBundle: Bundle) =
+            (topFeedsData as? ArrayList<T>)?.let {
+                if (!it.isEmpty()) {
+                    if (this@BaseFeedFragmentModel.data.count() == 0) {
+                        isListVisible.set(View.VISIBLE)
+                        isLockViewVisible.set(View.GONE)
+                        stubView?.onFilledFeed()
+                    }
+                    handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
+                    removeOldDuplicates(it)
+                    data.addAllFirst(it)
+                    if (isRefreshing.get()) {
+                        isRefreshing.set(false)
+                    }
                 }
             }
-        }
-    }
+
 
     @FuckingVoodooMagic(description = "Если нет новых фидов сервер присылает итем от которого проходила выборка(первый)")
-    protected fun removeOldDuplicates(data: FeedListData<T>) = with(this@BaseFeedFragmentModel.data) {
+    protected fun removeOldDuplicates(data: ArrayList<T>) = with(this@BaseFeedFragmentModel.data) {
         val feedsIterator = iterator()
         while (feedsIterator.hasNext()) {
             val feed = feedsIterator.next()
-            for (newFeed in data.items) {
+            for (newFeed in data) {
                 if (considerDuplicates(feed, newFeed)) {
                     feedsIterator.remove()
                     break
@@ -400,19 +405,19 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
 
     private fun hasData() = data.isNotEmpty()
 
-    fun onDeleteFeedItems(items: MutableList<T>, idsList: ArrayList<String>) = api?.let {
+    fun onDeleteFeedItems(items: MutableList<T>, idsList: ArrayList<String>) {
         val tempItems = items.toList()
         isLockViewVisible.set(View.VISIBLE)
-        mDeleteSubscription = it.callDelete(feedsType, idsList).subscribe(createSubscriber(tempItems))
+        mDeleteSubscription = apiNew.callDelete(feedsType, idsList).subscribe(createSubscriber(tempItems))
     }
 
-    fun onAddToBlackList(items: MutableList<T>) = api?.let {
+    fun onAddToBlackList(items: MutableList<T>) {
         val tempItems = items.toList()
         isLockViewVisible.set(View.VISIBLE)
-        mBlackListSubscription = it.callAddToBlackList(items).subscribe(createSubscriber(tempItems))
+        mBlackListSubscription = apiNew.callAddToBlackList(items).subscribe(createSubscriber(tempItems))
     }
 
-    private fun createSubscriber(items: List<T>) = object : Subscriber<Boolean>() {
+    private fun createSubscriber(items: List<T>) = object : Subscriber<Completed>() {
         override fun onCompleted() = isLockViewVisible.set(View.GONE)
 
         override fun onError(e: Throwable?) {
@@ -420,7 +425,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
             isLockViewVisible.set(View.GONE)
         }
 
-        override fun onNext(result: Boolean?) {
+        override fun onNext(result: Completed?) {
             val iterator = data.observableList.listIterator()
             var item: T
             while (iterator.hasNext()) {
@@ -449,7 +454,6 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val context: Context)
     }
 
     override fun unbind() {
-        api = null
         navigator = null
         stubView = null
         mAtomicUpdaterSubscription.get().safeUnsubscribe()
