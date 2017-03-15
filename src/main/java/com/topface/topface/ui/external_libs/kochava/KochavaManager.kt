@@ -38,7 +38,6 @@ class KochavaManager {
         // we need register callback before tracker init
         Feature.setAttributionHandler(Handler(Handler.Callback { msg ->
             // check attributionData to minimize of kochava instance using
-            Debug.log("$TAG handle callback message")
             ReferrerLogRequest(App.getContext(), kochavaData = msg?.data?.getString(Feature.ATTRIBUTION_DATA)).exec()
             msg?.data?.getString(Feature.ATTRIBUTION_DATA)?.let {
                 sendReferralTrack()

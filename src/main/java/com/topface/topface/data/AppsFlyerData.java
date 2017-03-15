@@ -81,15 +81,12 @@ public class AppsFlyerData implements SerializableToJson {
         }
 
         private void sendReferrerLog(Context context) {
-            Debug.log("KochavaManager sendReferrerLog");
-            String referralData;
+            String referralData = null;
             try {
                 referralData = new AppsFlyerData(context).toJsonWithConversions(holder).toString();
             } catch (JSONException e) {
                 e.printStackTrace();
-                referralData = null;
             }
-            Debug.log("KochavaManager send next data " + referralData);
             new ReferrerLogRequest(context, null, referralData).exec();
         }
     }

@@ -39,7 +39,7 @@ class ReferrerLogRequest(context: Context, private val kochavaData: String? = nu
 
     override fun isNeedAuth() = false
 
-    private fun JSONObject.fillJson(trackerName: String, referralData: String) = this.apply {
+    private fun JSONObject.fillJson(trackerName: String, referralData: String) = apply {
         put("diviceId", Feature.getKochavaDeviceId())
         put("trackerName", trackerName)
         put("referralData", referralData)
