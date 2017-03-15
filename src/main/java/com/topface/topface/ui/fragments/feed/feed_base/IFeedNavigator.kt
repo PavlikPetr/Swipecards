@@ -41,4 +41,5 @@ interface IFeedNavigator {
     fun showPurchaseSuccessfullFragment(sku: String)
     fun showMutualPopup(mutualUser: FeedUser)
     fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct)
+    fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
 }

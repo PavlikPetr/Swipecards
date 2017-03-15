@@ -8,7 +8,11 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
+import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.dialogs.ErrorDialogFactory
+import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
@@ -177,7 +181,25 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             it as PurchaseSuccessfullFragment
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
+
     override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct) {
         // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, hideTitle = false, product = product),
+                NinjaAddCardActivity.REQUEST_CODE)
+    }
+
+    override fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit) {
+        ErrorDialogFactory().construct(mActivityDelegate.getAlertDialogBuilder(R.style.NinjaTheme_Dialog),
+                singleButton,
+                object : IErrorDialogResultReceiver {
+                    override fun onRetryClick() {
+                        onRetryAction()
+                    }
+
+                    override fun onSwitchClick() {
+                        mActivityDelegate.finish()
+                    }
+                }
+        )
     }
 }
