@@ -78,6 +78,7 @@ public class AppConfig extends AbstractConfig {
     private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
     private static final String FB_APP_LINK = "fb_app_link";
     private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
+    private static final String APP_START_EVENT_NUMBER = "app_start_event_number";
 
     public AppConfig(Context context) {
         super(context);
@@ -149,6 +150,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, FB_APP_LINK, "");
         // счетчик показов экрана "Люди рядом" с разблокированными пермишинами
         addField(settingsMap, GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, 0);
+        // счетчик запусков приложения
+        addField(settingsMap, APP_START_EVENT_NUMBER, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -628,5 +631,16 @@ public class AppConfig extends AbstractConfig {
      */
     public void incrGeoScreenShowCount() {
         setField(getSettingsMap(), GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, getGeoScreenShowCount() + 1);
+    }
+
+    // номер запуска приложения
+    public int getAppStartEventNumber() {
+        return getIntegerField(getSettingsMap(), APP_START_EVENT_NUMBER);
+    }
+
+    // установка первой успешной авторизации для данной установки
+    public void incrAppStartEventNumber() {
+        int startNumber = getAppStartEventNumber();
+        setField(getSettingsMap(), APP_START_EVENT_NUMBER, startNumber == Integer.MAX_VALUE ? 0 : startNumber + 1);
     }
 }
