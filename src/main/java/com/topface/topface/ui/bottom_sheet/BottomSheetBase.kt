@@ -14,6 +14,9 @@ abstract class BottomSheetBase<V : View>(mBottomSheetView: V) {
         BottomSheetBehavior.from(mBottomSheetView)
     }
 
+    private var mShowPredivcate = { mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED }
+    private var mHidePredivcate = { mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN }
+
     init {
         initBottomSheet()
     }
@@ -21,10 +24,19 @@ abstract class BottomSheetBase<V : View>(mBottomSheetView: V) {
     private fun initBottomSheet() = mBottomSheetBehavior.apply { configurateBottomSheet(this) }
 
     fun hide() {
-        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        mHidePredivcate.invoke()
     }
 
     fun show() {
-        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        mShowPredivcate.invoke()
     }
+
+    fun BottomSheetBehavior<V>.showPredicate(predicate: () -> Unit) {
+        mShowPredivcate = predicate
+    }
+
+    fun BottomSheetBehavior<V>.hidePredicate(predicate: () -> Unit) {
+        mHidePredivcate = predicate
+    }
+
 }

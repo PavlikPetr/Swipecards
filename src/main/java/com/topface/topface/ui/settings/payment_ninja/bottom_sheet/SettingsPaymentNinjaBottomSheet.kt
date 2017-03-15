@@ -29,13 +29,18 @@ class SettingsPaymentNinjaBottomSheet(view: RecyclerView) : BottomSheetBase<Recy
                 .addAdapterComponent(BottomSheetItemComponent())
     }
 
-    override fun configurateBottomSheet(bottoSheet: BottomSheetBehavior<RecyclerView>) {
-        bottoSheet.state = BottomSheetBehavior.STATE_HIDDEN
-        bottoSheet.isHideable = false
+    val viewModel by lazy {
+        SettingsPaymentNinjaBottomSheetViewModel({ show() },
+                { mBottomSheet.peekHeight = it })
     }
 
-    val viewModel by lazy {
-        SettingsPaymentNinjaBottomSheetViewModel { show() }
+    private lateinit var mBottomSheet: BottomSheetBehavior<RecyclerView>
+
+    init {
+        with(view) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
     }
 
     override fun showCardBottomSheet() {
@@ -46,10 +51,10 @@ class SettingsPaymentNinjaBottomSheet(view: RecyclerView) : BottomSheetBase<Recy
         viewModel.showSubscriptionBottomSheet(isSubscriptionActive)
     }
 
-    init {
-        with(view) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
-        }
+    override fun configurateBottomSheet(bottoSheet: BottomSheetBehavior<RecyclerView>) = bottoSheet.run {
+        mBottomSheet = this
+        state = BottomSheetBehavior.STATE_HIDDEN
+        isHideable = false
+        showPredicate { state = BottomSheetBehavior.STATE_COLLAPSED }
     }
 }
