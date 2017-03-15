@@ -6,6 +6,7 @@ import com.kochava.android.tracker.EventType
 import com.kochava.android.tracker.Feature
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.requests.ReferrerLogRequest
 import com.topface.topface.requests.ReferrerRequest
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.social.AuthToken
@@ -37,6 +38,8 @@ class KochavaManager {
         // we need register callback before tracker init
         Feature.setAttributionHandler(Handler(Handler.Callback { msg ->
             // check attributionData to minimize of kochava instance using
+            Debug.log("$TAG handle callback message")
+            ReferrerLogRequest(App.getContext(), kochavaData = msg?.data?.getString(Feature.ATTRIBUTION_DATA)).exec()
             msg?.data?.getString(Feature.ATTRIBUTION_DATA)?.let {
                 sendReferralTrack()
             }

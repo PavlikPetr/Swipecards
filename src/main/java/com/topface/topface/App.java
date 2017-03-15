@@ -537,6 +537,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         AppConfig appConfig = App.getAppConfig();
         App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
+        appConfig.incrAppStartEventNumber();
+        appConfig.saveConfig();
         lookedAuthScreen();
     }
 
