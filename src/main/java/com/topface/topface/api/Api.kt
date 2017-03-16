@@ -1,6 +1,7 @@
 package com.topface.topface.api
 
 import android.os.Bundle
+import com.topface.topface.api.requests.AppDayRequest
 import com.topface.topface.api.requests.BlackListAddRequest
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.FeedItem
@@ -18,6 +19,9 @@ class Api : IApi {
     val mDeleteRequestFactory = DeleteFeedRequestFactory()
 
     val mFeedRequestFactory = FeedRequestFactory()
+
+    override fun callAppDayRequest(typeFeedFragment: String) =
+            AppDayRequest(typeFeedFragment).subscribe()
 
     override fun callAddToBlackList(items: List<FeedItem>) =
             BlackListAddRequest(items.getFeedIntIds()).subscribe()

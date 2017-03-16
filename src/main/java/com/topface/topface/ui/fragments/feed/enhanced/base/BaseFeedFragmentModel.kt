@@ -23,11 +23,14 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayStubItem
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ImprovedObservableList
 import com.topface.topface.ui.fragments.feed.feed_base.FeedCacheManager
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedLockerView
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.addAllFirst
+import com.topface.topface.ui.fragments.feed.feed_utils.addFirst
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.Utils
@@ -38,6 +41,7 @@ import com.topface.topface.utils.extensions.unregisterReceiver
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Observer
 import rx.Subscriber
@@ -247,7 +251,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
 
     protected open fun updateFeedsLoaded(newData: ArrayList<out FeedItem>, updateBundle: Bundle) {
         if (isDataFromCache || (data.isEmpty() && !(newData.isEmpty()))) {
-            typeFeedFragment?.let { /*getAppDayRequest(it)*/ }
+            typeFeedFragment?.let { getAppDayRequest(it) }
         }
         if (isDataFromCache) {
             data.clear()
@@ -267,24 +271,17 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         }
     }
 
-/*
-    передаю привет счастливчику
+
     fun getAppDayRequest(typeFeedFragment: String) {
-        mAppDayRequestSubscription = api?.callAppDayRequest(typeFeedFragment)?.subscribe(object : Subscriber<AppDay>() {
-            override fun onCompleted() {
-            }
-
-            override fun onError(e: Throwable?) =
-                    e?.let { Debug.log("App day banner error request: $it") } ?: Unit
-
-            override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
-                if (!imageArray.isEmpty()) {
-                    data.addFirst(AppDayStubItem(appDay) as T)
-                }
-            } ?: Unit
-        })
+        mAppDayRequestSubscription = mApi.callAppDayRequest(typeFeedFragment)
+                .subscribe(shortSubscription {
+                    it?.list?.let { imageArray ->
+                        if (!imageArray.isEmpty()) {
+                            data.addFirst(AppDayStubItem(it) as T)
+                        }
+                    }
+                })
     }
-*/
 
     private fun onErrorProcess(apiError: ApiError?) = apiError?.let {
         it.printStackTrace()
