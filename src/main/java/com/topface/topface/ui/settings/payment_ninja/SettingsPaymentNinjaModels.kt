@@ -75,6 +75,28 @@ data class CardInfo(var lastDigit: String = Utils.EMPTY, var type: String = Util
 }
 
 /**
+ * Список карт пользователя
+ *
+ * @param items - массив карт
+ */
+data class CardList(var items: Array<CardInfo>) : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<CardList> = object : Parcelable.Creator<CardList> {
+            override fun createFromParcel(source: Parcel): CardList = CardList(source)
+            override fun newArray(size: Int): Array<CardList?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readParcelableArray(CardInfo::class.java.classLoader) as Array<CardInfo>)
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeParcelableArray(items, 0)
+    }
+}
+
+/**
  * Данные о подписке, для отображения на экране "Платежи"
  *
  * @param id - id подписки
