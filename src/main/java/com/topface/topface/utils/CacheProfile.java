@@ -21,6 +21,7 @@ import com.topface.topface.ui.fragments.OwnAvatarFragment;
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList;
 import com.topface.topface.utils.config.SessionConfig;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -193,6 +194,11 @@ public class CacheProfile {
         if (response != null) {
             App.getSessionConfig().setMarketProductsData(response.toString());
         }
+    }
+
+    public static void setPaymentNinjaProducts(@NotNull PaymentNinjaProductsList products) {
+        mPaymentNinjaProductsList = products;
+        App.getSessionConfig().setPaymentNinjaProductsData(JsonUtils.toJson(products));
     }
 
     public static void setMarketProductsDetails(ProductsDetails productsDetails) {
