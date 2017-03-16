@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
+import android.text.TextUtils
 import android.view.View
 import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.dialogs.ErrorDialogFactory
@@ -184,8 +185,12 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
     override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct) {
         // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
-        mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, hideTitle = false, product = product),
-                NinjaAddCardActivity.REQUEST_CODE)
+        if (TextUtils.isEmpty(App.get().options.paymentNinjaInfo.lastDigits)) {
+            mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, product = product),
+                    NinjaAddCardActivity.REQUEST_CODE)
+        } else {
+            // todo simply call payment request with given product
+        }
     }
 
     override fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit) {

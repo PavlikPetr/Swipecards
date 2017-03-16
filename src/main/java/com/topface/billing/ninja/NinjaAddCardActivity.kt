@@ -20,14 +20,12 @@ class NinjaAddCardActivity: BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
     companion object {
         const val EXTRA_FROM_INSTANT_PURCHASE = "NinjaAddCardActivity.Extra.FromInstantPurchase"
         const val EXTRA_BUY_PRODUCT = "NinjaAddCardActivity.Extra.BuyProduct"
-        const val EXTRA_HIDE_TITLE = "NinjaAddCardActivity.Extra.HideTitle"
         const val REQUEST_CODE = 231
 
         private const val TAG = "NinjaAddCardActivity::"
-        fun createIntent(fromInstantPurchase: Boolean, hideTitle:Boolean, product: PaymentNinjaProduct) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
+        fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
             putExtra(EXTRA_FROM_INSTANT_PURCHASE, fromInstantPurchase)
-            putExtra(EXTRA_BUY_PRODUCT, product)
-            putExtra(EXTRA_HIDE_TITLE, hideTitle)
+            product?.let { putExtra(EXTRA_BUY_PRODUCT, it) }
         }
     }
 
