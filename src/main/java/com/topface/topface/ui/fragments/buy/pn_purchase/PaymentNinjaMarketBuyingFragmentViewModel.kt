@@ -23,7 +23,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
     val cardInfo = ObservableField("")
     val data = SingleObservableArrayList<Any>().apply {
         if (mIsVipPurchaseProducts) {
-            with(CacheProfile.getPaymentNinjaProductsList().getVipProducts()) {
+            with(CacheProfile.getPaymentNinjaProductsList().getVipProducts().filter { it.displayOnBuyScreen }) {
                 if (size > 0) {
                     this@apply.observableList.add(BuyScreenTitle())
                     this@apply.observableList.addAll(this)
@@ -33,7 +33,8 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
             }
 
         } else {
-            with(Pair(CacheProfile.getPaymentNinjaProductsList().getLikesProducts(), CacheProfile.getPaymentNinjaProductsList().getCoinsProducts())) {
+            with(Pair(CacheProfile.getPaymentNinjaProductsList().getLikesProducts().filter { it.displayOnBuyScreen },
+                    CacheProfile.getPaymentNinjaProductsList().getCoinsProducts().filter { it.displayOnBuyScreen })) {
                 if (first.isNotEmpty() || second.isNotEmpty()) {
                     this@apply.observableList.add(BuyScreenTitle())
                     if (this@with.first.isNotEmpty()) {
