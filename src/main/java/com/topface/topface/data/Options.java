@@ -673,7 +673,7 @@ public class Options extends AbstractData {
         /**
          * enabled - {Boolean} использовать ли Payment Ninja в целом
          * lastDigits - {String} пустая строка если карты нет, иначе последние 4ре цифры
-         * email - {String} мыло привязанное к карте
+         * email - {String} мыло этого пользователя в нашей системе, если указано - значит при добавлении карты мыло запрашивать не надо
          * publicKey - {String} публичный ключик нашего проекта
          */
         public boolean enabled;
