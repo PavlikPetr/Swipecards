@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+          android:color="@color/bg_white">
+    <item android:drawable="@drawable/borderless_button_pressed_state" android:state_pressed="true"/>
+    <item android:drawable="@drawable/borderless_button_pressed_state" android:state_selected="true"/>
+    <item android:drawable="@drawable/borderless_button_release_state"/>
+</selector>

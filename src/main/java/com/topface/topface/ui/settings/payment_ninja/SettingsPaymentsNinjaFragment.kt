@@ -6,16 +6,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentSettingsPaymentsBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.settings.payment_ninja.components.LoaderComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaBottomSheet
 import com.topface.topface.ui.settings.payment_ninja.components.CardComponent
 import com.topface.topface.ui.settings.payment_ninja.components.HelpComponent
+import com.topface.topface.ui.settings.payment_ninja.components.LoaderComponent
 import com.topface.topface.ui.settings.payment_ninja.components.SubscriptionComponent
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
@@ -49,17 +47,13 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mTypeProvider) { Bundle() }
-                .addAdapterComponent(CardComponent(mBottomSheet))
+                .addAdapterComponent(CardComponent(mFeedNavigator))
                 .addAdapterComponent(HelpComponent(mFeedNavigator))
-                .addAdapterComponent(SubscriptionComponent(mBottomSheet))
+                .addAdapterComponent(SubscriptionComponent(mFeedNavigator))
                 .addAdapterComponent(LoaderComponent())
     }
 
-    private val mBottomSheet by lazy {
-        SettingsPaymentNinjaBottomSheet(mBinding.bottomSheet.bottomSheetList)
-    }
-
-    private fun initList() = with(mBinding.paymentsContent.list) {
+    private fun initList() = with(mBinding.list) {
         layoutManager = LinearLayoutManager(context)
         adapter = mAdapter
         addItemDecoration(PurchasesItemDecorator())
@@ -69,7 +63,6 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
         initList()
         return mBinding.apply {
             viewModel = mViewModel
-            bottomSheetViewMDel = mBottomSheet.viewModel
         }.root
     }
 

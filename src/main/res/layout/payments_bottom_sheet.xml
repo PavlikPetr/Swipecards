@@ -6,13 +6,13 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetViewModel"/>
+            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaModalBottomSheetViewModel"/>
     </data>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bottomSheetList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:bindDataToCompositeAdapter="@{viewModel.data}"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior"/>
 </layout>

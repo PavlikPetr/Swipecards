@@ -3,16 +3,19 @@ package com.topface.topface.ui.settings.payment_ninja.components
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.databinding.PaymentNinjaPurchaseItemTitleOnlyBinding
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.settings.payment_ninja.CardInfo
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ISettingsPaymentNinjaBottomSheetInterface
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType.Companion.CARD_BOTTOM_SHEET
 import com.topface.topface.ui.settings.payment_ninja.view_models.CardViewModel
 
 /**
  * Компонент для title bottom sheet экрана платежей payment ninja
  * Created by petrp on 09.03.2017.
  */
-class CardComponent(private val mBottomSheetInterface: ISettingsPaymentNinjaBottomSheetInterface) : AdapterComponent<PaymentNinjaPurchaseItemTitleOnlyBinding, CardInfo>() {
+class CardComponent(private val mNavigator: FeedNavigator) : AdapterComponent<PaymentNinjaPurchaseItemTitleOnlyBinding, CardInfo>() {
 
     override val itemLayout: Int
         get() = R.layout.payment_ninja_purchase_item_title_only
@@ -22,7 +25,7 @@ class CardComponent(private val mBottomSheetInterface: ISettingsPaymentNinjaBott
     override fun bind(binding: PaymentNinjaPurchaseItemTitleOnlyBinding, data: CardInfo?, position: Int) {
         data?.let {
             binding.viewModel = CardViewModel(it, onLongClickListener = {
-                mBottomSheetInterface.showCardBottomSheet()
+                mNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetType(CARD_BOTTOM_SHEET))
                 true
             }).getViewModel()
         }

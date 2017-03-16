@@ -31,6 +31,8 @@ import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragme
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 
@@ -177,7 +179,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             it as PurchaseSuccessfullFragment
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
+
     override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct) {
         // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
+    }
+
+    override fun showPaymentNinjaBottomSheet(type: ModalBottomSheetType) {
+        mActivityDelegate.supportFragmentManager
+                .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
+                ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(type)
+                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 }

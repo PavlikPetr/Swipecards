@@ -1,34 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:bind="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
             type="com.topface.topface.ui.settings.payment_ninja.SettingsPaymentNinjaViewModel"/>
-
-        <variable
-            name="bottomSheetViewMоdel"
-            type="com.topface.topface.ui.settings.payment_ninja.bottom_sheet.view_models.SettingsPaymentNinjaBottomSheetViewModel"/>
     </data>
 
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ninja_payments_screen_background">
-
-        <!-- подключение основного контента -->
-        <include
-            android:id="@+id/paymentsContent"
-            layout="@layout/fragment_settings_payments_content"
-            bind:viewModel="@{viewModel}"/>
-
-        <!-- подключение нижнего экрана -->
-        <include
-            android:id="@+id/bottomSheet"
-            layout="@layout/payments_bottom_sheet"
-            bind:viewModel="@{bottomSheetViewMоdel}"/>
-
-    </android.support.design.widget.CoordinatorLayout>
+        android:background="@color/ninja_payments_screen_background"
+        app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}"/>
 </layout>

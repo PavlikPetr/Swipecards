@@ -84,7 +84,7 @@ class BuyScreenTextViewModel(mText: String = "", val textColor: Int = R.color.bl
         // item view для bottomSheet экрана "Платежи"
         fun PaymentNinjaBottomSheetItem(text: String, onClickListener: () -> Unit) = BuyScreenTextViewModel(
                 mText = text,
-                background = R.color.ninja_bottom_sheet_item_background,
+                background = R.drawable.borderless_btn_selector,
                 paddingBottom = R.dimen.payment_ninja_bottom_sheet_item_padding_bottom.getDimen(),
                 paddingLeft = R.dimen.payment_ninja_bottom_sheet_item_padding_left.getDimen(),
                 paddingTop = R.dimen.payment_ninja_bottom_sheet_item_padding_top.getDimen(),
