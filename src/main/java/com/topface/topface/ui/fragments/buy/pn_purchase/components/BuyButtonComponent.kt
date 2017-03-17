@@ -10,6 +10,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.views.BuyButtonVer1
 import com.topface.topface.utils.extensions.appContext
 import com.topface.topface.utils.extensions.getTag
+import com.topface.topface.utils.extensions.getTitle
 
 /**
  * Buy Paymnet Ninja product component
@@ -27,7 +28,7 @@ class BuyButtonComponent(private val mNavigator: FeedNavigator) : AdapterCompone
                     .discount(false)
                     .tag(product.getTag())
                     .showType(product.showType)
-                    .title(product.titleTemplate)
+                    .title(product.getTitle())
                     .onClick {
                         mNavigator.showPaymentNinjaPurchaseProduct(product)
                     }

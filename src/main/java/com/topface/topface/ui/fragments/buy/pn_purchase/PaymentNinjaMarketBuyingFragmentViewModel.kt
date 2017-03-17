@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.buy.pn_purchase
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
@@ -19,7 +20,8 @@ import rx.Subscription
  * Created by petrp on 02.03.2017.
  */
 class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProducts: Boolean) {
-    val cardInfoVisibility = ObservableInt(View.GONE)
+    val isCheckBoxVisible = ObservableInt(View.GONE)
+    val isChecked = ObservableBoolean(true)
     val cardInfo = ObservableField("")
     val data = SingleObservableArrayList<Any>().apply {
         if (mIsVipPurchaseProducts) {

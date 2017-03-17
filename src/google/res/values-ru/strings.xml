@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification"/>
+    <string name="receive_rate_notification" />
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1311,5 +1311,5 @@
     <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
 
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
-    <string name="get_other_card">Использовать другую карту</string>
+    <string name="use_card">Использовать карту **%s</string>
 </resources>
