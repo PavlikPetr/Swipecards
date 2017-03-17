@@ -32,7 +32,9 @@
         <CheckBox
             android:id="@+id/online_only"
             style="@style/DatingFilterSwitch"
-            android:checked="@{viewModel.isChecked}"
+            android:checked="@={viewModel.isChecked}"
+            android:enabled="true"
+            android:clickable="true"
             android:text="@{viewModel.cardInfo}"
             android:visibility="@{viewModel.isCheckBoxVisible}" />
     </LinearLayout>

@@ -5,12 +5,15 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.Options
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.extensions.getCoinsProducts
 import com.topface.topface.utils.extensions.getLikesProducts
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.getVipProducts
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
@@ -54,10 +57,24 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
         }
     }
 
-    private val mOptionsSubscription: Subscription =
-            App.getAppComponent().appState().getObservable(Options::class.java).subscribe(shortSubscription {
+    private var mOptionsSubscription: Subscription? = null
 
-            })
+    init {
+        mOptionsSubscription = App.getAppComponent().appState().getObservable(Options::class.java)
+                .map { it.paymentNinjaInfo }
+                .distinctUntilChanged { t1, t2 -> t1 == t2 }
+                .applySchedulers()
+                .subscribe(shortSubscription {
+                    it?.let {
+                        if (it.lastDigits.isNotEmpty() && it.type.isNotEmpty()) {
+                            cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigits))
+                            isCheckBoxVisible.set(View.VISIBLE)
+                        } else {
+                            isCheckBoxVisible.set(View.GONE)
+                        }
+                    }
+                })
+    }
 
     fun release() {
         mOptionsSubscription.safeUnsubscribe()

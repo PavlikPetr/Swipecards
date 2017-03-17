@@ -1,11 +1,8 @@
 package com.topface.topface.ui.fragments.buy.pn_purchase.components
 
-import android.text.TextUtils
 import com.topface.topface.R
-import com.topface.topface.data.BuyButtonData
 import com.topface.topface.databinding.BuyButtonVer1Binding
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.views.BuyButtonVer1
 import com.topface.topface.utils.extensions.appContext
@@ -16,7 +13,7 @@ import com.topface.topface.utils.extensions.getTitle
  * Buy Paymnet Ninja product component
  * Created by petrp on 02.03.2017.
  */
-class BuyButtonComponent(private val mNavigator: FeedNavigator) : AdapterComponent<BuyButtonVer1Binding, PaymentNinjaProduct>() {
+class BuyButtonComponent(private val onClick: (data: PaymentNinjaProduct) -> Unit) : AdapterComponent<BuyButtonVer1Binding, PaymentNinjaProduct>() {
     override val itemLayout: Int
         get() = R.layout.buy_button_ver_1
     override val bindingClass: Class<BuyButtonVer1Binding>
@@ -30,7 +27,7 @@ class BuyButtonComponent(private val mNavigator: FeedNavigator) : AdapterCompone
                     .showType(product.showType)
                     .title(product.getTitle())
                     .onClick {
-                        mNavigator.showPaymentNinjaPurchaseProduct(product)
+                        onClick(product)
                     }
                     .build(binding.appContext())
                     .mBtnHandler
