@@ -13,13 +13,14 @@ class CardType(val name: String, val numberMaxLength: Int, val cvvMaxLength: Int
         const val CVV_DEFAULT = 3
         const val CVV_AMEX = 4
 
-        val VISA = CardType("visa", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_visa)
-        val MASTERCARD = CardType("mastercard", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_mastercard)
-        val AMERICAN_EXPRESS = CardType("american_express", MAX_LENGTH_CARD_NUMBER_AMEX, CVV_AMEX, R.drawable.ic_visa)
-        val DINERS = CardType("diners", MAX_LENGTH_CARD_NUMBER_SHORT, CVV_DEFAULT, R.drawable.ic_visa)
-        val DISCOVER = CardType("discover", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_visa)
-        val JCB = CardType("jcb", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_visa)
-        val MIR = CardType("mir", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_visa)
-        val DEFAULT = CardType("default", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_visa)
+        // todo implement cards "laser" and "maestro" or remove their icons
+        val VISA = CardType("visa", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_card_visa)
+        val MASTERCARD = CardType("mastercard", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_card_mastercard)
+        val AMERICAN_EXPRESS = CardType("american_express", MAX_LENGTH_CARD_NUMBER_AMEX, CVV_AMEX, R.drawable.ic_card_american_express)
+        val DINERS = CardType("diners", MAX_LENGTH_CARD_NUMBER_SHORT, CVV_DEFAULT, R.drawable.ic_card_diners_club)
+        val DISCOVER = CardType("discover", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_card_discover)
+        val JCB = CardType("jcb", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_card_jcb)
+        val MIR = CardType("mir", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_card_mir)
+        val DEFAULT = CardType("default", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_card_default)
     }
 }
