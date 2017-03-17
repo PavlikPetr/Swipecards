@@ -1,11 +1,13 @@
 package com.topface.topface.ui.fragments.buy
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.BasePurchaseSuccessfullBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.utils.IActivityDelegate
 import kotlin.properties.Delegates
 
 /**
@@ -41,6 +43,12 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel.release()
+        activity?.let {
+            (it as IActivityDelegate).apply {
+                setResult(Activity.RESULT_OK, null)
+                finish()
+            }
+        }
     }
 
     override fun closeIt() = dialog.cancel()

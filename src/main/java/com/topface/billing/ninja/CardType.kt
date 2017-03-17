@@ -1,0 +1,25 @@
+package com.topface.billing.ninja
+
+import com.topface.topface.R
+
+class CardType(val name: String, val numberMaxLength: Int, val cvvMaxLength: Int, val cardIcon: Int) {
+
+    companion object {
+        const val MAX_LENGTH_CARD_NUMBER_LONG = 22
+        const val MAX_LENGTH_CARD_NUMBER_DEFAULT = 19
+        const val MAX_LENGTH_CARD_NUMBER_SHORT = 17
+        const val MAX_LENGTH_CARD_NUMBER_AMEX = 18
+
+        const val CVV_DEFAULT = 3
+        const val CVV_AMEX = 4
+
+        val VISA = CardType("visa", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_visa)
+        val MASTERCARD = CardType("mastercard", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_mastercard)
+        val AMERICAN_EXPRESS = CardType("american_express", MAX_LENGTH_CARD_NUMBER_AMEX, CVV_AMEX, R.drawable.ic_visa)
+        val DINERS = CardType("diners", MAX_LENGTH_CARD_NUMBER_SHORT, CVV_DEFAULT, R.drawable.ic_visa)
+        val DISCOVER = CardType("discover", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_visa)
+        val JCB = CardType("jcb", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_visa)
+        val MIR = CardType("mir", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_visa)
+        val DEFAULT = CardType("default", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_visa)
+    }
+}

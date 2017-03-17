@@ -5,7 +5,7 @@ import com.topface.topface.requests.ApiRequest
 import org.json.JSONObject
 
 /**
- * Sends card token recieved from Payment Ninja to ower server
+ * Sends card token received from Payment Ninja to own server
  * Created by m.bayutin on 03.03.17.
  */
 internal class SendCardTokenRequest(context: Context, val data: SendCardTokenModel) : ApiRequest(context) {

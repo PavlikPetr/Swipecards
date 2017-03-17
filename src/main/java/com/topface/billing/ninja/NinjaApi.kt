@@ -9,7 +9,7 @@ import rx.Observable
  * Created by m.bayutin on 03.03.17.
  */
 internal interface Request {
-    @GET(AddCardRequest.ADD_CARD_LINK)
+    @GET(AddCardRequest.ADD_CARD_METHOD)
     fun setParams(@QueryMap params: Map<String, String>): Observable<AddCardResponse>
 }
 

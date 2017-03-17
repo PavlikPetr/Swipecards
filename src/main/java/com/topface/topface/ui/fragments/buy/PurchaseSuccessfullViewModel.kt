@@ -28,7 +28,7 @@ class PurchaseSuccessfullViewModel(private val mSku: String, private val mIDialo
     val popupText = ObservableField<String>()
 
     init {
-        if (mSku.equals(Products.ProductType.PREMIUM)) {
+        if (mSku == Products.ProductType.PREMIUM.getName()) {
             popupText.set(R.string.now_you_have_VIP.getString())
             popupImage.set(R.drawable.pic_vip)
         } else {
@@ -48,13 +48,13 @@ class PurchaseSuccessfullViewModel(private val mSku: String, private val mIDialo
 
     fun preparePopupText(balanceData: BalanceData) =
             popupText.set(
-                    if (mSku.equals(Products.ProductType.COINS)) {
+                    if (mSku == Products.ProductType.COINS.getName()) {
                         Utils.getQuantityString(R.plurals.you_have_some_coins, balanceData.money)
                     } else {
                         Utils.getQuantityString(R.plurals.you_have_some_sympathies, balanceData.likes)
                     })
 
-    fun preparePopupImage() = if (mSku.equals(Products.ProductType.COINS)) R.drawable.pic_coins else R.drawable.pic_coins  // todo вставить картинку для симпатий
+    fun preparePopupImage() = if (mSku == Products.ProductType.COINS.getName()) R.drawable.pic_coins else R.drawable.pic_coins  // todo вставить картинку для симпатий
 
     fun closeDialog() = mIDialogCloser.closeIt()
 
