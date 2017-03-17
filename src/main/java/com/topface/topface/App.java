@@ -432,7 +432,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
         }
         initVkSdk();
-        mKochavaManager = getAppComponent().kochavaManager();
         mKochavaManager.initTracker();
         mProvider = new OptionsAndProfileProvider(this);
         // подписываемся на события о переходе приложения в состояние background/foreground
