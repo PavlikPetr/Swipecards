@@ -39,11 +39,11 @@ import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.dialogs.PermissionAlertDialogFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -58,7 +58,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -102,10 +101,12 @@ public class AddPhotoHelper {
             switch (view.getId()) {
                 case R.id.btnAddPhotoAlbum:
                 case R.id.btnTakeFormGallery:
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                     startChooseFromGallery();
                     break;
                 case R.id.btnAddPhotoCamera:
                 case R.id.btnTakePhoto:
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                     startCamera();
                     break;
             }
@@ -637,14 +638,6 @@ public class AddPhotoHelper {
         BitmapFactory.Options currentPhotoSize = getPhotoSizeByUri(uri);
         return currentPhotoSize != null && !(currentPhotoSize.outWidth < minPhotoSize.width ||
                 currentPhotoSize.outHeight < minPhotoSize.height);
-    }
-
-    @OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
-    public void onNeverAskAgain() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            new PermissionAlertDialogFactory().constructNeverAskAgain(activity);
-        }
     }
 }
 
