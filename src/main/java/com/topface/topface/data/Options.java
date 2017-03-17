@@ -253,9 +253,14 @@ public class Options extends AbstractData {
 
             if (payments != null) {
                 this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
+                this.payments.other.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
+                this.payments.premium.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
             }
 
             paymentNinjaInfo = JsonUtils.optFromJson(response.optString("paymentNinjaInfo"), PaymentNinjaInfo.class, new PaymentNinjaInfo());
+            paymentNinjaInfo.enabled = true;
+            paymentNinjaInfo.lastDigits = "9632";
+            paymentNinjaInfo.type = "MasterCard";
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
             if (contactsInvite != null) {
@@ -679,6 +684,7 @@ public class Options extends AbstractData {
         public boolean enabled;
         public String lastDigits;
         public String email;
+        public String type;
         public String publicKey;
     }
 

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
 import com.topface.topface.ui.fragments.BaseFragment
@@ -59,7 +60,15 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
-                .addAdapterComponent(BuyButtonComponent(mFeedNavigator))
+                .addAdapterComponent(BuyButtonComponent {
+                    val info = App.get().options.paymentNinjaInfo
+                    if (info.lastDigits.isEmpty() || info.type.isEmpty() || !mViewModel.isChecked.get()) {
+                        mFeedNavigator.showPaymentNinjaPurchaseProduct(it)
+                    } else {
+                        // Необходимо отправить запрос на покупку
+                        // P.S. метода на сервере еще нет
+                    }
+                })
                 .addAdapterComponent(BuyScreenTitleComponent(mText))
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())
                 .addAdapterComponent(BuyScreenLikesSectionComponent())
