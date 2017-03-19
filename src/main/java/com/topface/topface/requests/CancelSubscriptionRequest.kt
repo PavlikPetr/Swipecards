@@ -6,12 +6,12 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /**
- * Запрос на удаление карты payment ninja
+ * Запрос на отмену подписки
  * Created by ppavlik on 16.03.17.
  */
-class RemoveCardRequest(context: Context) : ApiRequest(context) {
+class CancelSubscriptionRequest(context: Context) : ApiRequest(context) {
 
-    override fun getServiceName() = "paymentNinja.removeCard"
+    override fun getServiceName() = "paymentNinja.cancelSubscription"
 
     override fun getRequestData() = JSONObject()
 }

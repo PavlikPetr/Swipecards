@@ -11,6 +11,8 @@ import com.topface.topface.databinding.FragmentSettingsPaymentsBinding
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
 import com.topface.topface.ui.settings.payment_ninja.components.CardComponent
 import com.topface.topface.ui.settings.payment_ninja.components.HelpComponent
 import com.topface.topface.ui.settings.payment_ninja.components.LoaderComponent
@@ -19,6 +21,7 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.extensions.isAvailable
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -34,7 +37,7 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        SettingsPaymentNinjaViewModel()
+        SettingsPaymentNinjaViewModel(mFeedNavigator)
     }
 
     private val mTypeProvider by lazy {
@@ -47,7 +50,18 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mTypeProvider) { Bundle() }
-                .addAdapterComponent(CardComponent(mFeedNavigator))
+                .addAdapterComponent(CardComponent {
+                    mViewModel.getCardInfo()?.let {
+                        mFeedNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetData(
+                                if (it.isAvailable())
+                                    ModalBottomSheetType(ModalBottomSheetType.CARD_BOTTOM_SHEET)
+                                else
+                                    ModalBottomSheetType(ModalBottomSheetType.CARD_DELETED_BOTTOM_SHEET),
+                                it
+                        ))
+                    }
+                    true
+                })
                 .addAdapterComponent(HelpComponent(mFeedNavigator))
                 .addAdapterComponent(SubscriptionComponent(mFeedNavigator))
                 .addAdapterComponent(LoaderComponent())

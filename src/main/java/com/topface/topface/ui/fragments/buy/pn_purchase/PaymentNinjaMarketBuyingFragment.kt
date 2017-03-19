@@ -15,6 +15,7 @@ import com.topface.topface.ui.fragments.buy.pn_purchase.components.*
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.extensions.isCradAvailable
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -62,7 +63,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
                     val info = App.get().options.paymentNinjaInfo
-                    if (info.lastDigits.isEmpty() || info.type.isEmpty() || !mViewModel.isChecked.get()) {
+                    if (!info.isCradAvailable() || !mViewModel.isChecked.get()) {
                         mFeedNavigator.showPaymentNinjaPurchaseProduct(it)
                     } else {
                         // Необходимо отправить запрос на покупку

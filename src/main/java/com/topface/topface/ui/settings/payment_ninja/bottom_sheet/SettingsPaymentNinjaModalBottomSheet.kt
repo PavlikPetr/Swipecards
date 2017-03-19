@@ -23,20 +23,20 @@ import org.jetbrains.anko.layoutInflater
  */
 class SettingsPaymentNinjaModalBottomSheet : BottomSheetDialogFragment() {
     companion object {
-        private const val TYPE = "bottom_sheet_type"
+        private const val DATA = "bottom_sheet_data"
         const val TAG = "settings_payment_ninja_modal_bottom_sheet_tag"
-        fun newInstance(type: ModalBottomSheetType) =
+        fun newInstance(data: ModalBottomSheetData) =
                 SettingsPaymentNinjaModalBottomSheet().apply {
                     arguments = Bundle().apply {
-                        putParcelable(TYPE, type)
+                        putParcelable(DATA, data)
                     }
                 }
     }
 
-    private lateinit var mType: ModalBottomSheetType
+    private lateinit var mData: ModalBottomSheetData
 
     private val mViewModel by lazy {
-        SettingsPaymentNinjaModalBottomSheetViewModel(mType)
+        SettingsPaymentNinjaModalBottomSheetViewModel(mData)
     }
 
     private val mTypeProvider by lazy {
@@ -56,7 +56,7 @@ class SettingsPaymentNinjaModalBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mType = arguments.getParcelable(TYPE)
+        mData = arguments.getParcelable(DATA)
     }
 
     private fun initList() = with(mBinding.bottomSheetList) {

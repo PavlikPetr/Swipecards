@@ -8,6 +8,7 @@ import android.view.View
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
 
 /**
@@ -41,7 +42,7 @@ interface IFeedNavigator {
     fun showPurchaseProduct(skuId: String, from: String)
     fun showPurchaseSuccessfullFragment(sku: String)
     fun showMutualPopup(mutualUser: FeedUser)
-    fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct)
-    fun showPaymentNinjaBottomSheet(type: ModalBottomSheetType)
+    fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct? = null)
+    fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
     fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
 }

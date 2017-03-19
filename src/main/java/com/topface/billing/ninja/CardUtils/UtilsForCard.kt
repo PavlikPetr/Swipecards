@@ -121,4 +121,6 @@ object UtilsForCard {
     // todo дополнительная проверка "а не текст ли ты часом?"
     fun isDigits(string: String) = string.matches(Regex("\\d+"))
 
+    fun getCardType(type: String): CardType? =
+            cardBrands.map { it.value }.find { it.name.toLowerCase() == type.toLowerCase() }
 }

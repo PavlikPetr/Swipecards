@@ -16,20 +16,52 @@ import com.topface.topface.R
  */
 data class BottomSheetTitle(var title: String)
 
-/**
- * Пул итемов для bottom sheet
- * @param textRes - ресурс для отображения во вью
- */
-enum class BOTTOM_SHEET_ITEMS_POOL(@StringRes val textRes: Int) {
-    CANCEL_SUBSCRIPTION(R.string.ninja_cancel_vip_status),
-    RESUME_SUBSCRIPTION(R.string.ninja_resume_vip_status),
-    DELETE_CARD(R.string.ninja_delete_card),
-    USE_ANOTHER_CARD(R.string.ninja_use_another_card)
+data class BottomSheetItemText(@StringRes val textRes: Int) : Parcelable {
+    companion object {
+        const val CANCEL_SUBSCRIPTION = R.string.ninja_cancel_vip_status
+        const val RESUME_SUBSCRIPTION = R.string.ninja_resume_vip_status
+        const val DELETE_CARD = R.string.ninja_delete_card
+        const val USE_ANOTHER_CARD = R.string.ninja_use_another_card
+        const val ADD_CARD = R.string.ninja_no_card_title
+
+        @JvmField val CREATOR: Parcelable.Creator<BottomSheetItemText> = object : Parcelable.Creator<BottomSheetItemText> {
+            override fun createFromParcel(source: Parcel): BottomSheetItemText = BottomSheetItemText(source)
+            override fun newArray(size: Int): Array<BottomSheetItemText?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(textRes)
+    }
+}
+
+data class BottomSheetData(var textRes: BottomSheetItemText, var data: Parcelable) : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<BottomSheetData> = object : Parcelable.Creator<BottomSheetData> {
+            override fun createFromParcel(source: Parcel): BottomSheetData = BottomSheetData(source)
+            override fun newArray(size: Int): Array<BottomSheetData?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readParcelable<BottomSheetItemText>(BottomSheetItemText::class.java.classLoader),
+            source.readParcelable(Parcelable::class.java.classLoader))
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeParcelable(textRes, 0)
+        dest?.writeParcelable(data, flags)
+    }
 }
 
 /**
  * Тип модального bottom sheet
- * @param type - тип dialogFragment-а ({@link #CARD_BOTTOM_SHEET}/{@link #RESTORE_SUBSCRIPTION_BOTTOM_SHEET}/{@link #CANCEL_SUBSCRIPTION_BOTTOM_SHEET})
+ * @param type - тип dialogFragment-а ({@link #CARD_BOTTOM_SHEET}/{@link #RESTORE_SUBSCRIPTION_BOTTOM_SHEET}
+ * /{@link #CANCEL_SUBSCRIPTION_BOTTOM_SHEET})
  */
 data class ModalBottomSheetType(var type: Int) : Parcelable {
     companion object {
@@ -40,6 +72,8 @@ data class ModalBottomSheetType(var type: Int) : Parcelable {
         const val CANCEL_SUBSCRIPTION_BOTTOM_SHEET = 3
 
         const val CANCEL_AUTOFILLING_BOTTOM_SHEET = 4
+
+        const val CARD_DELETED_BOTTOM_SHEET = 5
 
         @JvmField val CREATOR: Parcelable.Creator<ModalBottomSheetType> = object : Parcelable.Creator<ModalBottomSheetType> {
             override fun createFromParcel(source: Parcel): ModalBottomSheetType = ModalBottomSheetType(source)
@@ -53,5 +87,24 @@ data class ModalBottomSheetType(var type: Int) : Parcelable {
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(type)
+    }
+}
+
+data class ModalBottomSheetData(var type: ModalBottomSheetType, var data: Parcelable) : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<ModalBottomSheetData> = object : Parcelable.Creator<ModalBottomSheetData> {
+            override fun createFromParcel(source: Parcel): ModalBottomSheetData = ModalBottomSheetData(source)
+            override fun newArray(size: Int): Array<ModalBottomSheetData?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readParcelable<ModalBottomSheetType>(ModalBottomSheetType::class.java.classLoader),
+            source.readParcelable(Parcelable::class.java.classLoader))
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeParcelable(type, 0)
+        dest?.writeParcelable(data, flags)
     }
 }

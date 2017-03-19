@@ -15,7 +15,7 @@ import com.topface.topface.ui.settings.payment_ninja.view_models.CardViewModel
  * Компонент для title bottom sheet экрана платежей payment ninja
  * Created by petrp on 09.03.2017.
  */
-class CardComponent(private val mNavigator: FeedNavigator) : AdapterComponent<PaymentNinjaPurchaseItemTitleOnlyBinding, CardInfo>() {
+class CardComponent(private val mOnLongClick: () -> Boolean) : AdapterComponent<PaymentNinjaPurchaseItemTitleOnlyBinding, CardInfo>() {
 
     override val itemLayout: Int
         get() = R.layout.payment_ninja_purchase_item_title_only
@@ -24,10 +24,7 @@ class CardComponent(private val mNavigator: FeedNavigator) : AdapterComponent<Pa
 
     override fun bind(binding: PaymentNinjaPurchaseItemTitleOnlyBinding, data: CardInfo?, position: Int) {
         data?.let {
-            binding.viewModel = CardViewModel(it, onLongClickListener = {
-                mNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetType(CARD_BOTTOM_SHEET))
-                true
-            }).getViewModel()
+            binding.viewModel = CardViewModel(it, onLongClickListener = mOnLongClick).getViewModel()
         }
     }
 

@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification"/>
+    <string name="receive_rate_notification" />
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1321,7 +1321,7 @@
     <string name="ninja_number_error">Неверный формат номера карты</string>
     <string name="ninja_email_error">Неверный формат email</string>
     <string name="use_card">Использовать карту **%s</string>
-    <string name="ninja_no_card_title">Добавьте карту, чтобы ваши подписки были активны</string>
+    <string name="ninja_no_card_title">Добавить карту</string>
     <string name="ninja_subscription_expiration">Активна до %s</string>
     <string name="ninja_subscription_cancelled">Отменена</string>
     <string name="ninja_autofilling_cancelled">Отменено</string>

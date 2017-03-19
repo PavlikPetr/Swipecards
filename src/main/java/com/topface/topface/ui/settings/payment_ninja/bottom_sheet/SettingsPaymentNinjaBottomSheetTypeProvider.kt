@@ -9,7 +9,7 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 class SettingsPaymentNinjaBottomSheetTypeProvider : ITypeProvider {
     override fun getType(java: Class<*>) = when (java) {
         BottomSheetTitle::class.java -> 1
-        BOTTOM_SHEET_ITEMS_POOL::class.java -> 2
+        BottomSheetData::class.java -> 2
         else -> 0
     }
 }

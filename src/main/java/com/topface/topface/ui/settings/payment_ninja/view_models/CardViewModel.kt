@@ -1,9 +1,11 @@
 package com.topface.topface.ui.settings.payment_ninja.view_models
 
+import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.topface.R
 import com.topface.topface.ui.settings.payment_ninja.CardInfo
 import com.topface.topface.utils.extensions.getCardName
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.extensions.isAvailable
 import kotlin.properties.Delegates
 
 /**
@@ -27,13 +29,17 @@ class CardViewModel(private val cardInfo: CardInfo, val onLongClickListener: () 
     }
 
     init {
-        isCardAvailble = true
+        isCardAvailble = cardInfo.isAvailable()
     }
 
-    private fun getCardTitle() = cardInfo.getCardName()
+    private fun getCardTitle() =
+            if (cardInfo.getCardName().isNotEmpty())
+                cardInfo.getCardName()
+            else
+                R.string.ninja_no_card_title.getString()
 
     private fun getCardIcon() =
-            R.drawable.ic_warning
+            UtilsForCard.getCardType(cardInfo.type)?.cardIcon ?: R.drawable.ic_warning
 
     fun getViewModel() = mViewModel
 }

@@ -9,10 +9,7 @@ import com.topface.topface.R
 import com.topface.topface.data.Options
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.databinding.SingleObservableArrayList
-import com.topface.topface.utils.extensions.getCoinsProducts
-import com.topface.topface.utils.extensions.getLikesProducts
-import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.getVipProducts
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -66,8 +63,8 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     it?.let {
-                        if (it.lastDigits.isNotEmpty() && it.type.isNotEmpty()) {
-                            cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigits))
+                        if (it.isCradAvailable()) {
+                            cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigit))
                             isCheckBoxVisible.set(View.VISIBLE)
                         } else {
                             isCheckBoxVisible.set(View.GONE)

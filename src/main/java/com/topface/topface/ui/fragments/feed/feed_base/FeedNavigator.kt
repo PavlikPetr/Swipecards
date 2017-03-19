@@ -36,6 +36,7 @@ import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragme
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
@@ -185,9 +186,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct) {
+    override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct?) {
         // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
-        if (TextUtils.isEmpty(App.get().options.paymentNinjaInfo.lastDigits)) {
+        if (TextUtils.isEmpty(App.get().options.paymentNinjaInfo.lastDigit)) {
             mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, product = product),
                     NinjaAddCardActivity.REQUEST_CODE)
         } else {
@@ -210,10 +211,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         )
     }
 
-    override fun showPaymentNinjaBottomSheet(type: ModalBottomSheetType) {
+    override fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData) {
         mActivityDelegate.supportFragmentManager
                 .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
-                ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(type)
+                ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
                 .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
     }
 }
