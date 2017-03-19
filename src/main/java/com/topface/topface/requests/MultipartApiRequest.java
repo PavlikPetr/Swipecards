@@ -200,7 +200,7 @@ abstract public class MultipartApiRequest extends ApiRequest {
         return this;
     }
 
-    public MultipartApiRequest addRequests(List<IApiRequest> requests) {
+    public MultipartApiRequest addRequest(List<IApiRequest> requests) {
         for (IApiRequest request : requests) {
             mRequests.put(request.getId(), request);
         }

@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Делегат для актиити. Можно дописывать лдругие методы активити
@@ -35,4 +37,6 @@ public interface IActivityDelegate {
     void finish();
 
     void setResult(int resultCode, Intent data);
+
+    AlertDialog.Builder getAlertDialogBuilder(@StyleRes int dialogThemeResId);
 }

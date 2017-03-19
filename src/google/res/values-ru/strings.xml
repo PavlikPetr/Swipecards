@@ -1300,7 +1300,6 @@
     <string name="ninja_checkbox_auto_pay">Автопополнение счета</string>
     <string name="ninja_text_1">Безопасный платеж</string>
     <string name="ninja_text_2">128-bit SSL Secured</string>
-    <string name="ninja_text_3">Услуга позволяет пополнять баланс монет автоматически, при достижении на нём суммы в 5 монет.</string>
     <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
     <string name="ninja_text_link">правилами оказания услуги</string>
     <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
@@ -1317,6 +1316,11 @@
     <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
     <string name="get_other_card">Использовать другую карту</string>
+    <string name="ninja_cvv_error">Неверный CVV/CVC</string>
+    <string name="ninja_trhu_error">Неверная дата</string>
+    <string name="ninja_number_error">Неверный формат номера карты</string>
+    <string name="ninja_email_error">Неверный формат email</string>
+    <string name="use_card">Использовать карту **%s</string>
     <string name="ninja_no_card_title">Добавьте карту, чтобы ваши подписки были активны</string>
     <string name="ninja_subscription_expiration">Активна до %s</string>
     <string name="ninja_subscription_cancelled">Отменена</string>

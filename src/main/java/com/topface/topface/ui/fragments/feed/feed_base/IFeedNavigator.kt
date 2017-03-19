@@ -43,4 +43,5 @@ interface IFeedNavigator {
     fun showMutualPopup(mutualUser: FeedUser)
     fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct)
     fun showPaymentNinjaBottomSheet(type: ModalBottomSheetType)
+    fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
 }

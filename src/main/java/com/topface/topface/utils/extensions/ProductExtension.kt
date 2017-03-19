@@ -1,9 +1,14 @@
 package com.topface.topface.utils.extensions
 
+import com.google.android.gms.analytics.ecommerce.Product
+import com.topface.topface.App
 import com.topface.topface.data.BuyButtonData
 import com.topface.topface.data.Products
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList
 import com.topface.topface.utils.CacheProfile
+import java.text.NumberFormat
+import java.util.*
 
 fun String.getProduct() = CacheProfile.getMarketProducts()
         .getAllProductButtons()
@@ -31,6 +36,17 @@ fun PaymentNinjaProductsList.getCoinsProducts() = this.products.filter {
             it.type == Constants.COINS_SUBSCRIPTION ||
             it.type == Constants.COINS_SUBSCRIPTION_MASKED
 }
+
+fun PaymentNinjaProduct.getTitle() =
+        titleTemplate.replace(Products.PRICE_PER_ITEM,
+                NumberFormat.getCurrencyInstance(Locale(App.getLocaleConfig().applicationLocale))
+                        .getFormatedPrice((price / divider).toDouble()))
+
+fun NumberFormat.getFormatedPrice(price: Double) =
+        with(this) {
+            setMaximumFractionDigits(if (price % 1 != 0.0) 2 else 0)
+            format(price)
+        }
 
 object Constants {
     const val PREMIUM = "premium"
