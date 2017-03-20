@@ -11,6 +11,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.extensions.ProductExtensionKt;
 import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +51,7 @@ public class PurchaseButtonList {
 
     @Nullable
     private View getButtonView(BuyButtonData buyBtn, Context context, BuyButtonClickListener listener) {
-                return getViewV1(buyBtn, context, listener);
+        return getViewV1(buyBtn, context, listener);
     }
 
     private ValidatedAndDeffProductPrice getCurrentProductPrices(BuyButtonData buyBtn) {
@@ -100,7 +101,7 @@ public class PurchaseButtonList {
         price = getPriceByTemplate(price, buyBtn);
         for (String replaceTemplate : Products.PRICE_TEMPLATES) {
             if (buyBtn.titleTemplate.contains(replaceTemplate)) {
-                return buyBtn.titleTemplate.replace(replaceTemplate, getFormatedPrice(price, currencyFormatter));
+                return buyBtn.titleTemplate.replace(replaceTemplate, ProductExtensionKt.getFormatedPrice(currencyFormatter, price));
             }
         }
         return buyBtn.title;
@@ -114,7 +115,7 @@ public class PurchaseButtonList {
         }
     }
 
- private ValidatedAndDeffProductPrice getProductPrices(BuyButtonData buyBtn) {
+    private ValidatedAndDeffProductPrice getProductPrices(BuyButtonData buyBtn) {
         ProductsDetails productsDetails = CacheProfile.getMarketProductsDetails();
         Currency currency;
         NumberFormat currencyFormatter;
@@ -137,11 +138,6 @@ public class PurchaseButtonList {
         }
         buyBtn.currency = currency;
         return new ValidatedAndDeffProductPrice(buyBtn.id, deffPrice, validatedPrice);
-    }
-
-    private String getFormatedPrice(double price, NumberFormat currencyFormatter) {
-        currencyFormatter.setMaximumFractionDigits(price % 1 != 0 ? 2 : 0);
-        return currencyFormatter.format(price);
     }
 
     private ArrayList<ValidatedAndDeffProductPrice> getAllProductsPrices() {

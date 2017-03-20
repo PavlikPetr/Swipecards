@@ -22,7 +22,6 @@ import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.state.AuthState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
@@ -142,7 +141,6 @@ public class AuthorizationManager {
         Ssid.remove();
         ScruffyRequestManager.getInstance().logout();
         UserNotificationManager.getInstance().removeNotifications();
-        TabbedDialogsFragment.setTabsDefaultPosition();
         AuthToken authToken = AuthToken.getInstance();
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.logout();

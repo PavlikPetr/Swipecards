@@ -35,6 +35,7 @@ import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -110,9 +111,10 @@ public class OverflowMenu {
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
         this(iFragmentDelegate, barActions);
-        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
-            public void call(BalanceData balanceData) {
+            public void onNext(BalanceData balanceData) {
+                super.onNext(balanceData);
                 mBalanceData = balanceData;
             }
         });

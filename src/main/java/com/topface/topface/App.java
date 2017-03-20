@@ -67,8 +67,7 @@ import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.statistics.CommonSlices;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.ui.external_libs.AdWords;
-import com.topface.topface.ui.external_libs.AdjustManager;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
@@ -126,7 +125,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     WeakStorage mWeakStorage;
     @Inject
     EventBus mEventBus;
-    private AdjustManager mAdjustManager;
+    @Inject
+    KochavaManager mKochavaManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
@@ -203,28 +203,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                         Debug.log("Options::fail");
                     }
                 });
-    }
-
-    public static void sendAdjustAttributeData(final AdjustAttributeData attribution) {
-        Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
-        final AppConfig config = getAppConfig();
-        if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
-            new AdWords().trackInstall();
-            Debug.log("Adjust:: send AdjustAttributeData");
-            new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    Debug.log("Adjust:: attribution sent success");
-                    config.setAdjustAttributeDataSent(true);
-                    config.saveConfig();
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    Debug.log("Adjust:: fail while send AdjustAttributeData");
-                }
-            }).exec();
-        }
     }
 
     public static void sendReferrerTrack(final InstallReferrerData referrerTrack) {
@@ -454,8 +432,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
         }
         initVkSdk();
-        mAdjustManager = getAppComponent().adjustManager();
-        mAdjustManager.initAdjust();
+        mKochavaManager.initTracker();
         mProvider = new OptionsAndProfileProvider(this);
         // подписываемся на события о переходе приложения в состояние background/foreground
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
@@ -529,7 +506,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             }
         };
         AppConfig appConfig = App.getAppConfig();
-        App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
         lookedAuthScreen();
     }

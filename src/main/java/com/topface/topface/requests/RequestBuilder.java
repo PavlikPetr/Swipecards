@@ -65,7 +65,7 @@ public class RequestBuilder {
     public IApiRequest build() {
         if (mRequests.size() > 1) {
             MultipartApiRequest multipartRequest = new ParallelApiRequest(mContext);
-            multipartRequest.addRequests(mRequests);
+            multipartRequest.addRequest(mRequests);
             if (mApiHandler != null) {
                 multipartRequest.callback(mApiHandler);
             }

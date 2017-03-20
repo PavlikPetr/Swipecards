@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 
 /**
  * Интерфейс навигации в  фидах
@@ -37,5 +38,8 @@ interface IFeedNavigator {
 
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
+    fun showPurchaseSuccessfullFragment(sku: String)
     fun showMutualPopup(mutualUser: FeedUser)
+    fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct)
+    fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
 }

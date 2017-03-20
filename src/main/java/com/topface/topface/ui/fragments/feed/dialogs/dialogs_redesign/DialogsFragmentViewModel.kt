@@ -24,8 +24,8 @@ import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
@@ -79,24 +79,20 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
             item1.hasContacts || item2.hasDialogItems
         }
                 .filter { !it }
-                .subscribe(object : RxUtils.ShortSubscription<Boolean>() {
-                    override fun onNext(type: Boolean?) {
-                        isEnable.set(false)
-                        data.observableList.clear()
-                        data.observableList.add(EmptyDialogsFragmentStubItem())
-                    }
+                .subscribe(shortSubscription {
+                    isEnable.set(false)
+                    data.observableList.clear()
+                    data.observableList.add(EmptyDialogsFragmentStubItem())
                 })
 
         // подписка на события об удалении или добавлении  в ч\с через попап меню.
-        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java).subscribe(object : RxUtils.ShortSubscription<DialogPopupEvent>() {
-            // если все пришло, то удаляем пришедший итем из списка сообщений через итератор
-            override fun onNext(type: DialogPopupEvent?) {
-                super.onNext(type)
-                if (type != null) {
-                    deleteDialogItemFromList(type.feedForDelete.user.id)
-                }
-            }
-        })
+        mUpdateFromPopupMenuSubscription = mEventBus.getObservable(DialogPopupEvent::class.java)
+                .subscribe(shortSubscription {
+                    // если все пришло, то удаляем пришедший итем из списка сообщений через итератор
+                    it?.let {
+                        deleteDialogItemFromList(it.feedForDelete.user.id)
+                    }
+                })
 
     }
 

@@ -24,7 +24,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
     private static final int PADDING_FIVE = (int) App.getContext().getResources().getDimension(R.dimen.default_purchase_button_container_padding);
 
     private BuyButtonVer1Binding mBinding;
-    private BuyButtonVersion1Handler mBtnHandler;
+    public BuyButtonVersion1Handler mBtnHandler;
 
     public BuyButtonVer1(Context context) {
         this(context, (BuyButtonBuilder) null);

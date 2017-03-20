@@ -212,4 +212,17 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <!-- Theme for Payment Ninja add-card activity -->
+    <style name="NinjaTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/light_theme_color_primary</item>
+        <item name="colorPrimaryDark">@color/light_theme_color_primary_dark</item>
+        <item name="colorAccent">@color/ninja_color_accent</item>
+        <item name="android:windowBackground">@color/bg_white</item>
+    </style>
+
+    <style name="NinjaTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/popup_borderless_button_text</item>
+    </style>
+
 </resources>

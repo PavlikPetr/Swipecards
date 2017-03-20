@@ -9,10 +9,9 @@ import com.topface.topface.App;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.json.JSONObject;
-
-import rx.functions.Action1;
 
 public class CountersManager {
     public static final String CHANGED_BY_GCM = "";
@@ -44,9 +43,10 @@ public class CountersManager {
     private CountersManager(Context context) {
         mContext = context;
         mAppState = App.getAppComponent().appState();
-        mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mAppState.getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
-            public void call(BalanceData balanceData) {
+            public void onNext(BalanceData balanceData) {
+                super.onNext(balanceData);
                 mCachedBalanceData = balanceData;
             }
         });

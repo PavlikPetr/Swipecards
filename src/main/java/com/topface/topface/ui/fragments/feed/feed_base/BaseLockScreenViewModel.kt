@@ -5,6 +5,7 @@ import com.topface.topface.App
 import com.topface.topface.data.BalanceData
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscription
 
@@ -22,18 +23,15 @@ abstract class BaseLockScreenViewModel<T : ViewDataBinding>(binding: T, private 
 
     init {
         mBalanceSubscription = mState.getObservable(BalanceData::class.java)
-                .subscribe(object : RxUtils.ShortSubscription<BalanceData>() {
-                    override fun onNext(balanceData: BalanceData?) {
-                        balanceData?.let {
-                            data ->
-                            if (data.premium) {
-                                if (!(mBalance?.premium ?: true)) {
-                                    mIFeedUnlocked.onFeedUnlocked()
-                                }
-                                RxUtils.safeUnsubscribe(mBalanceSubscription)
+                .subscribe(shortSubscription {
+                    it?.let { data ->
+                        if (data.premium) {
+                            if (!(mBalance?.premium ?: true)) {
+                                mIFeedUnlocked.onFeedUnlocked()
                             }
-                            mBalance = data
+                            RxUtils.safeUnsubscribe(mBalanceSubscription)
                         }
+                        mBalance = data
                     }
                 })
     }

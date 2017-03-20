@@ -157,6 +157,8 @@ public class Options extends AbstractData {
 
     public Payments payments = new Payments();
 
+    public PaymentNinjaInfo paymentNinjaInfo = new PaymentNinjaInfo();
+
     /**
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
      */
@@ -191,21 +193,6 @@ public class Options extends AbstractData {
      * настройки для оферволов на экране Бонус
      */
     public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
-
-    /**
-     * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
-     */
-    @Deprecated
-    private boolean dialogRedesignEnabled;
-
-    /**
-     * {Integer} dialogRedesign - версия дизайна лайков/сообщений
-     * 0 - дефолт (старые диалоги)
-     * 1 - новые диалоги (замена для флажка dialogRedesignEnabled, который останется для старых клиентов)
-     * 2 - новый экран диалогов + убрать табы в симпатиях, оставить только одну, основную, страничку
-     * 3 - новый экран диалогов + вернуть все табы в симпатиях
-     */
-    private int dialogRedesign;
 
     /**
      * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
@@ -266,7 +253,14 @@ public class Options extends AbstractData {
 
             if (payments != null) {
                 this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
+                this.payments.other.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
+                this.payments.premium.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
             }
+
+            paymentNinjaInfo = JsonUtils.optFromJson(response.optString("paymentNinjaInfo"), PaymentNinjaInfo.class, new PaymentNinjaInfo());
+            paymentNinjaInfo.enabled = true;
+            paymentNinjaInfo.lastDigits = "9632";
+            paymentNinjaInfo.type = "MasterCard";
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
             if (contactsInvite != null) {
@@ -393,8 +387,6 @@ public class Options extends AbstractData {
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
-            dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
-            dialogRedesign = response.optInt("dialogRedesign");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
             mutualPopupEnabled = response.optBoolean("mutualPopupEnabled");
@@ -467,14 +459,6 @@ public class Options extends AbstractData {
 
     public String getPaymentwallLink() {
         return paymentwall;
-    }
-
-    public boolean getDialogRedesignEnabled() {
-        return dialogRedesignEnabled;
-    }
-
-    public int getDialogDesignVersion() {
-        return dialogRedesign;
     }
 
     public boolean containsBannerType(String bannerType) {
@@ -688,6 +672,20 @@ public class Options extends AbstractData {
         public Payments() {
         }
 
+    }
+
+    public static class PaymentNinjaInfo {
+        /**
+         * enabled - {Boolean} использовать ли Payment Ninja в целом
+         * lastDigits - {String} пустая строка если карты нет, иначе последние 4ре цифры
+         * email - {String} мыло этого пользователя в нашей системе, если указано - значит при добавлении карты мыло запрашивать не надо
+         * publicKey - {String} публичный ключик нашего проекта
+         */
+        public boolean enabled;
+        public String lastDigits;
+        public String email;
+        public String type;
+        public String publicKey;
     }
 
     public static class Offerwalls {

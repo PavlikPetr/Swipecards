@@ -5,8 +5,9 @@ import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.mvp.PresenterCache
 import com.topface.topface.state.*
 import com.topface.topface.ui.NavigationActivity
-import com.topface.topface.ui.external_libs.AdjustManager
+import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.NavigationManager
+import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.config.WeakStorage
 import dagger.Component
 import javax.inject.Singleton
@@ -26,8 +27,9 @@ interface AppComponent {
     fun lifeCycleState(): LifeCycleState
     fun authState(): AuthState
     fun presenterCache(): PresenterCache
+    fun runningStateManager(): RunningStateManager
 
-    fun adjustManager(): AdjustManager
+    fun kochavaManager(): KochavaManager
 
     fun inject(app: App)
     fun inject(manager: NavigationManager)

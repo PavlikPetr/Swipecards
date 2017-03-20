@@ -9,7 +9,6 @@ import com.flurry.android.FlurryAgentListener;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.social.AuthToken;
 
 import java.util.HashMap;
@@ -256,23 +255,6 @@ public class FlurryManager {
      */
     public void sendFullDialogEvent() {
         sendEvent(FULL_DIALOG_EVENT);
-    }
-
-    /**
-     * Send event - user come from referrer link
-     */
-    public void sendReferrerEvent(AdjustAttributeData attribution) {
-        if (attribution != null) {
-            Map<String, String> ref = new HashMap<>();
-            ref = put(ref, ADGROUP_REFERRER_PARAM, attribution.adgroup);
-            ref = put(ref, CAMPAIGN_REFERRER_PARAM, attribution.campaign);
-            ref = put(ref, CLICK_LABEL_REFERRER_PARAM, attribution.clickLabel);
-            ref = put(ref, CREATIVE_REFERRER_PARAM, attribution.creative);
-            ref = put(ref, NETWORK_REFERRER_PARAM, attribution.network);
-            ref = put(ref, TRACKER_NAME_REFERRER_PARAM, attribution.trackerName);
-            ref = put(ref, TRACKER_TOKEN_REFERRER_PARAM, attribution.trackerToken);
-            sendEvent(REFERRER_INSTALL_EVENT, ref);
-        }
     }
 
     private Map<String, String> put(Map<String, String> ref, String key, String value) {
