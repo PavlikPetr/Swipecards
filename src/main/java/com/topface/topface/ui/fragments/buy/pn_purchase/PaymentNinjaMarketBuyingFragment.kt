@@ -62,7 +62,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
                     val info = App.get().options.paymentNinjaInfo
-                    if (info.lastDigits.isEmpty() || info.type.isEmpty() || !mViewModel.isChecked.get()) {
+                    if (info.lastDigits.isNullOrEmpty() || info.type.isNullOrEmpty() || !mViewModel.isChecked.get()) {
                         mFeedNavigator.showPaymentNinjaPurchaseProduct(it)
                     } else {
                         // Необходимо отправить запрос на покупку

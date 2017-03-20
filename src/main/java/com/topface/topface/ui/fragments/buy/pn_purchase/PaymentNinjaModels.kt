@@ -39,13 +39,14 @@ class BuyScreenProductUnavailable
  * @param durationTitle - Заголовок обозначающий время продукта
  * @param divider - Возвращает делитель для подсчета суммы, к примеру неделя- 7/30 месяца = 0.23
  * @param typeOfSubscription - 0- не подписка 1- автопополнение (когда кончится) 2- подписка (раз в месяц)
+ * @param currencyCode - строковый код валюты
  * @param infoOfSubscription - Инфо о подписке
  */
 data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTemplate: String, var totalPriceTemplate: String,
                                var isSubscription: Boolean, var period: Int, var price: Int, var type: String,
                                var value: Int, var trialPeriod: Int, var displayOnBuyScreen: Boolean,
                                var durationTitle: String, var divider: Float, var typeOfSubscription: Int,
-                               var infoOfSubscription: PaymentNinjaSubscriptionInfo) : Parcelable {
+                               val currencyCode: String, var infoOfSubscription: PaymentNinjaSubscriptionInfo) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readString(),
@@ -62,6 +63,7 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
             source.readString(),
             source.readFloat(),
             source.readInt(),
+            source.readString(),
             source.readParcelable(PaymentNinjaSubscriptionInfo::class.java.classLoader)
     )
 
@@ -81,6 +83,7 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
                 it.writeString(durationTitle)
                 it.writeFloat(divider)
                 it.writeInt(typeOfSubscription)
+                it.writeString(currencyCode)
                 it.writeParcelable(infoOfSubscription, flags)
             } ?: Unit
 
