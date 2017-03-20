@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
         <variable
             name="viewModel"
-            type="com.topface.billing.ninja.AddCardViewModel" />
+            type="com.topface.billing.ninja.AddCardViewModel"/>
 
     </data>
 
@@ -43,7 +43,7 @@
                     android:textColor="@color/dark_primary_text"
                     android:textSize="20sp"
                     android:visibility="@{viewModel.titleVisibility}"
-                    tools:text=" 7 дней VIP за 40 руб." />
+                    tools:text=" 7 дней VIP за 40 руб."/>
 
                 <!-- card number -->
                 <android.support.design.widget.TextInputLayout
@@ -62,7 +62,8 @@
                         android:hint="@string/ninja_hint_card_number"
                         android:maxLength="@{viewModel.numberMaxLength}"
                         android:text="@={viewModel.numberText}"
-                        app:setSelection="@{viewModel.numberCursorPosition}" />
+                        app:setOnFocusChangeListener="@{viewModel.onNumberChange}"
+                        app:setSelection="@{viewModel.numberText.length}"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <!-- card additional data -->
@@ -88,7 +89,8 @@
                             android:hint="@string/ninja_hint_card_expires"
                             android:maxLength="5"
                             android:text="@={viewModel.trhuText}"
-                            app:setSelection="@{viewModel.trhuCursorPosition}" />
+                            app:setOnFocusChangeListener="@{viewModel.onTrhuChange}"
+                            app:setSelection="@{viewModel.trhuCursorPosition}"/>
                     </android.support.design.widget.TextInputLayout>
 
                     <!-- CVV/CVC -->
@@ -107,7 +109,9 @@
                             android:hint="@string/ninja_hint_cvv"
                             android:inputType="numberPassword"
                             android:maxLength="@{viewModel.cvvMaxLength}"
-                            android:text="@={viewModel.cvvText}" />
+                            android:text="@={viewModel.cvvText}"
+                            app:setOnFocusChangeListener="@{viewModel.onCvvChange}"/>
+
                     </android.support.design.widget.TextInputLayout>
 
                 </android.support.percent.PercentFrameLayout>
@@ -127,7 +131,8 @@
                         android:enabled="@{viewModel.isInputEnabled}"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
-                        android:text="@={viewModel.emailText}" />
+                        android:text="@={viewModel.emailText}"/>
+                        <!--app:setOnFocusChangeListener="@{viewModel.onEmailChange}"-->
                 </android.support.design.widget.TextInputLayout>
 
                 <!-- purchase button -->
@@ -139,7 +144,7 @@
                     android:enabled="@{viewModel.isButtonEnabled &amp;&amp; viewModel.isInputEnabled}"
                     android:minWidth="146dp"
                     android:onClick="@{()->viewModel.onClick()}"
-                    android:text="@string/ninja_button_buy" />
+                    android:text="@string/ninja_button_buy"/>
 
                 <!-- connection info -->
                 <LinearLayout
@@ -154,7 +159,7 @@
                         android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="12dp"
-                        android:background="@drawable/ic_lock" />
+                        android:background="@drawable/ic_lock"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -167,7 +172,7 @@
                             android:text="@string/ninja_text_1"
                             android:textColor="@color/dark_primary_text"
                             android:textSize="12sp"
-                            tools:text="Безопасный платеж" />
+                            tools:text="Безопасный платеж"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -175,7 +180,7 @@
                             android:text="@string/ninja_text_2"
                             android:textColor="@color/gray_primary_text"
                             android:textSize="12sp"
-                            tools:text="128-bit SSL Secured" />
+                            tools:text="128-bit SSL Secured"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -192,29 +197,29 @@
                     android:textColor="@color/dark_primary_text"
                     android:textSize="14sp"
                     android:visibility="@{viewModel.isAutoPayDescriptionVisible}"
-                    tools:text="Автопополнение счета" />
+                    tools:text="Автопополнение счета"/>
 
                 <TextView
                     style="@style/NinjaAutoPayDescription.TopMargin"
                     android:text="@{viewModel.autoPayDescriptionText}"
                     android:visibility="@{viewModel.isAutoPayDescriptionVisible}"
-                    tools:text="Услуга позволяет пополнять баланс монет автоматически, при достижении на нём суммы в 5 монет." />
+                    tools:text="Услуга позволяет пополнять баланс монет автоматически, при достижении на нём суммы в 5 монет."/>
 
                 <TextView
                     style="@style/NinjaAutoPayDescription.TopMargin"
                     android:text="@string/ninja_text_4"
                     android:visibility="@{viewModel.isAutoPayDescriptionVisible}"
-                    tools:text="Включая данную услугу, вы соглашаетесь с" />
+                    tools:text="Включая данную услугу, вы соглашаетесь с"/>
 
                 <!-- todo хотели как-то избавиться от "веб" вида у нас -->
                 <!-- надо подождать дизайнерского решения, но пока кликабельно как в веб -->
                 <TextView
                     style="@style/NinjaAutoPayDescription"
-                    android:text="@string/ninja_text_link"
-                    android:visibility="@{viewModel.isAutoPayDescriptionVisible}"
-                    android:textColor="@color/ninja_color_accent"
                     android:onClick="@{()->viewModel.navigateToRules()}"
-                    tools:text="правилами оказания услуги" />
+                    android:text="@string/ninja_text_link"
+                    android:textColor="@color/ninja_color_accent"
+                    android:visibility="@{viewModel.isAutoPayDescriptionVisible}"
+                    tools:text="правилами оказания услуги"/>
             </LinearLayout>
         </ScrollView>
 
@@ -227,13 +232,13 @@
             android:paddingTop="12dp"
             android:text="@{viewModel.vipDescriptionText}"
             android:visibility="@{viewModel.isVipDescriptionVisible}"
-            tools:text="Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках." />
+            tools:text="Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках."/>
 
         <!-- useless toolbar, need for activity -->
         <include
             android:id="@+id/toolbarInclude"
             layout="@layout/toolbar"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
     </LinearLayout>
 </layout>
