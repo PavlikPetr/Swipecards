@@ -21,7 +21,6 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
-import com.topface.topface.ui.dialogs.AlertDialogFactory
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -42,7 +41,6 @@ import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomShe
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.isEmpty
 
 /**
  * Класс для управления переходами между эркраними в фидах
@@ -188,13 +186,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaPurchaseProduct(isNeedToAddCard: Boolean, product: PaymentNinjaProduct) {
+    override fun showPaymentNinjaPurchaseProduct(isNeedToAddCard: Boolean, product: PaymentNinjaProduct?) {
         if (isNeedToAddCard) {
             mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, product = product),
                     NinjaAddCardActivity.REQUEST_CODE)
-        } else if (!product.isEmpty()) {
-            // todo simply call payment request with given product
-            showPurchaseSuccessfullFragment(product.type)
+        } else {
+            product?.let {
+                // todo simply call payment request with given product
+                showPurchaseSuccessfullFragment(it.type)
+            }
         }
     }
 

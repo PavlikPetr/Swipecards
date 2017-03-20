@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.topface.topface.utils.Utils
 
 /**
  * Модельки для экрана покупок продуктов Payment Ninja
@@ -39,12 +38,12 @@ class BuyScreenProductUnavailable
  * @param typeOfSubscription - 0- не подписка 1- автопополнение (когда кончится) 2- подписка (раз в месяц)
  * @param infoOfSubscription - Инфо о подписке
  */
-data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int = EMPTY_INT, var titleTemplate: String = Utils.EMPTY,
-                               var totalPriceTemplate: String = Utils.EMPTY, var isSubscription: Boolean = false,
-                               var period: Int = EMPTY_INT, var price: Int = EMPTY_INT, var type: String = Utils.EMPTY,
-                               var value: Int = EMPTY_INT, var trialPeriod: Int = EMPTY_INT, var displayOnBuyScreen: Boolean = false,
-                               var durationTitle: String = Utils.EMPTY, var divider: Float = EMPTY_FLOAT,
-                               var typeOfSubscription: Int = EMPTY_INT, var infoOfSubscription: PaymentNinjaSubscriptionInfo = PaymentNinjaSubscriptionInfo()) : Parcelable {
+data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTemplate: String,
+                               var totalPriceTemplate: String, var isSubscription: Boolean,
+                               var period: Int, var price: Int, var type: String,
+                               var value: Int, var trialPeriod: Int, var displayOnBuyScreen: Boolean,
+                               var durationTitle: String, var divider: Float,
+                               var typeOfSubscription: Int, var infoOfSubscription: PaymentNinjaSubscriptionInfo) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readString(),
@@ -101,7 +100,7 @@ data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int =
  * @param text - Текст с опяснением услуги автопополнения
  * @param url - Ссылка на документацию о правилах по оказанию услуги
  */
-data class PaymentNinjaSubscriptionInfo(var text: String = Utils.EMPTY, var url: String = Utils.EMPTY) : Parcelable {
+data class PaymentNinjaSubscriptionInfo(var text: String, var url: String) : Parcelable {
 
     constructor(source: Parcel) : this(source.readString(), source.readString())
 

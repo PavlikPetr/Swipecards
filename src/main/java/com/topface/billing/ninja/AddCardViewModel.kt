@@ -19,7 +19,6 @@ import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.isEmpty
 import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.applySchedulers
@@ -112,7 +111,7 @@ class AddCardViewModel(val data: Bundle) {
 
     var mFeedNavigator: FeedNavigator? = null
 
-    val product: PaymentNinjaProduct = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
+    val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
 
     private val readyCheck: MutableMap<Any, Boolean> = mutableMapOf()
 
@@ -125,12 +124,12 @@ class AddCardViewModel(val data: Bundle) {
             put(trhuText, false)
             put(emailText, !isEmailDefined)
         }
-        if (!product.isEmpty()) {
-            productTitle.set(product.titleTemplate)
+        product?.let {
+            productTitle.set(it.titleTemplate)
             titleVisibility.set(View.VISIBLE)
-            autoPayDescriptionText.set(product.infoOfSubscription.text)
-            isAutoPayDescriptionVisible.set(product.type == Products.ProductType.COINS.getName() && product.typeOfSubscription == 1)
-            isVipDescriptionVisible.set(product.type == Products.ProductType.PREMIUM.getName())
+            autoPayDescriptionText.set(it.infoOfSubscription.text)
+            isAutoPayDescriptionVisible.set(it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1)
+            isVipDescriptionVisible.set(it.type == Products.ProductType.PREMIUM.getName())
             // todo possibly add second text with template
             vipDescriptionText.set(R.string.ninja_text_5.getString())
         }
@@ -282,12 +281,12 @@ class AddCardViewModel(val data: Bundle) {
 
                     override fun onNext(t: IApiResponse?) {
                         // todo send "buy payment ninja product" here and after success show dialog
-                        if (!product.isEmpty()) {
-                            mFeedNavigator?.showPurchaseSuccessfullFragment(product.type)
+                        product?.let {
+                            mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
                         }
                     }
                 })
     }
 
-    fun navigateToRules(): Unit? = product.infoOfSubscription.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? = product?.infoOfSubscription?.let { Utils.goToUrl(App.getContext(), it.url) }
 }
