@@ -20,6 +20,8 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/item_layout"
+        app:uiTestTag = "@{model.getTag()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener::onClick}"
@@ -27,7 +29,7 @@
         app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
-            app:uiTestTag = "@{model.getTag()}"
+            android:id="@+id/frame_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> model.onAvatarClick()}">
