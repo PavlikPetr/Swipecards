@@ -253,15 +253,16 @@ public class PurchasesFragment extends BaseFragment {
             if (TextUtils.equals(tab.type, PurchasesTabData.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
             } else {
-                boolean isNeedRemoveTab;
+                boolean isNeedRemoveTab = true;
                 if (tab.type.equals(PurchasesTabData.PAYMENT_NINJA)) {
                     PaymentNinjaProductsList productsList = CacheProfile.getPaymentNinjaProductsList();
-                    if (isVip) {
-                        isNeedRemoveTab = ProductExtensionKt.getVipProducts(productsList).isEmpty();
-                    } else {
-                        isNeedRemoveTab = ProductExtensionKt.getCoinsProducts(productsList).isEmpty() && ProductExtensionKt.getLikesProducts(productsList).isEmpty();
+                    if (productsList != null) {
+                        if (isVip) {
+                            isNeedRemoveTab = ProductExtensionKt.getVipProducts(productsList).isEmpty();
+                        } else {
+                            isNeedRemoveTab = ProductExtensionKt.getCoinsProducts(productsList).isEmpty() && ProductExtensionKt.getLikesProducts(productsList).isEmpty();
+                        }
                     }
-
                 } else {
                     isNeedRemoveTab = isNeedRemoveTab(tab, isVip);
                 }
