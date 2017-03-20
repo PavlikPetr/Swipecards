@@ -24,13 +24,9 @@ class PaymentNinjaPurchasesItemWithSubtitle(private val mSubscription: Subscript
 
     private fun getSubtitleText() =
             if (mSubscription.type == 0) {
-                if (mSubscription.enabled) {
-                    String.format(App.getCurrentLocale(),
-                            R.string.ninja_subscription_expiration.getString(),
-                            SimpleDateFormat("d MMMM", Locale(App.getLocaleConfig().applicationLocale)).format(mSubscription.expire).toLowerCase())
-                } else {
-                    R.string.ninja_subscription_cancelled.getString()
-                }
+                String.format(App.getCurrentLocale(),
+                        if (mSubscription.enabled) R.string.ninja_subscription_expiration.getString() else R.string.ninja_subscription_cancelled.getString(),
+                        SimpleDateFormat("d MMMM", Locale(App.getLocaleConfig().applicationLocale)).format(mSubscription.expire).toLowerCase())
             } else {
                 (if (mSubscription.enabled) R.string.ninja_autofilling_activated else R.string.ninja_autofilling_cancelled).getString()
             }

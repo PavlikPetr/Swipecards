@@ -1,10 +1,12 @@
 package com.topface.topface.ui.settings.payment_ninja
 
+import android.app.Activity
 import android.os.Looper
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.requests.*
 import com.topface.topface.requests.response.SimpleResponse
+import com.topface.topface.ui.dialogs.AlertDialogFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BottomSheetData
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BottomSheetItemText
@@ -22,7 +24,7 @@ import rx.Subscription
  * Created by ppavlik on 06.03.17.
  */
 
-class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator) {
+class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, private val getActivity: () -> Activity) {
 
     private var mRequestSubscription: Subscription? = null
     private var mBottomSheetClickSubscription: Subscription? = null
@@ -44,10 +46,11 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator) {
                 .subscribe(shortSubscription {
                     it?.let {
                         when (it.textRes.textRes) {
-                            BottomSheetItemText.CANCEL_SUBSCRIPTION -> cancelSubscriptionRequest(it.data as SubscriptionInfo)
-                            BottomSheetItemText.RESUME_SUBSCRIPTION -> resumeSubscriptionRequest(it.data as SubscriptionInfo)
-                            BottomSheetItemText.DELETE_CARD -> deleteCardRequest()
-                            BottomSheetItemText.USE_ANOTHER_CARD, BottomSheetItemText.ADD_CARD -> mNavigator.showPaymentNinjaPurchaseProduct()
+                            BottomSheetItemText.CANCEL_SUBSCRIPTION -> cancelSubscriptionRequest(it.data as? SubscriptionInfo)
+                            BottomSheetItemText.DELETE_CARD -> AlertDialogFactory().constructDeleteCard(getActivity()) { deleteCardRequest(it.data as? CardInfo) }
+                            BottomSheetItemText.USE_ANOTHER_CARD, BottomSheetItemText.ADD_CARD -> mNavigator.showPaymentNinjaPurchaseProduct(true)
+                            else -> {
+                            }
                         }
                     }
                 })
@@ -59,37 +62,33 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator) {
     @Synchronized
     fun getData() = data
 
-    private fun deleteCardRequest() {
-        mDeleteCardSubscription = getDeleteCardRequest()
-                .applySchedulers()
-                .subscribe(shortSubscription {
-                    data.set(with(getData().indexOfFirst { it is CardInfo }) {
-                        if (this < 0) 0 else this
-                    }, CardInfo())
-                })
+    private fun deleteCardRequest(cardInfo: CardInfo?) {
+        cardInfo?.let { card ->
+            getData().indexOf(card).takeIf { it != -1 }?.let {
+                getData().set(it, CardInfo())
+            }
+            mDeleteCardSubscription = getDeleteCardRequest()
+                    .applySchedulers()
+                    .subscribe({ }, { sendCardListRequest() })
+        }
     }
 
-    private fun resumeSubscriptionRequest(subscriptionInfo: SubscriptionInfo) {
-        mResumeSubscription = getResumeSubscriptionRequest()
-                .applySchedulers()
-                .subscribe(shortSubscription {
-                    data.find { it == subscriptionInfo }?.let {
-                        val position = data.indexOf(it)
-                        data.set(position, (it as SubscriptionInfo).apply { enabled = true })
+    private fun cancelSubscriptionRequest(subscriptionInfo: SubscriptionInfo?) =
+            subscriptionInfo?.let { subscription ->
+                if (subscription.type == 0) {
+                    // т.к. это подписка, то меняем статус, чтобы у юзера она была как отмененная
+                    getData().indexOf(subscription).takeIf { it != -1 }?.let {
+                        getData().set(it, subscription.apply { enabled = false })
                     }
-                })
-    }
 
-    private fun cancelSubscriptionRequest(subscriptionInfo: SubscriptionInfo) {
-        mCancelSubscription = getCancelSubscriptionRequest()
-                .applySchedulers()
-                .subscribe(shortSubscription {
-                    data.find { it == subscriptionInfo }?.let {
-                        val position = data.indexOf(it)
-                        data.set(position, (it as SubscriptionInfo).apply { enabled = false })
-                    }
-                })
-    }
+                } else {
+                    // если это не подписка, то удаляем итем и забываем о нем
+                    getData().remove(subscription)
+                }
+                mCancelSubscription = getCancelSubscriptionRequest()
+                        .applySchedulers()
+                        .subscribe({ }, { sendUserSubscriptionsRequest() })
+            }
 
     private fun getSubscriptionsRequest() =
             Observable.fromEmitter<UserSubscriptions>({ emitter ->
@@ -136,24 +135,6 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator) {
     private fun getCancelSubscriptionRequest() =
             Observable.fromEmitter<SimpleResponse>({ emitter ->
                 val sendRequest = CancelSubscriptionRequest(App.getContext())
-                sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
-                    override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
-                    override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
-                    override fun fail(codeError: Int, response: IApiResponse) {
-//                        emitter.onError(Throwable(codeError.toString()))
-                    }
-
-                    override fun always(response: IApiResponse) {
-                        super.always(response)
-                        emitter.onNext(SimpleResponse(true))
-//                        emitter.onCompleted()
-                    }
-                }).exec()
-            }, Emitter.BackpressureMode.LATEST)
-
-    private fun getResumeSubscriptionRequest() =
-            Observable.fromEmitter<SimpleResponse>({ emitter ->
-                val sendRequest = ResumeSubscriptionRequest(App.getContext())
                 sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
                     override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)

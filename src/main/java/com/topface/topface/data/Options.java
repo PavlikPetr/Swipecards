@@ -257,8 +257,6 @@ public class Options extends AbstractData {
 
             if (payments != null) {
                 this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
-                this.payments.other.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
-                this.payments.premium.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
             }
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");

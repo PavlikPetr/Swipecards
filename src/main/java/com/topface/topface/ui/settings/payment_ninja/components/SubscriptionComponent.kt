@@ -1,16 +1,13 @@
 package com.topface.topface.ui.settings.payment_ninja.components
 
-import android.util.Log
 import com.topface.topface.R
 import com.topface.topface.databinding.PaymentNinjaPurchaseItemWithSubtitleBinding
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.settings.payment_ninja.SubscriptionInfo
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ISettingsPaymentNinjaBottomSheetInterface
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType.Companion.CANCEL_SUBSCRIPTION_BOTTOM_SHEET
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType.Companion.RESTORE_SUBSCRIPTION_BOTTOM_SHEET
 import com.topface.topface.ui.settings.payment_ninja.view_models.PaymentNinjaPurchasesItemWithSubtitle
 
 /**
@@ -27,12 +24,10 @@ class SubscriptionComponent(private val mNavigator: FeedNavigator) : AdapterComp
     override fun bind(binding: PaymentNinjaPurchaseItemWithSubtitleBinding, data: SubscriptionInfo?, position: Int) {
         data?.let {
             binding.viewModel = PaymentNinjaPurchasesItemWithSubtitle(mSubscription = it, onLongClickListener = {
-                mNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetData(ModalBottomSheetType(
-                        if (it.enabled)
-                            CANCEL_SUBSCRIPTION_BOTTOM_SHEET
-                        else
-                            RESTORE_SUBSCRIPTION_BOTTOM_SHEET), it))
-                true
+                if (it.enabled) {
+                    mNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetData(ModalBottomSheetType(CANCEL_SUBSCRIPTION_BOTTOM_SHEET), it))
+                    true
+                } else false
             })
         }
     }

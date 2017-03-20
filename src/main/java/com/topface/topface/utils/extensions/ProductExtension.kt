@@ -5,8 +5,12 @@ import com.topface.topface.App
 import com.topface.topface.data.BuyButtonData
 import com.topface.topface.data.Products
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct.Companion.EMPTY_FLOAT
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct.Companion.EMPTY_INT
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaSubscriptionInfo
 import com.topface.topface.utils.CacheProfile
+import com.topface.topface.utils.Utils
 import java.text.NumberFormat
 import java.util.*
 
@@ -47,6 +51,15 @@ fun NumberFormat.getFormatedPrice(price: Double) =
             setMaximumFractionDigits(if (price % 1 != 0.0) 2 else 0)
             format(price)
         }
+
+fun PaymentNinjaProduct.isEmpty() =
+        id == Utils.EMPTY && showType == EMPTY_INT && titleTemplate == Utils.EMPTY && totalPriceTemplate == Utils.EMPTY &&
+                !isSubscription && period == EMPTY_INT && price == EMPTY_INT && type == Utils.EMPTY && value == EMPTY_INT &&
+                trialPeriod == EMPTY_INT && !displayOnBuyScreen && durationTitle == Utils.EMPTY && divider == EMPTY_FLOAT &&
+                typeOfSubscription == EMPTY_INT && infoOfSubscription.isEmpty()
+
+fun PaymentNinjaSubscriptionInfo.isEmpty() =
+        text == Utils.EMPTY && url == Utils.EMPTY
 
 object Constants {
     const val PREMIUM = "premium"

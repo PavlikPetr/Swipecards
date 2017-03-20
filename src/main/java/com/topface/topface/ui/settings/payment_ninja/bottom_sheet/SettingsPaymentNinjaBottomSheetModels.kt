@@ -19,7 +19,6 @@ data class BottomSheetTitle(var title: String)
 data class BottomSheetItemText(@StringRes val textRes: Int) : Parcelable {
     companion object {
         const val CANCEL_SUBSCRIPTION = R.string.ninja_cancel_vip_status
-        const val RESUME_SUBSCRIPTION = R.string.ninja_resume_vip_status
         const val DELETE_CARD = R.string.ninja_delete_card
         const val USE_ANOTHER_CARD = R.string.ninja_use_another_card
         const val ADD_CARD = R.string.ninja_no_card_title
@@ -60,20 +59,16 @@ data class BottomSheetData(var textRes: BottomSheetItemText, var data: Parcelabl
 
 /**
  * Тип модального bottom sheet
- * @param type - тип dialogFragment-а ({@link #CARD_BOTTOM_SHEET}/{@link #RESTORE_SUBSCRIPTION_BOTTOM_SHEET}
- * /{@link #CANCEL_SUBSCRIPTION_BOTTOM_SHEET})
+ * @param type - тип dialogFragment-а ({@link #CARD_BOTTOM_SHEET}/{@link #CANCEL_SUBSCRIPTION_BOTTOM_SHEET}
+ * /{@link #CANCEL_AUTOFILLING_BOTTOM_SHEET})
  */
 data class ModalBottomSheetType(var type: Int) : Parcelable {
     companion object {
         const val CARD_BOTTOM_SHEET = 1
 
-        const val RESTORE_SUBSCRIPTION_BOTTOM_SHEET = 2
+        const val CANCEL_SUBSCRIPTION_BOTTOM_SHEET = 2
 
-        const val CANCEL_SUBSCRIPTION_BOTTOM_SHEET = 3
-
-        const val CANCEL_AUTOFILLING_BOTTOM_SHEET = 4
-
-        const val CARD_DELETED_BOTTOM_SHEET = 5
+        const val CANCEL_AUTOFILLING_BOTTOM_SHEET = 3
 
         @JvmField val CREATOR: Parcelable.Creator<ModalBottomSheetType> = object : Parcelable.Creator<ModalBottomSheetType> {
             override fun createFromParcel(source: Parcel): ModalBottomSheetType = ModalBottomSheetType(source)

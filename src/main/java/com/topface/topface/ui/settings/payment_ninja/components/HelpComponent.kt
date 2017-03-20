@@ -22,7 +22,7 @@ class HelpComponent(private val mNavigator: FeedNavigator) : AdapterComponent<Pa
     override fun bind(binding: PaymentNinjaPurchaseItemTitleOnlyBinding, data: PaymentNinjaHelp?, position: Int) {
         data?.let {
             binding.viewModel = PaymentNinjaPurchasesItemTitleOnlyViewModel(onClickListener = {
-                //todo дернуть показ экрана отправки сообщения в сапорт
+                mNavigator.showPaymentNinjaHelp()
             }).apply {
                 title.set(R.string.ninja_support.getString())
                 icon.set(R.drawable.ic_question_small)

@@ -12,9 +12,9 @@ import kotlin.properties.Delegates
  * Вью модель элемента "карта"
  * Created by ppavlik on 13.03.17.
  */
-class CardViewModel(private val cardInfo: CardInfo, val onLongClickListener: () -> Boolean) {
+class CardViewModel(private val cardInfo: CardInfo, private val mOnClick: () -> Unit, val onLongClickListener: () -> Boolean) {
     private val mViewModel by lazy {
-        PaymentNinjaPurchasesItemTitleOnlyViewModel(onLongClickListener = onLongClickListener)
+        PaymentNinjaPurchasesItemTitleOnlyViewModel(mOnClick, onLongClickListener)
     }
     var isCardAvailble by Delegates.observable(true) { prop, old, new ->
         with(mViewModel) {

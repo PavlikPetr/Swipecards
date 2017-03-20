@@ -974,7 +974,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1306,7 +1306,6 @@
     <string name="ninja_settings_toolbar">Платежи</string>
     <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
     <string name="ninja_cancel_vip_status">Отменить подписку</string>
-    <string name="ninja_resume_vip_status">Возобновить подписку</string>
     <string name="ninja_use_another_card">Использовать другую карту</string>
     <string name="ninja_delete_card">Удалить карту</string>
     <string name="ninja_error_dialog_title">Произошла ошибка</string>
@@ -1315,7 +1314,6 @@
     <string name="ninja_error_dialog_button_retry">Попробовать другую карту</string>
     <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
-    <string name="get_other_card">Использовать другую карту</string>
     <string name="ninja_cvv_error">Неверный CVV/CVC</string>
     <string name="ninja_trhu_error">Неверная дата</string>
     <string name="ninja_number_error">Неверный формат номера карты</string>
@@ -1323,8 +1321,9 @@
     <string name="use_card">Использовать карту **%s</string>
     <string name="ninja_no_card_title">Добавить карту</string>
     <string name="ninja_subscription_expiration">Активна до %s</string>
-    <string name="ninja_subscription_cancelled">Отменена</string>
+    <string name="ninja_subscription_cancelled">Отменена. Истекает %s</string>
     <string name="ninja_autofilling_cancelled">Отменено</string>
     <string name="ninja_autofilling_activated">Активно</string>
     <string name="ninja_support">Поддержка</string>
+    <string name="ninja_ask_to_delete_card_message">Вы уверены?</string>
 </resources>

@@ -62,13 +62,8 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
-                    val info = App.get().options.paymentNinjaInfo
-                    if (!info.isCradAvailable() || !mViewModel.isChecked.get()) {
-                        mFeedNavigator.showPaymentNinjaPurchaseProduct(it)
-                    } else {
-                        // Необходимо отправить запрос на покупку
-                        // P.S. метода на сервере еще нет
-                    }
+                    mFeedNavigator.showPaymentNinjaPurchaseProduct(!App.get().options.paymentNinjaInfo.isCradAvailable() ||
+                            !mViewModel.isChecked.get(), it)
                 })
                 .addAdapterComponent(BuyScreenTitleComponent(mText))
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())

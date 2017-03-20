@@ -19,6 +19,7 @@ import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.extensions.isEmpty
 import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.applySchedulers
@@ -32,7 +33,7 @@ import java.util.concurrent.TimeUnit
  * ВьюМодель добавления карт
  */
 
-class AddCardViewModel(val data:Bundle) {
+class AddCardViewModel(val data: Bundle) {
 
     val numberText = RxFieldObservable<String>()
     val numberCursorPosition = ObservableInt()
@@ -70,7 +71,7 @@ class AddCardViewModel(val data:Bundle) {
     val trhuCursorPosition = ObservableInt()
     val trhuError = ObservableField<String>()
 
-    val emailChangedCallback = object: Observable.OnPropertyChangedCallback() {
+    val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
             with(observable as ObservableField<String>) {
                 if (!get().isNullOrEmpty()) {
@@ -109,14 +110,14 @@ class AddCardViewModel(val data:Bundle) {
     val isInputEnabled = ObservableBoolean(true)
     val titleVisibility = ObservableInt(View.GONE)
 
-    var mFeedNavigator : FeedNavigator? = null
+    var mFeedNavigator: FeedNavigator? = null
 
-    val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
+    val product: PaymentNinjaProduct = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
 
     private val readyCheck: MutableMap<Any, Boolean> = mutableMapOf()
 
     init {
-        val email = App.get().options.paymentNinjaInfo.email ?: ""
+        val email = App.get().options.paymentNinjaInfo.email
         val isEmailDefined = TextUtils.isEmpty(email)
         readyCheck.apply {
             put(numberText, false)
@@ -124,14 +125,12 @@ class AddCardViewModel(val data:Bundle) {
             put(trhuText, false)
             put(emailText, !isEmailDefined)
         }
-        product?.let {
-            productTitle.set(it.titleTemplate)
+        if (!product.isEmpty()) {
+            productTitle.set(product.titleTemplate)
             titleVisibility.set(View.VISIBLE)
-            it.infoOfSubscription?.let {
-                autoPayDescriptionText.set(it.text)
-            }
-            isAutoPayDescriptionVisible.set(it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1)
-            isVipDescriptionVisible.set(it.type == Products.ProductType.PREMIUM.getName())
+            autoPayDescriptionText.set(product.infoOfSubscription.text)
+            isAutoPayDescriptionVisible.set(product.type == Products.ProductType.COINS.getName() && product.typeOfSubscription == 1)
+            isVipDescriptionVisible.set(product.type == Products.ProductType.PREMIUM.getName())
             // todo possibly add second text with template
             vipDescriptionText.set(R.string.ninja_text_5.getString())
         }
@@ -161,7 +160,10 @@ class AddCardViewModel(val data:Bundle) {
                     }
                     updateButton()
                 }
-                .filter { it.length >= 4 }
+                .filter {
+                    numberCursorPosition.set(it.length)
+                    it.length >= 4
+                }
                 .distinctUntilChanged()
                 .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
                 .map { str -> UtilsForCard.formattingForCardNumber(str) }
@@ -227,7 +229,6 @@ class AddCardViewModel(val data:Bundle) {
 
     fun setNumber(number: String) {
         numberText.set(number)
-        numberCursorPosition.set(number.length)
     }
 
     fun setTRHU(trhu: String) {
@@ -243,7 +244,7 @@ class AddCardViewModel(val data:Bundle) {
 
     fun onClick() {
         val trhuString = trhuText.get()
-        var month: String  = ""
+        var month: String = ""
         var year: String = ""
         if (!TextUtils.isEmpty(trhuString) && UtilsForCard.isValidTrhu(trhuString)) {
             month = trhuString.substring(0, 2)
@@ -260,7 +261,7 @@ class AddCardViewModel(val data:Bundle) {
         isInputEnabled.set(false)
         AddCardRequest().getRequestObservable(App.get(), cardModel)
                 .applySchedulers()
-                .subscribe(object: RxUtils.ShortSubscription<IApiResponse>() {
+                .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
                     override fun onCompleted() {
                         super.onCompleted()
                         isInputEnabled.set(true)
@@ -281,12 +282,12 @@ class AddCardViewModel(val data:Bundle) {
 
                     override fun onNext(t: IApiResponse?) {
                         // todo send "buy payment ninja product" here and after success show dialog
-                        product?.let {
-                            mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
+                        if (!product.isEmpty()) {
+                            mFeedNavigator?.showPurchaseSuccessfullFragment(product.type)
                         }
                     }
-        })
+                })
     }
 
-    fun navigateToRules(): Unit? = product?.infoOfSubscription?.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? = product.infoOfSubscription.let { Utils.goToUrl(App.getContext(), it.url) }
 }

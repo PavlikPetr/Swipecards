@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
-import android.text.TextUtils
 import android.view.View
 import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.dialogs.ErrorDialogFactory
@@ -22,6 +21,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
+import com.topface.topface.ui.dialogs.AlertDialogFactory
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -36,11 +36,13 @@ import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragme
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.settings.FeedbackMessageFragment
+import com.topface.topface.ui.settings.SettingsContainerActivity
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
-import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetType
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.isEmpty
 
 /**
  * Класс для управления переходами между эркраними в фидах
@@ -186,13 +188,13 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct?) {
-        // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
-        if (TextUtils.isEmpty(App.get().options.paymentNinjaInfo.lastDigit)) {
+    override fun showPaymentNinjaPurchaseProduct(isNeedToAddCard: Boolean, product: PaymentNinjaProduct) {
+        if (isNeedToAddCard) {
             mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, product = product),
                     NinjaAddCardActivity.REQUEST_CODE)
-        } else {
+        } else if (!product.isEmpty()) {
             // todo simply call payment request with given product
+            showPurchaseSuccessfullFragment(product.type)
         }
     }
 
@@ -216,5 +218,12 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
                 ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
                 .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+    }
+
+    override fun showPaymentNinjaHelp() {
+        mActivityDelegate.startActivityForResult(SettingsContainerActivity.getFeedbackMessageIntent(
+                mActivityDelegate.applicationContext,
+                FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
+        ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
 }

@@ -37,7 +37,9 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        SettingsPaymentNinjaViewModel(mFeedNavigator)
+        SettingsPaymentNinjaViewModel(mFeedNavigator) {
+            activity
+        }
     }
 
     private val mTypeProvider by lazy {
@@ -50,18 +52,21 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mTypeProvider) { Bundle() }
-                .addAdapterComponent(CardComponent {
+                .addAdapterComponent(CardComponent(mOnClick = {
                     mViewModel.getCardInfo()?.let {
-                        mFeedNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetData(
-                                if (it.isAvailable())
-                                    ModalBottomSheetType(ModalBottomSheetType.CARD_BOTTOM_SHEET)
-                                else
-                                    ModalBottomSheetType(ModalBottomSheetType.CARD_DELETED_BOTTOM_SHEET),
-                                it
-                        ))
+                        if (!it.isAvailable()) {
+                            mFeedNavigator.showPaymentNinjaPurchaseProduct(true)
+                        }
                     }
-                    true
-                })
+                }, mOnLongClick = {
+                    mViewModel.getCardInfo()?.let {
+                        if (it.isAvailable()) {
+                            mFeedNavigator.showPaymentNinjaBottomSheet(ModalBottomSheetData(
+                                    ModalBottomSheetType(ModalBottomSheetType.CARD_BOTTOM_SHEET), it))
+                        }
+                        it.isAvailable()
+                    } ?: false
+                }))
                 .addAdapterComponent(HelpComponent(mFeedNavigator))
                 .addAdapterComponent(SubscriptionComponent(mFeedNavigator))
                 .addAdapterComponent(LoaderComponent())
