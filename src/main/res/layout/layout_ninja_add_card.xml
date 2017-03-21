@@ -63,7 +63,7 @@
                         android:maxLength="@{viewModel.numberMaxLength}"
                         android:text="@={viewModel.numberText}"
                         app:setOnFocusChangeListener="@{viewModel.onNumberChange}"
-                        app:setSelection="@{viewModel.numberText.length}"/>
+                        app:setNumberSelection="@{viewModel.numberText}"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <!-- card additional data -->

@@ -1,6 +1,7 @@
 package com.topface.billing.ninja
 
 
+import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
@@ -26,7 +27,6 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
-import android.databinding.Observable
 
 /**
  * ВьюМодель добавления карт
@@ -50,7 +50,7 @@ class AddCardViewModel(val data: Bundle) {
     val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
             with(observable as ObservableField<String>) {
-                if (!get().isNullOrEmpty()) {
+                if (get().length >= 6) {
                     if (!get().matches(EMAIL_ADDRESS.toRegex())) {
                         Debug.error("--------------------EMAIL невалидный-----------------------------")
                         emailError.set(R.string.ninja_email_error.getString())
@@ -59,10 +59,6 @@ class AddCardViewModel(val data: Bundle) {
                         emailError.set(Utils.EMPTY)
                         readyCheck.put(emailText, true)
                     }
-                } else {
-                    Debug.error("---------------------ОШИБКА заполните поле email -----------------------")
-                    emailError.set(R.string.ninja_email_error.getString())
-                    readyCheck.put(emailText, false)
                 }
                 updateButton()
             }
@@ -122,18 +118,16 @@ class AddCardViewModel(val data: Bundle) {
                 .distinctUntilChanged()
                 .map { str -> UtilsForCard.formattingForCardNumber(str) }
                 .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
-                .subscribe( shortSubscription {
-                    it?.let {
-                        if (it.isEmpty()){
-                            cardIcon.set(0)
-                        }
-                        if (it.length == 4) {
-                            val cardType = giveMeBrand(it, UtilsForCard.cardBrands)
-                            setTemplate(cardType)
-                        }
-                        setNumber(it)
+                .subscribe(shortSubscription {
+                    if (it.isEmpty()) {
+                        cardIcon.set(0)
                     }
+                    if (it.length == 4) {
+                        setTemplate(giveMeBrand(it, UtilsForCard.cardBrands))
+                    }
+                    numberText.set(it)
                 }
+
                 ))
 
         cardFieldsSubscription.add(trhuText.filedObservable
@@ -166,11 +160,6 @@ class AddCardViewModel(val data: Bundle) {
             }
         }
         return CardType.DEFAULT
-    }
-
-    fun setNumber(number: String) {
-        Debug.error("--------до setText------- ${number.length} +            ${numberText.get().length}")
-        numberText.set(number)
     }
 
     fun setTRHU(trhu: String) {
