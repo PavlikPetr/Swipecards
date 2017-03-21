@@ -1,6 +1,5 @@
 package com.topface.billing.ninja
 
-
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
@@ -39,6 +38,16 @@ class AddCardViewModel(val data: Bundle) {
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
 
+    val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
+        override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
+            with(it as ObservableField<String>) {
+                if (get().length == cvvMaxLength.get()) {
+                    validateCvv()
+                }
+            }
+        } ?: Unit
+    }
+
     val cvvText = ObservableField<String>()
     val cvvMaxLength = ObservableInt(3)
     val cvvError = ObservableField<String>()
@@ -61,16 +70,6 @@ class AddCardViewModel(val data: Bundle) {
                     }
                 }
                 updateButton()
-            }
-        } ?: Unit
-    }
-
-    val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
-            with(it as ObservableField<String>) {
-                if (get().length == cvvMaxLength.get()) {
-                    validateCvv()
-                }
             }
         } ?: Unit
     }
@@ -141,9 +140,8 @@ class AddCardViewModel(val data: Bundle) {
                         validateNumber()
                     }
                     numberText.set(it)
-                }
-
-                ))
+                })
+        )
 
         cardFieldsSubscription.add(trhuText.filedObservable
                 .filter { it.length >= 2 }
@@ -159,7 +157,6 @@ class AddCardViewModel(val data: Bundle) {
                     }
                 })
         )
-
     }
 
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
@@ -188,8 +185,8 @@ class AddCardViewModel(val data: Bundle) {
 
     fun release() {
         cardFieldsSubscription.clear()
-        emailText.removeOnPropertyChangedCallback(emailChangedCallback)
         cvvText.removeOnPropertyChangedCallback(cvvChangedCallback)
+        emailText.removeOnPropertyChangedCallback(emailChangedCallback)
     }
 
     fun onClick() {
