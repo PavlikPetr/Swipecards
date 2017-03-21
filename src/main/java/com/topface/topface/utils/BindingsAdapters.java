@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -493,6 +494,13 @@ public class BindingsAdapters {
     public static void restoreStateForLayoutManager(RecyclerView view, Parcelable state) {
         if (state != null) {
             view.getLayoutManager().onRestoreInstanceState(state);
+        }
+    }
+
+    @BindingAdapter("setNumberSelection")
+    public static void setNumberSelection(EditText view, String string) {
+        if (string != null) {
+            view.setSelection(string.length());
         }
     }
 }
