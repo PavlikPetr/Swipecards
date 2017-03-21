@@ -35,7 +35,6 @@ import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 /**
  * ВьюМодель добавления карт
  */
@@ -43,7 +42,6 @@ import java.util.concurrent.TimeUnit
 class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
     val numberText = RxFieldObservable<String>()
-    val numberCursorPosition = ObservableInt()
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
@@ -53,21 +51,9 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
             with(it as ObservableField<String>) {
-                if (!get().isNullOrEmpty()) {
-                    if (get().length < cvvMaxLength.get() || !UtilsForCard.isDigits(get())) {
-                        Debug.error("--------------------Все очень плохо-----слишком мало букав---или введен текст-------------------")
-                        cvvError.set(R.string.ninja_cvv_error.getString())
-                        readyCheck.put(cvvText, false)
-                    } else {
-                        cvvError.set(Utils.EMPTY)
-                        readyCheck.put(cvvText, true)
-                    }
-                } else {
-                    Debug.error("---------------------ОШИБКА заполните поле cvv -----------------------")
-                    cvvError.set(R.string.ninja_cvv_error.getString())
-                    readyCheck.put(cvvText, false)
+                if (get().length == cvvMaxLength.get()) {
+                    validateCvv()
                 }
-                updateButton()
             }
         } ?: Unit
     }
@@ -83,7 +69,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
             with(observable as ObservableField<String>) {
-                if (!get().isNullOrEmpty()) {
+                if (get().length >= 6) {
                     if (!get().matches(EMAIL_ADDRESS.toRegex())) {
                         Debug.error("--------------------EMAIL невалидный-----------------------------")
                         emailError.set(R.string.ninja_email_error.getString())
@@ -92,10 +78,6 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
                         emailError.set(Utils.EMPTY)
                         readyCheck.put(emailText, true)
                     }
-                } else {
-                    Debug.error("---------------------ОШИБКА заполните поле email -----------------------")
-                    emailError.set(R.string.ninja_email_error.getString())
-                    readyCheck.put(emailText, false)
                 }
                 updateButton()
             }
@@ -144,65 +126,32 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
             vipDescriptionText.set(R.string.ninja_text_5.getString())
         }
         isEmailFormNeeded.set(TextUtils.isEmpty(email))
-        cvvText.addOnPropertyChangedCallback(cvvChangedCallback)
         emailText.addOnPropertyChangedCallback(emailChangedCallback)
+        cvvText.addOnPropertyChangedCallback(cvvChangedCallback)
+
         if (!isEmailDefined) {
             emailText.set(email)
         }
 
         cardFieldsSubscription.add(numberText.filedObservable
-                .doOnNext {
-                    if (!it.isNullOrEmpty() && UtilsForCard.isDigits(it.replace(UtilsForCard.SPACE_DIVIDER, ""))) {
-                        // валидация по алгоритму Луна
-                        if (!UtilsForCard.luhnsAlgorithm(it.replace(UtilsForCard.SPACE_DIVIDER, ""))) {
-                            Debug.error("---------------------ОШИБКА ввода номера карты--------------------------------")
-                            numberError.set(R.string.ninja_number_error.getString())
-                            readyCheck.put(numberText, false)
-                        } else {
-                            numberError.set(Utils.EMPTY)
-                            readyCheck.put(numberText, true)
-                        }
-                    } else {
-                        Debug.error("---------------------ОШИБКА заполните поле ввода номера карты -----------------------")
-                        numberError.set(R.string.ninja_number_error.getString())
-                        readyCheck.put(numberText, false)
-                    }
-                    updateButton()
-                }
-                .filter {
-                    numberCursorPosition.set(it.length)
-                    it.length >= 4
-                }
                 .distinctUntilChanged()
-                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
                 .map { str -> UtilsForCard.formattingForCardNumber(str) }
+                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
                 .subscribe(shortSubscription {
-                    it?.let {
-                        if (it.length == 4) {
-                            val cardType = giveMeBrand(it, UtilsForCard.cardBrands)
-                            setTemplate(cardType)
-                        }
-                        setNumber(it)
+                    if (it.isEmpty()) {
+                        cardIcon.set(0)
                     }
-                }))
+                    if (it.length == 4) {
+                        setTemplate(giveMeBrand(it, UtilsForCard.cardBrands))
+                    }
+                    if (it.length == numberMaxLength.get()) {
+                        validateNumber()
+                    }
+                    numberText.set(it)
+                })
+        )
 
         cardFieldsSubscription.add(trhuText.filedObservable
-                .doOnNext {
-                    if (!it.isNullOrEmpty() && it.length == UtilsForCard.TRHU_LENGTH) {
-                        if (!UtilsForCard.isValidTrhu(it)) {
-                            Debug.error("---------------------ОШИБКА ввода Срока годности карты------------------------")
-                            trhuError.set(R.string.ninja_trhu_error.getString())
-                            readyCheck.put(trhuText, false)
-                        } else {
-                            trhuError.set(Utils.EMPTY)
-                            readyCheck.put(trhuText, true)
-                        }
-                    } else {
-                        trhuError.set(R.string.ninja_trhu_error.getString())
-                        readyCheck.put(trhuText, false)
-                    }
-                    updateButton()
-                }
                 .filter { it.length >= 2 }
                 .distinctUntilChanged()
                 .map { str -> UtilsForCard.setTrhuDivider(str) }
@@ -210,14 +159,15 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
                 .subscribe(shortSubscription {
                     it?.let {
                         setTRHU(it)
+                        if (it.length == UtilsForCard.TRHU_LENGTH) {
+                            validateTrhu()
+                        }
                     }
                 })
         )
     }
 
-    private fun updateButton() {
-        isButtonEnabled.set(!readyCheck.containsValue(false))
-    }
+    private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
     fun setFeedNavigator(feedNavigator: FeedNavigator) = this.apply { mFeedNavigator = feedNavigator }
 
@@ -234,10 +184,6 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
             }
         }
         return CardType.DEFAULT
-    }
-
-    fun setNumber(number: String) {
-        numberText.set(number)
     }
 
     fun setTRHU(trhu: String) {
@@ -304,6 +250,78 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
                                 Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                     }
                 })
+    }
+
+    fun onNumberChange(v: View, hasFocus: Boolean) {
+        if (!hasFocus) {
+            validateNumber()
+        }
+    }
+
+    fun onTrhuChange(v: View, hasFocus: Boolean) {
+        if (!hasFocus) {
+            validateTrhu()
+        }
+    }
+
+    fun onCvvChange(v: View, hasFocus: Boolean) {
+        if (!hasFocus) {
+            validateCvv()
+        }
+    }
+
+    private fun validateNumber() {
+        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
+            // валидация по алгоритму Луна
+            if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
+                Debug.error("---------------------ОШИБКА ввода номера карты--------------------------------")
+                numberError.set(R.string.ninja_number_error.getString())
+                readyCheck.put(numberText, false)
+            } else {
+                numberError.set(Utils.EMPTY)
+                readyCheck.put(numberText, true)
+            }
+        } else {
+            Debug.error("---------------------ОШИБКА заполните поле ввода номера карты -----------------------")
+            numberError.set(R.string.ninja_number_error.getString())
+            readyCheck.put(numberText, false)
+        }
+    }
+
+    private fun validateTrhu() {
+        val trhuString = trhuText.get()
+        if (!trhuString.isNullOrEmpty() && trhuString.length == UtilsForCard.TRHU_LENGTH) {
+            if (!UtilsForCard.isValidTrhu(trhuString)) {
+                Debug.error("---------------------ОШИБКА ввода Срока годности карты------------------------")
+                trhuError.set(R.string.ninja_trhu_error.getString())
+                readyCheck.put(trhuText, false)
+            } else {
+                trhuError.set(Utils.EMPTY)
+                readyCheck.put(trhuText, true)
+            }
+        } else {
+            trhuError.set(R.string.ninja_trhu_error.getString())
+            readyCheck.put(trhuText, false)
+        }
+        updateButton()
+    }
+
+    private fun validateCvv() {
+        if (!cvvText.get().isNullOrEmpty()) {
+            if (cvvText.get().length < cvvMaxLength.get() || !UtilsForCard.isDigits(cvvText.get())) {
+                Debug.error("--------------------Все очень плохо-----слишком мало букав---или введен текст-------------------")
+                cvvError.set(R.string.ninja_cvv_error.getString())
+                readyCheck.put(cvvText, false)
+            } else {
+                cvvError.set(Utils.EMPTY)
+                readyCheck.put(cvvText, true)
+            }
+        } else {
+            Debug.error("---------------------ОШИБКА заполните поле cvv -----------------------")
+            cvvError.set(R.string.ninja_cvv_error.getString())
+            readyCheck.put(cvvText, false)
+        }
+        updateButton()
     }
 
     fun navigateToRules(): Unit? = product?.infoOfSubscription?.let { Utils.goToUrl(App.getContext(), it.url) }
