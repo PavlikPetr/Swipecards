@@ -7,24 +7,30 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
+import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
+import com.topface.topface.requests.ApiResponse
+import com.topface.topface.requests.DataApiHandler
 import com.topface.topface.requests.IApiResponse
+import com.topface.topface.requests.PaymentNinjaPurchaseRequest
+import com.topface.topface.requests.response.SimpleResponse
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.rx.RxFieldObservable
-import com.topface.topface.utils.rx.RxUtils
-import com.topface.topface.utils.rx.applySchedulers
-import com.topface.topface.utils.rx.shortSubscription
+import com.topface.topface.utils.rx.*
+import rx.Emitter
+import rx.Observable.fromEmitter
+import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -41,6 +47,8 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
+
+    private var mPurchaseRequestSubscription: Subscription? = null
 
     val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
@@ -241,6 +249,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
         cardFieldsSubscription.clear()
         cvvText.removeOnPropertyChangedCallback(cvvChangedCallback)
         emailText.removeOnPropertyChangedCallback(emailChangedCallback)
+        mPurchaseRequestSubscription.safeUnsubscribe()
     }
 
     fun onClick() {
@@ -270,7 +279,8 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
                     override fun onError(e: Throwable?) {
                         super.onError(e)
-                        mFeedNavigator?.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE)) {
+                        mFeedNavigator?.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
+                                product == null) {
                             if (isEmailFormNeeded.get()) {
                                 emailText.set("")
                             }
@@ -289,6 +299,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
                         // успешно
                         product?.let {
                             mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
+//                            sendPurchaseRequest(cardModel.email, "", it.type)
                         } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
                                 Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                     }
@@ -296,4 +307,29 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     }
 
     fun navigateToRules(): Unit? = product?.infoOfSubscription?.let { Utils.goToUrl(App.getContext(), it.url) }
+
+    private fun sendPurchaseRequest(email: String, token: String, productType: String) {
+        mPurchaseRequestSubscription = getPurchaseRequest(email, token)
+                .applySchedulers()
+                .subscribe(shortSubscription {
+                    mFeedNavigator?.showPurchaseSuccessfullFragment(productType)
+                })
+    }
+
+    private fun getPurchaseRequest(email: String, token: String) =
+            fromEmitter<SimpleResponse>({ emitter ->
+                val sendRequest = PaymentNinjaPurchaseRequest(App.getContext(), token, email)
+                sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
+                    override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
+                    override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
+                    override fun fail(codeError: Int, response: IApiResponse) {
+                        emitter.onError(Throwable(codeError.toString()))
+                    }
+
+                    override fun always(response: IApiResponse) {
+                        super.always(response)
+                        emitter.onCompleted()
+                    }
+                }).exec()
+            }, Emitter.BackpressureMode.LATEST)
 }
