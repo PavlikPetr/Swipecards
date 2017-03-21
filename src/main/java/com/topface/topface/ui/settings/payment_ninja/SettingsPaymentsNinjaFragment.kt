@@ -1,5 +1,6 @@
 package com.topface.topface.ui.settings.payment_ninja
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentSettingsPaymentsBinding
+import com.topface.topface.ui.dialogs.AlertDialogFactory
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -29,7 +31,7 @@ import org.jetbrains.anko.layoutInflater
  * Created by ppavlik on 06.03.17.
  */
 
-class SettingsPaymentsNinjaFragment : BaseFragment() {
+class SettingsPaymentsNinjaFragment : BaseFragment(), IAlertDialog {
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentSettingsPaymentsBinding>(context.layoutInflater,
@@ -37,9 +39,7 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        SettingsPaymentNinjaViewModel(mFeedNavigator) {
-            activity
-        }
+        SettingsPaymentNinjaViewModel(mFeedNavigator, this)
     }
 
     private val mTypeProvider by lazy {
@@ -93,5 +93,14 @@ class SettingsPaymentsNinjaFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(R.string.ninja_settings_toolbar.getString()))
+    }
+
+    override fun show(positive: () -> Unit) {
+        AlertDialogFactory().constructDeleteCard(activity, positive)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 }

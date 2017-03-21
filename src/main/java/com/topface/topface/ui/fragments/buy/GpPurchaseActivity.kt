@@ -54,7 +54,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
                 }
 
                 override fun onPopupClosed() {
-                    finish()
+                    closeFragmentByForm()
                 }
             })
         }
@@ -83,6 +83,6 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
 
     private fun closeWithSuccess(intent: Intent? = null) {
         setResult(Activity.RESULT_OK, intent)
-        finish()
+        closeFragmentByForm()
     }
 }

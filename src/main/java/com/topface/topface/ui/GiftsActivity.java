@@ -228,7 +228,7 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
                 if (mIsSuccessToastAvailable) {
                     Utils.showToastNotification(R.string.chat_gift_out, Toast.LENGTH_SHORT);
                 }
-                finish();
+                closeFragmentByForm();
             }
 
             @Override

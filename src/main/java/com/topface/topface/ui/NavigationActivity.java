@@ -137,7 +137,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         Intent intent = getIntent();
         try {
             if (intent.getBooleanExtra(INTENT_EXIT, false)) {
-                finish();
+                closeFragmentByForm();
             }
         } catch (BadParcelableException e) {
             Debug.error(e);
@@ -179,7 +179,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }));
         if (isNeedBroughtToFront(intent)) {
             // При открытии активити из лаунчера перезапускаем ее
-            finish();
+            closeFragmentByForm();
             return;
         }
         mContentFrame = findViewById(R.id.fragment_content);
@@ -463,7 +463,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                         mBackPressedOnce.set(true);
                         Utils.showToastNotification(R.string.press_back_more_to_close_app, Toast.LENGTH_SHORT);
                     } else {
-                        finish();
+                        closeFragmentByForm();
                     }
                     mIsPopupVisible = false;
                 }

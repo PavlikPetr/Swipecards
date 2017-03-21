@@ -418,8 +418,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
-    @Override
-    public void finish() {
+    public void closeFragmentByForm() {
         super.finish();
         if (!mNeedAnimate) {
             overridePendingTransition(0, 0);
@@ -497,11 +496,11 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     public void supportNavigateUpTo(Intent upIntent) {
         if (!isTaskRoot()) {
-            finish();
+            closeFragmentByForm();
         } else {
             upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(upIntent);
-            finish();
+            closeFragmentByForm();
         }
     }
 

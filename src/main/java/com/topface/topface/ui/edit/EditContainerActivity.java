@@ -21,7 +21,7 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
 
     Handler mFinishHandler = new Handler() {
         public void handleMessage(Message msg) {
-            EditContainerActivity.super.finish();
+            EditContainerActivity.super.closeFragmentByForm();
         }
     };
     private Fragment mFragment;
@@ -56,13 +56,13 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
         if (mFragment instanceof AbstractEditFragment) {
             ((AbstractEditFragment) mFragment).saveChanges(mFinishHandler);
         } else {
-            super.finish();
+            super.closeFragmentByForm();
         }
     }
 
     @Override
     public void onUpClick() {
-        super.finish();
+        super.closeFragmentByForm();
     }
 
     @Override

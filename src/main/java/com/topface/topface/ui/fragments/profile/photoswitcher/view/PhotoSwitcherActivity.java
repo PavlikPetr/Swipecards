@@ -325,7 +325,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
     private void initViews(int position, int photosCount) {
         if (mPhotoLinks.size() == 0) {
-            finish();
+            closeFragmentByForm();
             return;
         }
         int rest = photosCount - mPhotoLinks.size();
@@ -413,7 +413,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
         String itemId = intent.getStringExtra(AbstractProfileFragment.INTENT_ITEM_ID);
         startActivity(UserProfileActivity.createIntent(lastResponse != null ? lastResponse : null, null,
                 mUid, itemId, false, true, null, null, "photoAlbum"));
-        finish();
+        closeFragmentByForm();
     }
 
     @Override
@@ -536,7 +536,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
                     case ErrorCodes.NON_EXIST_PHOTO_ERROR:
                         Utils.showToastNotification(R.string.general_non_exist_photo_error, Toast.LENGTH_SHORT);
                         CacheProfile.sendUpdateProfileBroadcast();
-                        finish();
+                        closeFragmentByForm();
                         break;
                     case ErrorCodes.CODE_CANNOT_SET_PHOTO_AS_MAIN:
                         Utils.showCantSetPhotoAsMainToast(response);

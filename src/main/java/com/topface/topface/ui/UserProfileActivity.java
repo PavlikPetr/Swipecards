@@ -107,7 +107,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
 
     @Override
     public void finish() {
-        super.finish();
+        super.closeFragmentByForm();
         overridePendingTransition(0, 0);
     }
 

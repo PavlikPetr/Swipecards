@@ -1,17 +1,18 @@
 package com.topface.topface.ui.settings.payment_ninja
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Looper
+import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.requests.*
 import com.topface.topface.requests.response.SimpleResponse
-import com.topface.topface.ui.dialogs.AlertDialogFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BottomSheetData
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.BottomSheetItemText
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.databinding.MultiObservableArrayList
-import com.topface.topface.utils.extensions.isAvailable
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -24,7 +25,8 @@ import rx.Subscription
  * Created by ppavlik on 06.03.17.
  */
 
-class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, private val getActivity: () -> Activity) {
+class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
+                                    private val mAlertDialog: IAlertDialog) : ILifeCycle {
 
     private var mRequestSubscription: Subscription? = null
     private var mBottomSheetClickSubscription: Subscription? = null
@@ -47,7 +49,7 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, priva
                     it?.let {
                         when (it.textRes.textRes) {
                             BottomSheetItemText.CANCEL_SUBSCRIPTION -> cancelSubscriptionRequest(it.data as? SubscriptionInfo)
-                            BottomSheetItemText.DELETE_CARD -> AlertDialogFactory().constructDeleteCard(getActivity()) { deleteCardRequest(it.data as? CardInfo) }
+                            BottomSheetItemText.DELETE_CARD -> mAlertDialog.show { deleteCardRequest(it.data as? CardInfo) }
                             BottomSheetItemText.USE_ANOTHER_CARD, BottomSheetItemText.ADD_CARD -> mNavigator.showPaymentNinjaPurchaseProduct(true)
                             else -> {
                             }
@@ -92,42 +94,34 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, priva
 
     private fun getSubscriptionsRequest() =
             Observable.fromEmitter<UserSubscriptions>({ emitter ->
-                emitter.onNext(UserSubscriptions(arrayOf(
-                        SubscriptionInfo("some id", 0, "Подписка на ВИП", 1493683200, true),
-                        SubscriptionInfo("some id", 1, "Автопополнение монет", 1493683200, true))))
                 val sendRequest = PaymentNinhaSubscriptionsRequest(App.getContext())
                 sendRequest.callback(object : DataApiHandler<UserSubscriptions>(Looper.getMainLooper()) {
                     override fun success(data: UserSubscriptions?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), UserSubscriptions::class.java)
                     override fun fail(codeError: Int, response: IApiResponse) {
-//                        emitter.onError(Throwable(codeError.toString()))
+                        emitter.onError(Throwable(codeError.toString()))
                     }
 
                     override fun always(response: IApiResponse) {
                         super.always(response)
-                        emitter.onNext(UserSubscriptions(arrayOf(
-                                SubscriptionInfo("some id", 0, "Подписка на ВИП", 1493683200, true),
-                                SubscriptionInfo("some id", 1, "Автопополнение монет", 1493683200, true))))
-//                        emitter.onCompleted()
+                        emitter.onCompleted()
                     }
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
 
     private fun getDefaultCardRequest() =
             Observable.fromEmitter<CardInfo>({ emitter ->
-                emitter.onNext(CardInfo("8745", "Visa"))
                 val sendRequest = DefaultCardRequest(App.getContext())
                 sendRequest.callback(object : DataApiHandler<CardInfo>(Looper.getMainLooper()) {
                     override fun success(data: CardInfo?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), CardInfo::class.java)
                     override fun fail(codeError: Int, response: IApiResponse) {
-//                        emitter.onError(Throwable(codeError.toString()))
+                        emitter.onError(Throwable(codeError.toString()))
                     }
 
                     override fun always(response: IApiResponse) {
                         super.always(response)
-                        emitter.onNext(CardInfo("8745", "Visa"))
-//                        emitter.onCompleted()
+                        emitter.onCompleted()
                     }
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
@@ -139,13 +133,12 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, priva
                     override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
                     override fun fail(codeError: Int, response: IApiResponse) {
-//                        emitter.onError(Throwable(codeError.toString()))
+                        emitter.onError(Throwable(codeError.toString()))
                     }
 
                     override fun always(response: IApiResponse) {
                         super.always(response)
-                        emitter.onNext(SimpleResponse(true))
-//                        emitter.onCompleted()
+                        emitter.onCompleted()
                     }
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
@@ -157,13 +150,12 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, priva
                     override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
                     override fun fail(codeError: Int, response: IApiResponse) {
-//                        emitter.onError(Throwable(codeError.toString()))
+                        emitter.onError(Throwable(codeError.toString()))
                     }
 
                     override fun always(response: IApiResponse) {
                         super.always(response)
-                        emitter.onNext(SimpleResponse(true))
-//                        emitter.onCompleted()
+                        emitter.onCompleted()
                     }
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
@@ -217,9 +209,6 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, priva
         }
     }
 
-    fun isCardAvailable() =
-            getData().find { it is CardInfo }?.let { (it as? CardInfo)?.isAvailable() }
-
     fun getCardInfo() =
             getData().find { it is CardInfo }?.let { (it as? CardInfo) }
 
@@ -228,5 +217,16 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator, priva
                 mBottomSheetClickSubscription, mDeleteCardSubscription,
                 mUserSubscriptionsRequestSubscription, mResumeSubscription,
                 mCancelSubscription).safeUnsubscribe()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // если пришел интент о закрытии активити добавления карты,
+        // то шлем запрос на получение default карты
+        if (requestCode == NinjaAddCardActivity.REQUEST_CODE &&
+                resultCode == Activity.RESULT_OK &&
+                data?.getBooleanExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, false) ?: false) {
+            sendCardListRequest()
+        }
     }
 }

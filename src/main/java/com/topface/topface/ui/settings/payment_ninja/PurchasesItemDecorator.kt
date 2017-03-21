@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
@@ -30,21 +31,20 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
     }
 
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-        val params = view?.layoutParams as? RecyclerView.LayoutParams
-        val position = params?.viewAdapterPosition
-        if (position != null && position < state?.itemCount ?: 0 && view != null) {
-            isNeedDivider(parent, view)?.let {
+        Debug.error("PurchasesItemDecorator getItemOffsets outRect:$outRect view:$view parent:$parent state:$state")
+        view?.let {
+            isNeedDivider(parent, it)?.let {
+                Debug.error("PurchasesItemDecorator do we need divider:$it")
                 outRect?.set(0, 0, 0, (if (it)
                     R.dimen.payment_ninja_payments_same_type_items_divider_height
                 else
                     R.dimen.payment_ninja_payments_different_type_items_margin).getDimen().toInt())
             }
-        } else {
-            outRect?.setEmpty()
-        }
+        } ?: outRect?.setEmpty()
     }
 
     override fun onDraw(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
+        Debug.error("PurchasesItemDecorator onDraw")
         for (i in 0..(parent?.childCount ?: 1 - 1)) {
             val child = parent?.getChildAt(i)
             child?.let { child ->

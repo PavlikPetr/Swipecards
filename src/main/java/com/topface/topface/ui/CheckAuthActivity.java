@@ -26,7 +26,7 @@ public abstract class CheckAuthActivity<T extends Fragment, V extends ViewDataBi
                 Intent i = new Intent(this, NavigationActivity.class);
                 startActivity(i);
             }
-            finish();
+            closeFragmentByForm();
         }
     }
 

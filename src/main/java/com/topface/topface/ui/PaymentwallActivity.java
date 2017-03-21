@@ -17,7 +17,6 @@ import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.databinding.AcPaymentWallBinding;
 import com.topface.topface.databinding.ToolbarBinding;
-import com.topface.topface.databinding.WebViewFragmentBinding;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.Utils;
@@ -91,7 +90,7 @@ public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBindi
                     @Override
                     public void onPageFinished(String url) {
                         if (TextUtils.equals(url, mSuccessUrl)) {
-                            fillResultAndClose("PW: finish buy is completed " + url);
+                            fillResultAndClose("PW: closeFragmentByForm buy is completed " + url);
                         }
                         getViewBinding().webViewBinding.prsWebLoading.setVisibility(View.GONE);
                     }
@@ -108,13 +107,13 @@ public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBindi
         Intent intent = getIntent();
         intent.putExtra(PW_TRANSACTION_ID, "");
         setResult(RESULT_OK, intent);
-        finish();
+        closeFragmentByForm();
     }
 
     private void onFatalError() {
         Utils.showErrorMessage();
         setResult(RESULT_ERROR);
-        finish();
+        closeFragmentByForm();
     }
 
     private String getSuccessUrl(String url) {

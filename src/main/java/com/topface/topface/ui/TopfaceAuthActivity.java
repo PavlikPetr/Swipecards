@@ -48,7 +48,7 @@ public class TopfaceAuthActivity extends NoAuthActivity<TopfaceAuthFragment, AcF
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == RestoreAccountActivity.RESTORE_RESULT) {
-            finish();
+            closeFragmentByForm();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

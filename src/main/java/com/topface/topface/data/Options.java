@@ -394,9 +394,6 @@ public class Options extends AbstractData {
             if (response.has("paymentNinjaInfo")) {
                 paymentNinjaInfo = JsonUtils.fromJson(response.optJSONObject("paymentNinjaInfo").toString(), PaymentInfo.class);
             }
-            paymentNinjaInfo.setEnable(true);
-            paymentNinjaInfo.setLastDigit("1234");
-            paymentNinjaInfo.setType("Maestro");
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала

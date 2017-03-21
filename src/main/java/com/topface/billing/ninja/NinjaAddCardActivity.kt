@@ -16,11 +16,12 @@ import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
  * Add bank card activity
  * Created by m.bayutin on 02.03.17.
  */
-class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
+class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), IFinishDelegate {
     companion object {
         const val EXTRA_FROM_INSTANT_PURCHASE = "NinjaAddCardActivity.Extra.FromInstantPurchase"
         const val EXTRA_BUY_PRODUCT = "NinjaAddCardActivity.Extra.BuyProduct"
         const val REQUEST_CODE = 231
+        const val CARD_SENDED_SUCCESFULL = "NinjaAddCardActivity.CardSendedSuccesfull"
 
         fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
             putExtra(EXTRA_FROM_INSTANT_PURCHASE, fromInstantPurchase)
@@ -38,8 +39,12 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
         super.onCreate(savedInstanceState)
 
         intent?.let {
-            viewBinding.viewModel = AddCardViewModel(it.extras).setFeedNavigator(FeedNavigator(this))
+            viewBinding.viewModel = AddCardViewModel(it.extras, this).setFeedNavigator(FeedNavigator(this))
         }
     }
 
+    override fun finishWithResult(resultCode: Int, data: Intent) {
+        setResult(resultCode, data)
+        finish()
+    }
 }

@@ -1,5 +1,7 @@
 package com.topface.billing.ninja
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
@@ -32,7 +34,7 @@ import java.util.concurrent.TimeUnit
  * ВьюМодель добавления карт
  */
 
-class AddCardViewModel(val data: Bundle) {
+class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
     val numberText = RxFieldObservable<String>()
     val numberCursorPosition = ObservableInt()
@@ -281,9 +283,14 @@ class AddCardViewModel(val data: Bundle) {
 
                     override fun onNext(t: IApiResponse?) {
                         // todo send "buy payment ninja product" here and after success show dialog
+                        // если есть продукт, значит надо провести покупку. Ориентируясь на успешность этого
+                        // запроса на сервер покажем экран успешной покупки mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
+                        // если продукт null, значит закрываем активити, но при этом не забываем сообщить о том, что карта добавлена
+                        // успешно
                         product?.let {
                             mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
-                        }
+                        } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                                Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                     }
                 })
     }

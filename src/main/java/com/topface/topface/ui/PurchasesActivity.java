@@ -293,13 +293,13 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
                     return mBonusRedirect != null &&
                             getFragment().forceBonusScreen(mBonusRedirect.getText());
                 case SMS_INVITE_SCREEN:
-                    finish();
+                    closeFragmentByForm();
                     startActivity(SMSInviteActivity.createIntent(this));
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;
 
                 case TOPFACE_OFFERWALL_SCREEN:
-                    finish();
+                    closeFragmentByForm();
                     startActivity(BonusActivity.createIntent());
                     mTopfaceOfferwallRedirect.setComplited(true);
                     return true;
@@ -341,7 +341,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                finish();
+                closeFragmentByForm();
             }
         });
         if (!isCalled) {
@@ -354,7 +354,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         boolean isCalled = callTrialVipPopup(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                finish();
+                closeFragmentByForm();
             }
         });
         if (!isCalled && !isScreenShow()) {

@@ -2,7 +2,6 @@ package com.topface.topface.ui;
 
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 
@@ -22,7 +21,7 @@ public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment, Ac
 
     @Override
     public void finish() {
-        super.finish();
+        super.closeFragmentByForm();
         overridePendingTransition(0, 0);
     }
 

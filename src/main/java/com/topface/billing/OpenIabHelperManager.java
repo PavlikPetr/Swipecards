@@ -251,7 +251,7 @@ public class OpenIabHelperManager implements IabHelper.OnIabSetupFinishedListene
 
     private void notifyInventoryReceivers() {
         // if there are no active listeners - free helper
-        // don't do it when notifing about setup finish,
+        // don't do it when notifing about setup closeFragmentByForm,
         // because it will broke inventory update
         if (mInventoryReceivers.isEmpty()) {
             freeHelper();
