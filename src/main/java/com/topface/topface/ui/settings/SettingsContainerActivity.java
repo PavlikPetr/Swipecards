@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.settings.payment_ninja.SettingsPaymentsNinjaFragment;
 import com.topface.topface.utils.social.AuthToken;
@@ -101,7 +101,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

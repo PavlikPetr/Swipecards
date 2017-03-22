@@ -6,7 +6,7 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutNinjaAddCardBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -37,9 +37,9 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
         FeedNavigator(this as IActivityDelegate)
     }
 
-    override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding): ToolbarBinding = binding.toolbarInclude.apply { root?.visibility = View.GONE }
+    override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding): ToolbarViewBinding = binding.toolbarInclude.apply { root?.visibility = View.GONE }
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding) = EmptyToolbarViewModel(toolbar)
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) = EmptyToolbarViewModel(toolbar)
 
     override fun getLayout(): Int = R.layout.layout_ninja_add_card
 

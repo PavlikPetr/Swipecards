@@ -7,7 +7,7 @@ import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AddToPhotoBlogRedesignLayoutBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.HeaderComponent
 import com.topface.topface.ui.add_to_photo_blog.adapter_components.PhotoListComponent
@@ -51,7 +51,7 @@ class AddToPhotoBlogRedesignActivity : BaseFragmentActivity<AddToPhotoBlogRedesi
 
     override fun getLayout() = R.layout.add_to_photo_blog_redesign_layout
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding) =
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) =
             BackToolbarViewModel(toolbar,
                     getString(R.string.add_to_photo_blog_title), this@AddToPhotoBlogRedesignActivity)
 
@@ -74,13 +74,13 @@ class AddToPhotoBlogRedesignActivity : BaseFragmentActivity<AddToPhotoBlogRedesi
     override fun onUpClick() = finish()
 
     private fun initRecyclerView(recyclerView: RecyclerView, price: Int) =
-        with(recyclerView) {
-            layoutManager = LinearLayoutManager(this@AddToPhotoBlogRedesignActivity)
-            adapter = mAdapter
-            post {
-                mAdapter.data = mutableListOf(HeaderItem(), PhotoListItem(), PlaceButtonItem(price))
+            with(recyclerView) {
+                layoutManager = LinearLayoutManager(this@AddToPhotoBlogRedesignActivity)
+                adapter = mAdapter
+                post {
+                    mAdapter.data = mutableListOf(HeaderItem(), PhotoListItem(), PlaceButtonItem(price))
+                }
             }
-        }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

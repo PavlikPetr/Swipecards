@@ -7,7 +7,7 @@ import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcFragmentFrameBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.SingleFragmentActivity
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
@@ -64,7 +64,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
 
     override fun createFragment() = mFragment
 
-    override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarBinding = binding.toolbarInclude
+    override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarViewBinding = binding.toolbarInclude
 
     override fun getLayout() = R.layout.ac_fragment_frame
 
@@ -77,7 +77,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         super.onCreate(savedInstanceState)
     }
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding): BaseToolbarViewModel {
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding): BaseToolbarViewModel {
         return EmptyToolbarViewModel(toolbar)
     }
 

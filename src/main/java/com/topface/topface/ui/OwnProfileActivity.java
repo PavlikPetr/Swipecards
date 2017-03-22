@@ -2,7 +2,7 @@ package com.topface.topface.ui;
 
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +34,7 @@ public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment, Ac
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

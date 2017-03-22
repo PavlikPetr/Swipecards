@@ -16,7 +16,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcInviteVkFriendsBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
@@ -64,7 +64,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFrie
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.vk_profile_invite_friends_title), this);
     }
 
@@ -247,7 +247,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFrie
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcInviteVkFriendsBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcInviteVkFriendsBinding binding) {
         return binding.toolbarInclude;
     }
 

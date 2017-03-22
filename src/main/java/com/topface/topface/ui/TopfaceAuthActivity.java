@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.fragments.TopfaceAuthFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +55,7 @@ public class TopfaceAuthActivity extends NoAuthActivity<TopfaceAuthFragment, AcF
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

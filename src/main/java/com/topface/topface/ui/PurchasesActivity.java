@@ -21,7 +21,7 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
@@ -89,7 +89,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new PurchaseToolbarViewModel(toolbar, this);
     }
 
@@ -399,7 +399,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 
