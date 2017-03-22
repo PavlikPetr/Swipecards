@@ -37,6 +37,7 @@ class AddCardViewModel(val data: Bundle) {
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
+    val numberFocus = ObservableBoolean()
 
     val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
@@ -240,6 +241,7 @@ class AddCardViewModel(val data: Bundle) {
                             numberText.set("")
                             cvvText.set("")
                             trhuText.set("")
+                            numberFocus.set(true)
                         }
                         isInputEnabled.set(true)
                     }
