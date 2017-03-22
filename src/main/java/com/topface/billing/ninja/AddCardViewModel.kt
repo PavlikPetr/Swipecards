@@ -7,30 +7,23 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
-import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
-import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
-import com.topface.topface.requests.ApiResponse
-import com.topface.topface.requests.DataApiHandler
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
-import com.topface.topface.requests.response.SimpleResponse
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getRequestSubscriber
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.*
-import rx.Emitter
-import rx.Observable.fromEmitter
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
@@ -50,9 +43,9 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     private var mPurchaseRequestSubscription: Subscription? = null
 
     val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
-            with(it as ObservableField<String>) {
-                if (get().length == cvvMaxLength.get()) {
+        override fun onPropertyChanged(observable: Observable?, p1: Int) = (observable as? ObservableField<*>)?.let {
+            (it.get() as? String)?.let {
+                if (it.length == cvvMaxLength.get()) {
                     validateCvv()
                 }
             }
@@ -68,10 +61,10 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     val trhuError = ObservableField<String>()
 
     val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(observable: Observable?, p1: Int) = observable?.let {
-            with(observable as ObservableField<String>) {
-                if (get().length >= 6) {
-                    if (!get().matches(EMAIL_ADDRESS.toRegex())) {
+        override fun onPropertyChanged(observable: Observable?, p1: Int) = (observable as? ObservableField<*>)?.let {
+            (it.get() as? String)?.let {
+                if (it.length >= 6) {
+                    if (!it.matches(EMAIL_ADDRESS.toRegex())) {
                         Debug.error("--------------------EMAIL невалидный-----------------------------")
                         emailError.set(R.string.ninja_email_error.getString())
                         readyCheck.put(emailText, false)
@@ -126,10 +119,8 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
             if (it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1) {
                 isAutoPayDescriptionVisible.set(true)
-                it.infoOfSubscription?.let {
-                    firstDescriptionText.set(it.text)
-                    isFirstDescriptionVisible.set(true)
-                }
+                firstDescriptionText.set(it.infoOfSubscription.text)
+                isFirstDescriptionVisible.set(true)
                 secondDescriptionText.set(R.string.ninja_text_4.getString())
                 isSecondDescriptionVisible.set(true)
             } else if (it.type == Products.ProductType.PREMIUM.getName()) {
@@ -200,12 +191,10 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     }
 
     private fun giveMeBrand(cardNumber: String, cardBrands: HashMap<Regex, CardType>): CardType {
-        for (cardRegex in cardBrands.keys) {
-            if (cardNumber.matches(cardRegex)) {
-                return cardBrands.get(cardRegex)!!
-            }
-        }
-        return CardType.DEFAULT
+        return cardBrands.keys
+                .find { cardNumber.matches(it) }
+                ?.let { cardBrands.getOrDefault(it, CardType.DEFAULT) }
+                ?: CardType.DEFAULT
     }
 
     fun setTRHU(trhu: String) {
