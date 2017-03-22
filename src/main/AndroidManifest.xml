@@ -84,7 +84,7 @@
         <meta-data
                 android:name="adtoapp.sdk.plugin"
                 android:value="android"/>
-        <!-- AdToApp meta-data closeFragmentByForm -->
+        <!-- AdToApp meta-data finish -->
 
 
         <!-- activity -->

@@ -37,9 +37,9 @@ public abstract class SingleFragmentActivity<T extends Fragment, V extends ViewD
                 }
                 if (isTaskRoot()) {
                     startActivity(getSupportParentActivityIntent());
-                    closeFragmentByForm();
+                    finish();
                 } else {
-                    closeFragmentByForm();
+                    finish();
                 }
                 return true;
         }

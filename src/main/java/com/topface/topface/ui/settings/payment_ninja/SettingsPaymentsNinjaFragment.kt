@@ -33,6 +33,10 @@ import org.jetbrains.anko.layoutInflater
 
 class SettingsPaymentsNinjaFragment : BaseFragment(), IAlertDialog {
 
+    companion object {
+        const val FROM = "settings_payment_ninja_fragment"
+    }
+
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentSettingsPaymentsBinding>(context.layoutInflater,
                 R.layout.fragment_settings_payments, null, false)
@@ -55,7 +59,7 @@ class SettingsPaymentsNinjaFragment : BaseFragment(), IAlertDialog {
                 .addAdapterComponent(CardComponent(mOnClick = {
                     mViewModel.getCardInfo()?.let {
                         if (!it.isAvailable()) {
-                            mFeedNavigator.showPaymentNinjaPurchaseProduct(true)
+                            mFeedNavigator.showPaymentNinjaAddCardScreen(source = FROM)
                         }
                     }
                 }, mOnLongClick = {

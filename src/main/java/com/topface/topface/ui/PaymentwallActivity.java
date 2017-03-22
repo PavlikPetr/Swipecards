@@ -90,7 +90,7 @@ public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBindi
                     @Override
                     public void onPageFinished(String url) {
                         if (TextUtils.equals(url, mSuccessUrl)) {
-                            fillResultAndClose("PW: closeFragmentByForm buy is completed " + url);
+                            fillResultAndClose("PW: finish buy is completed " + url);
                         }
                         getViewBinding().webViewBinding.prsWebLoading.setVisibility(View.GONE);
                     }
@@ -107,13 +107,13 @@ public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBindi
         Intent intent = getIntent();
         intent.putExtra(PW_TRANSACTION_ID, "");
         setResult(RESULT_OK, intent);
-        closeFragmentByForm();
+        finish();
     }
 
     private void onFatalError() {
         Utils.showErrorMessage();
         setResult(RESULT_ERROR);
-        closeFragmentByForm();
+        finish();
     }
 
     private String getSuccessUrl(String url) {

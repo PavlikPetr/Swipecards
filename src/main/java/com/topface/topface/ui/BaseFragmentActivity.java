@@ -192,7 +192,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if(!isDatingRedesignEnabled()) {
+        if (!isDatingRedesignEnabled()) {
             if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме
@@ -418,7 +418,8 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
-    public void closeFragmentByForm() {
+    @Override
+    public void finish() {
         super.finish();
         if (!mNeedAnimate) {
             overridePendingTransition(0, 0);
@@ -496,11 +497,11 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
     @Override
     public void supportNavigateUpTo(Intent upIntent) {
         if (!isTaskRoot()) {
-            closeFragmentByForm();
+            finish();
         } else {
             upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(upIntent);
-            closeFragmentByForm();
+            finish();
         }
     }
 

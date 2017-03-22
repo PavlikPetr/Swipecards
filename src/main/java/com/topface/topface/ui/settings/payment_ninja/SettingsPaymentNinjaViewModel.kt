@@ -50,7 +50,8 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                         when (it.textRes.textRes) {
                             BottomSheetItemText.CANCEL_SUBSCRIPTION -> cancelSubscriptionRequest(it.data as? SubscriptionInfo)
                             BottomSheetItemText.DELETE_CARD -> mAlertDialog.show { deleteCardRequest(it.data as? CardInfo) }
-                            BottomSheetItemText.USE_ANOTHER_CARD, BottomSheetItemText.ADD_CARD -> mNavigator.showPaymentNinjaPurchaseProduct(true)
+                            BottomSheetItemText.USE_ANOTHER_CARD, BottomSheetItemText.ADD_CARD -> mNavigator
+                                    .showPaymentNinjaAddCardScreen(source = SettingsPaymentsNinjaFragment.FROM)
                             else -> {
                             }
                         }

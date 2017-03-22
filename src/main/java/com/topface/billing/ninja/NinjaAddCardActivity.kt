@@ -20,12 +20,15 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
     companion object {
         const val EXTRA_FROM_INSTANT_PURCHASE = "NinjaAddCardActivity.Extra.FromInstantPurchase"
         const val EXTRA_BUY_PRODUCT = "NinjaAddCardActivity.Extra.BuyProduct"
+        const val EXTRA_SOURCE = "NinjaAddCardActivity.Extra.Source"
         const val REQUEST_CODE = 231
         const val CARD_SENDED_SUCCESFULL = "NinjaAddCardActivity.CardSendedSuccesfull"
+        const val UNKNOWN_PLACE = "unknown_place"
 
-        fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
+        fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null, source: String) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
             putExtra(EXTRA_FROM_INSTANT_PURCHASE, fromInstantPurchase)
             product?.let { putExtra(EXTRA_BUY_PRODUCT, it) }
+            putExtra(EXTRA_SOURCE, source.takeIf { it.isNotEmpty() } ?: UNKNOWN_PLACE)
         }
     }
 

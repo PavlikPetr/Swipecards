@@ -71,7 +71,7 @@ class AddToPhotoBlogRedesignActivity : BaseFragmentActivity<AddToPhotoBlogRedesi
         mViewModel.release()
     }
 
-    override fun onUpClick() = closeFragmentByForm()
+    override fun onUpClick() = finish()
 
     private fun initRecyclerView(recyclerView: RecyclerView, price: Int) =
         with(recyclerView) {

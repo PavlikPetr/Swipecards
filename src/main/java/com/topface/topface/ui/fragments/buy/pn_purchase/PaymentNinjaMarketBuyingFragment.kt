@@ -3,11 +3,9 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
 import com.topface.topface.ui.fragments.BaseFragment
@@ -15,7 +13,6 @@ import com.topface.topface.ui.fragments.buy.pn_purchase.components.*
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.extensions.isCradAvailable
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -48,7 +45,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        PaymentNinjaMarketBuyingFragmentViewModel(mIsPremiumProducts)
+        PaymentNinjaMarketBuyingFragmentViewModel(mFeedNavigator, mIsPremiumProducts, mFrom ?: "")
     }
 
     private val mPnBuyingTypeProvider by lazy {
@@ -62,8 +59,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
-                    mFeedNavigator.showPaymentNinjaPurchaseProduct(!App.get().options.paymentNinjaInfo.isCradAvailable() ||
-                            !mViewModel.isChecked.get(), it)
+                    mViewModel.buyProduct(it)
                 })
                 .addAdapterComponent(BuyScreenTitleComponent(mText))
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())

@@ -27,7 +27,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         // если не нашли skuid в списке продуктов, значит и покупку не будем инициировать
         fun getIntent(skuId: String, from: String): Intent {
             val isSubscription = skuId.isSubscription()
-            return if (!MarketApiManager().isMarketApiAvailable  || isSubscription == null) {
+            return if (!MarketApiManager().isMarketApiAvailable || isSubscription == null) {
                 Intent()
             } else {
                 Intent(App.getContext(), GpPurchaseActivity::class.java).apply {
@@ -54,17 +54,17 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
                 }
 
                 override fun onPopupClosed() {
-                    closeFragmentByForm()
+                    finish()
                 }
             })
         }
     }
 
-    override fun getFragmentTag() = GpMarketFragment::class.java.simpleName
+    override fun getFragmentTag(): String = GpMarketFragment::class.java.simpleName
 
     override fun createFragment() = mFragment
 
-    override fun getToolbarBinding(binding: AcFragmentFrameBinding) = binding.toolbarInclude
+    override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarBinding = binding.toolbarInclude
 
     override fun getLayout() = R.layout.ac_fragment_frame
 
@@ -83,6 +83,6 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
 
     private fun closeWithSuccess(intent: Intent? = null) {
         setResult(Activity.RESULT_OK, intent)
-        closeFragmentByForm()
+        finish()
     }
 }

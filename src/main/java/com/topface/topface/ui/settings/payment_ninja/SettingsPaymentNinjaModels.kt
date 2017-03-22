@@ -2,6 +2,7 @@ package com.topface.topface.ui.settings.payment_ninja
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.topface.billing.ninja.AddCardRequest
 import com.topface.topface.utils.Utils
 
 /**
@@ -19,7 +20,7 @@ import com.topface.topface.utils.Utils
  * @param publicKey - публичный ключ для совершения платежей через Payment Ninja
  */
 data class PaymentInfo(var enable: Boolean = false, var lastDigit: String = Utils.EMPTY, var type: String = Utils.EMPTY,
-                       var email: String = Utils.EMPTY, var publicKey: String = Utils.EMPTY) : Parcelable {
+                       var email: String = Utils.EMPTY, var publicKey: String = Utils.EMPTY, var apiUrl: String = AddCardRequest.ADD_CARD_LINK) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readByte().toInt() == 1,

@@ -26,6 +26,7 @@ import com.topface.topface.requests.response.SimpleResponse
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getRequestSubscriber
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.*
 import rx.Emitter
@@ -104,6 +105,8 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     var mFeedNavigator: FeedNavigator? = null
 
     val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
+
+    private val mSource: String? = data.getString(NinjaAddCardActivity.EXTRA_SOURCE)
 
     private val readyCheck: MutableMap<Any, Boolean> = mutableMapOf()
 
@@ -245,7 +248,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
                         // успешно
                         product?.let {
                             mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
-//                            sendPurchaseRequest(cardModel.email, "", it.type)
+                            sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
                         } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
                                 Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                     }
@@ -326,28 +329,11 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
     fun navigateToRules(): Unit? = product?.infoOfSubscription?.let { Utils.goToUrl(App.getContext(), it.url) }
 
-    private fun sendPurchaseRequest(email: String, token: String, productType: String) {
-        mPurchaseRequestSubscription = getPurchaseRequest(email, token)
+    private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
+        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source).getRequestSubscriber()
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     mFeedNavigator?.showPurchaseSuccessfullFragment(productType)
                 })
     }
-
-    private fun getPurchaseRequest(email: String, token: String) =
-            fromEmitter<SimpleResponse>({ emitter ->
-                val sendRequest = PaymentNinjaPurchaseRequest(App.getContext(), token, email)
-                sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
-                    override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
-                    override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
-                    override fun fail(codeError: Int, response: IApiResponse) {
-                        emitter.onError(Throwable(codeError.toString()))
-                    }
-
-                    override fun always(response: IApiResponse) {
-                        super.always(response)
-                        emitter.onCompleted()
-                    }
-                }).exec()
-            }, Emitter.BackpressureMode.LATEST)
 }

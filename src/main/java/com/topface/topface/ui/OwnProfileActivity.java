@@ -21,7 +21,7 @@ public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment, Ac
 
     @Override
     public void finish() {
-        super.closeFragmentByForm();
+        super.finish();
         overridePendingTransition(0, 0);
     }
 

@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.util.*
 
 /**
  * Модельки для экрана покупок продуктов Payment Ninja
@@ -85,8 +86,6 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
     override fun describeContents() = 0
 
     companion object {
-        const val EMPTY_INT = Int.MIN_VALUE
-        const val EMPTY_FLOAT = -1f
         @JvmField val CREATOR: Parcelable.Creator<PaymentNinjaProduct> = object : Parcelable.Creator<PaymentNinjaProduct> {
             override fun createFromParcel(source: Parcel): PaymentNinjaProduct = PaymentNinjaProduct(source)
             override fun newArray(size: Int): Array<PaymentNinjaProduct?> = arrayOfNulls(size)
@@ -125,4 +124,9 @@ data class PaymentNinjaSubscriptionInfo(var text: String, var url: String) : Par
  *
  * @param products - Список продуктов
  */
-data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct>)
+data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct>) {
+    override fun equals(other: Any?) =
+            other?.let { (it as? PaymentNinjaProductsList)?.let { Arrays.equals(it.products, products) } ?: false } ?: false
+
+    override fun hashCode() = products.hashCode()
+}

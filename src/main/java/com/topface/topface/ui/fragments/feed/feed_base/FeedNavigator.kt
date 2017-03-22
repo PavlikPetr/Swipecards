@@ -186,16 +186,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaPurchaseProduct(isNeedToAddCard: Boolean, product: PaymentNinjaProduct?) {
-        if (isNeedToAddCard) {
-            mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, product = product),
-                    NinjaAddCardActivity.REQUEST_CODE)
-        } else {
-            product?.let {
-                // todo simply call payment request with given product
-                showPurchaseSuccessfullFragment(it.type)
-            }
-        }
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                NinjaAddCardActivity.REQUEST_CODE)
     }
 
     override fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit) {

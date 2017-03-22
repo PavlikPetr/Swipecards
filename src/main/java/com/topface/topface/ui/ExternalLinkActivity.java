@@ -23,9 +23,9 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null,"externalLink"));
+            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null, "externalLink"));
             getIntent().setData(null);
-            closeFragmentByForm();
+            finish();
         }
 
         @Override
@@ -37,10 +37,10 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
                 intent.putExtra(SettingsContainerActivity.CONFIRMATION_CODE, code);
                 startActivity(intent);
                 getIntent().setData(null);
-                closeFragmentByForm();
+                finish();
             }
             getIntent().setData(null);
-            closeFragmentByForm();
+            finish();
         }
 
         @Override
@@ -59,13 +59,13 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
         public void onOfferWall() {
             startActivity(BonusActivity.createIntent());
             getIntent().setData(null);
-            closeFragmentByForm();
+            finish();
         }
 
         @Override
         public void onNothingToShow() {
             getIntent().setData(null);
-            closeFragmentByForm();
+            finish();
             startActivity(new Intent(ExternalLinkActivity.this, NavigationActivity.class));
         }
     };

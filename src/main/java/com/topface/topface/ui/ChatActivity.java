@@ -75,7 +75,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
 
     private void finishWithResult(int resultCode) {
         setResult(resultCode);
-        closeFragmentByForm();
+        finish();
     }
 
     @Override
@@ -161,7 +161,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
 
     @Override
     public void finish() {
-        super.closeFragmentByForm();
+        super.finish();
         overridePendingTransition(0, 0);
     }
 }

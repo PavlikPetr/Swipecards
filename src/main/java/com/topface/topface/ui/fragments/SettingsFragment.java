@@ -270,7 +270,6 @@ public class SettingsFragment extends ProfileInnerFragment {
             }
         });
         preloadPhotoSelectorDialog.show(getActivity().getSupportFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
-
     }
 
     @SuppressWarnings("unused")
@@ -278,7 +277,6 @@ public class SettingsFragment extends ProfileInnerFragment {
     protected void showPurchasesScreen() {
         Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
         startActivityForResult(intent, SettingsContainerActivity.INTENT_PURCHASES);
-
     }
 
     @Override
