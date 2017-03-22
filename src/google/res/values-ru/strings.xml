@@ -1335,4 +1335,7 @@
     <string name="ninja_autofilling_activated">Активно</string>
     <string name="ninja_support">Поддержка</string>
     <string name="ninja_ask_to_delete_card_message">Вы уверены?</string>
+    <string name="ninja_product_by_price">%1$s за %2$s</string>
+    <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
+    <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
 </resources>

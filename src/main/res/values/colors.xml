@@ -316,6 +316,6 @@
     <color name="ninja_payments_screen_item_background">#FFFFFF</color>
     <color name="ninja_payments_screen_item_divider">#dbdbdb</color>
 
-    <color name="borderless_button_pressed">#CECECE</color>
+    <color name="borderless_button_pressed">#f5f5f5</color>
     <color name="borderless_button_release">#FFFFFF</color>
 </resources>

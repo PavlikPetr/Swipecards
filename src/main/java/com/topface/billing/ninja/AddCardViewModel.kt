@@ -21,6 +21,7 @@ import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getPurchaseScreenTitle
 import com.topface.topface.utils.extensions.getRequestSubscriber
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.*
@@ -113,7 +114,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             put(emailText, !isEmailDefined)
         }
         product?.let {
-            productTitle.set(it.titleTemplate)
+            productTitle.set(it.getPurchaseScreenTitle())
             titleVisibility.set(View.VISIBLE)
 
             if (it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1) {
@@ -190,7 +191,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     private fun giveMeBrand(cardNumber: String, cardBrands: HashMap<Regex, CardType>): CardType {
         return cardBrands.keys
                 .find { cardNumber.matches(it) }
-                ?.let { cardBrands.getOrDefault(it, CardType.DEFAULT) }
+                ?.let { cardBrands[it] }
                 ?: CardType.DEFAULT
     }
 
