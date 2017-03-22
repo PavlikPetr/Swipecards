@@ -44,7 +44,7 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
                                var isSubscription: Boolean, var period: Int, var price: Int, var type: String,
                                var value: Int, var trialPeriod: Int, var displayOnBuyScreen: Boolean,
                                var durationTitle: String, var divider: Float, var typeOfSubscription: Int,
-                               val currencyCode: String, var infoOfSubscription: PaymentNinjaSubscriptionInfo) : Parcelable {
+                               val currencyCode: String, var subscriptionInfo: PaymentNinjaSubscriptionInfo) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readString(),
@@ -82,7 +82,7 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
                 it.writeFloat(divider)
                 it.writeInt(typeOfSubscription)
                 it.writeString(currencyCode)
-                it.writeParcelable(infoOfSubscription, flags)
+                it.writeParcelable(subscriptionInfo, flags)
             } ?: Unit
 
     override fun describeContents() = 0

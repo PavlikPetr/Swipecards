@@ -117,7 +117,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
 
             if (it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1) {
                 isAutoPayDescriptionVisible.set(true)
-                firstDescriptionText.set(it.infoOfSubscription.text)
+                firstDescriptionText.set(it.subscriptionInfo.text)
                 isFirstDescriptionVisible.set(true)
                 secondDescriptionText.set(R.string.ninja_text_4.getString())
                 isSecondDescriptionVisible.set(true)
@@ -332,7 +332,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
         updateButton()
     }
 
-    fun navigateToRules(): Unit? = product?.infoOfSubscription?.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? = product?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
 
     private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
         mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source).getRequestSubscriber()
