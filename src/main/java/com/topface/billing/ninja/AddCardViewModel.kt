@@ -39,6 +39,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
+    val numberFocus = ObservableBoolean()
 
     private var mPurchaseRequestSubscription: Subscription? = null
 
@@ -240,6 +241,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                             numberText.set("")
                             cvvText.set("")
                             trhuText.set("")
+                            numberFocus.set(true)
                         }
                         isInputEnabled.set(true)
                     }
