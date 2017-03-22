@@ -56,7 +56,8 @@
                     android:hint="@string/ninja_hint_card_number"
                     android:maxLength="@{viewModel.numberMaxLength}"
                     android:text="@={viewModel.numberText}"
-                    app:setSelection="@{viewModel.numberCursorPosition}" />
+                    app:setOnFocusChangeListener="@{viewModel.onNumberChange}"
+                    app:setNumberSelection="@{viewModel.numberText}" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- card additional data -->
@@ -82,6 +83,7 @@
                         android:hint="@string/ninja_hint_card_expires"
                         android:maxLength="5"
                         android:text="@={viewModel.trhuText}"
+                        app:setOnFocusChangeListener="@{viewModel.onTrhuChange}"
                         app:setSelection="@{viewModel.trhuCursorPosition}" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -101,7 +103,8 @@
                         android:hint="@string/ninja_hint_cvv"
                         android:inputType="numberPassword"
                         android:maxLength="@{viewModel.cvvMaxLength}"
-                        android:text="@={viewModel.cvvText}" />
+                        android:text="@={viewModel.cvvText}"
+                        app:setOnFocusChangeListener="@{viewModel.onCvvChange}" />
                 </android.support.design.widget.TextInputLayout>
 
             </android.support.percent.PercentFrameLayout>
