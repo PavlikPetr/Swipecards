@@ -16,7 +16,7 @@ import java.util.*
  */
 class AddCardRequest {
     companion object {
-        const val ADD_CARD_LINK = "https://api.payment.ninja/v1"
+        const val ADD_CARD_LINK = "https://api.cauri.uk/v1/"
         const val ADD_CARD_METHOD = "card/getToken"
         const val KEY_PROJECT = "project"
         const val KEY_NUMBER = "number"
@@ -26,7 +26,7 @@ class AddCardRequest {
     }
 
     fun getRequestObservable(context: Context, addCardModel: AddCardModel) =
-            OffersUtils.getRequestInstance(App.get().options.paymentNinjaInfo.apiUrl)
+            OffersUtils.getRequestInstance(ADD_CARD_LINK)
                     .create(Request::class.java)
                     .setParams(HashMap<String, String>().apply {
                         put(KEY_PROJECT, addCardModel.project)
