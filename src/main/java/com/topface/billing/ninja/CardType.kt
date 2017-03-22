@@ -13,7 +13,6 @@ class CardType(val name: String, val numberMaxLength: Int, val cvvMaxLength: Int
         const val CVV_DEFAULT = 3
         const val CVV_AMEX = 4
 
-        // todo implement cards "laser" and "maestro" or remove their icons
         val VISA = CardType("visa", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_card_visa)
         val MASTERCARD = CardType("mastercard", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_card_mastercard)
         val AMERICAN_EXPRESS = CardType("american_express", MAX_LENGTH_CARD_NUMBER_AMEX, CVV_AMEX, R.drawable.ic_card_american_express)
