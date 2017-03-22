@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
  * ВьюМодель добавления карт
  */
 
-class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
+class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNavigator, private val mFinishCallback: IFinishDelegate) {
 
     val numberText = RxFieldObservable<String>()
     val numberMaxLength = ObservableInt(19)
@@ -95,8 +95,6 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
     val isButtonEnabled = ObservableBoolean(false)
     val isInputEnabled = ObservableBoolean(true)
     val titleVisibility = ObservableInt(View.GONE)
-
-    var mFeedNavigator: FeedNavigator? = null
 
     val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
 
@@ -182,8 +180,6 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
-    fun setFeedNavigator(feedNavigator: FeedNavigator) = this.apply { mFeedNavigator = feedNavigator }
-
     private fun setTemplate(cardType: CardType) {
         numberMaxLength.set(cardType.numberMaxLength)
         cvvMaxLength.set(cardType.cvvMaxLength)
@@ -236,7 +232,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
 
                     override fun onError(e: Throwable?) {
                         super.onError(e)
-                        mFeedNavigator?.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
+                        mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
                                 product == null) {
                             if (isEmailFormNeeded.get()) {
                                 emailText.set("")
@@ -255,7 +251,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
                         // если продукт null, значит закрываем активити, но при этом не забываем сообщить о том, что карта добавлена
                         // успешно
                         product?.let {
-                            mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
+                            mNavigator.showPurchaseSuccessfullFragment(it.type)
                             //sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
                         } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
                                 Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
@@ -342,7 +338,7 @@ class AddCardViewModel(val data: Bundle, val mFinishCallback: IFinishDelegate) {
         mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source).getRequestSubscriber()
                 .applySchedulers()
                 .subscribe(shortSubscription {
-                    mFeedNavigator?.showPurchaseSuccessfullFragment(productType)
+                    mNavigator.showPurchaseSuccessfullFragment(productType)
                 })
     }
 }

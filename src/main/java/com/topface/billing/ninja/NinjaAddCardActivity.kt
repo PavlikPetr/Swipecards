@@ -11,6 +11,7 @@ import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
+import com.topface.topface.utils.IActivityDelegate
 
 /**
  * Add bank card activity
@@ -28,11 +29,15 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
         fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null, source: String) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
             putExtra(EXTRA_FROM_INSTANT_PURCHASE, fromInstantPurchase)
             product?.let { putExtra(EXTRA_BUY_PRODUCT, it) }
-            putExtra(EXTRA_SOURCE, source.takeIf { it.isNotEmpty() } ?: UNKNOWN_PLACE)
+            putExtra(EXTRA_SOURCE, source.takeIf(String::isNotEmpty) ?: UNKNOWN_PLACE)
         }
     }
 
-    override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding) = binding.toolbarInclude.apply { root?.visibility = View.GONE }
+    private val mFeedNavigator by lazy {
+        FeedNavigator(this as IActivityDelegate)
+    }
+
+    override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding): ToolbarBinding = binding.toolbarInclude.apply { root?.visibility = View.GONE }
 
     override fun generateToolbarViewModel(toolbar: ToolbarBinding) = EmptyToolbarViewModel(toolbar)
 
@@ -42,7 +47,7 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
         super.onCreate(savedInstanceState)
 
         intent?.let {
-            viewBinding.viewModel = AddCardViewModel(it.extras, this).setFeedNavigator(FeedNavigator(this))
+            viewBinding.viewModel = AddCardViewModel(it.extras, mFeedNavigator, this)
         }
     }
 
