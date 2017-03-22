@@ -82,10 +82,11 @@ class AddCardViewModel(val data: Bundle) {
     val productTitle = ObservableField<String>()
 
     val isAutoPayDescriptionVisible = ObservableBoolean(false)
-    val autoPayDescriptionText = ObservableField<String>()
-    val isVipDescriptionVisible = ObservableBoolean(false)
-    val vipDescriptionText = ObservableField<String>()
     val isEmailFormNeeded = ObservableBoolean(false)
+    val firstDescriptionText = ObservableField<String>()
+    val secondDescriptionText = ObservableField<String>()
+    val isFirstDescriptionVisible = ObservableBoolean(false)
+    val isSecondDescriptionVisible = ObservableBoolean(false)
 
     val isButtonEnabled = ObservableBoolean(false)
     val isInputEnabled = ObservableBoolean(true)
@@ -109,13 +110,29 @@ class AddCardViewModel(val data: Bundle) {
         product?.let {
             productTitle.set(it.titleTemplate)
             titleVisibility.set(View.VISIBLE)
-            it.infoOfSubscription.let {
-                autoPayDescriptionText.set(it.text)
+
+            if (it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1) {
+                isAutoPayDescriptionVisible.set(true)
+                it.infoOfSubscription?.let {
+                    firstDescriptionText.set(it.text)
+                    isFirstDescriptionVisible.set(true)
+                }
+                secondDescriptionText.set(R.string.ninja_text_4.getString())
+                isSecondDescriptionVisible.set(true)
+            } else if (it.type == Products.ProductType.PREMIUM.getName()) {
+                if (it.trialPeriod > 0) {
+                    // trial vip
+                    isFirstDescriptionVisible.set(true)
+                    isSecondDescriptionVisible.set(true)
+                    firstDescriptionText.set(R.string.ninja_text_trial_1.getString())
+                    val days = Utils.getQuantityString(R.plurals.ninja_trial_days, it.trialPeriod, it.trialPeriod)
+                    secondDescriptionText.set(String.format(R.string.ninja_text_trial_2.getString(), days, it.price, it.currencyCode))
+                } else {
+                    // vip
+                    isFirstDescriptionVisible.set(true)
+                    firstDescriptionText.set(R.string.ninja_text_5.getString())
+                }
             }
-            isAutoPayDescriptionVisible.set(it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1)
-            isVipDescriptionVisible.set(it.type == Products.ProductType.PREMIUM.getName())
-            // todo possibly add second text with template
-            vipDescriptionText.set(R.string.ninja_text_5.getString())
         }
         isEmailFormNeeded.set(TextUtils.isEmpty(email))
         emailText.addOnPropertyChangedCallback(emailChangedCallback)
@@ -270,6 +287,7 @@ class AddCardViewModel(val data: Bundle) {
             numberError.set(R.string.ninja_number_error.getString())
             readyCheck.put(numberText, false)
         }
+        updateButton()
     }
 
     private fun validateTrhu() {
