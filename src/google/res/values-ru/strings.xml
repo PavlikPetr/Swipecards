@@ -1306,7 +1306,7 @@
     <string name="ninja_text_trial_1">У вас спишется и сразу вернётся €1 для того, чтобы подтвердить действительность карты.</string>
     <string name="ninja_text_trial_2">Через %1$s будет проведена транзакция на %2$d %3$s, каждый месяц подписка будет автоматически обновляться. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках</string>
     <string name="ninja_error_dialog_title">Произошла ошибка</string>
-    <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберете другой способ оплаты.</string>
+    <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберите другой способ оплаты.</string>
     <string name="ninja_error_dialog_message_single">Попробуйте ещё раз.</string>
     <string name="ninja_error_dialog_button_retry">Попробовать другую карту</string>
     <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
