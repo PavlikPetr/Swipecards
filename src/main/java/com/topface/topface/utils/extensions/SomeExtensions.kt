@@ -51,4 +51,4 @@ fun CardInfo.isAvailable() =
  * Проверка карты
  */
 fun PaymentInfo.isCradAvailable() =
-        CardInfo(this.lastDigit, this.type).isAvailable()
+        CardInfo(this.lastDigits, this.type).isAvailable()

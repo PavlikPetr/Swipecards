@@ -219,11 +219,11 @@ public class SettingsFragment extends ProfileInnerFragment {
     private void initPurchases(View root) {
         View frame = root.findViewById(R.id.loPurchases);
         PaymentInfo info = App.get().getOptions().paymentNinjaInfo;
-        if (info.getEnable()) {
+        if (true) {
             frame.setVisibility(View.VISIBLE);
             ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.ninja_settings_toolbar);
             TextView text = (TextView) frame.findViewWithTag("tvText");
-            text.setText(String.format(App.getCurrentLocale(), getString(R.string.payment_ninja_card_number), info.getLastDigit()));
+            text.setText(String.format(App.getCurrentLocale(), getString(R.string.payment_ninja_card_number), info.getLastDigits()));
             text.setVisibility(View.VISIBLE);
         } else {
             frame.setVisibility(View.GONE);

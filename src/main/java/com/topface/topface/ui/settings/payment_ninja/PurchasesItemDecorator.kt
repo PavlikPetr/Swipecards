@@ -16,6 +16,14 @@ import com.topface.topface.utils.extensions.getDimen
  */
 class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
 
+    companion object {
+        private const val NO_DIVIDER = 0
+        private const val SOLID_DIVIDER_NO_TOP_DIVIDER = 1
+        private const val SOLID_DIVIDER_WITH_TOP_DIVIDER = 2
+        private const val PARTIAL_DIVIDER_NO_TOP_DIVIDER = 3
+        private const val PARTIAL_DIVIDER_WITH_TOP_DIVIDER = 4
+    }
+
     private val mDividerFirstPart by lazy {
         Paint().apply {
             color = R.color.ninja_payments_screen_item_background.getColor()
@@ -32,52 +40,71 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
         Debug.error("PurchasesItemDecorator getItemOffsets outRect:$outRect view:$view parent:$parent state:$state")
-        view?.let {
-            isNeedDivider(parent, it)?.let {
-                Debug.error("PurchasesItemDecorator do we need divider:$it")
-                outRect?.set(0, 0, 0, (if (it)
-                    R.dimen.payment_ninja_payments_same_type_items_divider_height
-                else
-                    R.dimen.payment_ninja_payments_different_type_items_margin).getDimen().toInt())
+        if (view != null && outRect != null) {
+            val dividerType = getDividerType(parent, view)
+            if (dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
+                outRect.top = R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen().toInt()
             }
-        } ?: outRect?.setEmpty()
+            if (dividerType == SOLID_DIVIDER_NO_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
+                outRect.bottom = R.dimen.payment_ninja_payments_different_type_items_margin.getDimen().toInt()
+            }
+            if (dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER || dividerType == PARTIAL_DIVIDER_NO_TOP_DIVIDER) {
+                outRect.bottom = R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen().toInt()
+            }
+        } else outRect?.setEmpty()
     }
 
     override fun onDraw(c: Canvas?, parent: RecyclerView?, state: RecyclerView.State?) {
-        Debug.error("PurchasesItemDecorator onDraw")
-        for (i in 0..(parent?.childCount ?: 1 - 1)) {
-            val child = parent?.getChildAt(i)
-            child?.let { child ->
-                isNeedDivider(parent, child)?.let { isNeedDivider ->
-                    val startX = child.translationX
-                    val startY = child.bottom + child.translationY + R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
-                    c?.let {
-                        // разделитель рисуем только между итемами одинакового типа
-                        if (isNeedDivider) {
-                            // рисуем белую линию
-                            it.drawLine(startX, startY, R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX,
-                                    startY, mDividerFirstPart)
-                            // рисуем серую линию
-                            // в итоге итемы на белом фоне отделены серым divider с отступом слева
-                            it.drawLine(R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX, startY,
-                                    child.right.toFloat(), startY, mDividerSecondPart)
+        (0..(parent?.childCount ?: 1 - 1))
+                .map { parent?.getChildAt(it) }
+                .forEach { child ->
+                    child?.let { child ->
+                        val dividerType = getDividerType(parent, child)
+                        if (dividerType != NO_DIVIDER) {
+                            val startX = child.translationX
+                            val bottomDividerStartY = child.bottom + child.translationY + R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
+                            val topDividerStartY = child.translationY - R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
+                            c?.let {
+                                if (dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
+                                    // рисуем разделитель сверху
+                                    it.drawLine(startX, topDividerStartY, startX, topDividerStartY, mDividerSecondPart)
+
+                                }
+                                if (dividerType == PARTIAL_DIVIDER_NO_TOP_DIVIDER || dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER) {
+                                    // рисуем белую линию
+                                    it.drawLine(startX, bottomDividerStartY, R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX,
+                                            bottomDividerStartY, mDividerFirstPart)
+                                    // рисуем серую линию
+                                    // в итоге итемы на белом фоне отделены серым divider с отступом слева
+                                    it.drawLine(R.dimen.payment_ninja_payments_item_text_padding_left.getDimen() + startX, bottomDividerStartY,
+                                            child.right.toFloat(), bottomDividerStartY, mDividerSecondPart)
+                                }
+                                if (dividerType == SOLID_DIVIDER_NO_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
+                                    // рисуем серую линию во весь итем
+                                    it.drawLine(startX, bottomDividerStartY, child.right.toFloat(), bottomDividerStartY, mDividerSecondPart)
+                                }
+                            }
                         }
                     }
                 }
-            }
-
-        }
     }
 
-    private fun isNeedDivider(parent: RecyclerView?, view: View): Boolean? {
-        if (parent != null) {
-            val position = (view.layoutParams as RecyclerView.LayoutParams).viewAdapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                if (position + 1 < parent.adapter.itemCount) {
-                    return parent.adapter.getItemViewType(position) == parent.adapter.getItemViewType(position + 1)
-                }
-            }
-        }
-        return null
-    }
+    private fun getDividerType(parent: RecyclerView?, view: View) =
+            parent?.let {
+                val position = (view.layoutParams as RecyclerView.LayoutParams).viewAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    if (position + 1 < it.adapter.itemCount &&
+                            it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position + 1)) {
+                        if (position == 0 || it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position - 1))
+                            PARTIAL_DIVIDER_NO_TOP_DIVIDER
+                        else
+                            PARTIAL_DIVIDER_WITH_TOP_DIVIDER
+                    } else {
+                        if (position == 0 || it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position - 1))
+                            SOLID_DIVIDER_NO_TOP_DIVIDER
+                        else
+                            SOLID_DIVIDER_WITH_TOP_DIVIDER
+                    }
+                } else NO_DIVIDER
+            } ?: NO_DIVIDER
 }

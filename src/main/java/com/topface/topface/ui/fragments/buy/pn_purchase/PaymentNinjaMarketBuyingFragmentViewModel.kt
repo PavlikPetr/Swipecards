@@ -67,7 +67,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: FeedNavi
                 .subscribe(shortSubscription {
                     it?.let {
                         if (it.isCradAvailable()) {
-                            cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigit))
+                            cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigits))
                             isCheckBoxVisible.set(View.VISIBLE)
                         } else {
                             isCheckBoxVisible.set(View.GONE)

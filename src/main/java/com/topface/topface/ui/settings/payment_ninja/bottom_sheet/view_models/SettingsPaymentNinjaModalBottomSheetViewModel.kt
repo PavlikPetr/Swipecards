@@ -30,7 +30,7 @@ class SettingsPaymentNinjaModalBottomSheetViewModel(bottomSheetData: ModalBottom
                 with(data.observableList) {
                     clear()
                     val info = App.get().options.paymentNinjaInfo
-                    add(BottomSheetTitle(CardInfo(info.lastDigit, info.type).getCardName()))
+                    add(BottomSheetTitle(CardInfo(info.lastDigits, info.type).getCardName()))
                     add(BottomSheetData(BottomSheetItemText(USE_ANOTHER_CARD), bottomSheetData.data))
                     add(BottomSheetData(BottomSheetItemText(DELETE_CARD), bottomSheetData.data))
                 }

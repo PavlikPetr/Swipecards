@@ -216,7 +216,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             year = trhuString.substring(3)
         }
         val cardModel = AddCardModel(
-                App.get().options.paymentNinjaInfo.publicKey,
+                App.get().options.paymentNinjaInfo.projectKey,
                 numberText.get()?.replace(UtilsForCard.SPACE_DIVIDER, "") ?: "",
                 month,
                 year,

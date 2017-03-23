@@ -13,14 +13,15 @@ import com.topface.topface.utils.Utils
 /**
  * Настройки для Payment Ninja
  *
- * @param enable - включены ли платежи через payment ninja
- * @param lastDigit - последние 4 цифры из номера карты
+ * @param enabled - включены ли платежи через payment ninja
+ * @param lastDigits - последние 4 цифры из номера карты
  * @param type - тип карты (Maestro, Discover, American Express, Visa Electron, Diners Club, Laser, JCB, МИР)
  * @param email - email пользователя TF
- * @param publicKey - публичный ключ для совершения платежей через Payment Ninja
+ * @param projectKey - публичный ключ для совершения платежей через Payment Ninja
+ * @param apiUrl - линка для обращения к PN
  */
-data class PaymentInfo(var enable: Boolean = false, var lastDigit: String = Utils.EMPTY, var type: String = Utils.EMPTY,
-                       var email: String = Utils.EMPTY, var publicKey: String = Utils.EMPTY, var apiUrl: String = AddCardRequest.ADD_CARD_LINK) : Parcelable {
+data class PaymentInfo(var enabled: Boolean = false, var lastDigits: String = Utils.EMPTY, var type: String = Utils.EMPTY,
+                       var email: String = Utils.EMPTY, var projectKey: String = Utils.EMPTY, var apiUrl: String = AddCardRequest.ADD_CARD_LINK) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readByte().toInt() == 1,
@@ -41,11 +42,11 @@ data class PaymentInfo(var enable: Boolean = false, var lastDigit: String = Util
 
     override fun writeToParcel(dest: Parcel?, flags: Int) =
             dest?.let {
-                it.writeByte((if (enable) 1 else 0).toByte())
-                it.writeString(lastDigit)
+                it.writeByte((if (enabled) 1 else 0).toByte())
+                it.writeString(lastDigits)
                 it.writeString(type)
                 it.writeString(email)
-                it.writeString(publicKey)
+                it.writeString(projectKey)
             } ?: Unit
 }
 
