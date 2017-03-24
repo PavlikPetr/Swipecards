@@ -2,8 +2,8 @@ package com.topface.topface.api
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.topface.scruffy.utils.readBoolean
-import com.topface.scruffy.utils.writeBoolean
+import com.topface.topface.utils.extensions.readBoolean
+import com.topface.topface.utils.extensions.writeBoolean
 
 data class UnreadStatePair(var from: Boolean = false, var to: Boolean = false, var wasFromInited: Boolean = false)
     : Parcelable {
