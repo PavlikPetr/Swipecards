@@ -5,7 +5,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
@@ -39,18 +38,12 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
     }
 
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-        Debug.error("PurchasesItemDecorator getItemOffsets outRect:$outRect view:$view parent:$parent state:$state")
         if (view != null && outRect != null) {
             val dividerType = getDividerType(parent, view)
             if (dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
-                outRect.top = R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen().toInt()
+                outRect.top = R.dimen.payment_ninja_payments_different_type_items_margin.getDimen().toInt()
             }
-            if (dividerType == SOLID_DIVIDER_NO_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
-                outRect.bottom = R.dimen.payment_ninja_payments_different_type_items_margin.getDimen().toInt()
-            }
-            if (dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER || dividerType == PARTIAL_DIVIDER_NO_TOP_DIVIDER) {
-                outRect.bottom = R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen().toInt()
-            }
+            outRect.bottom = R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen().toInt()
         } else outRect?.setEmpty()
     }
 
@@ -63,11 +56,11 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
                         if (dividerType != NO_DIVIDER) {
                             val startX = child.translationX
                             val bottomDividerStartY = child.bottom + child.translationY + R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
-                            val topDividerStartY = child.translationY - R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
+                            val topDividerStartY = child.top - R.dimen.payment_ninja_payments_same_type_items_divider_height.getDimen() / 2
                             c?.let {
                                 if (dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER || dividerType == SOLID_DIVIDER_WITH_TOP_DIVIDER) {
                                     // рисуем разделитель сверху
-                                    it.drawLine(startX, topDividerStartY, startX, topDividerStartY, mDividerSecondPart)
+                                    it.drawLine(startX, topDividerStartY, child.right.toFloat(), topDividerStartY, mDividerSecondPart)
 
                                 }
                                 if (dividerType == PARTIAL_DIVIDER_NO_TOP_DIVIDER || dividerType == PARTIAL_DIVIDER_WITH_TOP_DIVIDER) {
@@ -92,18 +85,28 @@ class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
     private fun getDividerType(parent: RecyclerView?, view: View) =
             parent?.let {
                 val position = (view.layoutParams as RecyclerView.LayoutParams).viewAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    if (position + 1 < it.adapter.itemCount &&
-                            it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position + 1)) {
-                        if (position == 0 || it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position - 1))
+                if (position in 0..it.adapter.itemCount - 1) {
+                    if (position == 0) {
+                        if (position + 1 < it.adapter.itemCount &&
+                                it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position + 1))
                             PARTIAL_DIVIDER_NO_TOP_DIVIDER
                         else
-                            PARTIAL_DIVIDER_WITH_TOP_DIVIDER
-                    } else {
-                        if (position == 0 || it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position - 1))
                             SOLID_DIVIDER_NO_TOP_DIVIDER
-                        else
-                            SOLID_DIVIDER_WITH_TOP_DIVIDER
+                    } else {
+                        if (position + 1 < it.adapter.itemCount &&
+                                it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position + 1)) {
+                            if (it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position - 1)) {
+                                PARTIAL_DIVIDER_NO_TOP_DIVIDER
+                            } else {
+                                PARTIAL_DIVIDER_WITH_TOP_DIVIDER
+                            }
+                        } else {
+                            if (it.adapter.getItemViewType(position) == it.adapter.getItemViewType(position - 1)) {
+                                SOLID_DIVIDER_NO_TOP_DIVIDER
+                            } else {
+                                SOLID_DIVIDER_WITH_TOP_DIVIDER
+                            }
+                        }
                     }
                 } else NO_DIVIDER
             } ?: NO_DIVIDER
