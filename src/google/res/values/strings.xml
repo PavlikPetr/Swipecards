@@ -1046,6 +1046,8 @@
     <string name="ninja_text_4">Including the given sum, you agree to</string>
     <string name="ninja_text_link">the service\'s rules</string>
     <string name="ninja_text_5">In 7 days VIP-status will automatically renew. Your card will be saved for future payments. You can cancel your subscription and unlink your card in Settings.</string>
+    <string name="ninja_text_trial_1">€1 will be charged and immediately returned to your account in order to verify your card.</string>
+    <string name="ninja_text_trial_2">In %1$s a transaction will be completed for %2$d %3$s. Each month your subscription will be automatically renewed and your card saved for the upcoming payments. You can cancel your subscription and unlink your card in Settings.</string>
     <string name="ninja_settings_toolbar">Payments</string>
     <string name="ninja_vip_status_title">Subscription to VIP-status</string>
     <string name="ninja_cancel_vip_status">Cancel subscription</string>
@@ -1056,6 +1058,10 @@
     <string name="ninja_error_dialog_message_single">Please try again.</string>
     <string name="ninja_error_dialog_button_retry">Please try another card</string>
     <string name="ninja_error_dialog_button_change">Other payment method</string>
+    <plurals name="ninja_trial_days">
+        <item quantity="other">%d days</item>
+        <item quantity="one">%d day</item>
+    </plurals>
     <string name="payment_ninja_card_number">Card **%s is being used for payment</string>
     <string name="ninja_cvv_error">Incorrect CVV/CVC</string>
     <string name="ninja_trhu_error">Incorrect date</string>

@@ -1074,12 +1074,16 @@
     <string name="permission_alert_button_message">Pour télécharger des photos, vous devez donner à l\'application l\'accès à la mémoire de votre téléphone via les Paramètres</string>
     <string name="ninja_hint_card_number">Numéro de carte</string>
     <string name="ninja_hint_card_expires">Actif jusqu\'à</string>
+    <string name="ninja_hint_cvv">CVV / CVC</string>
     <string name="ninja_button_buy">Acheter</string>
+    <string name="ninja_checkbox_auto_pay">Recharge automatique</string>
     <string name="ninja_text_1">Paiement sécurisé</string>
     <string name="ninja_text_2">Sécurisé SSL 128 bits</string>
     <string name="ninja_text_4">En incluant la somme donnée, vous acceptez</string>
     <string name="ninja_text_link">Les règles du service</string>
     <string name="ninja_text_5">Dans 7 jours, le statut VIP sera automatiquement renouvelé. Votre carte sera enregistrée pour des paiements futurs. Vous pouvez annuler votre abonnement et supprimer les informations de votre carte dans les Paramètres.</string>
+    <string name="ninja_text_trial_1">€ 1 sera facturé puis immédiatement retourné sur votre compte, afin de vérifier votre carte.</string>
+    <string name="ninja_text_trial_2">Dans %1$s, une transaction sera terminée pour %2$d %3$s. Chaque mois, votre abonnement sera automatiquement renouvelé et votre carte sera enregistrée pour les paiements à venir. Vous pouvez annuler votre abonnement et supprimer votre carte dans les Paramètres.</string>
     <string name="ninja_settings_toolbar">Paiements</string>
     <string name="ninja_vip_status_title">Abonnement au statut VIP</string>
     <string name="ninja_cancel_vip_status">Annuler l\'abonnement</string>
@@ -1090,6 +1094,10 @@
     <string name="ninja_error_dialog_message_single">Veuillez réessayer</string>
     <string name="ninja_error_dialog_button_retry">Essayez une autre carte</string>
     <string name="ninja_error_dialog_button_change">Autre mode de paiement</string>
+    <plurals name="ninja_trial_days">
+        <item quantity="other">%d jours</item>
+        <item quantity="one">%d jour</item>
+    </plurals>
     <string name="payment_ninja_card_number">La carte **%s sera utilisée pour le paiement</string>
     <string name="ninja_trhu_error">Date incorrecte</string>
     <string name="ninja_number_error">Format de numéro de carte incorrect</string>
