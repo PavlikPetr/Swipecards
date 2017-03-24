@@ -505,10 +505,9 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("setFocusOnEditText")
-    public static void setNumberSelection(EditText view, Boolean isNeedfocus ) {
-        if (isNeedfocus){
+    public static void setNumberSelection(EditText view, Boolean isNeedfocus) {
+        if (isNeedfocus) {
             view.requestFocus();
         }
     }
-
 }

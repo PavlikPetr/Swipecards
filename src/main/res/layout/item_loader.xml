@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:gravity="center">
+    <data>
 
-        <ProgressBar
+        <variable
+            name="plc"
+            type="String"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <com.topface.topface.ui.views.CustomProgressBar
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:theme="@style/CircularProgress"/>
+            android:theme="@style/CircularProgress"
+            app:plc="@{plc}"/>
     </LinearLayout>
 </layout>
