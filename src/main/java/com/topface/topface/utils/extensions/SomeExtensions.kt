@@ -45,10 +45,10 @@ fun String?.toByteSafe(): Byte {
  * Проверка карты
  */
 fun CardInfo.isAvailable() =
-        this.lastDigit.isNotEmpty() && this.type.isNotEmpty()
+        this.lastFour.isNotEmpty() && this.type.isNotEmpty()
 
 /**
  * Проверка карты
  */
 fun PaymentInfo.isCradAvailable() =
-        CardInfo(this.lastDigits, this.type).isAvailable()
+        CardInfo(lastFour = this.lastDigits, type = this.type).isAvailable()

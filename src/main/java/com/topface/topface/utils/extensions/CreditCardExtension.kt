@@ -11,4 +11,4 @@ import com.topface.topface.ui.settings.payment_ninja.CardInfo
 const private val CARD_NAME_TEMPLATE = "%s **%s"
 
 fun CardInfo.getCardName() =
-        String.format(App.getCurrentLocale(), CARD_NAME_TEMPLATE, type, lastDigit)
+        String.format(App.getCurrentLocale(), CARD_NAME_TEMPLATE, type, lastFour)

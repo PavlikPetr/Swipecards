@@ -72,7 +72,10 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
             }
             mDeleteCardSubscription = getDeleteCardRequest()
                     .applySchedulers()
-                    .subscribe({ }, { sendCardListRequest() })
+                    .subscribe({
+                        // в случае успешного удаления карты необходимо обновить опции пользователя
+                        App.getUserOptionsRequest().exec()
+                    }, { sendCardListRequest() })
         }
     }
 
@@ -88,7 +91,7 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                     // если это не подписка, то удаляем итем и забываем о нем
                     getData().remove(subscription)
                 }
-                mCancelSubscription = getCancelSubscriptionRequest()
+                mCancelSubscription = getCancelSubscriptionRequest(subscription.id)
                         .applySchedulers()
                         .subscribe({ }, { sendUserSubscriptionsRequest() })
             }
@@ -127,9 +130,9 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
 
-    private fun getCancelSubscriptionRequest() =
+    private fun getCancelSubscriptionRequest(id: String) =
             Observable.fromEmitter<SimpleResponse>({ emitter ->
-                val sendRequest = CancelSubscriptionRequest(App.getContext())
+                val sendRequest = CancelSubscriptionRequest(App.getContext(), id)
                 sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
                     override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)

@@ -53,13 +53,13 @@ data class PaymentInfo(var enabled: Boolean = false, var lastDigits: String = Ut
 /**
  * Данные карты для Payment Ninja
  *
- * @param lastDigit - последние 4 цифры из номера карты
+ * @param lastFour - последние 4 цифры из номера карты
  * @param type - тип карты (Maestro, Discover, American Express, Visa Electron, Diners Club, Laser, JCB, МИР)
+ * @param hash - Хэш карты внутри TopFace
+ * @param expire - дата окончания действия карты
  */
-data class CardInfo(var lastDigit: String = Utils.EMPTY, var type: String = Utils.EMPTY) : Parcelable {
-
-    constructor(source: Parcel) : this(source.readString(), source.readString())
-
+data class CardInfo(var lastFour: String = Utils.EMPTY, var type: String = Utils.EMPTY, var hash: String = Utils.EMPTY,
+                    var expire: Long = 0) : Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<CardInfo> = object : Parcelable.Creator<CardInfo> {
             override fun createFromParcel(source: Parcel): CardInfo = CardInfo(source)
@@ -67,13 +67,16 @@ data class CardInfo(var lastDigit: String = Utils.EMPTY, var type: String = Util
         }
     }
 
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), source.readLong())
+
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) =
-            dest?.let {
-                it.writeString(lastDigit)
-                it.writeString(type)
-            } ?: Unit
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeString(lastFour)
+        dest?.writeString(type)
+        dest?.writeString(hash)
+        dest?.writeLong(expire)
+    }
 }
 
 /**
