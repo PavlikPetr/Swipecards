@@ -1,6 +1,9 @@
 package com.topface.billing.ninja.CardUtils
 
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import com.topface.billing.ninja.CardType
+import com.topface.framework.utils.Debug
 import java.util.*
 
 object UtilsForCard {
@@ -27,6 +30,7 @@ object UtilsForCard {
             Regex("^(6011|65\\d{2})+.*") to CardType.DISCOVER,
             Regex("^35([2-8][0-9])+.*") to CardType.JCB,
             Regex("") to CardType.DEFAULT)
+
 
     fun formattingForCardNumber(inputCardNumber: String): String {
         var text: String

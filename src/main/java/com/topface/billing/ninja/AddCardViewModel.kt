@@ -7,8 +7,11 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
@@ -16,6 +19,7 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
+import com.topface.topface.databinding.LayoutNinjaAddCardBinding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
@@ -62,6 +66,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val trhuCursorPosition = ObservableInt()
     val trhuError = ObservableField<String>()
 
+
     val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = (observable as? ObservableField<*>)?.let {
             (it.get() as? String)?.let {
@@ -97,6 +102,17 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val isButtonEnabled = ObservableBoolean(false)
     val isInputEnabled = ObservableBoolean(true)
     val titleVisibility = ObservableInt(View.GONE)
+
+
+    val watcher = Huiocher()
+
+
+         val CARD_NUMBER_TOTAL_SYMBOLS = 19 // size of pattern 0000-0000-0000-0000
+         val CARD_NUMBER_TOTAL_DIGITS = 16 // max numbers of digits in pattern: 0000 x 4
+         val CARD_NUMBER_DIVIDER_MODULO = 5 // means divider position is every 5th symbol beginning with 1
+         val CARD_NUMBER_DIVIDER_POSITION = CARD_NUMBER_DIVIDER_MODULO - 1 // means divider position is every 4th symbol beginning with 0
+         val CARD_NUMBER_DIVIDER = '-'
+
 
     val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
 
@@ -146,23 +162,27 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             emailText.set(email)
         }
 
-        cardFieldsSubscription.add(numberText.filedObservable
-                .distinctUntilChanged()
-                .map { str -> UtilsForCard.formattingForCardNumber(str) }
-                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
-                .subscribe(shortSubscription {
-                    if (it.isEmpty()) {
-                        cardIcon.set(0)
-                    }
-                    if (it.length == 4) {
-                        setTemplate(giveMeBrand(it, UtilsForCard.cardBrands))
-                    }
-                    if (it.length == numberMaxLength.get()) {
-                        validateNumber()
-                    }
-                    numberText.set(it)
-                })
-        )
+//        cardFieldsSubscription.add(numberText.filedObservable
+//                .distinctUntilChanged()
+////                .map { str -> UtilsForCard.fororor(str) }
+//                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
+//                .subscribe(shortSubscription {
+//
+//                        if ((it as String).isEmpty()) {
+//                            cardIcon.set(0)
+//                        }
+//                        if (it.length == 4) {
+//                            setTemplate(giveMeBrand(it, UtilsForCard.cardBrands))
+//                        }
+//                        if (it.length == numberMaxLength.get()) {
+//                            validateNumber()
+//                        }
+//
+////                        numberText.set(onCardNumberTextChanged(it))
+//
+//                }
+//                )
+//        )
 
         cardFieldsSubscription.add(trhuText.filedObservable
                 .filter { it.length >= 2 }
@@ -179,6 +199,73 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                 })
         )
     }
+
+    class Huiocher : TextWatcher {
+
+        override fun afterTextChanged(s: Editable?) {
+            s?.let{
+            if (!isInputCorrect(s, CARD_NUMBER_TOTAL_SYMBOLS, CARD_NUMBER_DIVIDER_MODULO, CARD_NUMBER_DIVIDER)) {
+                s.replace(0, s.length, concatString(getDigitArray(s, CARD_NUMBER_TOTAL_DIGITS), CARD_NUMBER_DIVIDER_POSITION, CARD_NUMBER_DIVIDER))
+            }
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+         val CARD_NUMBER_TOTAL_SYMBOLS = 19 // size of pattern 0000-0000-0000-0000
+         val CARD_NUMBER_TOTAL_DIGITS = 16 // max numbers of digits in pattern: 0000 x 4
+         val CARD_NUMBER_DIVIDER_MODULO = 5 // means divider position is every 5th symbol beginning with 1
+         val CARD_NUMBER_DIVIDER_POSITION = CARD_NUMBER_DIVIDER_MODULO - 1 // means divider position is every 4th symbol beginning with 0
+         val CARD_NUMBER_DIVIDER = '-'
+
+        private fun isInputCorrect(s: Editable, size: Int, dividerPosition: Int, divider: Char): Boolean {
+            var isCorrect = s.length <= size
+            for (i in 0..s.length - 1) {
+                if (i > 0 && (i + 1) % dividerPosition == 0) {
+                    isCorrect = isCorrect && (divider == s[i])
+                } else {
+                    isCorrect = isCorrect && Character.isDigit(s[i])
+                }
+            }
+            Debug.error("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!          $isCorrect         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            return isCorrect
+        }
+
+        private fun concatString(digits: CharArray, dividerPosition: Int, divider: Char): String {
+            Debug.error("----------------------рекурсия?--------")
+            val formatted = StringBuilder()
+
+            for (i in digits.indices) {
+                if (digits[i].toInt() != 0) {
+                    formatted.append(digits[i])
+                    if (i > 0 && i < digits.size - 1 && (i + 1) % dividerPosition == 0) {
+                        formatted.append(divider)
+                    }
+                }
+            }
+
+            return formatted.toString()
+        }
+
+        private fun getDigitArray(s: Editable, size: Int): CharArray {
+            val digits = CharArray(size)
+            var index = 0
+            var i = 0
+            while (i < s.length && index < size) {
+                val current = s[i]
+                if (Character.isDigit(current)) {
+                    digits[index] = current
+                    index++
+                }
+                i++
+            }
+            return digits
+        }
+
+    }
+
 
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 

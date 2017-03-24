@@ -157,7 +157,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
-            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
+            NinjaAddCardActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 
     override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
