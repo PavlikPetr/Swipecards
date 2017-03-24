@@ -18,8 +18,10 @@ import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.data.Profile;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.fragments.OwnAvatarFragment;
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList;
 import com.topface.topface.utils.config.SessionConfig;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,6 +81,7 @@ public class CacheProfile {
     private static ProductsDetails mProductsDetails;
     private static PaymentWallProducts mPWProducts;
     private static PaymentWallProducts mPWMobileProducts;
+    private static PaymentNinjaProductsList mPaymentNinjaProductsList;
 
     /**
      * Данные из сервиса googleplay.getProducts
@@ -101,6 +104,17 @@ public class CacheProfile {
             }
         }
         return mMarketProducts;
+    }
+
+    public static PaymentNinjaProductsList getPaymentNinjaProductsList() {
+        if (mPaymentNinjaProductsList == null) {
+            SessionConfig config = App.getSessionConfig();
+            String productsCache = config.getPaymentNinjaProductsData();
+            if (!TextUtils.isEmpty(productsCache)) {
+                mPaymentNinjaProductsList = JsonUtils.fromJson(productsCache, PaymentNinjaProductsList.class);
+            }
+        }
+        return mPaymentNinjaProductsList;
     }
 
     public static ProductsDetails getMarketProductsDetails() {
@@ -180,6 +194,11 @@ public class CacheProfile {
         if (response != null) {
             App.getSessionConfig().setMarketProductsData(response.toString());
         }
+    }
+
+    public static void setPaymentNinjaProducts(@NotNull PaymentNinjaProductsList products) {
+        mPaymentNinjaProductsList = products;
+        App.getSessionConfig().setPaymentNinjaProductsData(JsonUtils.toJson(products));
     }
 
     public static void setMarketProductsDetails(ProductsDetails productsDetails) {

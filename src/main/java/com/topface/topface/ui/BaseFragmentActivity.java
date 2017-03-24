@@ -24,7 +24,6 @@ import android.widget.FrameLayout;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
@@ -193,7 +192,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if(!isDatingRedesignEnabled()) {
+        if (!isDatingRedesignEnabled()) {
             if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме

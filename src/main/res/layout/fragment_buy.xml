@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="@dimen/buy_screen_products_list_padding">
 
                 <TextView
                     android:id="@+id/fbBuyingDisabled"
@@ -43,8 +43,8 @@
                     style="@style/GrayText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="@dimen/buy_screen_products_likes_section_padding_bottom"
+                    android:layout_marginTop="@dimen/buy_screen_products_likes_section_padding_top"
                     android:text="@string/buying_sympathies" />
 
                 <LinearLayout
@@ -59,8 +59,8 @@
                     style="@style/GrayText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="@dimen/buy_screen_products_coins_section_padding_bottom"
+                    android:layout_marginTop="@dimen/buy_screen_products_coins_section_padding_top"
                     android:text="@string/buying_money" />
 
                 <LinearLayout

@@ -22,7 +22,7 @@ class PlaceButtonItemViewModel(val price: Int, val lastSelectedPhotoId: Observab
 
     private val mOnPropertyChangedCallback: Observable.OnPropertyChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) {
-            (observable as ObservableInt)?.let { isEnabled.set(it.get() != 0) }
+            (observable as? ObservableInt)?.let { isEnabled.set(it.get() != 0) }
         }
     }
 

@@ -10,6 +10,7 @@ public class PurchasesTabData {
     public static final String PWALL_MOBILE = "paymentwall-mobile";
     public static final String PWALL = "paymentwall-direct";
     public static final String BONUS = "bonus";
+    public static final String PAYMENT_NINJA = "payment-ninja";
 
     /**
      * !!! IMPORTANT !!!
@@ -19,6 +20,7 @@ public class PurchasesTabData {
     public static Set<String> markets = new HashSet<>();
 
     static {
+        markets.add(PAYMENT_NINJA);
         markets.add(GPLAY);
         markets.add(AMAZON);
         markets.add(PWALL_MOBILE);

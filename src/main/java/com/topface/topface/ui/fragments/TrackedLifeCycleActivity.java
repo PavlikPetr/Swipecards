@@ -2,6 +2,8 @@ package com.topface.topface.ui.fragments;
 
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.annotation.StyleRes;
+import android.support.v7.app.AlertDialog;
 
 import com.topface.topface.utils.ActivityLifeCycleReporter;
 
@@ -71,6 +73,11 @@ public abstract class TrackedLifeCycleActivity<T extends ViewDataBinding> extend
 
     public boolean isActivityRestoredState() {
         return mIsActivityRestoredState;
+    }
+
+    @Override
+    public AlertDialog.Builder getAlertDialogBuilder(@StyleRes int dialogStyleResId) {
+        return new AlertDialog.Builder(this, dialogStyleResId);
     }
 
 }

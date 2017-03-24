@@ -10,14 +10,14 @@ import com.topface.topface.R
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.isHasNotification
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 
 /**
@@ -25,7 +25,7 @@ import rx.subscriptions.CompositeSubscription
  * вью модель тулбара для чата
  */
 
-class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
+class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarViewBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation), IAppBarState {
 
     private val mState by lazy {
@@ -87,8 +87,12 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
         binding.toolbarCustomView.addView(additionalViewBinding.root)
         extraViewModel = CustomToolbarViewModel(additionalViewBinding)
         additionalViewBinding.viewModel = extraViewModel
-        subscriptions.add(title.filedObservable.subscribe { extraViewModel?.title?.set(it) })
-        subscriptions.add(subTitle.filedObservable.subscribe { extraViewModel?.subTitle?.set(it) })
+        subscriptions.add(title.filedObservable.subscribe(shortSubscription {
+            it?.let { extraViewModel?.title?.set(it) }
+        }))
+        subscriptions.add(subTitle.filedObservable.subscribe(shortSubscription {
+            it?.let { extraViewModel?.subTitle?.set(it) }
+        }))
         subscriptions.add(mState.getObservable(CountersData::class.java)
                 .map {
                     it.dialogs > 0 || it.mutual > 0
@@ -96,17 +100,12 @@ class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBindi
                 .filter {
                     mHasNotification == null || mHasNotification != it
                 }
-                .subscribe(object : RxUtils.ShortSubscription<Boolean>() {
-                    override fun onNext(isHasNotif: Boolean?) {
-                        super.onNext(isHasNotif)
-                        mHasNotification = isHasNotif
-                        setUpIconStyle(isCollapsStyle.get(), mHasNotification)
-                    }
+                .subscribe(shortSubscription {
+                    mHasNotification = it
+                    setUpIconStyle(isCollapsStyle.get(), mHasNotification)
                 }))
-        subscriptions.add(mState.getObservable(Profile::class.java).subscribe(object : RxUtils.ShortSubscription<Profile>() {
-            override fun onNext(profile: Profile?) {
-                profile?.let { ownProfile = it }
-            }
+        subscriptions.add(mState.getObservable(Profile::class.java).subscribe(shortSubscription {
+            it?.let { ownProfile = it }
         }))
     }
 

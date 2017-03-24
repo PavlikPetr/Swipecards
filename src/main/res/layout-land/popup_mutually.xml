@@ -38,7 +38,7 @@
             android:layout_height="@dimen/mutual_popup_avatar"
             android:layout_above="@id/icArrow"
             android:layout_marginBottom="16dp"
-            android:layout_marginLeft="46dp"
+            android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/icArrow"
             android:src="@drawable/girl_blur_6"
             app:animationSrc="@{@anim/mutual_popup_right}"
@@ -54,7 +54,7 @@
             android:layout_height="@dimen/mutual_popup_avatar"
             android:layout_above="@id/icArrow"
             android:layout_marginBottom="16dp"
-            android:layout_marginRight="14dp"
+            android:layout_marginRight="34dp"
             android:layout_toLeftOf="@id/icPen"
             android:src="@drawable/man_blur_5"
             app:animationSrc="@{@anim/mutual_popup_left}"
@@ -67,30 +67,37 @@
             android:id="@+id/icArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="57dp"
+            android:layout_alignBottom="@id/mutualIC"
+            android:layout_toLeftOf="@id/mutualIC"
+            android:layout_marginRight="33dp"
             android:src="@drawable/arrow_to_left"/>
+
+        <FrameLayout
+            android:id="@+id/viewForLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"></FrameLayout>
 
         <ImageView
             android:id="@+id/mutualIC"
             android:layout_width="74dp"
             android:layout_height="74dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="40dp"
-            android:layout_marginLeft="111dp"
+            android:layout_below="@id/viewForLayout"
+            android:layout_marginTop="50dp"
+            android:layout_toLeftOf="@id/viewForLayout"
+            android:layout_marginRight="120dp"
             android:src="@drawable/ic_mutually"/>
 
         <ImageView
             android:id="@+id/icPen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@id/mutualIC"
+            android:layout_below="@id/avatarUserPhoto"
+            android:layout_alignBottom="@id/mutualIC"
+            android:layout_toLeftOf="@id/viewForLayout"
+            android:layout_marginRight="80dp"
             android:src="@drawable/pen"/>
 
         <ImageView
@@ -106,15 +113,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="69dp"
-            android:layout_toRightOf="@+id/avatarUserPhoto"
+            android:layout_toRightOf="@+id/viewForLayout"
             android:gravity="center_horizontal"
+            android:layout_centerVertical="true"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/popupTitle"
-                style="@style/PopupTitle"
-                android:layout_marginTop="83dp"
+                style="@style/MutualPopupTitle"
                 android:ellipsize="end"
                 android:text="@string/mutual_popup_you_get_mutual"/>
 

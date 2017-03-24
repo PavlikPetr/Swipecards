@@ -21,6 +21,7 @@ import com.topface.topface.utils.databinding.IOnListChangedCallbackBinded
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.extensions.toIntSafe
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
 import rx.Subscriber
 import rx.Subscription
@@ -53,7 +54,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     }
 
     init {
-        mUpdateSubscription = updateObservable.subscribe {
+        mUpdateSubscription = updateObservable.subscribe(shortSubscription {
             if (mHasInitialData) {
                 data.onCallbackBinded = this
                 mHasInitialData = false
@@ -66,7 +67,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                     }
                 }
             }
-        }
+        })
         amount.addOnPropertyChangedCallback(object : OnPropertyChangedCallback() {
             override fun onPropertyChanged(obs: android.databinding.Observable?, p1: Int) {
                 counterVisibility.set(if (with(obs as? ObservableField<String>) {
@@ -76,12 +77,10 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         })
         // подписка на ивент о прочтении итема
         mContactsItemReadSubscription = mEventBus.getObservable(ContactsItemsReadEvent::class.java)
-                .subscribe { event ->
-                    data.observableList.find {
-                        it is DialogContactsItem && it.id == event.contactsItem.id
-                    }
+                .subscribe(shortSubscription { event ->
+                    data.observableList.find { it is DialogContactsItem && it.id == event?.contactsItem?.id }
                             .to(mContactsStubItem.dialogContacts.items.find {
-                                it.id == event.contactsItem.id
+                                it.id == event?.contactsItem?.id
                             })
                             .run {
                                 // 1-й - это элемент списка data.observableList
@@ -93,7 +92,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                                     decrementCounter()
                                 }
                             }
-                }
+                })
     }
 
     override fun onCallbackBinded() {
@@ -188,11 +187,11 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
                 if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
                     removeItemByUserId(userId)?.let {
                         if (it.unread) {
-                            sendReadRequest(it).subscribe {
+                            sendReadRequest(it).subscribe(shortSubscription {
                                 if (it.completed) {
                                     decrementCounter()
                                 }
-                            }
+                            })
                         }
                         showStubIfNeed()
                     }

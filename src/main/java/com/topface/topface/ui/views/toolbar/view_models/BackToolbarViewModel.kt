@@ -1,8 +1,6 @@
 package com.topface.topface.ui.views.toolbar.view_models
 
-import android.support.v7.widget.Toolbar
-import com.topface.topface.R
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 
 /**
@@ -10,8 +8,8 @@ import com.topface.topface.ui.views.toolbar.IToolbarNavigation
  * вьюмодель самого простого тулбара со стрелкой влево (upButton) и title
  */
 
-class BackToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, titleString: String? = null, mNavigation: IToolbarNavigation? = null)
-: BaseToolbarViewModel(binding, mNavigation) {
+class BackToolbarViewModel @JvmOverloads constructor(binding: ToolbarViewBinding, titleString: String? = null, mNavigation: IToolbarNavigation? = null)
+    : BaseToolbarViewModel(binding, mNavigation) {
 
     init {
         titleString?.let {

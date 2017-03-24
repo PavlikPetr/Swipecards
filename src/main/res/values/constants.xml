@@ -52,4 +52,5 @@
     <string name="adtoapp_key_value">M_tom-o_IROTf2mZSF4GNGGleuARfi81i0qT-bTH2sqiuaGLrKcCbtyEm6gQqpSWpG_otS4vIvbBTtXJC8Wo0S</string>
 
     <string name="usd">$</string>
+    <string name="cvv">Secure code</string>
 </resources>

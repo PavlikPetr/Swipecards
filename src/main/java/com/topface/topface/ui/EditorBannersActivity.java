@@ -5,12 +5,12 @@ import android.content.Intent;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.fragments.EditorBannersFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-public class EditorBannersActivity extends CheckAuthActivity<EditorBannersFragment,AcFragmentFrameBinding> {
+public class EditorBannersActivity extends CheckAuthActivity<EditorBannersFragment, AcFragmentFrameBinding> {
 
     // Id для админки начиная со 101
     public static final int INTENT_EDITOR_BANNERS = 101;
@@ -33,7 +33,7 @@ public class EditorBannersActivity extends CheckAuthActivity<EditorBannersFragme
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

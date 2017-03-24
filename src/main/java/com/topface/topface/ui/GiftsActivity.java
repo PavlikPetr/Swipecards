@@ -19,7 +19,7 @@ import com.topface.topface.data.Gift;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.databinding.AcGiftsBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
@@ -251,13 +251,13 @@ public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implemen
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.profile_gifts), this);
     }
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcGiftsBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcGiftsBinding binding) {
         return binding.toolbarInclude;
     }
 

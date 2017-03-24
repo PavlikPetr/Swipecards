@@ -1,5 +1,6 @@
 package com.topface.topface.utils.extensions
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.provider.Settings
 import android.support.annotation.IntDef
 import android.support.v4.content.ContextCompat
 import com.topface.topface.App
+import com.topface.topface.ui.dialogs.AlertDialogFactory
 import permissions.dispatcher.PermissionUtils
 
 /**
@@ -99,3 +101,19 @@ fun Activity.getPermissionStatus(vararg permissions: String) =
         else if (!this.shouldShowRequestPermissionRationale(permissions.sorted()) &&
                 permissions.find { App.getAppConfig().permissionStateMap.containsKey(it) } != null) PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN
         else PermissionsExtensions.PERMISSION_DENIED
+
+fun Activity.isPermissinsBlockedForever(vararg permissions: String) =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissions.find {
+                this.getPermissionStatus(it) == PermissionsExtensions.PERMISSION_NEVER_ASK_AGAIN
+            } != null
+        } else false
+
+fun Activity.askUnlockStoragePermissionIfNeed() {
+    this?.let {
+        if (it.isPermissinsBlockedForever(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            AlertDialogFactory().constructNeverAskAgain(it)
+        }
+    }
+}
+

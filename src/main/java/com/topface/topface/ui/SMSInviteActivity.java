@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.fragments.SmsInviteFragment;
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
@@ -35,13 +35,13 @@ public class SMSInviteActivity extends CheckAuthActivity<SmsInviteFragment, AcFr
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new BackToolbarViewModel(toolbar, getString(R.string.sms_invite_title), this);
     }
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

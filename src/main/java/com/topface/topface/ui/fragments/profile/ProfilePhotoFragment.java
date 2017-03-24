@@ -43,6 +43,7 @@ import com.topface.topface.ui.edit.EditContainerActivity;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.loadcontollers.AlbumLoadController;
 import com.topface.topface.utils.rx.RxUtils;
 
@@ -51,7 +52,6 @@ import kotlin.jvm.functions.Function0;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.topface.topface.utils.AddPhotoHelper.EXTRA_BUTTON_ID;
 
@@ -187,6 +187,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 new Function0<Unit>() {
                     @Override
                     public Unit invoke() {
+                        PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                         ProfilePhotoFragmentPermissionsDispatcher.takeCameraPhotoWithCheck(ProfilePhotoFragment.this);
                         return null;
                     }
@@ -194,6 +195,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 new Function0<Unit>() {
                     @Override
                     public Unit invoke() {
+                        PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                         ProfilePhotoFragmentPermissionsDispatcher.takeAlbumPhotoWithCheck(ProfilePhotoFragment.this);
                         return null;
                     }
@@ -230,9 +232,10 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                 mBinding.usedGrid.scrollToPosition(position);
             }
         });
-        mSubscription = mAppState.getObservable(Profile.class).subscribe(new Action1<Profile>() {
+        mSubscription = mAppState.getObservable(Profile.class).subscribe(new RxUtils.ShortSubscription<Profile>() {
             @Override
-            public void call(Profile profile) {
+            public void onNext(Profile profile) {
+                super.onNext(profile);
                 if (mOwnProfileRecyclerViewAdapter != null && profile.photos != null &&
                         mOwnProfileRecyclerViewAdapter.getPhotos().size() != profile.photos.size()) {
 

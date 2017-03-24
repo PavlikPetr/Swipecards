@@ -58,9 +58,10 @@ public class PromoExpressMessages extends PromoDialog {
         super.onResume();
         mBalanceSubscription = mAppState
                 .getObservable(BalanceData.class)
-                .subscribe(new Action1<BalanceData>() {
+                .subscribe(new RxUtils.ShortSubscription<BalanceData>() {
                     @Override
-                    public void call(BalanceData balanceData) {
+                    public void onNext(BalanceData balanceData) {
+                        super.onNext(balanceData);
                         if (balanceData.premium) {
                             // хак для открытия диалогов после покупки вип на случай когда протух фрагмент под активити покупок
                             PromoExpressMessages.this.closeFragment();

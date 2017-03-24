@@ -15,14 +15,17 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
 
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
-    val userPlaceholderRes = ObservableField((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_small
+    val userPlaceholderRes = ObservableField((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
                                                                                 else R.drawable.dialogues_av_girl_small))
 
     val mutualUserPhoto = ObservableField(mutualUser.photo)
-    val mutualPlaceholderRes = ObservableField(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
+    val mutualPlaceholderRes = ObservableField(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
 
-    fun startDialog() = navigator.showChat(mutualUser, null)
+    fun startDialog() {
+        navigator.showChat(mutualUser, null)
+        iDialogCloser.closeIt()
+    }
 
     fun closePopup() = iDialogCloser.closeIt()
 

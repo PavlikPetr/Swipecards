@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.edit.filter.view.DatingFilterFragment;
 
@@ -61,13 +61,18 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
     }
 
     @Override
+    public void onUpClick() {
+        super.finish();
+    }
+
+    @Override
     public boolean isTrackable() {
         return false;
     }
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 
