@@ -248,6 +248,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                     }
 
                     override fun onNext(t: IApiResponse?) {
+                        // в случае успешного добавления карты необходимо обновить опции пользователя
+                        App.getUserOptionsRequest().exec()
                         // todo send "buy payment ninja product" here and after success show dialog
                         // если есть продукт, значит надо провести покупку. Ориентируясь на успешность этого
                         // запроса на сервер покажем экран успешной покупки mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
