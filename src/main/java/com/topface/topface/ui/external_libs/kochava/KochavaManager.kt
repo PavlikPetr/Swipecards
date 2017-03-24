@@ -21,6 +21,7 @@ class KochavaManager {
     companion object {
         private const val APP_GUID = "kotopface-android-s07"
         private const val TAG = "KochavaManager"
+        private const val USER_AUTH_EVENT = "UserAuthEvent"
     }
 
     val kochavaTracker by lazy {
@@ -79,6 +80,11 @@ class KochavaManager {
             quantity(quantity)
             price(price)
         })
+    }
+
+    fun authEvent(uid: String) {
+        Debug.log("$TAG send $USER_AUTH_EVENT. Uid : $uid")
+        kochavaTracker.event(USER_AUTH_EVENT, uid)
     }
 
     /**
