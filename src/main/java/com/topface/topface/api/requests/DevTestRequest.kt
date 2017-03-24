@@ -12,7 +12,7 @@ class DevTestRequest(val delay: Int, val required: Int, val error: Int? = null,
         json.addProperty("required", required)
         json.addProperty("error", error)
         json.addProperty("errorMessage", errorMessage)
-      //  json.addProperty("delay", delay)
+        json.addProperty("delay", delay)
     }
 
     override fun getMethod() = "dev.test"

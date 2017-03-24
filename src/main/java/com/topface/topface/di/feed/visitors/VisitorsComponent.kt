@@ -5,9 +5,6 @@ import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorAdapterComponent
 import dagger.Subcomponent
 
-/**
- * Created by tiberal on 12.02.17.
- */
 @FragmentScope
 @Subcomponent(modules = arrayOf(VisitorsModule::class))
 interface VisitorsComponent {

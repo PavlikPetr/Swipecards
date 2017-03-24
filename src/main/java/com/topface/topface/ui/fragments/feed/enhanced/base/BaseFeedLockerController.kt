@@ -48,7 +48,7 @@ abstract class BaseFeedLockerController<VM : BaseViewModel>(private val mStub: V
     }
 
     override fun onInflate(stub: ViewStub?, inflated: View?) {
-        //после эого метода стаб в прокси будет null, такие вот дела
+        //после этого метода стаб в прокси будет null, такие вот дела
         mViewStub = stub
         lockScreenFactory?.let { factory ->
             mStub.binding?.let {

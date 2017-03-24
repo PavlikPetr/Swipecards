@@ -12,7 +12,6 @@ import com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData
 import com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 
-
 open class BaseFeedItemViewModel<out T : FeedItem>(val item: T, private val mNavigator: IFeedNavigator,
                                                    private val mIsActionModeEnabled: () -> Boolean, val click: () -> Unit) : BaseViewModel() {
     open val feed_type: String = "UNDEFINED"

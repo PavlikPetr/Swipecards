@@ -11,10 +11,6 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by tiberal on 08.02.17.
- */
-
 @Module
 class NavigationActivityModule(private val mActivity: NavigationActivity) {
 

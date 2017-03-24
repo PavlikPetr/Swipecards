@@ -4,7 +4,6 @@ import android.databinding.ViewStubProxy
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 
-
 class FansLockController(stub: ViewStubProxy, private val mNavigator: IFeedNavigator) : BaseFeedLockerController<FansLockScreenViewModel>(stub) {
     override fun initLockedFeedStub(errorCode: Int) {
         mStubModel?.let {

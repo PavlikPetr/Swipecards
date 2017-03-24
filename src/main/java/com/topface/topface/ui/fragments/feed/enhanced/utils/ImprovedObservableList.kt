@@ -11,13 +11,11 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import java.lang.ref.WeakReference
 import java.util.*
 
-
 class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = ObservableArrayList())
     : ObservableList<T> by observableList {
 
     var weakListener: WeakReference<ObservableList.OnListChangedCallback<out ObservableList<T>>>? = null
     var canAddListener = false
-
 
     override fun addOnListChangedCallback(listener: ObservableList.OnListChangedCallback<out ObservableList<T>>?) {
         if (canAddListener && this.weakListener == null) {
@@ -43,7 +41,6 @@ class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = Obs
         }
         weakListener = null
     }
-
 }
 
 @BindingAdapter("bindDataToFeedRecycler")
@@ -91,7 +88,6 @@ fun bindDataToAutoCompleteTextView(recyclerView: RecyclerView, data: ImprovedObs
             override fun onItemRangeMoved(objects: ObservableArrayList<FeedItem>, fromPosition: Int, toPosition: Int, itemCount: Int) {
                 Log.d("ImprovedObservableList", " onItemRangeMoved")
             }
-
 
             override fun onChanged(objects: ObservableArrayList<FeedItem>) {
                 Log.d("ImprovedObservableList", " onItemRangeChanged")

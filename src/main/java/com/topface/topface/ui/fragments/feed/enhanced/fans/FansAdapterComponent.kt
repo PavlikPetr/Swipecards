@@ -10,7 +10,6 @@ import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedItemAdapterComponent
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedItemViewModel
 
-
 class FansAdapterComponent(click: (View?) -> Unit, longClick: (View?) -> Unit)
     : BaseFeedItemAdapterComponent<NewFeedItemSimpleTimeBinding, FeedBookmark>(click, longClick) {
 

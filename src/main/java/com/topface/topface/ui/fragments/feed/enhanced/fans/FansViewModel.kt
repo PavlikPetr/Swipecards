@@ -11,8 +11,7 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-
-class FansViewModel(context: Context, api: IApi) : BaseFeedFragmentModel<FeedBookmark>(context,api) {
+class FansViewModel(context: Context, api: IApi) : BaseFeedFragmentModel<FeedBookmark>(context, api) {
     override val responseClass: Class<out IBaseFeedResponse>
         get() = GetFeedBookmarkListResponse::class.java
     override val feedsType: FeedsCache.FEEDS_TYPE
@@ -31,5 +30,4 @@ class FansViewModel(context: Context, api: IApi) : BaseFeedFragmentModel<FeedBoo
 
     override fun considerDuplicates(first: FeedBookmark, second: FeedBookmark) =
             first.user?.id == second.user?.id
-
 }

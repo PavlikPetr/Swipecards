@@ -16,7 +16,6 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDele
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 
-
 @FlurryOpenEvent(name = VisitorsFragment.SCREEN_TYPE)
 class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate {
 
@@ -58,6 +57,4 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
     override fun closeFragmentByForm() = onFeedUnlocked()
 
     override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
-
-
 }

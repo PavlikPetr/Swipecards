@@ -8,6 +8,8 @@ import com.topface.scruffy.ScruffyManager
 import com.topface.scruffy.utils.objectFromJson
 import com.topface.topface.App
 import com.topface.topface.api.Api
+import com.topface.topface.api.DeleteFeedRequestFactory
+import com.topface.topface.api.FeedRequestFactory
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.CountersData
 import com.topface.topface.state.TopfaceAppState
@@ -51,5 +53,14 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideApi() = Api()
+    fun provideDeleteFeedRequestFactory() = DeleteFeedRequestFactory()
+
+    @Provides
+    @Singleton
+    fun provideFeedRequestFactory() = FeedRequestFactory()
+
+    @Provides
+    @Singleton
+    fun provideApi(deleteFeedRequestFactory: DeleteFeedRequestFactory,
+                   feedRequestFactory: FeedRequestFactory) = Api(deleteFeedRequestFactory, feedRequestFactory)
 }

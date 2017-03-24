@@ -10,7 +10,6 @@ open class BaseViewModel : ILifeCycle {
      * Отцепить view model от вьюхи. Тут нужно убивать любые ссылки на вьюху.
      */
     open fun unbind() {
-
     }
 
     /**
@@ -18,7 +17,6 @@ open class BaseViewModel : ILifeCycle {
      * и освободить все, что освобождается
      */
     open fun release() {
-
     }
 
     /**
@@ -26,22 +24,17 @@ open class BaseViewModel : ILifeCycle {
      * для делегирования ивентов
      */
     override fun onSavedInstanceState(state: Bundle) {
-
     }
 
     override fun onRestoreInstanceState(state: Bundle) {
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
     }
 
     override fun onResume() {
-
     }
 
     override fun onPause() {
-
     }
 }

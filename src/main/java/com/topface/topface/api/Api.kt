@@ -3,6 +3,7 @@ package com.topface.topface.api
 import android.os.Bundle
 import com.topface.topface.api.requests.AppDayRequest
 import com.topface.topface.api.requests.BlackListAddRequest
+import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
@@ -14,11 +15,8 @@ import java.util.*
  * Api interactor
  * Created by tiberal on 06.03.17.
  */
-class Api : IApi {
-
-    val mDeleteRequestFactory = DeleteFeedRequestFactory()
-
-    val mFeedRequestFactory = FeedRequestFactory()
+class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
+          private val mFeedRequestFactory: IFeedRequestFactory) : IApi {
 
     override fun callAppDayRequest(typeFeedFragment: String) =
             AppDayRequest(typeFeedFragment).subscribe()

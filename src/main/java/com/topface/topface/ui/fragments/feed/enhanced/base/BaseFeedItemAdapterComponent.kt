@@ -48,5 +48,4 @@ abstract class BaseFeedItemAdapterComponent<T : ViewDataBinding, D : FeedItem>(v
             binding.root.isSelected = mMultiselectionController.mSelected.contains(data)
         }
     }
-
 }

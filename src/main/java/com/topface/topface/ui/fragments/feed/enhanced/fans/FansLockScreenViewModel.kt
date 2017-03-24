@@ -5,7 +5,6 @@ import android.view.View
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseLockScreenViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 
-
 class FansLockScreenViewModel(mIFeedUnlocked: IFeedUnlocked) :
         BaseLockScreenViewModel(mIFeedUnlocked) {
 

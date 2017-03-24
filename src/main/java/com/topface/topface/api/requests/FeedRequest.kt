@@ -13,13 +13,13 @@ class FeedRequest<T : Any>(val service: String, val previousUnreadState: UnreadS
 
     override fun createJson(json: JsonObject) = with(json) {
         addProperty("leave", leave)
-        if (to != null) {
-            addProperty("to", to)
+        to?.let {
+            addProperty("to", it)
         }
-        if (from != null) {
-            addProperty("from", from)
+        from?.let {
+            addProperty("from", it)
         }
-        if (previousUnreadState != null) {
+        previousUnreadState?.let {
             addProperty("fromUnread", previousUnreadState.from)
             addProperty("toUnread", previousUnreadState.to)
         }

@@ -13,9 +13,6 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import dagger.Module
 import dagger.Provides
 
-/**
- * Created by tiberal on 14.02.17.
- */
 @Module
 class BaseFeedModule(private val mFragment: BaseFeedFragment<*>) {
 
@@ -27,11 +24,9 @@ class BaseFeedModule(private val mFragment: BaseFeedFragment<*>) {
             ActionModeController(mFragment.activity.menuInflater, mFragment.actionModeMenu,
                     mActionModeEventsListener = mFragment)
 
-
     @Provides
     @FragmentScope
     fun provideBannersController() = BannersController(mFragment, App.get().options)
-
 
     @Provides
     @FragmentScope
@@ -45,5 +40,4 @@ class BaseFeedModule(private val mFragment: BaseFeedFragment<*>) {
         }
         return mAdapter
     }
-
 }

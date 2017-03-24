@@ -10,7 +10,6 @@ import com.topface.topface.di.feed.visitors.VisitorsComponent
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedItemAdapterComponent
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedItemViewModel
 
-
 class VisitorAdapterComponent(click: (View?) -> Unit, longClick: (View?) -> Unit)
     : BaseFeedItemAdapterComponent<NewFeedItemSimpleTimeBinding, Visitor>(click, longClick) {
 
@@ -25,5 +24,4 @@ class VisitorAdapterComponent(click: (View?) -> Unit, longClick: (View?) -> Unit
         binding.viewModel = VisitorsItemViewModel(data, mNavigator,
                 isActionModeEnabled = { mMultiselectionController.mSelected.isNotEmpty() }) { click(binding.root) } as BaseFeedItemViewModel<FeedItem>
     }
-
 }

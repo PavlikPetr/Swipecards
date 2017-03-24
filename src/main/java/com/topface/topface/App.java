@@ -128,7 +128,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     @Inject
     EventBus mEventBus;
     @Inject
-    ScruffyManager scruffyManager;
+    ScruffyManager mScruffyManager;
     private AdjustManager mAdjustManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
@@ -446,7 +446,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         super.onCreate();
         mContext = getApplicationContext();
         appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(getApplicationContext()))
+                .appModule(new AppModule(mContext))
                 .build();
         appComponent.inject(this);
         LeakCanary.install(this);

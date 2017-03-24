@@ -50,5 +50,4 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
         ComponentManager.releaseComponent(FansComponent::class.java)
         super.onDestroyView()
     }
-
 }

@@ -27,14 +27,8 @@ object ComponentManager {
             }) as T
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Any?> obtainComponent(componentClass: Class<T>): T {
-        val component = componentsMap[componentClass]
-        if (component != null) {
-            return component as T
-        } else {
-            throw ComponentNotFound()
-        }
-    }
+    fun <T : Any?> obtainComponent(componentClass: Class<T>) =
+            (componentsMap[componentClass] ?: ComponentNotFound()) as T
 
     fun releaseComponent(clazz: Class<*>) = componentsMap.remove(clazz)
 }

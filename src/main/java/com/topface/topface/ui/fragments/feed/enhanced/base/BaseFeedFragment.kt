@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.enhanced.base
 
-import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.appodeal.ads.g
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.banners.IPageWithAds
 import com.topface.topface.banners.PageInfo
@@ -35,7 +33,7 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
         ActionModeController.OnActionModeEventsListener,
         IFeedUnlocked, IPageWithAds {
     /**
-     * onSaveInstanceStateWasCalled - флаг того, что был вызван onSaveInstanceState, сдовательно
+     * onSaveInstanceStateWasCalled - флаг того, что был вызван onSaveInstanceState, следовательно
      * мы или пересоздаем фрагмент либо свернули приложение
      */
     private var onSaveInstanceStateWasCalled = false
@@ -73,7 +71,6 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
             mAdapter.notifyItemChanged(itemPosition)
         }
     }
-
 
     @Suppress("UNCHECKED_CAST")
     protected fun itemClick(view: View?) {

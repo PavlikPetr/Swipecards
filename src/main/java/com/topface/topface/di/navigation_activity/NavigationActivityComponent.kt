@@ -12,10 +12,6 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import dagger.Subcomponent
 
-/**
- * Created by tiberal on 08.02.17.
- */
-
 @ActivityScope
 @Subcomponent(modules = arrayOf(NavigationActivityModule::class))
 interface NavigationActivityComponent {

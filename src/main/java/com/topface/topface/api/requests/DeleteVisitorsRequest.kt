@@ -5,7 +5,6 @@ import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.stringListToJsonArray
 import java.util.*
 
-
 class DeleteVisitorsRequest(val userIds: ArrayList<String>) : BaseScruffyRequest<Completed>() {
 
     override fun getMethod() = "visitor.delete"

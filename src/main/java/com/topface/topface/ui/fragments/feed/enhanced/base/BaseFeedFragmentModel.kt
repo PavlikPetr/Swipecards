@@ -23,7 +23,6 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
-import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayStubItem
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ImprovedObservableList
 import com.topface.topface.ui.fragments.feed.feed_base.FeedCacheManager

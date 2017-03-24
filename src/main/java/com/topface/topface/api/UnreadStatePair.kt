@@ -2,31 +2,26 @@ package com.topface.topface.api
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.topface.topface.ui.new_adapter.ExpandableItem
+import com.topface.scruffy.utils.readBoolean
+import com.topface.scruffy.utils.writeBoolean
 
-class UnreadStatePair(var from: Boolean = false, var to: Boolean = false) : Parcelable {
+data class UnreadStatePair(var from: Boolean = false, var to: Boolean = false, var wasFromInited: Boolean = false)
+    : Parcelable {
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<UnreadStatePair> = object : Parcelable.Creator<UnreadStatePair> {
-            override fun createFromParcel(`in`: Parcel) = UnreadStatePair(`in`.readByte().toInt() == 1, `in`.readByte().toInt() == 1).apply {
-                wasFromInited = `in`.readByte().toInt() == 1
-            }
+            override fun createFromParcel(`in`: Parcel) =
+                    UnreadStatePair(`in`.readBoolean(), `in`.readBoolean(), `in`.readBoolean())
 
             override fun newArray(size: Int): Array<UnreadStatePair?> = arrayOfNulls(size)
         }
-
-
     }
 
-    var wasFromInited: Boolean = false
+    override fun describeContents() = 0
 
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeByte((if (wasFromInited) 1 else 0).toByte())
-        dest.writeByte((if (from) 1 else 0).toByte())
-        dest.writeByte((if (to) 1 else 0).toByte())
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeBoolean(wasFromInited)
+        writeBoolean(from)
+        writeBoolean(to)
     }
 }

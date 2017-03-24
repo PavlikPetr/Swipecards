@@ -36,20 +36,18 @@ class Visitor : FeedItem()
 class FeedBookmark : FeedItem()
 
 /**
- * С помощью этой штуки мы можем полуить данные из отмета не страдая от некорректных женериков.
+ * С помощью этой штуки мы можем получить данные из ответа не страдая от некорректных женериков.
  */
 open class IBaseFeedResponse {
     val more: Boolean = false
     open fun getItemsList(): ArrayList<out FeedItem> = ArrayList()
 }
 
-class GetVisitorsListResponse : IBaseFeedResponse() {
-    val items: ArrayList<Visitor> = ArrayList()
+data class GetVisitorsListResponse(val items: ArrayList<Visitor> = ArrayList()) : IBaseFeedResponse() {
     override fun getItemsList() = items
 }
 
-class GetFeedBookmarkListResponse : IBaseFeedResponse() {
-    val items: ArrayList<FeedBookmark> = ArrayList()
+data class GetFeedBookmarkListResponse(val items: ArrayList<FeedBookmark> = ArrayList()) : IBaseFeedResponse() {
     override fun getItemsList() = items
 }
 
