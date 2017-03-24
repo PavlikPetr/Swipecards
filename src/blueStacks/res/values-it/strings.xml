@@ -974,6 +974,10 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="buy_likes_become_popular_male">Diventa popolare</string>
   <string name="you_are_not_shown">Non ti si vede molto nella sezione \&quot;Appuntamenti\&quot;</string>
   <string name="you_are_not_shown_answer">Rispondi ad alcuni dei Like che hai ricevuto per apparire nella sezione.</string>
+  <string name="offers_free_title">Gratis</string>
+  <string name="offers_free_vip">Vip gratuito</string>
+  <string name="offers_free_coins">Monete gratuite</string>
+  <string name="offers_free_likes">Like gratuiti</string>
   <string name="permission_alert_button_allow">Vai a</string>
   <string name="permission_alert_button_disallow">Rifiuta</string>
   <string name="permission_alert_button_message">Per caricare le foto dovrai permettere all\'app di accedere alla memoria del telefono dalle Impostazioni</string>

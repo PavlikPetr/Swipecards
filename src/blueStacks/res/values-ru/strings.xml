@@ -1031,6 +1031,10 @@
   <string name="buy_likes_become_popular_male">Стать популярным</string>
   <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
   <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+  <string name="offers_free_title">Бесплатно</string>
+  <string name="offers_free_vip">Бесплатный VIP</string>
+  <string name="offers_free_coins">Бесплатные монеты</string>
+  <string name="offers_free_likes">Бесплатные симпатии</string>
   <string name="permission_alert_button_allow">Перейти</string>
   <string name="permission_alert_button_disallow">Отклонить</string>
   <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>

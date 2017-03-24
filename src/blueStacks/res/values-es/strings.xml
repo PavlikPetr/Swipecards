@@ -972,6 +972,10 @@
   <string name="buy_likes_become_popular_male">Hazte popular</string>
   <string name="you_are_not_shown">Casi no apareces en \&quot;Citas\&quot;</string>
   <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
+  <string name="offers_free_title">Gratis</string>
+  <string name="offers_free_vip">VIP Gratis</string>
+  <string name="offers_free_coins">Monedas Gratis</string>
+  <string name="offers_free_likes">Simpatías Gratis</string>
   <string name="permission_alert_button_allow">Ir a</string>
   <string name="permission_alert_button_disallow">Rechazar</string>
   <string name="permission_alert_button_message">Para subir fotos necesitas darle a la app acceso a la memoria de tu teléfono a través de Configuración</string>

@@ -961,6 +961,10 @@
   <string name="buy_likes_become_popular_male">Become popular</string>
   <string name="you_are_not_shown">You are hardly being shown in \&quot;Dating\&quot;</string>
   <string name="you_are_not_shown_answer">Respond to some incoming Likes and you will be shown more often.</string>
+  <string name="offers_free_title">Free</string>
+  <string name="offers_free_vip">Free VIP</string>
+  <string name="offers_free_coins">Free Coins</string>
+  <string name="offers_free_likes">Free Likes</string>
   <string name="permission_alert_button_allow">Go to</string>
   <string name="permission_alert_button_disallow">Decline</string>
   <string name="permission_alert_button_message">To upload photos you need to give the app access to your phone\'s memory via Settings</string>

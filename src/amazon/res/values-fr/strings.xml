@@ -1069,6 +1069,10 @@
     <string name="buy_likes_become_popular_male">Devenez populaire</string>
     <string name="you_are_not_shown">Vous apparaissez difficilement dans les \"Rencontres\"</string>
     <string name="you_are_not_shown_answer">Envoyez un J\'aime en réponse à plusieurs J\'aime reçus et apparaissez ainsi plus souvent.</string>
+    <string name="offers_free_title">Gratuit</string>
+    <string name="offers_free_vip">VIP gratuit</string>
+    <string name="offers_free_coins">Pièces gratuites</string>
+    <string name="offers_free_likes">J\'aime gratuits</string>
     <string name="permission_alert_button_allow">Aller à</string>
     <string name="permission_alert_button_disallow">Décliner</string>
     <string name="permission_alert_button_message">Pour télécharger des photos, vous devez donner à l\'application l\'accès à la mémoire de votre téléphone via les Paramètres</string>
