@@ -97,17 +97,15 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
             Observable.fromEmitter<UserSubscriptions>({ emitter ->
                 val sendRequest = PaymentNinhaSubscriptionsRequest(App.getContext())
                 sendRequest.callback(object : DataApiHandler<UserSubscriptions>(Looper.getMainLooper()) {
-                    override fun success(data: UserSubscriptions?, response: IApiResponse?) = emitter.onNext(getSubs())
+                    override fun success(data: UserSubscriptions?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), UserSubscriptions::class.java)
                     override fun fail(codeError: Int, response: IApiResponse) {
-                        emitter.onNext(getSubs())
-//                        emitter.onError(Throwable(codeError.toString()))
+                        emitter.onError(Throwable(codeError.toString()))
                     }
 
                     override fun always(response: IApiResponse) {
                         super.always(response)
-                        emitter.onNext(getSubs())
-//                        emitter.onCompleted()
+                        emitter.onCompleted()
                     }
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
@@ -116,24 +114,18 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
             Observable.fromEmitter<CardInfo>({ emitter ->
                 val sendRequest = DefaultCardRequest(App.getContext())
                 sendRequest.callback(object : DataApiHandler<CardInfo>(Looper.getMainLooper()) {
-                    override fun success(data: CardInfo?, response: IApiResponse?) = emitter.onNext(CardInfo("1234", "visa"))
+                    override fun success(data: CardInfo?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), CardInfo::class.java)
                     override fun fail(codeError: Int, response: IApiResponse) {
-//                        emitter.onError(Throwable(codeError.toString()))
-                        emitter.onNext(CardInfo("1234", "visa"))
+                        emitter.onError(Throwable(codeError.toString()))
                     }
 
                     override fun always(response: IApiResponse) {
                         super.always(response)
-//                        emitter.onCompleted()
-                        emitter.onNext(CardInfo("1234", "visa"))
+                        emitter.onCompleted()
                     }
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
-
-    private fun getSubs() = UserSubscriptions(arrayOf(
-            SubscriptionInfo("some id", 0, "Подписка на VIP", 1523793600, true),
-            SubscriptionInfo("autopay_id", 3, "Автопополнение монет", 1492257600, true)))
 
     private fun getCancelSubscriptionRequest() =
             Observable.fromEmitter<SimpleResponse>({ emitter ->
