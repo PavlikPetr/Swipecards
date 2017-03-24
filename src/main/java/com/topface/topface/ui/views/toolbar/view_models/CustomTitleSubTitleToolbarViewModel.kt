@@ -4,7 +4,7 @@ import android.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import com.topface.topface.R
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils
@@ -14,7 +14,7 @@ import com.topface.topface.utils.Utils
  * вью модель тулбара кактарая по дефолту имеет upIcon в виде стрелки влево и кастомный title/subtitle
  */
 
-class CustomTitleSubTitleToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
+class CustomTitleSubTitleToolbarViewModel @JvmOverloads constructor(binding: ToolbarViewBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation) {
     var extraViewModel: CustomToolbarViewModel
 

@@ -3,11 +3,10 @@ package com.topface.topface.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
-
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.bonus.view.BonusActivity;
 import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
@@ -23,7 +22,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
     ExternalLinkExecuter.OnExternalLinkListener mListener = new ExternalLinkExecuter.OnExternalLinkListener() {
         @Override
         public void onProfileLink(int profileID) {
-            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null,"externalLink"));
+            startActivity(UserProfileActivity.createIntent(null, null, profileID, null, true, true, null, null, "externalLink"));
             getIntent().setData(null);
             finish();
         }
@@ -104,7 +103,7 @@ public class ExternalLinkActivity extends BaseFragmentActivity<AcFragmentFrameBi
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

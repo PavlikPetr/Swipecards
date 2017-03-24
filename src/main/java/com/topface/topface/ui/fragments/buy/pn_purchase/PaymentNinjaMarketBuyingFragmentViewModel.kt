@@ -7,12 +7,11 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Options
+import com.topface.topface.requests.PaymentNinjaPurchaseRequest
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.databinding.SingleObservableArrayList
-import com.topface.topface.utils.extensions.getCoinsProducts
-import com.topface.topface.utils.extensions.getLikesProducts
-import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.extensions.getVipProducts
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -22,7 +21,7 @@ import rx.Subscription
  * Buy buttons view model
  * Created by petrp on 02.03.2017.
  */
-class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProducts: Boolean) {
+class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: FeedNavigator, private val mIsVipPurchaseProducts: Boolean, private val mFrom: String) {
     val isCheckBoxVisible = ObservableInt(View.GONE)
     val isChecked = ObservableBoolean(true)
     val cardInfo = ObservableField("")
@@ -58,6 +57,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
     }
 
     private var mOptionsSubscription: Subscription? = null
+    private var mPurchaseSubscription: Subscription? = null
 
     init {
         mOptionsSubscription = App.getAppComponent().appState().getObservable(Options::class.java)
@@ -66,7 +66,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     it?.let {
-                        if (it.lastDigits.isNotEmpty() && it.type.isNotEmpty()) {
+                        if (it.isCradAvailable()) {
                             cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigits))
                             isCheckBoxVisible.set(View.VISIBLE)
                         } else {
@@ -76,7 +76,21 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProduc
                 })
     }
 
+    fun buyProduct(product: PaymentNinjaProduct) {
+        if (!App.get().options.paymentNinjaInfo.isCradAvailable() ||
+                !isChecked.get()) {
+            mNavigator.showPaymentNinjaAddCardScreen(product, mFrom)
+        } else {
+            mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom)
+                    .getRequestSubscriber()
+                    .applySchedulers()
+                    .subscribe(shortSubscription {
+                        mNavigator.showPurchaseSuccessfullFragment(product.type)
+                    })
+        }
+    }
+
     fun release() {
-        mOptionsSubscription.safeUnsubscribe()
+        arrayOf(mPurchaseSubscription, mOptionsSubscription).safeUnsubscribe()
     }
 }

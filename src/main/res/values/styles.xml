@@ -1474,6 +1474,10 @@
         <item name="android:background">@drawable/green_button_selector</item>
     </style>
 
+    <style name="PopupGreenButton.Purchase">
+        <item name="android:background">@drawable/green_button_selector</item>
+    </style>
+
     <style name="PopupBorderlessdButton" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -1786,6 +1790,31 @@
         <item name="android:inputType">number</item>
         <item name="android:textColor">@color/dark_primary_text</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="PaymentNinjaPurchasesItemTitle">
+        <item name="android:textColor">@color/ninja_payments_screen_item_title_color</item>
+        <item name="android:textSize">@dimen/ninja_payments_screen_item_title_size</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="PaymentNinjaPurchasesItemIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">
+            @dimen/payment_ninja_payments_item_icon_padding_left
+        </item>
+        <item name="android:layout_marginStart" tools:ignore="NewApi">
+            @dimen/payment_ninja_payments_item_icon_padding_left
+        </item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="PaymentNinjaPurchasesItemContainer">
+        <item name="android:background">@drawable/borderless_btn_selector</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/payment_ninja_payments_items_height</item>
     </style>
 
 </resources>

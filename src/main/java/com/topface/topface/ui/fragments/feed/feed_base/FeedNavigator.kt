@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
-import android.text.TextUtils
 import android.view.View
 import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.dialogs.ErrorDialogFactory
@@ -36,6 +35,10 @@ import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragme
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.settings.FeedbackMessageFragment
+import com.topface.topface.ui.settings.SettingsContainerActivity
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 
@@ -183,14 +186,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaPurchaseProduct(product: PaymentNinjaProduct) {
-        // ну чета делаем с данными о продукте, чтобы провести покупку. Моделька уже parcelable, так что если надо кинуть в активити - ноу проблем
-        if (TextUtils.isEmpty(App.get().options.paymentNinjaInfo.lastDigits)) {
-            mActivityDelegate.startActivityForResult(NinjaAddCardActivity.createIntent(fromInstantPurchase = false, product = product),
-                    NinjaAddCardActivity.REQUEST_CODE)
-        } else {
-            // todo simply call payment request with given product
-        }
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                NinjaAddCardActivity.REQUEST_CODE)
     }
 
     override fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit) {
@@ -206,5 +205,19 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                     }
                 }
         )
+    }
+
+    override fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData) {
+        mActivityDelegate.supportFragmentManager
+                .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
+                ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
+                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+    }
+
+    override fun showPaymentNinjaHelp() {
+        mActivityDelegate.startActivityForResult(SettingsContainerActivity.getFeedbackMessageIntent(
+                mActivityDelegate.applicationContext,
+                FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
+        ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
 }

@@ -192,7 +192,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if(!isDatingRedesignEnabled()) {
+        if (!isDatingRedesignEnabled()) {
             if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме

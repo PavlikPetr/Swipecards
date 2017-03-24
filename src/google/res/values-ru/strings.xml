@@ -1305,6 +1305,11 @@
     <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
     <string name="ninja_text_trial_1">У вас спишется и сразу вернётся €1 для того, чтобы подтвердить действительность карты.</string>
     <string name="ninja_text_trial_2">Через %1$s будет проведена транзакция на %2$d %3$s, каждый месяц подписка будет автоматически обновляться. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках</string>
+    <string name="ninja_settings_toolbar">Платежи</string>
+    <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
+    <string name="ninja_cancel_vip_status">Отменить подписку</string>
+    <string name="ninja_use_another_card">Использовать другую карту</string>
+    <string name="ninja_delete_card">Удалить карту</string>
     <string name="ninja_error_dialog_title">Произошла ошибка</string>
     <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберите другой способ оплаты.</string>
     <string name="ninja_error_dialog_message_single">Попробуйте ещё раз.</string>
@@ -1318,11 +1323,19 @@
     </plurals>
 
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
-    <string name="get_other_card">Использовать другую карту</string>
     <string name="ninja_cvv_error">Неверный код</string>
     <string name="ninja_trhu_error">Неверная дата</string>
     <string name="ninja_number_error">Неверный формат номера карты</string>
     <string name="ninja_email_error">Неверный формат email</string>
     <string name="use_card">Использовать карту **%s</string>
-
+    <string name="ninja_no_card_title">Добавить карту</string>
+    <string name="ninja_subscription_expiration">Активна до %s</string>
+    <string name="ninja_subscription_cancelled">Отменена. Истекает %s</string>
+    <string name="ninja_autofilling_cancelled">Отменено</string>
+    <string name="ninja_autofilling_activated">Активно</string>
+    <string name="ninja_support">Поддержка</string>
+    <string name="ninja_ask_to_delete_card_message">Вы уверены?</string>
+    <string name="ninja_product_by_price">%1$s за %2$s</string>
+    <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
+    <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
 </resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.settings.payment_ninja.view_models.PaymentNinjaPurchasesItemWithSubtitle"/>
+    </data>
+
+    <RelativeLayout
+        style="@style/PaymentNinjaPurchasesItemContainer"
+        android:clickable="true"
+        android:longClickable="true"
+        android:onClick="@{() -> viewModel.onClickListener.invoke()}"
+        app:onLongClickListener="@{() -> viewModel.onLongClickListener.invoke()}">
+
+        <ImageView
+            style="@style/PaymentNinjaPurchasesItemIcon"
+            android:src="@{viewModel.icon}"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:paddingEnd="@dimen/payment_ninja_payments_item_text_padding_right"
+            android:paddingLeft="@dimen/payment_ninja_payments_item_text_padding_left"
+            android:paddingRight="@dimen/payment_ninja_payments_item_text_padding_right"
+            android:paddingStart="@dimen/payment_ninja_payments_item_text_padding_left"
+            tools:ignore="RtlSymmetry">
+
+            <TextView
+                style="@style/PaymentNinjaPurchasesItemTitle"
+                android:text="@{viewModel.title}"
+                tools:text="Test title"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:longClickable="false"
+                android:text="@{viewModel.subTitle}"
+                android:textColor="@{viewModel.subTitleColor}"
+                android:textSize="@dimen/ninja_payments_screen_item_subtitle_size"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

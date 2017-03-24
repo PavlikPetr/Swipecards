@@ -47,7 +47,7 @@ class MultiObservableArrayList<T> : ArrayList<T>() {
     }
 
     @SuppressLint("NewApi")
-    override fun removeIf(filter: Predicate<in T>?): Boolean {
+    override fun removeIf(filter: Predicate<in T>): Boolean {
         return super.removeIf(filter).apply { informSubscribers() }
     }
 

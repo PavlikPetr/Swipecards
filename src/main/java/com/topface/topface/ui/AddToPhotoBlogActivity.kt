@@ -15,7 +15,7 @@ import com.topface.topface.R
 import com.topface.topface.data.Photos
 import com.topface.topface.databinding.AddToPhotoBlogHeaderLayoutBinding
 import com.topface.topface.databinding.AddToPhotoBlogLayoutBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.ui.adapters.LoadingListAdapter
@@ -97,7 +97,7 @@ class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBind
         return mHeaderBinding.root
     }
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding) =
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) =
             BackToolbarViewModel(toolbar,
                     getString(R.string.publish_photo), this@AddToPhotoBlogActivity)
 

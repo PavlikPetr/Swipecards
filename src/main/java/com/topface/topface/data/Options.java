@@ -21,6 +21,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -157,8 +158,6 @@ public class Options extends AbstractData {
 
     public Payments payments = new Payments();
 
-    public PaymentNinjaInfo paymentNinjaInfo = new PaymentNinjaInfo();
-
     /**
      * Ключ эксперимента под который попадает данный пользователь (передаем его в GA)
      */
@@ -209,6 +208,11 @@ public class Options extends AbstractData {
      */
     public FBInviteSettings fbInviteSettings = new FBInviteSettings();
 
+    /**
+     * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
+     */
+    public PaymentInfo paymentNinjaInfo = new PaymentInfo();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -253,14 +257,7 @@ public class Options extends AbstractData {
 
             if (payments != null) {
                 this.payments = JsonUtils.optFromJson(payments.toString(), Payments.class, new Payments());
-                this.payments.other.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
-                this.payments.premium.list.add(0, new PurchasesTabData("Карта", PurchasesTabData.PAYMENT_NINJA));
             }
-
-            paymentNinjaInfo = JsonUtils.optFromJson(response.optString("paymentNinjaInfo"), PaymentNinjaInfo.class, new PaymentNinjaInfo());
-            paymentNinjaInfo.enabled = true;
-            paymentNinjaInfo.lastDigits = "9632";
-            paymentNinjaInfo.type = "MasterCard";
 
             JSONObject contactsInvite = response.optJSONObject("inviteContacts");
             if (contactsInvite != null) {
@@ -393,6 +390,9 @@ public class Options extends AbstractData {
             JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
             if (fbInvitesJsonObject != null) {
                 fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
+            }
+            if (response.has("paymentNinjaInfo")) {
+                paymentNinjaInfo = JsonUtils.fromJson(response.optJSONObject("paymentNinjaInfo").toString(), PaymentInfo.class);
             }
 
         } catch (Exception e) {
@@ -672,20 +672,6 @@ public class Options extends AbstractData {
         public Payments() {
         }
 
-    }
-
-    public static class PaymentNinjaInfo {
-        /**
-         * enabled - {Boolean} использовать ли Payment Ninja в целом
-         * lastDigits - {String} пустая строка если карты нет, иначе последние 4ре цифры
-         * email - {String} мыло этого пользователя в нашей системе, если указано - значит при добавлении карты мыло запрашивать не надо
-         * publicKey - {String} публичный ключик нашего проекта
-         */
-        public boolean enabled;
-        public String lastDigits;
-        public String email;
-        public String type;
-        public String publicKey;
     }
 
     public static class Offerwalls {

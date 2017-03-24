@@ -23,7 +23,7 @@ import com.topface.topface.data.Photos;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.databinding.AcPhotosBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.requests.AlbumRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -690,7 +690,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         PhotoSwitcherToolbarViewModel toolbarViewModel = new PhotoSwitcherToolbarViewModel(toolbar, this);
         toolbarViewModel.getShadowVisibility().set(View.GONE);
         return toolbarViewModel;
@@ -698,7 +698,7 @@ public class PhotoSwitcherActivity extends BaseFragmentActivity<AcPhotosBinding>
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcPhotosBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcPhotosBinding binding) {
         return binding.toolbarInclude;
     }
 

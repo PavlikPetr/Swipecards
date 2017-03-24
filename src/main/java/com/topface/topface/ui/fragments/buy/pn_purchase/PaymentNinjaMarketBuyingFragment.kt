@@ -3,11 +3,9 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
 import com.topface.topface.ui.fragments.BaseFragment
@@ -47,7 +45,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        PaymentNinjaMarketBuyingFragmentViewModel(mIsPremiumProducts)
+        PaymentNinjaMarketBuyingFragmentViewModel(mFeedNavigator, mIsPremiumProducts, mFrom ?: "")
     }
 
     private val mPnBuyingTypeProvider by lazy {
@@ -61,13 +59,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
-                    val info = App.get().options.paymentNinjaInfo
-                    if (info.lastDigits.isNullOrEmpty() || info.type.isNullOrEmpty() || !mViewModel.isChecked.get()) {
-                        mFeedNavigator.showPaymentNinjaPurchaseProduct(it)
-                    } else {
-                        // Необходимо отправить запрос на покупку
-                        // P.S. метода на сервере еще нет
-                    }
+                    mViewModel.buyProduct(it)
                 })
                 .addAdapterComponent(BuyScreenTitleComponent(mText))
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())

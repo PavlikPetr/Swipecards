@@ -1048,6 +1048,19 @@
     <string name="write_her_without_symphaty">Écrivez-lui sans Attraction mutuelle !</string>
     <string name="people_nearby_popover_text">Apparaissez dans le fil des photos !\nDes milliers de personnes vous verront</string>
     <string name="mutual_popup_you_get_mutual">Vous vous appréciez l\'un et l\'autre !</string>
+    <string name="start_dialog">Commencez la conversation</string>
+    <string name="continue_to_meet">Continuer de Rencontrer</string>
+    <string name="basic_information">Informations de base</string>
+    <string name="purchase_successfull">Paiement réussi !</string>
+    <string name="now_you_have_VIP">Vous avez maintenant le statut VIP</string>
+    <plurals name="you_have_some_coins">
+        <item quantity="other">Vous avez désormais %d Pièces</item>
+        <item quantity="one">Vous avez désormais %d Pièce</item>
+    </plurals>
+    <plurals name="you_have_some_sympathies">
+        <item quantity="other">Vous avez désormais %d J\'aime</item>
+        <item quantity="one">Vous avez désormais %d J\'aime</item>
+    </plurals>
     <string name="photo_feed_add_photo">Apparaissez dans le fil des photos !\nDes milliers de personnes vous verront.</string>
     <string name="buy_likes_get_more_likes">Obtenez plus de J\'aime !</string>
     <string name="buy_likes_become_first_in_searchlist_female">Apparaissez en premier aux garçons qui recherchent des filles comme vous !</string>
@@ -1056,4 +1069,37 @@
     <string name="buy_likes_become_popular_male">Devenez populaire</string>
     <string name="you_are_not_shown">Vous apparaissez difficilement dans les \"Rencontres\"</string>
     <string name="you_are_not_shown_answer">Envoyez un J\'aime en réponse à plusieurs J\'aime reçus et apparaissez ainsi plus souvent.</string>
+    <string name="permission_alert_button_allow">Aller à</string>
+    <string name="permission_alert_button_disallow">Décliner</string>
+    <string name="permission_alert_button_message">Pour télécharger des photos, vous devez donner à l\'application l\'accès à la mémoire de votre téléphone via les Paramètres</string>
+    <string name="ninja_hint_card_number">Numéro de carte</string>
+    <string name="ninja_hint_card_expires">Actif jusqu\'à</string>
+    <string name="ninja_button_buy">Acheter</string>
+    <string name="ninja_text_1">Paiement sécurisé</string>
+    <string name="ninja_text_2">Sécurisé SSL 128 bits</string>
+    <string name="ninja_text_4">En incluant la somme donnée, vous acceptez</string>
+    <string name="ninja_text_link">Les règles du service</string>
+    <string name="ninja_text_5">Dans 7 jours, le statut VIP sera automatiquement renouvelé. Votre carte sera enregistrée pour des paiements futurs. Vous pouvez annuler votre abonnement et supprimer les informations de votre carte dans les Paramètres.</string>
+    <string name="ninja_settings_toolbar">Paiements</string>
+    <string name="ninja_vip_status_title">Abonnement au statut VIP</string>
+    <string name="ninja_cancel_vip_status">Annuler l\'abonnement</string>
+    <string name="ninja_use_another_card">Utilisez une autre carte</string>
+    <string name="ninja_delete_card">Supprimer la carte</string>
+    <string name="ninja_error_dialog_title">Une erreur s\'est produite</string>
+    <string name="ninja_error_dialog_message_dual">Veuillez réessayer ou choisir un autre mode de paiement.</string>
+    <string name="ninja_error_dialog_message_single">Veuillez réessayer</string>
+    <string name="ninja_error_dialog_button_retry">Essayez une autre carte</string>
+    <string name="ninja_error_dialog_button_change">Autre mode de paiement</string>
+    <string name="payment_ninja_card_number">La carte **%s sera utilisée pour le paiement</string>
+    <string name="ninja_trhu_error">Date incorrecte</string>
+    <string name="ninja_number_error">Format de numéro de carte incorrect</string>
+    <string name="ninja_email_error">Format d\'e-mail incorrect</string>
+    <string name="use_card">Utiliser la carte **%s</string>
+    <string name="ninja_no_card_title">Ajouter une carte</string>
+    <string name="ninja_subscription_expiration">Actif jusqu\'à %s</string>
+    <string name="ninja_subscription_cancelled">Annulé. Expirant %s</string>
+    <string name="ninja_autofilling_cancelled">Annulé</string>
+    <string name="ninja_autofilling_activated">Actif</string>
+    <string name="ninja_support">Assistance</string>
+    <string name="ninja_ask_to_delete_card_message">Êtes-vous sûr ?</string>
 </resources>

@@ -8,8 +8,9 @@ import android.support.v4.app.Fragment;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.settings.payment_ninja.SettingsPaymentsNinjaFragment;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +28,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
     public static final int INTENT_CHANGE_EMAIL = 206;
     public static final int INTENT_NOTIFICATIONS = 207;
     public static final int INTENT_FEEDBACK = 208;
+    public static final int INTENT_PURCHASES = 209;
 
     private String mConfirmCode;
 
@@ -76,6 +78,9 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
                 case INTENT_NOTIFICATIONS:
                     fragment = new SettingsNotificationsFragment();
                     break;
+                case INTENT_PURCHASES:
+                    fragment = new SettingsPaymentsNinjaFragment();
+                    break;
                 default:
                     break;
             }
@@ -96,7 +101,7 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

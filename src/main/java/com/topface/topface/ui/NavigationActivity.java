@@ -30,7 +30,7 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -234,7 +234,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return mWeakStorage.getDatingRedesignEnabled() ?
                 new DatingRedesignToolbarViewModel(toolbar, this) :
                 new NavigationToolbarViewModel(toolbar, this);
@@ -572,7 +572,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
         return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }

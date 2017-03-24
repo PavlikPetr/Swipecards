@@ -34,7 +34,7 @@ class KochavaManager {
      */
     fun initTracker() {
         // to receive attribution data via a callback
-        // we need register callback before tracker init
+        // we need to register callback before tracker init
         Feature.setAttributionHandler(Handler(Handler.Callback { msg ->
             // check attributionData to minimize of kochava instance using
             msg?.data?.getString(Feature.ATTRIBUTION_DATA)?.let {

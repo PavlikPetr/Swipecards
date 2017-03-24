@@ -1,5 +1,8 @@
 package com.topface.topface.utils.extensions
 
+import com.topface.topface.ui.settings.payment_ninja.CardInfo
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo
+
 /**
  * Помойка расширений
  * Created by tiberal on 18.11.16.
@@ -37,3 +40,15 @@ fun String?.toByteSafe(): Byte {
         return -1
     }
 }
+
+/**
+ * Проверка карты
+ */
+fun CardInfo.isAvailable() =
+        this.lastDigit.isNotEmpty() && this.type.isNotEmpty()
+
+/**
+ * Проверка карты
+ */
+fun PaymentInfo.isCradAvailable() =
+        CardInfo(this.lastDigits, this.type).isAvailable()

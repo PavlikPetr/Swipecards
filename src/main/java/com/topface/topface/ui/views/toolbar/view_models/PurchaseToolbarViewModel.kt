@@ -6,7 +6,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.databinding.PurchaseToolbarAdditionalViewBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.PurchaseCustomToolbarViewModel
 import com.topface.topface.utils.extensions.getString
@@ -18,7 +18,7 @@ import rx.Subscription
  * Created by ppavlik on 18.10.16.
  * вьюмодель для тулбара экрана покупок
  */
-class PurchaseToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding,
+class PurchaseToolbarViewModel @JvmOverloads constructor(binding: ToolbarViewBinding,
                                                          mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation) {
     private var balanceSubscription: Subscription
