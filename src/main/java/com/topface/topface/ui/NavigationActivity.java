@@ -31,7 +31,7 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.di.ComponentManager;
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
 import com.topface.topface.di.navigation_activity.NavigationActivityModule;
@@ -42,7 +42,7 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
@@ -71,6 +71,7 @@ import com.topface.topface.utils.popups.start_actions.OldVersionStartAction;
 import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
 import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -153,12 +154,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
-            @Override
-            public void call(AdjustAttributeData adjustAttributionData) {
-                App.sendAdjustAttributeData(adjustAttributionData);
-            }
-        }));
         mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData wrappedNavigationData) {
@@ -182,9 +177,10 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 throwable.printStackTrace();
             }
         }));
-        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
+        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new RxUtils.ShortSubscription<DrawerLayoutStateData>() {
             @Override
-            public void call(DrawerLayoutStateData drawerLayoutStateData) {
+            public void onNext(DrawerLayoutStateData drawerLayoutStateData) {
+                super.onNext(drawerLayoutStateData);
                 if (drawerLayoutStateData.getState() != DrawerLayoutStateData.UNDEFINED && mDrawerLayout != null &&
                         mDrawerLayout.getDrawer() != null) {
                     Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
@@ -209,9 +205,10 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         initFullscreen();
         initAppsFlyer();
         isPhotoAsked = false;
-        mSubscription.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        mSubscription.add(mAppState.getObservable(City.class).subscribe(new RxUtils.ShortSubscription<City>() {
             @Override
-            public void call(final City city) {
+            public void onNext(final City city) {
+                super.onNext(city);
                 if (city != null) {
                     SettingsRequest request = new SettingsRequest(App.getContext());
                     request.cityid = city.id;
@@ -247,7 +244,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return mWeakStorage.getDatingRedesignEnabled() ?
                 new DatingRedesignToolbarViewModel(toolbar, this) :
                 new NavigationToolbarViewModel(toolbar, this);
@@ -587,7 +584,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
         return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }

@@ -18,6 +18,7 @@ import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.CurrentUserRequest;
 import com.topface.topface.utils.social.OkAuthorizer;
 import com.topface.topface.utils.social.OkUserData;
@@ -34,9 +35,10 @@ public class OkProfileFragment extends ProfileInnerFragment {
     private TopfaceAppState mAppState;
     private OkProfileHandler mHandler;
     private Subscription mSubscription;
-    private Action1<OkUserData> mSubscriber = new Action1<OkUserData>() {
+    private RxUtils.ShortSubscription<OkUserData> mSubscriber = new RxUtils.ShortSubscription<OkUserData>() {
         @Override
-        public void call(OkUserData okUserData) {
+        public void onNext(OkUserData okUserData) {
+            super.onNext(okUserData);
             if (mHandler != null && okUserData != null) {
                 showProgress(false);
                 mHandler.imageSrc.set(!TextUtils.isEmpty(okUserData.bigSquareImage)

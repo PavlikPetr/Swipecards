@@ -7,7 +7,7 @@ import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcFragmentFrameBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.SingleFragmentActivity
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
@@ -27,7 +27,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         // если не нашли skuid в списке продуктов, значит и покупку не будем инициировать
         fun getIntent(skuId: String, from: String): Intent {
             val isSubscription = skuId.isSubscription()
-            return if (!MarketApiManager().isMarketApiAvailable  || isSubscription == null) {
+            return if (!MarketApiManager().isMarketApiAvailable || isSubscription == null) {
                 Intent()
             } else {
                 Intent(App.getContext(), GpPurchaseActivity::class.java).apply {
@@ -60,11 +60,11 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         }
     }
 
-    override fun getFragmentTag() = GpMarketFragment::class.java.simpleName
+    override fun getFragmentTag(): String = GpMarketFragment::class.java.simpleName
 
     override fun createFragment() = mFragment
 
-    override fun getToolbarBinding(binding: AcFragmentFrameBinding) = binding.toolbarInclude
+    override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarViewBinding = binding.toolbarInclude
 
     override fun getLayout() = R.layout.ac_fragment_frame
 
@@ -77,7 +77,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
         super.onCreate(savedInstanceState)
     }
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding): BaseToolbarViewModel {
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding): BaseToolbarViewModel {
         return EmptyToolbarViewModel(toolbar)
     }
 

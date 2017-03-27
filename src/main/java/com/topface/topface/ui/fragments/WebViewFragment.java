@@ -30,9 +30,15 @@ abstract public class WebViewFragment extends BaseFragment {
     }
 
     protected View getView(LayoutInflater inflater) {
-        mBinding = DataBindingUtil.inflate(inflater,R.layout.web_view_fragment, null,false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.web_view_fragment, null, false);
         mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding);
         mBinding.wvWebFrame.setWebChromeClient(mFullScreenWebChromeClient);
+        mBinding.wvWebFrame.setInitialScale(1);
+        mBinding.wvWebFrame.getSettings().setLoadWithOverviewMode(true);
+        mBinding.wvWebFrame.getSettings().setUseWideViewPort(true);
+        mBinding.wvWebFrame.getSettings().setSupportZoom(true);
+        mBinding.wvWebFrame.getSettings().setDisplayZoomControls(false);
+        mBinding.wvWebFrame.getSettings().setBuiltInZoomControls(true);
         mBinding.wvWebFrame.getSettings().setJavaScriptEnabled(true);
         mBinding.wvWebFrame.setVerticalScrollbarOverlay(true);
         mBinding.wvWebFrame.setWebViewClient(new LoaderClient(mBinding.wvWebFrame));

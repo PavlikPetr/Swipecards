@@ -8,11 +8,14 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
+import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.dialogs.ErrorDialogFactory
+import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
-import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
@@ -22,6 +25,8 @@ import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.buy.PurchaseSuccessfullFragment
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
@@ -30,6 +35,10 @@ import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragme
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.settings.FeedbackMessageFragment
+import com.topface.topface.ui.settings.SettingsContainerActivity
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 
@@ -171,4 +180,44 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
+    override fun showPurchaseSuccessfullFragment(sku: String) {
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
+            it as PurchaseSuccessfullFragment
+        } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+    }
+
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                NinjaAddCardActivity.REQUEST_CODE)
+    }
+
+    override fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit) {
+        ErrorDialogFactory().construct(mActivityDelegate.getAlertDialogBuilder(R.style.NinjaTheme_Dialog),
+                singleButton,
+                object : IErrorDialogResultReceiver {
+                    override fun onRetryClick() {
+                        onRetryAction()
+                    }
+
+                    override fun onSwitchClick() {
+                        mActivityDelegate.finish()
+                    }
+                }
+        )
+    }
+
+    override fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData) {
+        mActivityDelegate.supportFragmentManager
+                .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
+                ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
+                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+    }
+
+    override fun showPaymentNinjaHelp() {
+        mActivityDelegate.startActivityForResult(SettingsContainerActivity.getFeedbackMessageIntent(
+                mActivityDelegate.applicationContext,
+                FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
+        ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
+    }
 }

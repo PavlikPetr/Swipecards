@@ -22,7 +22,7 @@ class PhotoItemViewModel(photo: Photo, val lastSelectedPhotoId: ObservableInt) {
 
     private val mOnPropertyChangedCallback: OnPropertyChangedCallback = object: OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) {
-            (observable as ObservableInt)?.let { setSelected(it.get() == photo.id) }
+            (observable as? ObservableInt)?.let { setSelected(it.get() == photo.id) }
         }
     }
 

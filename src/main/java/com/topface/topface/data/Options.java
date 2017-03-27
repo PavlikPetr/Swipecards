@@ -21,6 +21,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -193,21 +194,6 @@ public class Options extends AbstractData {
     public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
 
     /**
-     * {Boolean} dialogRedesignEnabled - флаг определяющий показ нового экрана диалогов, настройки
-     */
-    @Deprecated
-    private boolean dialogRedesignEnabled;
-
-    /**
-     * {Integer} dialogRedesign - версия дизайна лайков/сообщений
-     * 0 - дефолт (старые диалоги)
-     * 1 - новые диалоги (замена для флажка dialogRedesignEnabled, который останется для старых клиентов)
-     * 2 - новый экран диалогов + убрать табы в симпатиях, оставить только одну, основную, страничку
-     * 3 - новый экран диалогов + вернуть все табы в симпатиях
-     */
-    private int dialogRedesign;
-
-    /**
      * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
      */
     public boolean peopleNearbyRedesignEnabled;
@@ -221,6 +207,11 @@ public class Options extends AbstractData {
      * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
      */
     public FBInviteSettings fbInviteSettings = new FBInviteSettings();
+
+    /**
+     * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
+     */
+    public PaymentInfo paymentNinjaInfo = new PaymentInfo();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -393,14 +384,15 @@ public class Options extends AbstractData {
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
-            dialogRedesignEnabled = response.optBoolean("dialogRedesignEnabled");
-            dialogRedesign = response.optInt("dialogRedesign");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
             mutualPopupEnabled = response.optBoolean("mutualPopupEnabled");
             JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
             if (fbInvitesJsonObject != null) {
                 fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
+            }
+            if (response.has("paymentNinjaInfo")) {
+                paymentNinjaInfo = JsonUtils.fromJson(response.optJSONObject("paymentNinjaInfo").toString(), PaymentInfo.class);
             }
 
         } catch (Exception e) {
@@ -467,14 +459,6 @@ public class Options extends AbstractData {
 
     public String getPaymentwallLink() {
         return paymentwall;
-    }
-
-    public boolean getDialogRedesignEnabled() {
-        return dialogRedesignEnabled;
-    }
-
-    public int getDialogDesignVersion() {
-        return dialogRedesign;
     }
 
     public boolean containsBannerType(String bannerType) {

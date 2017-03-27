@@ -7,6 +7,7 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.subscriptions.CompositeSubscription
 
@@ -25,8 +26,8 @@ class CustomToolbarViewModel(binding: CustomTitleAndSubtitleToolbarAdditionalVie
     private val subscriptions = CompositeSubscription()
 
     init {
-        subscriptions.add(title.filedObservable.subscribe { Debug.error("CUSTOM_VIEW_TEST title = $it") })
-        subscriptions.add(subTitle.filedObservable.subscribe { Debug.error("CUSTOM_VIEW_TEST subTitle = $it") })
+        subscriptions.add(title.filedObservable.subscribe(shortSubscription { Debug.error("CUSTOM_VIEW_TEST title = $it") }))
+        subscriptions.add(subTitle.filedObservable.subscribe(shortSubscription { Debug.error("CUSTOM_VIEW_TEST subTitle = $it") }))
     }
 
     override fun release() {

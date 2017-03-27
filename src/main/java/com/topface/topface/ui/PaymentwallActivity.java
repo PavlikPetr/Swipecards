@@ -16,8 +16,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.databinding.AcPaymentWallBinding;
-import com.topface.topface.databinding.ToolbarBinding;
-import com.topface.topface.databinding.WebViewFragmentBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.Utils;
@@ -144,13 +143,13 @@ public class PaymentwallActivity extends BaseFragmentActivity<AcPaymentWallBindi
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcPaymentWallBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcPaymentWallBinding binding) {
         return binding.toolbarInclude;
     }
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new PurchaseToolbarViewModel(toolbar, this);
     }
 

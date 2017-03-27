@@ -5,7 +5,7 @@ import android.content.Intent;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.fragments.ComplainsFragment;
 
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public class ComplainsActivity extends CheckAuthActivity<ComplainsFragment, AcFr
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

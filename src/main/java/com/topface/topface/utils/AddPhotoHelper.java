@@ -43,6 +43,7 @@ import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -100,10 +101,12 @@ public class AddPhotoHelper {
             switch (view.getId()) {
                 case R.id.btnAddPhotoAlbum:
                 case R.id.btnTakeFormGallery:
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                     startChooseFromGallery();
                     break;
                 case R.id.btnAddPhotoCamera:
                 case R.id.btnTakePhoto:
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                     startCamera();
                     break;
             }
@@ -636,6 +639,5 @@ public class AddPhotoHelper {
         return currentPhotoSize != null && !(currentPhotoSize.outWidth < minPhotoSize.width ||
                 currentPhotoSize.outHeight < minPhotoSize.height);
     }
-
 }
 

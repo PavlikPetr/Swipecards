@@ -7,8 +7,8 @@ import android.view.View
 import com.topface.topface.R
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.rx.RxUtils
 
 /**
  * VM итема формы

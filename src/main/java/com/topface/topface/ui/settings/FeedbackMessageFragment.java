@@ -283,7 +283,8 @@ public class FeedbackMessageFragment extends AbstractEditFragment {
         DEVELOPERS_MESSAGE("mobile_question", R.string.settings_ask_developer_internal),
         PAYMENT_MESSAGE("mobile_payment_issue", R.string.settings_payment_problems_internal),
         BAN("mobile_ban", R.string.feedback_subject_ban_internal),
-        LOW_RATE_MESSAGE("mobile_low_rate", R.string.settings_low_rate_internal);
+        LOW_RATE_MESSAGE("mobile_low_rate", R.string.settings_low_rate_internal),
+        PAYMENT_NINJA_MESSAGE("payment_ninja", R.string.settings_payment_problems_internal);
 
         private final String mTypeTag;
         private final int mTitleRes;

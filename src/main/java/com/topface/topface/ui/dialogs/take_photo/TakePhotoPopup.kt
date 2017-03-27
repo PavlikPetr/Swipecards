@@ -12,6 +12,7 @@ import com.topface.topface.state.EventBus
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
+import com.topface.topface.utils.extensions.askUnlockStoragePermissionIfNeed
 import com.topface.topface.utils.extensions.getString
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
@@ -46,8 +47,10 @@ class TakePhotoPopup : AbstractDialogFragment() {
     private lateinit var mBinding: TakePhotoDialogBinding
     private val mViewModel by lazy {
         TakePhotoPopupViewModel(mBinding, {
+            activity.askUnlockStoragePermissionIfNeed()
             TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this)
         }, {
+            activity.askUnlockStoragePermissionIfNeed()
             TakePhotoPopupPermissionsDispatcher.takeExternalPhotoWithCheck(this)
         })
     }

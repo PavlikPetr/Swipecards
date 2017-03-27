@@ -5,7 +5,7 @@ import android.transition.Transition
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
@@ -23,7 +23,7 @@ class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurcha
 
     override fun getLayout() = R.layout.admiration_purchase_popup
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding) = InvisibleToolbarViewModel(toolbar)
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) = InvisibleToolbarViewModel(toolbar)
 
     var isFinishTransition = false
 

@@ -13,7 +13,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
@@ -40,7 +40,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 
@@ -128,7 +128,7 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new CustomTitleSubTitleToolbarViewModel(toolbar, this);
     }
 

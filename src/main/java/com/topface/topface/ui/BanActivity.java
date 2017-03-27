@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.BanActivityBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
@@ -100,7 +100,7 @@ public class BanActivity extends TrackedFragmentActivity<BanActivityBinding> {
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull BanActivityBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull BanActivityBinding binding) {
         return binding.toolbarInclude;
     }
 

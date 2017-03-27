@@ -31,8 +31,8 @@ import com.topface.topface.utils.debug.FuckingVoodooMagic
 import com.topface.topface.utils.extensions.registerReceiver
 import com.topface.topface.utils.extensions.unregisterReceiver
 import com.topface.topface.utils.gcmutils.GCMUtils
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscriber
@@ -125,12 +125,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         mUpdaterSubscription = mAdapter?.let { adapter ->
             adapter.updaterObservable.distinct {
                 it?.getString(TO, Utils.EMPTY)
-            }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
-                override fun onNext(updateBundle: Bundle?) {
-                    if (!mIsAllDataLoaded) {
-                        updateBundle?.let {
-                            update(it)
-                        }
+            }.subscribe(shortSubscription {
+                if (!mIsAllDataLoaded) {
+                    it?.let {
+                        update(it)
                     }
                 }
             })
@@ -141,12 +139,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                     mCounters.setCounters(newCounters)
                     isChanged
                 }
-                .subscribe(object : RxUtils.ShortSubscription<CountersData>() {
-                    override fun onNext(newCounters: CountersData?) {
-                        super.onNext(newCounters)
-                        newCounters?.let {
-                            loadTopFeeds()
-                        }
+                .subscribe(shortSubscription {
+                    it?.let {
+                        loadTopFeeds()
                     }
                 })
         createAndRegisterBroadcasts()

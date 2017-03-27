@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -461,7 +462,7 @@ public class BindingsAdapters {
         }
     }
 
-    @BindingAdapter({"app:glideBlurUrl", "app:blurRadius"})
+    @BindingAdapter({"glideBlurUrl", "blurRadius"})
     public static void setBlurredImageByUrlWithRadius(ImageView imageView, String imgUrl, int blurRadius) {
         Context context = imageView.getContext().getApplicationContext();
         Glide.with(context)
@@ -495,4 +496,19 @@ public class BindingsAdapters {
             view.getLayoutManager().onRestoreInstanceState(state);
         }
     }
+
+    @BindingAdapter("setNumberSelection")
+    public static void setNumberSelection(EditText view, String string) {
+        if (string != null) {
+            view.setSelection(string.length());
+        }
+    }
+
+    @BindingAdapter("setFocusOnEditText")
+    public static void setNumberSelection(EditText view, Boolean isNeedfocus ) {
+        if (isNeedfocus){
+            view.requestFocus();
+        }
+    }
+
 }
