@@ -54,8 +54,9 @@
                     android:drawableRight="@{viewModel.cardIcon}"
                     android:enabled="@{viewModel.isInputEnabled}"
                     android:hint="@string/ninja_hint_card_number"
-                    android:text="@={viewModel.trhuText}"
+                    android:text="@={viewModel.numberText}"
                     android:focusableInTouchMode="true"
+                    android:maxLength="@{viewModel.numberMaxLength}"
                     app:setOnFocusChangeListener="@{viewModel.onNumberChange}"
                     app:addTextChangedListener="@{viewModel.numberWatcher}"/>
             </android.support.design.widget.TextInputLayout>

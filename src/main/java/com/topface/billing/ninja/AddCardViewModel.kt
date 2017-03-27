@@ -7,9 +7,7 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
-import android.text.Editable
 import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.View
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
@@ -57,28 +55,18 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     val cvvText = ObservableField<String>()
-    val cvvMaxLength = ObservableInt(3)
+    val cvvMaxLength = ObservableInt(4)
     val cvvError = ObservableField<String>()
 
     val trhuText = RxFieldObservable<String>()
     val trhuError = ObservableField<String>()
 
-
     val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = (observable as? ObservableField<*>)?.let {
             (it.get() as? String)?.let {
-                if (it.length >= 6) {
-                    if (!it.matches(EMAIL_ADDRESS.toRegex())) {
-                        Debug.error("--------------------EMAIL невалидный-----------------------------")
-                        emailError.set(R.string.ninja_email_error.getString())
-                        readyCheck.put(emailText, false)
-                    } else {
-                        emailError.set(Utils.EMPTY)
-                        readyCheck.put(emailText, true)
-                    }
-                }
-                updateButton()
-            }
+                if (it.length>2){
+                    validateEmail()
+            }}
         } ?: Unit
     }
 
@@ -86,7 +74,6 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val emailError = ObservableField<String>()
 
     val cardFieldsSubscription = CompositeSubscription()
-
     val productTitle = ObservableField<String>()
 
     val isAutoPayDescriptionVisible = ObservableBoolean(false)
@@ -151,42 +138,36 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             emailText.set(email)
         }
 
-//        cardFieldsSubscription.add(numberText.filedObservable
-//                .distinctUntilChanged()
-////                .map { str -> UtilsForCard.fororor(str) }
-//                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
-//                .subscribe(shortSubscription {
-//
-//                        if ((it as String).isEmpty()) {
-//                            cardIcon.set(0)
-//                        }
-//                        if (it.length >= 4) {
-//                            setTemplate(giveMeBrand(it, UtilsForCard.cardBrands))
-//                        }
-//                        if (it.length == numberMaxLength.get()) {
-//                            validateNumber()
-//                        }
-//
-////                        numberText.set(onCardNumberTextChanged(it))
-//
-//                }
-//                )
-//        )
+        cardFieldsSubscription.add(numberText.filedObservable
+                .distinctUntilChanged()
+                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
+                .subscribe(shortSubscription {
+                    if ((it as String).isEmpty()) {
+                        cardIcon.set(0)
+                    }
+                    if (it.length >= 4) {
+                        setTemplate(giveMeBrand(it, UtilsForCard.cardBrands))
+                    }
+                    if (it.length == numberMaxLength.get()) {
+                        validateNumber()
+                    }
+                }
+                )
+        )
 
-//        cardFieldsSubscription.add(trhuText.filedObservable
-//                .filter { it.length >= 2 }
-//                .distinctUntilChanged()
-//                .map { str -> UtilsForCard.setTrhuDivider(str) }
-//                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
-//                .subscribe(shortSubscription {
-//                    it?.let {
-//                        trhuText.set(it)
-//                        if (it.length == UtilsForCard.TRHU_LENGTH) {
-//                            validateTrhu()
-//                        }
-//                    }
-//                })
-//        )
+        cardFieldsSubscription.add(trhuText.filedObservable
+                .filter { it.length >= 2 }
+                .distinctUntilChanged()
+                .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
+                .subscribe(shortSubscription {
+                    it?.let {
+                        trhuText.set(it)
+                        if (it.length == UtilsForCard.TRHU_LENGTH) {
+                            validateTrhu()
+                        }
+                    }
+                })
+        )
     }
 
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
@@ -212,58 +193,61 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     fun onClick() {
-        val trhuString = trhuText.get()
-        var month: String = ""
-        var year: String = ""
-        if (!TextUtils.isEmpty(trhuString) && UtilsForCard.isValidTrhu(trhuString)) {
-            month = trhuString.substring(0, 2)
-            year = trhuString.substring(3)
-        }
-        val cardModel = AddCardModel(
-                App.get().options.paymentNinjaInfo.projectKey,
-                numberText.get()?.replace(UtilsForCard.SPACE_DIVIDER, "") ?: "",
-                month,
-                year,
-                cvvText.get() ?: "",
-                emailText.get() ?: ""
-        )
-        isInputEnabled.set(false)
-        AddCardRequest().getRequestObservable(App.get(), cardModel)
-                .applySchedulers()
-                .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
-                    override fun onCompleted() {
-                        super.onCompleted()
-                        isInputEnabled.set(true)
-                    }
-
-                    override fun onError(e: Throwable?) {
-                        super.onError(e)
-                        mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
-                                product == null) {
-                            if (isEmailFormNeeded.get()) {
-                                emailText.set("")
-                            }
-                            numberText.set("")
-                            cvvText.set("")
-                            trhuText.set("")
-                            numberFocus.set(true)
+        if (validateNumber() && validateCvv() && validateTrhu() && validateEmail()) {
+            val trhuString = trhuText.get()
+            var month: String = ""
+            var year: String = ""
+            if (!TextUtils.isEmpty(trhuString) && UtilsForCard.isValidTrhu(trhuString)) {
+                month = trhuString.substring(0, 2)
+                year = trhuString.substring(3)
+            }
+            val cardModel = AddCardModel(
+                    App.get().options.paymentNinjaInfo.projectKey,
+                    numberText.get()?.replace(UtilsForCard.SPACE_DIVIDER, "") ?: "",
+                    month,
+                    year,
+                    cvvText.get() ?: "",
+                    emailText.get() ?: ""
+            )
+            isInputEnabled.set(false)
+            AddCardRequest().getRequestObservable(App.get(), cardModel)
+                    .applySchedulers()
+                    .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
+                        override fun onCompleted() {
+                            super.onCompleted()
+                            isInputEnabled.set(true)
                         }
-                        isInputEnabled.set(true)
-                    }
 
-                    override fun onNext(t: IApiResponse?) {
-                        // todo send "buy payment ninja product" here and after success show dialog
-                        // если есть продукт, значит надо провести покупку. Ориентируясь на успешность этого
-                        // запроса на сервер покажем экран успешной покупки mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
-                        // если продукт null, значит закрываем активити, но при этом не забываем сообщить о том, что карта добавлена
-                        // успешно
-                        product?.let {
-                            mNavigator.showPurchaseSuccessfullFragment(it.type)
-                            //sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
-                        } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
-                                Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
-                    }
-                })
+                        override fun onError(e: Throwable?) {
+                            super.onError(e)
+                            mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
+                                    product == null) {
+                                if (isEmailFormNeeded.get()) {
+                                    emailText.set("")
+                                }
+                                numberText.set("")
+                                cvvText.set("")
+                                trhuText.set("")
+                                numberFocus.set(true)
+                            }
+                            isInputEnabled.set(true)
+
+                        }
+
+                        override fun onNext(t: IApiResponse?) {
+                            // todo send "buy payment ninja product" here and after success show dialog
+                            // если есть продукт, значит надо провести покупку. Ориентируясь на успешность этого
+                            // запроса на сервер покажем экран успешной покупки mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
+                            // если продукт null, значит закрываем активити, но при этом не забываем сообщить о том, что карта добавлена
+                            // успешно
+                            product?.let {
+                                mNavigator.showPurchaseSuccessfullFragment(it.type)
+                                //sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
+                            } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                                    Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                        }
+                    })
+        }
     }
 
     fun onNumberChange(v: View, hasFocus: Boolean) {
@@ -284,7 +268,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
         }
     }
 
-    private fun validateNumber() {
+    private fun validateNumber(): Boolean {
         if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
@@ -294,6 +278,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             } else {
                 numberError.set(Utils.EMPTY)
                 readyCheck.put(numberText, true)
+                Debug.error("---------------------Номер введен корректно------------------${readyCheck.get(numberText)}--------------")
             }
         } else {
             Debug.error("---------------------ОШИБКА заполните поле ввода номера карты -----------------------")
@@ -301,9 +286,10 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(numberText, false)
         }
         updateButton()
+        return readyCheck.get(numberText) ?: false
     }
 
-    private fun validateTrhu() {
+    private fun validateTrhu(): Boolean {
         val trhuString = trhuText.get()
         if (!trhuString.isNullOrEmpty() && trhuString.length == UtilsForCard.TRHU_LENGTH) {
             if (!UtilsForCard.isValidTrhu(trhuString)) {
@@ -319,11 +305,12 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(trhuText, false)
         }
         updateButton()
+        return readyCheck.get(trhuText) ?: false
     }
 
-    private fun validateCvv() {
-        if (!cvvText.get().isNullOrEmpty()) {
-            if (cvvText.get().length < cvvMaxLength.get() || !UtilsForCard.isDigits(cvvText.get())) {
+    private fun validateCvv(): Boolean {
+        if (cvvText.get().length>2 &&!cvvText.get().isNullOrEmpty()) {
+            if (!UtilsForCard.isDigits(cvvText.get())) {
                 Debug.error("--------------------Все очень плохо-----слишком мало букав---или введен текст-------------------")
                 cvvError.set(R.string.ninja_cvv_error.getString())
                 readyCheck.put(cvvText, false)
@@ -337,6 +324,20 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(cvvText, false)
         }
         updateButton()
+        return readyCheck.get(cvvText) ?: false
+    }
+
+    private fun validateEmail(): Boolean {
+        if (!emailText.get().matches(EMAIL_ADDRESS.toRegex())) {
+            Debug.error("--------------------EMAIL невалидный-----------------------------")
+            emailError.set(R.string.ninja_email_error.getString())
+            readyCheck.put(emailText, false)
+        } else {
+            emailError.set(Utils.EMPTY)
+            readyCheck.put(emailText, true)
+        }
+        updateButton()
+        return readyCheck.get(emailText) ?: false
     }
 
     fun navigateToRules(): Unit? = product?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
