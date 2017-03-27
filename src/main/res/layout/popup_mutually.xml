@@ -121,7 +121,7 @@
 
         <Button
             android:id="@+id/btnClearFilterDating"
-            style="@style/PopupBorderlessdButton"
+            style="@style/PopupBorderlessButton"
             android:layout_below="@+id/btnChangeFilterDating"
             android:layout_centerHorizontal="true"
             android:onClick="@{() -> model.closePopup()}"

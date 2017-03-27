@@ -1454,7 +1454,7 @@
         <item name="android:background">@drawable/green_button_selector</item>
     </style>
 
-    <style name="PopupBorderlessdButton" parent="@style/Widget.AppCompat.Button.Borderless">
+    <style name="PopupBorderlessButton" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
