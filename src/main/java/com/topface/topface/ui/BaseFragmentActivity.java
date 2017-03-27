@@ -392,13 +392,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
                 mGoogleAuthStarted = true;
             }
-            //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
-            //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
-            //и ответ возвращать тоже в активити.
-            Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-            if (authFragment != null) {
-                authFragment.onActivityResult(requestCode, resultCode, data);
-            }
             super.onActivityResult(requestCode, resultCode, data);
         }
     }

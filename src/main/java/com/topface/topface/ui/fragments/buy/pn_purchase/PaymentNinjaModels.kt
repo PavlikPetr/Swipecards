@@ -38,7 +38,7 @@ class BuyScreenProductUnavailable
  * @param divider - Возвращает делитель для подсчета суммы, к примеру неделя- 7/30 месяца = 0.23
  * @param typeOfSubscription - 0- не подписка 1- автопополнение (когда кончится) 2- подписка (раз в месяц)
  * @param currencyCode - строковый код валюты
- * @param infoOfSubscription - Инфо о подписке
+ * @param subscriptionInfo - Инфо о подписке
  */
 data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTemplate: String, var totalPriceTemplate: String,
                                var isSubscription: Boolean, var period: Int, var price: Int, var type: String,
