@@ -231,7 +231,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                                 numberFocus.set(true)
                             }
                             isInputEnabled.set(true)
-
+                            isButtonEnabled.set(false)
                         }
 
                         override fun onNext(t: IApiResponse?) {
