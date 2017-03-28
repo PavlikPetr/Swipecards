@@ -20,10 +20,10 @@
             android:layout_gravity="center"
             android:onClick="@{() -> viewModel.onClick()}"/>
 
-        <com.topface.topface.ui.views.CustomProgressBar
+        <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
             style="@style/SmallWhiteProgressBar"
             android:layout_gravity="center"
             android:visibility="@{viewModel.isProgressVisible}"
-            app:plc='@{"album_image_item_loader"}'/>
+            app:plc="@string/album_image_loader"/>
     </FrameLayout>
 </layout>

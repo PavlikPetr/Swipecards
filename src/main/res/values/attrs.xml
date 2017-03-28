@@ -100,4 +100,7 @@
         <attr name="currentMaxValue" format="integer" />
         <attr name="range" format="integer" />
     </declare-styleable>
+    <declare-styleable name="StatisticsProgressBar">
+        <attr name="plc" format="string" />
+    </declare-styleable>
 </resources>

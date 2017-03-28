@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.LoaderData;
+import com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.adapter_utils.IInjectViewBucketRegistrator;
 import com.topface.topface.utils.adapter_utils.InjectViewBucket;
@@ -246,6 +247,8 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
         return R.id.prsLoader;
     }
 
+    abstract String getPlc();
+
     protected void addLoaderItem(boolean hasMore) {
         FeedList<T> currentData = getData();
         mMore = hasMore;
@@ -285,7 +288,9 @@ public abstract class LoadingListAdapter<T extends LoaderData> extends BaseAdapt
     }
 
     private ProgressBar getLoaderRetrierProgress() {
-        return (ProgressBar) mLoaderRetrier.findViewById(getLoaderProgreesBarId());
+        StatisticsProgressBar progressBar = (StatisticsProgressBar) mLoaderRetrier.findViewById(getLoaderProgreesBarId());
+        progressBar.setPlc(getPlc());
+        return progressBar;
     }
 
     public abstract ILoaderRetrierCreator<T> getLoaderRetrierCreator();

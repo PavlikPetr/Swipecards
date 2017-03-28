@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:text="@string/general_dialog_retry"/>
 
-    <ProgressBar
+    <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
         android:id="@+id/prsLoader"
         style="@style/TopFaceProgressBar.Small"
         android:layout_width="wrap_content"

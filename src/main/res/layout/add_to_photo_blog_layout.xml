@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:bind="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="toolbarViewModel"
-            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel" />
     </data>
 
     <FrameLayout
@@ -17,7 +18,7 @@
         <include
             android:id="@+id/toolbarInclude"
             layout="@layout/toolbar_view"
-            bind:viewModel="@{toolbarViewModel}"/>
+            bind:viewModel="@{toolbarViewModel}" />
 
         <LinearLayout
             android:id="@+id/root"
@@ -30,12 +31,13 @@
                 android:id="@+id/user_photos_grid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/add_to_leader_spacing_value"/>
+                android:paddingLeft="@dimen/add_to_leader_spacing_value" />
 
-            <com.topface.topface.ui.views.LockerView
+            <com.topface.topface.ui.views.locker_view.LockerView
                 android:id="@+id/locker"
                 style="@style/LoadingLocker"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:plc="add_to_photoblog_locker_view" />
 
         </LinearLayout>
     </FrameLayout>

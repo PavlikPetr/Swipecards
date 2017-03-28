@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:gravity="center">
 
-        <com.topface.topface.ui.views.CustomProgressBar
+        <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

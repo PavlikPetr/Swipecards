@@ -30,6 +30,7 @@ class LikesFeedAdapter(private val mInstantPurchaseModel: InstantPurchaseModel, 
         binding?.let { bind ->
             (getHeaderItem(position) as? List<AppDayImage>)?.let {
                 bind.setVariable(BR.viewModel, AppDayViewModel(bind as AppDayListBinding, it, mInstantPurchaseModel))
+                bind.setVariable(BR.plc,"likes_fragment_app_day_loader")
             }
         }
     }

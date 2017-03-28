@@ -7,8 +7,16 @@ import com.topface.topface.R;
 import com.topface.topface.data.FeedGeo;
 
 public class PeopleNearbyAdapter extends FeedAdapter<FeedGeo> {
+
+	private final static String PLC = "people_nearby_list_loader";
+
 	public PeopleNearbyAdapter(Context context, Updater updateCallback) {
 		super(context, updateCallback);
+	}
+
+	@Override
+	String getPlc() {
+		return PLC;
 	}
 
 	@Override

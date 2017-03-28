@@ -26,7 +26,7 @@ class AddCardRequest {
     }
 
     fun getRequestObservable(context: Context, addCardModel: AddCardModel) =
-            OffersUtils.getRequestInstance(ADD_CARD_LINK)
+            OffersUtils.getRequestInstance(App.get().options.paymentNinjaInfo.apiUrl)
                     .create(Request::class.java)
                     .setParams(HashMap<String, String>().apply {
                         put(KEY_PROJECT, addCardModel.project)

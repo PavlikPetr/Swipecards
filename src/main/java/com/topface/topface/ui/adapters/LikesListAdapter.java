@@ -15,6 +15,8 @@ import com.topface.topface.ui.views.FeedItemViewConstructor;
 
 public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
+    private final static String PLC = "likes_list_loader";
+
     private OnMutualListener mMutualListener;
 
     public interface OnMutualListener {
@@ -23,6 +25,11 @@ public class LikesListAdapter extends FeedAdapter<FeedLike> {
 
     public LikesListAdapter(Context context, Updater updateCallback) {
         super(context, updateCallback);
+    }
+
+    @Override
+    String getPlc() {
+        return PLC;
     }
 
     @Override

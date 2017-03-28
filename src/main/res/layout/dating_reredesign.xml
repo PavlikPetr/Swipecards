@@ -144,7 +144,7 @@
                 bind:viewModel="@{viewModel}" />
         </LinearLayout>
 
-        <ProgressBar
+        <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -153,6 +153,7 @@
             android:layout_marginBottom="-20dp"
             android:background="@drawable/loader_bg"
             android:theme="@style/CircularProgress"
-            android:visibility="@{viewModel.isDatingProgressBarVisible}" />
+            android:visibility="@{viewModel.isDatingProgressBarVisible}"
+            app:plc="@string/dating_fragment_loader" />
     </RelativeLayout>
 </layout>
