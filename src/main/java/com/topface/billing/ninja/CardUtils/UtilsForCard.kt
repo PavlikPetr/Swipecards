@@ -1,6 +1,9 @@
 package com.topface.billing.ninja.CardUtils
 
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import com.topface.billing.ninja.CardType
+import com.topface.framework.utils.Debug
 import java.util.*
 
 object UtilsForCard {
@@ -23,62 +26,10 @@ object UtilsForCard {
             Regex("^[4]+.*") to CardType.VISA,
             Regex("^5[1-5]+.*") to CardType.MASTERCARD,
             Regex("^3[47]+.*") to CardType.AMERICAN_EXPRESS,
-            Regex("^3(?:0[0-5]|[68][0-9])+.*") to CardType.DINERS,
+            Regex("^30([0-5]|[68][0-9])+.*") to CardType.DINERS,
             Regex("^(6011|65\\d{2})+.*") to CardType.DISCOVER,
             Regex("^35([2-8][0-9])+.*") to CardType.JCB,
             Regex("") to CardType.DEFAULT)
-
-    fun formattingForCardNumber(inputCardNumber: String): String {
-        var text: String
-        val formattingText = inputCardNumber.replace(SPACE_DIVIDER, "")
-        if (formattingText.length >= 4) {
-
-            text = formattingText.substring(0, 4)
-
-            if (formattingText.length >= 8) {
-                text += SPACE_DIVIDER + formattingText.substring(4, 8)
-            } else if (formattingText.length > 4) {
-                text += SPACE_DIVIDER + formattingText.substring(4)
-            }
-
-            if (formattingText.length >= 12) {
-                text += SPACE_DIVIDER + formattingText.substring(8, 12)
-            } else if (formattingText.length > 8) {
-                text += SPACE_DIVIDER + formattingText.substring(8)
-            }
-
-            if (formattingText.length >= 16) {
-                text += SPACE_DIVIDER + formattingText.substring(12)
-            } else if (formattingText.length > 12) {
-                text += SPACE_DIVIDER + formattingText.substring(12)
-            }
-
-            return text
-
-        } else {
-            text = formattingText.trim { it <= ' ' }
-        }
-
-        return text
-    }
-
-    fun setTrhuDivider(stre: String): String {
-
-        val expiryString = stre.replace(UtilsForCard.SLASH_DIVIDER, "")
-        var str = ""
-        if (expiryString.length >= 2) {
-            val mm = expiryString.substring(0, 2)
-            str = mm
-
-            if (expiryString.length > 2) {
-                val yy = expiryString.substring(2)
-                str = mm + UtilsForCard.SLASH_DIVIDER + yy
-            }
-        } else {
-            str = expiryString
-        }
-        return str
-    }
 
     fun isValidTrhu(trhu: String): Boolean {
         val trhuText = trhu.replace(SLASH_DIVIDER, "")
