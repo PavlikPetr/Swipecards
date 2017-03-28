@@ -64,9 +64,10 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val emailChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(observable: Observable?, p1: Int) = (observable as? ObservableField<*>)?.let {
             (it.get() as? String)?.let {
-                if (it.length>2){
+                if (it.length > 2) {
                     validateEmail()
-            }}
+                }
+            }
         } ?: Unit
     }
 
@@ -151,8 +152,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                     if (it.length == numberMaxLength.get()) {
                         validateNumber()
                     }
-                }
-                )
+                })
         )
 
         cardFieldsSubscription.add(trhuText.filedObservable
@@ -309,7 +309,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     private fun validateCvv(): Boolean {
-        if (cvvText.get().length>2 &&!cvvText.get().isNullOrEmpty()) {
+        if (cvvText.get().length > 2 && !cvvText.get().isNullOrEmpty()) {
             if (!UtilsForCard.isDigits(cvvText.get())) {
                 Debug.error("--------------------Все очень плохо-----слишком мало букав---или введен текст-------------------")
                 cvvError.set(R.string.ninja_cvv_error.getString())
