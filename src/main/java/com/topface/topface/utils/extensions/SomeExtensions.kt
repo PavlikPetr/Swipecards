@@ -1,5 +1,7 @@
 package com.topface.topface.utils.extensions
 
+import android.os.Parcel
+
 import com.topface.topface.ui.settings.payment_ninja.CardInfo
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo
 
@@ -52,3 +54,7 @@ fun CardInfo.isAvailable() =
  */
 fun PaymentInfo.isCradAvailable() =
         CardInfo(this.lastDigits, this.type).isAvailable()
+
+fun Parcel.writeBoolean(bool: Boolean) = writeByte((if (bool) 1 else 0).toByte())
+
+fun Parcel.readBoolean() = readByte().toInt() == 1

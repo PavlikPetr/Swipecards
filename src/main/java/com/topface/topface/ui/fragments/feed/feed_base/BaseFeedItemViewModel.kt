@@ -20,13 +20,16 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding: T, val item: D, private val mNavigator: IFeedNavigator,
                                                                         private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
-    val AGE_TEMPLATE = ", %d"
-    val DOTS = "&#8230;"
-    val TAG_TEMPLATE = "%s_%d_%s"
     open val feed_type: String = "UNDEFINED"
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
     open val text: String? = null
+
+    companion object{
+        const val AGE_TEMPLATE = ", %d"
+        const val DOTS = "&#8230;"
+        const val TAG_TEMPLATE = "%s_%d_%s"
+    }
 
     init {
         item.user?.let {

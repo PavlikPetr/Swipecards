@@ -18,7 +18,7 @@ fun Array<Subscription?>.safeUnsubscribe() {
 }
 
 fun <T> Observable<T>.applySchedulers(): Observable<T> = compose<T>(Observable.Transformer<T, T> {
-    subscribeOn(Schedulers.newThread())
+    subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 })
 
@@ -37,5 +37,8 @@ fun <T> shortSubscription(next: (T) -> Unit) = object : Subscriber<T>() {
 
     override fun onNext(type: T) = next(type)
 }
+
+inline fun <T> Observable<T>.shortSubscribe(crossinline next: (T) -> Unit): Subscription
+        = subscribe(shortSubscription { next(it) })
 
 

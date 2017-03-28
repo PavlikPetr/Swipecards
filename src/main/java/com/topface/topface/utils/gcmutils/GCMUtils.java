@@ -26,8 +26,8 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
-import com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
 import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -374,7 +374,7 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
-                Intent i = null;
+        Intent i = null;
         String pageName;
         switch (type) {
             case GCM_TYPE_MESSAGE:

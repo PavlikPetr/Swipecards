@@ -37,7 +37,7 @@ public class AppodealProvider extends AbstractAdsProvider {
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
-        UserSettings userSettings = Appodeal.getUserSettings(activity);
+        UserSettings userSettings = Appodeal.getUserSettings(activity.getApplicationContext());
         userSettings.setGender(
                 App.get().getProfile().sex == Profile.BOY ?
                         UserSettings.Gender.MALE :

@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.ui.fragments.feed.FeedFragment;
 
 import java.util.ArrayList;
 
