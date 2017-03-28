@@ -24,5 +24,5 @@ class ChatViewModel {
         }
     }
 
-    val complainVisibility = ObservableInt(View.VISIBLE)
+    val complainVisibility = ObservableInt(View.GONE)
 }
