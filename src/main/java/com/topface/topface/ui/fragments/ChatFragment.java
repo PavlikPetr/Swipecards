@@ -34,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +44,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.chat.vm.ChatViewModel;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Gift;
@@ -55,6 +55,7 @@ import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.UniversalUserFactory;
+import com.topface.topface.databinding.FragmentChatBinding;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -344,8 +345,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        mRootLayout = (KeyboardListenerLayout) inflater.inflate(R.layout.fragment_chat, null);
-        setAnimatedView(mRootLayout.findViewById(R.id.lvChatList));
+        FragmentChatBinding binding = FragmentChatBinding.inflate(inflater, container, false);
+        binding.setViewModel(new ChatViewModel());
+        mRootLayout = (KeyboardListenerLayout) binding.getRoot();
+        setAnimatedView(binding.lvChatList);
         mRootLayout.setKeyboardListener(mKeyboardListener);
         Debug.log(this, "+onCreate");
         // Swap Control
@@ -354,7 +357,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mSendButton = (ImageButton) mRootLayout.findViewById(R.id.btnSend);
         mSendButton.setOnClickListener(this);
         // Loader on background
-        mBackgroundController.setProgressBar((ProgressBar) mRootLayout.findViewById(R.id.chat_loader));
+        mBackgroundController.setProgressBar(binding.chatLoader);
         mBackgroundController.startAnimation();
         // Edit Box
         mEditBox = (EditText) mRootLayout.findViewById(R.id.edChatBox);
@@ -369,12 +372,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         mEditBox.setOnEditorActionListener(mEditorActionListener);
         mEditBox.addTextChangedListener(mTextWatcher);
         //LockScreen
-        initLockScreen(mRootLayout, savedInstanceState);
+        initLockScreen(binding.llvLockScreen.getViewStub(), savedInstanceState);
         updateSendMessageAbility(false);
         //init data
         restoreData(savedInstanceState);
         // History ListView & ListAdapter
-        initChatHistory(mRootLayout);
+        initChatHistory(binding);
         if (mUser != null && !mUser.isEmpty()) {
             onUserLoaded(mUser);
         }
@@ -495,10 +498,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         updateSendMessageAbility();
     }
 
-    private void initChatHistory(View root) {
+    private void initChatHistory(FragmentChatBinding binding) {
 
         // list view
-        mListView = (PullToRefreshListView) root.findViewById(R.id.lvChatList);
+        mListView = binding.lvChatList;
         mListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -566,8 +569,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         });
     }
 
-    private void initLockScreen(View root, Bundle savedInstanceState) {
-        mStubsController = new ChatStabsController((ViewStub) root.findViewById(R.id.llvLockScreen), this);
+    private void initLockScreen(ViewStub stub, Bundle savedInstanceState) {
+        mStubsController = new ChatStabsController(stub, this);
         mStubsController.onRestoreInstanceState(savedInstanceState);
         String avatar = mPhoto != null && !TextUtils.isEmpty(mPhoto.getDefaultLink()) ? mPhoto.getDefaultLink() : Utils.EMPTY;
         mStubsController.setPhoto(mIsBanned || TextUtils.isEmpty(avatar) ? Utils.getLocalResUrl(mSex == Profile.BOY ?
