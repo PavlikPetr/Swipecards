@@ -309,7 +309,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     private fun validateCvv(): Boolean {
-        if (cvvText.get().length > 2 && !cvvText.get().isNullOrEmpty()) {
+        if (!cvvText.get().isNullOrEmpty() && cvvText.get().length == cvvMaxLength.get()) {
             if (!UtilsForCard.isDigits(cvvText.get())) {
                 Debug.error("--------------------Все очень плохо-----слишком мало букав---или введен текст-------------------")
                 cvvError.set(R.string.ninja_cvv_error.getString())
