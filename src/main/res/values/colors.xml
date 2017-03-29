@@ -301,4 +301,7 @@
 
     <color name="dating_filter_background"> #f5f5f5 </color>
 
+    <color name="view_pager_indicator_select">#fe63cd</color>
+    <color name="view_pager_indicator_non_select">#e0e0e0</color>
+
 </resources>

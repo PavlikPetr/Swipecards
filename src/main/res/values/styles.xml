@@ -1736,4 +1736,16 @@
         <item name="colorAccent">@color/dating_fab_skip</item>
     </style>
 
+    <style name="FBBlueButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/popup_green_button_text</item>
+        <item name="android:textSize">@dimen/popup_button_text</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="FBBlueButton.Background">
+        <item name="android:background">@drawable/blue_button_selector</item>
+    </style>
+
 </resources>

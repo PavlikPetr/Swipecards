@@ -18,6 +18,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
+import com.topface.topface.ui.auth.fb_invitation.FBinvitationFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -46,6 +47,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
     private val mEmptyDatingFragment by lazy {
         mActivityDelegate.supportFragmentManager.findFragmentByTag(DatingEmptyFragment.TAG)?.let { it as DatingEmptyFragment } ?: DatingEmptyFragment.newInstance()
+    }
+
+    private val mFBInvitation by lazy {
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)?.let { it as FBinvitationFragment } ?: FBinvitationFragment()
     }
 
     override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
@@ -147,8 +152,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mEmptyDatingFragment.dialog?.cancel()
     }
 
-    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
-            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
+    override fun showFilter() = showFBInvitationPopup()
+//            mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
+//            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 
     override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
@@ -170,5 +176,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showPurchaseProduct(skuId: String, from: String) =
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
+
+    override fun showFBInvitationPopup() = mFBInvitation.show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
 
 }

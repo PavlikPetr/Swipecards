@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.auth.fb_invitation.FBInvitationItemViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/centerImage"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/unavailable_geo_bigger_circle"/>
+
+        <ImageView
+            style="@style/PopupAnimatedBackground"
+            app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}" />
+
+        <ImageView
+            android:layout_width="156dp"
+            android:layout_height="156dp"
+            android:layout_centerInParent="true"
+            android:src="@{viewModel.imageSrc}"/>
+
+        <TextView
+            android:id="@+id/popupText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/centerImage"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:layout_marginTop="49dp"
+            android:text="@{viewModel.popupText}"/>
+
+    </RelativeLayout>
+</layout>
