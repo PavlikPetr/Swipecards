@@ -1273,10 +1273,10 @@
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
 
-
     <string name="fb_invitation_find_what_you_are_looking_for">Найдёте то, что ищете</string>
     <string name="fb_invitation_amoung_more_than_100_mln_people">Среди более 100 миллионов людей</string>
     <string name="fb_invitation_intelligent_selection_filter">Интеллектуальный механизм подбора</string>
     <string name="fb_invitation_personalized_approach">Персонализированный подход</string>
     <string name="fb_invitation_button_text">Войти через Facebook</string>
+
 </resources>
