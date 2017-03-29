@@ -1325,7 +1325,7 @@
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
     <string name="ninja_cvv_error">Неверный код</string>
     <string name="ninja_trhu_error">Неверная дата</string>
-    <string name="ninja_number_error">Неверный номера карты</string>
+    <string name="ninja_number_error">Неверный номер карты</string>
     <string name="ninja_email_error">Неверный формат email</string>
     <string name="use_card">Использовать карту **%s</string>
     <string name="ninja_no_card_title">Добавить карту</string>
