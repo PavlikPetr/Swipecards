@@ -32,7 +32,7 @@
         <com.topface.topface.ui.views.view_pager_indicator.CirclePageIndicator
             android:id="@+id/indicator"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             app:pageColor="@color/view_pager_indicator_non_select"
             app:fillColor="@color/view_pager_indicator_select"
@@ -41,7 +41,9 @@
 
         <Button
             android:id="@+id/btnAuthFB"
-            style="@style/PopupGreenButton.Background"
+            android:layout_marginTop="50dp"
+            style="@style/FBBlueButton.Background"
+            android:layout_gravity="center_horizontal"
             android:onClick="@{() -> viewModel.fbButtonClick()}"
             android:text="@string/fb_invitation_button_text"/>
 

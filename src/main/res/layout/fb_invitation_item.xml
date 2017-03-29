@@ -36,6 +36,7 @@
             android:layout_below="@+id/centerImage"
             android:layout_centerHorizontal="true"
             android:textSize="16sp"
+            android:textColor="@color/black"
             android:layout_marginTop="49dp"
             android:text="@{viewModel.popupText}"/>
 
