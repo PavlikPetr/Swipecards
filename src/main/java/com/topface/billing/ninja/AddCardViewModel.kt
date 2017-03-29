@@ -269,7 +269,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     private fun validateNumber(): Boolean {
-        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) && numberText.get().length<= numberMaxLength.get()) {
+        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) && numberText.get().length <= numberMaxLength.get()) {
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
                 Debug.error("---------------------ОШИБКА ввода номера карты--------------------------------")
