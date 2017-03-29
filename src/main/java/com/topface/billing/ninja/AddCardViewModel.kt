@@ -55,7 +55,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     val cvvText = ObservableField<String>()
-    val cvvMaxLength = ObservableInt(4)
+    val cvvMaxLength = ObservableInt(3)
     val cvvError = ObservableField<String>()
 
     val trhuText = RxFieldObservable<String>()
