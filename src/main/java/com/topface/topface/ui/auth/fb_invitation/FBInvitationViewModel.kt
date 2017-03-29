@@ -1,12 +1,10 @@
 package com.topface.topface.ui.auth.fb_invitation
 
-
 /**
  * Created by mbulgakov on 28.03.17.
  */
-class FBInvitationViewModel{
+class FBInvitationViewModel {
 
-    fun fbButtonClick(){
+    fun fbButtonClick() {
     }
-
 }
