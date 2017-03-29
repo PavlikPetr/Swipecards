@@ -253,7 +253,10 @@
     <dimen name="dating_buttons_padding_bottom">13dp</dimen>
     <dimen name="dating_smaller_buttons_size">60dp</dimen>
     <dimen name="dating_bigger_buttons_size">76dp</dimen>
-    
+
+    <!--Метрики для опросника-->
+    <dimen name="questionnaire_counters_text_size">14sp</dimen>
+
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
     <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
