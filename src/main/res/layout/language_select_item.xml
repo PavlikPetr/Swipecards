@@ -11,33 +11,19 @@
 
     </data>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardUseCompatPadding="true">
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
 
             <TextView
                 android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="name"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"/>
-
-            <TextView
-                android:id="@+id/tvEmailId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvName"
-                android:text="email"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@{viewModel.image}"
+                android:text="@{viewModel.title}"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"/>
 
@@ -47,10 +33,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:background="@color/bg_white"
                 android:setTag="@{viewModel.tag}"
-                app:setChecked="@{viewModel.isChecked}"
-                app:setOnClickListener="@{viewModel.onItemClickListener)}"/>
+                app:setChecked="@{viewModel.isSelected}"
+                app:setOnClickListener="@{viewModel.onItemClickListener}"/>
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+        </LinearLayout>
 </layout>
