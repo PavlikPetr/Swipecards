@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.onboarding.question.single_list.SingleListItemViewModel"/>
+    </data>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{viewModel.title, default=PUSH}"
+        android:background="@drawable/onboarding_list_item_bg_selector"
+        android:gravity="center"
+        android:textColor="@color/onboarding_list_item_text_color_selector"
+        android:layout_margin="8dp"
+        android:onClick="@{() -> viewModel.onClick()}"/>
+</layout>

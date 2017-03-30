@@ -1272,4 +1272,7 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+
+    <!-- Onboarding experiment -->
+    <string name="onboarding_button_next">Далее</string>
 </resources>
