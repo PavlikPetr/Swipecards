@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
@@ -33,13 +32,21 @@ class QuestionnaireActivity : TrackedLifeCycleActivity<AcQuestionnaireBinding>()
 
     private val mQuestionNavigator by lazy {
         QuestionScreenNavigator(arrayOf(QuestionSettings(type = 3,
-                typeThird = QuestionTypeThird(title = "Укажи твой рост ",
+                questionWithInput = InputValueSettings(title = "Укажи твой рост ",
                         min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
                         max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
                         unit = "см",
                         fieldName = "height",
                         hint = "Ваш рост"
-                ))), questionNavigator = this)
+                )),
+                QuestionSettings(type = 5,
+                        questionWithInput = InputValueSettings(title = "Загадай желание",
+                                min = ValueConditions(value = 5, errorMessage = "Дайте расширенный ответ"),
+                                max = ValueConditions(value = 1024, errorMessage = ""),
+                                unit = "",
+                                fieldName = "",
+                                hint = "Желание"
+                        ))), questionNavigator = this)
     }
 
     private var mToolbarViewModel: QuestionnaireToolbarViewModel? = null
@@ -60,6 +67,7 @@ class QuestionnaireActivity : TrackedLifeCycleActivity<AcQuestionnaireBinding>()
     override fun onDestroy() {
         super.onDestroy()
         mQuestionaireSubscription.safeUnsubscribe()
+        mToolbarViewModel?.release()
     }
 
     override fun addQuestionScreen(fragment: Fragment?) =

@@ -3,6 +3,8 @@ package com.topface.topface.experiments.onboarding.question
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
+import com.topface.topface.R
+import com.topface.topface.utils.extensions.getString
 import kotlin.properties.Delegates
 
 /**
@@ -11,9 +13,6 @@ import kotlin.properties.Delegates
  */
 
 class CountersCustomToolbarViewModel {
-    companion object {
-        private const val COUNTER_TEMPLATE = "%s/%s"
-    }
 
     val title = ObservableField<String>()
     val visibility = ObservableInt(View.GONE)
@@ -28,7 +27,7 @@ class CountersCustomToolbarViewModel {
             visibility.set(View.GONE)
         } else {
             visibility.set(View.VISIBLE)
-            title.set(String.format(COUNTER_TEMPLATE, currentPosition, questionsCount))
+            title.set(String.format(R.string.num_from_num.getString(), currentPosition, questionsCount))
         }
     }
 
