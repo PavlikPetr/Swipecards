@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
+import android.support.v4.app.Fragment
 import android.view.View
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser

@@ -215,6 +215,7 @@
     <string name="general_settings">Настройки</string>
     <string name="general_vk_profile">ВК</string>
     <string name="general_ok_profile">ОК</string>
+    <string name="general_wrong_field_value">Неверный формат</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">ВКонтакте</string>
