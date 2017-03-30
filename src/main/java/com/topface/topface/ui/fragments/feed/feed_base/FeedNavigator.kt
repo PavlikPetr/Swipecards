@@ -172,9 +172,4 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showPurchaseProduct(skuId: String, from: String) =
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
-
-    override fun showFragment() {
-        mActivityDelegate.startActivity(QuestionnaireActivity.getIntent())
-    }
-
 }

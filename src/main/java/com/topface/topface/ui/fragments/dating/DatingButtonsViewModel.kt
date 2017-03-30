@@ -141,7 +141,26 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         mNavigator.showPurchaseVip("Dating")
     }
 
-    fun skip() = mNavigator.showFragment()
+    fun skip() = currentUser?.let {
+        if (!it.skipped && !it.rated) {
+            showNextUser()
+            mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {
+                override fun onCompleted() = mSkipSubscription.safeUnsubscribe()
+                override fun onError(e: Throwable?) = e?.printStackTrace() ?: Unit
+                override fun onNext(t: IApiResponse?) {
+                    for (user in mUserSearchList) {
+                        if (user.id == it.id) {
+                            user.skipped = true
+                            return
+                        }
+                    }
+                    mDatingButtonsView.unlockControls()
+                }
+            })
+        } else {
+            showNextUser()
+        }
+    }
 
     fun sendLike() = sendSomething {
         if (!it.rated) {
