@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
@@ -32,14 +31,37 @@ class QuestionnaireActivity : TrackedLifeCycleActivity<AcQuestionnaireBinding>()
     }
 
     private val mQuestionNavigator by lazy {
-        QuestionScreenNavigator(arrayOf(QuestionSettings(type = 3,
-                typeThird = QuestionTypeThird(title = "Укажи твой рост ",
-                        min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
-                        max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
-                        unit = "см",
-                        fieldName = "height",
-                        hint = "Ваш рост"
-                ))), questionNavigator = this)
+        QuestionScreenNavigator(arrayOf(
+                QuestionSettings(type = 3,
+                        typeThird = QuestionTypeThird(
+                                title = "Укажи твой рост ",
+                                min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
+                                max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
+                                unit = "см",
+                                fieldName = "height",
+                                hint = "Ваш рост"
+                        )
+                ),
+                QuestionSettings(type = 1,
+                        typeFirst = QuestionTypeFirst(
+                                title = "Какого они должны быть возраста?",
+                                min = ValueConditions(value = 16, fieldName = "ageStart"),
+                                max = ValueConditions(value = 100, fieldName = "ageEnd"),
+                                startValue = 25,
+                                endValue = 35
+                        )
+                ),
+                QuestionSettings(type = 2,
+                        typeSecond = QuestionTypeSecond(
+                                title = "Кого ищешь?",
+                                fieldName = "mayBeSexMayBeNo",
+                                buttons = arrayOf(
+                                        Button(title = "M", value = "0"),
+                                        Button(title = "W", value = "1")
+                                )
+                        )
+                )
+                ), questionNavigator = this)
     }
 
     private var mToolbarViewModel: QuestionnaireToolbarViewModel? = null

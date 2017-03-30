@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.onboarding.question.single_list.SingleListItemViewModel" />
+    </data>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/onboarding_list_item_bg_selector"
+        android:button="@null"
+        android:drawableLeft="@null"
+        android:enabled="@{viewModel.isEnabled}"
+        android:gravity="center"
+        android:onClick="@{() -> viewModel.onClick()}"
+        android:text="@{viewModel.title, default=PUSH}"
+        android:textColor="@color/onboarding_list_item_text_color_selector" />
+</layout>

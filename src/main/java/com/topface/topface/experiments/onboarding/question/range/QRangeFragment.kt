@@ -7,25 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.OnboardingQRangeBinding
+import com.topface.topface.experiments.onboarding.question.QuestionTypeFirst
 import com.topface.topface.ui.fragments.BaseFragment
 import org.jetbrains.anko.layoutInflater
+import org.json.JSONObject
 
 class QRangeFragment: BaseFragment() {
+    companion object {
+        const val EXTRA_DATA = "QRangeFragment.Extra.Data"
+        fun newInstance(data: QuestionTypeFirst, json: JSONObject = JSONObject()) = QRangeFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(EXTRA_DATA, data)
+            }
+        }
+    }
+
     override fun needOptionsMenu() = false
 
     private val mViewModel by lazy {
-        QRangeFragmentViewModel()
+        QRangeFragmentViewModel(arguments)
     }
-
-    private val mLayoutResId = R.layout.onboarding_q_range
 
     private val mBinding by lazy {
-        DataBindingUtil.inflate<OnboardingQRangeBinding>(context.layoutInflater, mLayoutResId, null, false)
+        DataBindingUtil.inflate<OnboardingQRangeBinding>(context.layoutInflater, R.layout.questionnaire_q_range, null, false)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        mBinding.viewModel = QRangeFragmentViewModel()
-        return mBinding.root
-    }
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            mBinding.apply { viewModel = mViewModel }.root
 }

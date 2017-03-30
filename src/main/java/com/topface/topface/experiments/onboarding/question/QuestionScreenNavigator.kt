@@ -1,11 +1,12 @@
 package com.topface.topface.experiments.onboarding.question
 
-import android.support.v4.app.Fragment
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.EnterTextScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.EnterValueScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.MultiSelectScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.RangeQuestionScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.SingleChoiseScreen
+import com.topface.topface.experiments.onboarding.question.range.QRangeFragment
+import com.topface.topface.experiments.onboarding.question.single_list.QSingleListFragment
 import com.topface.topface.experiments.onboarding.question.valueSetter.EnterValueFragment
 
 /**
@@ -26,8 +27,8 @@ class QuestionScreenNavigator(private val questions: Array<QuestionSettings>, pr
 
     private fun getFragmentByType(data: QuestionSettings) =
             when (data.type) {
-                RangeQuestionScreen -> EnterValueFragment.newInstance(data.typeThird)
-                SingleChoiseScreen -> EnterValueFragment.newInstance(data.typeThird)
+                RangeQuestionScreen -> QRangeFragment.newInstance(data.typeFirst)
+                SingleChoiseScreen -> QSingleListFragment.newInstance(data.typeSecond)
                 EnterValueScreen -> EnterValueFragment.newInstance(data.typeThird)
                 MultiSelectScreen -> EnterValueFragment.newInstance(data.typeThird)
                 EnterTextScreen -> EnterValueFragment.newInstance(data.typeThird)
