@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
@@ -539,7 +540,25 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
         appConfig.incrAppStartEventNumber();
         appConfig.saveConfig();
+        setSessionState();
         lookedAuthScreen();
+    }
+
+    private void setSessionState() {
+        AppConfig appConfig = getAppConfig();
+        if (appConfig.isFirstSessionAfterInstall()) {
+            boolean isFirstInstall;
+            try {
+                long firstInstallTime = mContext.getPackageManager().getPackageInfo(getPackageName(), 0).firstInstallTime;
+                long lastUpdateTime = mContext.getPackageManager().getPackageInfo(getPackageName(), 0).lastUpdateTime;
+                isFirstInstall = firstInstallTime == lastUpdateTime;
+            } catch (PackageManager.NameNotFoundException e) {
+                isFirstInstall = false;
+            }
+            appConfig.setFirstSessionAfterInstallAttribute(false);
+            mWeakStorage.setFirstSessionAfterInstallAttribute(isFirstInstall && AuthToken.getInstance().isEmpty());
+            appConfig.saveConfig();
+        }
     }
 
     private void lookedAuthScreen() {
