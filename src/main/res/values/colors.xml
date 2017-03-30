@@ -300,5 +300,7 @@
     <color name="circle_around_online_circle">@color/bg_white</color>
 
     <color name="dating_filter_background"> #f5f5f5 </color>
+    <color name="questions_button_color">#fe63cd</color>
+    <color name="questions_button_color_pressed">#C94FA3</color>
 
 </resources>

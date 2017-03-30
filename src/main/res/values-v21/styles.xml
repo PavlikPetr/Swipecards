@@ -223,4 +223,9 @@
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
 
+    <style name="MaterialCheckBoxBlue">
+        <item name="android:button">@null</item>
+        <item name="android:drawableLeft">@drawable/checkbox_selector_21</item>
+    </style>
+
 </resources>

@@ -13,26 +13,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/bg_white"
         android:orientation="vertical"
-        android:background="@color/bg_white">
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/what_languages_do_you_speak"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_margin="5dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="1"
-            android:scrollbars="vertical"/>
+            android:scrollbars="none"/>
 
         <Button
             android:id="@+id/btnShow"
+            style="@style/QuestionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="#00796B"
-            android:onClick="@{()->viewModel.onButtonClick()}"
-            android:text="Что выделено?"
-            android:textColor="@color/bg_white"/>
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/next"
+            android:onClick="@{()->viewModel.onButtonClick()}"/>
 
     </LinearLayout>
 </layout>
