@@ -303,5 +303,10 @@
 
     <!--Цвета для экранов опросника-->
     <color name="questionnaire_counters_text_color">#878787</color>
+    <color name="questionnaire_third_type_title_text_color">#000000</color>
+    <color name="questionnaire_appearance_error_text_color">#ff2e48</color>
+    <color name="questionnaire_appearance_hint_text_color">#9A9999</color>
+    <color name="questionnaire_input_text_color">#de000000</color>
+    <color name="questionnaire_unit_text_color">#000000</color>
 
 </resources>

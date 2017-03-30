@@ -10,6 +10,7 @@ import com.topface.topface.databinding.QuestionnaireEnterValueLayoutBinding
 import com.topface.topface.experiments.onboarding.question.QuestionTypeThird
 import com.topface.topface.ui.fragments.BaseFragment
 import org.jetbrains.anko.layoutInflater
+import org.json.JSONObject
 
 /**
  * Фрагмент для третьего типа вопроса
@@ -18,7 +19,7 @@ import org.jetbrains.anko.layoutInflater
 class EnterValueFragment : BaseFragment() {
     companion object {
         const val EXTRA_DATA = "EnterValueFragment.Extra.Data"
-        fun newInstance(data: QuestionTypeThird) = EnterValueFragment().apply {
+        fun newInstance(data: QuestionTypeThird, json: JSONObject = JSONObject()) = EnterValueFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_DATA, data)
             }

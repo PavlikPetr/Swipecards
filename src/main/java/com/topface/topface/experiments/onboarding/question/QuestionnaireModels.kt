@@ -3,6 +3,7 @@ package com.topface.topface.experiments.onboarding.question
 import android.os.Parcel
 import android.os.Parcelable
 import com.topface.topface.utils.Utils
+import org.json.JSONObject
 
 /**
  * Различные модельки данных для опросника
@@ -11,8 +12,9 @@ import com.topface.topface.utils.Utils
 
 /**
  * Пользователь дал ответ и необходимо показать следующий вопрос
+ * @param json - ответ пользователя в json
  */
-class UserChooseAnswer
+data class UserChooseAnswer(var json: JSONObject = JSONObject())
 
 /**
  * Моделька ответа на запрос настроек для опросника
@@ -265,8 +267,8 @@ data class MultiselectListItem(var title: String = Utils.EMPTY, var value: Strin
  * @param max - параметры для максимального значения
  */
 data class QuestionTypeFifth(var title: String = Utils.EMPTY, var hint: String = Utils.EMPTY,
-                             var description: String = Utils.EMPTY, var fieldName: String = Utils.EMPTY,
-                             var min: ValueConditions = ValueConditions(), var max: ValueConditions = ValueConditions()) : Parcelable {
+                             var fieldName: String = Utils.EMPTY, var min: ValueConditions = ValueConditions(),
+                             var max: ValueConditions = ValueConditions()) : Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<QuestionTypeFifth> = object : Parcelable.Creator<QuestionTypeFifth> {
             override fun createFromParcel(source: Parcel): QuestionTypeFifth = QuestionTypeFifth(source)
@@ -274,14 +276,13 @@ data class QuestionTypeFifth(var title: String = Utils.EMPTY, var hint: String =
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), source.readString(), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader))
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(title)
         dest?.writeString(hint)
-        dest?.writeString(description)
         dest?.writeString(fieldName)
         dest?.writeParcelable(min, 0)
         dest?.writeParcelable(max, 0)

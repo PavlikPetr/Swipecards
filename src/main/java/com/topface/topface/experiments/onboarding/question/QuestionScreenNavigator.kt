@@ -12,11 +12,17 @@ import com.topface.topface.experiments.onboarding.question.valueSetter.EnterValu
  * Фабрика для экранов опросника
  * Created by petrp on 29.03.2017.
  */
-class QuestionScreenFactory(private val questions: Array<QuestionSettings>, private var startPosition: Int = -1,
-                            private val questionNavigator: IQuestionNavigator) {
-    fun show(position: Int = startPosition + 1) {
-        questions.getOrNull(position)?.let { questionNavigator.addQuestionScreen(getFragmentByType(it)) } ?: questionNavigator.showResultScreen()
+class QuestionScreenNavigator(private val questions: Array<QuestionSettings>, private var startPosition: Int = -1,
+                              private val questionNavigator: IQuestionNavigator) {
+    fun show(position: Int? = null) {
+        val pos = position ?: startPosition + 1
+        startPosition = pos
+        questions.getOrNull(pos)?.let { questionNavigator.addQuestionScreen(getFragmentByType(it)) } ?: questionNavigator.showResultScreen()
     }
+
+    fun getCurrentPosition() = startPosition
+
+    fun getTotalPOsition() = questions.size
 
     private fun getFragmentByType(data: QuestionSettings) =
             when (data.type) {

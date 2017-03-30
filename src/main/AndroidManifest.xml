@@ -178,6 +178,10 @@
             android:parentActivityName=".ui.NavigationActivity"
             android:theme="@style/Theme.FullyTransparent"/>
 
+        <activity
+            android:name=".experiments.onboarding.question.QuestionnaireActivity"
+            android:parentActivityName=".ui.NavigationActivity"/>
+
         <!-- Facebook -->
         <activity
             android:name="com.facebook.FacebookActivity"
