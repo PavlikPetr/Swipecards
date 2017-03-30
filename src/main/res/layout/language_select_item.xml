@@ -20,14 +20,15 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="8dp">
+            android:layout_marginRight="8dp">
 
             <ImageView
-                android:layout_width="21dp"
-                android:layout_height="26dp"
-                android:background="@drawable/fake_boy2"/>
+                android:layout_width="26dp"
+                android:layout_height="21dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                app:remoteSrcGlide="@{viewModel.imageLink}"/>
         </FrameLayout>
-
 
         <TextView
             android:id="@+id/tvName"

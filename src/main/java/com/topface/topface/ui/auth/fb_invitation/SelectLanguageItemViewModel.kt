@@ -14,22 +14,7 @@ class SelectLanguageItemViewModel(current: Language) {
 
     var title = ObservableField<String>(current.title)
     var isSelected = ObservableBoolean(current.isSelected)
-    var image = ObservableInt(R.drawable.fake_boy1)
+    var imageLink = ObservableField(current.imageLink)
     var tag = ObservableField<String>(current.value)
 
-    init {
-
-    }
-
-
-    var onItemClickListener = object : View.OnClickListener {
-        override fun onClick(v: View?) {
-            (v as CheckBox)?.let {
-                val currentSKA = v.getTag()
-                isSelected.set(true)
-
-                //todo НАДО ОПОВЕСТИТЬ СПИСОК О ТОМ, ЧТО ЧУВАК ВЫБРАН
-            }
-        }
-    }
 }
