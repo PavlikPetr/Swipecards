@@ -1,4 +1,4 @@
-package com.topface.topface.ui.auth.fb_invitation
+package com.topface.topface.experiments.fb_invitation
 
 class FBInvitationViewModel {
 

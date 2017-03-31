@@ -18,7 +18,7 @@ import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
-import com.topface.topface.ui.auth.fb_invitation.FBinvitationFragment
+import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity

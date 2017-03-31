@@ -1,4 +1,4 @@
-package com.topface.topface.ui.auth.fb_invitation
+package com.topface.topface.experiments.fb_invitation
 
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater

@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.auth.fb_invitation.FBInvitationViewModel"/>
+            type="com.topface.topface.experiments.fb_invitation.FBInvitationViewModel"/>
     </data>
 
     <LinearLayout
