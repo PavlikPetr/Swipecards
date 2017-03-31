@@ -19,6 +19,8 @@ class QRangeFragment: BaseFragment() {
                 putParcelable(EXTRA_DATA, data)
             }
         }
+        private const val STATE_MIN = "QRangeFragment.State.Min"
+        private const val STATE_MAX = "QRangeFragment.State.Min"
     }
 
     override fun needOptionsMenu() = false
@@ -33,4 +35,20 @@ class QRangeFragment: BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             mBinding.apply { viewModel = mViewModel }.root
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        savedInstanceState?.let {
+            if (it.containsKey(STATE_MAX)) mViewModel.end.set(it.getInt(STATE_MAX))
+            if (it.containsKey(STATE_MIN)) mViewModel.start.set(it.getInt(STATE_MIN))
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.apply {
+            putInt(STATE_MAX, mViewModel.end.get())
+            putInt(STATE_MIN, mViewModel.start.get())
+        }
+    }
 }
