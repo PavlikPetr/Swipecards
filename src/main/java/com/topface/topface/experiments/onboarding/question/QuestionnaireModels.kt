@@ -2,6 +2,7 @@ package com.topface.topface.experiments.onboarding.question
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.topface.topface.data.FeedUser
 import com.topface.topface.utils.Utils
 import org.json.JSONObject
 
