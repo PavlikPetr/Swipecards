@@ -308,6 +308,8 @@
     <color name="questionnaire_appearance_hint_text_color">#9A9999</color>
     <color name="questionnaire_input_text_color">#de000000</color>
     <color name="questionnaire_unit_text_color">#000000</color>
-    <color name="questionnaire_text_input_appearance_hint_text_color">#499aff</color>
+    <color name="questionnaire_text_input_appearance_hint_text_color">@color/questionnaire_blue</color>
 
+    <color name="questionnaire_button_pink">#fe63cd</color>
+    <color name="questionnaire_blue">#499AFF</color>
 </resources>

@@ -180,6 +180,7 @@
 
         <activity
             android:name=".experiments.onboarding.question.QuestionnaireActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".ui.NavigationActivity"/>
 
         <!-- Facebook -->

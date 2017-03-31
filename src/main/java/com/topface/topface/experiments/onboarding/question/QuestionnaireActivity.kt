@@ -9,7 +9,6 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
 import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.ui.BaseFragmentActivity
-import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.json.JSONObject
@@ -33,14 +32,35 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     }
 
     private val mQuestionNavigator by lazy {
-        QuestionScreenNavigator(arrayOf(QuestionSettings(type = 3,
-                questionWithInput = InputValueSettings(title = "Укажи твой рост ",
-                        min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
-                        max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
-                        unit = "см",
-                        fieldName = "height",
-                        hint = ""
-                )),
+        QuestionScreenNavigator(arrayOf(
+                QuestionSettings(type = 3,
+                        questionWithInput = InputValueSettings(title = "Укажи твой рост ",
+                                min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
+                                max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
+                                unit = "см",
+                                fieldName = "height",
+                                hint = ""
+                        )
+                ),
+                QuestionSettings(type = 1,
+                        typeFirst = QuestionTypeFirst(
+                                title = "Какого они должны быть возраста?",
+                                min = ValueConditions(value = 16, fieldName = "ageStart"),
+                                max = ValueConditions(value = 100, fieldName = "ageEnd"),
+                                startValue = 25,
+                                endValue = 35
+                        )
+                ),
+                QuestionSettings(type = 2,
+                        typeSecond = QuestionTypeSecond(
+                                title = "Кого ищешь?",
+                                fieldName = "mayBeSexMayBeNo",
+                                buttons = arrayOf(
+                                        Button(title = "M", value = "0"),
+                                        Button(title = "W", value = "1")
+                                )
+                        )
+                ),
                 QuestionSettings(type = 5,
                         questionWithInput = InputValueSettings(title = "Загадай желание",
                                 min = ValueConditions(value = 5, errorMessage = "Дайте расширенный ответ"),
@@ -48,7 +68,8 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
                                 unit = "",
                                 fieldName = "",
                                 hint = "Желание"
-                        ))), questionNavigator = this)
+                        ))
+        ), questionNavigator = this)
     }
 
     private var mToolbarViewModel: QuestionnaireToolbarViewModel? = null

@@ -1731,11 +1731,17 @@
         <item name="android:textStyle">normal</item>
     </style>
 
-
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/dating_fab_skip</item>
     </style>
 
+    <!-- Onboarding experiment-->
+    <style name="OnboardingPinkButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal" tools:targetApi="lollipop">@color/questionnaire_button_pink</item>
+        <item name="colorButtonNormal">@color/questionnaire_button_pink</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+    </style>
     <!--Стили для опросника-->
     <!--Стили для 3-го типа вопроса-->
     <style name="TitleThirdType">
@@ -1749,6 +1755,7 @@
     <style name="QuestionnaireContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingBottom">@dimen/questionnaire_container_bottom_padding</item>
         <item name="android:paddingLeft">@dimen/questionnaire_third_type_title_side_padding</item>
         <item name="android:paddingStart" tools:ignore="NewApi">
             @dimen/questionnaire_third_type_title_side_padding

@@ -266,6 +266,7 @@
     <dimen name="questionnaire_text_input_appearance_hint_text_size">11sp</dimen>
     <dimen name="questionnaire_text_input_text_size">14sp</dimen>
     <dimen name="questionnaire_digit_input_one_sign_width">20dp</dimen>
+    <dimen name="questionnaire_container_bottom_padding">16dp</dimen>
 
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
