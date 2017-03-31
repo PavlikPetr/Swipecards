@@ -6,11 +6,7 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.experiments.onboarding.question.MultiselectListItem
 
-
-/**
- * Created by mbulgakov on 29.03.17.
- */
-class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) {
+class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) : View.OnClickListener {
 
     private val mEventBus = App.getAppComponent().eventBus()
 
@@ -19,14 +15,12 @@ class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) {
     var image = ObservableField<String>(current.image)
     var value = ObservableField<String>(current.value)
 
-    fun onItemClickListener()=
-        object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                v?.let {
-                    isSelected.set(if (isSelected.get()) false else true)
-                    mEventBus.setData(CheckboxSelected(value.get()))
-                }
-            }
+    override fun onClick(v: View?) {
+        v?.let {
+            isSelected.set(!isSelected.get())
+            mEventBus.setData(CheckboxSelected(value.get()))
         }
+    }
+
 
 }

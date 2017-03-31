@@ -12,16 +12,16 @@ import com.topface.topface.ui.add_to_photo_blog.TypeProvider
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.appContext
+import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
-import org.json.JSONObject
-
 
 class MultiSelectCheckboxListFragment : BaseFragment() {
 
     companion object {
         const val EXTRA_DATA = "MultiSelectCheckboxListFragment.Extra.Data"
 
-        fun newInstance(data: QuestionTypeFourth, json: JSONObject = JSONObject()) = MultiSelectCheckboxListFragment().apply {
+        fun newInstance(data: QuestionTypeFourth) = MultiSelectCheckboxListFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(MultiSelectCheckboxListFragment.EXTRA_DATA, data)
             }
@@ -32,7 +32,11 @@ class MultiSelectCheckboxListFragment : BaseFragment() {
         DataBindingUtil.inflate<MultiselectCheckboxListBinding>(context.layoutInflater, R.layout.multiselect_checkbox_list, null, false)
     }
 
-    private val mViewModel by lazy { MultiSelectCheckboxViewModel(arguments) }
+    private val mViewModel by lazy {
+        MultiSelectCheckboxViewModel(arguments).apply {
+            activity.registerLifeCycleDelegate(this)
+        }
+    }
 
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(TypeProvider()) {
@@ -47,4 +51,13 @@ class MultiSelectCheckboxListFragment : BaseFragment() {
                 recyclerView.layoutManager = LinearLayoutManager(mBinding.appContext(), LinearLayoutManager.VERTICAL, false)
             }.root
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.release()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity.unregisterLifeCycleDelegate(mViewModel)
+    }
 }
