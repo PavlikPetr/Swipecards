@@ -7,6 +7,7 @@ import com.topface.topface.App
 import com.topface.topface.experiments.onboarding.question.QuestionTypeFirst
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.ui.views.RangeSeekBar
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import org.json.JSONObject
 
@@ -14,8 +15,16 @@ import org.json.JSONObject
  * VM for question about range
  * Created by m.bayutin on 28.03.17.
  */
-class QRangeFragmentViewModel(bundle: Bundle) : RangeSeekBar.OnRangeSeekBarChangeListener<Int> {
-    private val mData: QuestionTypeFirst? = bundle.getParcelable(QRangeFragment.EXTRA_DATA)
+class QRangeFragmentViewModel(bundle: Bundle) : RangeSeekBar.OnRangeSeekBarChangeListener<Int>, ILifeCycle {
+    companion object {
+        private const val STATE_MIN = "QRangeFragment.State.Min"
+        private const val STATE_MAX = "QRangeFragment.State.Max"
+        private const val STATE_END = "QRangeFragment.State.End"
+        private const val STATE_START = "QRangeFragment.State.Start"
+        private const val STATE_TITLE = "QRangeFragment.State.Title"
+    }
+
+    private var mData: QuestionTypeFirst? = bundle.getParcelable(QRangeFragment.EXTRA_DATA)
 
     val title = ObservableField<String>(mData?.title ?: Utils.EMPTY)
     val maxValue = object : ObservableInt(mData?.max?.value ?: 0) {
@@ -57,5 +66,29 @@ class QRangeFragmentViewModel(bundle: Bundle) : RangeSeekBar.OnRangeSeekBarChang
                 it.max?.let { put(it.fieldName, maxValueTitle.get()) }
             }
         }))
+    }
+
+    override fun onSavedInstanceState(state: Bundle) {
+        super.onSavedInstanceState(state)
+        with(state) {
+            putParcelable(QRangeFragment.EXTRA_DATA, mData)
+            putInt(STATE_END, end.get())
+            putInt(STATE_START, start.get())
+            putInt(STATE_MIN, minValue.get())
+            putInt(STATE_MAX, maxValue.get())
+            putString(STATE_TITLE, title.get())
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Bundle) {
+        super.onRestoreInstanceState(state)
+        with(state) {
+            mData = getParcelable(QRangeFragment.EXTRA_DATA)
+            end.set(getInt(STATE_END))
+            start.set(getInt(STATE_START))
+            minValue.set(getInt(STATE_MIN))
+            maxValue.set(getInt(STATE_MAX))
+            title.set(getString(STATE_TITLE))
+        }
     }
 }

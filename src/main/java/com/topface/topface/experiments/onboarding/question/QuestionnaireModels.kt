@@ -46,18 +46,16 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
  *
  * @param type - тип вопроса (1 - экран с выбором диапазона; 2 - экран с выбором одного варианта из n;
  *                            3 - экран с вводом параметра; 4 - экран с выбором нескольких вариантов из списка;
- *                            4 - экран с вводом текстового ответа на вопрос)
- * @param typeFifth - данные для вопроса первого типа
+ *                            5 - экран с вводом текстового ответа на вопрос)
+ * @param typeFirst - данные для вопроса первого типа
  * @param typeSecond - данные для вопроса второго типа
- * @param typeThird - данные для вопроса третьего типа
+ * @param questionWithInput - данные для вопроса третьего типа
  * @param typeFourth - данные для вопроса четвертого типа
- * @param typeFirst - данные для вопроса пятого типа
  */
 data class QuestionSettings(var type: Int = 0, var typeFirst: QuestionTypeFirst = QuestionTypeFirst(),
                             var typeSecond: QuestionTypeSecond = QuestionTypeSecond(),
-                            var typeThird: QuestionTypeThird = QuestionTypeThird(),
-                            var typeFourth: QuestionTypeFourth = QuestionTypeFourth(),
-                            var typeFifth: QuestionTypeFifth = QuestionTypeFifth()) : Parcelable {
+                            var questionWithInput: InputValueSettings = InputValueSettings(),
+                            var typeFourth: QuestionTypeFourth = QuestionTypeFourth()) : Parcelable {
     companion object {
         const val RangeQuestionScreen = 1
         const val SingleChoiseScreen = 2
@@ -70,7 +68,7 @@ data class QuestionSettings(var type: Int = 0, var typeFirst: QuestionTypeFirst 
         }
     }
 
-    constructor(source: Parcel) : this(source.readInt(), source.readParcelable<QuestionTypeFirst>(QuestionTypeFirst::class.java.classLoader), source.readParcelable<QuestionTypeSecond>(QuestionTypeSecond::class.java.classLoader), source.readParcelable<QuestionTypeThird>(QuestionTypeThird::class.java.classLoader), source.readParcelable<QuestionTypeFourth>(QuestionTypeFourth::class.java.classLoader), source.readParcelable<QuestionTypeFifth>(QuestionTypeFifth::class.java.classLoader))
+    constructor(source: Parcel) : this(source.readInt(), source.readParcelable<QuestionTypeFirst>(QuestionTypeFirst::class.java.classLoader), source.readParcelable<QuestionTypeSecond>(QuestionTypeSecond::class.java.classLoader), source.readParcelable<InputValueSettings>(InputValueSettings::class.java.classLoader), source.readParcelable<QuestionTypeFourth>(QuestionTypeFourth::class.java.classLoader))
 
     override fun describeContents() = 0
 
@@ -78,9 +76,8 @@ data class QuestionSettings(var type: Int = 0, var typeFirst: QuestionTypeFirst 
         dest?.writeInt(type)
         dest?.writeParcelable(typeFirst, 0)
         dest?.writeParcelable(typeSecond, 0)
-        dest?.writeParcelable(typeThird, 0)
+        dest?.writeParcelable(questionWithInput, 0)
         dest?.writeParcelable(typeFourth, 0)
-        dest?.writeParcelable(typeFifth, 0)
     }
 }
 
@@ -176,13 +173,13 @@ data class Button(var title: String = Utils.EMPTY, var value: String = Utils.EMP
  * @param fieldName - название поля, которое будет содержать ответ пользователя
  * @param hint - hint, отображаемый до начала ввода данных пользователем
  */
-data class QuestionTypeThird(var title: String = Utils.EMPTY, var min: ValueConditions = ValueConditions(),
-                             var max: ValueConditions = ValueConditions(), var unit: String = Utils.EMPTY,
-                             var fieldName: String = Utils.EMPTY, var hint: String = Utils.EMPTY) : Parcelable {
+data class InputValueSettings(var title: String = Utils.EMPTY, var min: ValueConditions = ValueConditions(),
+                              var max: ValueConditions = ValueConditions(), var unit: String = Utils.EMPTY,
+                              var fieldName: String = Utils.EMPTY, var hint: String = Utils.EMPTY) : Parcelable {
     companion object {
-        @JvmField val CREATOR: Parcelable.Creator<QuestionTypeThird> = object : Parcelable.Creator<QuestionTypeThird> {
-            override fun createFromParcel(source: Parcel): QuestionTypeThird = QuestionTypeThird(source)
-            override fun newArray(size: Int): Array<QuestionTypeThird?> = arrayOfNulls(size)
+        @JvmField val CREATOR: Parcelable.Creator<InputValueSettings> = object : Parcelable.Creator<InputValueSettings> {
+            override fun createFromParcel(source: Parcel): InputValueSettings = InputValueSettings(source)
+            override fun newArray(size: Int): Array<InputValueSettings?> = arrayOfNulls(size)
         }
     }
 
@@ -253,39 +250,6 @@ data class MultiselectListItem(var title: String = Utils.EMPTY, var value: Strin
         dest?.writeString(value)
         dest?.writeString(image)
         dest?.writeInt((if (isSelected) 1 else 0))
-    }
-}
-
-/**
- * Настройки для пятого типа экрана
- *
- * @param title - заголовок экрана
- * @param hint - hint, отображаемый до начала ввода данных пользователем
- * @param description - описание для поля ввода
- * @param fieldName - название поля, которое будет содержать ответ пользователя
- * @param min - параметры для минимального значения
- * @param max - параметры для максимального значения
- */
-data class QuestionTypeFifth(var title: String = Utils.EMPTY, var hint: String = Utils.EMPTY,
-                             var fieldName: String = Utils.EMPTY, var min: ValueConditions = ValueConditions(),
-                             var max: ValueConditions = ValueConditions()) : Parcelable {
-    companion object {
-        @JvmField val CREATOR: Parcelable.Creator<QuestionTypeFifth> = object : Parcelable.Creator<QuestionTypeFifth> {
-            override fun createFromParcel(source: Parcel): QuestionTypeFifth = QuestionTypeFifth(source)
-            override fun newArray(size: Int): Array<QuestionTypeFifth?> = arrayOfNulls(size)
-        }
-    }
-
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader))
-
-    override fun describeContents() = 0
-
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(title)
-        dest?.writeString(hint)
-        dest?.writeString(fieldName)
-        dest?.writeParcelable(min, 0)
-        dest?.writeParcelable(max, 0)
     }
 }
 

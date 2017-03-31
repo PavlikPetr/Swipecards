@@ -1276,4 +1276,5 @@
 
     <!-- Onboarding experiment -->
     <string name="onboarding_button_next">Далее</string>
+    <string name="num_from_num">%1$s из %2$s</string>
 </resources>

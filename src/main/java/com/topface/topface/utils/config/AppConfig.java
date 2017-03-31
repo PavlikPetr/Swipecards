@@ -79,6 +79,7 @@ public class AppConfig extends AbstractConfig {
     private static final String FB_APP_LINK = "fb_app_link";
     private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
     private static final String APP_START_EVENT_NUMBER = "app_start_event_number";
+    private static final String IS_FIRST_SESSION_AFTER_INSTALL = "is_first_session_after_install";
 
     public AppConfig(Context context) {
         super(context);
@@ -152,6 +153,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, 0);
         // счетчик запусков приложения
         addField(settingsMap, APP_START_EVENT_NUMBER, 0);
+        // если true, значит эта сессия для юзера первая после установки приложения
+        addField(settingsMap, IS_FIRST_SESSION_AFTER_INSTALL, true);
     }
 
     protected SharedPreferences getPreferences() {
@@ -642,5 +645,23 @@ public class AppConfig extends AbstractConfig {
     public void incrAppStartEventNumber() {
         int startNumber = getAppStartEventNumber();
         setField(getSettingsMap(), APP_START_EVENT_NUMBER, startNumber == Integer.MAX_VALUE ? 0 : startNumber + 1);
+    }
+
+    /**
+     * Set first session after install attribute
+     *
+     * @param isFirst true if this session first after install app
+     */
+    public void setFirstSessionAfterInstallAttribute(boolean isFirst) {
+        setField(getSettingsMap(), IS_FIRST_SESSION_AFTER_INSTALL, isFirst);
+    }
+
+    /**
+     * Get attribute about first session after install
+     *
+     * @return true if this session first after install app
+     */
+    public boolean isFirstSessionAfterInstall() {
+        return getBooleanField(getSettingsMap(), IS_FIRST_SESSION_AFTER_INSTALL);
     }
 }
