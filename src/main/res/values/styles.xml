@@ -1735,6 +1735,21 @@
         <item name="colorAccent">@color/dating_fab_skip</item>
     </style>
 
+    <style name="FBBlueButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:textColor">@color/bg_white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/popup_button_text</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="FBBlueButton.Background">
+        <item name="android:background">@drawable/blue_button_selector</item>
+    </style>
     <!-- Onboarding experiment-->
     <style name="OnboardingPinkButton" parent="Widget.AppCompat.Button.Colored">
         <item name="android:colorButtonNormal" tools:targetApi="lollipop">@color/questionnaire_button_pink</item>
