@@ -6,10 +6,12 @@ import com.adjust.sdk.AdjustConfig;
 import com.adjust.sdk.AdjustEvent;
 import com.adjust.sdk.LogLevel;
 import com.adjust.sdk.OnAttributionChangedListener;
+import com.kochava.android.tracker.Feature;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.data.ActivityLifreCycleData;
 import com.topface.topface.data.Products;
+import com.topface.topface.requests.ReferrerLogRequest;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -48,6 +50,7 @@ public class AdjustManager {
                 AdjustAttributeData data = new AdjustAttributeData(attribution);
                 mAppState.setData(data);
                 FlurryManager.getInstance().sendReferrerEvent(data);
+                new ReferrerLogRequest(App.getContext(), null, null, data).exec();
             }
         });
         config.setLogLevel(Debug.isDebugLogsEnabled() ? LogLevel.VERBOSE : LogLevel.ASSERT);
