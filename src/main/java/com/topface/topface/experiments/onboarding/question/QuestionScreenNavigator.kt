@@ -11,7 +11,6 @@ import com.topface.topface.experiments.onboarding.question.range.QRangeFragment
 import com.topface.topface.experiments.onboarding.question.single_list.QSingleListFragment
 import com.topface.topface.experiments.onboarding.question.text_input.TextInputFragment
 
-
 /**
  * Фабрика для экранов опросника
  * Created by petrp on 29.03.2017.
