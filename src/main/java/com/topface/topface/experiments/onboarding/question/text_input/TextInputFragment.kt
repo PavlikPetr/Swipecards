@@ -6,22 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
-import com.topface.topface.databinding.QuestionnaireDigitInputLayoutBinding
 import com.topface.topface.databinding.QuestionnaireTextInputLayoutBinding
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
-import com.topface.topface.experiments.onboarding.question.digit_input.DigitInputFragment
-import com.topface.topface.experiments.onboarding.question.digit_input.DigitInputFragmentViewModel
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
- * Фрагмент для третьего типа вопроса
+ * Фрагмент для пятого типа вопроса
  * Created by petrp on 29.03.2017.
  */
 class TextInputFragment : BaseFragment() {
     companion object {
-        const val EXTRA_DATA = "EnterValueFragment.Extra.Data"
-        fun newInstance(data: InputValueSettings) = DigitInputFragment().apply {
+        const val EXTRA_DATA = "TextInputFragment.Extra.Data"
+        fun newInstance(data: InputValueSettings) = TextInputFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_DATA, data)
             }
@@ -34,8 +33,12 @@ class TextInputFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        TextInputFragmentViewModel(arguments)
+        TextInputFragmentViewModel(arguments).apply {
+            activity.registerLifeCycleDelegate(this)
+        }
     }
+
+    override fun needOptionsMenu() = false
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
             mBinding.apply { viewModel = mViewModel }.root
@@ -43,5 +46,10 @@ class TextInputFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel.release()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity.unregisterLifeCycleDelegate(mViewModel)
     }
 }

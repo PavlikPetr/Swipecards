@@ -4,10 +4,14 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeToInt
@@ -21,9 +25,19 @@ import rx.Subscription
  * Вьюмодель экрана третьего типа вопроса в опроснике
  * Created by petrp on 30.03.2017.
  */
-class DigitInputFragmentViewModel(bundle: Bundle) {
+class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
 
-    private val mData: InputValueSettings? = bundle.getParcelable(DigitInputFragment.EXTRA_DATA)
+    companion object {
+        private const val TITLE = "DigitInputFragmentViewModel.Title"
+        private const val ERROR = "DigitInputFragmentViewModel.Error"
+        private const val HINT = "DigitInputFragmentViewModel.Hint"
+        private const val MAX_LENGTH = "DigitInputFragmentViewModel.MaxLength"
+        private const val TEXT = "DigitInputFragmentViewModel.Text"
+        private const val IS_ERROR_ENABLED = "DigitInputFragmentViewModel.IsErrorEnabled"
+        private const val UNIT = "DigitInputFragmentViewModel.Unit"
+    }
+
+    private var mData: InputValueSettings? = bundle.getParcelable(DigitInputFragment.EXTRA_DATA)
 
     val title = ObservableField<String>(mData?.title ?: Utils.EMPTY)
     val error = ObservableField<String>()
@@ -32,6 +46,13 @@ class DigitInputFragmentViewModel(bundle: Bundle) {
     val text = RxFieldObservable<String>()
     val isErrorEnabled = ObservableBoolean(mData?.let { !it.max.errorMessage.isNullOrEmpty() && !it.min.errorMessage.isNullOrEmpty() } ?: false)
     val unit = ObservableField<String>(mData?.unit ?: Utils.EMPTY)
+
+    val onEditorActionListener = TextView.OnEditorActionListener { v, actionId, event ->
+        if (event?.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+            onNext()
+            true
+        } else false
+    }
 
     private val mTextChangeSubscription: Subscription
 
@@ -75,4 +96,34 @@ class DigitInputFragmentViewModel(bundle: Bundle) {
     fun release() {
         mTextChangeSubscription.safeUnsubscribe()
     }
+
+    override fun onSavedInstanceState(state: Bundle) {
+        super.onSavedInstanceState(state)
+        with(state) {
+            putParcelable(DigitInputFragment.EXTRA_DATA, mData)
+            putString(TITLE, title.get())
+            putString(ERROR, error.get())
+            putString(HINT, hint.get())
+            putInt(MAX_LENGTH, maxLength.get())
+            putString(TEXT, text.get())
+            putBoolean(IS_ERROR_ENABLED, isErrorEnabled.get())
+            putString(UNIT, unit.get())
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Bundle) {
+        super.onRestoreInstanceState(state)
+        with(state) {
+            mData = getParcelable(DigitInputFragment.EXTRA_DATA)
+            title.set(getString(TITLE))
+            error.set(getString(ERROR))
+            hint.set(getString(HINT))
+            maxLength.set(getInt(MAX_LENGTH))
+            text.set(getString(TEXT))
+            isErrorEnabled.set(getBoolean(IS_ERROR_ENABLED))
+            unit.set(getString(UNIT))
+        }
+
+    }
+
 }

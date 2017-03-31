@@ -1779,7 +1779,7 @@
     <style name="QuestionnaireInputTextEdit">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:imeOptions">actionDone</item>
+        <item name="android:imeOptions">actionDone|flagNoExtractUi</item>
         <item name="android:textColor">@color/questionnaire_input_text_color</item>
     </style>
 

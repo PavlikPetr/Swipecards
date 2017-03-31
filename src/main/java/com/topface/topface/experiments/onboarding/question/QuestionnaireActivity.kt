@@ -8,6 +8,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
 import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -18,9 +19,10 @@ import rx.Subscription
  * Активити опросника
  * Created by petrp on 29.03.2017.
  */
-class QuestionnaireActivity : TrackedLifeCycleActivity<AcQuestionnaireBinding>(), IQuestionNavigator {
+class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQuestionNavigator {
 
     companion object {
+        private const val CURRENT_QUESTION_POSITION = "QuestionnaireActivity.Current.Question.Position"
         fun getIntent() =
                 Intent(App.getContext(), QuestionnaireActivity::class.java).apply {
                 }
@@ -52,16 +54,22 @@ class QuestionnaireActivity : TrackedLifeCycleActivity<AcQuestionnaireBinding>()
     private var mToolbarViewModel: QuestionnaireToolbarViewModel? = null
     private var mQuestionaireSubscription: Subscription? = null
     private val mRequestData = JSONObject()
+    private var mQuestionStartPosition: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        savedInstanceState?.let {
+            if (it.containsKey(CURRENT_QUESTION_POSITION)) {
+                mQuestionStartPosition = it.getInt(CURRENT_QUESTION_POSITION)
+            }
+        }
         mQuestionaireSubscription = mEventBus
                 .getObservable(UserChooseAnswer::class.java)
                 .subscribe(shortSubscription {
                     mQuestionNavigator.show()
                 })
         // запускаем показы
-        mQuestionNavigator.show()
+        mQuestionNavigator.show(mQuestionStartPosition)
     }
 
     override fun onDestroy() {
@@ -92,5 +100,10 @@ class QuestionnaireActivity : TrackedLifeCycleActivity<AcQuestionnaireBinding>()
 
     override fun onUpButtonClick() {
         //ничего не делаем
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(CURRENT_QUESTION_POSITION, mQuestionNavigator.getCurrentPosition())
     }
 }
