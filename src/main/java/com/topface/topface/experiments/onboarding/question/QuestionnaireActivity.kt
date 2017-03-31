@@ -39,7 +39,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
                         max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
                         unit = "см",
                         fieldName = "height",
-                        hint = "Ваш рост"
+                        hint = ""
                 )),
                 QuestionSettings(type = 5,
                         questionWithInput = InputValueSettings(title = "Загадай желание",

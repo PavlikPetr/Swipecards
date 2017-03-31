@@ -13,6 +13,7 @@ import com.topface.topface.experiments.onboarding.question.InputValueSettings
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeToInt
 import com.topface.topface.utils.rx.RxFieldObservable
@@ -35,6 +36,7 @@ class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
         private const val TEXT = "DigitInputFragmentViewModel.Text"
         private const val IS_ERROR_ENABLED = "DigitInputFragmentViewModel.IsErrorEnabled"
         private const val UNIT = "DigitInputFragmentViewModel.Unit"
+        private const val MIN_WIDTH = "DigitInputFragmentViewModel.MinWidth"
     }
 
     private var mData: InputValueSettings? = bundle.getParcelable(DigitInputFragment.EXTRA_DATA)
@@ -46,6 +48,7 @@ class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
     val text = RxFieldObservable<String>()
     val isErrorEnabled = ObservableBoolean(mData?.let { !it.max.errorMessage.isNullOrEmpty() && !it.min.errorMessage.isNullOrEmpty() } ?: false)
     val unit = ObservableField<String>(mData?.unit ?: Utils.EMPTY)
+    val minWidth = ObservableInt(R.dimen.questionnaire_digit_input_one_sign_width.getDimen().toInt() * maxLength.get())
 
     val onEditorActionListener = TextView.OnEditorActionListener { v, actionId, event ->
         if (event?.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
@@ -108,6 +111,7 @@ class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
             putString(TEXT, text.get())
             putBoolean(IS_ERROR_ENABLED, isErrorEnabled.get())
             putString(UNIT, unit.get())
+            putInt(MIN_WIDTH, minWidth.get())
         }
     }
 
@@ -122,6 +126,7 @@ class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
             text.set(getString(TEXT))
             isErrorEnabled.set(getBoolean(IS_ERROR_ENABLED))
             unit.set(getString(UNIT))
+            minWidth.set(getInt(MIN_WIDTH))
         }
 
     }

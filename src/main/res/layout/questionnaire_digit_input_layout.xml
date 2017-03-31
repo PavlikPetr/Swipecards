@@ -42,6 +42,7 @@
                     android:inputType="numberDecimal"
                     android:lines="1"
                     android:maxLength="@{viewModel.maxLength}"
+                    app:minimumWidth="@{viewModel.minWidth}"
                     android:maxLines="1"
                     android:text="@={viewModel.text}"
                     android:textSize="@dimen/questionnaire_digit_input_text_size"

@@ -31,12 +31,12 @@
             app:errorTextAppearance="@style/QuestionnaireErrorTextAppearance"
             app:hintEnabled="@{viewModel.isHintEnabled}"
             app:hintTextAppearance="@style/QuestionnaireTextInputHintTextAppearance"
+            android:hint="@{viewModel.hint}"
             app:setError="@{viewModel.error}">
 
             <android.support.design.widget.TextInputEditText
                 style="@style/QuestionnaireInputTextEdit"
                 android:layout_width="match_parent"
-                android:hint="@{viewModel.hint}"
                 android:inputType="text"
                 android:maxLength="@{viewModel.maxLength}"
                 android:maxLines="4"
