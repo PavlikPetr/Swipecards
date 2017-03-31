@@ -33,15 +33,6 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     private val mQuestionNavigator by lazy {
         QuestionScreenNavigator(arrayOf(
-                QuestionSettings(type = 3,
-                        questionWithInput = InputValueSettings(title = "Укажи твой рост ",
-                                min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
-                                max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
-                                unit = "см",
-                                fieldName = "height",
-                                hint = ""
-                        )
-                ),
                 QuestionSettings(type = 1,
                         typeFirst = QuestionTypeFirst(
                                 title = "Какого они должны быть возраста?",
@@ -59,6 +50,63 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
                                         Button(title = "M", value = "0"),
                                         Button(title = "W", value = "1")
                                 )
+                        )
+                ),
+                QuestionSettings(type = 3,
+                        questionWithInput = InputValueSettings(title = "Укажи твой рост ",
+                                min = ValueConditions(value = 130, errorMessage = "Минимальное значение для роста 130 см"),
+                                max = ValueConditions(value = 250, errorMessage = "Максимальное значение для роста 250 см"),
+                                unit = "см",
+                                fieldName = "height",
+                                hint = ""
+                        )
+                ),
+                QuestionSettings(type = 4,
+                        typeFourth = QuestionTypeFourth(
+                                title = "Какими языками владеешь?",
+                                fieldName = "languages",
+                                list = arrayOf<MultiselectListItem>(MultiselectListItem(
+                                        "Русский", "ru","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                ),
+                                        MultiselectListItem(
+                                                "Норвежский", "nw","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png",true
+                                        ),
+                                        MultiselectListItem(
+                                                "Английский", "en","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png",true
+                                        ),
+                                        MultiselectListItem(
+                                                "Испанский", "es","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Бельгийский", "bg","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Немецкий", "de","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Валерийский", "vl","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Русский", "ru","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Норвежский", "nw","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png",true
+                                        ),
+                                        MultiselectListItem(
+                                                "Английский", "en","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Испанский", "es","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Бельгийский", "bg","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Немецкий", "de","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ),
+                                        MultiselectListItem(
+                                                "Валерийский", "vl","http://static-eten.dev.stage.tf/default/images/flags/lang-large-rounded/bengali_v1490884227.png"
+                                        ))
                         )
                 ),
                 QuestionSettings(type = 5,

@@ -1803,6 +1803,19 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:imeOptions">actionDone|flagNoExtractUi</item>
         <item name="android:textColor">@color/questionnaire_input_text_color</item>
+        <item name="android:textSize">@dimen/questionnaire_text_input_text_size</item>
     </style>
 
+    <style name="MaterialCheckBoxBlue">
+        <item name="android:drawableLeft">@drawable/blue_checkbox_selector</item>
+    </style>
+
+    <style name="QuestionButton">
+    <item name="android:background">@drawable/pink_button_selector</item>
+    <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+    <item name="textAllCaps">true</item>
+    <item name="android:textColor">@color/bg_white</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:gravity">center</item>
+    </style>
 </resources>

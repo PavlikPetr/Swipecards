@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ActionBarItemClick">
         <item name="android:background">@drawable/actionbar_pressed_animation</item>
@@ -221,6 +221,11 @@
 
     <style name="PopupGreenButton.Background">
         <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
+    <style name="MaterialCheckBoxBlue">
+        <item name="android:button">@null</item>
+        <item name="android:drawableLeft">@drawable/checkbox_selector_21</item>
     </style>
 
     <style name="FBBlueButton.Background">

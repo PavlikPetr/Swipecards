@@ -24,7 +24,7 @@ class QuestionnaireToolbarViewModel(binding: ToolbarBinding, mNavigation: IToolb
         title.set(Utils.EMPTY)
         subTitle.set(Utils.EMPTY)
         shadowVisibility.set(View.GONE)
-        upIcon.set(R.drawable.empty_res)
+        upIcon.set(0)
         val additionalViewBinding = DataBindingUtil.inflate<QuestionnaireAdditionalToolbarViewBinding>(LayoutInflater.from(context),
                 R.layout.questionnaire_additional_toolbar_view, null, false)
         additionalViewBinding.viewModel = additionalViewModel
