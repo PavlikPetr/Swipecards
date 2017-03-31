@@ -6,9 +6,6 @@ import com.topface.topface.R
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
 
-/**
- * Created by mbulgakov on 28.03.17.
- */
 class FBInvitationItemViewModel(image: Int) {
 
     val imageSrc = ObservableInt(image)

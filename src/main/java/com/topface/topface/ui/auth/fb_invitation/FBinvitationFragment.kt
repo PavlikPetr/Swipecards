@@ -10,9 +10,6 @@ import com.topface.topface.databinding.FbInvitationItemBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import kotlin.properties.Delegates
 
-/**
- * Created by mbulgakov on 28.03.17.
- */
 class FBinvitationFragment : AbstractDialogFragment() {
 
     companion object {
