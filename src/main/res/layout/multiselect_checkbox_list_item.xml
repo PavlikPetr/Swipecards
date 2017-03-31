@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxListFragment"/>
+            type="com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxItemViewModel"/>
 
     </data>
 
@@ -15,7 +15,9 @@
         android:layout_height="56dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:background="@drawable/multiselect_checkbox_item_selector"
+        android:padding="16dp"
+        android:onClick="@{viewModel.onItemClickListener}">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -27,7 +29,7 @@
                 android:layout_height="21dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                app:remoteSrcGlide="@{viewModel.imageLink}"/>
+                app:remoteSrcGlide="@{viewModel.image}"/>
         </FrameLayout>
 
         <TextView
@@ -46,9 +48,7 @@
             style="@style/MaterialCheckBoxBlue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:setTag="@{viewModel.tag}"
-            app:setChecked="@{viewModel.isSelected}"
-            app:setOnClickListener="@{viewModel.onItemClickListener}"/>
+            app:setChecked="@{viewModel.isSelected}"/>
 
     </LinearLayout>
 </layout>

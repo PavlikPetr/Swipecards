@@ -2,19 +2,31 @@ package com.topface.topface.experiments.onboarding.question.multiselectCheckboxL
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.databinding.ObservableInt
 import android.view.View
-import android.widget.CheckBox
-import com.topface.topface.R
+import com.topface.topface.App
+import com.topface.topface.experiments.onboarding.question.MultiselectListItem
+
 
 /**
  * Created by mbulgakov on 29.03.17.
  */
-class SelectLanguageItemViewModel(current: com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.Language) {
+class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) {
 
-    var title = android.databinding.ObservableField<String>(current.title)
-    var isSelected = android.databinding.ObservableBoolean(current.isSelected)
-    var imageLink = android.databinding.ObservableField(current.imageLink)
-    var tag = android.databinding.ObservableField<String>(current.value)
+    private val mEventBus = App.getAppComponent().eventBus()
+
+    var title = ObservableField<String>(current.title)
+    var isSelected = ObservableBoolean(current.isSelected)
+    var image = ObservableField<String>(current.image)
+    var value = ObservableField<String>(current.value)
+
+    fun onItemClickListener()=
+        object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                v?.let {
+                    isSelected.set(if (isSelected.get()) false else true)
+                    mEventBus.setData(CheckboxSelected(value.get()))
+                }
+            }
+        }
 
 }

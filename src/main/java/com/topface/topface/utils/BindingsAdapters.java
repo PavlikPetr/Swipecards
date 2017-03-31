@@ -461,7 +461,7 @@ public class BindingsAdapters {
         }
     }
 
-    @BindingAdapter({"glideBlurUrl", "blurRadius"})
+    @BindingAdapter({"app:glideBlurUrl", "app:blurRadius"})
     public static void setBlurredImageByUrlWithRadius(ImageView imageView, String imgUrl, int blurRadius) {
         Context context = imageView.getContext().getApplicationContext();
         Glide.with(context)

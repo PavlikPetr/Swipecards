@@ -6,6 +6,7 @@ import com.topface.topface.experiments.onboarding.question.QuestionSettings.Comp
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.MultiSelectScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.RangeQuestionScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.SingleChoiseScreen
+import com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxListFragment
 import com.topface.topface.experiments.onboarding.question.valueSetter.EnterValueFragment
 
 /**
@@ -29,7 +30,7 @@ class QuestionScreenNavigator(private val questions: Array<QuestionSettings>, pr
                 RangeQuestionScreen -> EnterValueFragment.newInstance(data.typeThird)
                 SingleChoiseScreen -> EnterValueFragment.newInstance(data.typeThird)
                 EnterValueScreen -> EnterValueFragment.newInstance(data.typeThird)
-                MultiSelectScreen -> EnterValueFragment.newInstance(data.typeThird)
+                MultiSelectScreen -> MultiSelectCheckboxListFragment.newInstance(data.typeFourth)
                 EnterTextScreen -> EnterValueFragment.newInstance(data.typeThird)
                 else -> null
             }

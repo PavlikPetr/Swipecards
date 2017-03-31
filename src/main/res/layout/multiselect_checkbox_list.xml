@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.experiments.onboarding.question.multiSelectCheckboxViewModel"/>
+            type="com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxViewModel"/>
 
     </data>
 
@@ -25,8 +25,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:text="@string/what_languages_do_you_speak"
+            android:text="@{viewModel.title}"
             android:textColor="@android:color/black"
             android:textSize="24sp"/>
 
@@ -37,8 +36,7 @@
             android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:scrollbars="none"
-            app:bindDataToCompositeAdapter="@{viewModel.data}"
-            />
+            app:bindDataToCompositeAdapter="@{viewModel.data}"/>
 
         <Button
             android:id="@+id/btnShow"

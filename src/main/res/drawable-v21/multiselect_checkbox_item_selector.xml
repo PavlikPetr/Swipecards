@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
         android:color="?android:colorControlHighlight">
-    <item android:drawable="@drawable/pink_button_selector_21"/>
+    <item android:drawable="@drawable/multiselector_checkbox_item_selecetor_21"/>
 </ripple>
