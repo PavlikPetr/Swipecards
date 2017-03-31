@@ -6,16 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
-import com.topface.topface.databinding.OnboardingQRangeBinding
+import com.topface.topface.databinding.QuestionnaireQRangeBinding
 import com.topface.topface.experiments.onboarding.question.QuestionTypeFirst
 import com.topface.topface.ui.fragments.BaseFragment
 import org.jetbrains.anko.layoutInflater
-import org.json.JSONObject
 
 class QRangeFragment: BaseFragment() {
     companion object {
         const val EXTRA_DATA = "QRangeFragment.Extra.Data"
-        fun newInstance(data: QuestionTypeFirst, json: JSONObject = JSONObject()) = QRangeFragment().apply {
+        fun newInstance(data: QuestionTypeFirst) = QRangeFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_DATA, data)
             }
@@ -29,7 +28,7 @@ class QRangeFragment: BaseFragment() {
     }
 
     private val mBinding by lazy {
-        DataBindingUtil.inflate<OnboardingQRangeBinding>(context.layoutInflater, R.layout.questionnaire_q_range, null, false)
+        DataBindingUtil.inflate<QuestionnaireQRangeBinding>(context.layoutInflater, R.layout.questionnaire_q_range, null, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =

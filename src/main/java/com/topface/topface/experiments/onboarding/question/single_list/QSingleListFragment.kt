@@ -7,13 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
-import com.topface.topface.databinding.OnboardingQSingleListBinding
+import com.topface.topface.databinding.QuestionnaireQSingleListBinding
 import com.topface.topface.experiments.onboarding.question.QuestionTypeSecond
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.appContext
 import org.jetbrains.anko.layoutInflater
-import org.json.JSONObject
 
 /**
  * Fragment for list with single selection question
@@ -21,7 +20,7 @@ import org.json.JSONObject
 class QSingleListFragment: BaseFragment() {
     companion object {
         const val EXTRA_DATA = "QSingleListFragment.Extra.Data"
-        fun newInstance(data: QuestionTypeSecond, json: JSONObject = JSONObject()) = QSingleListFragment().apply {
+        fun newInstance(data: QuestionTypeSecond) = QSingleListFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_DATA, data)
             }
@@ -43,7 +42,7 @@ class QSingleListFragment: BaseFragment() {
     }
 
     private val mBinding by lazy {
-        DataBindingUtil.inflate<OnboardingQSingleListBinding>(context.layoutInflater, R.layout.questionnaire_q_single_list, null, false)
+        DataBindingUtil.inflate<QuestionnaireQSingleListBinding>(context.layoutInflater, R.layout.questionnaire_q_single_list, null, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
