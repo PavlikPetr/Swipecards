@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxItemViewModel"/>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@drawable/multiselect_checkbox_item_selector"
+        android:padding="16dp"
+        android:onClick="@{viewModel}">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp">
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="21dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                app:remoteSrcGlide="@{viewModel.image}"/>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:layout_weight="1"
+            android:maxLines="2"
+            android:singleLine="true"
+            android:text="@{viewModel.title}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"/>
+
+        <CheckBox
+            android:id="@+id/chkSelected"
+            style="@style/MaterialCheckBoxBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:setChecked="@{viewModel.isSelected}"/>
+
+    </LinearLayout>
+</layout>
