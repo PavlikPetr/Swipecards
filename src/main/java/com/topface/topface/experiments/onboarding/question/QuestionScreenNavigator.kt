@@ -6,7 +6,6 @@ import com.topface.topface.experiments.onboarding.question.QuestionSettings.Comp
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.RangeQuestionScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.SingleChoiseScreen
 import com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxListFragment
-import com.topface.topface.experiments.onboarding.question.valueSetter.EnterValueFragment
 import com.topface.topface.experiments.onboarding.question.digit_input.DigitInputFragment
 import com.topface.topface.experiments.onboarding.question.range.QRangeFragment
 import com.topface.topface.experiments.onboarding.question.single_list.QSingleListFragment
