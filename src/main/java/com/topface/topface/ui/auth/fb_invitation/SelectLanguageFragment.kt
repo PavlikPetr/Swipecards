@@ -56,26 +56,21 @@ class SelectLanguageFragment : AbstractDialogFragment() {
 
         override fun onBindViewHolder(viewHolder: LanguageSelectionItemHolder, position: Int) {
             viewHolder.binding.setViewModel(SelectLanguageItemViewModel(languageList.get(position)))
-
-
-            //todo засетили клик листнер на биндинге ВьюХолдер
-//            viewHolder.binding.root.setOnClickListener(object: View.OnClickListener{
-//                override fun onClick(v: View?) {
-//                    v?.let {
-//                        it.getTag()
-//                    }
-//                }
-//            })
+            viewHolder.binding.chkSelected.setOnClickListener(object: View.OnClickListener{
+                override fun onClick(v: View?) {
+                    v?.let {
+                        it.getTag()
+                    }
+                }
+            })
         }
 
         override fun getItemCount(): Int = languageList.size
 
-        inner class LanguageSelectionItemHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
+        inner class LanguageSelectionItemHolder(v: View) : RecyclerView.ViewHolder(v) {
             val binding = DataBindingUtil.bind<LanguageSelectItemBinding>(v)
 
-            override fun onClick(v: View?) {
 
-            }
 
         }
 
