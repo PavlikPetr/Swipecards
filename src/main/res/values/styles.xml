@@ -1735,18 +1735,56 @@
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/dating_fab_skip</item>
     </style>
+    <!--Стили для опросника-->
+    <!--Стили для 3-го типа вопроса-->
+    <style name="TitleThirdType">
+        <item name="android:textSize">@dimen/questionnaire_third_type_title_text_size</item>
+        <item name="android:textColor">@color/questionnaire_third_type_title_text_color</item>
+        <item name="android:layout_marginLeft">@dimen/questionnaire_third_type_title_side_padding
+        </item>
+        <item name="android:layout_marginStart" tools:ignore="NewApi">
+            @dimen/questionnaire_third_type_title_side_padding
+        </item>
+        <item name="android:layout_marginEnd" tools:ignore="NewApi">
+            @dimen/questionnaire_third_type_title_side_padding
+        </item>
+        <item name="android:layout_marginRight">@dimen/questionnaire_third_type_title_side_padding
+        </item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="QuestionnaireErrorTextAppearance">
+        <item name="android:textColor">@color/questionnaire_appearance_error_text_color</item>
+        <item name="android:textSize">@dimen/questionnaire_appearance_error_text_size</item>
+    </style>
+
+    <style name="QuestionnaireHintTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/questionnaire_appearance_hint_text_color</item>
+        <item name="android:textSize">@dimen/questionnaire_appearance_hint_text_size</item>
+    </style>
+
+    <style name="QuestionnaireInputTextEdit">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">numberDecimal</item>
+        <item name="android:textColor">@color/questionnaire_input_text_color</item>
+        <item name="android:textSize">@dimen/questionnaire_input_text_size</item>
+
+    </style>
 
     <style name="MaterialCheckBoxBlue">
         <item name="android:drawableLeft">@drawable/blue_checkbox_selector</item>
     </style>
 
     <style name="QuestionButton">
-        <item name="android:background">@drawable/pink_button_selector</item>
-        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
-        <item name="textAllCaps">true</item>
-        <item name="android:textColor">@color/bg_white</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:gravity">center</item>
+    <item name="android:background">@drawable/pink_button_selector</item>
+    <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+    <item name="textAllCaps">true</item>
+    <item name="android:textColor">@color/bg_white</item>
+    <item name="android:textSize">14sp</item>
+    <item name="android:gravity">center</item>
     </style>
-
 </resources>

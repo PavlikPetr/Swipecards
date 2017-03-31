@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.auth.fb_invitation.SelectLanguageItemViewModel"/>
+            type="com.topface.topface.experiments.onboarding.question.multiselectCheckboxList.MultiSelectCheckboxListFragment"/>
 
     </data>
 

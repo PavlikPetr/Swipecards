@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.auth.fb_invitation.SelectLanguageViewModel"/>
+            type="com.topface.topface.experiments.onboarding.question.multiSelectCheckboxViewModel"/>
 
     </data>
 
