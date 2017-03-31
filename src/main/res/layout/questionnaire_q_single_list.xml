@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.onboarding.question.single_list.QSingleListFragmentViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:overScrollMode="never"
+            app:bindDataToCompositeAdapter="@{viewModel.data}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/list"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="72dp"
+            android:text="@{viewModel.title}"
+            android:textColor="@color/dark_primary_text"
+            android:textSize="24sp"
+            tools:text="Кого ищешь?" />
+    </RelativeLayout>
+</layout>

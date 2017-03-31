@@ -18,6 +18,7 @@ public class WeakStorage extends AbstractConfig {
     private static final String APPODEAL_FULLSCREEN_SEGMENT_NAME = "appodeal_fullscreen_segment_name";
     private static final String PROFILE_DIALOG_REDESIGN_ENABLED = "profile_dialog_redesign_enabled";
     private static final String DATING_REDESIGN_ENABLED = "dating_redesign_enabled";
+    private static final String IS_FIRST_SESSION = "is_first_session";
 
     public WeakStorage() {
         super(App.getContext());
@@ -34,6 +35,8 @@ public class WeakStorage extends AbstractConfig {
         // строковая обертка над boolean чтобы знать что значение было установлено
         // если установлено, то отражает разрешение на показ редизайна знакомств
         addField(settingsMap, DATING_REDESIGN_ENABLED, Utils.EMPTY);
+        // если это первая сессия после установки - true
+        addField(settingsMap, IS_FIRST_SESSION, false);
     }
 
     @Override
@@ -112,5 +115,22 @@ public class WeakStorage extends AbstractConfig {
      */
     public void resetDatingRedesignEnabled() {
         setField(getSettingsMap(), DATING_REDESIGN_ENABLED, Utils.EMPTY);
+    }
+
+    /**
+     * Метод установки флага на текущую сессию
+     * Если эта сессия первая после установки, не обновления, значит сетим true
+     *
+     * @param isFirst true if this session first after install app
+     */
+    public void setFirstSessionAfterInstallAttribute(boolean isFirst) {
+        setField(getSettingsMap(), IS_FIRST_SESSION, isFirst);
+    }
+
+    /**
+     * Признак того, что текущая сессия является первой после установки приложения
+     */
+    public boolean isFirstSessionAfterInstall() {
+        return getBooleanField(getSettingsMap(), IS_FIRST_SESSION);
     }
 }

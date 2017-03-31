@@ -47,7 +47,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/next"
+            android:text="@string/onboarding_button_next"
             android:onClick="@{()->viewModel.onButtonClick()}"/>
 
     </LinearLayout>

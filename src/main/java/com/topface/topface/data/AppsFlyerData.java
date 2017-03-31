@@ -87,7 +87,7 @@ public class AppsFlyerData implements SerializableToJson {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            new ReferrerLogRequest(context, null, referralData).exec();
+            new ReferrerLogRequest(context, null, referralData, null).exec();
         }
     }
 

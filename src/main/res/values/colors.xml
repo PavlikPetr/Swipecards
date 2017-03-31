@@ -311,6 +311,7 @@
     <color name="questionnaire_unit_text_color">#000000</color>
     <color name="questionnaire_multiselect_checkbox_item">#ffffff</color>
     <color name="questionnaire_multiselect_checkbox_item_pressed">#F4F4F4</color>
-
-
+    <color name="questionnaire_text_input_appearance_hint_text_color">@color/questionnaire_blue</color>
+    <color name="questionnaire_button_pink">#fe63cd</color>
+    <color name="questionnaire_blue">#499AFF</color>
 </resources>
