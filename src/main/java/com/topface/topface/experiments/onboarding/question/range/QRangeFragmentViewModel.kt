@@ -44,8 +44,14 @@ class QRangeFragmentViewModel(bundle: Bundle) : RangeSeekBar.OnRangeSeekBarChang
     val maxValueTitle = ObservableField<String>()
     val minValueTitle = ObservableField<String>()
 
-    val end = ObservableInt(mData?.endValue ?: 0)
-    val start = ObservableInt(mData?.startValue ?: 0)
+    // protection from crazy server response
+    val end = ObservableInt(mData?.let { Math.min(it.max.value, it.endValue) } ?: 0)
+    val start = ObservableInt(mData?.let { Math.max(it.min.value, it.startValue) } ?: 0)
+
+    init {
+        maxValueTitle.set(maxValue.get().toString())
+        minValueTitle.set(minValue.get().toString())
+    }
 
     override fun onRangeSeekBarValuesChanged(bar: RangeSeekBar<*>?, minValue: Int, maxValue: Int, thumbId: RangeSeekBar.Thumb?) {
         if (thumbId != null) {
