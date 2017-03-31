@@ -253,7 +253,21 @@
     <dimen name="dating_buttons_padding_bottom">13dp</dimen>
     <dimen name="dating_smaller_buttons_size">60dp</dimen>
     <dimen name="dating_bigger_buttons_size">76dp</dimen>
-    
+
+    <!--Метрики для опросника-->
+    <dimen name="questionnaire_counters_text_size">14sp</dimen>
+    <dimen name="questionnaire_third_type_title_text_size">24sp</dimen>
+    <dimen name="questionnaire_third_type_title_side_padding">15dp</dimen>
+    <dimen name="questionnaire_appearance_error_text_size">14sp</dimen>
+    <dimen name="questionnaire_appearance_hint_text_size">14sp</dimen>
+    <dimen name="questionnaire_digit_input_text_size">30sp</dimen>
+    <dimen name="questionnaire_unit_text_size">22sp</dimen>
+    <dimen name="questionnaire_unit_padding_left">8dp</dimen>
+    <dimen name="questionnaire_text_input_appearance_hint_text_size">11sp</dimen>
+    <dimen name="questionnaire_text_input_text_size">14sp</dimen>
+    <dimen name="questionnaire_digit_input_one_sign_width">20dp</dimen>
+    <dimen name="questionnaire_container_bottom_padding">16dp</dimen>
+
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
     <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->

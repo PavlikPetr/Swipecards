@@ -12,9 +12,9 @@ import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
-import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
@@ -177,5 +177,4 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
     override fun showFBInvitationPopup() = mFBInvitation.show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
-
 }
