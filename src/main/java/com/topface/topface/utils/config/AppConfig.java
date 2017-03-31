@@ -12,6 +12,7 @@ import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
@@ -80,6 +81,8 @@ public class AppConfig extends AbstractConfig {
     private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
     private static final String APP_START_EVENT_NUMBER = "app_start_event_number";
     private static final String IS_FIRST_SESSION_AFTER_INSTALL = "is_first_session_after_install";
+    private static final String QUESTIONNAIRE_RESPONSE_DATA = "questionnaire_response_data";
+    private static final String QUESTIONNAIRE_CURRENT_POSITION = "questionnaire_current_position";
 
     public AppConfig(Context context) {
         super(context);
@@ -155,6 +158,10 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, APP_START_EVENT_NUMBER, 0);
         // если true, значит эта сессия для юзера первая после установки приложения
         addField(settingsMap, IS_FIRST_SESSION_AFTER_INSTALL, true);
+        // настройки для эксперимента с опросником
+        addField(settingsMap, QUESTIONNAIRE_RESPONSE_DATA, Utils.EMPTY);
+        // номер вопроса, на котором закончили показ опросника
+        addField(settingsMap, QUESTIONNAIRE_CURRENT_POSITION, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -663,5 +670,41 @@ public class AppConfig extends AbstractConfig {
      */
     public boolean isFirstSessionAfterInstall() {
         return getBooleanField(getSettingsMap(), IS_FIRST_SESSION_AFTER_INSTALL);
+    }
+
+    /**
+     * Set position of the last visible question
+     *
+     * @param position position of the last visible question
+     */
+    public void setCurrentQuestionPosition(int position) {
+        setField(getSettingsMap(), QUESTIONNAIRE_CURRENT_POSITION, position);
+    }
+
+    /**
+     * Get position of the last visible question
+     *
+     * @return position of the last visible question
+     */
+    public int getCurrentQuestionPosition() {
+        return getIntegerField(getSettingsMap(), QUESTIONNAIRE_CURRENT_POSITION);
+    }
+
+    /**
+     * Set questionnaire settings
+     *
+     * @param data questionnaire response data
+     */
+    public void setQuestionnaireData(QuestionnaireResponse data) {
+        setField(getSettingsMap(), QUESTIONNAIRE_RESPONSE_DATA, JsonUtils.toJson(data).toString());
+    }
+
+    /**
+     * Get questionnaire settings
+     *
+     * @return questionnaire response data
+     */
+    public QuestionnaireResponse getQuestionnaireData() {
+        return JsonUtils.fromJson(getStringField(getSettingsMap(), QUESTIONNAIRE_RESPONSE_DATA), QuestionnaireResponse.class);
     }
 }

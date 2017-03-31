@@ -31,6 +31,8 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -54,6 +56,7 @@ import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
+import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -87,7 +90,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
-    private static final int EXIT_TIMEOUT = 3000;
+    public static final int EXIT_TIMEOUT = 3000;
 
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
@@ -122,6 +125,16 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(options.startPage));
         activity.startActivity(intent);
+    }
+
+    private void showQuestionnaire() {
+        AppConfig config = App.getAppConfig();
+        int startPosition = config.getCurrentQuestionPosition();
+        QuestionnaireResponse data = config.getQuestionnaireData();
+        if (startPosition != Integer.MIN_VALUE && !data.isEmpty()) {
+            startActivityForResult(QuestionnaireActivity.Companion.getIntent(data,
+                    startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE);
+        }
     }
 
     @Override
@@ -225,6 +238,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
+        showQuestionnaire();
     }
 
     @Override

@@ -31,14 +31,16 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readParcelableArray(QuestionSettings::class.java.classLoader) as Array<QuestionSettings>)
+    constructor(source: Parcel) : this(source.readString(), source.createTypedArray(QuestionSettings.CREATOR))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(questionnaireMethodName)
-        dest?.writeParcelableArray(questions, 0)
+        dest?.writeTypedArray(questions, 0)
     }
+
+    fun isEmpty() = this == QuestionnaireResponse()
 }
 
 /**
@@ -128,14 +130,14 @@ data class QuestionTypeSecond(var title: String = Utils.EMPTY, var fieldName: St
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readParcelableArray(Button::class.java.classLoader) as Array<Button>)
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.createTypedArray(Button.CREATOR))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(title)
         dest?.writeString(fieldName)
-        dest?.writeParcelableArray(buttons, 0)
+        dest?.writeTypedArray(buttons, 0)
     }
 }
 
@@ -213,14 +215,14 @@ data class QuestionTypeFourth(var title: String = Utils.EMPTY, var fieldName: St
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readParcelableArray(MultiselectListItem::class.java.classLoader) as Array<MultiselectListItem>)
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.createTypedArray(MultiselectListItem.CREATOR))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(title)
         dest?.writeString(fieldName)
-        dest?.writeParcelableArray(list, 0)
+        dest?.writeTypedArray(list, 0)
     }
 }
 
