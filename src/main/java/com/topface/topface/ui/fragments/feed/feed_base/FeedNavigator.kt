@@ -177,4 +177,16 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
     override fun showFBInvitationPopup() = mFBInvitation.show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+
+    override fun showQuestionnaire():Boolean {
+        val config = App.getAppConfig()
+        val startPosition = config.currentQuestionPosition
+        val data = config.questionnaireData
+        if (startPosition != Integer.MIN_VALUE && data != null && !data.isEmpty()) {
+            mActivityDelegate.startActivityForResult(QuestionnaireActivity.getIntent(data,
+                    startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE)
+            return true
+        }
+        return false
+    }
 }

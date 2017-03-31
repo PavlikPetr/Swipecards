@@ -25,12 +25,14 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -41,6 +43,7 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
@@ -87,7 +90,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
-    private static final int EXIT_TIMEOUT = 3000;
+    public static final int EXIT_TIMEOUT = 3000;
 
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
@@ -225,6 +228,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
+        new FeedNavigator(this).showQuestionnaire();
     }
 
     @Override
@@ -534,6 +538,16 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+        if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // редиректим юзера на экран знакомств
+                App.getAppComponent().navigationState()
+                        .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING),
+                                WrappedNavigationData.SELECT_EXTERNALY));
+            } else {
+                finish();
+            }
+        }
     }
 
     private void toggleDrawerLayout() {

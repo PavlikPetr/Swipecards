@@ -38,7 +38,9 @@ class MultiSelectCheckboxViewModel(bundle: Bundle) : ILifeCycle {
     fun onButtonClick() {
         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
             mData?.fieldName?.let {
-                put(it, JSONArray(selectedCheckboxes))
+                if (it.isNotEmpty()) {
+                    put(it, JSONArray(selectedCheckboxes))
+                }
             }
         }))
     }

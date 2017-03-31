@@ -68,8 +68,16 @@ class QRangeFragmentViewModel(bundle: Bundle) : RangeSeekBar.OnRangeSeekBarChang
     fun onNext() {
         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
             mData?.let {
-                it.min?.let { put(it.fieldName, minValueTitle.get()) }
-                it.max?.let { put(it.fieldName, maxValueTitle.get()) }
+                it.min.fieldName.let {
+                    if (it.isNotEmpty()) {
+                        put(it, minValueTitle.get())
+                    }
+                }
+                it.max.fieldName.let {
+                    if (it.isNotEmpty()) {
+                        put(it, maxValueTitle.get())
+                    }
+                }
             }
         }))
     }

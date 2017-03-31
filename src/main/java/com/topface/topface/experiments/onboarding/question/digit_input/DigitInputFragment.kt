@@ -1,10 +1,12 @@
 package com.topface.topface.experiments.onboarding.question.digit_input
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.topface.topface.R
 import com.topface.topface.databinding.QuestionnaireDigitInputLayoutBinding
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
@@ -17,7 +19,7 @@ import org.jetbrains.anko.layoutInflater
  * Фрагмент для третьего типа вопроса
  * Created by petrp on 29.03.2017.
  */
-class DigitInputFragment : BaseFragment() {
+class DigitInputFragment : BaseFragment(), IKeyboard {
     companion object {
         const val EXTRA_DATA = "DigitInputFragment.Extra.Data"
         fun newInstance(data: InputValueSettings) = DigitInputFragment().apply {
@@ -33,7 +35,7 @@ class DigitInputFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        DigitInputFragmentViewModel(arguments).apply {
+        DigitInputFragmentViewModel(arguments, this).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }
@@ -51,5 +53,10 @@ class DigitInputFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(mViewModel)
+    }
+
+    override fun hideKeyboard(view: View?) {
+        (activity.getSystemService(Context.INPUT_METHOD_SERVICE)as?InputMethodManager)
+                ?.hideSoftInputFromWindow((view ?: activity.currentFocus).windowToken, 0)
     }
 }

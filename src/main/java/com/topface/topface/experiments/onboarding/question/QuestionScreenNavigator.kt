@@ -1,7 +1,7 @@
 package com.topface.topface.experiments.onboarding.question
 
-import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.EnterTextScreen
-import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.EnterValueScreen
+import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.TextInputScreen
+import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.DigitInputScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.MultiSelectScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.RangeQuestionScreen
 import com.topface.topface.experiments.onboarding.question.QuestionSettings.Companion.SingleChoiseScreen
@@ -12,7 +12,7 @@ import com.topface.topface.experiments.onboarding.question.single_list.QSingleLi
 import com.topface.topface.experiments.onboarding.question.text_input.TextInputFragment
 
 /**
- * Фабрика для экранов опросника
+ * Навигатор по опроснику
  * Created by petrp on 29.03.2017.
  */
 class QuestionScreenNavigator(private val questions: Array<QuestionSettings>, private var startPosition: Int = -1,
@@ -31,9 +31,9 @@ class QuestionScreenNavigator(private val questions: Array<QuestionSettings>, pr
             when (data.type) {
                 RangeQuestionScreen -> QRangeFragment.newInstance(data.typeFirst)
                 SingleChoiseScreen -> QSingleListFragment.newInstance(data.typeSecond)
-                EnterValueScreen -> DigitInputFragment.newInstance(data.questionWithInput)
+                DigitInputScreen -> DigitInputFragment.newInstance(data.typeThird)
                 MultiSelectScreen -> MultiSelectCheckboxListFragment.newInstance(data.typeFourth)
-                EnterTextScreen -> TextInputFragment.newInstance(data.questionWithInput)
+                TextInputScreen -> TextInputFragment.newInstance(data.typeFifth)
                 else -> null
             }
 }
