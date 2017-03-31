@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.onboarding.question.text_input.TextInputFragmentViewModel"/>
+    </data>
+
+    <RelativeLayout
+        style="@style/QuestionnaireContainer">
+
+        <TextView
+            style="@style/TitleThirdType"
+            android:layout_above="@+id/inputTextLayout"
+            android:text="@{viewModel.title}"
+            tools:text="Загадай желание"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="32dp"
+            app:counterEnabled="@{viewModel.isCounterEnable}"
+            app:counterMaxLength="@{viewModel.maxLength}"
+            app:errorEnabled="@{viewModel.isErrorEnabled}"
+            app:errorTextAppearance="@style/QuestionnaireErrorTextAppearance"
+            app:hintEnabled="@{viewModel.isHintEnabled}"
+            app:hintTextAppearance="@style/QuestionnaireTextInputHintTextAppearance"
+            android:hint="@{viewModel.hint}"
+            app:setError="@{viewModel.error}">
+
+            <android.support.design.widget.TextInputEditText
+                style="@style/QuestionnaireInputTextEdit"
+                android:layout_width="match_parent"
+                android:inputType="text"
+                android:maxLength="@{viewModel.maxLength}"
+                android:maxLines="4"
+                android:text="@={viewModel.text}"
+                android:textSize="@dimen/questionnaire_text_input_text_size"
+                tools:hint="Желание"
+                tools:text="Я желаю, чтобы у ме"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <!--добавить стиль для розовой кнопки-->
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.onNext()}"
+            android:padding="10dp"
+            android:text="ПРОДОЛЖИТЬ"/>
+
+    </RelativeLayout>
+</layout>

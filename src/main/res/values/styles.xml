@@ -1741,19 +1741,22 @@
     <style name="TitleThirdType">
         <item name="android:textSize">@dimen/questionnaire_third_type_title_text_size</item>
         <item name="android:textColor">@color/questionnaire_third_type_title_text_color</item>
-        <item name="android:layout_marginLeft">@dimen/questionnaire_third_type_title_side_padding
-        </item>
-        <item name="android:layout_marginStart" tools:ignore="NewApi">
-            @dimen/questionnaire_third_type_title_side_padding
-        </item>
-        <item name="android:layout_marginEnd" tools:ignore="NewApi">
-            @dimen/questionnaire_third_type_title_side_padding
-        </item>
-        <item name="android:layout_marginRight">@dimen/questionnaire_third_type_title_side_padding
-        </item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="QuestionnaireContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingLeft">@dimen/questionnaire_third_type_title_side_padding</item>
+        <item name="android:paddingStart" tools:ignore="NewApi">
+            @dimen/questionnaire_third_type_title_side_padding
+        </item>
+        <item name="android:paddingEnd" tools:ignore="NewApi">
+            @dimen/questionnaire_third_type_title_side_padding
+        </item>
+        <item name="android:paddingRight">@dimen/questionnaire_third_type_title_side_padding</item>
     </style>
 
     <style name="QuestionnaireErrorTextAppearance">
@@ -1766,13 +1769,18 @@
         <item name="android:textSize">@dimen/questionnaire_appearance_hint_text_size</item>
     </style>
 
+    <style name="QuestionnaireTextInputHintTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/questionnaire_text_input_appearance_hint_text_color
+        </item>
+        <item name="android:textSize">@dimen/questionnaire_text_input_appearance_hint_text_size
+        </item>
+    </style>
+
     <style name="QuestionnaireInputTextEdit">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:imeOptions">actionDone</item>
-        <item name="android:inputType">numberDecimal</item>
+        <item name="android:imeOptions">actionDone|flagNoExtractUi</item>
         <item name="android:textColor">@color/questionnaire_input_text_color</item>
-        <item name="android:textSize">@dimen/questionnaire_input_text_size</item>
     </style>
 
 </resources>

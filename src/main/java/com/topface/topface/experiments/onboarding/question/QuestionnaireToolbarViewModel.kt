@@ -14,9 +14,8 @@ import com.topface.topface.utils.Utils
  * Вьюмодель тулбара со счетчиком для опросника
  * Created by ppavlik on 29.03.17.
  */
-class QuestionnaireToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding,
-                                                              mNavigation: IToolbarNavigation? = null)
-    : BaseToolbarViewModel(binding, mNavigation) {
+class QuestionnaireToolbarViewModel(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null) : BaseToolbarViewModel(binding, mNavigation) {
+
     val additionalViewModel by lazy {
         CountersCustomToolbarViewModel()
     }
