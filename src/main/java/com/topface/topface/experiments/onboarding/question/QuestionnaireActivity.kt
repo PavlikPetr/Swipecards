@@ -47,6 +47,10 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         QuestionScreenNavigator(mResponse?.questions ?: arrayOf<QuestionSettings>(), questionNavigator = this)
     }
 
+    private val mAppConfig by lazy {
+        App.getAppConfig()
+    }
+
     private val mViewModel by lazy {
         QuestionnaireViewModel()
     }
@@ -86,7 +90,10 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     override fun addQuestionScreen(fragment: Fragment?) =
             fragment?.let {
-                mViewModel.setCounterTitle(mQuestionNavigator.getCurrentPosition() + 1, mQuestionNavigator.getTotalPOsition())
+                val currentPos = mQuestionNavigator.getCurrentPosition()
+                mAppConfig.currentQuestionPosition = currentPos
+                mAppConfig.saveConfig()
+                mViewModel.setCounterTitle(currentPos + 1, mQuestionNavigator.getTotalPOsition())
                 supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
                 Unit
             } ?: Unit
@@ -94,6 +101,13 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     override fun showResultScreen() {
         mViewModel.visibility.set(View.GONE)
         //todo временно закрываю активити для тестирования. Как будет готов экран F2, надо здесь вызвать его показ
+        finishSuccessfully()
+    }
+
+    private fun finishSuccessfully() {
+        // если пользователь прошел все круги ада с опросником, то дропаем счетчик, чтобы он больше не запустился
+        mAppConfig.currentQuestionPosition = Integer.MIN_VALUE
+        mAppConfig.saveConfig()
         setResult(Activity.RESULT_OK)
         finish()
     }
@@ -135,6 +149,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     override fun onBackPressed() {
         if (!mBackPressedOnce.get()) {
+            mBackPressedOnce.set(true)
             Timer().schedule(object : TimerTask() {
                 override fun run() {
                     mBackPressedOnce.set(false)

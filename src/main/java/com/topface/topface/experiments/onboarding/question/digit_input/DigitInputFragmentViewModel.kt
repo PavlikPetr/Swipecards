@@ -26,7 +26,7 @@ import rx.Subscription
  * Вьюмодель экрана третьего типа вопроса в опроснике
  * Created by petrp on 30.03.2017.
  */
-class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
+class DigitInputFragmentViewModel(bundle: Bundle, private val keyboard: IKeyboard) : ILifeCycle {
 
     companion object {
         private const val TITLE = "DigitInputFragmentViewModel.Title"
@@ -81,10 +81,13 @@ class DigitInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
                     error.set(R.string.general_wrong_field_value.getString())
                 } else if (isValid(this.toInt())) {
                     App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
-                        mData?.let {
-                            put(it.fieldName, this@with.toInt())
+                        mData?.fieldName?.let {
+                            if (it.isNotEmpty()) {
+                                put(it, this@with.toInt())
+                            }
                         }
                     }))
+                    keyboard.hideKeyboard()
                 }
             }
 

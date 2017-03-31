@@ -53,8 +53,10 @@ class TextInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
                         error.set(mData?.max?.errorMessage ?: Utils.EMPTY)
                     } else {
                         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
-                            mData?.let {
-                                put(it.fieldName, this@with)
+                            mData?.fieldName?.let {
+                                if (it.isNotEmpty()) {
+                                    put(it, this@with)
+                                }
                             }
                         }))
                     }

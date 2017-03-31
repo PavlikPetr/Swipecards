@@ -12,10 +12,10 @@ class SingleListItemViewModel(val model: Button, val fieldName: String, val isEn
 
     fun onClick() {
         isEnabled.set(false)
-        if (!fieldName.isNullOrEmpty()) {
-            App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
-                    put(fieldName, model.value)
-            }))
-        }
+        App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
+            if (fieldName.isNotEmpty()) {
+                put(fieldName, model.value)
+            }
+        }))
     }
 }

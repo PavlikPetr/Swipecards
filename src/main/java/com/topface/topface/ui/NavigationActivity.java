@@ -25,6 +25,7 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
+import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
@@ -32,7 +33,6 @@ import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarBinding;
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
-import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -43,6 +43,7 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
@@ -56,7 +57,6 @@ import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
-import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
@@ -125,16 +125,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(options.startPage));
         activity.startActivity(intent);
-    }
-
-    private void showQuestionnaire() {
-        AppConfig config = App.getAppConfig();
-        int startPosition = config.getCurrentQuestionPosition();
-        QuestionnaireResponse data = config.getQuestionnaireData();
-        if (startPosition != Integer.MIN_VALUE && !data.isEmpty()) {
-            startActivityForResult(QuestionnaireActivity.Companion.getIntent(data,
-                    startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE);
-        }
     }
 
     @Override
@@ -238,7 +228,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
-        showQuestionnaire();
+        new FeedNavigator(this).showQuestionnaire();
     }
 
     @Override
@@ -548,6 +538,16 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+        if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // редиректим юзера на экран знакомств
+                App.getAppComponent().navigationState()
+                        .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING),
+                                WrappedNavigationData.SELECT_EXTERNALY));
+            } else {
+                finish();
+            }
+        }
     }
 
     private void toggleDrawerLayout() {
