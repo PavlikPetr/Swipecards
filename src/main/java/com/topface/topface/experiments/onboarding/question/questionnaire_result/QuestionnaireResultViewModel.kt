@@ -1,6 +1,5 @@
 package com.topface.topface.experiments.onboarding.question.questionnaire_result
 
-import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.databinding.ObservableLong

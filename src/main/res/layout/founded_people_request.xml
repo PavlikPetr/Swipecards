@@ -18,27 +18,38 @@
             android:layout_height="match_parent"
             app:showChild="@{viewModel.showChild}">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:orientation="vertical">
 
-                <ProgressBar
-                    style="@style/Widget.AppCompat.ProgressBar"
+                <ImageView
+                    android:id="@+id/center_loader"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_pre_big"
+                    app:animationSrc="@{@anim/loader_rotate_right}"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_pre_small"
+                    app:animationSrc="@{@anim/loader_rotate_left}"/>
 
                 <TextView
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/center_loader"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="47dp"
                     android:gravity="center"
-                    android:text="@{viewModel.buyMessage}"
+                    android:text="@string/searching_couple_for_you"
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
