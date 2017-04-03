@@ -1,41 +1,55 @@
 package com.topface.topface.experiments.onboarding.question.questionnaire_result
 
+import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.databinding.FoundedPeopleRequestBinding
-import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
-import com.topface.topface.ui.dialogs.AbstractDialogFragment
+import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.registerLifeCycleDelegate
-import kotlin.properties.Delegates
+import org.jetbrains.anko.layoutInflater
+import org.json.JSONObject
 
-class QuestionnaireResultFragment : AbstractDialogFragment() {
+class QuestionnaireResultFragment : BaseFragment() {
 
     companion object {
         const val TAG = "QuestionnaireResultFragment"
-        const val EXTRA_DATA = "QuestionnaireResultFragment.Extra.Data"
-        fun getInstance(data: QuestionnaireResult
+        const val EXTRA_METHOD_NAME = "QuestionnaireResultFragment.Extra.MethodName"
+        const val EXTRA_REQUEST_DATA = "QuestionnaireResultFragment.Extra.RequestData"
+        fun newInstance(methodName: String, requestData: JSONObject
         ) = QuestionnaireResultFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(EXTRA_DATA, data)
+                putString(EXTRA_METHOD_NAME, methodName)
+                putString(EXTRA_REQUEST_DATA, requestData.toString())
             }
         }
     }
 
-    override fun getDialogLayoutRes() = R.layout.founded_people_request
+    private val mApi by lazy {
+        FeedApi(context, this)
+    }
 
-    private var mBinding by Delegates.notNull<FoundedPeopleRequestBinding>()
-
-    override fun isModalDialog() = false
-
-    override fun initViews(root: View?) {
-        mBinding = FoundedPeopleRequestBinding.bind(root)
-        mBinding.setViewModel(mViewModel)
+    private val mBinding by lazy {
+        DataBindingUtil.inflate<FoundedPeopleRequestBinding>(context.layoutInflater,
+                R.layout.founded_people_request, null, false)
     }
 
     private val mViewModel by lazy {
-        QuestionnaireResultViewModel(arguments).apply {
+        QuestionnaireResultViewModel(arguments, mApi, FeedNavigator(activity as IActivityDelegate)).apply {
             activity.registerLifeCycleDelegate(this)
         }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            mBinding.apply { viewModel = mViewModel }.root
+
+    override fun onDetach() {
+        super.onDetach()
+        mViewModel.release()
     }
 }

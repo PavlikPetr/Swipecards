@@ -9,19 +9,29 @@ import com.topface.topface.data.Photo
 import com.topface.topface.data.User
 import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
 import com.topface.topface.glide.tranformation.GlideTransformationType
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
+import org.json.JSONObject
+import rx.Observable
+import rx.subscriptions.CompositeSubscription
+import java.util.concurrent.TimeUnit
 
-class QuestionnaireResultViewModel(bundle: Bundle) {
+class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFeedNavigator: FeedNavigator) {
 
     companion object{
         const val LOADER = 0
+        const val FINAL = 1
+        private const val DELAY = 3L
     }
-    private val mData: QuestionnaireResult? = bundle.getParcelable(QuestionnaireResultFragment.EXTRA_DATA)
 
-    val userList = mData?.users
-
-    val foundTitle = ObservableField<String>(mData?.foundtitle)
-    val buyMessage = ObservableField<String>(mData?.buyMessage)
+    val mMethodName: String = bundle.getString(QuestionnaireResultFragment.EXTRA_METHOD_NAME)
+    val mRequestData = JSONObject(bundle.getString(QuestionnaireResultFragment.EXTRA_REQUEST_DATA))
+    val foundTitle = ObservableField<String>()
+    val buyMessage = ObservableField<String>()
 
     val firstAvatar: ObservableField<Photo> = ObservableField()
     val secondAvatar: ObservableField<Photo> = ObservableField()
@@ -38,21 +48,41 @@ class QuestionnaireResultViewModel(bundle: Bundle) {
     val startOffSettLateral = ObservableLong(700)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
 
-    val productId = mData?.productId
+    var productId: String = Utils.EMPTY
+
+    private val mSubscription = CompositeSubscription()
 
     init {
-        userList?.let {
-            firstAvatar.set(it.get(0).photo)
-            secondAvatar.set(it.get(1).photo)
-            thirdAvatar.set(it.get(2).photo)
-            fourthAvatar.set(it.get(3).photo)
-            fifthAvatar.set(it.get(4).photo)
+        mSubscription.add(
+                Observable.combineLatest(
+                        Observable.timer(DELAY, TimeUnit.SECONDS),
+                        api.callQuestionnaireSearch(mMethodName, mRequestData)
+                ) { item1, item2 ->
+                    item2
+                }.first().subscribe(shortSubscription {
+                    fillData(it)
+                })
+        )
+    }
 
-            avatarPlaceholderRes.set((if (it.get(0).sex == User.BOY) R.drawable.dialogues_av_man_big
+    fun fillData(data: QuestionnaireResult) {
+        with(data.users) {
+            firstAvatar.set(get(0).photo)
+            secondAvatar.set(get(1).photo)
+            thirdAvatar.set(get(2).photo)
+            fourthAvatar.set(get(3).photo)
+            fifthAvatar.set(get(4).photo)
+
+            avatarPlaceholderRes.set((if (get(0).sex == User.BOY) R.drawable.dialogues_av_man_big
             else R.drawable.dialogues_av_girl_small))
         }
+        foundTitle.set(data.foundtitle)
+        buyMessage.set(data.buyMessage)
+        productId = data.productId
+        showChild.set(FINAL)
     }
 
-    fun onBuyButtonClick() {
-    }
+    fun onBuyButtonClick() = mFeedNavigator.showPurchaseProduct(productId, "Questionnaire Experiment")
+
+    fun release() = mSubscription.safeUnsubscribe()
 }
