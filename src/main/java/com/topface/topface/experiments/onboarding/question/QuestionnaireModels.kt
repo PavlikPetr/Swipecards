@@ -40,7 +40,7 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
         dest?.writeTypedArray(questions, 0)
     }
 
-    fun isEmpty() = this == QuestionnaireResponse()
+    fun isEmpty() = false
 }
 
 /**

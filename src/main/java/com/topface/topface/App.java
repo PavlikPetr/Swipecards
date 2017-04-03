@@ -470,7 +470,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
                 FlurryManager.getInstance().sendAppInForegroundEvent();
-                sendBannerSettingsRequest(getContext());
+                if (!AuthToken.getInstance().isEmpty()) {
+                    sendBannerSettingsRequest(getContext());
+                }
             }
 
             @Override

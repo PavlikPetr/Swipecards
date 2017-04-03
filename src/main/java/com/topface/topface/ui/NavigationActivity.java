@@ -228,7 +228,9 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
-        new FeedNavigator(this).showQuestionnaire();
+        if(!AuthToken.getInstance().isEmpty()) {
+            new FeedNavigator(this).showQuestionnaire();
+        }
     }
 
     @Override

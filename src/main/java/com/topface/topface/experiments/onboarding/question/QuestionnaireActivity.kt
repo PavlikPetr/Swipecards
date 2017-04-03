@@ -107,6 +107,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     private fun finishSuccessfully() {
         // если пользователь прошел все круги ада с опросником, то дропаем счетчик, чтобы он больше не запустился
         mAppConfig.currentQuestionPosition = Integer.MIN_VALUE
+        mAppConfig.questionnaireData = QuestionnaireResponse()
         mAppConfig.saveConfig()
         setResult(Activity.RESULT_OK)
         finish()

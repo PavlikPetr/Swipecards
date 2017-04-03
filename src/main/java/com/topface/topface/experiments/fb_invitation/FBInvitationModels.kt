@@ -1,5 +1,4 @@
 package com.topface.topface.experiments.fb_invitation
 
-/**
- * Created by ppavlik on 03.04.17.
- */
+// EventBus объект для авторизации с FB
+class AuthFB
