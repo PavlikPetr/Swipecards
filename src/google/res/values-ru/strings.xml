@@ -1284,4 +1284,5 @@
     <string name="onboarding_button_next">Далее</string>
     <string name="num_from_num">%1$s из %2$s</string>
     <string name="onboarding_get_access">Получи доступ</string>
+    <string name="searching_couple_for_you">Идет поиск пары по вашим критериями</string>
 </resources>
