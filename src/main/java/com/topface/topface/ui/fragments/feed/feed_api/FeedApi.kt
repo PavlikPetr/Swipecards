@@ -8,6 +8,8 @@ import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
+import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
+import com.topface.topface.experiments.onboarding.question.questionnaire_result.QuestionnaireSearchRequest
 import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
@@ -20,6 +22,8 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
+import org.json.JSONObject
+import rx.Emitter
 import rx.Observable
 import java.util.*
 
@@ -111,6 +115,26 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                 }
             }).exec()
         }
+    }
+
+    fun callQuestionnaireSearch(methodName: String, data: JSONObject): Observable<QuestionnaireResult> {
+        return Observable.fromEmitter({
+            val request = QuestionnaireSearchRequest(mContext, methodName, data)
+            request.callback(object: DataApiHandler<QuestionnaireResult>() {
+                override fun success(data: QuestionnaireResult, response: IApiResponse?) = it.onNext(data)
+
+                override fun parseResponse(response: ApiResponse): QuestionnaireResult =
+                    JsonUtils.fromJson(response.toString(), QuestionnaireResult::class.java)
+
+                override fun fail(codeError: Int, response: IApiResponse) =
+                    it.onError(Throwable(response.errorMessage))
+
+                override fun always(response: IApiResponse?) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }, Emitter.BackpressureMode.LATEST)
     }
 
     fun callFilterRequest(filter: FilterData): Observable<DatingFilter> {
