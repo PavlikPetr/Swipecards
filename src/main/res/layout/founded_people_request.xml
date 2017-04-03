@@ -34,7 +34,6 @@
 
             <!--Телочка, что самая левая-->
             <ImageView
-                android:id="@+id/left_left_avatar"
                 android:layout_width="@dimen/questionnaire_small_avatar"
                 android:layout_height="@dimen/questionnaire_small_avatar"
                 android:layout_alignTop="@+id/left_avatar"
@@ -69,7 +68,6 @@
 
             <!--Телочка, что самая правая-->
             <ImageView
-                android:id="@+id/right_right_avatar"
                 android:layout_width="@dimen/questionnaire_small_avatar"
                 android:layout_height="@dimen/questionnaire_small_avatar"
                 android:layout_alignTop="@+id/right_avatar"
@@ -132,7 +130,6 @@
                 android:textSize="18sp"/>
 
             <Button
-                android:id="@+id/btnChangeFilterDating"
                 style="@style/PopupGreenButton.Background"
                 android:layout_below="@+id/buy_message"
                 android:layout_centerHorizontal="true"

@@ -19,7 +19,6 @@ import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
 import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
-import com.topface.topface.experiments.onboarding.question.questionnaire_result.QuestionnaireResultFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -34,7 +33,6 @@ import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
-import java.util.*
 
 /**
  * Класс для управления переходами между эркраними в фидах
