@@ -10,6 +10,7 @@ import com.topface.topface.data.User
 import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
 import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -19,7 +20,7 @@ import rx.Observable
 import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
 
-class QuestionnaireResultViewModel(bundle: Bundle, val mApi: FeedApi) {
+class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFeedNavigator: FeedNavigator) {
 
     companion object{
         const val LOADER = 0
@@ -55,7 +56,7 @@ class QuestionnaireResultViewModel(bundle: Bundle, val mApi: FeedApi) {
         mSubscription.add(
                 Observable.combineLatest(
                         Observable.timer(DELAY, TimeUnit.SECONDS),
-                        mApi.callQuestionnaireSearch(mMethodName, mRequestData)
+                        api.callQuestionnaireSearch(mMethodName, mRequestData)
                 ) { item1, item2 ->
                     item2
                 }.first().subscribe(shortSubscription {
@@ -81,9 +82,7 @@ class QuestionnaireResultViewModel(bundle: Bundle, val mApi: FeedApi) {
         showChild.set(FINAL)
     }
 
-    fun onBuyButtonClick() {
-        //todo start GP purchase activity with productId
-    }
+    fun onBuyButtonClick() = mFeedNavigator.showPurchaseProduct(productId, "Questionnaire Experiment")
 
     fun release() = mSubscription.safeUnsubscribe()
 }

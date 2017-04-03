@@ -12,6 +12,7 @@ import com.topface.topface.databinding.ToolbarBinding
 import com.topface.topface.experiments.onboarding.question.questionnaire_result.QuestionnaireResultFragment
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.NavigationActivity
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
 import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -82,6 +83,12 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         viewBinding.viewModel = mViewModel
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GpPurchaseActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            finishSuccessfully()
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -105,7 +112,6 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
             val fragment = QuestionnaireResultFragment.newInstance(it.questionnaireMethodName, mRequestData)
             supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
         }
-        //todo call finishSuccessfully()
     }
 
     private fun finishSuccessfully() {
