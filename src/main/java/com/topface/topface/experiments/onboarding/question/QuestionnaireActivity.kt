@@ -9,6 +9,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
 import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.experiments.onboarding.question.questionnaire_result.QuestionnaireResultFragment
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
@@ -100,8 +101,11 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     override fun showResultScreen() {
         mViewModel.visibility.set(View.GONE)
-        //todo временно закрываю активити для тестирования. Как будет готов экран F2, надо здесь вызвать его показ
-        finishSuccessfully()
+        mResponse?.let {
+            val fragment = QuestionnaireResultFragment.newInstance(it.questionnaireMethodName, mRequestData)
+            supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
+        }
+        //todo call finishSuccessfully()
     }
 
     private fun finishSuccessfully() {
