@@ -33,9 +33,6 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
     val ageEnd = ObservableInt()
     val defaultCities = ObservableField<MutableList<City>>(prepareDefaultCityList())
 
-    val gif = ObservableField(R.drawable.loloader)
-    val doNextSlide = ObservableBoolean(false)
-
     init {
         setStartingValue(filter)
     }
@@ -69,12 +66,7 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
             with(isMaleSelected) {
                 set(true)
                 notifyChange()
-                doNextSlide.set(true)
             }
-
- fun   onClickSKA(){
-     doNextSlide.set(true)
-    }
 
     fun onFemaleCheckBoxClick() =
             with(isMaleSelected) {
