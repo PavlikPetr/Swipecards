@@ -16,7 +16,7 @@
         <ViewFlipper
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:nextSlide="@{viewModel.doNextSlide}">
+            app:showChild="@{viewModel.showChild}">
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -495,11 +495,4 @@ public class BindingsAdapters {
             view.getLayoutManager().onRestoreInstanceState(state);
         }
     }
-
-    @BindingAdapter("nextSlide")
-    public static void nextSlide(ViewFlipper vFlipper, Boolean doNextSlide) {
-        if (doNextSlide) {
-            vFlipper.showNext();
-        }
-    }
 }
