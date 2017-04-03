@@ -7,6 +7,7 @@ import com.topface.topface.experiments.onboarding.question.MultiselectListItem
 import com.topface.topface.experiments.onboarding.question.QuestionTypeFourth
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -15,9 +16,9 @@ import org.json.JSONObject
 import rx.Subscription
 import java.util.*
 
-class MultiSelectCheckboxViewModel(bundle: Bundle): ILifeCycle {
+class MultiSelectCheckboxViewModel(bundle: Bundle) : ILifeCycle {
 
-    companion object{
+    companion object {
         private const val TITLE = "MultiSelectCheckboxListFragment.Title"
         private const val SELECTED_CHECKBOXES = "MultiSelectCheckboxListFragment.SelectedCheckboxes"
     }
@@ -26,17 +27,20 @@ class MultiSelectCheckboxViewModel(bundle: Bundle): ILifeCycle {
         App.getAppComponent().eventBus()
     }
 
-    private var mData: QuestionTypeFourth = bundle.getParcelable(MultiSelectCheckboxListFragment.EXTRA_DATA)
-    val itemsList = mData.list.toList()
-    val data = SingleObservableArrayList<MultiselectListItem>().apply { addAll(itemsList) }
-    val title = ObservableField<String>(mData.title)
-    var selectedCheckboxes = getSelectedCheckboxes(itemsList)
+    private var mData: QuestionTypeFourth? = bundle.getParcelable(MultiSelectCheckboxListFragment.EXTRA_DATA)
+
+    val itemsList = mData?.list?.toList()
+    val data = SingleObservableArrayList<MultiselectListItem>().apply { itemsList?.let { addAll(it) } }
+    val title = ObservableField<String>(mData?.title ?: Utils.EMPTY)
+    var selectedCheckboxes = itemsList?.let { it.filterTo(ArrayList<MultiselectListItem>(), { it.isSelected }).map { it -> it.value }.toMutableList() }
     private var mCheckboxSubscription: Subscription? = null
 
     fun onButtonClick() {
         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
-            mData?.let {
-                put(it.fieldName, JSONArray(selectedCheckboxes))
+            mData?.fieldName?.let {
+                if (it.isNotEmpty()) {
+                    put(it, JSONArray(selectedCheckboxes))
+                }
             }
         }))
     }
@@ -45,18 +49,8 @@ class MultiSelectCheckboxViewModel(bundle: Bundle): ILifeCycle {
         mCheckboxSubscription = mEventBus
                 .getObservable(CheckboxSelected::class.java)
                 .subscribe(shortSubscription {
-                    addToValuesArray(selectedCheckboxes, it.value)
+                    selectedCheckboxes?.let { it1 -> addToValuesArray(it1, it.value) }
                 })
-    }
-
-    private fun getSelectedCheckboxes(itemsList: List<MultiselectListItem>): MutableList<String> {
-        var selectedList = mutableListOf<String>()
-        for (item in itemsList) {
-            if (item.isSelected) {
-                selectedList.add(item.value)
-            }
-        }
-        return selectedList
     }
 
     private fun addToValuesArray(valuesArray: MutableList<String>, value: String) {
@@ -85,8 +79,7 @@ class MultiSelectCheckboxViewModel(bundle: Bundle): ILifeCycle {
         }
     }
 
-
-    fun release(){
+    fun release() {
         mCheckboxSubscription.safeUnsubscribe()
     }
 }

@@ -40,4 +40,5 @@ interface IFeedNavigator {
     fun showPurchaseProduct(skuId: String, from: String)
     fun showMutualPopup(mutualUser: FeedUser)
     fun showFBInvitationPopup()
+    fun showQuestionnaire():Boolean
 }

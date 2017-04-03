@@ -12,7 +12,7 @@ import kotlin.properties.Delegates
  * Вьюмоделька для кастомной вью в тулбаре покупок
  */
 
-class CountersCustomToolbarViewModel {
+class QuestionnaireViewModel {
 
     val title = ObservableField<String>()
     val visibility = ObservableInt(View.GONE)

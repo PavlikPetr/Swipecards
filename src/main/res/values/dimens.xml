@@ -257,7 +257,6 @@
     <!--Метрики для опросника-->
     <dimen name="questionnaire_counters_text_size">14sp</dimen>
     <dimen name="questionnaire_third_type_title_text_size">24sp</dimen>
-    <dimen name="questionnaire_third_type_title_side_padding">15dp</dimen>
     <dimen name="questionnaire_appearance_error_text_size">14sp</dimen>
     <dimen name="questionnaire_appearance_hint_text_size">14sp</dimen>
     <dimen name="questionnaire_digit_input_text_size">30sp</dimen>
@@ -266,7 +265,7 @@
     <dimen name="questionnaire_text_input_appearance_hint_text_size">11sp</dimen>
     <dimen name="questionnaire_text_input_text_size">14sp</dimen>
     <dimen name="questionnaire_digit_input_one_sign_width">20dp</dimen>
-    <dimen name="questionnaire_container_bottom_padding">16dp</dimen>
+    <dimen name="questionnaire_container_padding">16dp</dimen>
 
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->

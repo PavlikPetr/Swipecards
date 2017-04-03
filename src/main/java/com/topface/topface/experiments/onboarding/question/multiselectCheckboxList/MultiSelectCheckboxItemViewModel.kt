@@ -2,11 +2,10 @@ package com.topface.topface.experiments.onboarding.question.multiselectCheckboxL
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.view.View
 import com.topface.topface.App
 import com.topface.topface.experiments.onboarding.question.MultiselectListItem
 
-class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) : View.OnClickListener {
+class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) {
 
     private val mEventBus = App.getAppComponent().eventBus()
 
@@ -15,12 +14,8 @@ class MultiSelectCheckboxItemViewModel(current: MultiselectListItem) : View.OnCl
     var image = ObservableField<String>(current.image)
     var value = ObservableField<String>(current.value)
 
-    override fun onClick(v: View?) {
-        v?.let {
-            isSelected.set(!isSelected.get())
-            mEventBus.setData(CheckboxSelected(value.get()))
-        }
+    fun onClick() {
+        isSelected.set(!isSelected.get())
+        mEventBus.setData(CheckboxSelected(value.get()))
     }
-
-
 }

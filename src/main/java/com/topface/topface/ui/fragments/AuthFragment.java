@@ -33,6 +33,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -44,6 +45,11 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.databinding.FragmentAuthBinding;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
+import com.topface.topface.experiments.onboarding.requests.QuestionnaireGetListRequest;
+import com.topface.topface.requests.ApiRequest;
+import com.topface.topface.requests.ApiResponse;
+import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.AuthState;
@@ -54,9 +60,12 @@ import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
 import com.topface.topface.ui.auth.AuthFragmentViewModel;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.rx.RxUtils;
@@ -67,7 +76,10 @@ import com.vk.sdk.dialogs.VKOpenAuthDialog;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
+import rx.Emitter;
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 
@@ -99,6 +111,7 @@ public class AuthFragment extends BaseAuthFragment {
             showButtons();
         }
     };
+    private Subscription mQuestionnaireGetListRequestSubscription;
     private OnAuthButtonsClick mOnAuthButtonsClick = new OnAuthButtonsClick() {
         @Override
         public void onVkButtonClick() {
@@ -314,7 +327,69 @@ public class AuthFragment extends BaseAuthFragment {
         } else {
             setAllSocNetBtnVisibility(true, true, false);
         }
+        sendQuestionnaireGetListRequestIfNeeded();
         return root;
+    }
+
+    private void sendQuestionnaireGetListRequestIfNeeded() {
+        // todo закоментил на время, пока тестирования проводится на стейже
+        // if (App.getAppComponent().weakStorage().isFirstSessionAfterInstall()) {
+        showProgress();
+        mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(5, TimeUnit.SECONDS))
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
+                    @Override
+                    public void onNext(Object object) {
+                        super.onNext(object);
+                        if (object instanceof QuestionnaireResponse) {
+                            // словили ответ сервера раньше чем сработал таймер
+                            // отпишемся, чтобы срабатывание таймера не пришлось обрабатывать
+                            RxUtils.safeUnsubscribe(mQuestionnaireGetListRequestSubscription);
+                            AppConfig config = App.getAppConfig();
+                            // свежие настройки записываем в конфиг и дропаем счетчик,
+                            // чтобы показы были с первого вопроса
+                            config.setQuestionnaireData((QuestionnaireResponse) object);
+                            config.setCurrentQuestionPosition(0);
+                            config.saveConfig();
+                        } else {
+                            hideProgress();
+                            showButtons();
+                        }
+                    }
+                });
+    }
+
+    private Observable<QuestionnaireResponse> getQuestionnaireGetListRequest() {
+        return Observable.fromEmitter(new Action1<Emitter<QuestionnaireResponse>>() {
+            @Override
+            public void call(final Emitter<QuestionnaireResponse> emitter) {
+                ApiRequest request = new QuestionnaireGetListRequest(getActivity().getApplicationContext(),
+                        LocaleConfig.getServerLocale(getActivity(), App.getLocaleConfig().getApplicationLocale()));
+                request.callback(new DataApiHandler<QuestionnaireResponse>() {
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                        emitter.onError(new Throwable(response.getErrorMessage()));
+                    }
+
+                    @Override
+                    protected void success(QuestionnaireResponse data, IApiResponse response) {
+                        emitter.onNext(data);
+                    }
+
+                    @Override
+                    protected QuestionnaireResponse parseResponse(ApiResponse response) {
+                        return JsonUtils.fromJson(response.toString(), QuestionnaireResponse.class);
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        emitter.onCompleted();
+                    }
+                });
+                request.exec();
+            }
+        }, Emitter.BackpressureMode.LATEST);
     }
 
     @Override
@@ -363,12 +438,26 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void onOptionsAndProfileSuccess() {
-        Activity activity = getActivity();
-        if (isAdded() && activity instanceof BaseFragmentActivity) {
-            ((BaseFragmentActivity) activity).close(this, true);
-            mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
+        // если не смогли показать опросник, значит редиректим в знакомства
+        if (!showQuestionnaire()) {
+            Activity activity = getActivity();
+            if (isAdded() && activity instanceof BaseFragmentActivity) {
+                ((BaseFragmentActivity) activity).close(this, true);
+                mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
+            }
         }
     }
+
+    private boolean showQuestionnaire() {
+        Activity activity = getActivity();
+        if (isAdded()) {
+            if (activity instanceof IActivityDelegate) {
+                return new FeedNavigator((IActivityDelegate) activity).showQuestionnaire();
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -524,6 +613,7 @@ public class AuthFragment extends BaseAuthFragment {
         super.onDestroyView();
         Debug.log("AuthStateData unsubscribe");
         RxUtils.safeUnsubscribe(mAuthStateSubscription);
+        RxUtils.safeUnsubscribe(mQuestionnaireGetListRequestSubscription);
     }
 
     //TODO SETTOOLBARSETTINGS

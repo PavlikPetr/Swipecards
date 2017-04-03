@@ -32,14 +32,16 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readParcelableArray(QuestionSettings::class.java.classLoader) as Array<QuestionSettings>)
+    constructor(source: Parcel) : this(source.readString(), source.createTypedArray(QuestionSettings.CREATOR))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(questionnaireMethodName)
-        dest?.writeParcelableArray(questions, 0)
+        dest?.writeTypedArray(questions, 0)
     }
+
+    fun isEmpty() = this == QuestionnaireResponse()
 }
 
 /**
@@ -50,26 +52,33 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
  *                            5 - экран с вводом текстового ответа на вопрос)
  * @param typeFirst - данные для вопроса первого типа
  * @param typeSecond - данные для вопроса второго типа
- * @param questionWithInput - данные для вопроса третьего типа
+ * @param typeThird - данные для вопроса третьего типа
  * @param typeFourth - данные для вопроса четвертого типа
+ * @param typeFifth - данные для вопроса пятого типа
  */
 data class QuestionSettings(var type: Int = 0, var typeFirst: QuestionTypeFirst = QuestionTypeFirst(),
                             var typeSecond: QuestionTypeSecond = QuestionTypeSecond(),
-                            var questionWithInput: InputValueSettings = InputValueSettings(),
-                            var typeFourth: QuestionTypeFourth = QuestionTypeFourth()) : Parcelable {
+                            var typeThird: InputValueSettings = InputValueSettings(),
+                            var typeFourth: QuestionTypeFourth = QuestionTypeFourth(),
+                            var typeFifth: InputValueSettings = InputValueSettings()) : Parcelable {
     companion object {
         const val RangeQuestionScreen = 1
         const val SingleChoiseScreen = 2
-        const val EnterValueScreen = 3
+        const val DigitInputScreen = 3
         const val MultiSelectScreen = 4
-        const val EnterTextScreen = 5
+        const val TextInputScreen = 5
         @JvmField val CREATOR: Parcelable.Creator<QuestionSettings> = object : Parcelable.Creator<QuestionSettings> {
             override fun createFromParcel(source: Parcel): QuestionSettings = QuestionSettings(source)
             override fun newArray(size: Int): Array<QuestionSettings?> = arrayOfNulls(size)
         }
     }
 
-    constructor(source: Parcel) : this(source.readInt(), source.readParcelable<QuestionTypeFirst>(QuestionTypeFirst::class.java.classLoader), source.readParcelable<QuestionTypeSecond>(QuestionTypeSecond::class.java.classLoader), source.readParcelable<InputValueSettings>(InputValueSettings::class.java.classLoader), source.readParcelable<QuestionTypeFourth>(QuestionTypeFourth::class.java.classLoader))
+    constructor(source: Parcel) : this(source.readInt(),
+            source.readParcelable<QuestionTypeFirst>(QuestionTypeFirst::class.java.classLoader),
+            source.readParcelable<QuestionTypeSecond>(QuestionTypeSecond::class.java.classLoader),
+            source.readParcelable<InputValueSettings>(InputValueSettings::class.java.classLoader),
+            source.readParcelable<QuestionTypeFourth>(QuestionTypeFourth::class.java.classLoader),
+            source.readParcelable<InputValueSettings>(InputValueSettings::class.java.classLoader))
 
     override fun describeContents() = 0
 
@@ -77,8 +86,9 @@ data class QuestionSettings(var type: Int = 0, var typeFirst: QuestionTypeFirst 
         dest?.writeInt(type)
         dest?.writeParcelable(typeFirst, 0)
         dest?.writeParcelable(typeSecond, 0)
-        dest?.writeParcelable(questionWithInput, 0)
+        dest?.writeParcelable(typeThird, 0)
         dest?.writeParcelable(typeFourth, 0)
+        dest?.writeParcelable(typeFifth, 0)
     }
 }
 
@@ -100,7 +110,10 @@ data class QuestionTypeFirst(var title: String = Utils.EMPTY, var min: ValueCond
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readInt(), source.readInt())
+    constructor(source: Parcel) : this(source.readString(),
+            source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader),
+            source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader),
+            source.readInt(), source.readInt())
 
     override fun describeContents() = 0
 
@@ -129,14 +142,14 @@ data class QuestionTypeSecond(var title: String = Utils.EMPTY, var fieldName: St
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readParcelableArray(Button::class.java.classLoader) as Array<Button>)
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.createTypedArray(Button.CREATOR))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(title)
         dest?.writeString(fieldName)
-        dest?.writeParcelableArray(buttons, 0)
+        dest?.writeTypedArray(buttons, 0)
     }
 }
 
@@ -184,7 +197,10 @@ data class InputValueSettings(var title: String = Utils.EMPTY, var min: ValueCon
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader), source.readString(), source.readString(), source.readString())
+    constructor(source: Parcel) : this(source.readString(),
+            source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader),
+            source.readParcelable<ValueConditions>(ValueConditions::class.java.classLoader),
+            source.readString(), source.readString(), source.readString())
 
     override fun describeContents() = 0
 
@@ -214,14 +230,14 @@ data class QuestionTypeFourth(var title: String = Utils.EMPTY, var fieldName: St
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readParcelableArray(MultiselectListItem::class.java.classLoader) as Array<MultiselectListItem>)
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.createTypedArray(MultiselectListItem.CREATOR))
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(title)
         dest?.writeString(fieldName)
-        dest?.writeParcelableArray(list, 0)
+        dest?.writeTypedArray(list, 0)
     }
 }
 
@@ -242,7 +258,7 @@ data class MultiselectListItem(var title: String = Utils.EMPTY, var value: Strin
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), 1.equals(source.readInt()))
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), 1 == source.readInt())
 
     override fun describeContents() = 0
 
