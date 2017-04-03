@@ -1,5 +1,6 @@
 package com.topface.topface.experiments.onboarding.question.questionnaire_result
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.databinding.ObservableLong
@@ -13,6 +14,9 @@ import com.topface.topface.utils.extensions.getDimen
 
 class QuestionnaireResultViewModel(bundle: Bundle) {
 
+    companion object{
+        const val LOADER = 0
+    }
     private val mData: QuestionnaireResult? = bundle.getParcelable(QuestionnaireResultFragment.EXTRA_DATA)
 
     val userList = mData?.users
@@ -28,6 +32,8 @@ class QuestionnaireResultViewModel(bundle: Bundle) {
 
     val avatarPlaceholderRes = ObservableInt()
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
+
+    val showChild = ObservableInt(LOADER)
 
     val startOffSettMedial = ObservableLong(500)
     val startOffSettLateral = ObservableLong(700)

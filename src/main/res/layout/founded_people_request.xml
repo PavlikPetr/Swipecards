@@ -10,142 +10,171 @@
 
     <android.support.v4.widget.NestedScrollView
         style="@style/PopupScroll"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:background="@color/bg_white">
 
-        <RelativeLayout
+        <ViewFlipper
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_white">
+            app:showChild="@{viewModel.showChild}">
 
-            <TextView
-                android:id="@+id/popupTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="80dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@{viewModel.foundTitle}"
-                android:textColor="@color/black"
-                android:textSize="24sp"/>
+                android:orientation="vertical">
 
-            <!--АХТУНГИ!!!!!!!! ТЕЛОЧКИ, ИДУЩИЕ В РЯД-->
+                <ProgressBar
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <!--Телочка, что самая левая-->
-            <ImageView
-                android:layout_width="@dimen/questionnaire_small_avatar"
-                android:layout_height="@dimen/questionnaire_small_avatar"
-                android:layout_alignTop="@+id/left_avatar"
-                android:layout_below="@+id/popupTitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginRight="@dimen/questionnaire_avatar_margin_from_side"
-                android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
-                android:layout_toLeftOf="@+id/center"
-                app:animationSrc="@{@anim/founded_people_left_left}"
-                app:bindStartOffSet="@{viewModel.startOffSettLateral}"
-                app:glideTransformationPhoto="@{viewModel.firstAvatar}"
-                app:outSideCircle="@{viewModel.outsideCircle}"
-                app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
-                app:typeTransformation="@{viewModel.type}"/>
+                <TextView
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="47dp"
+                    android:gravity="center"
+                    android:text="@{viewModel.buyMessage}"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
 
-            <!--Телочка, что чуть левее-->
-            <ImageView
-                android:id="@+id/left_avatar"
-                android:layout_width="@dimen/questionnaire_middle_avatar"
-                android:layout_height="@dimen/questionnaire_middle_avatar"
-                android:layout_alignTop="@+id/center_avatar"
-                android:layout_below="@+id/popupTitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
-                android:layout_toLeftOf="@+id/center"
-                app:animationSrc="@{@anim/founded_people_left}"
-                app:bindStartOffSet="@{viewModel.startOffSettMedial}"
-                app:glideTransformationPhoto="@{viewModel.secondAvatar}"
-                app:outSideCircle="@{viewModel.outsideCircle}"
-                app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
-                app:typeTransformation="@{viewModel.type}"/>
+            </LinearLayout>
 
-            <!--Телочка, что самая правая-->
-            <ImageView
-                android:layout_width="@dimen/questionnaire_small_avatar"
-                android:layout_height="@dimen/questionnaire_small_avatar"
-                android:layout_alignTop="@+id/right_avatar"
-                android:layout_below="@+id/popupTitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="@dimen/questionnaire_avatar_margin_from_side"
-                android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
-                android:layout_toRightOf="@+id/center"
-                app:animationSrc="@{@anim/founded_people_right_right}"
-                app:bindStartOffSet="@{viewModel.startOffSettLateral}"
-                app:glideTransformationPhoto="@{viewModel.fifthAvatar}"
-                app:outSideCircle="@{viewModel.outsideCircle}"
-                app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
-                app:typeTransformation="@{viewModel.type}"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <!--Телочка, что чуть правее-->
-            <ImageView
-                android:id="@+id/right_avatar"
-                android:layout_width="@dimen/questionnaire_middle_avatar"
-                android:layout_height="@dimen/questionnaire_middle_avatar"
-                android:layout_alignTop="@+id/center_avatar"
-                android:layout_below="@+id/popupTitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
-                android:layout_toRightOf="@+id/center"
-                app:animationSrc="@{@anim/founded_people_right}"
-                app:bindStartOffSet="@{viewModel.startOffSettMedial}"
-                app:glideTransformationPhoto="@{viewModel.fourthAvatar}"
-                app:outSideCircle="@{viewModel.outsideCircle}"
-                app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
-                app:typeTransformation="@{viewModel.type}"/>
+                <TextView
+                    android:id="@+id/popupTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="80dp"
+                    android:gravity="center"
+                    android:text="@{viewModel.foundTitle}"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"/>
 
-            <!--Центральная телочка-->
-            <ImageView
-                android:id="@+id/center_avatar"
-                android:layout_width="@dimen/questionnaire_big_avatar"
-                android:layout_height="@dimen/questionnaire_big_avatar"
-                android:layout_below="@+id/popupTitle"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="40dp"
-                app:glideTransformationPhoto="@{viewModel.thirdAvatar}"
-                app:outSideCircle="@{viewModel.outsideCircle}"
-                app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
-                app:typeTransformation="@{viewModel.type}"/>
+                <!--АХТУНГИ!!!!!!!! ТЕЛОЧКИ, ИДУЩИЕ В РЯД-->
 
-            <!--ТЕЛОЧКИ ЗАКОНЧИЛИСЬ-->
+                <!--Телочка, что самая левая-->
+                <ImageView
+                    android:layout_width="@dimen/questionnaire_small_avatar"
+                    android:layout_height="@dimen/questionnaire_small_avatar"
+                    android:layout_alignTop="@+id/left_avatar"
+                    android:layout_below="@+id/popupTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginRight="@dimen/questionnaire_avatar_margin_from_side"
+                    android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
+                    android:layout_toLeftOf="@+id/center"
+                    app:animationSrc="@{@anim/founded_people_left_left}"
+                    app:bindStartOffSet="@{viewModel.startOffSettLateral}"
+                    app:glideTransformationPhoto="@{viewModel.firstAvatar}"
+                    app:outSideCircle="@{viewModel.outsideCircle}"
+                    app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
+                    app:typeTransformation="@{viewModel.type}"/>
 
-            <TextView
-                android:id="@+id/buy_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/center_avatar"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="50dp"
-                android:gravity="center"
-                android:text="@{viewModel.buyMessage}"
-                android:textColor="@color/black"
-                android:textSize="18sp"/>
+                <!--Телочка, что чуть левее-->
+                <ImageView
+                    android:id="@+id/left_avatar"
+                    android:layout_width="@dimen/questionnaire_middle_avatar"
+                    android:layout_height="@dimen/questionnaire_middle_avatar"
+                    android:layout_alignTop="@+id/center_avatar"
+                    android:layout_below="@+id/popupTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
+                    android:layout_toLeftOf="@+id/center"
+                    app:animationSrc="@{@anim/founded_people_left}"
+                    app:bindStartOffSet="@{viewModel.startOffSettMedial}"
+                    app:glideTransformationPhoto="@{viewModel.secondAvatar}"
+                    app:outSideCircle="@{viewModel.outsideCircle}"
+                    app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
+                    app:typeTransformation="@{viewModel.type}"/>
 
-            <Button
-                style="@style/PopupGreenButton.Background"
-                android:layout_below="@+id/buy_message"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="100dp"
-                android:onClick="@{() -> viewModel.onBuyButtonClick()}"
-                android:text="@string/onboarding_get_access"
-                android:textAllCaps="true"
-                android:textSize="18sp"/>
+                <!--Телочка, что самая правая-->
+                <ImageView
+                    android:layout_width="@dimen/questionnaire_small_avatar"
+                    android:layout_height="@dimen/questionnaire_small_avatar"
+                    android:layout_alignTop="@+id/right_avatar"
+                    android:layout_below="@+id/popupTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/questionnaire_avatar_margin_from_side"
+                    android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
+                    android:layout_toRightOf="@+id/center"
+                    app:animationSrc="@{@anim/founded_people_right_right}"
+                    app:bindStartOffSet="@{viewModel.startOffSettLateral}"
+                    app:glideTransformationPhoto="@{viewModel.fifthAvatar}"
+                    app:outSideCircle="@{viewModel.outsideCircle}"
+                    app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
+                    app:typeTransformation="@{viewModel.type}"/>
 
-            <FrameLayout
-                android:id="@+id/center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
-            </FrameLayout>
+                <!--Телочка, что чуть правее-->
+                <ImageView
+                    android:id="@+id/right_avatar"
+                    android:layout_width="@dimen/questionnaire_middle_avatar"
+                    android:layout_height="@dimen/questionnaire_middle_avatar"
+                    android:layout_alignTop="@+id/center_avatar"
+                    android:layout_below="@+id/popupTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/questionnaire_avatar_margin_top"
+                    android:layout_toRightOf="@+id/center"
+                    app:animationSrc="@{@anim/founded_people_right}"
+                    app:bindStartOffSet="@{viewModel.startOffSettMedial}"
+                    app:glideTransformationPhoto="@{viewModel.fourthAvatar}"
+                    app:outSideCircle="@{viewModel.outsideCircle}"
+                    app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
+                    app:typeTransformation="@{viewModel.type}"/>
 
-        </RelativeLayout>
+                <!--Центральная телочка-->
+                <ImageView
+                    android:id="@+id/center_avatar"
+                    android:layout_width="@dimen/questionnaire_big_avatar"
+                    android:layout_height="@dimen/questionnaire_big_avatar"
+                    android:layout_below="@+id/popupTitle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    app:glideTransformationPhoto="@{viewModel.thirdAvatar}"
+                    app:outSideCircle="@{viewModel.outsideCircle}"
+                    app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
+                    app:typeTransformation="@{viewModel.type}"/>
+
+                <!--ТЕЛОЧКИ ЗАКОНЧИЛИСЬ-->
+
+                <TextView
+                    android:id="@+id/buy_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/center_avatar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="50dp"
+                    android:gravity="center"
+                    android:text="@{viewModel.buyMessage}"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"/>
+
+                <Button
+                    style="@style/PopupGreenButton.Background"
+                    android:layout_below="@+id/buy_message"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="100dp"
+                    android:onClick="@{() -> viewModel.onBuyButtonClick()}"
+                    android:text="@string/onboarding_get_access"
+                    android:textAllCaps="true"
+                    android:textSize="18sp"/>
+
+                <FrameLayout
+                    android:id="@+id/center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+                </FrameLayout>
+
+            </RelativeLayout>
+
+        </ViewFlipper>
     </android.support.v4.widget.NestedScrollView>
 </layout>
