@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -83,6 +84,7 @@ public class AppConfig extends AbstractConfig {
     private static final String IS_FIRST_SESSION_AFTER_INSTALL = "is_first_session_after_install";
     private static final String QUESTIONNAIRE_RESPONSE_DATA = "questionnaire_response_data";
     private static final String QUESTIONNAIRE_CURRENT_POSITION = "questionnaire_current_position";
+    public static final String QUESTIONNAIRE_REQUEST_DATA = "questionnaire_request_data";
 
     public AppConfig(Context context) {
         super(context);
@@ -162,6 +164,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, QUESTIONNAIRE_RESPONSE_DATA, Utils.EMPTY);
         // номер вопроса, на котором закончили показ опросника
         addField(settingsMap, QUESTIONNAIRE_CURRENT_POSITION, 0);
+        // ответы пользователя на опросник
+        addField(settingsMap, QUESTIONNAIRE_REQUEST_DATA, Utils.EMPTY);
     }
 
     protected SharedPreferences getPreferences() {
@@ -704,7 +708,34 @@ public class AppConfig extends AbstractConfig {
      *
      * @return questionnaire response data
      */
+    @NotNull
     public QuestionnaireResponse getQuestionnaireData() {
-        return JsonUtils.fromJson(getStringField(getSettingsMap(), QUESTIONNAIRE_RESPONSE_DATA), QuestionnaireResponse.class);
+        QuestionnaireResponse res = JsonUtils.fromJson(getStringField(getSettingsMap(), QUESTIONNAIRE_RESPONSE_DATA), QuestionnaireResponse.class);
+        return res == null ? new QuestionnaireResponse() : res;
+    }
+
+    /**
+     * Set user answers
+     *
+     * @param data user answers
+     */
+    public void setQuestionnaireAnswers(JSONObject data) {
+        setField(getSettingsMap(), QUESTIONNAIRE_REQUEST_DATA, data.toString());
+    }
+
+    /**
+     * Get user answers
+     *
+     * @return user answers in Json format
+     */
+    public JSONObject getQuestionnaireAnswers() {
+        JSONObject res;
+        try {
+            res = new JSONObject(getStringField(getSettingsMap(), QUESTIONNAIRE_REQUEST_DATA));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            res = new JSONObject();
+        }
+        return res;
     }
 }

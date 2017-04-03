@@ -5,6 +5,7 @@ import android.os.Parcelable
 import com.topface.topface.data.FeedUser
 import com.topface.topface.utils.Utils
 import org.json.JSONObject
+import java.util.*
 
 /**
  * Различные модельки данных для опросника
@@ -41,7 +42,7 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
         dest?.writeTypedArray(questions, 0)
     }
 
-    fun isEmpty() = false
+    fun isEmpty() = this == QuestionnaireResponse()
 }
 
 /**
@@ -313,7 +314,7 @@ data class QuestionnaireResult(var foundtitle: String = Utils.EMPTY, var buyMess
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString() ,source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
 
     override fun describeContents() = 0
 

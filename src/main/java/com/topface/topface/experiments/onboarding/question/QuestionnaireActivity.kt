@@ -17,6 +17,7 @@ import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewMode
 import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import org.json.JSONException
 import org.json.JSONObject
 import rx.Subscription
 import java.util.*
@@ -31,6 +32,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     companion object {
         private const val RESPONSE_DATA = "QuestionnaireActivity.Response.Data"
         private const val CURRENT_QUESTION_POSITION = "QuestionnaireActivity.Current.Question.Position"
+        private const val REQUEST_DATA = "QuestionnaireActivity.Request.Data"
         const val ACTIVITY_REQUEST_CODE = 113
         fun getIntent(response: QuestionnaireResponse, startPosition: Int = 0) =
                 Intent(App.getContext(), QuestionnaireActivity::class.java).apply {
@@ -58,7 +60,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     }
 
     private var mQuestionaireSubscription: Subscription? = null
-    private val mRequestData = JSONObject()
+    private var mRequestData = mAppConfig.questionnaireAnswers
     private var mQuestionStartPosition: Int? = null
     private val mBackPressedOnce = AtomicBoolean(false)
 
@@ -69,7 +71,6 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
                 .getObservable(UserChooseAnswer::class.java)
                 .subscribe(shortSubscription {
                     mQuestionNavigator.show()
-                    //todo теоретически должно работать. Смысл этой операции это перегнать ответы пользователя в json, который будет отправлен на сервер
                     it?.json?.let { json ->
                         mRequestData.apply {
                             json.keys().forEach {
@@ -100,6 +101,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
             fragment?.let {
                 val currentPos = mQuestionNavigator.getCurrentPosition()
                 mAppConfig.currentQuestionPosition = currentPos
+                mAppConfig.questionnaireAnswers = mRequestData
                 mAppConfig.saveConfig()
                 mViewModel.setCounterTitle(currentPos + 1, mQuestionNavigator.getTotalPOsition())
                 supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
@@ -138,6 +140,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         outState?.let {
             it.putInt(CURRENT_QUESTION_POSITION, mQuestionNavigator.getCurrentPosition())
             it.putParcelable(RESPONSE_DATA, mResponse)
+            it.putString(REQUEST_DATA, mRequestData.toString())
         }
     }
 
@@ -148,6 +151,13 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
             }
             if (it.containsKey(RESPONSE_DATA)) {
                 mResponse = it.getParcelable(RESPONSE_DATA)
+            }
+            if (it.containsKey(REQUEST_DATA)) {
+                try {
+                    mRequestData = JSONObject(it.getString(REQUEST_DATA))
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
             }
         }
         if (mQuestionStartPosition == null) {
