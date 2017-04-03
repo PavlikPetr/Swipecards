@@ -1,43 +1,41 @@
 package com.topface.topface.experiments.onboarding.question.questionnaire_result
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.FoundedPeopleRequestBinding
-import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
+import com.topface.topface.ui.dialogs.AbstractDialogFragment
 import com.topface.topface.utils.registerLifeCycleDelegate
-import org.jetbrains.anko.layoutInflater
+import kotlin.properties.Delegates
 
-class QuestionnaireResultFragment(val feedNavigator: IFeedNavigator): BaseFragment() {
+class QuestionnaireResultFragment : AbstractDialogFragment() {
 
     companion object {
+        const val TAG = "QuestionnaireResultFragment"
         const val EXTRA_DATA = "QuestionnaireResultFragment.Extra.Data"
-        fun newInstance(data: QuestionnaireResult) = QuestionnaireResultFragment().apply {
+        fun getInstance(data: QuestionnaireResult
+        ) = QuestionnaireResultFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(EXTRA_DATA, data)
             }
         }
     }
 
-    private val mBinding by lazy {
-        DataBindingUtil.inflate<FoundedPeopleRequestBinding>(context.layoutInflater,
-                R.layout.founded_people_request, null, false)
+    override fun getDialogLayoutRes() = R.layout.founded_people_request
+
+    private var mBinding by Delegates.notNull<FoundedPeopleRequestBinding>()
+
+    override fun isModalDialog() = false
+
+    override fun initViews(root: View?) {
+        mBinding = FoundedPeopleRequestBinding.bind(root)
+        mBinding.setViewModel(mViewModel)
     }
 
     private val mViewModel by lazy {
-        QuestionnaireResultViewModel(feedNavigator).apply {
+        QuestionnaireResultViewModel(arguments).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }
-
-    override fun needOptionsMenu() = false
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            mBinding.apply {
-                viewModel = mViewModel
-            }.root
-
 }

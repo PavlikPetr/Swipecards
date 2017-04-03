@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
+import java.util.*
 
 /**
  * Интерфейс навигации в  фидах
