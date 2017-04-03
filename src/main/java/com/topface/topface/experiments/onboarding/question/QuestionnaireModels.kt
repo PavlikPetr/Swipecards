@@ -2,6 +2,7 @@ package com.topface.topface.experiments.onboarding.question
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.topface.topface.data.FeedUser
 import com.topface.topface.utils.Utils
 import org.json.JSONObject
 
@@ -292,5 +293,34 @@ data class ValueConditions(var value: Int = 0, var fieldName: String = Utils.EMP
         dest?.writeInt(value)
         dest?.writeString(fieldName)
         dest?.writeString(errorMessage)
+    }
+}
+
+/**
+ * Настройки для экрана показа "100500" объектов для знакомств
+ *
+ * @param foundtitle - заголовок экрана
+ * @param buyMessage - текст самого попапа
+ * @param productId - Id продукта для оплаты
+ * @param users - список людишек для отображения их аватаров
+ */
+data class QuestionnaireResult(var foundtitle: String = Utils.EMPTY, var buyMessage: String = Utils.EMPTY,
+                               var productId: String = Utils.EMPTY, var users: Array<FeedUser> = arrayOf<FeedUser>()) : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<QuestionnaireResult> = object : Parcelable.Creator<QuestionnaireResult> {
+            override fun createFromParcel(source: Parcel): QuestionnaireResult = QuestionnaireResult(source)
+            override fun newArray(size: Int): Array<QuestionnaireResult?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString() ,source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeString(foundtitle)
+        dest?.writeString(buyMessage)
+        dest?.writeString(productId)
+        dest?.writeParcelableArray(users, 0)
     }
 }
