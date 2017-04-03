@@ -16,7 +16,7 @@ import com.topface.topface.ui.views.RangeSeekBar.OnRangeSeekBarChangeListener
 import com.topface.topface.utils.IActivityDelegate
 import java.util.*
 
-class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) : OnRangeSeekBarChangeListener<Int>{
+class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) : OnRangeSeekBarChangeListener<Int> {
 
     companion object {
         const val MIN_AGE = 16
@@ -32,6 +32,9 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
     val ageStart = ObservableInt()
     val ageEnd = ObservableInt()
     val defaultCities = ObservableField<MutableList<City>>(prepareDefaultCityList())
+
+    val gif = ObservableField(R.drawable.loloader)
+    val doNextSlide = ObservableBoolean(false)
 
     init {
         setStartingValue(filter)
@@ -66,7 +69,12 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
             with(isMaleSelected) {
                 set(true)
                 notifyChange()
+                doNextSlide.set(true)
             }
+
+ fun   onClickSKA(){
+     doNextSlide.set(true)
+    }
 
     fun onFemaleCheckBoxClick() =
             with(isMaleSelected) {

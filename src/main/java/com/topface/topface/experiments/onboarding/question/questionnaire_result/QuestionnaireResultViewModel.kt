@@ -1,5 +1,6 @@
 package com.topface.topface.experiments.onboarding.question.questionnaire_result
 
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.databinding.ObservableLong
@@ -28,6 +29,8 @@ class QuestionnaireResultViewModel(bundle: Bundle) {
 
     val avatarPlaceholderRes = ObservableInt()
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
+
+    val doNextSlide = ObservableBoolean(false)
 
     val startOffSettMedial = ObservableLong(500)
     val startOffSettLateral = ObservableLong(700)
