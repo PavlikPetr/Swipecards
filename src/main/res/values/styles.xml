@@ -1820,4 +1820,13 @@
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <style name="RatingBarForApp">
+        <item name="android:numStars">5</item>
+        <item name="android:rating">0</item>
+        <item name="android:stepSize">1</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:maxHeight">488dip</item>
+        <item name="android:progressDrawable">@drawable/topface_ratingbar</item>
+    </style>
 </resources>

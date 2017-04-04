@@ -1285,4 +1285,8 @@
     <string name="num_from_num">%1$s из %2$s</string>
     <string name="onboarding_get_access">Получи доступ</string>
     <string name="searching_couple_for_you">Идет поиск пары по вашим критериями</string>
+
+    <!--ОЦенка приложения-->
+    <string name="rate">Оценить</string>
+    <string name="rate_our_app">Оцените наше приложение!</string>
 </resources>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.new_rate.RateAppViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <!--Композиция из еблетов и звездочек-->
+
+        <FrameLayout
+            android:id="@+id/some_special"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"/>
+        <!--Звезды-->
+        <!--Звезды-->
+        <!--Звезды-->
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toLeftOf="@id/some_special"
+            android:src="@drawable/icon_star_pressed"/>
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="120dp"
+            android:layout_toLeftOf="@id/some_special"
+            android:src="@drawable/icon_star_pressed"/>
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="53dp"
+            android:layout_toLeftOf="@id/some_special"
+            android:src="@drawable/icon_star_pressed"/>
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="110dp"
+            android:layout_toLeftOf="@id/some_special"
+            android:src="@drawable/icon_star_pressed"/>
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="35dp"
+            android:layout_toRightOf="@id/some_special"
+            android:src="@drawable/icon_star_pressed"/>
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="121dp"
+            android:layout_toRightOf="@id/some_special"
+            android:src="@drawable/icon_star_pressed"/>
+
+        <!--Звезды кончились-->
+
+        <!--Еблеты-->
+        <ImageView
+            android:id="@+id/image_left_top"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="44dp"
+            android:layout_toLeftOf="@id/some_special"
+            android:src="@drawable/girl_2"/>
+
+        <ImageView
+            android:id="@+id/image_left"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="60dp"
+            android:layout_toLeftOf="@id/some_special"
+            android:src="@drawable/girl_1"/>
+
+        <ImageView
+            android:id="@+id/image_right_top"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="44dp"
+            android:layout_toRightOf="@id/some_special"
+            android:src="@drawable/girl_4"/>
+
+        <ImageView
+            android:id="@+id/image_right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/some_special"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="60dp"
+            android:layout_toRightOf="@id/some_special"
+            android:src="@drawable/girl_5"/>
+
+        <ImageView
+            android:id="@+id/image_center"
+            android:layout_width="87dp"
+            android:layout_height="87dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="52dp"
+            app:glideTransformationPhoto="@{@drawable/girl_8}"
+            app:outSideCircle="@{viewModel.outsideCircle}"
+            app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
+            app:typeTransformation="@{viewModel.type}"/>
+        <!--Еблеты закончились-->
+
+        <!--Закончилась композиция-->
+
+        <TextView
+            android:id="@+id/rate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/image_center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:text="@string/rate_our_app"
+            android:textSize="22sp"/>
+
+        <RatingBar
+            android:id="@+id/rate_rating_bar"
+            style="@style/RatingBarForApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rate_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="35dp"/>
+
+        <Button
+            android:id="@+id/btn_ok"
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rate_rating_bar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="66dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/rate_popup_set_rate"/>
+
+        <Button
+            style="@style/PopupBorderlessdButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_ok"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="66dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/thanks_for_your_rate_close"
+            android:textColor="#b9b9b9"/>
+
+    </RelativeLayout>
+</layout>
