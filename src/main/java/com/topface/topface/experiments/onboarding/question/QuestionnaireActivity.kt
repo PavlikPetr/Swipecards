@@ -99,11 +99,8 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     override fun addQuestionScreen(fragment: Fragment?) =
             fragment?.let {
-                val currentPos = mQuestionNavigator.getCurrentPosition()
-                mAppConfig.currentQuestionPosition = currentPos
-                mAppConfig.questionnaireAnswers = mRequestData
-                mAppConfig.saveConfig()
-                mViewModel.setCounterTitle(currentPos + 1, mQuestionNavigator.getTotalPOsition())
+                saveSettings()
+                mViewModel.setCounterTitle(mQuestionNavigator.getCurrentPosition() + 1, mQuestionNavigator.getTotalPOsition())
                 supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
                 Unit
             } ?: Unit
@@ -111,9 +108,16 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     override fun showResultScreen() {
         mViewModel.visibility.set(View.GONE)
         mResponse?.let {
+            saveSettings()
             val fragment = QuestionnaireResultFragment.newInstance(it.questionnaireMethodName, mRequestData)
             supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
         }
+    }
+
+    private fun saveSettings() {
+        mAppConfig.currentQuestionPosition = mQuestionNavigator.getCurrentPosition()
+        mAppConfig.questionnaireAnswers = mRequestData
+        mAppConfig.saveConfig()
     }
 
     private fun finishSuccessfully() {

@@ -42,6 +42,23 @@ data class QuestionnaireResponse(var questionnaireMethodName: String = Utils.EMP
         dest?.writeTypedArray(questions, 0)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as QuestionnaireResponse
+
+        if (questionnaireMethodName != other.questionnaireMethodName) return false
+        if (!Arrays.equals(questions, other.questions)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = questionnaireMethodName.hashCode()
+        result = 31 * result + Arrays.hashCode(questions)
+        return result
+    }
+
     fun isEmpty() = this == QuestionnaireResponse()
 }
 
@@ -91,6 +108,31 @@ data class QuestionSettings(var type: Int = 0, var typeFirst: QuestionTypeFirst 
         dest?.writeParcelable(typeFourth, 0)
         dest?.writeParcelable(typeFifth, 0)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as QuestionSettings
+
+        if (type != other.type) return false
+        if (typeFirst != other.typeFirst) return false
+        if (typeSecond != other.typeSecond) return false
+        if (typeThird != other.typeThird) return false
+        if (typeFourth != other.typeFourth) return false
+        if (typeFifth != other.typeFifth) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = type
+        result = 31 * result + typeFirst.hashCode()
+        result = 31 * result + typeSecond.hashCode()
+        result = 31 * result + typeThird.hashCode()
+        result = 31 * result + typeFourth.hashCode()
+        result = 31 * result + typeFifth.hashCode()
+        return result
+    }
 }
 
 /**
@@ -125,6 +167,29 @@ data class QuestionTypeFirst(var title: String = Utils.EMPTY, var min: ValueCond
         dest?.writeInt(startValue)
         dest?.writeInt(endValue)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as QuestionTypeFirst
+
+        if (title != other.title) return false
+        if (min != other.min) return false
+        if (max != other.max) return false
+        if (startValue != other.startValue) return false
+        if (endValue != other.endValue) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + min.hashCode()
+        result = 31 * result + max.hashCode()
+        result = 31 * result + startValue
+        result = 31 * result + endValue
+        return result
+    }
 }
 
 /**
@@ -152,6 +217,25 @@ data class QuestionTypeSecond(var title: String = Utils.EMPTY, var fieldName: St
         dest?.writeString(fieldName)
         dest?.writeTypedArray(buttons, 0)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as QuestionTypeSecond
+
+        if (title != other.title) return false
+        if (fieldName != other.fieldName) return false
+        if (!Arrays.equals(buttons, other.buttons)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + fieldName.hashCode()
+        result = 31 * result + Arrays.hashCode(buttons)
+        return result
+    }
 }
 
 /**
@@ -175,6 +259,23 @@ data class Button(var title: String = Utils.EMPTY, var value: String = Utils.EMP
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(title)
         dest?.writeString(value)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as Button
+
+        if (title != other.title) return false
+        if (value != other.value) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + value.hashCode()
+        return result
     }
 }
 
@@ -213,6 +314,31 @@ data class InputValueSettings(var title: String = Utils.EMPTY, var min: ValueCon
         dest?.writeString(fieldName)
         dest?.writeString(hint)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as InputValueSettings
+
+        if (title != other.title) return false
+        if (min != other.min) return false
+        if (max != other.max) return false
+        if (unit != other.unit) return false
+        if (fieldName != other.fieldName) return false
+        if (hint != other.hint) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + min.hashCode()
+        result = 31 * result + max.hashCode()
+        result = 31 * result + unit.hashCode()
+        result = 31 * result + fieldName.hashCode()
+        result = 31 * result + hint.hashCode()
+        return result
+    }
 }
 
 /**
@@ -231,7 +357,8 @@ data class QuestionTypeFourth(var title: String = Utils.EMPTY, var fieldName: St
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.createTypedArray(MultiselectListItem.CREATOR))
+    constructor(source: Parcel) : this(source.readString(), source.readString(),
+            source.createTypedArray(MultiselectListItem.CREATOR))
 
     override fun describeContents() = 0
 
@@ -239,6 +366,25 @@ data class QuestionTypeFourth(var title: String = Utils.EMPTY, var fieldName: St
         dest?.writeString(title)
         dest?.writeString(fieldName)
         dest?.writeTypedArray(list, 0)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as QuestionTypeFourth
+
+        if (title != other.title) return false
+        if (fieldName != other.fieldName) return false
+        if (!Arrays.equals(list, other.list)) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + fieldName.hashCode()
+        result = 31 * result + Arrays.hashCode(list)
+        return result
     }
 }
 
@@ -269,6 +415,27 @@ data class MultiselectListItem(var title: String = Utils.EMPTY, var value: Strin
         dest?.writeString(image)
         dest?.writeInt((if (isSelected) 1 else 0))
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as MultiselectListItem
+
+        if (title != other.title) return false
+        if (value != other.value) return false
+        if (image != other.image) return false
+        if (isSelected != other.isSelected) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + value.hashCode()
+        result = 31 * result + image.hashCode()
+        result = 31 * result + isSelected.hashCode()
+        return result
+    }
 }
 
 /**
@@ -295,6 +462,25 @@ data class ValueConditions(var value: Int = 0, var fieldName: String = Utils.EMP
         dest?.writeString(fieldName)
         dest?.writeString(errorMessage)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as ValueConditions
+
+        if (value != other.value) return false
+        if (fieldName != other.fieldName) return false
+        if (errorMessage != other.errorMessage) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = value
+        result = 31 * result + fieldName.hashCode()
+        result = 31 * result + errorMessage.hashCode()
+        return result
+    }
 }
 
 /**
@@ -314,7 +500,8 @@ data class QuestionnaireResult(var foundtitle: String = Utils.EMPTY, var buyMess
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(), source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readString(),
+            source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
 
     override fun describeContents() = 0
 
