@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.experiments.onboarding.getDigitInputError
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.utils.ILifeCycle
@@ -62,32 +63,30 @@ class DigitInputFragmentViewModel(bundle: Bundle, private val keyboard: IKeyboar
     init {
         mTextChangeSubscription = text.filedObservable
                 .subscribe(shortSubscription {
-                    it?.let {
-                        if (it.isNotEmpty() && it.safeToInt(kotlin.Int.MIN_VALUE) == Int.MIN_VALUE) {
-                            error.set(R.string.general_wrong_field_value.getString())
-                        } else {
-                            error.set(Utils.EMPTY)
-                        }
-                        if (it.length == maxLength.get()) {
-                            isValid(it.toInt())
-                        }
+                    it?.let { value ->
+                        mData?.let {
+                            error.set(value.getDigitInputError(it.min, it.max).second)
+                        } ?: error.set(Utils.EMPTY)
                     }
                 })
     }
 
     fun onNext() =
-            with(text.get()) {
-                if (this.safeToInt(kotlin.Int.MIN_VALUE) == Int.MIN_VALUE) {
-                    error.set(R.string.general_wrong_field_value.getString())
-                } else if (isValid(this.toInt())) {
-                    App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
-                        mData?.fieldName?.let {
-                            if (it.isNotEmpty()) {
-                                put(it, this@with.toInt())
+            mData?.let {
+                val value = text.get()
+                value.getDigitInputError(it.min, it.max).run {
+                    if (first) {
+                        error.set(second)
+                    } else {
+                        App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
+                            mData?.fieldName?.let {
+                                if (it.isNotEmpty()) {
+                                    put(it, value.safeToInt())
+                                }
                             }
-                        }
-                    }))
-                    keyboard.hideKeyboard()
+                        }))
+                        keyboard.hideKeyboard()
+                    }
                 }
             }
 
