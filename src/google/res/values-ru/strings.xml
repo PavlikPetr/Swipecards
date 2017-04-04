@@ -1289,4 +1289,8 @@
     <!--ОЦенка приложения-->
     <string name="rate">Оценить</string>
     <string name="rate_our_app">Оцените наше приложение!</string>
+    <string name="what_we_can_improve">Напишите, пожалуйста, что нам улучшить</string>
+    <string name="we_are_glad_that_you_like">Мы рады, что вам нравится!</string>
+    <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?!</string>
+    <string name="send_rate_feedback">Отправить отзыв</string>
 </resources>

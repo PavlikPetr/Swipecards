@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.new_rate.GoogleFeedbackInviteViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/ic_clocks"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="22sp"
+            android:textColor="@color/black"
+            android:text="@string/what_we_can_improve"/>
+
+        <Button
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="66dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginTop="28dp"
+            android:text="@string/send_rate_feedback"/>
+
+        <Button
+            style="@style/PopupBorderlessdButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="66dp"
+            android:layout_marginRight="66dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/thanks_for_your_rate_close"
+            android:textColor="#b9b9b9"/>
+    </LinearLayout>
+
+
+</layout>
