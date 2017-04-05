@@ -8,6 +8,7 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.statistics.generated.QuestionnaireStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.databinding.FbInvitationBinding
 import com.topface.topface.ui.dialogs.BaseDialog
@@ -28,6 +29,7 @@ class FBinvitationFragment : BaseDialog(), IDialogCloser {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        QuestionnaireStatisticsGeneratedStatistics.sendNow_FB_INVITATION_SHOW()
         mBinding.viewModel = mViewModel
         with(mBinding.pagerIntroduction) {
             adapter = object : PagerAdapter() {

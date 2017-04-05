@@ -39,7 +39,7 @@ class TextInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
     val hint = ObservableField<String>(mData?.hint ?: Utils.EMPTY)
     val isHintEnabled = ObservableBoolean(mData?.let { !it.hint.isNullOrEmpty() } ?: false)
     val maxLength = ObservableInt(mData?.max?.value ?: MAX_LENGTH_DEFAULT)
-    val text = ObservableField<String>()
+    val text = ObservableField<String>(Utils.EMPTY)
     val isErrorEnabled = ObservableBoolean(mData?.let { !it.max.errorMessage.isNullOrEmpty() && !it.min.errorMessage.isNullOrEmpty() } ?: false)
     val unit = ObservableField<String>(mData?.unit ?: Utils.EMPTY)
     val isCounterEnable = ObservableBoolean(mData?.let { it.max.value > 0 } ?: false)

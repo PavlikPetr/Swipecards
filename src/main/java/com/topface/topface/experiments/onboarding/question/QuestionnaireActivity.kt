@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.QuestionnaireStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
@@ -99,8 +101,10 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     override fun addQuestionScreen(fragment: Fragment?) =
             fragment?.let {
+                val currentPosition = mQuestionNavigator.getCurrentPosition() + 1
                 saveSettings()
-                mViewModel.setCounterTitle(mQuestionNavigator.getCurrentPosition() + 1, mQuestionNavigator.getTotalPOsition())
+                QuestionnaireStatisticsGeneratedStatistics.sendNow_QUESTION_SHOW(Slices().apply { put("int", currentPosition) })
+                mViewModel.setCounterTitle(currentPosition, mQuestionNavigator.getTotalPOsition())
                 supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
                 Unit
             } ?: Unit
@@ -109,6 +113,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         mViewModel.visibility.set(View.GONE)
         mResponse?.let {
             saveSettings()
+            QuestionnaireStatisticsGeneratedStatistics.sendNow_QUESTIONNAIRE_RESULT_SHOW()
             val fragment = QuestionnaireResultFragment.newInstance(it.questionnaireMethodName, mRequestData)
             supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
         }
