@@ -341,24 +341,28 @@ public class AuthFragment extends BaseAuthFragment {
     private void sendQuestionnaireGetListRequestIfNeeded() {
         // todo закоментил на время, пока тестирования проводится на стейже
 //        if (App.getAppComponent().weakStorage().isFirstSessionAfterInstall()) {
-        mQuestionnaireGetListRequestSubscription = getQuestionnaireGetListRequest()
+        mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
                 .first()
-                .delay(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxUtils.ShortSubscription<QuestionnaireResponse>() {
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
                                @Override
-                               public void onNext(QuestionnaireResponse object) {
+                               public void onNext(Object object) {
                                    super.onNext(object);
-                                   // словили ответ сервера раньше чем сработал таймер
-                                   AppConfig config = App.getAppConfig();
-                                   // свежие настройки записываем в конфиг и дропаем счетчик,
-                                   // чтобы показы были с первого вопроса
-                                   QuestionnaireResponse responseData = (QuestionnaireResponse) object;
-                                   config.setQuestionnaireData(responseData);
-                                   config.setCurrentQuestionPosition(0);
-                                   config.saveConfig();
-                                   if (!responseData.isEmpty() && mNavigator != null) {
-                                       mNavigator.showFBInvitationPopup();
+                                   if (object instanceof QuestionnaireResponse) {
+                                       // словили ответ сервера раньше чем сработал таймер
+                                       AppConfig config = App.getAppConfig();
+                                       // свежие настройки записываем в конфиг и дропаем счетчик,
+                                       // чтобы показы были с первого вопроса
+                                       QuestionnaireResponse responseData = (QuestionnaireResponse) object;
+                                       config.setQuestionnaireData(responseData);
+                                       config.setCurrentQuestionPosition(0);
+                                       config.saveConfig();
+                                       if (!responseData.isEmpty() && mNavigator != null) {
+                                           mNavigator.showFBInvitationPopup();
+                                       } else {
+                                           hideProgress();
+                                           showButtons();
+                                       }
                                    } else {
                                        hideProgress();
                                        showButtons();
