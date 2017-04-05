@@ -34,19 +34,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
-            app:pageColor="@color/view_pager_indicator_non_select"
             app:fillColor="@color/view_pager_indicator_select"
+            app:pageColor="@color/view_pager_indicator_non_select"
             app:radius="5dp"
             app:strokeWidth="0dp"/>
 
         <Button
             android:id="@+id/btnAuthFB"
-            android:layout_marginTop="50dp"
             style="@style/FBBlueButton.Background"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="50dp"
             android:onClick="@{() -> viewModel.fbButtonClick()}"
             android:text="@string/fb_invitation_button_text"/>
-
     </LinearLayout>
 
 </layout>
