@@ -135,7 +135,7 @@
             android:layout_height="34dp"
             android:layout_below="@id/some_special"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="40dp"
             android:layout_toLeftOf="@id/some_special"
             android:src="@drawable/girl_2"
             app:animationSrc="@{@anim/move_to_right_n_top}"/>
@@ -145,7 +145,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_below="@id/some_special"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="25dp"
             android:layout_marginTop="60dp"
             android:layout_toLeftOf="@id/some_special"
             android:src="@drawable/girl_1"
@@ -157,7 +157,7 @@
             android:layout_height="34dp"
             android:layout_below="@id/some_special"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="40dp"
             android:layout_toRightOf="@id/some_special"
             android:src="@drawable/girl_4"
             app:animationSrc="@{@anim/move_to_right_n_top}"/>
@@ -167,7 +167,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_below="@id/some_special"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="25dp"
             android:layout_marginTop="60dp"
             android:layout_toRightOf="@id/some_special"
             android:src="@drawable/girl_5"
@@ -179,10 +179,7 @@
             android:layout_height="87dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="52dp"
-            app:glideTransformationPhoto="@{@drawable/girl_8}"
-            app:outSideCircle="@{viewModel.outsideCircle}"
-            app:placeholderRes="@{viewModel.avatarPlaceholderRes}"
-            app:typeTransformation="@{viewModel.type}"/>
+            android:src="@drawable/man_5"/>
         <!--Еблеты закончились-->
 
         <!--Закончилась композиция-->
@@ -207,7 +204,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
-            android:layout_marginTop="35dp"/>
+            android:layout_marginTop="35dp"
+            app:setOnRatingBarChangeListener="@{viewModel.onRatingChanged}"/>
 
         <Button
             android:id="@+id/btn_ok"
@@ -219,6 +217,8 @@
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="28dp"
+            android:enabled="@{viewModel.buttonEnadled}"
+            android:onClick="@{()->viewModel.okButtonClick()}"
             android:text="@string/rate_popup_set_rate"/>
 
         <Button
@@ -227,11 +227,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/btn_ok"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="8dp"
             android:text="@string/thanks_for_your_rate_close"
+            android:onClick="@{()->viewModel.closeButtonClick()}"
             android:textColor="#b9b9b9"/>
 
     </RelativeLayout>

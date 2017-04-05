@@ -3,6 +3,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.topface.topface.ui.dialogs.new_rate.GoogleFeedbackInviteViewModel"/>
@@ -26,9 +27,9 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="15dp"
-            android:textSize="22sp"
+            android:text="@string/we_are_glad_that_you_like"
             android:textColor="@color/black"
-            android:text="@string/we_are_glad_that_you_like"/>
+            android:textSize="22sp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,9 +37,9 @@
             android:layout_marginLeft="55dp"
             android:layout_marginRight="55dp"
             android:layout_marginTop="12dp"
-            android:textSize="16sp"
+            android:text="@string/could_you_give_us_feedback"
             android:textColor="@color/rate_text"
-            android:text="@string/could_you_give_us_feedback"/>
+            android:textSize="16sp"/>
 
         <Button
             style="@style/Widget.Topface.Button.Big.Blue"
@@ -47,16 +48,18 @@
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="28dp"
+            android:onClick="@{()->viewModel.okButtonClick()}"
             android:text="@string/send_rate_feedback"/>
 
         <Button
             style="@style/PopupBorderlessdButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="8dp"
+            android:onClick="@{()->viewModel.closeButtonClick()}"
             android:text="@string/thanks_for_your_rate_close"
             android:textColor="#b9b9b9"/>
     </LinearLayout>

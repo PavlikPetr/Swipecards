@@ -19,16 +19,20 @@ import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
 import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
+import com.topface.topface.ui.dialogs.new_rate.FeedbackInvitePopup
+import com.topface.topface.ui.dialogs.new_rate.GoogleFeedbackPopup
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
+import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -188,5 +192,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             return true
         }
         return false
+    }
+
+    override fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi){
+        val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator,mApi)
+        mFeedbackInvitePopup.show(mActivityDelegate.supportFragmentManager, FeedbackInvitePopup.TAG)
+    }
+
+    override fun showGoogleFeedbackPopup(mNavigator: FeedNavigator, mApi: FeedApi){
+        val mGoogleFeedbackPopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(GoogleFeedbackPopup.TAG)?.let { it as GoogleFeedbackPopup } ?: GoogleFeedbackPopup(mNavigator,mApi)
+        mGoogleFeedbackPopup.show(mActivityDelegate.supportFragmentManager, GoogleFeedbackPopup.TAG)
     }
 }

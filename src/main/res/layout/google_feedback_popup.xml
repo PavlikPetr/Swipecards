@@ -56,16 +56,18 @@
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="28dp"
+            android:onClick="@{()->viewModel.okButtonClick()}"
             android:text="@string/send_rate_feedback"/>
 
         <Button
             style="@style/PopupBorderlessdButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="8dp"
+            android:onClick="@{()->viewModel.closeButtonClick()}"
             android:text="@string/thanks_for_your_rate_close"
             android:textColor="#b9b9b9"/>
     </LinearLayout>

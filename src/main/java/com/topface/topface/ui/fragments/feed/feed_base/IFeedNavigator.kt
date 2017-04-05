@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 
 /**
  * Интерфейс навигации в  фидах
@@ -40,4 +41,7 @@ interface IFeedNavigator {
     fun showMutualPopup(mutualUser: FeedUser)
     fun showFBInvitationPopup()
     fun showQuestionnaire():Boolean
+    fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi)
+    fun showGoogleFeedbackPopup(mNavigator: FeedNavigator, mApi: FeedApi)
+
 }

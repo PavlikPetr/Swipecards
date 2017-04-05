@@ -435,8 +435,7 @@
     <string name="rate_popup_set_rate">Поставить оценку</string>
     <string name="rate_popup_later">Спросить позже</string>
     <string name="rate_popup_cancel">Нет, спасибо</string>
-    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению
-    </string>
+    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению</string>
     <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится
         в приложении. Помогите нам стать лучше. Спасибо!
     </string>
