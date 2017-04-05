@@ -1753,7 +1753,7 @@
 
     <!--Стили для опросника-->
     <!--Стили для 3-го типа вопроса-->
-    <style name="TitleThirdType">
+    <style name="QuestionnaireTitle">
         <item name="android:textSize">@dimen/questionnaire_third_type_title_text_size</item>
         <item name="android:textColor">@color/questionnaire_third_type_title_text_color</item>
         <item name="android:gravity">center</item>
