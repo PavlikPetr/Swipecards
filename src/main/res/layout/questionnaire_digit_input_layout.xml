@@ -65,7 +65,7 @@
 
         <!--добавить стиль для розовой кнопки-->
         <Button
-            style="@style/OnboardingPinkButton"
+            style="@style/QuestionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
