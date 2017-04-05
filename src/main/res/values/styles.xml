@@ -1750,18 +1750,10 @@
     <style name="FBBlueButton.Background">
         <item name="android:background">@drawable/blue_button_selector</item>
     </style>
-    <!-- Onboarding experiment-->
-    <style name="OnboardingPinkButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:colorButtonNormal" tools:targetApi="lollipop">
-            @color/questionnaire_button_pink
-        </item>
-        <item name="colorButtonNormal">@color/questionnaire_button_pink</item>
-        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
-        <item name="textAllCaps">true</item>
-    </style>
+
     <!--Стили для опросника-->
     <!--Стили для 3-го типа вопроса-->
-    <style name="TitleThirdType">
+    <style name="QuestionnaireTitle">
         <item name="android:textSize">@dimen/questionnaire_third_type_title_text_size</item>
         <item name="android:textColor">@color/questionnaire_third_type_title_text_color</item>
         <item name="android:gravity">center</item>
@@ -1809,7 +1801,7 @@
     </style>
 
     <style name="MaterialCheckBoxBlue">
-        <item name="android:drawableLeft">@drawable/blue_checkbox_selector</item>
+        <item name="android:button">@drawable/blue_checkbox_selector</item>
     </style>
 
     <style name="QuestionButton">

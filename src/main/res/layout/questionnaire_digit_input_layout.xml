@@ -14,7 +14,7 @@
         style="@style/QuestionnaireContainer">
 
         <TextView
-            style="@style/TitleThirdType"
+            style="@style/QuestionnaireTitle"
             android:layout_above="@+id/inputTextLayout"
             android:text="@{viewModel.title}"
             tools:text="Укажи твой рост" />
@@ -65,7 +65,7 @@
 
         <!--добавить стиль для розовой кнопки-->
         <Button
-            style="@style/OnboardingPinkButton"
+            style="@style/QuestionButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

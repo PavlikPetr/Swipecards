@@ -406,7 +406,7 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Social networks SDK
-    compile('com.vk:androidsdk:1.6.1') {
+    compile('com.vk:androidsdk:1.6.8') {
         exclude group: 'com.android.support'
     }
     compile('com.facebook.android:facebook-android-sdk:4.5.0') {
