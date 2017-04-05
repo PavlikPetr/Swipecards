@@ -76,7 +76,7 @@ class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFe
                 avatarPlaceholderRes.set(if (it.sex == Profile.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_small)
             }
         }
-        foundTitle.set(data.foundtitle)
+        foundTitle.set(data.foundTitle)
         buyMessage.set(data.buyMessage)
         productId = data.productId
         showChild.set(FINAL)

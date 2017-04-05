@@ -504,7 +504,7 @@ data class QuestionnaireResult(var foundTitle: String = Utils.EMPTY, var buyMess
             source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
 
     override fun describeContents() = 0
-b
+
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(foundTitle)
         dest?.writeString(buyMessage)
