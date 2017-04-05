@@ -17,7 +17,7 @@ class RateAppViewModel(private val mNavigator: FeedNavigator, private val iDialo
     }
 
     var currentRating = ObservableFloat()
-    val buttonEnabled = ObservableBoolean()
+    val buttonEnabled = ObservableBoolean(false)
 
     var isTimeForGoogleFeedback = false
 
@@ -33,11 +33,7 @@ class RateAppViewModel(private val mNavigator: FeedNavigator, private val iDialo
     fun onRatingChanged(ratingBar: RatingBar, rating: Float, fromUser: Boolean) {
         if (rating <= 0) {
             buttonEnabled.set(false)
-        } else if (rating >= 4) {
-            isTimeForGoogleFeedback = false
-        } else {
-            isTimeForGoogleFeedback = true
-        }
+        } else isTimeForGoogleFeedback = rating < 4
     }
 
     fun closeButtonClick() {

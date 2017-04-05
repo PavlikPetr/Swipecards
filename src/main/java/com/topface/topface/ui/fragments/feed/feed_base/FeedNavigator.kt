@@ -14,19 +14,19 @@ import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
-import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
 import com.topface.topface.ui.dialogs.new_rate.FeedbackInvitePopup
 import com.topface.topface.ui.dialogs.new_rate.GoogleFeedbackPopup
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
-import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
@@ -156,8 +156,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mEmptyDatingFragment.dialog?.cancel()
     }
 
-    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
-            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
+    override fun showFilter() = showRateAppFragment(this)
+//            mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
+//            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 
     override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
@@ -193,6 +194,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
         return false
     }
+
+    override fun showRateAppFragment(mNavigator: FeedNavigator) = RateAppFragment(mNavigator).show(mActivityDelegate.supportFragmentManager, RateAppFragment.TAG)
+
 
     override fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi){
         val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator,mApi)

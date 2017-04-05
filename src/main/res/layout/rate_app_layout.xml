@@ -217,7 +217,7 @@
             android:layout_marginLeft="66dp"
             android:layout_marginRight="66dp"
             android:layout_marginTop="28dp"
-            android:enabled="@{viewModel.buttonEnadled}"
+            android:enabled="@{viewModel.buttonEnabled}"
             android:onClick="@{()->viewModel.okButtonClick()}"
             android:text="@string/rate_popup_set_rate"/>
 
