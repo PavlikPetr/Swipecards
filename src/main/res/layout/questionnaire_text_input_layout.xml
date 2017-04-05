@@ -14,7 +14,7 @@
         style="@style/QuestionnaireContainer">
 
         <TextView
-            style="@style/TitleThirdType"
+            style="@style/QuestionnaireTitle"
             android:layout_above="@+id/inputTextLayout"
             android:text="@{viewModel.title}"
             tools:text="Загадай желание"/>
