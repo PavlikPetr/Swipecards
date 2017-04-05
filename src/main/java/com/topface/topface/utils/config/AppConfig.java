@@ -85,6 +85,7 @@ public class AppConfig extends AbstractConfig {
     private static final String QUESTIONNAIRE_RESPONSE_DATA = "questionnaire_response_data";
     private static final String QUESTIONNAIRE_CURRENT_POSITION = "questionnaire_current_position";
     public static final String QUESTIONNAIRE_REQUEST_DATA = "questionnaire_request_data";
+    private static final String RESERVE_SOCIAL_APP_ID = "reserve_social_app_id";
 
     public AppConfig(Context context) {
         super(context);
@@ -166,6 +167,8 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, QUESTIONNAIRE_CURRENT_POSITION, 0);
         // ответы пользователя на опросник
         addField(settingsMap, QUESTIONNAIRE_REQUEST_DATA, Utils.EMPTY);
+        // флажок об использовании резервнs[ social app ids
+        addField(settingsMap, RESERVE_SOCIAL_APP_ID, true);
     }
 
     protected SharedPreferences getPreferences() {
@@ -737,5 +740,23 @@ public class AppConfig extends AbstractConfig {
             res = new JSONObject();
         }
         return res;
+    }
+
+    /**
+     * Выставляем статус для использования резервного набора social app ids
+     *
+     * @param isReserveAppIds true если необходимо использовать резервные значения
+     */
+    public void setReserveSocialAppIdState(boolean isReserveAppIds) {
+        setField(getSettingsMap(), RESERVE_SOCIAL_APP_ID, isReserveAppIds);
+    }
+
+    /**
+     * Cтатус использования резервного набора social app ids
+     *
+     * @return true если необходимо использовать резервные значения
+     */
+    public boolean isReserveSocialAppIdState() {
+        return getBooleanField(getSettingsMap(), RESERVE_SOCIAL_APP_ID);
     }
 }

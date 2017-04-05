@@ -72,6 +72,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private EditSwitcher switcher;
     private long standard_timeout;
     private EditSwitcher switcherTestNetwork;
+    private EditSwitcher switcherReserveAppIds;
     private CheckBox mCustomApiCheckBox;
     private EditText mCustomApi;
     private Spinner mConnectionTypeChoose;
@@ -129,10 +130,19 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         initEditorMode(root);
         initUserInfo(root);
         initConnections(root);
+        initReserveSocialAppIds(root);
         //После инита всех элементов заполняем их значениями по умолчанию
         setConfigValues();
         mConfigInited = true;
         return root;
+    }
+
+    private void initReserveSocialAppIds(View root) {
+        ViewGroup reserveSocialAppIds = (ViewGroup) root.findViewById(R.id.reserveSocialAppIds);
+        ((TextView) reserveSocialAppIds.findViewWithTag("tvTitle")).setText(R.string.editor_social_app_ids_reserve);
+        reserveSocialAppIds.setOnClickListener(this);
+        switcherReserveAppIds = new EditSwitcher(reserveSocialAppIds);
+        switcherReserveAppIds.setChecked(mAppConfig.isReserveSocialAppIdState());
     }
 
     private void initConnections(View root) {
@@ -387,6 +397,11 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 }
                 profile.canInvite = switcher.isChecked();
 
+                break;
+            case R.id.reserveSocialAppIds:
+                switcherReserveAppIds.doSwitch();
+                mAppConfig.setReserveSocialAppIdState(switcherReserveAppIds.isChecked());
+                mAppConfig.saveConfig();
                 break;
             case R.id.loTestNetworkSwitcher:
                 switcherTestNetwork.doSwitch();
