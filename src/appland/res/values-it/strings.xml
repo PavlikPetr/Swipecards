@@ -182,6 +182,7 @@
     <string name="general_settings">Impostazioni</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Valore non valido</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Riprovare</string>
@@ -1043,6 +1044,9 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="write_her_without_symphaty">Scrivile senza un Like Reciproco!</string>
     <string name="people_nearby_popover_text">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
     <string name="mutual_popup_you_get_mutual">Vi piacete!</string>
+    <string name="start_dialog">Comincia la conversazione</string>
+    <string name="continue_to_meet">Continua a fare conoscenza</string>
+    <string name="basic_information">Informazioni di base</string>
     <string name="photo_feed_add_photo">Fatti notare nel feed delle foto!\nMigliaia di persone ti vedranno</string>
     <string name="buy_likes_get_more_likes">Ottieni più Like!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Fatti notare subito dai ragazzi che cercano ragazze come te!</string>
@@ -1051,4 +1055,13 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="buy_likes_become_popular_male">Diventa popolare</string>
     <string name="you_are_not_shown">Non ti si vede molto nella sezione \"Appuntamenti\"</string>
     <string name="you_are_not_shown_answer">Rispondi ad alcuni dei Like che hai ricevuto per apparire nella sezione.</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Trova chi stai cercando</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Fra più di 100 milioni di persone</string>
+    <string name="fb_invitation_intelligent_selection_filter">Filtro di selezione intelligente</string>
+    <string name="fb_invitation_personalized_approach">Approccio personalizzato</string>
+    <string name="fb_invitation_button_text">Entra con Facebook</string>
+    <string name="onboarding_button_next">Avanti</string>
+    <string name="num_from_num">%1$s da %2$s</string>
+    <string name="onboarding_get_access">Ottieni l\'accesso</string>
+    <string name="searching_couple_for_you">Ricerca della corrispondenza in base ai tuoi criteri</string>
 </resources>
