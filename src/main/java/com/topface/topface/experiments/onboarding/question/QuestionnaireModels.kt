@@ -486,12 +486,12 @@ data class ValueConditions(var value: Int = 0, var fieldName: String = Utils.EMP
 /**
  * Настройки для экрана показа "100500" объектов для знакомств
  *
- * @param foundtitle - заголовок экрана
+ * @param foundTitle - заголовок экрана
  * @param buyMessage - текст самого попапа
  * @param productId - Id продукта для оплаты
  * @param users - список людишек для отображения их аватаров
  */
-data class QuestionnaireResult(var foundtitle: String = Utils.EMPTY, var buyMessage: String = Utils.EMPTY,
+data class QuestionnaireResult(var foundTitle: String = Utils.EMPTY, var buyMessage: String = Utils.EMPTY,
                                var productId: String = Utils.EMPTY, var users: Array<FeedUser> = arrayOf<FeedUser>()) : Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<QuestionnaireResult> = object : Parcelable.Creator<QuestionnaireResult> {
@@ -504,9 +504,9 @@ data class QuestionnaireResult(var foundtitle: String = Utils.EMPTY, var buyMess
             source.readParcelableArray(FeedUser::class.java.classLoader) as Array<FeedUser>)
 
     override fun describeContents() = 0
-
+b
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(foundtitle)
+        dest?.writeString(foundTitle)
         dest?.writeString(buyMessage)
         dest?.writeString(productId)
         dest?.writeParcelableArray(users, 0)
