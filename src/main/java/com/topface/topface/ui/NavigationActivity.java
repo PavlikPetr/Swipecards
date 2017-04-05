@@ -228,7 +228,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
-        if(!AuthToken.getInstance().isEmpty()) {
+        if (!AuthToken.getInstance().isEmpty()) {
             new FeedNavigator(this).showQuestionnaire();
         }
     }
@@ -276,7 +276,8 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     private void startPopupRush() {
         Debug.log("PopupMANAGER start rusgh");
-        if (hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
+        if (App.getAppConfig().getQuestionnaireData().isEmpty()
+                && hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             initPopups();
@@ -546,6 +547,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 App.getAppComponent().navigationState()
                         .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING),
                                 WrappedNavigationData.SELECT_EXTERNALY));
+                startPopupRush();
             } else {
                 finish();
             }
