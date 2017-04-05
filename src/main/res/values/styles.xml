@@ -1585,8 +1585,8 @@
         <item name="android:text">@string/label1_text_admiration_purchase_popup</item>
         <item name="android:textColor">@color/label1_text_color</item>
         <item name="android:textSize">@dimen/main_label_text_size</item>
-        <item name="android:layout_alignEnd">@+id/coins_button</item>
-        <item name="android:layout_alignStart">@+id/coins_button</item>
+        <item name="android:layout_alignEnd" tools:ignore="NewApi">@+id/coins_button</item>
+        <item name="android:layout_alignStart" tools:ignore="NewApi">@+id/coins_button</item>
         <item name="android:layout_alignRight">@+id/coins_button</item>
         <item name="android:layout_alignLeft">@+id/coins_button</item>
         <item name="android:layout_width">200dp</item>
