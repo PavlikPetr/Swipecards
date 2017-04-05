@@ -65,7 +65,7 @@
                     android:gravity="center"
                     android:text="@{viewModel.foundTitle}"
                     android:textColor="@color/black"
-                    android:textSize="24sp"/>
+                    android:textSize="16sp"/>
 
                 <!--АХТУНГИ!!!!!!!! ТЕЛОЧКИ, ИДУЩИЕ В РЯД-->
 
@@ -164,17 +164,13 @@
                     android:gravity="center"
                     android:text="@{viewModel.buyMessage}"
                     android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textSize="24sp"/>
 
                 <Button
-                    style="@style/PopupGreenButton.Background"
+                    style="@style/PopupGreenButton.Background.QuestionnaireResult"
                     android:layout_below="@+id/buy_message"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="100dp"
                     android:onClick="@{() -> viewModel.onBuyButtonClick()}"
-                    android:text="@string/onboarding_get_access"
-                    android:textAllCaps="true"
-                    android:textSize="18sp"/>
+                    android:text="@string/onboarding_get_access"/>
 
                 <FrameLayout
                     android:id="@+id/center"

@@ -4,9 +4,10 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.databinding.ObservableLong
 import android.os.Bundle
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Photo
-import com.topface.topface.data.User
+import com.topface.topface.data.Profile
 import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
 import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -17,12 +18,12 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.json.JSONObject
 import rx.Observable
-import rx.subscriptions.CompositeSubscription
+import rx.Subscription
 import java.util.concurrent.TimeUnit
 
 class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFeedNavigator: FeedNavigator) {
 
-    companion object{
+    companion object {
         const val LOADER = 0
         const val FINAL = 1
         private const val DELAY = 3L
@@ -33,13 +34,13 @@ class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFe
     val foundTitle = ObservableField<String>()
     val buyMessage = ObservableField<String>()
 
-    val firstAvatar: ObservableField<Photo> = ObservableField()
-    val secondAvatar: ObservableField<Photo> = ObservableField()
-    val thirdAvatar: ObservableField<Photo> = ObservableField()
-    val fourthAvatar: ObservableField<Photo> = ObservableField()
-    val fifthAvatar: ObservableField<Photo> = ObservableField()
+    val firstAvatar: ObservableField<Photo?> = ObservableField()
+    val secondAvatar: ObservableField<Photo?> = ObservableField()
+    val thirdAvatar: ObservableField<Photo?> = ObservableField()
+    val fourthAvatar: ObservableField<Photo?> = ObservableField()
+    val fifthAvatar: ObservableField<Photo?> = ObservableField()
 
-    val avatarPlaceholderRes = ObservableInt()
+    val avatarPlaceholderRes = ObservableInt(if (App.get().profile.sex == Profile.GIRL) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_small)
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
 
     val showChild = ObservableInt(LOADER)
@@ -50,31 +51,30 @@ class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFe
 
     var productId: String = Utils.EMPTY
 
-    private val mSubscription = CompositeSubscription()
+    private var mSubscription: Subscription? = null
 
     init {
-        mSubscription.add(
-                Observable.combineLatest(
-                        Observable.timer(DELAY, TimeUnit.SECONDS),
-                        api.callQuestionnaireSearch(mMethodName, mRequestData)
-                ) { item1, item2 ->
-                    item2
-                }.first().subscribe(shortSubscription {
-                    fillData(it)
-                })
-        )
+        mSubscription = Observable.combineLatest(
+                Observable.timer(DELAY, TimeUnit.SECONDS),
+                api.callQuestionnaireSearch(mMethodName, mRequestData)
+        ) { item1, item2 ->
+            item2
+        }.first().subscribe(shortSubscription {
+            fillData(it)
+        })
     }
 
     fun fillData(data: QuestionnaireResult) {
         with(data.users) {
-            firstAvatar.set(get(0).photo)
-            secondAvatar.set(get(1).photo)
-            thirdAvatar.set(get(2).photo)
-            fourthAvatar.set(get(3).photo)
-            fifthAvatar.set(get(4).photo)
+            firstAvatar.set(getOrNull(0)?.photo)
+            secondAvatar.set(getOrNull(1)?.photo)
+            thirdAvatar.set(getOrNull(2)?.photo)
+            fourthAvatar.set(getOrNull(3)?.photo)
+            fifthAvatar.set(getOrNull(4)?.photo)
 
-            avatarPlaceholderRes.set((if (get(0).sex == User.BOY) R.drawable.dialogues_av_man_big
-            else R.drawable.dialogues_av_girl_small))
+            getOrNull(0)?.let {
+                avatarPlaceholderRes.set(if (it.sex == Profile.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_small)
+            }
         }
         foundTitle.set(data.foundtitle)
         buyMessage.set(data.buyMessage)
