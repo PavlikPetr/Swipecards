@@ -21,7 +21,11 @@
 
         <TextView
             style="@style/QuestionnaireTitle"
-            android:paddingLeft="16dp"
+            android:paddingEnd="@dimen/questionnaire_container_padding"
+            android:paddingLeft="@dimen/questionnaire_container_padding"
+            android:paddingRight="@dimen/questionnaire_container_padding"
+            android:paddingStart="@dimen/questionnaire_container_padding"
+
             android:text="@{viewModel.title}"/>
 
         <android.support.v7.widget.RecyclerView
