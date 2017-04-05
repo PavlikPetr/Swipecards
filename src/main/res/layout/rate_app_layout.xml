@@ -26,10 +26,11 @@
             android:layout_width="4dp"
             android:layout_height="4dp"
             android:layout_below="@id/some_special"
-            android:layout_marginRight="110dp"
+            android:layout_marginRight="100dp"
             android:layout_marginTop="68dp"
             android:layout_toLeftOf="@id/some_special"
-            android:src="@drawable/icon_star_pressed"
+            android:src="@drawable/ic_circle"
+            android:tint="#ffc0eb"
             app:animationSrc="@{@anim/fade_in}"/>
 
         <ImageView
@@ -39,7 +40,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="33dp"
             android:layout_toRightOf="@id/some_special"
-            android:src="@drawable/icon_star_pressed"
+            android:src="@drawable/ic_circle"
             app:animationSrc="@{@anim/fade_in}"/>
 
         <ImageView
@@ -49,7 +50,8 @@
             android:layout_marginLeft="75dp"
             android:layout_marginTop="118dp"
             android:layout_toRightOf="@id/some_special"
-            android:src="@drawable/icon_star_pressed"
+            android:src="@drawable/ic_circle"
+            android:tint="#ffc0eb"
             app:animationSrc="@{@anim/fade_in}"/>
         <!--кружочки закончились-->
 
