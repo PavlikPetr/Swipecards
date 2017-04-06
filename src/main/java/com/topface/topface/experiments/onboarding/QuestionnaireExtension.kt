@@ -30,3 +30,14 @@ fun String.getDigitInputError(min: ValueConditions, max: ValueConditions) =
                 Pair(true, R.string.general_wrong_field_value.getString())
             else getDigitInputError(min, max)
         }
+
+// возвращает Pair<Boolean,String>, где Boolean - найдена ли ошибка при валидации данных,
+// а String - текст ошибки
+fun String.getTextInputError(min: ValueConditions, max: ValueConditions) =
+        if (this == null)
+            Pair(true, R.string.general_wrong_field_value.getString())
+        else if (this.length < min.value)
+            Pair(true, min.errorMessage)
+        else if (this.length > max.value)
+            Pair(true, max.errorMessage)
+        else Pair(false, Utils.EMPTY)

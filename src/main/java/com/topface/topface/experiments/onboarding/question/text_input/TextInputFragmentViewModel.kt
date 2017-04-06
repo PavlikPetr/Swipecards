@@ -5,13 +5,19 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import com.topface.topface.App
+import com.topface.topface.experiments.onboarding.getDigitInputError
+import com.topface.topface.experiments.onboarding.getTextInputError
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.experiments.onboarding.question.digit_input.DigitInputFragment
 import com.topface.topface.experiments.onboarding.question.text_input.TextInputFragment.Companion.EXTRA_DATA
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.rx.RxFieldObservable
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.json.JSONObject
+import rx.Subscription
 
 /**
  * Вьюмодель экрана пятого типа вопроса в опроснике
@@ -39,18 +45,34 @@ class TextInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
     val hint = ObservableField<String>(mData?.hint ?: Utils.EMPTY)
     val isHintEnabled = ObservableBoolean(mData?.let { !it.hint.isNullOrEmpty() } ?: false)
     val maxLength = ObservableInt(mData?.max?.value ?: MAX_LENGTH_DEFAULT)
-    val text = ObservableField<String>(Utils.EMPTY)
+    val text = RxFieldObservable<String>(Utils.EMPTY)
     val isErrorEnabled = ObservableBoolean(mData?.let { !it.max.errorMessage.isNullOrEmpty() && !it.min.errorMessage.isNullOrEmpty() } ?: false)
     val unit = ObservableField<String>(mData?.unit ?: Utils.EMPTY)
     val isCounterEnable = ObservableBoolean(mData?.let { it.max.value > 0 } ?: false)
 
+    private val mTextChangeSubscription: Subscription
+
+    init {
+        mTextChangeSubscription = text.filedObservable
+                .subscribe(shortSubscription {
+                    it?.let { value ->
+                        mData?.let {
+                            with(value.getTextInputError(it.min, it.max)) {
+                                if (!first) {
+                                    error.set(Utils.EMPTY)
+                                }
+                            }
+                            error.set(value.getDigitInputError(it.min, it.max).second)
+                        } ?: error.set(Utils.EMPTY)
+                    }
+                })
+    }
+
     fun onNext() =
-            with(text.get()) {
-                this?.let {
-                    if (it.length < mData?.min?.value ?: 0) {
-                        error.set(mData?.min?.errorMessage ?: Utils.EMPTY)
-                    } else if (it.length > mData?.max?.value ?: Int.MAX_VALUE) {
-                        error.set(mData?.max?.errorMessage ?: Utils.EMPTY)
+            mData?.let {
+                with(text.get().getTextInputError(it.min, it.max)) {
+                    if (first) {
+                        error.set(second)
                     } else {
                         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
                             mData?.fieldName?.let {
@@ -63,9 +85,7 @@ class TextInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
                 }
             }
 
-    fun release() {
-
-    }
+    fun release() = mTextChangeSubscription.safeUnsubscribe()
 
     override fun onSavedInstanceState(state: Bundle) {
         super.onSavedInstanceState(state)

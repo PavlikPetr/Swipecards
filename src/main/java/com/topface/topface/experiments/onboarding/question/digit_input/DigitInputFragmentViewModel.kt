@@ -15,7 +15,6 @@ import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDimen
-import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeToInt
 import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -90,17 +89,7 @@ class DigitInputFragmentViewModel(bundle: Bundle, private val keyboard: IKeyboar
                 }
             }
 
-    private fun isValid(value: Int) = if (value < mData?.min?.value ?: 0) {
-        error.set(mData?.min?.errorMessage ?: Utils.EMPTY)
-        false
-    } else if (value > mData?.max?.value ?: 0) {
-        error.set(mData?.max?.errorMessage ?: Utils.EMPTY)
-        false
-    } else true
-
-    fun release() {
-        mTextChangeSubscription.safeUnsubscribe()
-    }
+    fun release() = mTextChangeSubscription.safeUnsubscribe()
 
     override fun onSavedInstanceState(state: Bundle) {
         super.onSavedInstanceState(state)

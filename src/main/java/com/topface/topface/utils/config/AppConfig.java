@@ -168,7 +168,7 @@ public class AppConfig extends AbstractConfig {
         // ответы пользователя на опросник
         addField(settingsMap, QUESTIONNAIRE_REQUEST_DATA, Utils.EMPTY);
         // флажок об использовании резервнs[ social app ids
-        addField(settingsMap, RESERVE_SOCIAL_APP_ID, true);
+        addField(settingsMap, RESERVE_SOCIAL_APP_ID, false);
     }
 
     protected SharedPreferences getPreferences() {
