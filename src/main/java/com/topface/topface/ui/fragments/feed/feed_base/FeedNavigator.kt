@@ -156,9 +156,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mEmptyDatingFragment.dialog?.cancel()
     }
 
-    override fun showFilter() = showRateAppFragment(this)
-//            mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
-//            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
+            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
 
     override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
             mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
@@ -183,7 +182,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
     override fun showFBInvitationPopup() = mFBInvitation.show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
 
-    override fun showQuestionnaire():Boolean {
+    override fun showQuestionnaire(): Boolean {
         val config = App.getAppConfig()
         val startPosition = config.currentQuestionPosition
         val data = config.questionnaireData
@@ -195,16 +194,16 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         return false
     }
 
-    override fun showRateAppFragment(mNavigator: FeedNavigator) = RateAppFragment(mNavigator).show(mActivityDelegate.supportFragmentManager, RateAppFragment.TAG)
+    override fun showRateAppFragment(mNavigator: FeedNavigator) = RateAppFragment(mNavigator).show((mActivityDelegate as Activity).fragmentManager, RateAppFragment.TAG)
 
 
-    override fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi){
-        val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator,mApi)
+    override fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi) {
+        val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator, mApi)
         mFeedbackInvitePopup.show(mActivityDelegate.supportFragmentManager, FeedbackInvitePopup.TAG)
     }
 
-    override fun showGoogleFeedbackPopup(mNavigator: FeedNavigator, mApi: FeedApi){
-        val mGoogleFeedbackPopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(GoogleFeedbackPopup.TAG)?.let { it as GoogleFeedbackPopup } ?: GoogleFeedbackPopup(mNavigator,mApi)
-        mGoogleFeedbackPopup.show(mActivityDelegate.supportFragmentManager, GoogleFeedbackPopup.TAG)
+    override fun showGoogleFeedbackPopup(mNavigator: FeedNavigator, mApi: FeedApi, rate: Float) {
+        val mGoogleFeedbackPopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(GoogleFeedbackPopup.TAG)?.let { it as GoogleFeedbackPopup } ?: GoogleFeedbackPopup(mNavigator, mApi, rate)
+        mGoogleFeedbackPopup.show((mActivityDelegate as Activity).fragmentManager, GoogleFeedbackPopup.TAG)
     }
 }

@@ -28,6 +28,7 @@ import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
@@ -142,6 +143,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     fun skip() = currentUser?.let {
+        mNavigator.showRateAppFragment(mNavigator as FeedNavigator)
         if (!it.skipped && !it.rated) {
             showNextUser()
             mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {

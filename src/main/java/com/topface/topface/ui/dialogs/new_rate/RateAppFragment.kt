@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.databinding.RateAppLayoutBinding
 import com.topface.topface.ui.fragments.dating.IDialogCloser
@@ -17,8 +18,10 @@ import com.topface.topface.utils.http.IRequestClient
 import org.jetbrains.anko.layoutInflater
 
 class RateAppFragment(private val mFeedNavigator: FeedNavigator) : DialogFragment(), IDialogCloser {
-    companion object{
+
+    companion object {
         const val TAG = "RateAppFragment"
+        const val RATING = "val"
     }
 
     private val mViewModel by lazy { RateAppViewModel(mFeedNavigator, this@RateAppFragment, mApi) }
@@ -34,12 +37,19 @@ class RateAppFragment(private val mFeedNavigator: FeedNavigator) : DialogFragmen
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
         viewModel = mViewModel
         dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window.setBackgroundDrawableResource(R.drawable.rate_popup_corners_background)
         root
     }
 
-    override fun closeIt() {
-        dialog.cancel()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_SHOW()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
+    }
 
+    override fun closeIt() = dialog.cancel()
 }

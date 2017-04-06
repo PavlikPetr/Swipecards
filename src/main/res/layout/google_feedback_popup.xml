@@ -25,8 +25,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
             android:text="@string/what_we_can_improve"
             android:textColor="@color/black"
             android:textSize="22sp"/>
@@ -38,34 +40,34 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="22dp"
             app:errorEnabled="true"
-            app:errorTextAppearance="@style/QuestionnaireErrorTextAppearance"
+            app:hintTextAppearance="@style/RateTextStyle"
+            app:errorTextAppearance="@style/RateTextStyle"
             app:setError="@{viewModel.error}">
 
             <android.support.design.widget.TextInputEditText
-                style="@style/QuestionnaireInputTextEdit"
+                style="@style/RatePopupTextInput"
                 android:maxLines="5"
-                android:text="@={viewModel.text}"
-                android:textSize="@dimen/questionnaire_digit_input_text_size"/>
+                android:text="@={viewModel.text}"/>
 
         </android.support.design.widget.TextInputLayout>
 
         <Button
             style="@style/Widget.Topface.Button.Big.Blue"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="66dp"
-            android:layout_marginRight="66dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
             android:onClick="@{()->viewModel.okButtonClick()}"
             android:text="@string/send_rate_feedback"/>
 
         <Button
             style="@style/PopupBorderlessdButton"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:layout_marginLeft="66dp"
-            android:layout_marginRight="66dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:onClick="@{()->viewModel.closeButtonClick()}"
             android:text="@string/thanks_for_your_rate_close"
