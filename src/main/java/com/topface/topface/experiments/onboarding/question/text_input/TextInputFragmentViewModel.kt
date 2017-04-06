@@ -5,14 +5,16 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import com.topface.topface.App
-import com.topface.topface.experiments.onboarding.getDigitInputError
-import com.topface.topface.experiments.onboarding.getTextInputError
+import com.topface.topface.R
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.experiments.onboarding.question.digit_input.DigitInputFragment
+import com.topface.topface.experiments.onboarding.question.digit_input.IKeyboard
 import com.topface.topface.experiments.onboarding.question.text_input.TextInputFragment.Companion.EXTRA_DATA
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.extensions.safeToInt
 import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -23,7 +25,7 @@ import rx.Subscription
  * Вьюмодель экрана пятого типа вопроса в опроснике
  * Created by petrp on 30.03.2017.
  */
-class TextInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
+class TextInputFragmentViewModel(bundle: Bundle, private val keyboard: IKeyboard) : ILifeCycle {
 
     companion object {
         private const val MAX_LENGTH_DEFAULT = 1024
@@ -57,32 +59,30 @@ class TextInputFragmentViewModel(bundle: Bundle) : ILifeCycle {
                 .subscribe(shortSubscription {
                     it?.let { value ->
                         mData?.let {
-                            with(value.getTextInputError(it.min, it.max)) {
-                                if (!first) {
-                                    error.set(Utils.EMPTY)
-                                }
-                            }
-                            error.set(value.getDigitInputError(it.min, it.max).second)
-                        } ?: error.set(Utils.EMPTY)
-                    }
+                            if (value.length >= it.min.value) error.set(Utils.EMPTY)
+                        }
+                    } ?: error.set(Utils.EMPTY)
                 })
     }
 
     fun onNext() =
             mData?.let {
-                with(text.get().getTextInputError(it.min, it.max)) {
-                    if (first) {
-                        error.set(second)
+                text.get()?.run {
+                    if (length < it.min.value) {
+                        error.set(it.min.errorMessage)
+                    } else if (length > it.max.value) {
+                        error.set(it.max.errorMessage)
                     } else {
                         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
                             mData?.fieldName?.let {
                                 if (it.isNotEmpty()) {
-                                    put(it, this@with)
+                                    put(it, this@run.safeToInt())
                                 }
                             }
                         }))
+                        keyboard.hideKeyboard()
                     }
-                }
+                } ?: error.set(R.string.general_wrong_field_value.getString())
             }
 
     fun release() = mTextChangeSubscription.safeUnsubscribe()

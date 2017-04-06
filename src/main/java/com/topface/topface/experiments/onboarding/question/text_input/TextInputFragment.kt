@@ -1,13 +1,16 @@
 package com.topface.topface.experiments.onboarding.question.text_input
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import com.topface.topface.R
 import com.topface.topface.databinding.QuestionnaireTextInputLayoutBinding
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
+import com.topface.topface.experiments.onboarding.question.digit_input.IKeyboard
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
@@ -17,7 +20,7 @@ import org.jetbrains.anko.layoutInflater
  * Фрагмент для пятого типа вопроса
  * Created by petrp on 29.03.2017.
  */
-class TextInputFragment : BaseFragment() {
+class TextInputFragment() : BaseFragment(), IKeyboard {
     companion object {
         const val EXTRA_DATA = "TextInputFragment.Extra.Data"
         fun newInstance(data: InputValueSettings) = TextInputFragment().apply {
@@ -33,7 +36,7 @@ class TextInputFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        TextInputFragmentViewModel(arguments).apply {
+        TextInputFragmentViewModel(arguments,this).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }
@@ -51,5 +54,10 @@ class TextInputFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(mViewModel)
+    }
+
+    override fun hideKeyboard(view: View?) {
+        (activity.getSystemService(Context.INPUT_METHOD_SERVICE)as?InputMethodManager)
+                ?.hideSoftInputFromWindow((view ?: activity.currentFocus).windowToken, 0)
     }
 }

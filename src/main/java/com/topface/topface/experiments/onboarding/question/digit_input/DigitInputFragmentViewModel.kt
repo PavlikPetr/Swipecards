@@ -9,12 +9,12 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.experiments.onboarding.getDigitInputError
 import com.topface.topface.experiments.onboarding.question.InputValueSettings
 import com.topface.topface.experiments.onboarding.question.UserChooseAnswer
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.safeToInt
 import com.topface.topface.utils.rx.RxFieldObservable
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -62,31 +62,41 @@ class DigitInputFragmentViewModel(bundle: Bundle, private val keyboard: IKeyboar
     init {
         mTextChangeSubscription = text.filedObservable
                 .subscribe(shortSubscription {
-                    it?.let { value ->
-                        mData?.let {
-                            error.set(value.getDigitInputError(it.min, it.max).second)
-                        } ?: error.set(Utils.EMPTY)
+                    mData?.let { data ->
+                        if (getDigit(it) != null) {
+                            if (it.length >= data.min.value.toString().length) {
+                                if (it.safeToInt() < data.min.value)
+                                    error.set(data.min.errorMessage)
+                                else if (it.safeToInt() > data.max.value)
+                                    error.set(data.max.errorMessage)
+                                else
+                                    error.set(Utils.EMPTY)
+                            } else error.set(Utils.EMPTY)
+                        } else error.set(R.string.general_wrong_field_value.getString())
                     }
                 })
     }
 
+    private fun getDigit(value: String?) = value?.safeToInt(kotlin.Int.MIN_VALUE).run { if (this == Int.MIN_VALUE) null else this }
+
     fun onNext() =
-            mData?.let {
-                val value = text.get()
-                value.getDigitInputError(it.min, it.max).run {
-                    if (first) {
-                        error.set(second)
-                    } else {
+            mData?.let { data ->
+                getDigit(text.get())?.run {
+                    if (this < data.min.value)
+                        error.set(data.min.errorMessage)
+                    else if (this > data.max.value)
+                        error.set(data.max.errorMessage)
+                    else {
                         App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
                             mData?.fieldName?.let {
                                 if (it.isNotEmpty()) {
-                                    put(it, value.safeToInt())
+                                    put(it, this@run)
                                 }
                             }
                         }))
                         keyboard.hideKeyboard()
                     }
-                }
+                } ?: error.set(R.string.general_wrong_field_value.getString())
             }
 
     fun release() = mTextChangeSubscription.safeUnsubscribe()
