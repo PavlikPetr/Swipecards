@@ -143,7 +143,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     fun skip() = currentUser?.let {
-        mNavigator.showRateAppFragment(mNavigator as FeedNavigator)
         if (!it.skipped && !it.rated) {
             showNextUser()
             mSkipSubscription = mApi.callSkipRequest(it.id).subscribe(object : Subscriber<IApiResponse>() {

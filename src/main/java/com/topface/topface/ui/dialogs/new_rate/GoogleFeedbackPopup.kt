@@ -29,6 +29,7 @@ class GoogleFeedbackPopup(private val mFeedNavigator: FeedNavigator, private val
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
         viewModel = mViewModel
         dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window.setBackgroundDrawableResource(R.drawable.rate_popup_corners_background)
         root
     }
 

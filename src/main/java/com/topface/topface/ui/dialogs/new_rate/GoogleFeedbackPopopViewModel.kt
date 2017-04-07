@@ -1,7 +1,8 @@
 package com.topface.topface.ui.dialogs.new_rate
 
+import android.databinding.Observable
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
-import android.text.TextUtils
 import android.widget.Toast
 import com.topface.framework.utils.BackgroundThread
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
@@ -16,13 +17,23 @@ import com.topface.topface.ui.settings.FeedbackMessageFragment
 import com.topface.topface.utils.ClientUtils
 import com.topface.topface.utils.Utils
 
-class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, private val mRating:Float) {
+class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, private val mRating: Float) {
 
     val error = ObservableField<String>()
     val text = ObservableField<String>()
+    val buttonEnabled = ObservableBoolean(false)
 
-    fun okButtonClick(){
-        if (!text.get().isNullOrEmpty()){
+    init {
+        text.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(observable: Observable?, p1: Int) = (observable as? ObservableField<*>)?.let {
+                (it.get() as? String)?.let {
+                    buttonEnabled.set(it.isNotEmpty())
+                }
+            } ?: Unit
+        })
+    }
+
+    fun okButtonClick() {
             val handler = object : SimpleApiHandler() {
                 override fun fail(codeError: Int, response: IApiResponse) {
                     if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
@@ -35,11 +46,11 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
             object : BackgroundThread() {
                 override fun execute() {
 
-                        val report = FeedbackMessageFragment.Report(
-                                FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE
-                        )
-                    with(report){
-                        subject = String.format(this.subject, mRating.toInt())
+                    val report = FeedbackMessageFragment.Report(
+                            FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE
+                    )
+                    with(report) {
+                        subject = String.format(FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE.title, mRating.toInt())
                         body = text.get()
                         email = ClientUtils.getSocialAccountEmail()
                         FeedbackMessageFragment.fillVersion(App.getContext(), this)
@@ -47,10 +58,10 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
                     }
                 }
             }
-        }
+            mDialogCloseable.closeIt()
     }
 
-    fun closeButtonClick(){
+    fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         mDialogCloseable.closeIt()
     }

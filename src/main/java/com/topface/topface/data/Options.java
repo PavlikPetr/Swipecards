@@ -68,6 +68,10 @@ public class Options extends AbstractData {
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
 
+    public boolean ratePopupNewVersionEnabled = false;
+    public long ratePopupNewVersionNotNowTimeout = DateUtils.DAY_IN_MILLISECONDS;
+    public long ratePopupNewVersionBadRateTimeout = DateUtils.DAY_IN_MILLISECONDS;
+
     private String paymentwall;
 
     public String maxVersion = "2147483647";
@@ -298,6 +302,13 @@ public class Options extends AbstractData {
             if (ratePopupObject != null) {
                 ratePopupEnabled = ratePopupObject.optBoolean("enabled");
                 ratePopupTimeout = ratePopupObject.optInt("timeout") * DateUtils.HOUR_IN_MILLISECONDS;
+            }
+
+            JSONObject ratePopupNewVersionObject = response.optJSONObject("rateAppSplitPopup");
+            if (ratePopupNewVersionObject != null) {
+                ratePopupNewVersionEnabled = ratePopupNewVersionObject.optBoolean("enabled");
+                ratePopupNewVersionNotNowTimeout = ratePopupNewVersionObject.optInt("notNowTimeout") * DateUtils.HOUR_IN_MILLISECONDS;
+                ratePopupNewVersionBadRateTimeout = ratePopupNewVersionObject.optInt("badRateTimeout") * DateUtils.HOUR_IN_MILLISECONDS;
             }
 
             JSONObject blockSympathyObj = response.optJSONObject("blockSympathy");

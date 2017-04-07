@@ -2,10 +2,12 @@ package com.topface.topface.ui.fragments.dating.dating_redesign
 
 import android.os.Bundle
 import android.view.View
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.PopupMutuallyBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
@@ -38,6 +40,15 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
     override fun initViews(root: View?) {
         mBinding = PopupMutuallyBinding.bind(root)
         mBinding.setModel(mViewModel)
+    }
+
+    override fun isCancelable(): Boolean {
+        val options = App.get().options
+        if (RateAppFragment.isApplicable(options.ratePopupNewVersionNotNowTimeout, options.ratePopupNewVersionBadRateTimeout, options.ratePopupNewVersionEnabled)) {
+            mNavigator.showRateAppFragment(mNavigator)
+        }
+        return super.isCancelable()
+
     }
 
     override fun isModalDialog() = false

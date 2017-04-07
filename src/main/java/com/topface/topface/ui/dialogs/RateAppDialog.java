@@ -16,7 +16,6 @@ import com.topface.topface.requests.AppRateRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.RatePopupStatistics;
-import com.topface.topface.ui.dialogs.new_rate.RateAppViewModel;
 import com.topface.topface.utils.Utils;
 
 import static com.topface.topface.ui.settings.FeedbackMessageFragment.FeedbackType.LOW_RATE_MESSAGE;

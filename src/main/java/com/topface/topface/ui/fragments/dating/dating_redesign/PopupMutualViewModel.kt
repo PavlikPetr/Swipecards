@@ -6,6 +6,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getDimen
@@ -16,7 +17,7 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val userPlaceholderRes = ObservableField((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
-                                                                                else R.drawable.dialogues_av_girl_small))
+    else R.drawable.dialogues_av_girl_small))
 
     val mutualUserPhoto = ObservableField(mutualUser.photo)
     val mutualPlaceholderRes = ObservableField(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
@@ -27,6 +28,12 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
         iDialogCloser.closeIt()
     }
 
-    fun closePopup() = iDialogCloser.closeIt()
+    fun closePopup() {
+        val options = App.get().options
+        if (RateAppFragment.isApplicable(options.ratePopupNewVersionNotNowTimeout, options.ratePopupNewVersionBadRateTimeout, options.ratePopupNewVersionEnabled)) {
+            navigator.showRateAppFragment(navigator)
+        }
+        iDialogCloser.closeIt()
+    }
 
 }

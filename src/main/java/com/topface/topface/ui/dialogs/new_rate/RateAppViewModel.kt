@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dialogs.new_rate
 
-import android.content.Context
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableFloat
 import android.os.Bundle
@@ -18,6 +17,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.ILifeCycle
 
 class RateAppViewModel(private val mNavigator: FeedNavigator, private val iDialogCloser: IDialogCloser, private val mApi: FeedApi) : ILifeCycle {
+
     companion object {
         const val IS_ENABLED_BUTTON = "enabled_button"
         const val CURRENT_RATING = "current_rating"
@@ -30,12 +30,20 @@ class RateAppViewModel(private val mNavigator: FeedNavigator, private val iDialo
 
     fun okButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_RATE(Slices().apply { putSlice(RATING, currentRating?.toString()) })
+        val rateInInt = currentRating.get()
         if (isTimeForGoogleFeedback) {
             mNavigator.showFeedbackInvitePopup(mNavigator, mApi)
         } else {
-            mNavigator.showGoogleFeedbackPopup(mNavigator, mApi, currentRating.get())
+            mNavigator.showGoogleFeedbackPopup(mNavigator, mApi, rateInInt)
         }
-        sendRateRequest(currentRating.get().toLong())
+        sendRateRequest(rateInInt.toLong())
+        if (rateInInt <=0){
+
+        } else if (rateInInt >=4){
+            RateAppFragment.saveRatingPopupStatus(0)
+        } else {
+            RateAppFragment.saveRatingPopupStatus(0)
+        }
         iDialogCloser.closeIt()
     }
 
@@ -63,6 +71,7 @@ class RateAppViewModel(private val mNavigator: FeedNavigator, private val iDialo
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         sendRateRequest(AppRateRequest.NO_RATE)
+        RateAppFragment.saveRatingPopupStatus(0)
         iDialogCloser.closeIt()
     }
 

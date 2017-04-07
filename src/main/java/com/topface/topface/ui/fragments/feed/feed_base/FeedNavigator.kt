@@ -198,7 +198,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
 
     override fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi) {
-        val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator, mApi)
+        val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator, mApi, mActivityDelegate)
         mFeedbackInvitePopup.show(mActivityDelegate.supportFragmentManager, FeedbackInvitePopup.TAG)
     }
 
