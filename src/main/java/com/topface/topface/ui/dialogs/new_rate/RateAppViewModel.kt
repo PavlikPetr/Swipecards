@@ -70,11 +70,11 @@ class RateAppViewModel(private val mNavigator: FeedNavigator, private val iDialo
 
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
         sendRateRequest(AppRateRequest.NO_RATE)
         RateAppFragment.saveRatingPopupStatus(0)
         iDialogCloser.closeIt()
     }
-
 
     //    сохраняем состояние
     override fun onSavedInstanceState(state: Bundle) {

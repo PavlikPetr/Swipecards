@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import com.topface.framework.utils.BackgroundThread
+import com.topface.framework.utils.Debug
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
@@ -90,6 +91,7 @@ class RateAppFragment(private val mFeedNavigator: FeedNavigator) : DialogFragmen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setRetainInstance(true)
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_SHOW()
     }
 
@@ -99,11 +101,6 @@ class RateAppFragment(private val mFeedNavigator: FeedNavigator) : DialogFragmen
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
-    }
-
-    override fun closeIt() = dialog.cancel()
+    override fun closeIt() = dialog.dismiss()
 
 }

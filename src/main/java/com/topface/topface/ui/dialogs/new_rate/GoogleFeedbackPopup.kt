@@ -1,12 +1,14 @@
 package com.topface.topface.ui.dialogs.new_rate
 
 import android.app.DialogFragment
+import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.databinding.GoogleFeedbackPopupBinding
 import com.topface.topface.ui.fragments.dating.IDialogCloser
@@ -33,5 +35,10 @@ class GoogleFeedbackPopup(private val mFeedNavigator: FeedNavigator, private val
         root
     }
 
-    override fun closeIt() = dialog.cancel()
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
+    }
+
+    override fun closeIt() = dialog.dismiss()
 }

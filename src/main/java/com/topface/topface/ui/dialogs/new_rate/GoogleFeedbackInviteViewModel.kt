@@ -17,6 +17,7 @@ class GoogleFeedbackInviteViewModel(private val mDialogCloser: IDialogCloser, pr
     }
     fun closeButtonClick(){
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
         mDialogCloser.closeIt()
     }
 }

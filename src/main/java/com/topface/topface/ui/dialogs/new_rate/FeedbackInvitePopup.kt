@@ -1,5 +1,6 @@
 package com.topface.topface.ui.dialogs.new_rate
 
+import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import com.topface.framework.utils.Debug
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.databinding.GoogleFeedbackInviteBinding
@@ -35,10 +37,11 @@ class FeedbackInvitePopup(private val mNavigator: FeedNavigator, private val mAp
         root
     }
 
-    override fun isCancelable(): Boolean {
+    override fun onCancel(dialog: DialogInterface?) {
+        super.onCancel(dialog)
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
-        return super.isCancelable()
+        Debug.error("-----------------isCancelable---------------")
     }
 
-    override fun closeIt() = dialog.cancel()
+    override fun closeIt() = dialog.dismiss()
 }
