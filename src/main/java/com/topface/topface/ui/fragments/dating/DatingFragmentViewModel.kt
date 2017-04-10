@@ -81,7 +81,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         mProfileSubscription.add(mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }
                 .subscribe(shortSubscription { profile ->
-                    Debug.log("---- DATING CHANGED 2")
                     if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                         if (currentUser == null) {
                             mUserSearchList.currentUser?.let {
