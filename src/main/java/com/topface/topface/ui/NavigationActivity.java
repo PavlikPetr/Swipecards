@@ -547,7 +547,23 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 App.getAppComponent().navigationState()
                         .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING),
                                 WrappedNavigationData.SELECT_EXTERNALY));
-                startPopupRush();
+                // если попали сюда, значит юзер произвел покупку, поэтому лучше запускать очередь
+                // попапов с обновленным профилем
+                App.sendProfileRequest(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        startPopupRush();
+                    }
+                });
             } else {
                 finish();
             }

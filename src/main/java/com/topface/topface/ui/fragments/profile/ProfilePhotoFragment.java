@@ -281,7 +281,7 @@ public class ProfilePhotoFragment extends ProfileInnerFragment implements IBackP
                                     case ErrorCodes.NON_EXIST_PHOTO_ERROR:
                                         errorStringResource = R.string.general_non_exist_photo_error;
                                         // обновляем профиль пользователя
-                                        App.sendProfileRequest();
+                                        App.sendProfileRequest(null);
                                         break;
                                     case ErrorCodes.CODE_CANNOT_SET_PHOTO_AS_MAIN:
                                         Utils.showCantSetPhotoAsMainToast(response);
