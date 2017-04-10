@@ -161,7 +161,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public static void sendProfileAndOptionsRequests(ApiHandler handler) {
         new ParallelApiRequest(App.getContext())
                 .addRequest(getUserOptionsRequest())
-                .addRequest(getProductsRequest().get(0))
+                .addRequest(getProductsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProfileRequest())
                 .callback(handler)
@@ -184,7 +184,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .addRequest(getProfileRequest())
                 .addRequest(getUserOptionsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
-                .addRequest(getProductsRequest().get(0))
+                .addRequest(getProductsRequest())
                 .exec();
     }
 
