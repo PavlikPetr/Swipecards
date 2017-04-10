@@ -81,6 +81,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         mProfileSubscription.add(mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }
                 .subscribe(shortSubscription { profile ->
+                    Debug.log("---- DATING CHANGED 2")
                     if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty) {
                         if (currentUser == null) {
                             mUserSearchList.currentUser?.let {
@@ -108,9 +109,27 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         }
                     }
                 }))
+        mProfileSubscription.add(
+                mState.getObservable(Profile::class.java)
+                        .distinctUntilChanged { t1, t2 ->
+                            t1.dating == t2.dating
+                        }
+                        .skip(1)
+                        .subscribe(shortSubscription {
+                            it.dating?.let {
+                                updateSearchListWithFilter(FilterData(it))
+                            }
+                        })
+        )
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
+    }
+
+    private fun updateSearchListWithFilter(filterData: FilterData) {
+        sendFilterRequest(filterData)
+        mNewFilter = true
+        FlurryManager.getInstance().sendFilterChangedEvent()
     }
 
     private fun createAndRegisterBroadcasts() {
@@ -217,12 +236,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
-            if (data != null && data.extras != null) {
-                sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
-                mNewFilter = true
-                FlurryManager.getInstance().sendFilterChangedEvent()
+            data?.let {
+                it.extras?.apply {
+                    updateSearchListWithFilter(it.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
+                }
             }
         }
+
         /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
         По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
         if (mUserSearchList.isEnded && !mUpdateInProcess) {
