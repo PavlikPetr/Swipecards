@@ -5,7 +5,7 @@
 
         <variable
             name="complainVisibility"
-            type="int" />
+            type="boolean" />
 
         <variable
             name="listener"

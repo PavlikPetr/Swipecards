@@ -44,6 +44,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.chat.IComplainHeaderActionListener;
 import com.topface.topface.chat.vm.ChatViewModel;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
@@ -193,6 +194,26 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             return actionId == EditorInfo.IME_ACTION_SEND && sendMessage();
         }
     };
+
+    private IComplainHeaderActionListener mComplainHeaderActionListener = new IComplainHeaderActionListener() {
+        @Override
+        public void onComplain() {
+            getOverflowMenu().processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.COMPLAIN_ACTION);
+            hideComplainHeader();
+        }
+
+        @Override
+        public void onBlock() {
+            getOverflowMenu().processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION);
+            hideComplainHeader();
+        }
+
+        @Override
+        public void onClose() {
+            hideComplainHeader();
+        }
+    };
+
     private TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -346,7 +367,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         FragmentChatBinding binding = FragmentChatBinding.inflate(inflater, container, false);
-        binding.setViewModel(new ChatViewModel());
+        binding.setViewModel(new ChatViewModel(
+                mComplainHeaderActionListener,
+                App.getAppComponent().suspiciousUserCache().getIsUserSuspicious(mUserId))
+        );
         mRootLayout = (KeyboardListenerLayout) binding.getRoot();
         setAnimatedView(binding.lvChatList);
         mRootLayout.setKeyboardListener(mKeyboardListener);
@@ -708,6 +732,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
                 mHistoryFeedList = data.items;
+                App.getAppComponent().suspiciousUserCache().setUserIsSuspiciousIfNeed(mUserId, data.isSuspiciousUser);
                 if (!data.items.isEmpty() && !isPopularLockOn) {
                     if (mStubsController != null) {
                         int blockStage = mStubsController.getLockType(data);
@@ -1000,6 +1025,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
+                    hideComplainHeader();
                     isSendMessage = true;
                     scrollListToTheEnd();
                     Bundle extras = data.getExtras();
@@ -1081,6 +1107,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     public boolean sendMessage(String text, final boolean cancelable) {
+        hideComplainHeader();
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
         final Activity activity = getActivity();
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, activity, App.from(activity).getOptions().blockUnconfirmed);
@@ -1144,6 +1171,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             }
         }).exec();
         return true;
+    }
+
+    private void hideComplainHeader() {
+        App.getAppComponent().suspiciousUserCache().setUserIsSuspicious(mUserId, false);
     }
 
     private void startBuyVipActivity(String from) {
