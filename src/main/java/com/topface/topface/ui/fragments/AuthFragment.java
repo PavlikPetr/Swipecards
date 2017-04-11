@@ -69,6 +69,7 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -339,8 +340,8 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     private void sendQuestionnaireGetListRequestIfNeeded() {
-        // todo закоментил на время, пока тестирования проводится на стейже
-//        if (App.getAppComponent().weakStorage().isFirstSessionAfterInstall()) {
+        WeakStorage storage = App.getAppComponent().weakStorage();
+        if (storage.isFirstSessionAfterInstall() && !storage.isQuestionnaireRequestSent()) {
         mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
                 .first()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -377,16 +378,17 @@ public class AuthFragment extends BaseAuthFragment {
                                }
                            }
                 );
-//        } else {
-//            hideProgress();
-//            showButtons();
-//        }
+        } else {
+            hideProgress();
+            showButtons();
+        }
     }
 
     private Observable<QuestionnaireResponse> getQuestionnaireGetListRequest() {
         return Observable.fromEmitter(new Action1<Emitter<QuestionnaireResponse>>() {
             @Override
             public void call(final Emitter<QuestionnaireResponse> emitter) {
+                App.getAppComponent().weakStorage().questionnaireRequestSent();
                 ApiRequest request = new QuestionnaireGetListRequest(getActivity().getApplicationContext(),
                         LocaleConfig.getServerLocale(getActivity(), App.getLocaleConfig().getApplicationLocale()));
                 request.callback(new DataApiHandler<QuestionnaireResponse>() {
@@ -453,8 +455,7 @@ public class AuthFragment extends BaseAuthFragment {
                                 showProgress();
                                 break;
                             case AuthTokenStateData.TOKEN_AUTHORIZED:
-                                hideProgress();
-                                showButtons(true);
+                                // ничего не делаем, просто ждем, что авторизация пройдет успешно
                                 break;
                             case AuthTokenStateData.TOKEN_NOT_READY:
                                 if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {

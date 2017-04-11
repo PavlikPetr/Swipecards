@@ -31,7 +31,9 @@ public abstract class AbstractBillingFragment extends BaseFragment {
      */
     public boolean isTestPurchasesEnabled() {
         //На всякий случай проверяем, что доступны тестовые платежи
-        return isTestPurchasesAvailable() && mIsTestPayments;
+        //todo achtung!!!! включил на время тестирования, не забыть отключить для прода!!!!
+//        return isTestPurchasesAvailable() && mIsTestPayments;
+        return true;
     }
 
     @SuppressWarnings("UnusedDeclaration")
