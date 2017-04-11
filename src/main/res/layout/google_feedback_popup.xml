@@ -35,6 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             app:errorEnabled="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             app:hintTextAppearance="@style/RateTextStyle"
             app:errorTextAppearance="@style/RateTextStyle">
 

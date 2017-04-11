@@ -27,10 +27,6 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
 
     var currentRating = ObservableFloat()
     val buttonEnabled = ObservableBoolean(false)
-    val layoutTransition = LayoutTransition().apply {
-        setDuration(500L)
-        setStartDelay(LayoutTransition.APPEARING, 400L)
-    }
 
     val layoutRateVisibility = ObservableInt(View.VISIBLE)
     val layoutGoogleVisibility = ObservableInt(View.GONE)
