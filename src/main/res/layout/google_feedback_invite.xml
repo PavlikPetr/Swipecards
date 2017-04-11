@@ -18,14 +18,11 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="32dp"
             android:src="@drawable/ic_google_store"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
             android:text="@string/we_are_glad_that_you_like"
@@ -47,8 +44,6 @@
             style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="28dp"
             android:onClick="@{()->viewModel.okButtonClick()}"
             android:text="@string/send_rate_feedback"/>
@@ -58,8 +53,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:onClick="@{()->viewModel.closeButtonClick()}"
             android:text="@string/thanks_for_your_rate_close"

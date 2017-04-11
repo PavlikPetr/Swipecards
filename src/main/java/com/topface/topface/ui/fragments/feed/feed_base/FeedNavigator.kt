@@ -19,8 +19,6 @@ import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
-import com.topface.topface.ui.dialogs.new_rate.FeedbackInvitePopup
-import com.topface.topface.ui.dialogs.new_rate.GoogleFeedbackPopup
 import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
@@ -32,7 +30,6 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.utils.IActivityDelegate
@@ -194,16 +191,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         return false
     }
 
-    override fun showRateAppFragment(mNavigator: FeedNavigator) = RateAppFragment(mNavigator).show((mActivityDelegate as Activity).fragmentManager, RateAppFragment.TAG)
-
-
-    override fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi) {
-        val mFeedbackInvitePopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(FeedbackInvitePopup.TAG)?.let { it as FeedbackInvitePopup } ?: FeedbackInvitePopup(mNavigator, mApi, mActivityDelegate)
-        mFeedbackInvitePopup.show(mActivityDelegate.supportFragmentManager, FeedbackInvitePopup.TAG)
-    }
-
-    override fun showGoogleFeedbackPopup(mNavigator: FeedNavigator, mApi: FeedApi, rate: Float) {
-        val mGoogleFeedbackPopup = mActivityDelegate.supportFragmentManager.findFragmentByTag(GoogleFeedbackPopup.TAG)?.let { it as GoogleFeedbackPopup } ?: GoogleFeedbackPopup(mNavigator, mApi, rate)
-        mGoogleFeedbackPopup.show((mActivityDelegate as Activity).fragmentManager, GoogleFeedbackPopup.TAG)
+    override fun showRateAppFragment() {
+        val mRateAppFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(RateAppFragment.TAG)?.let { it as RateAppFragment } ?: RateAppFragment()
+        mRateAppFragment.show((mActivityDelegate as Activity).fragmentManager, RateAppFragment.TAG)
     }
 }

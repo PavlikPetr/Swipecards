@@ -3,8 +3,10 @@ package com.topface.topface.ui.fragments.feed.feed_api
 import android.content.Context
 import android.os.Bundle
 import android.os.Looper
+import android.widget.Toast
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
@@ -13,11 +15,13 @@ import com.topface.topface.experiments.onboarding.question.questionnaire_result.
 import com.topface.topface.requests.*
 import com.topface.topface.requests.handlers.ApiHandler
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
+import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.requests.handlers.SimpleApiHandler
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.SimpleResponse
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
+import com.topface.topface.ui.settings.FeedbackMessageFragment
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.http.IRequestClient
@@ -120,14 +124,14 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     fun callQuestionnaireSearch(methodName: String, data: JSONObject): Observable<QuestionnaireResult> {
         return Observable.fromEmitter({
             val request = QuestionnaireSearchRequest(mContext, methodName, data)
-            request.callback(object: DataApiHandler<QuestionnaireResult>() {
+            request.callback(object : DataApiHandler<QuestionnaireResult>() {
                 override fun success(data: QuestionnaireResult, response: IApiResponse?) = it.onNext(data)
 
                 override fun parseResponse(response: ApiResponse): QuestionnaireResult =
-                    JsonUtils.fromJson(response.toString(), QuestionnaireResult::class.java)
+                        JsonUtils.fromJson(response.toString(), QuestionnaireResult::class.java)
 
                 override fun fail(codeError: Int, response: IApiResponse) =
-                    it.onError(Throwable(response.errorMessage))
+                        it.onError(Throwable(response.errorMessage))
 
                 override fun always(response: IApiResponse?) {
                     super.always(response)
@@ -397,6 +401,31 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             mRequestClient.registerRequest(request)
             request.exec()
         }
+    }
+
+    fun callSendFeedbackRequest(report: FeedbackMessageFragment.Report): Observable<SimpleResponse> {
+        return Observable.fromEmitter({
+            SendFeedbackRequest(App.getContext(), report).callback(object : DataApiHandler<SimpleResponse>() {
+                override fun parseResponse(response: ApiResponse?) = response?.jsonResult?.toString()?.run {
+                    JsonUtils.fromJson<SimpleResponse>(this, SimpleResponse::class.java)
+                }
+
+                override fun success(data: SimpleResponse?, response: IApiResponse?) = it.onNext(data)
+                override fun fail(codeError: Int, response: IApiResponse) {
+                    if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
+                        Utils.showToastNotification(R.string.ban_flood_detected, Toast.LENGTH_SHORT)
+                    } else {
+                        Utils.showErrorMessage()
+                    }
+                    it.onError(Exception(codeError.toString()))
+                }
+
+                override fun always(response: IApiResponse?) {
+                    super.always(response)
+                    it.onCompleted()
+                }
+            }).exec()
+        }, Emitter.BackpressureMode.LATEST)
     }
 
     fun callMutualBandGetList(limit: Int = 10, from: Int? = null, to: Int? = null): Observable<DialogContacts> {

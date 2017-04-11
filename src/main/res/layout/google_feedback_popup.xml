@@ -19,15 +19,12 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="32dp"
             android:src="@drawable/ic_leave_feedback"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="15dp"
             android:text="@string/what_we_can_improve"
             android:textColor="@color/black"
@@ -36,13 +33,10 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="22dp"
             app:errorEnabled="true"
             app:hintTextAppearance="@style/RateTextStyle"
-            app:errorTextAppearance="@style/RateTextStyle"
-            app:setError="@{viewModel.error}">
+            app:errorTextAppearance="@style/RateTextStyle">
 
             <android.support.design.widget.TextInputEditText
                 style="@style/RatePopupTextInput"
@@ -55,8 +49,6 @@
             style="@style/Widget.Topface.Button.Big.Blue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="10dp"
             android:enabled="@{viewModel.buttonEnabled}"
             android:onClick="@{()->viewModel.okButtonClick()}"
@@ -67,8 +59,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:onClick="@{()->viewModel.closeButtonClick()}"
             android:text="@string/thanks_for_your_rate_close"

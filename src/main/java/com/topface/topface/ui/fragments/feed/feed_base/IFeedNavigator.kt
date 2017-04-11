@@ -41,8 +41,5 @@ interface IFeedNavigator {
     fun showMutualPopup(mutualUser: FeedUser)
     fun showFBInvitationPopup()
     fun showQuestionnaire(): Boolean
-    fun showRateAppFragment(mNavigator: FeedNavigator)
-    fun showFeedbackInvitePopup(mNavigator: FeedNavigator, mApi: FeedApi)
-    fun showGoogleFeedbackPopup(mNavigator: FeedNavigator, mApi: FeedApi, rate: Float)
-
+    fun showRateAppFragment()
 }

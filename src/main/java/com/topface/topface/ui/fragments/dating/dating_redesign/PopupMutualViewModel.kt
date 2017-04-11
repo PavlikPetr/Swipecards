@@ -28,12 +28,6 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
         iDialogCloser.closeIt()
     }
 
-    fun closePopup() {
-        val options = App.get().options
-        if (RateAppFragment.isApplicable(options.ratePopupNewVersionNotNowTimeout, options.ratePopupNewVersionBadRateTimeout, options.ratePopupNewVersionEnabled)) {
-            navigator.showRateAppFragment(navigator)
-        }
-        iDialogCloser.closeIt()
-    }
+    fun closePopup() = iDialogCloser.closeIt()
 
 }
