@@ -70,12 +70,12 @@ class QRangeFragmentViewModel(bundle: Bundle) : RangeSeekBar.OnRangeSeekBarChang
             mData?.let {
                 it.min.fieldName.let {
                     if (it.isNotEmpty()) {
-                        put(it, minValueTitle.get())
+                        put(it, start.get())
                     }
                 }
                 it.max.fieldName.let {
                     if (it.isNotEmpty()) {
-                        put(it, maxValueTitle.get())
+                        put(it, end.get())
                     }
                 }
             }

@@ -8,10 +8,10 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Profile
+import com.topface.topface.experiments.onboarding.question.BuyProductEvent
 import com.topface.topface.experiments.onboarding.question.QuestionnaireResult
 import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -21,7 +21,7 @@ import rx.Observable
 import rx.Subscription
 import java.util.concurrent.TimeUnit
 
-class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFeedNavigator: FeedNavigator) {
+class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi) {
 
     companion object {
         const val LOADER = 0
@@ -82,7 +82,7 @@ class QuestionnaireResultViewModel(bundle: Bundle, api: FeedApi, private val mFe
         showChild.set(FINAL)
     }
 
-    fun onBuyButtonClick() = mFeedNavigator.showPurchaseProduct(productId, "Questionnaire Experiment")
+    fun onBuyButtonClick() = App.getAppComponent().eventBus().setData(BuyProductEvent(productId))
 
     fun release() = mSubscription.safeUnsubscribe()
 }
