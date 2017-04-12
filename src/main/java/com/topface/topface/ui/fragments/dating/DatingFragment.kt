@@ -40,7 +40,6 @@ import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewMod
 import com.topface.topface.utils.*
 import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.extensions.loadBackground
-import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import org.jetbrains.anko.layoutInflater
@@ -78,7 +77,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
-        DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
+        DatingAlbumViewModel(mCollapseBinding, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
             with(mCollapseBinding.albumRoot) {
                 mLoadBackgroundSubscription.safeUnsubscribe()
                 mLoadBackgroundSubscription = loadBackground(it)
@@ -113,16 +112,12 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     private val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
     }
-
-    private val mController by lazy {
-        AlbumLoadController(AlbumLoadController.FOR_PREVIEW)
-    }
     //~~~~~~~~~~~~~~~~~~~~~~~ конец ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     override fun bindModels() {
         super.bindModels()
         mAnchorBinding.setModel(mDatingButtonsViewModel)
-        mBinding.setModel(mDatingButtonsViewModel)
+        mBinding.model = mDatingButtonsViewModel
         mCollapseBinding.model = mDatingAlbumViewModel
     }
 

@@ -44,7 +44,6 @@ import kotlin.properties.Delegates
  * Created by tiberal on 11.10.16.
  */
 class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: FeedApi,
-                           private val mController: AlbumLoadController,
                            private val mUserSearchList: CachableSearchList<SearchUser>,
                            private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView,
