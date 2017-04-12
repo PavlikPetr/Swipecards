@@ -1478,6 +1478,7 @@
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
         <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
         <item name="android:textColor">@color/popup_borderless_button_text</item>
         <item name="android:textSize">@dimen/popup_button_text</item>
     </style>
@@ -1829,5 +1830,27 @@
         <item name="android:textColor">@color/bg_white</item>
         <item name="android:textSize">14sp</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="RatingBarForApp">
+        <item name="android:numStars">5</item>
+        <item name="android:rating">0</item>
+        <item name="android:stepSize">1</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:maxHeight">488dip</item>
+        <item name="android:progressDrawable">@drawable/rate_ratingbar</item>
+    </style>
+
+    <style name="RatePopupTextInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:textColor">@color/dark_primary_text</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RateTextStyle">
+        <item name="android:textColor">@color/questionnaire_counters_text_color</item>
+        <item name="android:textSize">@dimen/questionnaire_appearance_error_text_size</item>
     </style>
 </resources>

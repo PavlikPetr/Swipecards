@@ -133,9 +133,8 @@ public class FbAuthorizer extends Authorizer {
     }
 
     public static String getFbId() {
-        return App.getAppConfig().getStageChecked()
-                ? STAGE_AUTH_FACEBOOK_ID
-                : App.getAppSocialAppsIds().fbId;
+        return App.getAppConfig().getStageChecked()? STAGE_AUTH_FACEBOOK_ID :
+                App.getAppSocialAppsIds().fbId;
     }
 
     @Override
