@@ -330,8 +330,7 @@
   <string name="rate_popup_set_rate">Dar una valoración</string>
   <string name="rate_popup_later">Preguntar más tarde</string>
   <string name="rate_popup_cancel">No, gracias</string>
-  <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra
-        aplicación.</string>
+  <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra aplicación.</string>
   <string name="feedback_popup_title">Has puesto una nota baja. Cuéntanos qué es lo que no te
         gusta en la aplicación. Ayúdanos a mejorar. ¡Gracias!</string>
   <string name="settings_melody">Melodía para notificaciones</string>

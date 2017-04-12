@@ -435,8 +435,7 @@
     <string name="rate_popup_set_rate">Поставить оценку</string>
     <string name="rate_popup_later">Спросить позже</string>
     <string name="rate_popup_cancel">Нет, спасибо</string>
-    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению
-    </string>
+    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению</string>
     <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится
         в приложении. Помогите нам стать лучше. Спасибо!
     </string>
@@ -1285,4 +1284,12 @@
     <string name="num_from_num">%1$s из %2$s</string>
     <string name="onboarding_get_access">Получи доступ</string>
     <string name="searching_couple_for_you">Идет поиск пары по вашим критериями</string>
+
+    <!--ОЦенка приложения-->
+    <string name="rate">Оценить</string>
+    <string name="rate_our_app">Оцените наше приложение!</string>
+    <string name="what_we_can_improve">Напишите, пожалуйста, что нам улучшить</string>
+    <string name="we_are_glad_that_you_like">Мы рады, что вам нравится!</string>
+    <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?!</string>
+    <string name="send_rate_feedback">Оставить отзыв</string>
 </resources>
