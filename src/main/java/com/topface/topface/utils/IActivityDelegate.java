@@ -26,6 +26,8 @@ public interface IActivityDelegate {
 
     FragmentManager getSupportFragmentManager();
 
+    android.app.FragmentManager getFragmentManager();
+
     ContentResolver getContentResolver();
 
     boolean isActivityRestoredState();

@@ -14,11 +14,12 @@ import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
-import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -190,5 +191,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             return true
         }
         return false
+    }
+
+    override fun showRateAppFragment() {
+        val mRateAppFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(RateAppFragment.TAG)?.let { it as RateAppFragment } ?: RateAppFragment()
+        mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)
     }
 }
