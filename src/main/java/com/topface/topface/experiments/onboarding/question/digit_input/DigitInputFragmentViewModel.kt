@@ -62,46 +62,44 @@ class DigitInputFragmentViewModel(bundle: Bundle, private val keyboard: IKeyboar
     init {
         mTextChangeSubscription = text.filedObservable
                 .subscribe(shortSubscription {
-                    it?.let {
-                        if (it.isNotEmpty() && it.safeToInt(kotlin.Int.MIN_VALUE) == Int.MIN_VALUE) {
-                            error.set(R.string.general_wrong_field_value.getString())
-                        } else {
-                            error.set(Utils.EMPTY)
-                        }
-                        if (it.length == maxLength.get()) {
-                            isValid(it.toInt())
-                        }
+                    mData?.let { data ->
+                        if (getDigit(it) != null) {
+                            if (it.length >= data.min.value.toString().length) {
+                                if (it.safeToInt() < data.min.value)
+                                    error.set(data.min.errorMessage)
+                                else if (it.safeToInt() > data.max.value)
+                                    error.set(data.max.errorMessage)
+                                else
+                                    error.set(Utils.EMPTY)
+                            } else error.set(Utils.EMPTY)
+                        } else error.set(R.string.general_wrong_field_value.getString())
                     }
                 })
     }
 
+    private fun getDigit(value: String?) = value?.safeToInt(kotlin.Int.MIN_VALUE).run { if (this == Int.MIN_VALUE) null else this }
+
     fun onNext() =
-            with(text.get()) {
-                if (this.safeToInt(kotlin.Int.MIN_VALUE) == Int.MIN_VALUE) {
-                    error.set(R.string.general_wrong_field_value.getString())
-                } else if (isValid(this.toInt())) {
-                    App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
-                        mData?.fieldName?.let {
-                            if (it.isNotEmpty()) {
-                                put(it, this@with.toInt())
+            mData?.let { data ->
+                getDigit(text.get())?.run {
+                    if (this < data.min.value)
+                        error.set(data.min.errorMessage)
+                    else if (this > data.max.value)
+                        error.set(data.max.errorMessage)
+                    else {
+                        App.getAppComponent().eventBus().setData(UserChooseAnswer(JSONObject().apply {
+                            mData?.fieldName?.let {
+                                if (it.isNotEmpty()) {
+                                    put(it, this@run)
+                                }
                             }
-                        }
-                    }))
-                    keyboard.hideKeyboard()
-                }
+                        }))
+                        keyboard.hideKeyboard()
+                    }
+                } ?: error.set(R.string.general_wrong_field_value.getString())
             }
 
-    private fun isValid(value: Int) = if (value < mData?.min?.value ?: 0) {
-        error.set(mData?.min?.errorMessage ?: Utils.EMPTY)
-        false
-    } else if (value > mData?.max?.value ?: 0) {
-        error.set(mData?.max?.errorMessage ?: Utils.EMPTY)
-        false
-    } else true
-
-    fun release() {
-        mTextChangeSubscription.safeUnsubscribe()
-    }
+    fun release() = mTextChangeSubscription.safeUnsubscribe()
 
     override fun onSavedInstanceState(state: Bundle) {
         super.onSavedInstanceState(state)

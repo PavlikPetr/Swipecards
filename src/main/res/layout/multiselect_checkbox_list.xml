@@ -20,14 +20,13 @@
         android:paddingTop="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingLeft="16dp"
-            android:text="@{viewModel.title}"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"/>
+            style="@style/QuestionnaireTitle"
+            android:paddingEnd="@dimen/questionnaire_container_padding"
+            android:paddingLeft="@dimen/questionnaire_container_padding"
+            android:paddingRight="@dimen/questionnaire_container_padding"
+            android:paddingStart="@dimen/questionnaire_container_padding"
+
+            android:text="@{viewModel.title}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

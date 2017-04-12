@@ -38,7 +38,8 @@ public class FbAuthorizer extends Authorizer {
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
 
-    private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends", "user_photos", "user_birthday");
+    private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends",
+            "user_photos", "user_birthday", "user_location");
 
     public FbAuthorizer() {
         super();

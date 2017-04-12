@@ -1,8 +1,6 @@
-package com.topface.topface.experiments.onboarding.requests
+package com.topface.topface.experiments.onboarding.question
 
 import android.content.Context
-import com.kochava.android.tracker.Feature
-import com.topface.framework.utils.Debug
 import com.topface.topface.requests.ApiRequest
 import org.json.JSONObject
 

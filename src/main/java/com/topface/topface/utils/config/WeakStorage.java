@@ -3,8 +3,10 @@ package com.topface.topface.utils.config;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.utils.Utils;
 
 
@@ -19,6 +21,8 @@ public class WeakStorage extends AbstractConfig {
     private static final String PROFILE_DIALOG_REDESIGN_ENABLED = "profile_dialog_redesign_enabled";
     private static final String DATING_REDESIGN_ENABLED = "dating_redesign_enabled";
     private static final String IS_FIRST_SESSION = "is_first_session";
+    private static final String IS_QUESTIONNAIRE_REQUEST_SENT = "is_questionnaire_request_sent";
+    private static final String AUTH_TOKEN_STATE = "auth_token_state";
 
     public WeakStorage() {
         super(App.getContext());
@@ -37,6 +41,10 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, DATING_REDESIGN_ENABLED, Utils.EMPTY);
         // если это первая сессия после установки - true
         addField(settingsMap, IS_FIRST_SESSION, false);
+        // признак того был ли отправлен запрос на получениенастроек для опросника
+        addField(settingsMap, IS_QUESTIONNAIRE_REQUEST_SENT, false);
+        // статус токена авторизации
+        addField(settingsMap, AUTH_TOKEN_STATE, Utils.EMPTY);
     }
 
     @Override
@@ -132,5 +140,40 @@ public class WeakStorage extends AbstractConfig {
      */
     public boolean isFirstSessionAfterInstall() {
         return getBooleanField(getSettingsMap(), IS_FIRST_SESSION);
+    }
+
+    /**
+     * Метода переводит в состояние true статус отправки запроса на получение настроек для опросника
+     */
+    public void questionnaireRequestSent() {
+        setField(getSettingsMap(), IS_QUESTIONNAIRE_REQUEST_SENT, true);
+    }
+
+    /**
+     * Получить текущий статус отправки запроса для опросника
+     *
+     * @return true если запрос в этой сессии уже был отправлен
+     */
+    public boolean isQuestionnaireRequestSent() {
+        return getBooleanField(getSettingsMap(), IS_QUESTIONNAIRE_REQUEST_SENT);
+    }
+
+    /**
+     * Set current state of auth token
+     *
+     * @param data current auth token state
+     */
+    public void setAuthTokenState(AuthTokenStateData data) {
+        setField(getSettingsMap(), AUTH_TOKEN_STATE, JsonUtils.toJson(data));
+    }
+
+    /**
+     * Get current state of auth token
+     *
+     * @return current auth token state
+     */
+    public AuthTokenStateData getAuthTokenState() {
+        AuthTokenStateData state = JsonUtils.fromJson(getStringField(getSettingsMap(), AUTH_TOKEN_STATE), AuthTokenStateData.class);
+        return state == null ? new AuthTokenStateData() : state;
     }
 }

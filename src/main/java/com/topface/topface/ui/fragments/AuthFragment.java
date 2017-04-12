@@ -46,8 +46,8 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.databinding.FragmentAuthBinding;
 import com.topface.topface.experiments.fb_invitation.AuthFB;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireGetListRequest;
 import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
-import com.topface.topface.experiments.onboarding.requests.QuestionnaireGetListRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -339,26 +339,30 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     private void sendQuestionnaireGetListRequestIfNeeded() {
-        // todo закоментил на время, пока тестирования проводится на стейже
-//        if (App.getAppComponent().weakStorage().isFirstSessionAfterInstall()) {
-        mQuestionnaireGetListRequestSubscription = getQuestionnaireGetListRequest()
+//        WeakStorage storage = App.getAppComponent().weakStorage();
+//        if (storage.isFirstSessionAfterInstall() && !storage.isQuestionnaireRequestSent()) {
+        mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
                 .first()
-                .delay(1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxUtils.ShortSubscription<QuestionnaireResponse>() {
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
                                @Override
-                               public void onNext(QuestionnaireResponse object) {
+                               public void onNext(Object object) {
                                    super.onNext(object);
-                                   // словили ответ сервера раньше чем сработал таймер
-                                   AppConfig config = App.getAppConfig();
-                                   // свежие настройки записываем в конфиг и дропаем счетчик,
-                                   // чтобы показы были с первого вопроса
-                                   QuestionnaireResponse responseData = (QuestionnaireResponse) object;
-                                   config.setQuestionnaireData(responseData);
-                                   config.setCurrentQuestionPosition(0);
-                                   config.saveConfig();
-                                   if (!responseData.isEmpty() && mNavigator != null) {
-                                       mNavigator.showFBInvitationPopup();
+                                   if (object instanceof QuestionnaireResponse) {
+                                       // словили ответ сервера раньше чем сработал таймер
+                                       AppConfig config = App.getAppConfig();
+                                       // свежие настройки записываем в конфиг и дропаем счетчик,
+                                       // чтобы показы были с первого вопроса
+                                       QuestionnaireResponse responseData = (QuestionnaireResponse) object;
+                                       config.setQuestionnaireData(responseData);
+                                       config.setCurrentQuestionPosition(0);
+                                       config.saveConfig();
+                                       if (!responseData.isEmpty() && mNavigator != null) {
+                                           mNavigator.showFBInvitationPopup();
+                                       } else {
+                                           hideProgress();
+                                           showButtons();
+                                       }
                                    } else {
                                        hideProgress();
                                        showButtons();
@@ -383,6 +387,7 @@ public class AuthFragment extends BaseAuthFragment {
         return Observable.fromEmitter(new Action1<Emitter<QuestionnaireResponse>>() {
             @Override
             public void call(final Emitter<QuestionnaireResponse> emitter) {
+                App.getAppComponent().weakStorage().questionnaireRequestSent();
                 ApiRequest request = new QuestionnaireGetListRequest(getActivity().getApplicationContext(),
                         LocaleConfig.getServerLocale(getActivity(), App.getLocaleConfig().getApplicationLocale()));
                 request.callback(new DataApiHandler<QuestionnaireResponse>() {
@@ -449,8 +454,7 @@ public class AuthFragment extends BaseAuthFragment {
                                 showProgress();
                                 break;
                             case AuthTokenStateData.TOKEN_AUTHORIZED:
-                                hideProgress();
-                                showButtons(true);
+                                // ничего не делаем, просто ждем, что авторизация пройдет успешно
                                 break;
                             case AuthTokenStateData.TOKEN_NOT_READY:
                                 if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
@@ -491,25 +495,17 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void onOptionsAndProfileSuccess() {
-        // если не смогли показать опросник, значит редиректим в знакомства
-        if (!showQuestionnaire()) {
+        if (isAdded()) {
             Activity activity = getActivity();
-            if (isAdded() && activity instanceof BaseFragmentActivity) {
+            if (activity instanceof BaseFragmentActivity) {
                 ((BaseFragmentActivity) activity).close(this, true);
                 mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
-        }
-    }
-
-    private boolean showQuestionnaire() {
-        if (isAdded()) {
             if (mNavigator != null) {
-                return mNavigator.showQuestionnaire();
+                mNavigator.showQuestionnaire();
             }
         }
-        return false;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -173,15 +173,18 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
     override fun showFBInvitationPopup() =
-            (mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)
-                    ?.let { it as FBinvitationFragment } ?: FBinvitationFragment())
-                    .show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+            with(mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)
+                    ?.let { it as? FBinvitationFragment } ?: FBinvitationFragment()) {
+                if (!isAdded) {
+                    show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+                }
+            }
 
     override fun showQuestionnaire(): Boolean {
         val config = App.getAppConfig()
         val startPosition = config.currentQuestionPosition
         val data = config.questionnaireData
-        if (startPosition != Integer.MIN_VALUE && data != null && !data.isEmpty()) {
+        if (startPosition != Integer.MIN_VALUE && !data.isEmpty()) {
             mActivityDelegate.startActivityForResult(QuestionnaireActivity.getIntent(data,
                     startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE)
             return true

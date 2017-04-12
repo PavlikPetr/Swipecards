@@ -9,6 +9,7 @@ import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.data.search.UsersList;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.JsonExtensionsKt;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +57,7 @@ public class UsersListCacheManager extends PreferencesCacheManager {
      * @throws JSONException
      */
     protected void saveToCache(SharedPreferences.Editor editor, UsersList usersList) throws JSONException {
-        editor.putString(getDataCacheKey(mCacheKey), new JSONObject().put(UsersList.USERS, new JSONArray(JsonUtils.toJson(usersList))).toString());
+        editor.putString(getDataCacheKey(mCacheKey), new JSONObject().put(UsersList.USERS, JsonExtensionsKt.jsonArray(usersList)).toString());
         editor.putInt(getPositionCacheKey(mCacheKey), usersList.getSearchPosition());
     }
 
