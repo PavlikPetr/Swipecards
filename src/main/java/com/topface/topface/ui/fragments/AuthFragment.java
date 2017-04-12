@@ -89,6 +89,7 @@ import rx.functions.Action1;
 public class AuthFragment extends BaseAuthFragment {
 
     public static final String TF_BUTTONS = "tf_buttons";
+    public static final String IS_PROGRESS_VISIBLE = "is_progress_visible";
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
 
     private NavigationState mNavigationState;
@@ -330,11 +331,16 @@ public class AuthFragment extends BaseAuthFragment {
         mBinding.btnOtherServices.setVisibility(isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
         mBinding.setViewModel(new AuthFragmentViewModel(getContext()));
         initViews(root);
-        if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
-            setAllSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
-            setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true, false);
-        } else {
-            setAllSocNetBtnVisibility(true, true, false);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(TF_BUTTONS)) {
+                setAllSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
+                setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true, false);
+            } else {
+                setAllSocNetBtnVisibility(true, true, false);
+            }
+            if (savedInstanceState.getBoolean(IS_PROGRESS_VISIBLE, false)) {
+                showProgress();
+            }
         }
         return root;
     }
@@ -429,8 +435,12 @@ public class AuthFragment extends BaseAuthFragment {
                     public void onNext(Object type) {
                         super.onNext(type);
                         if (mOnAuthButtonsClick != null) {
+                            hideButtons();
+                            showProgress();
                             mOnAuthButtonsClick.onFbButtonClick();
                         } else if (mNavigator != null) {
+                            hideButtons();
+                            showProgress();
                             mNavigator.showFBInvitationPopup();
                         } else {
                             hideProgress();
@@ -458,6 +468,8 @@ public class AuthFragment extends BaseAuthFragment {
                                 break;
                             case AuthTokenStateData.TOKEN_NOT_READY:
                                 if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
+                                    hideButtons();
+                                    showProgress();
                                     mNavigator.showFBInvitationPopup();
                                 } else {
                                     hideProgress();
@@ -491,6 +503,7 @@ public class AuthFragment extends BaseAuthFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(TF_BUTTONS, mIsTfBtnVisible);
+        outState.putBoolean(IS_PROGRESS_VISIBLE, mBinding.prsAuthLoading.getVisibility() == View.VISIBLE);
     }
 
     @Override
