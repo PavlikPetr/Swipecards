@@ -49,10 +49,6 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mActivityDelegate.supportFragmentManager.findFragmentByTag(DatingEmptyFragment.TAG)?.let { it as DatingEmptyFragment } ?: DatingEmptyFragment.newInstance()
     }
 
-    private val mFBInvitation by lazy {
-        mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)?.let { it as FBinvitationFragment } ?: FBinvitationFragment()
-    }
-
     override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
             .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
 
@@ -176,13 +172,19 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
-    override fun showFBInvitationPopup() = mFBInvitation.show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+    override fun showFBInvitationPopup() =
+            with(mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)
+                    ?.let { it as? FBinvitationFragment } ?: FBinvitationFragment()) {
+                if (!isAdded) {
+                    show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+                }
+            }
 
-    override fun showQuestionnaire():Boolean {
+    override fun showQuestionnaire(): Boolean {
         val config = App.getAppConfig()
         val startPosition = config.currentQuestionPosition
         val data = config.questionnaireData
-        if (startPosition != Integer.MIN_VALUE && data != null && !data.isEmpty()) {
+        if (startPosition != Integer.MIN_VALUE && !data.isEmpty()) {
             mActivityDelegate.startActivityForResult(QuestionnaireActivity.getIntent(data,
                     startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE)
             return true

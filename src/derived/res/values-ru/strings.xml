@@ -215,6 +215,7 @@
     <string name="general_settings">Настройки</string>
     <string name="general_vk_profile">ВК</string>
     <string name="general_ok_profile">ОК</string>
+    <string name="general_wrong_field_value">Неверный формат</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">ВКонтакте</string>
@@ -1272,4 +1273,16 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+
+    <string name="fb_invitation_find_what_you_are_looking_for">Найдёте то, что ищете</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Среди более 100 миллионов людей</string>
+    <string name="fb_invitation_intelligent_selection_filter">Интеллектуальный механизм подбора</string>
+    <string name="fb_invitation_personalized_approach">Персонализированный подход</string>
+    <string name="fb_invitation_button_text">Войти через Facebook</string>
+
+    <!-- Onboarding experiment -->
+    <string name="onboarding_button_next">Далее</string>
+    <string name="num_from_num">%1$s из %2$s</string>
+    <string name="onboarding_get_access">Получи доступ</string>
+    <string name="searching_couple_for_you">Идет поиск пары по вашим критериями</string>
 </resources>

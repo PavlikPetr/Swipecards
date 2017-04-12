@@ -184,6 +184,7 @@
     <string name="general_settings">Ajustes</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Valor incorrecto</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
@@ -739,9 +740,8 @@
     <string name="feedback_subject_ban">Queja sobre restricción de acceso</string>
     <string name="settings_led">Notificación LED</string>
     <string name="open_market_error">No se puede abrir la página de la aplicación</string>
-    <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por
-        favor
-    </string>
+    <string name="billing_item_already_owned">Tu anterior compra está procesándose, espera por
+        favor</string>
     <string name="dialog">Correspondencia</string>
     <string name="reply">Responder</string>
     <string name="unit_weight">%d kg</string>
@@ -1040,6 +1040,9 @@
     <string name="write_her_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
     <string name="people_nearby_popover_text">¡Aparece en el feed de fotos!\nTe verán miles de personas</string>
     <string name="mutual_popup_you_get_mutual">¡Os gustáis entre vosotros!</string>
+    <string name="start_dialog">Empezar Conversación</string>
+    <string name="continue_to_meet">Seguir Ligando</string>
+    <string name="basic_information">Datos básicos</string>
     <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
     <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
     <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>
@@ -1048,4 +1051,13 @@
     <string name="buy_likes_become_popular_male">Hazte popular</string>
     <string name="you_are_not_shown">Casi no apareces en \"Citas\"</string>
     <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Descubre a quien estás buscando</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Entre más de 100 millones de personas</string>
+    <string name="fb_invitation_intelligent_selection_filter">Filtro de selección inteligente</string>
+    <string name="fb_invitation_personalized_approach">Enfoque personalizado</string>
+    <string name="fb_invitation_button_text">Inicia sesión con Facebook</string>
+    <string name="onboarding_button_next">Siguiente</string>
+    <string name="num_from_num">%1$s de %2$s</string>
+    <string name="onboarding_get_access">Consigue acceso</string>
+    <string name="searching_couple_for_you">Búsqueda de pareja basada en tus criterios</string>
 </resources>

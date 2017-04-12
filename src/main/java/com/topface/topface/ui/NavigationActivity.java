@@ -228,7 +228,9 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
-        new FeedNavigator(this).showQuestionnaire();
+        if (!AuthToken.getInstance().isEmpty()) {
+            new FeedNavigator(this).showQuestionnaire();
+        }
     }
 
     @Override
@@ -274,7 +276,8 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     private void startPopupRush() {
         Debug.log("PopupMANAGER start rusgh");
-        if (hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
+        if (App.getAppConfig().getQuestionnaireData().isEmpty()
+                && hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             initPopups();
@@ -544,6 +547,23 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
                 App.getAppComponent().navigationState()
                         .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING),
                                 WrappedNavigationData.SELECT_EXTERNALY));
+                // если попали сюда, значит юзер произвел покупку, поэтому лучше запускать очередь
+                // попапов с обновленным профилем
+                App.sendProfileRequest(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        startPopupRush();
+                    }
+                });
             } else {
                 finish();
             }
