@@ -347,8 +347,7 @@
     <string name="rate_popup_set_rate">Dai un voto</string>
     <string name="rate_popup_later">Chiedimelo più tardi</string>
     <string name="rate_popup_cancel">No, grazie</string>
-    <string name="rate_popup_error">Devi indicare quante stelle dai alla nostra applicazione
-    </string>
+    <string name="rate_popup_error">Devi indicare quante stelle dai alla nostra applicazione</string>
     <string name="feedback_popup_title">Hai dato un voto basso. Dicci cosa non ti piace di questa
         applicazione. Aiutaci a migliorare. Grazie!
     </string>

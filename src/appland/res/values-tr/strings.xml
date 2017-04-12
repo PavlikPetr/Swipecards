@@ -176,6 +176,7 @@
     <string name="general_settings">Ayarlar</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">Tamam</string>
+    <string name="general_wrong_field_value">Yanlış değer</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tekrar deneyin</string>
@@ -956,6 +957,9 @@
     <string name="write_her_without_symphaty">Ortak Beğeni olmadan ona yaz</string>
     <string name="people_nearby_popover_text">Fotoğraf akışında özellikli ol!\nBinlerce insan seni görecek</string>
     <string name="mutual_popup_you_get_mutual">Birbirinizi beğeniyorsunuz!</string>
+    <string name="start_dialog">Sohbete başla</string>
+    <string name="continue_to_meet">Arkadaşlık kurmaya devam et</string>
+    <string name="basic_information">Bilgiler</string>
     <string name="photo_feed_add_photo">Fotoğraf akışında özellikli ol!\nBinlerce insan seni görecek</string>
     <string name="buy_likes_get_more_likes">Daha çok Beğeni alın!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Sizin gibi kızları arayan erkeklere ilk gösterilen olun!</string>
@@ -964,4 +968,13 @@
     <string name="buy_likes_become_popular_male">Popüler olun</string>
     <string name="you_are_not_shown">“Tanışma”da neredeyse gösterilmiyorsun</string>
     <string name="you_are_not_shown_answer">Gelen Beğenilerin bazılarına cevap ver ve daha sık gösterilirsin.</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Aradığın kişinin kim olduğunu öğren</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">100 Milyon kullanıcı arasında</string>
+    <string name="fb_invitation_intelligent_selection_filter">Akıllı seçim fonksiyonu aktif</string>
+    <string name="fb_invitation_personalized_approach">Özelleştirilmiş yaklaşım</string>
+    <string name="fb_invitation_button_text">Facebook ile Giriş Yap</string>
+    <string name="onboarding_button_next">İleri</string>
+    <string name="num_from_num">%2$s\'dan %1$s</string>
+    <string name="onboarding_get_access">Erişim sağla</string>
+    <string name="searching_couple_for_you">Kriterlerinize göre eş araması</string>
 </resources>

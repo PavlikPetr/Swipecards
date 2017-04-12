@@ -69,6 +69,7 @@ public class FbAuthorizer extends Authorizer {
                             accessToken.getToken(),
                             accessToken.getExpires().toString()
                     );
+                    sendTokenIntent(AuthTokenStateData.TOKEN_READY);
                     return;
                 }
                 sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
@@ -133,7 +134,7 @@ public class FbAuthorizer extends Authorizer {
     }
 
     public static String getFbId() {
-        return App.getAppConfig().getStageChecked()? STAGE_AUTH_FACEBOOK_ID :
+        return App.getAppConfig().getStageChecked() ? STAGE_AUTH_FACEBOOK_ID :
                 App.getAppSocialAppsIds().fbId;
     }
 

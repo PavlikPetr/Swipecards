@@ -337,8 +337,7 @@
     <string name="rate_popup_set_rate">Note geben</string>
     <string name="rate_popup_later">Später fragen</string>
     <string name="rate_popup_cancel">Nein, danke</string>
-    <string name="rate_popup_error">Sie müssen angeben, wie viele Sterne Sie unserer App geben
-    </string>
+    <string name="rate_popup_error">Sie müssen angeben, wie viele Sterne Sie unserer App geben</string>
     <string name="feedback_popup_title">Sie gaben eine niedrige Note. Erzählen Sie bitte, was Ihnen
         in unserer App nicht gefällt. Helfen Sie uns besser werden. Danke!
     </string>
