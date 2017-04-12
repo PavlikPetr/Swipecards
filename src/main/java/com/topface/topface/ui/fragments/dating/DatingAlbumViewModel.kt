@@ -8,6 +8,12 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v4.view.ViewPager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.topface.framework.utils.Debug
+import com.topface.topface.App
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
@@ -17,15 +23,22 @@ import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.views.ImageSwitcher
+import com.topface.topface.ui.views.image_switcher.ImageClick
+import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
+import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.addData
+import com.topface.topface.utils.extensions.clear
 import com.topface.topface.utils.extensions.isNotEmpty
+import com.topface.topface.utils.extensions.loadLinkToSameCache
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscription
 import java.util.*
+import kotlin.properties.Delegates
 
 
 /**
@@ -42,10 +55,24 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
     val albumData = ObservableField<Photos>()
+    val isNeedPreloadOnStart = ObservableBoolean(false)
     val isOnline = ObservableBoolean()
     val isPhotosCounterVisible = ObservableBoolean(false)
     val isNeedAnimateLoader = ObservableBoolean(false)
     val currentItem = ObservableInt(0)
+
+    private var mPreloadTarget: Target<GlideDrawable>? = null
+    private var mOnImageClickSubscription: Subscription? = null
+    private var mLoadLinksSubscription: Subscription? = null
+
+    private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
+        updatePhotosCounter(new)
+//        loadBluredBackground(new)
+    }
+
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
 
     var currentUser: SearchUser? = null
         set(value) {
@@ -57,6 +84,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
             updatePhotosCounter(0)
             nameAgeOnline.set(value?.nameAndAge ?: Utils.EMPTY)
             isOnline.set(value?.online ?: false)
+            preloadPhoto()
         }
     private var mLoadedCount = 0
     private var mCanSendAlbumReq = true
@@ -78,11 +106,40 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         const val NEED_MORE = "need_more"
     }
 
-    fun onPhotoClick() = with(currentUser) {
-        this?.photos?.let {
-            if (it.isNotEmpty()) {
-                mNavigator.showAlbum(binding.datingAlbum.selectedPosition, id, photosCount, it)
-            }
+    init {
+        subscribeIfNeeded()
+    }
+
+    private fun preloadPhoto() {
+        mUserSearchList.getOrNull(mUserSearchList.searchPosition + 1)?.photo?.defaultLink?.let {
+            mPreloadTarget.clear()
+            mPreloadTarget = Glide.with(binding.root.context)
+                    .fromString()
+                    .fitCenter()
+                    .loadLinkToSameCache(it)
+                    .listener(object : RequestListener<String, GlideDrawable> {
+                        override fun onResourceReady(resource: GlideDrawable?, model: String?,
+                                                     target: Target<GlideDrawable>?, isFromMemoryCache: Boolean,
+                                                     isFirstResource: Boolean): Boolean {
+                            isNeedPreloadOnStart.apply {
+                                set(true)
+                                notifyChange()
+                            }
+                            Debug.log("${PhotoAlbumAdapter.TAG} =======================onResourceReady=DatingPreload==========\nlink:$model\nisFirst:$isFirstResource\nisFromCache:$isFromMemoryCache\n===============================================")
+                            return false
+                        }
+
+                        override fun onException(e: Exception?, model: String?, target: Target<GlideDrawable>?,
+                                                 isFirstResource: Boolean): Boolean {
+                            isNeedPreloadOnStart.apply {
+                                set(true)
+                                notifyChange()
+                            }
+                            Debug.log("${PhotoAlbumAdapter.TAG} =======================onException=DatingPreload==========\n$e\nlink:$model\nisFirst:$isFirstResource\n===============================================")
+                            return false
+                        }
+                    })
+                    .preload()
         }
     }
 
@@ -105,32 +162,46 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         }
     }
 
-    private fun sendAlbumRequest(data: Photos) {
-        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
-            return
+    override fun onResume() {
+        super.onResume()
+        subscribeIfNeeded()
+    }
+
+    private fun subscribeIfNeeded() {
+        if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
+            mOnImageClickSubscription = mEventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {
+                with(currentUser) {
+                    this?.photos?.let {
+                        if (it.isNotEmpty()) {
+                            mNavigator.showAlbum(mCurrentPosition, id, photosCount, it)
+                        }
+                    }
+                }
+            })
         }
+        if (mLoadLinksSubscription?.isUnsubscribed ?: true) {
+            mLoadLinksSubscription = mEventBus.getObservable(PreloadPhoto::class.java)
+                    .distinctUntilChanged { t1, t2 -> t1.position == t2.position }
+                    .subscribe(shortSubscription {
+                        if (mCanSendAlbumReq) {
+                            mCanSendAlbumReq = false
+                            sendAlbumRequest(it.position)
+                        }
+
+                    })
+        }
+    }
+
+    private fun sendAlbumRequest(position: Int) {
         mUserSearchList.currentUser?.let {
-            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
+            mAlbumSubscription = mApi.callAlbumRequest(it, position).subscribe(object : Observer<AlbumPhotos> {
                 override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
+                        albumData.addData(newPhotos)
+//                        loadBluredBackground(mCurrentPosition)
                         mNeedMore = newPhotos.more
-                        var i = 0
-                        for (photo in newPhotos) {
-                            if (mLoadedCount + i < data.size) {
-                                data[mLoadedCount + i] = photo
-                                i++
-                            }
-                        }
                         mLoadedCount += newPhotos.size
-                        binding.datingAlbum?.let {
-                            if (it.selectedPosition > mLoadedCount + mController.itemsOffsetByConnectionType) {
-                                sendAlbumRequest(data)
-                            }
-                            if (it.adapter != null) {
-                                it.adapter.notifyDataSetChanged()
-                            }
-                        }
                     }
                     mCanSendAlbumReq = true
                 }
@@ -142,6 +213,30 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         }
     }
 
+//    private fun sendAlbumRequest(data: Photos) {
+//        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
+//            return
+//        }
+//        mUserSearchList.currentUser?.let {
+//            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
+//                override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
+//                override fun onNext(newPhotos: AlbumPhotos?) {
+//                    if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
+//                        albumData.addData(newPhotos)
+////                        loadBluredBackground(mCurrentPosition)
+//                        mNeedMore = newPhotos.more
+//                        mLoadedCount += newPhotos.size
+//                    }
+//                    mCanSendAlbumReq = true
+//                }
+//
+//                override fun onError(e: Throwable?) {
+//                    mCanSendAlbumReq = true
+//                }
+//            })
+//        }
+//    }
+
     override fun onSavedInstanceState(state: Bundle) = with(state) {
         putString(PHOTOS_COUNTER, photosCounter.get())
         putString(NAME_AGE_ONLINE, nameAgeOnline.get())
@@ -149,7 +244,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         putBoolean(ONLINE, isOnline.get())
         putBoolean(PHOTOS_COUNTER_VISIBLE, isPhotosCounterVisible.get())
         putBoolean(NEED_ANIMATE_LOADER, isNeedAnimateLoader.get())
-        putInt(CURRENT_ITEM, binding.datingAlbum.selectedPosition)
+        putInt(CURRENT_ITEM, mCurrentPosition)
         putParcelable(CURRENT_USER, currentUser)
         putInt(LOADED_COUNT, mLoadedCount)
         putBoolean(CAN_SEND_ALBUM_REQUEST, mCanSendAlbumReq)
@@ -163,30 +258,21 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         isOnline.set(getBoolean(ONLINE, false))
         isPhotosCounterVisible.set(getBoolean(PHOTOS_COUNTER_VISIBLE, false))
         isNeedAnimateLoader.set(getBoolean(NEED_ANIMATE_LOADER, false))
-        currentItem.set(getInt(CURRENT_ITEM, 0))
         currentUser = getParcelable(CURRENT_USER)
         mLoadedCount = getInt(LOADED_COUNT, 0)
         mCanSendAlbumReq = getBoolean(CAN_SEND_ALBUM_REQUEST, false)
         mNeedMore = getBoolean(NEED_MORE, false)
+        setCurrentUser(getInt(CURRENT_ITEM))
     }
 
     override fun release() {
         super.release()
-        mAlbumSubscription.safeUnsubscribe()
+        arrayOf(mAlbumSubscription, mOnImageClickSubscription, mLoadLinksSubscription).safeUnsubscribe()
+        mPreloadTarget.clear()
     }
 
     override fun onPageSelected(position: Int) {
-        updatePhotosCounter(position)
-        binding.datingAlbum?.let {
-            if (position + mController.itemsOffsetByConnectionType == mLoadedCount - 1) {
-                (it.adapter as ImageSwitcher.ImageSwitcherAdapter).data?.let {
-                    if (mNeedMore && mCanSendAlbumReq && !it.isEmpty()) {
-                        mCanSendAlbumReq = false
-                        sendAlbumRequest(it)
-                    }
-                }
-            }
-        }
+        mCurrentPosition = position
     }
 
     override fun onPageScrollStateChanged(state: Int) {
@@ -207,5 +293,11 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                 photos?.add(Photo.createFakePhoto())
             }
         }
+    }
+
+    private fun setCurrentUser(position: Int) {
+        currentItem.set(position)
+        currentItem.notifyChange()
+        mCurrentPosition = position
     }
 }
