@@ -24,6 +24,7 @@ import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.settings.FeedbackMessageFragment
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
+import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.http.IRequestClient
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import org.json.JSONObject
@@ -413,7 +414,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                 override fun success(data: SimpleResponse?, response: IApiResponse?) = it.onNext(data)
                 override fun fail(codeError: Int, response: IApiResponse) {
                     if (response.isCodeEqual(ErrorCodes.TOO_MANY_MESSAGES)) {
-                        Utils.showToastNotification(R.string.ban_flood_detected, Toast.LENGTH_SHORT)
+                        R.string.ban_flood_detected.showShortToast()
                     } else {
                         Utils.showErrorMessage()
                     }

@@ -3,10 +3,9 @@ package com.topface.topface.ui.dialogs.new_rate
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.utils.IActivityDelegate
-import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 
-class GoogleFeedbackInviteViewModel(private val mDialogCloser: IDialogCloser, private val mActivityDelegate: IActivityDelegate) : ILifeCycle {
+class GoogleFeedbackInviteViewModel(private val mDialogCloser: IDialogCloser, private val mActivityDelegate: IActivityDelegate) {
 
     companion object {
         const val GPLAY_ACTIVITY = 9999
