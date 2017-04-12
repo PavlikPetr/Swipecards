@@ -19,6 +19,12 @@ import java.util.*
 data class UserChooseAnswer(var json: JSONObject = JSONObject())
 
 /**
+ * Пользователь нажал на кнопку получения доступа
+ * @param productId - skuId продукта
+ */
+data class BuyProductEvent(var productId: String)
+
+/**
  * Моделька ответа на запрос настроек для опросника
  *
  * @param questionnaireMethodName - название метода в котором клиент отправит ответы пользователя

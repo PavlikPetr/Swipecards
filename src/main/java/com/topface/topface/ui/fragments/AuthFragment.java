@@ -340,48 +340,48 @@ public class AuthFragment extends BaseAuthFragment {
     }
 
     private void sendQuestionnaireGetListRequestIfNeeded() {
-        WeakStorage storage = App.getAppComponent().weakStorage();
-        if (storage.isFirstSessionAfterInstall() && !storage.isQuestionnaireRequestSent()) {
-        mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
-                .first()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new RxUtils.ShortSubscription<Object>() {
-                               @Override
-                               public void onNext(Object object) {
-                                   super.onNext(object);
-                                   if (object instanceof QuestionnaireResponse) {
-                                       // словили ответ сервера раньше чем сработал таймер
-                                       AppConfig config = App.getAppConfig();
-                                       // свежие настройки записываем в конфиг и дропаем счетчик,
-                                       // чтобы показы были с первого вопроса
-                                       QuestionnaireResponse responseData = (QuestionnaireResponse) object;
-                                       config.setQuestionnaireData(responseData);
-                                       config.setCurrentQuestionPosition(0);
-                                       config.saveConfig();
-                                       if (!responseData.isEmpty() && mNavigator != null) {
-                                           mNavigator.showFBInvitationPopup();
+//        WeakStorage storage = App.getAppComponent().weakStorage();
+//        if (storage.isFirstSessionAfterInstall() && !storage.isQuestionnaireRequestSent()) {
+            mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
+                    .first()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxUtils.ShortSubscription<Object>() {
+                                   @Override
+                                   public void onNext(Object object) {
+                                       super.onNext(object);
+                                       if (object instanceof QuestionnaireResponse) {
+                                           // словили ответ сервера раньше чем сработал таймер
+                                           AppConfig config = App.getAppConfig();
+                                           // свежие настройки записываем в конфиг и дропаем счетчик,
+                                           // чтобы показы были с первого вопроса
+                                           QuestionnaireResponse responseData = (QuestionnaireResponse) object;
+                                           config.setQuestionnaireData(responseData);
+                                           config.setCurrentQuestionPosition(0);
+                                           config.saveConfig();
+                                           if (!responseData.isEmpty() && mNavigator != null) {
+                                               mNavigator.showFBInvitationPopup();
+                                           } else {
+                                               hideProgress();
+                                               showButtons();
+                                           }
                                        } else {
                                            hideProgress();
                                            showButtons();
                                        }
-                                   } else {
+                                   }
+
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       super.onError(e);
                                        hideProgress();
                                        showButtons();
                                    }
                                }
-
-                               @Override
-                               public void onError(Throwable e) {
-                                   super.onError(e);
-                                   hideProgress();
-                                   showButtons();
-                               }
-                           }
-                );
-        } else {
-            hideProgress();
-            showButtons();
-        }
+                    );
+//        } else {
+//            hideProgress();
+//            showButtons();
+//        }
     }
 
     private Observable<QuestionnaireResponse> getQuestionnaireGetListRequest() {
@@ -496,25 +496,17 @@ public class AuthFragment extends BaseAuthFragment {
 
     @Override
     protected void onOptionsAndProfileSuccess() {
-        // если не смогли показать опросник, значит редиректим в знакомства
-        if (!showQuestionnaire()) {
+        if (isAdded()) {
             Activity activity = getActivity();
-            if (isAdded() && activity instanceof BaseFragmentActivity) {
+            if (activity instanceof BaseFragmentActivity) {
                 ((BaseFragmentActivity) activity).close(this, true);
                 mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
-        }
-    }
-
-    private boolean showQuestionnaire() {
-        if (isAdded()) {
             if (mNavigator != null) {
-                return mNavigator.showQuestionnaire();
+                mNavigator.showQuestionnaire();
             }
         }
-        return false;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

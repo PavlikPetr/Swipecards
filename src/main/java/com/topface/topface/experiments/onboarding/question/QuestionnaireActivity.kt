@@ -15,8 +15,10 @@ import com.topface.topface.experiments.onboarding.question.questionnaire_result.
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
 import com.topface.topface.utils.extensions.showShortToast
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.json.JSONException
@@ -47,6 +49,10 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         App.getAppComponent().eventBus()
     }
 
+    private val mFeedNavigator by lazy {
+        FeedNavigator(this)
+    }
+
     private var mResponse: QuestionnaireResponse? = null
 
     private val mQuestionNavigator by lazy {
@@ -62,6 +68,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     }
 
     private var mQuestionaireSubscription: Subscription? = null
+    private var mPurchaseSubscription: Subscription? = null
     private var mRequestData = mAppConfig.questionnaireAnswers
     private var mQuestionStartPosition: Int? = null
     private val mBackPressedOnce = AtomicBoolean(false)
@@ -78,6 +85,20 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
                             json.keys().forEach {
                                 put(it, json.get(it))
                             }
+                        }
+                    }
+                })
+        mPurchaseSubscription = mEventBus
+                .getObservable(BuyProductEvent::class.java)
+                .applySchedulers()
+                .subscribe(shortSubscription {
+                    it?.productId?.let {
+                        if (it.isEmpty()) {
+                            // если skuId пустой, значит сервер не хочет чтобы юзер проводил покупку,
+                            // а сразу шел знакомиться
+                            finishSuccessfully()
+                        } else {
+                            mFeedNavigator.showPurchaseProduct(it, "Questionnaire Experiment")
                         }
                     }
                 })
