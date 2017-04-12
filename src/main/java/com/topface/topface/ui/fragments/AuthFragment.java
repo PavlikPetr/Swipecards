@@ -69,7 +69,6 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -342,42 +341,42 @@ public class AuthFragment extends BaseAuthFragment {
     private void sendQuestionnaireGetListRequestIfNeeded() {
 //        WeakStorage storage = App.getAppComponent().weakStorage();
 //        if (storage.isFirstSessionAfterInstall() && !storage.isQuestionnaireRequestSent()) {
-            mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
-                    .first()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new RxUtils.ShortSubscription<Object>() {
-                                   @Override
-                                   public void onNext(Object object) {
-                                       super.onNext(object);
-                                       if (object instanceof QuestionnaireResponse) {
-                                           // словили ответ сервера раньше чем сработал таймер
-                                           AppConfig config = App.getAppConfig();
-                                           // свежие настройки записываем в конфиг и дропаем счетчик,
-                                           // чтобы показы были с первого вопроса
-                                           QuestionnaireResponse responseData = (QuestionnaireResponse) object;
-                                           config.setQuestionnaireData(responseData);
-                                           config.setCurrentQuestionPosition(0);
-                                           config.saveConfig();
-                                           if (!responseData.isEmpty() && mNavigator != null) {
-                                               mNavigator.showFBInvitationPopup();
-                                           } else {
-                                               hideProgress();
-                                               showButtons();
-                                           }
+        mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
+                .first()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
+                               @Override
+                               public void onNext(Object object) {
+                                   super.onNext(object);
+                                   if (object instanceof QuestionnaireResponse) {
+                                       // словили ответ сервера раньше чем сработал таймер
+                                       AppConfig config = App.getAppConfig();
+                                       // свежие настройки записываем в конфиг и дропаем счетчик,
+                                       // чтобы показы были с первого вопроса
+                                       QuestionnaireResponse responseData = (QuestionnaireResponse) object;
+                                       config.setQuestionnaireData(responseData);
+                                       config.setCurrentQuestionPosition(0);
+                                       config.saveConfig();
+                                       if (!responseData.isEmpty() && mNavigator != null) {
+                                           mNavigator.showFBInvitationPopup();
                                        } else {
                                            hideProgress();
                                            showButtons();
                                        }
-                                   }
-
-                                   @Override
-                                   public void onError(Throwable e) {
-                                       super.onError(e);
+                                   } else {
                                        hideProgress();
                                        showButtons();
                                    }
                                }
-                    );
+
+                               @Override
+                               public void onError(Throwable e) {
+                                   super.onError(e);
+                                   hideProgress();
+                                   showButtons();
+                               }
+                           }
+                );
 //        } else {
 //            hideProgress();
 //            showButtons();
