@@ -294,12 +294,14 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     private fun showProgress() {
+        mDatingButtonsEvents.onShowProgress()
         isDatingProgressBarVisible.set(View.VISIBLE)
         isDatingButtonsVisible.set(View.INVISIBLE)
         mLockDatingButtonsVisibility = true
     }
 
     private fun hideProgress() {
+        mDatingButtonsEvents.onHideProgress()
         mLockDatingButtonsVisibility = false
         isDatingProgressBarVisible.set(View.GONE)
         isDatingButtonsVisible.set(View.VISIBLE)

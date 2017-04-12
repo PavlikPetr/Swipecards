@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.data.AlbumPhotos
 import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
@@ -27,10 +28,7 @@ import com.topface.topface.ui.views.image_switcher.ImageClick
 import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
 import com.topface.topface.ui.views.image_switcher.PreloadPhoto
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.addData
-import com.topface.topface.utils.extensions.clear
-import com.topface.topface.utils.extensions.isNotEmpty
-import com.topface.topface.utils.extensions.loadLinkToSameCache
+import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -49,7 +47,8 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                            private val mController: AlbumLoadController,
                            private val mUserSearchList: CachableSearchList<SearchUser>,
                            private val mNavigator: IFeedNavigator,
-                           private val mAlbumActionsListener: IDatingAlbumView) :
+                           private val mAlbumActionsListener: IDatingAlbumView,
+                           private val mLoadBackground: (link: String) -> Unit) :
         BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
 
     val photosCounter = ObservableField<String>()
@@ -60,6 +59,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     val isPhotosCounterVisible = ObservableBoolean(false)
     val isNeedAnimateLoader = ObservableBoolean(false)
     val currentItem = ObservableInt(0)
+    val albumDefaultBackground = ObservableField(R.drawable.bg_blur.getDrawable())
 
     private var mPreloadTarget: Target<GlideDrawable>? = null
     private var mOnImageClickSubscription: Subscription? = null
@@ -67,7 +67,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
 
     private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
         updatePhotosCounter(new)
-//        loadBluredBackground(new)
+        loadBluredBackground(new)
     }
 
     private val mEventBus by lazy {
@@ -80,10 +80,11 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
             value?.let {
                 mAlbumActionsListener.onUserShow(it)
             }
-            currentItem.set(0)
             updatePhotosCounter(0)
             nameAgeOnline.set(value?.nameAndAge ?: Utils.EMPTY)
             isOnline.set(value?.online ?: false)
+            albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
+            setCurrentUser(0)
             preloadPhoto()
         }
     private var mLoadedCount = 0
@@ -146,7 +147,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && data != null) {
-            currentItem.set(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
+            setCurrentUser(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
         }
     }
 
@@ -199,7 +200,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
                 override fun onNext(newPhotos: AlbumPhotos?) {
                     if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
                         albumData.addData(newPhotos)
-//                        loadBluredBackground(mCurrentPosition)
+                        loadBluredBackground(mCurrentPosition)
                         mNeedMore = newPhotos.more
                         mLoadedCount += newPhotos.size
                     }
@@ -212,30 +213,6 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
             })
         }
     }
-
-//    private fun sendAlbumRequest(data: Photos) {
-//        if (mLoadedCount - 1 >= data.size || data[mLoadedCount - 1] == null) {
-//            return
-//        }
-//        mUserSearchList.currentUser?.let {
-//            mAlbumSubscription = mApi.callAlbumRequest(it, data[mLoadedCount - 1].getPosition() + 1).subscribe(object : Observer<AlbumPhotos> {
-//                override fun onCompleted() = mAlbumSubscription.safeUnsubscribe()
-//                override fun onNext(newPhotos: AlbumPhotos?) {
-//                    if (it.id == mUserSearchList.currentUser.id && newPhotos != null) {
-//                        albumData.addData(newPhotos)
-////                        loadBluredBackground(mCurrentPosition)
-//                        mNeedMore = newPhotos.more
-//                        mLoadedCount += newPhotos.size
-//                    }
-//                    mCanSendAlbumReq = true
-//                }
-//
-//                override fun onError(e: Throwable?) {
-//                    mCanSendAlbumReq = true
-//                }
-//            })
-//        }
-//    }
 
     override fun onSavedInstanceState(state: Bundle) = with(state) {
         putString(PHOTOS_COUNTER, photosCounter.get())
@@ -275,10 +252,15 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         mCurrentPosition = position
     }
 
+
     override fun onPageScrollStateChanged(state: Int) {
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        // если true, значит viewPager ожил после переворота экрана и можно засетить текущую позицию
+        if (position == 0 && positionOffset == 0f && positionOffsetPixels == 0) {
+            currentItem.notifyChange()
+        }
     }
 
     fun setUser(user: SearchUser?) = user?.let {
@@ -300,4 +282,13 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         currentItem.notifyChange()
         mCurrentPosition = position
     }
+
+    fun onShowProgress() {
+        albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
+    }
+
+    private fun loadBluredBackground(position: Int) =
+            albumData.get()?.getOrNull(position)?.getSuitableLink(Photo.SIZE_128)?.let {
+                mLoadBackground(it)
+            }
 }

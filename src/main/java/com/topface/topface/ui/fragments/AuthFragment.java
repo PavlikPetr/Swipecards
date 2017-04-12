@@ -465,11 +465,11 @@ public class AuthFragment extends BaseAuthFragment {
                                 }
                                 break;
                             case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
-                                showProgress();
+//                                showProgress();
                                 if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
                                     mNavigator.showFBInvitationPopup();
                                 } else {
-                                    sendQuestionnaireGetListRequestIfNeeded();
+//                                    sendQuestionnaireGetListRequestIfNeeded();
                                 }
                                 break;
                         }

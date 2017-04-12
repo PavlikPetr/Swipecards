@@ -10,9 +10,11 @@
     </data>
 
     <FrameLayout
+        android:id="@+id/albumRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dating_fragment_background_color">
+        android:background="@color/dating_fragment_background_color"
+        app:backgroundDrawable="@{model.albumDefaultBackground}">
 
         <com.topface.topface.ui.views.image_switcher.ImageLoader
             android:id="@+id/dating_album"
@@ -21,7 +23,7 @@
             app:currentItemImmediately="@{model.currentItem}"
             app:data="@{model.albumData}"
             app:necessityPreloadOnStart="@{model.isNeedPreloadOnStart}"
-            app:onPageChangeListener="@{model}" />
+            app:onPageChangeListener="@{model}"/>
 
         <LinearLayout
             android:layout_width="match_parent"
