@@ -119,6 +119,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     private var mSkipSubscription: Subscription? = null
     private var mLikeSubscription: Subscription? = null
     private var mProfileSubscription: Subscription? = null
+    private var mDatingFilterSubscription: Subscription? = null
     private var mUpdateSubscription: Subscription? = null
     private var mFilterRequestSubscription: Subscription? = null
     private var mLoadBackgroundSubscription: Subscription? = null
@@ -258,6 +259,16 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                         }
                     }
                 })
+        mDatingFilterSubscription = mAppState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 ->
+                    t1.dating == t2.dating
+                }
+                .skip(1)
+                .subscribe(shortSubscription {
+                    it.dating?.let {
+                        updateSearchListWithFilter(FilterData(it))
+                    }
+                })
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
     }
@@ -325,6 +336,14 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
         }
     }
 
+    private fun updateSearchListWithFilter(filterData: FilterData) {
+        mIsDatingButtonEnable = false
+        mEmptySearchVisibility.hideEmptySearchDialog()
+        sendFilterRequest(filterData)
+        mNewFilter = true
+        FlurryManager.getInstance().sendFilterChangedEvent()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             showProgress()
@@ -334,12 +353,10 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             setCurrentUser(data.getIntExtra(PhotoSwitcherActivity.INTENT_ALBUM_POS, 0))
         }
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
-            mIsDatingButtonEnable = false
-            mEmptySearchVisibility.hideEmptySearchDialog()
-            if (data != null && data.extras != null) {
-                sendFilterRequest(data.getParcelableExtra<FilterData>(DatingFilterFragment.INTENT_DATING_FILTER))
-                mNewFilter = true
-                FlurryManager.getInstance().sendFilterChangedEvent()
+            data?.let {
+                it.extras?.apply {
+                    updateSearchListWithFilter(it.getParcelableExtra<FilterData>(DatingFilterFragment.INTENT_DATING_FILTER))
+                }
             }
         }
         /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
@@ -477,7 +494,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     fun release() {
         arrayOf(mAlbumSubscription, mSkipSubscription, mLikeSubscription, mUpdateSubscription,
                 mLoadBackgroundSubscription, mOnImageClickSubscription, mProfileSubscription,
-                mFilterRequestSubscription, mLoadLinksSubscription).safeUnsubscribe()
+                mFilterRequestSubscription, mLoadLinksSubscription, mDatingFilterSubscription).safeUnsubscribe()
         LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mUpdateActionsReceiver)
         mPreloadTarget.clear()
     }
