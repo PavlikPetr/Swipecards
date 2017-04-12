@@ -439,7 +439,6 @@ public class AuthFragment extends BaseAuthFragment {
                     }
                 });
         mAuthStateSubscription = mAuthState.getObservable(AuthTokenStateData.class)
-                .distinctUntilChanged()
                 .compose(RxUtils.<AuthTokenStateData>applySchedulers())
                 .subscribe(new Action1<AuthTokenStateData>() {
                     @Override
