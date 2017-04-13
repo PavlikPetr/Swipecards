@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.QuestionnaireStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
@@ -13,10 +15,13 @@ import com.topface.topface.experiments.onboarding.question.questionnaire_result.
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
 import com.topface.topface.utils.extensions.showShortToast
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import org.json.JSONException
 import org.json.JSONObject
 import rx.Subscription
 import java.util.*
@@ -31,6 +36,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     companion object {
         private const val RESPONSE_DATA = "QuestionnaireActivity.Response.Data"
         private const val CURRENT_QUESTION_POSITION = "QuestionnaireActivity.Current.Question.Position"
+        private const val REQUEST_DATA = "QuestionnaireActivity.Request.Data"
         const val ACTIVITY_REQUEST_CODE = 113
         fun getIntent(response: QuestionnaireResponse, startPosition: Int = 0) =
                 Intent(App.getContext(), QuestionnaireActivity::class.java).apply {
@@ -41,6 +47,10 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     private val mEventBus by lazy {
         App.getAppComponent().eventBus()
+    }
+
+    private val mFeedNavigator by lazy {
+        FeedNavigator(this)
     }
 
     private var mResponse: QuestionnaireResponse? = null
@@ -58,7 +68,8 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     }
 
     private var mQuestionaireSubscription: Subscription? = null
-    private val mRequestData = JSONObject()
+    private var mPurchaseSubscription: Subscription? = null
+    private var mRequestData = mAppConfig.questionnaireAnswers
     private var mQuestionStartPosition: Int? = null
     private val mBackPressedOnce = AtomicBoolean(false)
 
@@ -69,12 +80,25 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
                 .getObservable(UserChooseAnswer::class.java)
                 .subscribe(shortSubscription {
                     mQuestionNavigator.show()
-                    //todo теоретически должно работать. Смысл этой операции это перегнать ответы пользователя в json, который будет отправлен на сервер
                     it?.json?.let { json ->
                         mRequestData.apply {
                             json.keys().forEach {
                                 put(it, json.get(it))
                             }
+                        }
+                    }
+                })
+        mPurchaseSubscription = mEventBus
+                .getObservable(BuyProductEvent::class.java)
+                .applySchedulers()
+                .subscribe(shortSubscription {
+                    it?.productId?.let {
+                        if (it.isEmpty()) {
+                            // если skuId пустой, значит сервер не хочет чтобы юзер проводил покупку,
+                            // а сразу шел знакомиться
+                            finishSuccessfully()
+                        } else {
+                            mFeedNavigator.showPurchaseProduct(it, "Questionnaire Experiment")
                         }
                     }
                 })
@@ -98,10 +122,10 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
 
     override fun addQuestionScreen(fragment: Fragment?) =
             fragment?.let {
-                val currentPos = mQuestionNavigator.getCurrentPosition()
-                mAppConfig.currentQuestionPosition = currentPos
-                mAppConfig.saveConfig()
-                mViewModel.setCounterTitle(currentPos + 1, mQuestionNavigator.getTotalPOsition())
+                val currentPosition = mQuestionNavigator.getCurrentPosition() + 1
+                saveSettings()
+                QuestionnaireStatisticsGeneratedStatistics.sendNow_QUESTION_SHOW(Slices().apply { put("int", currentPosition) })
+                mViewModel.setCounterTitle(currentPosition, mQuestionNavigator.getTotalPOsition())
                 supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
                 Unit
             } ?: Unit
@@ -109,14 +133,23 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
     override fun showResultScreen() {
         mViewModel.visibility.set(View.GONE)
         mResponse?.let {
+            saveSettings()
+            QuestionnaireStatisticsGeneratedStatistics.sendNow_QUESTIONNAIRE_RESULT_SHOW()
             val fragment = QuestionnaireResultFragment.newInstance(it.questionnaireMethodName, mRequestData)
             supportFragmentManager.beginTransaction().replace(R.id.content, fragment, null).commit()
         }
     }
 
+    private fun saveSettings() {
+        mAppConfig.currentQuestionPosition = mQuestionNavigator.getCurrentPosition()
+        mAppConfig.questionnaireAnswers = mRequestData
+        mAppConfig.saveConfig()
+    }
+
     private fun finishSuccessfully() {
         // если пользователь прошел все круги ада с опросником, то дропаем счетчик, чтобы он больше не запустился
         mAppConfig.currentQuestionPosition = Integer.MIN_VALUE
+        mAppConfig.questionnaireData = QuestionnaireResponse()
         mAppConfig.saveConfig()
         setResult(Activity.RESULT_OK)
         finish()
@@ -137,6 +170,7 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         outState?.let {
             it.putInt(CURRENT_QUESTION_POSITION, mQuestionNavigator.getCurrentPosition())
             it.putParcelable(RESPONSE_DATA, mResponse)
+            it.putString(REQUEST_DATA, mRequestData.toString())
         }
     }
 
@@ -147,6 +181,13 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
             }
             if (it.containsKey(RESPONSE_DATA)) {
                 mResponse = it.getParcelable(RESPONSE_DATA)
+            }
+            if (it.containsKey(REQUEST_DATA)) {
+                try {
+                    mRequestData = JSONObject(it.getString(REQUEST_DATA))
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
             }
         }
         if (mQuestionStartPosition == null) {

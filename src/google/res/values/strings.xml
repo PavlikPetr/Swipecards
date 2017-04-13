@@ -36,7 +36,7 @@
     <string name="buying_store_purchase">Processing purchase in the iTunes Store</string>
     <string name="buying_tf_ack_sending">Sending purchase info to Topface</string>
     <string name="ok_label">Odnoklassniki</string>
-    <string name="autorefill">Auto refill</string>
+    <string name="autorefill">Auto-refill</string>
     <string name="coins">Coins</string>
     <string name="photo_info_deleted">Deleted</string>
     <string name="settings_block_main">Main</string>
@@ -178,6 +178,7 @@
     <string name="general_settings">Settings</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Incorrect value</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Retry</string>
@@ -223,8 +224,8 @@
         <item quantity="one">To send an adoration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="other">To be able to see who likes you, get %d more coins</item>
-        <item quantity="one">To be able to see who likes you, get %d more coin</item>
+        <item quantity="other">To be able to see who Likes you, get %d more coins</item>
+        <item quantity="one">To be able to see who Likes you, get %d more coin</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="other">To be able to be seen by everyone, get %d more coins</item>
@@ -382,7 +383,7 @@
     <string name="settings_invalid_email">Invalid email</string>
     <string name="chat_write_message">Write a message</string>
     <string name="dating_message">Message…</string>
-    <string name="buying_sympathies">Purchase likes</string>
+    <string name="buying_sympathies">Purchase Likes</string>
     <string name="general_reconnect_social">Cannot connect to the social network. Please try again
         later.
     </string>
@@ -490,7 +491,7 @@
         stand out!</string>
     <string name="status_is_empty">You status is empty</string>
     <string name="you_dont_have_gifts_yet">You do not have any gifts yet</string>
-    <string name="buy_sympathies">Purchase likes</string>
+    <string name="buy_sympathies">Purchase Likes</string>
     <string name="upload_photos">Upload photos</string>
     <string name="user_baned">User has been banned.</string>
     <string name="general_choose_city">Select your city</string>
@@ -756,7 +757,7 @@
     <string name="enter_text">Enter text</string>
     <string name="send_feedback">Send message</string>
     <string name="get_vip_free">Get free VIP-status</string>
-    <string name="buy_more_sympathies">Get more likes, become more popular</string>
+    <string name="buy_more_sympathies">Get more Likes, become more popular</string>
     <string name="transaction_code_help">If you send us a transaction code, this will help us
         complete your request by speeding up the processing time. Further information about an order
         can be found through %s.
@@ -1023,4 +1024,13 @@
     <string name="buy_likes_become_popular_male">Become popular</string>
     <string name="you_are_not_shown">You are hardly being shown in \"Dating\"</string>
     <string name="you_are_not_shown_answer">Respond to some incoming Likes and you will be shown more often.</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Find who you\'re searching for</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Among more than 100 million people</string>
+    <string name="fb_invitation_intelligent_selection_filter">Smart selection filter</string>
+    <string name="fb_invitation_personalized_approach">Personalized approach</string>
+    <string name="fb_invitation_button_text">Login with Facebook</string>
+    <string name="onboarding_button_next">Next</string>
+    <string name="num_from_num">%1$s from %2$s</string>
+    <string name="onboarding_get_access">Get Access</string>
+    <string name="searching_couple_for_you">Pair searching based on your criteria</string>
 </resources>

@@ -67,7 +67,6 @@ public class Options extends AbstractData {
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
-
     private String paymentwall;
 
     public String maxVersion = "2147483647";
@@ -221,6 +220,11 @@ public class Options extends AbstractData {
      * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
      */
     public FBInviteSettings fbInviteSettings = new FBInviteSettings();
+
+    /**
+     * {RatePopupNewVersion}  - настройки для редизайна попапа оценки приложения
+     */
+    public RatePopupNewVersion ratePopupNewVersion = new RatePopupNewVersion();
 
     public Options(IApiResponse data) {
         this(data.getJsonResult());
@@ -390,6 +394,10 @@ public class Options extends AbstractData {
             JSONObject appOfTheDayJsonObject = response.optJSONObject("appOfTheDay");
             if (appOfTheDayJsonObject != null) {
                 appOfTheDay = JsonUtils.optFromJson(appOfTheDayJsonObject.toString(), AppOfTheDay.class, new AppOfTheDay());
+            }
+            JSONObject rateAppSplitJsonObject = response.optJSONObject("rateAppSplitPopup");
+            if (rateAppSplitJsonObject != null) {
+                ratePopupNewVersion = JsonUtils.fromJson(rateAppSplitJsonObject.toString(), RatePopupNewVersion.class);
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");

@@ -45,8 +45,9 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.databinding.FragmentAuthBinding;
+import com.topface.topface.experiments.fb_invitation.AuthFB;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireGetListRequest;
 import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
-import com.topface.topface.experiments.onboarding.requests.QuestionnaireGetListRequest;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -68,6 +69,7 @@ import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -81,11 +83,13 @@ import java.util.concurrent.TimeUnit;
 import rx.Emitter;
 import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 public class AuthFragment extends BaseAuthFragment {
 
     public static final String TF_BUTTONS = "tf_buttons";
+    public static final String IS_PROGRESS_VISIBLE = "is_progress_visible";
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
 
     private NavigationState mNavigationState;
@@ -104,6 +108,7 @@ public class AuthFragment extends BaseAuthFragment {
     private FragmentAuthBinding mBinding;
     private LoginFragmentHandler mLoginFragmentHandler;
     private boolean mGoToSocNetAuthScreen;
+    private FeedNavigator mNavigator;
     private BroadcastReceiver mRestoreAccountShown = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -112,6 +117,7 @@ public class AuthFragment extends BaseAuthFragment {
         }
     };
     private Subscription mQuestionnaireGetListRequestSubscription;
+    private Subscription mCallFBAuthSubscription;
     private OnAuthButtonsClick mOnAuthButtonsClick = new OnAuthButtonsClick() {
         @Override
         public void onVkButtonClick() {
@@ -311,6 +317,10 @@ public class AuthFragment extends BaseAuthFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
+        Activity activity = getActivity();
+        if (activity instanceof IActivityDelegate) {
+            mNavigator = new FeedNavigator((IActivityDelegate) activity);
+        }
         mAuthState = App.getAppComponent().authState();
         mNavigationState = App.getAppComponent().navigationState();
         View root = inflater.inflate(R.layout.fragment_auth, null);
@@ -321,47 +331,70 @@ public class AuthFragment extends BaseAuthFragment {
         mBinding.btnOtherServices.setVisibility(isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
         mBinding.setViewModel(new AuthFragmentViewModel(getContext()));
         initViews(root);
-        if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
-            setAllSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
-            setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true, false);
-        } else {
-            setAllSocNetBtnVisibility(true, true, false);
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(TF_BUTTONS)) {
+                setAllSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
+                setTfLoginBtnVisibility(savedInstanceState.getBoolean(TF_BUTTONS), true, false);
+            } else {
+                setAllSocNetBtnVisibility(true, true, false);
+            }
+            if (savedInstanceState.getBoolean(IS_PROGRESS_VISIBLE, false)) {
+                showProgress();
+            }
         }
-        sendQuestionnaireGetListRequestIfNeeded();
         return root;
     }
 
     private void sendQuestionnaireGetListRequestIfNeeded() {
-        // todo закоментил на время, пока тестирования проводится на стейже
-        // if (App.getAppComponent().weakStorage().isFirstSessionAfterInstall()) {
-        showProgress();
-        mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(5, TimeUnit.SECONDS))
-                .subscribe(new RxUtils.ShortSubscription<Object>() {
-                    @Override
-                    public void onNext(Object object) {
-                        super.onNext(object);
-                        if (object instanceof QuestionnaireResponse) {
-                            // словили ответ сервера раньше чем сработал таймер
-                            // отпишемся, чтобы срабатывание таймера не пришлось обрабатывать
-                            RxUtils.safeUnsubscribe(mQuestionnaireGetListRequestSubscription);
-                            AppConfig config = App.getAppConfig();
-                            // свежие настройки записываем в конфиг и дропаем счетчик,
-                            // чтобы показы были с первого вопроса
-                            config.setQuestionnaireData((QuestionnaireResponse) object);
-                            config.setCurrentQuestionPosition(0);
-                            config.saveConfig();
-                        } else {
-                            hideProgress();
-                            showButtons();
-                        }
-                    }
-                });
+        WeakStorage storage = App.getAppComponent().weakStorage();
+        if (storage.isFirstSessionAfterInstall() && !storage.isQuestionnaireRequestSent()) {
+            mQuestionnaireGetListRequestSubscription = Observable.merge(getQuestionnaireGetListRequest(), Observable.timer(3, TimeUnit.SECONDS))
+                    .first()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new RxUtils.ShortSubscription<Object>() {
+                                   @Override
+                                   public void onNext(Object object) {
+                                       super.onNext(object);
+                                       if (object instanceof QuestionnaireResponse) {
+                                           // словили ответ сервера раньше чем сработал таймер
+                                           AppConfig config = App.getAppConfig();
+                                           // свежие настройки записываем в конфиг и дропаем счетчик,
+                                           // чтобы показы были с первого вопроса
+                                           QuestionnaireResponse responseData = (QuestionnaireResponse) object;
+                                           config.setQuestionnaireData(responseData);
+                                           config.setCurrentQuestionPosition(0);
+                                           config.saveConfig();
+                                           if (!responseData.isEmpty() && mNavigator != null) {
+                                               mNavigator.showFBInvitationPopup();
+                                           } else {
+                                               hideProgress();
+                                               showButtons();
+                                           }
+                                       } else {
+                                           hideProgress();
+                                           showButtons();
+                                       }
+                                   }
+
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       super.onError(e);
+                                       hideProgress();
+                                       showButtons();
+                                   }
+                               }
+                    );
+        } else {
+            hideProgress();
+            showButtons();
+        }
     }
 
     private Observable<QuestionnaireResponse> getQuestionnaireGetListRequest() {
         return Observable.fromEmitter(new Action1<Emitter<QuestionnaireResponse>>() {
             @Override
             public void call(final Emitter<QuestionnaireResponse> emitter) {
+                App.getAppComponent().weakStorage().questionnaireRequestSent();
                 ApiRequest request = new QuestionnaireGetListRequest(getActivity().getApplicationContext(),
                         LocaleConfig.getServerLocale(getActivity(), App.getLocaleConfig().getApplicationLocale()));
                 request.callback(new DataApiHandler<QuestionnaireResponse>() {
@@ -395,7 +428,28 @@ public class AuthFragment extends BaseAuthFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mCallFBAuthSubscription = App.getAppComponent().eventBus().getObservable(AuthFB.class)
+                .compose(RxUtils.applySchedulers())
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
+                    @Override
+                    public void onNext(Object type) {
+                        super.onNext(type);
+                        if (mOnAuthButtonsClick != null) {
+                            hideButtons();
+                            showProgress();
+                            mOnAuthButtonsClick.onFbButtonClick();
+                        } else if (mNavigator != null) {
+                            hideButtons();
+                            showProgress();
+                            mNavigator.showFBInvitationPopup();
+                        } else {
+                            hideProgress();
+                            showButtons();
+                        }
+                    }
+                });
         mAuthStateSubscription = mAuthState.getObservable(AuthTokenStateData.class)
+                .compose(RxUtils.<AuthTokenStateData>applySchedulers())
                 .subscribe(new Action1<AuthTokenStateData>() {
                     @Override
                     public void call(AuthTokenStateData authTokenStateData) {
@@ -410,10 +464,25 @@ public class AuthFragment extends BaseAuthFragment {
                                 showProgress();
                                 break;
                             case AuthTokenStateData.TOKEN_AUTHORIZED:
-                            case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
+                                // ничего не делаем, просто ждем, что авторизация пройдет успешно
+                                break;
                             case AuthTokenStateData.TOKEN_NOT_READY:
-                                hideProgress();
-                                showButtons(true);
+                                if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
+                                    hideButtons();
+                                    showProgress();
+                                    mNavigator.showFBInvitationPopup();
+                                } else {
+                                    hideProgress();
+                                    showButtons(true);
+                                }
+                                break;
+                            case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
+                                showProgress();
+                                if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
+                                    mNavigator.showFBInvitationPopup();
+                                } else {
+                                    sendQuestionnaireGetListRequestIfNeeded();
+                                }
                                 break;
                         }
                     }
@@ -434,30 +503,22 @@ public class AuthFragment extends BaseAuthFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(TF_BUTTONS, mIsTfBtnVisible);
+        outState.putBoolean(IS_PROGRESS_VISIBLE, mBinding.prsAuthLoading.getVisibility() == View.VISIBLE);
     }
 
     @Override
     protected void onOptionsAndProfileSuccess() {
-        // если не смогли показать опросник, значит редиректим в знакомства
-        if (!showQuestionnaire()) {
+        if (isAdded()) {
             Activity activity = getActivity();
-            if (isAdded() && activity instanceof BaseFragmentActivity) {
+            if (activity instanceof BaseFragmentActivity) {
                 ((BaseFragmentActivity) activity).close(this, true);
                 mNavigationState.emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING), WrappedNavigationData.SELECT_EXTERNALY));
             }
-        }
-    }
-
-    private boolean showQuestionnaire() {
-        Activity activity = getActivity();
-        if (isAdded()) {
-            if (activity instanceof IActivityDelegate) {
-                return new FeedNavigator((IActivityDelegate) activity).showQuestionnaire();
+            if (mNavigator != null) {
+                mNavigator.showQuestionnaire();
             }
         }
-        return false;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -614,6 +675,7 @@ public class AuthFragment extends BaseAuthFragment {
         Debug.log("AuthStateData unsubscribe");
         RxUtils.safeUnsubscribe(mAuthStateSubscription);
         RxUtils.safeUnsubscribe(mQuestionnaireGetListRequestSubscription);
+        RxUtils.safeUnsubscribe(mCallFBAuthSubscription);
     }
 
     //TODO SETTOOLBARSETTINGS

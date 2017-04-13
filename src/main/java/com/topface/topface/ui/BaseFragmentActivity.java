@@ -24,7 +24,6 @@ import android.widget.FrameLayout;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
@@ -193,7 +192,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if(!isDatingRedesignEnabled()) {
+        if (!isDatingRedesignEnabled()) {
             if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме
@@ -392,13 +391,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
                 mGoogleAuthStarted = true;
-            }
-            //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
-            //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
-            //и ответ возвращать тоже в активити.
-            Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-            if (authFragment != null) {
-                authFragment.onActivityResult(requestCode, resultCode, data);
             }
             super.onActivityResult(requestCode, resultCode, data);
         }

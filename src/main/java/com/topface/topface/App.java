@@ -163,7 +163,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
-                .addRequest(getProfileRequest())
+                .addRequest(getProfileRequest(null))
                 .callback(handler)
                 .exec();
     }
@@ -181,7 +181,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static void sendUserOptionsAndPurchasesRequest() {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getProfileRequest())
+                .addRequest(getProfileRequest(null))
                 .addRequest(getUserOptionsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
@@ -253,11 +253,11 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
     }
 
-    public static void sendProfileRequest() {
-        getProfileRequest().exec();
+    public static void sendProfileRequest(ApiHandler handler) {
+        getProfileRequest(handler).exec();
     }
 
-    public static ApiRequest getProfileRequest() {
+    public static ApiRequest getProfileRequest(final ApiHandler handler) {
         mLastProfileUpdate = System.currentTimeMillis();
         return new ProfileRequest(App.getContext())
                 .callback(new DataApiHandler<Profile>() {
@@ -275,6 +275,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getContext().startService(intent);
                         }
                         CacheProfile.sendUpdateProfileBroadcast();
+                        if (handler != null) {
+                            handler.success(response);
+                        }
                     }
 
                     @Override
@@ -284,6 +287,17 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
+                        if (handler != null) {
+                            handler.fail(codeError, response);
+                        }
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (handler != null) {
+                            handler.always(response);
+                        }
                     }
                 });
     }
@@ -311,7 +325,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest().exec();
+            getProfileRequest(null).exec();
         }
     }
 
@@ -470,7 +484,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
                 FlurryManager.getInstance().sendAppInForegroundEvent();
-                sendBannerSettingsRequest(getContext());
+                if (!AuthToken.getInstance().isEmpty()) {
+                    sendBannerSettingsRequest(getContext());
+                }
             }
 
             @Override

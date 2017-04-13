@@ -182,6 +182,7 @@
     <string name="general_settings">Definições</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Valor incorreto</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
@@ -1021,9 +1022,9 @@
     <string name="unlock_symphaty_hours_few">Desbloqueado por: %d horas</string>
     <string name="unlock_symphaty_hours_other">Desbloqueado por: %d horas</string>
     <string name="unlock_symphaty_women_one">%d mulher enviou-te um Gosto!</string>
-    <string name="unlock_symphaty_women_many">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_women_many">%d raparigas enviaram-te Gostos!</string>
     <string name="unlock_symphaty_women_few">%d mulheres enviaram-te Gostos!</string>
-    <string name="unlock_symphaty_women_other">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_women_other">%d raparigas enviaram-te Gostos!</string>
     <string name="unlock_symphaty_men_one">%d homem enviou-te um Gosto!</string>
     <string name="unlock_symphaty_men_many">%d homens enviaram-te Gostos!</string>
     <string name="unlock_symphaty_men_few">%d homens enviaram-te Gostos!</string>
@@ -1039,12 +1040,24 @@
     <string name="write_her_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
     <string name="people_nearby_popover_text">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te</string>
     <string name="mutual_popup_you_get_mutual">Vocês gostam um do outro!</string>
+    <string name="start_dialog">Começar Conversa</string>
+    <string name="continue_to_meet">Continuar a namorar</string>
+    <string name="basic_information">Informações básicas</string>
     <string name="photo_feed_add_photo">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te.</string>
     <string name="buy_likes_get_more_likes">Obtém mais Gostos!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Aparece primeiro a homens à procura de mulheres como tu!</string>
-    <string name="buy_likes_become_first_in_searchlist_male">Aparece primeiro a mulheres à procura de homens como tu!</string>
+    <string name="buy_likes_become_first_in_searchlist_male">Aparece primeiro a raparigas à procura de homens como tu!</string>
     <string name="buy_likes_become_popular_female">Torna-te popular</string>
     <string name="buy_likes_become_popular_male">Torna-te popular</string>
     <string name="you_are_not_shown">Quase não apareces em \"Namorar\"</string>
     <string name="you_are_not_shown_answer">Responde a alguns dos Gostos que recebes e irás aparecer mais frequentemente.</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Encontra quem estás à procura</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Entre mais de 100 milhões de pessoas</string>
+    <string name="fb_invitation_intelligent_selection_filter">Filtro de seleção inteligente</string>
+    <string name="fb_invitation_personalized_approach">Abordagem personalizada</string>
+    <string name="fb_invitation_button_text">Entra com o Facebook</string>
+    <string name="onboarding_button_next">Próximo</string>
+    <string name="num_from_num">%1$s de %2$s</string>
+    <string name="onboarding_get_access">Obtém Acesso</string>
+    <string name="searching_couple_for_you">Procura de par baseada nos teus critérios</string>
 </resources>

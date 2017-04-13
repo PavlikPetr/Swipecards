@@ -2,6 +2,7 @@ package com.topface.topface.requests;
 
 import android.content.Context;
 
+import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 
 import org.json.JSONException;
@@ -18,7 +19,10 @@ public class AppGetSocialAppsIdsRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        return new JSONObject().put("clienttype", BuildConfig.MARKET_API_TYPE.getClientType());
+        JSONObject json = new JSONObject();
+        json.put("reserve", App.getAppConfig().isReserveSocialAppIdState());
+        json.put("clienttype", BuildConfig.MARKET_API_TYPE.getClientType());
+        return json;
     }
 
     @Override
