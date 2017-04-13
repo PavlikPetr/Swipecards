@@ -1124,5 +1124,10 @@
     <string name="mutual_write_them_first">Напишите им</string>
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
+    
+    <string name="you_can_write_wom">Теперь вы можете написать ей!</string>
+    <string name="you_can_write_man">Теперь вы можете написать ему!</string>
+    <string name="see_next">Смотреть дальше</string>
+    <string name="go_to_messages">Перейти в сообщения</string>
 
 </resources>
