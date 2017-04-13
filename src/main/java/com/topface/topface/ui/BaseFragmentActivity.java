@@ -170,7 +170,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
-    protected boolean isDatingRedesignEnabled() {
+    protected boolean isTranslucentDating() {
         return false;
     }
 
@@ -192,8 +192,8 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if (!isDatingRedesignEnabled()) {
-            if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
+        if (!isTranslucentDating()) {
+            if (Utils.isKitKatWithNoTranslucent(isTranslucentDating())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

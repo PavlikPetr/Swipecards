@@ -19,7 +19,7 @@ public class WeakStorage extends AbstractConfig {
     private static final String APPODEAL_BANNER_SEGMENT_NAME = "appodeal_banner_segment_name";
     private static final String APPODEAL_FULLSCREEN_SEGMENT_NAME = "appodeal_fullscreen_segment_name";
     private static final String PROFILE_DIALOG_REDESIGN_ENABLED = "profile_dialog_redesign_enabled";
-    private static final String DATING_REDESIGN_ENABLED = "dating_redesign_enabled";
+    private static final String IS_TRANSLUCENT_DATING = "dating_redesign_enabled";
     private static final String IS_FIRST_SESSION = "is_first_session";
     private static final String IS_QUESTIONNAIRE_REQUEST_SENT = "is_questionnaire_request_sent";
     private static final String AUTH_TOKEN_STATE = "auth_token_state";
@@ -38,7 +38,7 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, PROFILE_DIALOG_REDESIGN_ENABLED, Utils.EMPTY);
         // строковая обертка над boolean чтобы знать что значение было установлено
         // если установлено, то отражает разрешение на показ редизайна знакомств
-        addField(settingsMap, DATING_REDESIGN_ENABLED, Utils.EMPTY);
+        addField(settingsMap, IS_TRANSLUCENT_DATING, Utils.EMPTY);
         // если это первая сессия после установки - true
         addField(settingsMap, IS_FIRST_SESSION, false);
         // признак того был ли отправлен запрос на получениенастроек для опросника
@@ -110,19 +110,19 @@ public class WeakStorage extends AbstractConfig {
     /**
      * @return true if must use new design for dating
      */
-    public boolean getDatingRedesignEnabled() {
+    public boolean getIsTranslucentDating() {
         SettingsMap settingsMap = getSettingsMap();
-        if (TextUtils.isEmpty(getStringField(settingsMap, DATING_REDESIGN_ENABLED))) {
-            setField(settingsMap, DATING_REDESIGN_ENABLED, String.valueOf(App.get().getOptions().datingRedesignEnabled));
+        if (TextUtils.isEmpty(getStringField(settingsMap, IS_TRANSLUCENT_DATING))) {
+            setField(settingsMap, IS_TRANSLUCENT_DATING, String.valueOf(App.get().getOptions().isTranslucentDating()));
         }
-        return Boolean.valueOf(getStringField(getSettingsMap(), DATING_REDESIGN_ENABLED));
+        return Boolean.valueOf(getStringField(getSettingsMap(), IS_TRANSLUCENT_DATING));
     }
 
     /**
      * Resets stored "design version" for dating
      */
-    public void resetDatingRedesignEnabled() {
-        setField(getSettingsMap(), DATING_REDESIGN_ENABLED, Utils.EMPTY);
+    public void resetIsTranslucentDating() {
+        setField(getSettingsMap(), IS_TRANSLUCENT_DATING, Utils.EMPTY);
     }
 
     /**

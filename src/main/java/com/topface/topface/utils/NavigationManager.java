@@ -179,7 +179,7 @@ public class NavigationManager {
                 fragment = OwnProfileFragment.newInstance();
                 break;
             case FragmentIdData.DATING:
-                fragment = mWeakStorage.getDatingRedesignEnabled() ?
+                fragment = mWeakStorage.getIsTranslucentDating() ?
                         new com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment() :
                         new DatingFragment();
                 break;
