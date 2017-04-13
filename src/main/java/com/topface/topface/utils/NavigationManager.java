@@ -180,7 +180,7 @@ public class NavigationManager {
                 break;
             case FragmentIdData.DATING:
                 fragment = mWeakStorage.getIsTranslucentDating() ?
-                        new com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment() :
+                        new com.topface.topface.ui.fragments.dating.design.v1.DatingFragment() :
                         new DatingFragment();
                 break;
             case FragmentIdData.GEO:

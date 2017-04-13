@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.dating.dating_redesign
+package com.topface.topface.ui.fragments.dating.design.v1
 
 import android.content.DialogInterface
 import android.os.Bundle
