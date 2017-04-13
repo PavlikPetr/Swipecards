@@ -21,6 +21,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -224,7 +225,7 @@ public class Options extends AbstractData {
      * @return true if current design has translucent status bar
      */
     public boolean isTranslucentDating() {
-        return datingRedesign == 1;
+        return datingRedesign == DatingFragmentFactory.V1_DESIGN;
     }
 
     /**
