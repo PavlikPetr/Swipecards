@@ -74,7 +74,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
     private val mDatingFragmentViewModel by lazy {
         DatingFragmentViewModel(mBinding, mApi, mUserSearchList, mDatingViewModelEvents = this,
-                mDatingButtonsView = this, mEmptySearchVisibility = this)
+                mDatingButtonsView = this, mEmptySearchVisibility = this )
     }
     private val mDatingOptionMenuManager by lazy {
         DatingOptionMenuManager(mNavigator)
@@ -136,9 +136,8 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     private fun initFormList() = with(mBinding.formsList) {
         layoutManager = LinearLayoutManager(context)
         adapter = CompositeAdapter(mTypeProvider){Bundle()}
-                .addAdapterComponent(ChildItemComponent(mApi))
                 .addAdapterComponent(ParentItemComponent())
-                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator,context))
+//                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator,context))
 
 //                CompositeAdapter<IType>().apply {
 //            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)

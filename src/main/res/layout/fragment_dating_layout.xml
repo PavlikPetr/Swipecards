@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:fab="http://schemas.android.com/apk/res-auto">
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="model"
             type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
+        
+        <variable
+            name="dataModel"
+            type="com.topface.topface.ui.fragments.dating.DatingFragmentViewModel"/>
     </data>
 
     <FrameLayout
@@ -19,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
-            android:fadingEdge="none"/>
+            android:fadingEdge="none"
+            app:bindDataToCompositeAdapter="@{dataModel.mUserSearchList}"/>
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/right_labels"
