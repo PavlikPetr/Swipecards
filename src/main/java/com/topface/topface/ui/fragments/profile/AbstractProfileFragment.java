@@ -1,11 +1,11 @@
 package com.topface.topface.ui.fragments.profile;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,23 +17,21 @@ import com.topface.topface.R;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.User;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.ProfilePageAdapter;
-import com.topface.topface.ui.dialogs.TrialVipPopup;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.fragments.AnimatedFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
 
 public abstract class AbstractProfileFragment extends AnimatedFragment implements ViewPager.OnPageChangeListener {
     public static final String INTENT_UID = "intent_profile_uid";
@@ -75,8 +73,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     };
 
     private ViewPager mBodyPager;
-    @BindView(R.id.profileTabs)
-    TabLayout mTabLayout;
 
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
 
@@ -115,42 +111,9 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
                 Profile profile = App.get().getProfile();
                 if (App.isNeedShowTrial && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                         && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-                    final TrialVipPopup popup = TrialVipPopup.newInstance(true);
-                    popup.setOnSubscribe(new TrialVipPopup.OnFragmentActionsListener() {
-                        @Override
-                        public void onSubscribeClick() {
-                            Fragment f = popup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-                            final Fragment fragment = f == null ?
-                                    TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
-                            fragment.setRetainInstance(true);
-                            if (fragment instanceof ITransparentMarketFragmentRunner) {
-                                ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                                    @Override
-                                    public void onPurchaseSuccess() {
-                                        popup.dismiss();
-                                    }
-
-                                    @Override
-                                    public void onPopupClosed() {
-
-                                    }
-                                });
-                                FragmentTransaction transaction = popup.getActivity().getSupportFragmentManager().beginTransaction();
-                                if (!fragment.isAdded()) {
-                                    transaction.add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-                                } else {
-                                    transaction.remove(fragment)
-                                            .add(R.id.fragment_content, fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFragmentFinish() {
-
-                        }
-                    });
-                    popup.show(getActivity().getSupportFragmentManager(), TrialVipPopup.TAG);
+                    //noinspection WrongConstant
+                    ExperimentBoilerplateFragment mTrialVipPopup = ExperimentBoilerplateFragment.newInstance();
+                    mTrialVipPopup.show(getActivity().getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
                     App.isNeedShowTrial = false;
                 }
             }
@@ -168,8 +131,17 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         final View root = inflater.inflate(R.layout.fragment_profile, null);
         bindView(root);
         initBodyPages(root);
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mBodyPager, mTabLayout, BODY_PAGES_TITLES, null);
-        mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
+        Activity activity = getActivity();
+        TabLayout tabLayout = null;
+        if (activity instanceof ITabLayoutHolder) {
+            tabLayout = ((ITabLayoutHolder) activity).getTabLayout();
+        }
+        if (tabLayout != null) {
+            mTabLayoutCreator = new TabLayoutCreator(activity, mBodyPager, tabLayout, BODY_PAGES_TITLES, null, BODY_PAGES_CLASS_NAMES);
+            mTabLayoutCreator.setTabTitle(DEFAULT_PAGE);
+        } else {
+            throw new IllegalStateException("AbstractProfileFragment:: activity must have TabLayout");
+        }
         return root;
     }
 
@@ -192,6 +164,11 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
             mPageChangeListener.onPageSelected(0);
         }
 
+    }
+
+    @Override
+    protected boolean isTabbedFragment() {
+        return true;
     }
 
     protected void onProfileUpdated() {
@@ -253,7 +230,6 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
         mBodyPager.setAdapter(mBodyPagerAdapter);
         //Tabs for Body
         mBodyPager.addOnPageChangeListener(mPageChangeListener);
-        mTabLayout.setupWithViewPager(mBodyPager);
     }
 
     protected void initBody() {
@@ -268,7 +244,7 @@ public abstract class AbstractProfileFragment extends AnimatedFragment implement
     }
 
     protected void addBodyPage(String className, String pageTitle) {
-        BODY_PAGES_TITLES.add(pageTitle.toUpperCase());
+        BODY_PAGES_TITLES.add(pageTitle.toUpperCase(App.getCurrentLocale()));
         BODY_PAGES_CLASS_NAMES.add(className);
     }
 

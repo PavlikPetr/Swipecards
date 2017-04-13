@@ -9,6 +9,7 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.BannerView;
 import com.appodeal.ads.UserSettings;
+import com.appodeal.ads.utils.Log;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -18,25 +19,25 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormItem;
 import com.topface.topface.utils.config.WeakStorage;
 
-import javax.inject.Inject;
-
 public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
     private static final String YANDEX_NETWORK = "yandex";
+    public static final String CHEETAH_NETWORK = "cheetah";
 
-    @Inject
-    static WeakStorage mWeakStorage;
+    private static WeakStorage mWeakStorage;
 
     @Override
     boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
-        Appodeal.setLogging(Debug.isDebugLogsEnabled());
+        Appodeal.setTesting(false);
+        Appodeal.setLogLevel(Log.LogLevel.verbose);
+        Appodeal.disableNetwork(activity.getApplicationContext(), CHEETAH_NETWORK);
         Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
-        UserSettings userSettings = Appodeal.getUserSettings(activity);
+        UserSettings userSettings = Appodeal.getUserSettings(activity.getApplicationContext());
         userSettings.setGender(
                 App.get().getProfile().sex == Profile.BOY ?
                         UserSettings.Gender.MALE :
@@ -153,14 +154,21 @@ public class AppodealProvider extends AbstractAdsProvider {
     }
 
     public static void setCustomSegment() {
-        String fullscreenSegment = mWeakStorage.getAppodealFullscreenSegmentName();
+        String fullscreenSegment = getWeekStorage().getAppodealFullscreenSegmentName();
         if (TextUtils.isEmpty(fullscreenSegment)) {
-            String bannerSegment = mWeakStorage.getAppodealBannerSegmentName();
+            String bannerSegment = getWeekStorage().getAppodealBannerSegmentName();
             Debug.log("BANNER_SETTINGS : set segment " + bannerSegment);
-            Appodeal.setCustomSegment(bannerSegment, 0);
+            Appodeal.setCustomRule(bannerSegment, 0);
         } else {
             Debug.log("BANNER_SETTINGS : set segment " + fullscreenSegment);
-            Appodeal.setCustomSegment(fullscreenSegment, 0);
+            Appodeal.setCustomRule(fullscreenSegment, 0);
         }
+    }
+
+    private static WeakStorage getWeekStorage() {
+        if (mWeakStorage == null) {
+            mWeakStorage = App.getAppComponent().weakStorage();
+        }
+        return mWeakStorage;
     }
 }

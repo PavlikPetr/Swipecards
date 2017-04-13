@@ -2,7 +2,7 @@ package com.topface.topface.requests.transport.scruffy;
 
 import com.koushikdutta.async.http.WebSocket;
 import com.topface.framework.utils.Debug;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.concurrent.TimeUnit;
 

@@ -30,7 +30,7 @@ public class EmptyActivity extends AppCompatActivity {
                 doSomething();
             }
         });
-        ((ViewGroup) findViewById(R.id.loFrame)).addView(button);
+        ((ViewGroup) findViewById(R.id.fragment_content)).addView(button);
     }
 
     private void doSomething() {

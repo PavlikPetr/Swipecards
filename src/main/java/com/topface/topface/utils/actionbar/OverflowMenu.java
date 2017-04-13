@@ -27,22 +27,20 @@ import com.topface.topface.requests.DeleteBookmarksRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -62,10 +60,9 @@ import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.
  */
 public class OverflowMenu {
 
-    @Inject
-    TopfaceAppState mAppState;
     private final static String INTENT_BUY_VIP_FROM = "UserProfileFragment";
-    public static final String USER_ID_FOR_REMOVE = "user_id";
+    public static final String USER_ID_FOR_REMOVE = "user_id_for_remove";
+    public static final String USER_ID_FOR_REMOVE_FROM_BLACK_LIST = "user_id_for_remove_from_black_list";
 
     private Menu mBarActions;
     private OverflowMenuType mOverflowMenuType;
@@ -105,7 +102,6 @@ public class OverflowMenu {
     private IFragmentDelegate mFragmentDelegate;
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions) {
-        App.from(App.getContext()).inject(this);
         mBarActions = barActions;
         mOverflowMenuType = OverflowMenuType.CHAT_OVERFLOW_MENU;
         mContext = iFragmentDelegate.getActivity().getApplicationContext();
@@ -115,9 +111,10 @@ public class OverflowMenu {
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
         this(iFragmentDelegate, barActions);
-        mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
-            public void call(BalanceData balanceData) {
+            public void onNext(BalanceData balanceData) {
+                super.onNext(balanceData);
                 mBalanceData = balanceData;
             }
         });
@@ -422,8 +419,8 @@ public class OverflowMenu {
                             super.success(response);
                             showBlackListToast(false);
                             LocalBroadcastManager.getInstance(mContext).
-                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
-                                            .putExtra(USER_ID_FOR_REMOVE, -1));
+                                    sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
+                                            .putExtra(USER_ID_FOR_REMOVE_FROM_BLACK_LIST, userId));
                         }
 
                         @Override
@@ -444,7 +441,7 @@ public class OverflowMenu {
                             super.success(response);
                             showBlackListToast(true);
                             LocalBroadcastManager.getInstance(mContext).
-                                    sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS)
+                                    sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS)
                                             .putExtra(USER_ID_FOR_REMOVE, userId));
                         }
 
@@ -462,7 +459,7 @@ public class OverflowMenu {
 
     private void addToFavorite() {
         Boolean isBookmarked = isBookmarked();
-        Integer userId = getUserId();
+        final Integer userId = getUserId();
         if (isBookmarked == null || userId == null || mContext == null) {
             return;
         }
@@ -476,7 +473,10 @@ public class OverflowMenu {
                         super.success(response);
                         showBookmarkToast(false);
                         LocalBroadcastManager.getInstance(mContext).
-                                sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+                                sendBroadcast(BlackListAndBookmarkHandler
+                                        .getValuedActionsUpdateIntent(BlackListAndBookmarkHandler
+                                                        .ActionTypes.BOOKMARK, false,
+                                                getUserId()));
                     }
 
                     @Override
@@ -495,7 +495,9 @@ public class OverflowMenu {
                         super.success(response);
                         showBookmarkToast(true);
                         LocalBroadcastManager.getInstance(mContext).
-                                sendBroadcast(new Intent(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY));
+                                sendBroadcast(new Intent(BlackListAndBookmarkHandler
+                                        .getValuedActionsUpdateIntent(BlackListAndBookmarkHandler
+                                                .ActionTypes.BOOKMARK, false, getUserId())));
                     }
 
                     @Override

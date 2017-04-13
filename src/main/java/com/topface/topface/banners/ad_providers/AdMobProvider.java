@@ -25,6 +25,9 @@ class AdMobProvider extends AbstractAdsProvider {
 
     @Override
     public final boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks) {
+        if (page == null || page.getActivity() == null) {
+            return false;
+        }
         mContext = page.getActivity().getApplicationContext();
         createView(page);
         setCallback(callbacks);
@@ -52,7 +55,7 @@ class AdMobProvider extends AbstractAdsProvider {
     private Calendar getUserAge() {
         Calendar rightNow = Calendar.getInstance();
         int year = rightNow.get(Calendar.YEAR);
-        rightNow.set(Calendar.YEAR, year - App.from(mContext).getProfile().age);
+        rightNow.set(Calendar.YEAR, year - App.get().getProfile().age);
         return rightNow;
     }
 
@@ -63,7 +66,7 @@ class AdMobProvider extends AbstractAdsProvider {
     protected void createView(IPageWithAds page) {
         ViewGroup container = page.getContainerForAd();
         adView = (AdView) View
-                .inflate(container.getContext(), getLayout(), container)
+                .inflate(container.getContext().getApplicationContext(), getLayout(), container)
                 .findViewById(R.id.adMobView);
     }
 
@@ -120,5 +123,13 @@ class AdMobProvider extends AbstractAdsProvider {
                                 AdRequest.GENDER_MALE :
                                 AdRequest.GENDER_FEMALE
                 ).setBirthday(getUserAge().getTime());
+    }
+
+    @Override
+    public void clean(IPageWithAds page) {
+        adView.setAdListener(null);
+        adView.destroy();
+        adView.destroyDrawingCache();
+        adView.clearAnimation();
     }
 }

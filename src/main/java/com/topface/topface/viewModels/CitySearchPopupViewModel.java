@@ -17,9 +17,9 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.adapters.CityAdapter;
 import com.topface.topface.ui.adapters.ItemEventListener;
 import com.topface.topface.ui.dialogs.IOnCitySelected;
-import com.topface.topface.utils.RxFieldObservable;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.rx.RxFieldObservable;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -67,9 +66,10 @@ public class CitySearchPopupViewModel extends BaseViewModel<CitySearchPopupBindi
                 })
                 .throttleLast(INPUT_DELAY, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<String>() {
+                .subscribe(new RxUtils.ShortSubscription<String>() {
                     @Override
-                    public void call(String s) {
+                    public void onNext(String s) {
+                        super.onNext(s);
                         sendRequest(s.isEmpty() ? null : s);
                         isRequestInProgress.set(true);
                     }

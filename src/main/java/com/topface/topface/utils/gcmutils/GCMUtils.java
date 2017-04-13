@@ -18,7 +18,6 @@ import com.topface.topface.Ssid;
 import com.topface.topface.data.Photo;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.SerializableToJson;
-import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RegistrationTokenRequest;
@@ -26,11 +25,9 @@ import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
-import com.topface.topface.ui.fragments.feed.LikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.fragments.feed.VisitorsFragment;
-import com.topface.topface.ui.fragments.feed.mutual.MutualFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
 import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -56,7 +53,6 @@ import static com.topface.topface.data.leftMenu.FragmentIdData.TABBED_VISITORS;
 
 public class GCMUtils {
     public static final String GCM_NOTIFICATION = "com.topface.topface.action.NOTIFICATION";
-
     private Context mContext;
 
     public static final int GCM_TYPE_UNKNOWN = -1;
@@ -73,10 +69,13 @@ public class GCMUtils {
     public static final int GCM_TYPE_FAN_UPDATE_PROFILE = 11;
     public static final int GCM_TYPE_FAN_ADD_PHOTO = 12;
     public static final int GCM_TYPE_FAN_ONLINE = 13;
+    public static final int GCM_TYPE_ADMIRATION = 18;
+
 
     public static final String NEXT_INTENT = "com.topface.topface_next";
 
     public static final String GCM_DIALOGS_UPDATE = "com.topface.topface.action.GCM_DIALOGS_UPDATE";
+    public static final String GCM_ADMIRATION_UPDATE = "com.topface.topface.action.GCM_ADMIRATION_UPDATE";
     public static final String GCM_MUTUAL_UPDATE = "com.topface.topface.action.GCM_MUTUAL_UPDATE";
     public static final String GCM_LIKE_UPDATE = "com.topface.topface.action.GCM_LIKE_UPDATE";
     public static final String GCM_GUESTS_UPDATE = "com.topface.topface.action.GCM_GUESTS_UPDATE";
@@ -92,6 +91,7 @@ public class GCMUtils {
     private static boolean showLikes = false;
     private static boolean showSympathy = false;
     private static boolean showVisitors = false;
+    private static boolean showAdmirations = false;
     public static final String NOTIFICATION_INTENT = "GCM";
     /**
      * Extras key for gcm type.
@@ -361,8 +361,6 @@ public class GCMUtils {
                 if (getUsersCountInMessageStack(user) > 1) {
                     // create intent to open Dialogs
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, DialogsFragment.class.getName());
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
@@ -377,6 +375,7 @@ public class GCMUtils {
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
         Intent i = null;
+        String pageName;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
@@ -386,11 +385,9 @@ public class GCMUtils {
                 if (showSympathy) {
                     lastNotificationType = GCM_TYPE_MUTUAL;
                     i = new Intent(context, NavigationActivity.class);
-                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_LIKES));
-                    i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, MutualFragment.class.getName());
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                 }
                 break;
-
             case GCM_TYPE_LIKE:
                 if (showLikes) {
                     lastNotificationType = GCM_TYPE_LIKE;
@@ -399,7 +396,13 @@ public class GCMUtils {
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, LikesFragment.class.getName());
                 }
                 break;
-
+            case GCM_TYPE_ADMIRATION:
+                if (showAdmirations) {
+                    lastNotificationType = GCM_TYPE_ADMIRATION;
+                    i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
+                }
+                break;
             case GCM_TYPE_GUESTS:
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
@@ -420,19 +423,14 @@ public class GCMUtils {
                     i = new Intent(context, NavigationActivity.class);
                 }
                 break;
-            case GCM_TYPE_DIALOGS:
-                lastNotificationType = GCM_TYPE_DIALOGS;
-                i = new Intent(context, NavigationActivity.class);
-                FeedScreensIntent.equipMessageAllIntent(i);
-                break;
             case GCM_TYPE_FAN_UPDATE_PROFILE:
                 lastNotificationType = GCM_TYPE_FAN_UPDATE_PROFILE;
-                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city);
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city, "gcm_type_fan_update_profile");
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserFormFragment.class.getName());
                 break;
             case GCM_TYPE_FAN_ADD_PHOTO:
                 lastNotificationType = GCM_TYPE_FAN_ADD_PHOTO;
-                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city);
+                i = UserProfileActivity.createIntent(null, null, user.id, null, true, true, Utils.getNameAndAge(user.name, user.age), user.city, "gcm_type_fan_add_photo");
                 i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, UserPhotoFragment.class.getName());
                 break;
             case GCM_TYPE_FAN_ONLINE:

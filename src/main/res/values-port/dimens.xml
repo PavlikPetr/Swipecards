@@ -3,4 +3,9 @@
 
     <!--column count for screen "add to leader"-->
     <integer name="add_to_leader_column_count">3</integer>
+
+    <!--Columns count for redesign screen "people nearby"-->
+    <integer name="add_to_people_nearby_count">2</integer>
+
+    <dimen name="people_nearby_image_height">168dp</dimen>
 </resources>

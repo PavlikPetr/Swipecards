@@ -17,11 +17,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class UsersList<T extends FeedUser> extends LinkedList<T> implements SerializableToJson {
+public class UsersList<T extends FeedUser> extends ArrayList<T> implements SerializableToJson {
 
     public static final String USERS = "users";
 
@@ -118,17 +119,9 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         return !contains(object) && super.add(object);
     }
 
-    @Override
-    public void addLast(T object) {
-        if (!contains(object)) {
-            super.addLast(object);
-        }
-    }
-
-    @Override
     public void addFirst(T object) {
         if (!contains(object)) {
-            super.addFirst(object);
+            add(0, object);
             //Если добавляем в начало, то указатель должен увеличиться на 1
             setSearchPosition(getSearchPosition() + 1);
         }
@@ -172,7 +165,8 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         if (users != null) {
             for (int i = 0; i < users.length(); i++) {
                 try {
-                    add(JsonUtils.fromJson(users.optJSONObject(i).toString(), mClass));
+                    //да, да если вдруг тут будет не search user то будет боль
+                    add((T) JsonUtils.searchUserFromJson(users.optJSONObject(i).toString()));
                 } catch (Exception e) {
                     Debug.error(e);
                 }
@@ -274,7 +268,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         addAll(usersList);
     }
 
-    private boolean isNeedPreload() {
+    public boolean isNeedPreload() {
         return mNeedPreload && size() > 0 && mPosition > size() - mLoadController.getItemsOffsetByConnectionType();
     }
 
@@ -321,7 +315,7 @@ public class UsersList<T extends FeedUser> extends LinkedList<T> implements Seri
         if (!useSignature) return false;
         boolean result = false;
         String currentSignature = getSignature();
-        if (currentSignature == null) {
+        if (currentSignature == null || currentSignature.isEmpty()) {
             mSignature = signature;
         } else if (!TextUtils.equals(currentSignature, signature)) {
             log("Signature is changed. Clear search");

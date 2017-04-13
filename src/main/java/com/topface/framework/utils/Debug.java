@@ -111,12 +111,6 @@ public class Debug {
         }
     }
 
-    public static void log(String msg) {
-        if (mShowDebugLogs) {
-            showChunkedLogInfo(App.TAG, msg);
-        }
-    }
-
     public static void error(String msg, Throwable e) {
         if (mShowDebugLogs) {
             StringBuilder stack = new StringBuilder("\n");
@@ -127,6 +121,12 @@ public class Debug {
             String errorText = e.toString();
             errorText = "\n" + errorText + "\n";
             showChunkedLogError(App.TAG, msg + errorText + stack.toString());
+        }
+    }
+
+    public static void log(String msg) {
+        if (mShowDebugLogs) {
+            showChunkedLogInfo(App.TAG, msg);
         }
     }
 

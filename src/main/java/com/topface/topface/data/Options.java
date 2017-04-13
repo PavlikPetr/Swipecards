@@ -20,8 +20,8 @@ import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -35,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.inject.Inject;
 
 import static com.topface.topface.data.leftMenu.FragmentIdData.DATING;
 import static com.topface.topface.data.leftMenu.FragmentIdData.UNDEFINED;
@@ -167,8 +165,9 @@ public class Options extends AbstractData {
     public AppOfTheDay appOfTheDay;
     public Offerwalls offerwalls = new Offerwalls();
     public boolean forceCoinsSubscriptions;
-
-    public boolean showRefillBalanceInSideMenu = false;
+    public boolean mutualPopupEnabled;
+    public boolean showRefillBalanceInSideMenu;
+    public boolean enableFacebookInvite;
     public boolean unlockAllForPremium;
     public int maxMessageSize = 10000;
     public ForceOfferwallRedirect forceOfferwallRedirect = new ForceOfferwallRedirect();
@@ -178,13 +177,11 @@ public class Options extends AbstractData {
     public NotShown notShown = new NotShown();
     transient public InstantMessagesForNewbies instantMessagesForNewbies = new InstantMessagesForNewbies();
     public InterstitialInFeeds interstitial = new InterstitialInFeeds();
-    @Inject
-    transient TopfaceAppState mAppState;
 
     /**
      * Набор разнообразных параметров срезов по пользователю, для статистики
      */
-    public HashMap<String, Object> statisticsSlices;
+    public HashMap<String, Object> statisticsSlices = new HashMap<>();
 
     /**
      * массив пунктов левого меню от интеграторов
@@ -196,6 +193,26 @@ public class Options extends AbstractData {
      */
     public OfferwallsSettings offerwallsSettings = new OfferwallsSettings();
 
+    /**
+     * {Boolean} peopleNearbyRedesignEnabled - флаг определяющий показ нового экрана "Люди рядом"
+     */
+    public boolean peopleNearbyRedesignEnabled;
+
+    /**
+     * {Boolean} datingRedesignEnabled - флаг определяющий показ нового экрана "Знакомства"
+     */
+    public Boolean datingRedesignEnabled = false;
+
+    /**
+     * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
+     */
+    public FBInviteSettings fbInviteSettings = new FBInviteSettings();
+
+    /**
+     * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
+     */
+    public PaymentInfo paymentNinjaInfo = new PaymentInfo();
+
     public Options(IApiResponse data) {
         this(data.getJsonResult());
     }
@@ -206,7 +223,6 @@ public class Options extends AbstractData {
 
     public Options(JSONObject data, boolean cacheToPreferences) {
         if (data != null) {
-            App.from(App.getContext().getApplicationContext()).inject(this);
             fillData(data, cacheToPreferences);
         }
     }
@@ -338,6 +354,7 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
+            datingRedesignEnabled = response.optBoolean("datingRedesignEnabled");
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
@@ -367,6 +384,16 @@ public class Options extends AbstractData {
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
+            peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
+            enableFacebookInvite = response.optBoolean("enableFacebookInvite");
+            mutualPopupEnabled = response.optBoolean("mutualPopupEnabled");
+            JSONObject fbInvitesJsonObject = response.optJSONObject("fbInvite");
+            if (fbInvitesJsonObject != null) {
+                fbInviteSettings = JsonUtils.fromJson(fbInvitesJsonObject.toString(), FBInviteSettings.class);
+            }
+            if (response.has("paymentNinjaInfo")) {
+                paymentNinjaInfo = JsonUtils.fromJson(response.optJSONObject("paymentNinjaInfo").toString(), PaymentInfo.class);
+            }
 
         } catch (Exception e) {
             // отображение максимально заметного тоста, чтобы на этапе тестирования любого функционала
@@ -383,7 +410,7 @@ public class Options extends AbstractData {
             Debug.error("Options parsing error", e);
         }
         if (cacheToPreferences) {
-            mAppState.setData(this);
+            App.getAppComponent().appState().setData(this);
         }
     }
 

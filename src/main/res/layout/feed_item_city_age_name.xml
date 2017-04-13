@@ -8,17 +8,13 @@
 
         <import type="android.databinding.ViewDataBinding" />
 
-        <import type="com.topface.topface.ui.fragments.feed.feed_base.BaseFeedItemViewModel" />
+        <import type="com.topface.topface.ui.fragments.feed.mutual.MutualItemViewModel" />
 
         <import type="com.topface.topface.data.FeedItem" />
 
         <variable
             name="model"
-            type="BaseFeedItemViewModel&lt;ViewDataBinding, FeedItem&gt;" />
-
-        <variable
-            name="city"
-            type="com.topface.topface.data.City" />
+            type="MutualItemViewModel" />
 
         <variable
             name="longClickListener"
@@ -38,6 +34,7 @@
         app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
+            app:uiTestTag="@{model.getTag()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> model.onAvatarClick()}">
@@ -70,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@{city.name}" />
+                android:text="@{model.getCity}" />
 
         </LinearLayout>
 

@@ -1,13 +1,17 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
 import android.databinding.ViewDataBinding
+import android.text.Html
+import android.text.TextUtils
 import android.view.View
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.feed.feed_utils.AgeAndNameData
 import com.topface.topface.ui.fragments.feed.feed_utils.AvatarHolder
+import com.topface.topface.ui.fragments.feed.feed_utils.getUITestTag
 import com.topface.topface.viewModels.BaseViewModel
 
 /**
@@ -16,17 +20,32 @@ import com.topface.topface.viewModels.BaseViewModel
  */
 open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding: T, val item: D, private val mNavigator: IFeedNavigator,
                                                                         private val mIsActionModeEnabled: () -> Boolean) : BaseViewModel<T>(binding) {
-
+    open val feed_type: String = "UNDEFINED"
     var avatarHolder: AvatarHolder? = null
     var nameAndAge: AgeAndNameData? = null
     open val text: String? = null
 
+    companion object{
+        const val AGE_TEMPLATE = ", %d"
+        const val DOTS = "&#8230;"
+        const val TAG_TEMPLATE = "%s_%d_%s"
+    }
+
     init {
         item.user?.let {
             avatarHolder = AvatarHolder(it.photo, getStubResourсe())
-            nameAndAge = AgeAndNameData(it.nameAndAge, null, getOnlineRes(it))
+            nameAndAge = getNameAndAge(it)
         }
     }
+
+    fun getTag() = item.getUITestTag(feed_type)
+
+    open fun getNameAndAge(feedUser: FeedUser) = AgeAndNameData(
+            if (TextUtils.isEmpty(feedUser.firstName))
+                Html.fromHtml(DOTS).toString()
+            else
+                feedUser.firstName,
+            String.format(App.getCurrentLocale(), AGE_TEMPLATE, feedUser.age), getOnlineRes(feedUser))
 
     private fun getOnlineRes(user: FeedUser): Int {
         if (user.state == null) {
@@ -65,6 +84,8 @@ open class BaseFeedItemViewModel<T : ViewDataBinding, out D : FeedItem>(binding:
     open fun onAvatarClickActionModeEnabled() {
     }
 
-    open fun onAvatarClickActionModeDisabled() = mNavigator.showProfile(item)
+    open fun onAvatarClickActionModeDisabled() {
+        mNavigator.showProfile(item, feed_type.toLowerCase())
+    }
 
 }

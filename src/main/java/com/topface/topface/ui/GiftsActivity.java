@@ -11,11 +11,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.SendGiftAnswer;
+import com.topface.topface.databinding.AcGiftsBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.GiftsRequest;
@@ -25,16 +29,21 @@ import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.gift.GiftsListFragment;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.utils.EasyTracker;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import static com.topface.topface.utils.FlurryManager.BUY_GIFT;
 
-public class GiftsActivity extends BaseFragmentActivity implements IGiftSendListener {
+public class GiftsActivity extends BaseFragmentActivity<AcGiftsBinding> implements IGiftSendListener {
 
     public static final int INTENT_REQUEST_GIFT = 111;
     public static final String INTENT_GIFT_PRICE = "gift_price";
@@ -43,6 +52,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     public static final String GIFTS_LIST = "gifts_list";
     public static final String SUCCESS_TOAST_AVAILABLE = "success_toast_available";
     public static final String INTENT_SEND_GIFT_ANSWER = "send_gift_answer";
+    public static final String FROM = "From";
 
     private ArrayList<Gift> mAllGifts = new ArrayList<>();
     private int mUserIdToSendGift;
@@ -62,9 +72,10 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
      * @param userId  profile id to send gift
      * @return intent
      */
-    public static Intent getSendGiftIntent(Context context, int userId) {
+    public static Intent getSendGiftIntent(Context context, int userId, String from) {
         Intent result = new Intent(context, GiftsActivity.class);
         result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
+        result.putExtra(FROM, from);
         return result;
     }
 
@@ -78,10 +89,11 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
      * @param isSuccessToastAvailable show or not toast on success gift send
      * @return intent
      */
-    public static Intent getSendGiftIntent(Context context, int userId, boolean isSuccessToastAvailable) {
+    public static Intent getSendGiftIntent(Context context, int userId, boolean isSuccessToastAvailable, String from) {
         Intent result = new Intent(context, GiftsActivity.class);
         result.putExtra(INTENT_USER_ID_TO_SEND_GIFT, userId);
         result.putExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, isSuccessToastAvailable);
+        result.putExtra(FROM, from);
         return result;
     }
 
@@ -89,7 +101,7 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        actionBarView.setArrowUpView(getResources().getString(R.string.profile_gifts));
+        NewProductsKeysGeneratedStatistics.sendNow_GIFTS_OPEN(new Slices().putSlice("ref", getIntent().getStringExtra(FROM)), getApplicationContext());
         mUserIdToSendGift = getIntent().getIntExtra(INTENT_USER_ID_TO_SEND_GIFT, 0);
         mIsSuccessToastAvailable = getIntent().getBooleanExtra(INTENT_IS_SUCCESS_TOAST_AVAILABLE, true);
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.giftGrid);
@@ -111,11 +123,6 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
             }
         }).build();
         mLockScreen.addView(mRetryView.getView());
-    }
-
-    @Override
-    protected int getContentLayout() {
-        return R.layout.ac_gifts;
     }
 
     /**
@@ -240,5 +247,22 @@ public class GiftsActivity extends BaseFragmentActivity implements IGiftSendList
                 }
             }
         }).exec();
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
+        return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.profile_gifts), this);
+    }
+
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcGiftsBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_gifts;
     }
 }

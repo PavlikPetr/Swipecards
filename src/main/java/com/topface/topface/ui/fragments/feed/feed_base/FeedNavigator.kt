@@ -1,19 +1,46 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
+import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
+import android.support.v4.app.ActivityOptionsCompat
+import android.view.View
+import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.dialogs.ErrorDialogFactory
+import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
-import com.topface.topface.data.FeedItem
+import com.topface.topface.R
+import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
-import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.data.leftMenu.WrappedNavigationData
+import com.topface.topface.data.search.SearchUser
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
+import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
+import com.topface.topface.ui.fragments.buy.PurchaseSuccessfullFragment
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
+import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
+import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
+import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
+import com.topface.topface.ui.settings.FeedbackMessageFragment
+import com.topface.topface.ui.settings.SettingsContainerActivity
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
+import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
-import javax.inject.Inject
 
 /**
  * Класс для управления переходами между эркраними в фидах
@@ -22,35 +49,64 @@ import javax.inject.Inject
 //todo раздавать через даггер 2, синглтон на фрагмент
 class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNavigator {
 
-    @Inject lateinit var mNavigationState: NavigationState
-
-    init {
-        App.get().inject(this)
+    private val mNavigationState by lazy {
+        App.getAppComponent().navigationState()
     }
 
-    override fun showPurchaseCoins() = mActivityDelegate.startActivity(PurchasesActivity
-            .createBuyingIntent("EmptyLikes", App.get().options.topfaceOfferwallRedirect))
+    private val mEmptyDatingFragment by lazy {
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(DatingEmptyFragment.TAG)?.let { it as DatingEmptyFragment } ?: DatingEmptyFragment.newInstance()
+    }
 
-    override fun showPurchaseVip() = mActivityDelegate.startActivityForResult(PurchasesActivity
-            .createVipBuyIntent(null, "Likes"), PurchasesActivity.INTENT_BUY_VIP)
+    override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
+            .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
 
-    override fun <T : FeedItem> showProfile(item: T?) {
+    override fun showPurchaseVip(from: String) = mActivityDelegate.startActivityForResult(PurchasesActivity
+            .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
+
+    override fun <T : FeedItem> showProfile(item: T?, from: String) {
         item?.let {
             if (!it.user.isEmpty) {
                 val user = it.user
                 mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, user.photo,
                         user.id, it.id, false, true, Utils.getNameAndAge(user.firstName, user.age),
-                        user.city.getName()))
+                        user.city.getName(), from))
             }
         }
     }
 
+    override fun showProfile(item: SearchUser?, from: String) =
+            item?.let {
+                if (!it.isEmpty) {
+                    mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, it.photo,
+                            it.id, null, false, true, Utils.getNameAndAge(it.firstName, it.age),
+                            it.city.getName(), from))
+                }
+            } ?: Unit
+
+    /**
+     * Show chat from feed
+     */
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
-            if (!it.user.isEmpty) {
-                val user = it.user
-                val intent = ChatActivity.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, item.type, user.banned)
-                mActivityDelegate.startActivityForResult(intent, ChatActivity.REQUEST_CHAT)
+            it.user?.let {
+                showChat(it) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, banned) }
+            }
+        }
+    }
+
+    /**
+     * Show chat from dating
+     */
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
+        user?.let {
+            showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
+        }
+    }
+
+    private inline fun <T : FeedUser> showChat(user: T, func: T.() -> Intent?) {
+        if (!user.isEmpty) {
+            user.func()?.let {
+                mActivityDelegate.startActivityForResult(it, ChatActivity.REQUEST_CHAT)
             }
         }
     }
@@ -60,10 +116,108 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                     WrappedNavigationData.SELECT_EXTERNALY))
 
     override fun showAddToLeader() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
-            AddToPhotoBlogActivity::class.java), PhotoblogFragment.ADD_TO_PHOTO_BLOG_ACTIVITY_ID)
+            if (App.get().options.peopleNearbyRedesignEnabled) AddToPhotoBlogRedesignActivity::class.java else AddToPhotoBlogActivity::class.java), PhotoblogFragment.ADD_TO_PHOTO_BLOG_ACTIVITY_ID)
 
     override fun showOwnProfile() = mActivityDelegate.startActivity(Intent(mActivityDelegate.applicationContext, OwnProfileActivity::class.java))
 
     override fun showTakePhotoPopup() = TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_ADD_TO_LEADER)
             .show(mActivityDelegate.supportFragmentManager, TakePhotoPopup.TAG)
+
+    @SuppressLint("NewApi")
+    override fun showAdmirationPurchasePopup(currentUser: SearchUser?, transitionView: View, activity: Activity, @ColorInt fabColorResId: Int, @DrawableRes fabIconResId: Int) {
+        val intent = Intent(activity, AdmirationPurchasePopupActivity::class.java)
+        intent.putExtra(AdmirationPurchasePopupActivity.CURRENT_USER, currentUser)
+        if (Utils.isLollipop()) {
+            FabTransform.addExtras(intent, fabColorResId, fabIconResId)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView,
+                    AdmirationPurchasePopupViewModel.TRANSITION_NAME)
+            activity.startActivityForResult(intent, AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP, options.toBundle())
+        } else {
+            activity.startActivityForResult(intent, AdmirationPurchasePopupActivity.INTENT_ADMIRATION_PURCHASE_POPUP)
+        }
+    }
+
+    override fun showGiftsActivity(id: Int, from: String) {
+        mActivityDelegate.startActivityForResult(
+                GiftsActivity.getSendGiftIntent(mActivityDelegate.applicationContext, id, false, from),
+                GiftsActivity.INTENT_REQUEST_GIFT
+        )
+    }
+
+    override fun showEmptyDating(onCancelFunction: (() -> Unit)?) = with(mEmptyDatingFragment) {
+        if (onCancelFunction != null) {
+            setOnCancelListener { onCancelFunction() }
+        }
+        show(mActivityDelegate.supportFragmentManager, DatingEmptyFragment.TAG)
+    }
+
+    override fun closeEmptyDating() {
+        mEmptyDatingFragment.setOnCancelListener(null)
+        mEmptyDatingFragment.dialog?.cancel()
+    }
+
+    override fun showFilter() = mActivityDelegate.startActivityForResult(Intent(mActivityDelegate.applicationContext,
+            EditContainerActivity::class.java), EditContainerActivity.INTENT_EDIT_FILTER)
+
+    override fun showAlbum(position: Int, userId: Int, photosCount: Int, photos: Photos) =
+            mActivityDelegate.startActivityForResult(PhotoSwitcherActivity.getPhotoSwitcherIntent(position, userId, photosCount, photos),
+                    PhotoSwitcherActivity.PHOTO_SWITCHER_ACTIVITY_REQUEST_CODE)
+
+    override fun showTrialPopup(args: Bundle) {
+        ExperimentBoilerplateFragment.newInstance(args = args)
+                .show(mActivityDelegate.supportFragmentManager, ExperimentBoilerplateFragment.TAG)
+    }
+
+    override fun showMutualPopup(mutualUser: FeedUser) {
+        val mMutualPopupFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(MutualPopupFragment.TAG)?.let { it as MutualPopupFragment } ?: MutualPopupFragment.getInstance(mutualUser)
+        mMutualPopupFragment.show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+    }
+
+    override fun showDialogpopupMenu(item: FeedDialog) =
+            DialogMenuFragment.getInstance(item).show(mActivityDelegate.supportFragmentManager, DialogMenuFragment.TAG)
+
+    override fun showPurchaseProduct(skuId: String, from: String) =
+            mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
+                    GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
+
+    override fun showPurchaseSuccessfullFragment(sku: String) {
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
+            it as PurchaseSuccessfullFragment
+        } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+    }
+
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                NinjaAddCardActivity.REQUEST_CODE)
+    }
+
+    override fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit) {
+        ErrorDialogFactory().construct(mActivityDelegate.getAlertDialogBuilder(R.style.NinjaTheme_Dialog),
+                singleButton,
+                object : IErrorDialogResultReceiver {
+                    override fun onRetryClick() {
+                        onRetryAction()
+                    }
+
+                    override fun onSwitchClick() {
+                        mActivityDelegate.finish()
+                    }
+                }
+        )
+    }
+
+    override fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData) {
+        mActivityDelegate.supportFragmentManager
+                .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
+                ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
+                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+    }
+
+    override fun showPaymentNinjaHelp() {
+        mActivityDelegate.startActivityForResult(SettingsContainerActivity.getFeedbackMessageIntent(
+                mActivityDelegate.applicationContext,
+                FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
+        ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
+    }
 }

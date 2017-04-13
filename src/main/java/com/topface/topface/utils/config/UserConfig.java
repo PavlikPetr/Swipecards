@@ -67,7 +67,7 @@ public class UserConfig extends AbstractConfig {
     public static final String SILENT = "silent";
     public static final String PURCHASED_SUBSCRIPTIONS = "purchased_subscriptions";
     public static final String DATING_LOCK_POPUP_TIME = "dating_lock_popup_time";
-    public static final String TRIAL_VIP_POPUP_COUNTER = "trial_vip_popup_counter";
+    public static final String QUEUE_TRIAL_VIP_POPUP_COUNTER = "trial_vip_popup_counter";
     public static final String TOPFACE_OFFERWALL_REDIRECT_COUNTER = "topface_offerwall_redirect_counter";
     public static final String REMAINED_DAILY_PUBNATIVE_SHOWS = "remained_feed_ad_shows";
     public static final String LAST_DAY_PUBNATIVE_SHOWN = "current_day_for_showing_feed_ad";
@@ -91,6 +91,12 @@ public class UserConfig extends AbstractConfig {
     private static final String FULLSCREEN_SETTINGS = "fullscreen_settings";
     private static final String BANNER_SETTINGS = "banner_settings";
     private static final String LOCALE_CHANGE = "locale_change";
+    private static final String ADMIRATION_PURCHASE_POPUP_SHOWN = "admiration_popup_purchase_shown";
+    private static final String SYMPATHES_COUNT = "symphates_count";
+    private static final String TRIAL_SHOWS_IN_USER_PROFILE = "trial_shows_in_user_profile";
+    private static final String TRIAL_SHOWS_IN_VISITORS = "trial_shows_in_visitors";
+    public static final String TRIAL_VIP_POPUP_SHOW_COUNTER = "trial_vip_popup_show_counter";
+    public static final String PEOPLE_NEARBY_POPOVER_CLOSE_TIME = "people_nearby_popover_show_time";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -186,7 +192,7 @@ public class UserConfig extends AbstractConfig {
         // отправленные контакты для отправки смс
         addField(settingsMap, INVITED_CONTACTS_FOR_SMS, "");
         // счетчик показа попапа триального VIP
-        addField(settingsMap, TRIAL_VIP_POPUP_COUNTER, DEFAULT_SHOW_COUNT);
+        addField(settingsMap, QUEUE_TRIAL_VIP_POPUP_COUNTER, DEFAULT_SHOW_COUNT);
         // последнее сохраненное местоположение пользователя
         addField(settingsMap, LAST_CATCHED_GEO_LATITUDE, DEFAULT_USER_LATITUDE_LOCATION);
         // время последнего показа попапа триала
@@ -210,6 +216,17 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, BANNER_SETTINGS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
         //флаг смены локализации
         addField(settingsMap, LOCALE_CHANGE, false);
+        addField(settingsMap, ADMIRATION_PURCHASE_POPUP_SHOWN, false);
+        //Колличество симпатия показанных за день
+        addField(settingsMap, SYMPATHES_COUNT, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //Колличество показов триала в профиле юзера
+        addField(settingsMap, TRIAL_SHOWS_IN_USER_PROFILE, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        //Колличество показов триала в гостях
+        addField(settingsMap, TRIAL_SHOWS_IN_VISITORS, new DailyConfigExtension.DailyConfigField<>(0, DailyConfigExtension.EVERY_DAY).toString());
+        // общее число показов попапа триального вип для пользователя
+        addField(settingsMap, TRIAL_VIP_POPUP_SHOW_COUNTER, 0);
+        // время последнего закрытия popover на экране Люди рядом
+        addField(settingsMap, PEOPLE_NEARBY_POPOVER_CLOSE_TIME, 0L);
     }
 
     @Override
@@ -333,13 +350,63 @@ public class UserConfig extends AbstractConfig {
         return getStringField(getSettingsMap(), DATA_PIN_CODE);
     }
 
+
+    public void setAdmirationPurchasePopupShown() {
+        setField(getSettingsMap(), ADMIRATION_PURCHASE_POPUP_SHOWN, true);
+    }
+
+    public Boolean isAdmirationPurchasePopupShown() {
+        return getBooleanField(getSettingsMap(), ADMIRATION_PURCHASE_POPUP_SHOWN);
+    }
+
+    private void setShowsInVisitors() {
+        mConfigExtension.setDailyConfigField(TRIAL_SHOWS_IN_VISITORS, 0);
+    }
+
+    public void setShowsInUserProfile() {
+        mConfigExtension.setDailyConfigField(TRIAL_SHOWS_IN_USER_PROFILE, 0);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getShowsInUserProfile() {
+        return mConfigExtension.getDailyConfigField(TRIAL_SHOWS_IN_USER_PROFILE, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
+    }
+
+    public void setSympathyCount() {
+        mConfigExtension.setDailyConfigField(SYMPATHES_COUNT, 0);
+    }
+
+    public <T> DailyConfigExtension.DailyConfigField<T> getSympathyCount() {
+        return mConfigExtension.getDailyConfigField(SYMPATHES_COUNT, new TypeToken<DailyConfigExtension.DailyConfigField<Integer>>() {
+        }.getType());
+    }
+
+    /**
+     * save the number of impressions trial vip popup inside popup queue
+     *
+     * @param count times trial vip popup showing
+     */
+    public void setQueueTrialVipPopupCounter(int count) {
+        setField(getSettingsMap(), QUEUE_TRIAL_VIP_POPUP_COUNTER, count);
+    }
+
+    /**
+     * get the number of impressions trial vip popup inside popup queue
+     *
+     * @return count
+     */
+    public int getQueueTrialVipCounter() {
+        return getIntegerField(getSettingsMap(), QUEUE_TRIAL_VIP_POPUP_COUNTER);
+    }
+
+
     /**
      * save the number of impressions trial vip popup
      *
      * @param count times trial vip popup showing
      */
-    public void setTrialVipPopupCounter(int count) {
-        setField(getSettingsMap(), TRIAL_VIP_POPUP_COUNTER, count);
+    public void setTrialVipPopupShowCounter(int count) {
+        setField(getSettingsMap(), TRIAL_VIP_POPUP_SHOW_COUNTER, count);
     }
 
     /**
@@ -347,10 +414,9 @@ public class UserConfig extends AbstractConfig {
      *
      * @return count
      */
-    public int getTrialVipCounter() {
-        return getIntegerField(getSettingsMap(), TRIAL_VIP_POPUP_COUNTER);
+    public int getTrialVipShowCounter() {
+        return getIntegerField(getSettingsMap(), TRIAL_VIP_POPUP_SHOW_COUNTER);
     }
-
 
     public void setDatingLockPopupRedirect(long lastTime) {
         setField(getSettingsMap(), DATING_LOCK_POPUP_TIME, lastTime);
@@ -777,4 +843,22 @@ public class UserConfig extends AbstractConfig {
         return setField(getSettingsMap(), IS_USER_CITY_CHANGED, isChanged);
     }
 
+    /**
+     * Set time of PeopleNearby popover close
+     *
+     * @param time current time of popover close
+     * @return true if set successfull
+     */
+    public boolean setPeopleNearbyPopoverClose(long time) {
+        return setField(getSettingsMap(), PEOPLE_NEARBY_POPOVER_CLOSE_TIME, time);
+    }
+
+    /**
+     * Get time of last PeopleNearby popover close
+     *
+     * @return time of last popover close
+     */
+    public long getPeopleNearbyPopoverClose() {
+        return getLongField(getSettingsMap(), PEOPLE_NEARBY_POPOVER_CLOSE_TIME);
+    }
 }

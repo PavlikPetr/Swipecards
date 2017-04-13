@@ -43,7 +43,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.topface.framework.imageloader.IPhoto;
-import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.i18n.plurals.PluralResources;
 import com.topface.topface.App;
@@ -57,19 +56,19 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.debug.HockeySender;
-import com.topface.topface.utils.exception.OurTestException;
 import com.topface.topface.utils.social.AuthToken;
 
-import org.acra.sender.ReportSenderException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -109,6 +108,10 @@ public class Utils {
 
     public static String getLocalResUrl(@DrawableRes int res) {
         return String.format(App.getCurrentLocale(), Utils.getLocalRes(), res);
+    }
+
+    public static String getUniqueKeyStatistic(String postfix) {
+        return String.format(App.getCurrentLocale(), "%d_%s", App.get().getProfile().uid, postfix);
     }
 
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {
@@ -225,6 +228,19 @@ public class Utils {
         return size;
     }
 
+    /**
+     * Вычисляется высота системного statusBar, что бы мы могли подвинуть свой тулбар
+     */
+    public static int getStatusBarHeight(Context context) {
+        int result = 0;
+        Resources resources = context.getResources();
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = resources.getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     public static boolean isIntentAvailable(Context context, Intent intent) {
         final PackageManager packageManager = context.getPackageManager();
         if (packageManager != null) {
@@ -258,6 +274,7 @@ public class Utils {
         Intent i = Utils.getIntentToOpenUrl(url);
         if (i != null) {
             FlurryManager.getInstance().sendExternalUrlEvent(url);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         }
     }
@@ -461,7 +478,6 @@ public class Utils {
         }
     }
 
-
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static void enableLayoutChangingTransition(ViewGroup viewGroup) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -560,21 +576,6 @@ public class Utils {
 
     public static String replaceDashWithHyphen(String text) {
         return Html.fromHtml(text.replaceAll(DASH_SYMBOL, HYPHEN_SYMBOL)).toString();
-    }
-
-    public static void sendHockeyMessage(final String message) {
-        final Context context = App.getContext();
-        new BackgroundThread() {
-            @Override
-            public void execute() {
-                HockeySender hockeySender = new HockeySender();
-                try {
-                    hockeySender.send(context, hockeySender.createLocalReport(context, new OurTestException(message)));
-                } catch (ReportSenderException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
     }
 
     public static String getUnlockButtonText(int sec) {
@@ -676,9 +677,78 @@ public class Utils {
     }
 
     @NotNull
+    public static List<Integer> chooseRandomResourceID(int count, List<Integer> images) {
+        List<Integer> result = new ArrayList<>();
+        Random random = new Random();
+        int randomIndex;
+        List<Integer> indexSaver = new ArrayList<>();
+        if (count == images.size()) {
+            return images;
+        } else if (count > images.size()) {
+            for (int i = 0; i < count - images.size(); i++) {
+                randomIndex = random.nextInt(images.size());
+                while (indexSaver.contains(randomIndex)) {
+                    randomIndex = random.nextInt(images.size());
+                }
+                indexSaver.add(randomIndex);
+                images.add(images.get(randomIndex));
+            }
+            indexSaver.clear();
+            return images;
+        } else if (count < images.size()) {
+            if (count > images.size() / 2) {
+                for (int i = 0; i < images.size() - count; i++) {
+                    randomIndex = random.nextInt(images.size());
+                    while (indexSaver.contains(randomIndex)) {
+                        randomIndex = random.nextInt(images.size());
+                    }
+                    indexSaver.add(randomIndex);
+                    images.remove(randomIndex);
+                }
+                indexSaver.clear();
+                return images;
+            } else {
+                for (int i = 0; i < count; i++) {
+                    randomIndex = random.nextInt(images.size());
+                    while (indexSaver.contains(randomIndex)) {
+                        randomIndex = random.nextInt(images.size());
+                    }
+                    indexSaver.add(randomIndex);
+                    result.add(images.get(randomIndex));
+                }
+                indexSaver.clear();
+            }
+        }
+
+        return result;
+    }
+
+    @NotNull
     public static String prepareUrl(@NotNull String url) {
         return url.replace(USER_ID, AuthToken.getInstance().getUserSocialId())
                 .replace(SECRET_KEY, Ssid.get());
     }
 
+    public static Boolean isLollipop() {
+        return android.os.Build.VERSION.SDK_INT >= 21;
+    }
+
+    // костыль только по причине того, что IntArray котлин не подходит для getLocationInWindow
+    public static ArrayList<Integer> getLocationInWindow(View view) {
+        int[] position = new int[2];
+        view.getLocationInWindow(position);
+        return new ArrayList<>(Arrays.asList(position[0], position[1]));
+    }
+
+    public static boolean isKitKatWithNoTranslucent(boolean isDatingRedesignEnabled) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+                && !isDatingRedesignEnabled;
+    }
+
+    public static String convertToHex(final byte[] bytes) {
+        final BigInteger bigInt = new BigInteger(1, bytes);
+        final String formatString = "%0" + (bytes.length << 1) + "x";
+        return String.format(Locale.US, formatString, bigInt);
+    }
 }

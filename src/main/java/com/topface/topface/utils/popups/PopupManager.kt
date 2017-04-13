@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity
 import com.topface.framework.utils.Debug
 import com.topface.topface.utils.controllers.startactions.IStartAction
 import org.jetbrains.anko.doAsync
+import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 
@@ -19,11 +20,12 @@ object PopupManager {
 
     private val mSequences = ConcurrentHashMap<String, SequenceHolder>()
     private var mActionFactory: IStartActionFactory? = null
-    private var mActivity: FragmentActivity? = null
+    private var mActivity: WeakReference<FragmentActivity>? = null
 
     fun init(activity: FragmentActivity) {
-        if (mActivity == null || mActionFactory == null) {
-            mActivity = activity
+        val activityRef = mActivity
+        if (activityRef == null || activityRef.get() == null || mActionFactory == null) {
+            mActivity = WeakReference(activity)
             mActionFactory = StartActionFactory()
         }
     }
@@ -92,7 +94,7 @@ object PopupManager {
     }
 
     private fun getApplicableAction(holder: SequenceHolder, name: String): IStartAction? {
-        val activity = mActivity
+        val activity = mActivity?.get()
         val factory = mActionFactory
         if (activity != null && factory != null) {
             for (i in holder.position..holder.sequence.count() - 1) {
@@ -122,12 +124,11 @@ object PopupManager {
         }
     }
 
-    fun isSequenceComplete(name: String): Boolean =
+    fun isSequenceComplete(name: String) =
             if (mSequences.containsKey(name)) {
                 mSequences[name]?.let {
-                    return@let it.isSequenceComplete
-                }
-                false
+                    return it.isSequenceComplete
+                } ?: false
             } else {
                 false
             }

@@ -39,21 +39,20 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.RateController;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.actionbar.OverflowMenu;
 import com.topface.topface.utils.actionbar.OverflowMenuUser;
+import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -85,8 +84,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private String mUserNameAndAge;
     private String mUserCity;
     private Photo mPhoto;
-    @Inject
-    TopfaceAppState mState;
     Subscription mBalanceSubscription;
 
     @Override
@@ -109,11 +106,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @SuppressWarnings("ConstantConditions")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        App.get().inject(this);
         View root = super.onCreateView(inflater, container, savedInstanceState);
-        mBalanceSubscription = mState.getObservable(BalanceData.class).subscribe(new Action1<BalanceData>() {
+        mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
-            public void call(BalanceData balanceData) {
+            public void onNext(BalanceData balanceData) {
+                super.onNext(balanceData);
                 if (!isAddToFavoriteAvailable() && balanceData.premium) {
                     setIsAddToFavoritsAvailable(balanceData.premium);
                 }
@@ -165,7 +162,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mRateController != null) {
+        if (mRateController != null) {
             mRateController.destroyController();
         }
     }
@@ -173,6 +170,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
     @Override
     public void onResume() {
         super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(TextUtils.isEmpty(mUserNameAndAge) ?
+                getString(R.string.general_profile) :
+                mUserNameAndAge,
+                mUserCity));
         getUserProfile(mProfileId);
         if (App.from(getActivity()).getProfile().premium) {
             setIsChatAvailable(true);
@@ -200,24 +201,6 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         mGiftReceiver,
                         new IntentFilter(PhotoSwitcherActivity.ADD_NEW_GIFT)
                 );
-    }
-
-    @Override
-    protected String getDefaultTitle() {
-        return getString(R.string.general_profile);
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return mUserCity;
-    }
-
-    @Override
-    protected String getTitle() {
-        if (TextUtils.isEmpty(mUserNameAndAge)) {
-            return getDefaultTitle();
-        }
-        return mUserNameAndAge;
     }
 
     @Override
@@ -485,7 +468,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     @Override
                     public void clickSendGift() {
                         startActivityForResult(
-                                GiftsActivity.getSendGiftIntent(getActivity(), mProfileId),
+                                GiftsActivity.getSendGiftIntent(getActivity(), mProfileId, "profile"),
                                 GiftsActivity.INTENT_REQUEST_GIFT
                         );
                     }

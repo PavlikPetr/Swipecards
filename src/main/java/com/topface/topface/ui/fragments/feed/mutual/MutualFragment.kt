@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.mutual
 
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
-import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.FeedMutual
 import com.topface.topface.databinding.LayoutEmptyMutualBinding
@@ -41,13 +40,10 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
 
     override fun getEmptyFeedLayout() = R.layout.layout_empty_mutual
 
-    override fun getTitle(): String? = getString(R.string.general_sympathies)
-
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isVisibleToUser && isAdded) {
             mViewModel.loadTopFeeds()
         }
     }
-
 }

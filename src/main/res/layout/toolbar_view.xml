@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@{viewModel.topPadding}"
+        app:layout_collapseMode="pin">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@{viewModel.background}"
+            android:visibility="@{viewModel.visibility}"
+            app:navigationIcon="@{viewModel.upIcon}"
+            app:subtitle="@{viewModel.subTitle}"
+            app:subtitleTextColor="@{viewModel.subTitleTextColor}"
+            app:title="@{viewModel.title}"
+            app:titleMarginStart="@dimen/toolbar_title_padding_left"
+            app:titleTextColor="@{viewModel.titleTextColor}">
+
+            <FrameLayout
+                android:id="@+id/toolbarCustomView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="?actionBarSize">
+
+            <include layout="@layout/merge_tab_internal_layout" />
+
+            <include
+                layout="@layout/toolbar_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_elevation"
+                bind:visibility="@{viewModel.shadowVisibility}" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

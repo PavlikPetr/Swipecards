@@ -7,8 +7,11 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.topface.topface.App;
 import com.topface.topface.data.leftMenu.LeftMenuData;
 import com.topface.topface.utils.Utils;
+
+import static com.topface.topface.ui.fragments.MenuFragment.ITEM_TAG_TEMPLATE;
 
 /**
  * Created by ppavlik on 05.05.16.
@@ -22,6 +25,8 @@ public class LeftMenuItemViewModel {
     public ObservableInt dividerVisibility = new ObservableInt(View.GONE);
     public ObservableField<String> iconSrc = new ObservableField<>(null);
     public ObservableBoolean isSelected = new ObservableBoolean(false);
+    // тэги для автоматизированного тестирования
+    public ObservableField<String> tag = new ObservableField<>(null);
 
     private String mIcon;
     private String mBadge;
@@ -35,6 +40,7 @@ public class LeftMenuItemViewModel {
         setDividerEnable(data.isDividerEnabled());
         setIcon(data.getIcon());
         setSelected(data.isSelected());
+        tag.set(String.format(App.getCurrentLocale(), ITEM_TAG_TEMPLATE, data.getSettings().getUniqueKey()));
     }
 
     private void setBadgeCount(String value) {

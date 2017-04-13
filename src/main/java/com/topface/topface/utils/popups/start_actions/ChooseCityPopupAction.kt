@@ -8,13 +8,10 @@ import com.topface.topface.R
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SettingsRequest
 import com.topface.topface.requests.handlers.ApiHandler
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.dialogs.CitySearchPopup
-import com.topface.topface.ui.dialogs.TakePhotoPopup
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.utils.controllers.startactions.IStartAction
-import com.topface.topface.utils.controllers.startactions.OnNextActionListener
 import com.topface.topface.utils.popups.PopupManager
-import javax.inject.Inject
 
 /**
  * Выбор города
@@ -22,11 +19,8 @@ import javax.inject.Inject
  */
 class ChooseCityPopupAction(private val mFragmentManager: FragmentManager, private val mPriority: Int, private val mFrom: String) : IStartAction {
 
-    @Inject
-    lateinit var mAppState: TopfaceAppState
-
-    init {
-        App.get().inject(this)
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
     }
 
     override fun callInBackground() {

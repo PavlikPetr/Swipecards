@@ -1,11 +1,14 @@
 package com.topface.topface.ui;
 
-import android.support.v4.app.Fragment;
+import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
+import com.topface.topface.ui.fragments.feed.blacklist.BlackListFragment;
 
-import com.topface.topface.ui.fragments.feed.BlackListFragment;
+import org.jetbrains.annotations.NotNull;
 
-
-public class BlackListActivity extends SingleFragmentActivity {
+public class BlackListActivity extends SingleFragmentActivity<BlackListFragment, AcFragmentFrameBinding> {
 
     @Override
     protected String getFragmentTag() {
@@ -13,7 +16,18 @@ public class BlackListActivity extends SingleFragmentActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
+    protected BlackListFragment createFragment() {
         return new BlackListFragment();
+    }
+
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

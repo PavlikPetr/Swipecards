@@ -1,10 +1,10 @@
 package com.topface.topface.promo.dialogs;
 
 import android.content.res.TypedArray;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -15,15 +15,15 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.databinding.PromoExpressMessagesBinding;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
+import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -42,16 +42,15 @@ public class PromoExpressMessages extends PromoDialog {
 
     private Random mRandom;
 
-    @Inject
-    NavigationState mNavigationState;
-    @Inject
-    TopfaceAppState mAppState;
+    private NavigationState mNavigationState;
+    private TopfaceAppState mAppState;
     private Subscription mBalanceSubscription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
+        mNavigationState = App.getAppComponent().navigationState();
+        mAppState = App.getAppComponent().appState();
     }
 
     @Override
@@ -59,9 +58,10 @@ public class PromoExpressMessages extends PromoDialog {
         super.onResume();
         mBalanceSubscription = mAppState
                 .getObservable(BalanceData.class)
-                .subscribe(new Action1<BalanceData>() {
+                .subscribe(new RxUtils.ShortSubscription<BalanceData>() {
                     @Override
-                    public void call(BalanceData balanceData) {
+                    public void onNext(BalanceData balanceData) {
+                        super.onNext(balanceData);
                         if (balanceData.premium) {
                             // хак для открытия диалогов после покупки вип на случай когда протух фрагмент под активити покупок
                             PromoExpressMessages.this.closeFragment();
@@ -136,16 +136,19 @@ public class PromoExpressMessages extends PromoDialog {
     @Override
     public void initViews(View root) {
         super.initViews(root);
-        Button btnDelete = (Button) root.findViewById(R.id.deleteMessages);
+        PromoExpressMessagesBinding binding = DataBindingUtil.bind(root);
+        BackToolbarViewModel toolbarViewModel = new BackToolbarViewModel(binding.toolbarInclude, ResourceExtensionKt.getString(R.string.settings_messages));
+        toolbarViewModel.getUpIcon().set(R.drawable.menu_gray_notification);
+        binding.setToolbarViewModel(toolbarViewModel);
         if (getPremiumEntity().getPopupVersion() == 1) {
-            btnDelete.setTextColor(getResources().getColorStateList(R.color.delete_messages_text_color_selector));
-            btnDelete.setBackgroundColor(Color.TRANSPARENT);
+            binding.deleteMessages.setTextColor(getResources().getColorStateList(R.color.delete_messages_text_color_selector));
+            binding.deleteMessages.setBackgroundColor(Color.TRANSPARENT);
         }
         ArrayList<Integer> avatarArray = getFakeAvatars();
         if (avatarArray.size() != 0) {
-            ((ImageViewRemote) root.findViewById(R.id.firstFakeUser)).setResourceSrc(getAvatarId(avatarArray));
-            ((ImageViewRemote) root.findViewById(R.id.secondFakeUser)).setResourceSrc(getAvatarId(avatarArray));
-            ((ImageViewRemote) root.findViewById(R.id.thirdFakeUser)).setResourceSrc(getAvatarId(avatarArray));
+            binding.firstFakeUser.setResourceSrc(getAvatarId(avatarArray));
+            binding.secondFakeUser.setResourceSrc(getAvatarId(avatarArray));
+            binding.thirdFakeUser.setResourceSrc(getAvatarId(avatarArray));
         }
     }
 
@@ -168,6 +171,7 @@ public class PromoExpressMessages extends PromoDialog {
             } while (avatarsIdArray.contains(usersFakeArray.get(randomValue)) || iterCounter < 30);
             avatarsIdArray.add(usersFakeArray.get(randomValue));
         }
+        imgs.recycle();
         return avatarsIdArray;
     }
 

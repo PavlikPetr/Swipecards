@@ -1,0 +1,21 @@
+<resources>
+    <dimen name="admiration_image_width">100dp</dimen>
+    <dimen name="admiration_image_height">100dp</dimen>
+    <dimen name="admiration_image_margin_top">20dp</dimen>
+
+    <dimen name="coins_button_width">200dp</dimen>
+    <dimen name="coins_button_height">36dp</dimen>
+    <dimen name="coins_button_text_size">12sp</dimen>
+    <dimen name="coins_button_margin_top">12dp</dimen>
+
+    <dimen name="admiration_avatar_width">40dp</dimen>
+    <dimen name="admiration_avatar_height">40dp</dimen>
+    <dimen name="admiration_avatar_margin_top">-16dp</dimen>
+
+
+    <dimen name="admiration_popup_label2_margin_top">6dp</dimen>
+    <dimen name="arrow_bottom_margin_top">16dp</dimen>
+    <dimen name="vip_button_margin_top">4dp</dimen>
+
+    <dimen name="main_label_text_size">11sp</dimen>
+</resources>

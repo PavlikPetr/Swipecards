@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/forms_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:fadingEdge="none"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/right_labels"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="7dp"
+            fab:fab_addButtonColorNormal="@color/dating_fab_like"
+            fab:fab_addButtonColorPressed="@color/dating_fab_like"
+            fab:fab_addButtonPlusIconColor="@color/dating_fab_small"
+            fab:fab_labelsPosition="left">
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                android:id="@+id/send_admiration"
+                style="@style/ExpandableFabItem"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_DATING_FRAGMENT)}"
+                android:src="@drawable/admiration_expanded"/>
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                style="@style/ExpandableFabItem"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.showChat()}"
+                android:src="@drawable/mail_expanded"/>
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                style="@style/ExpandableFabItem"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.skip()}"
+                android:src="@drawable/skip_expanded"/>
+
+            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+                style="@style/ExpandableFabItem"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.sendLike()}"
+                android:src="@drawable/like_expanded"/>
+
+        </net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu>
+
+
+    </FrameLayout>
+
+
+</layout>

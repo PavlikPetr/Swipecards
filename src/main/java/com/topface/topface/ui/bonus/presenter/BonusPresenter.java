@@ -13,7 +13,7 @@ import com.topface.topface.ui.bonus.viewModel.BonusFragmentViewModel;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.external_libs.offers.OffersUtils;
 import com.topface.topface.utils.ListUtils;
-import com.topface.topface.utils.RxUtils;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,8 +24,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Observer;
@@ -38,15 +36,14 @@ public class BonusPresenter implements IBonusPresenter {
 
     private static final int OFFERS_DELAY = 500; //увеличиваем время показа лоадера
 
-    @Inject
-    EventBus mEvenBus;
+    private EventBus mEvenBus;
     private IBonusView mIBonusView;
     private ArrayList<IOfferwallBaseModel> mOffers = new ArrayList<>();
     private BonusFragmentViewModel mViewModel;
     private Subscription mSubscription;
 
     public BonusPresenter() {
-        App.get().inject(this);
+        mEvenBus = App.getAppComponent().eventBus();
     }
 
     @Override
@@ -57,6 +54,10 @@ public class BonusPresenter implements IBonusPresenter {
     @Override
     public void unbindView() {
         mIBonusView = null;
+    }
+
+    @Override
+    public void release() {
         RxUtils.safeUnsubscribe(mSubscription);
     }
 
@@ -88,8 +89,12 @@ public class BonusPresenter implements IBonusPresenter {
     @Override
     public void loadOfferwalls() {
         if (App.get().getOptions().offerwallsSettings.isEnable()) {
-            showLoader();
-            getOfferwalls();
+            if (mOffers.isEmpty()) {
+                showLoader();
+                getOfferwalls();
+            } else {
+                showOffers();
+            }
         } else {
             showEmptyView();
         }

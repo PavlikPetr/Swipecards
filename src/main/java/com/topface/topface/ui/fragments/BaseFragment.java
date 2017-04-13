@@ -22,11 +22,12 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.ui.BaseFragmentActivity;
+import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.analytics.TrackedFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.http.IRequestClient;
 
@@ -41,13 +42,10 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient, IOnBackPressed, IFragmentDelegate {
 
-    private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
     private ActionBar mSupportActionBar;
     private BroadcastReceiver mProfileLoadReceiver;
-    protected ActionBarTitleSetterDelegate mTitleSetter;
-    private boolean mNeedTitles = true;
     private Unbinder mUnbinder;
 
     @Override
@@ -65,9 +63,6 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         } catch (Exception ex) {
             Debug.error(ex);
         }
-        if (savedInstanceState != null) {
-            mNeedTitles = savedInstanceState.getBoolean(STATE_NEED_TITLES, true);
-        }
     }
 
     protected int getStatusBarColor() {
@@ -78,11 +73,14 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         return true;
     }
 
+    protected boolean isTabbedFragment() {
+        return false;
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clearPreviousState();
-        mTitleSetter = new ActionBarTitleSetterDelegate(getSupportActionBar());
         refreshActionBarTitles();
         if (view != null) {
             AppConfig appConfig = App.getAppConfig();
@@ -91,10 +89,16 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
+    public void setToolbarSettings(ToolbarSettingsData settings) {
+        if (getActivity() instanceof ToolbarActivity) {
+            //TODO SETTOOLBARSETTINGS
+//            ((ToolbarActivity) getActivity()).setToolbarSettings(settings);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mTitleSetter = null;
         if (isButterKnifeAvailable() && mUnbinder != null) {
             mUnbinder.unbind();
         }
@@ -111,16 +115,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_NEED_TITLES, mNeedTitles);
     }
 
     private void clearPreviousState() {
         mSupportActionBar = null;
-        mTitleSetter = null;
     }
 
     public void refreshActionBarTitles() {
-        setActionBarTitles(getTitle(), getSubtitle());
     }
 
     @SuppressWarnings("unused")
@@ -166,6 +167,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
                 .registerReceiver(mProfileLoadReceiver, new IntentFilter(CacheProfile.ACTION_PROFILE_LOAD));
         checkProfileLoad();
         refreshActionBarTitles();
+
+        if (isTabbedFragment()) {
+            Activity activity = getActivity();
+            if (activity instanceof ITabLayoutHolder) {
+                ((ITabLayoutHolder) activity).showTabLayout(true);
+            }
+        }
     }
 
     @Override
@@ -215,6 +223,13 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         if (rootView != null) {
             unbindDrawables(getView());
             System.gc();
+        }
+
+        if (isTabbedFragment()) {
+            Activity activity = getActivity();
+            if (activity instanceof ITabLayoutHolder) {
+                ((ITabLayoutHolder) activity).showTabLayout(false);
+            }
         }
     }
 
@@ -289,49 +304,7 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
         }
     }
 
-    protected void setActionBarTitles(String title, String subtitle) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, subtitle);
-            mTitleSetter.setOnline(false);
-        }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    protected void setActionBarTitles(int title, int subtitle) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, subtitle);
-        }
-    }
-
-    protected void setActionBarTitles(String title) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, null);
-        }
-    }
-
-    protected void setActionBarTitles(int title) {
-        if (mTitleSetter != null && mNeedTitles) {
-            mTitleSetter.setActionBarTitles(title, null);
-        }
-    }
-
-    public ActionBarTitleSetterDelegate getTitleSetter() {
-        return mTitleSetter;
-    }
-
-    protected String getTitle() {
-        return null;
-    }
-
-    protected String getSubtitle() {
-        return null;
-    }
-
     protected void restoreState(Bundle savedInstanceState) {
-    }
-
-    protected void setNeedTitles(boolean needTitles) {
-        mNeedTitles = needTitles;
     }
 
     @Override

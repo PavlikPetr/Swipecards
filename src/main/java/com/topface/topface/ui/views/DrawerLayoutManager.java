@@ -11,27 +11,21 @@ import com.topface.topface.state.DrawerLayoutState;
 
 import org.jetbrains.annotations.NotNull;
 
-import javax.inject.Inject;
+public class DrawerLayoutManager<T extends DrawerLayout> {
 
-/**
- * Created by ppavlik on 19.05.16.
- */
-public class DrawerLayoutManager<DrawerLayoutType extends DrawerLayout> {
+    private DrawerLayoutState mDrawerLayoutState;
 
-    @Inject
-    DrawerLayoutState mDrawerLayoutState;
+    private T mDrawerLayout;
 
-    private DrawerLayoutType mDrawerLayout;
-
-    public DrawerLayoutManager(@NotNull DrawerLayoutType drawerLayout) {
-        App.get().inject(this);
+    public DrawerLayoutManager(@NotNull T drawerLayout) {
+        mDrawerLayoutState = App.getAppComponent().drawerLayoutState();
         mDrawerLayout = drawerLayout;
     }
 
     public void initLeftMneuDrawerLayout() {
-        mDrawerLayout.setScrimColor(Color.argb(217, 0, 0, 0));
+        mDrawerLayout.setScrimColor(Color.argb(77, 0, 0, 0));
         mDrawerLayout.setDrawerShadow(R.drawable.shadow_left_menu_right, GravityCompat.START);
-        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 mDrawerLayoutState.onSlide();
@@ -49,16 +43,15 @@ public class DrawerLayoutManager<DrawerLayoutType extends DrawerLayout> {
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                mDrawerLayoutState.onStateChanged();
             }
         });
     }
 
-    public void close(){
+    public void close() {
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    public DrawerLayoutType getDrawer() {
+    public T getDrawer() {
         return mDrawerLayout;
     }
 }

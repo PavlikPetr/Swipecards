@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.design_dialog.DialoguesEmptyFragmentViewModel"/>
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        style="@style/PopupScroll">
+
+        <LinearLayout
+            style="@style/PopupRootContainer">
+
+            <TextView
+                style="@style/PopupTitle"
+                android:text="@string/dialog_empty_title"/>
+
+            <RelativeLayout
+                style="@style/PopupCenterImageContainer">
+
+                <ImageView
+                    style="@style/PopupAnimatedBackground"
+                    app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
+
+                <ImageView
+                    style="@style/PopupEmptyDialoguesCenterImage"/>
+            </RelativeLayout>
+
+            <ImageView
+                style="@style/PopupArrow"/>
+
+            <Button
+                android:id="@+id/btn_start_dating"
+                style="@style/PopupGreenButton.Background"
+                android:onClick="@{() -> viewModel.startDating()}"
+                android:text="@string/start_dating"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

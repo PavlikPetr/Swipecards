@@ -2,32 +2,39 @@ package com.topface.topface.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.ViewDataBinding;
 import android.os.BadParcelableException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appodeal.ads.Appodeal;
 import com.appsflyer.AppsFlyerLib;
-import com.topface.billing.OpenIabFragment;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.City;
-import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
+import com.topface.topface.databinding.AcNavigationBinding;
+import com.topface.topface.databinding.AcNewNavigationBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
+import com.topface.topface.di.ComponentManager;
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
+import com.topface.topface.di.navigation_activity.NavigationActivityModule;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -35,25 +42,26 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
-import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
+import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.DatingRedesignToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.CacheProfile;
-import com.topface.topface.utils.CustomViewNotificationController;
-import com.topface.topface.utils.IActionbarNotifier;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.controllers.DatingInstantMessageController;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.DatingLockPopupAction;
 import com.topface.topface.utils.controllers.startactions.ExpressMessageAction;
-import com.topface.topface.utils.controllers.startactions.InvitePopupAction;
 import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.popups.PopupManager;
@@ -63,6 +71,7 @@ import com.topface.topface.utils.popups.start_actions.OldVersionStartAction;
 import com.topface.topface.utils.popups.start_actions.PromoPopupStartAction;
 import com.topface.topface.utils.popups.start_actions.RatePopupStartAction;
 import com.topface.topface.utils.popups.start_actions.SelectPhotoStartAction;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -74,11 +83,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import kotlin.jvm.functions.Function0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-public class NavigationActivity extends ParentNavigationActivity implements INavigationFragmentsListener {
+public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
@@ -87,21 +97,20 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
     private Intent mPendingNextIntent;
-    private boolean mIsActionBarHidden;
     private View mContentFrame;
     private DrawerLayoutManager<HackyDrawerLayout> mDrawerLayout;
     private FullscreenController mFullscreenController;
     private boolean mIsPopupVisible = false;
     private boolean mActionBarOverlayed = false;
     private int mInitialTopMargin = 0;
-    @SuppressWarnings("deprecation")
-    private IActionbarNotifier mNotificationController;
     @Inject
     TopfaceAppState mAppState;
     @Inject
     NavigationState mNavigationState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    WeakStorage mWeakStorage;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -117,38 +126,24 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         Intent intent = new Intent(activity, NavigationActivity.class)
                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(GCMUtils.NEXT_INTENT, new LeftMenuSettingsData(options.startPage));
-        if (App.getUserConfig().getDatingMessage().equals(options
-                .instantMessageFromSearch.getText())) {
-            intent.putExtra(DatingInstantMessageController.DEFAULT_MESSAGE, true);
-        }
         activity.startActivity(intent);
     }
 
     @Override
-    protected void initActionBarOptions(ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-                    ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP
-                            | ActionBar.DISPLAY_SHOW_TITLE
-                            | ActionBar.DISPLAY_SHOW_HOME
-                            | ActionBar.DISPLAY_HOME_AS_UP);
-            mNotificationController = new CustomViewNotificationController(actionBar);
-        }
-    }
-
-    @Override
-    protected void setActionBarView() {
-        actionBarView.setLeftMenuView();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
+        NavigationActivityComponent component = ComponentManager.INSTANCE
+                .obtainComponent(NavigationActivityComponent.class, new Function0<NavigationActivityComponent>() {
+                    @Override
+                    public NavigationActivityComponent invoke() {
+                        return App.getAppComponent().add(new NavigationActivityModule(NavigationActivity.this));
+                    }
+                });
+        component.inject(this);
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
             config.saveConfig();
         }
-        App.from(getApplicationContext()).inject(this);
         Intent intent = getIntent();
         try {
             if (intent.getBooleanExtra(INTENT_EXIT, false)) {
@@ -159,20 +154,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(CountersData.class).subscribe(new Action1<CountersData>() {
-            @Override
-            public void call(CountersData countersData) {
-                if (mNotificationController != null) {
-                    mNotificationController.refreshNotificator(countersData.getDialogs(), countersData.getMutual());
-                }
-            }
-        }));
-        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new Action1<AdjustAttributeData>() {
-            @Override
-            public void call(AdjustAttributeData adjustAttributionData) {
-                App.sendAdjustAttributeData(adjustAttributionData);
-            }
-        }));
         mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData wrappedNavigationData) {
@@ -196,15 +177,13 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 throwable.printStackTrace();
             }
         }));
-        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new Action1<DrawerLayoutStateData>() {
+        mSubscription.add(mDrawerLayoutState.getObservable().subscribe(new RxUtils.ShortSubscription<DrawerLayoutStateData>() {
             @Override
-            public void call(DrawerLayoutStateData drawerLayoutStateData) {
-                switch (drawerLayoutStateData.getState()) {
-                    case DrawerLayoutStateData.STATE_CHANGED:
-                        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
-                            Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
-                        }
-                        break;
+            public void onNext(DrawerLayoutStateData drawerLayoutStateData) {
+                super.onNext(drawerLayoutStateData);
+                if (drawerLayoutStateData.getState() != DrawerLayoutStateData.UNDEFINED && mDrawerLayout != null &&
+                        mDrawerLayout.getDrawer() != null) {
+                    Utils.hideSoftKeyboard(NavigationActivity.this, mDrawerLayout.getDrawer().getWindowToken());
                 }
             }
         }));
@@ -226,9 +205,10 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         initFullscreen();
         initAppsFlyer();
         isPhotoAsked = false;
-        mSubscription.add(mAppState.getObservable(City.class).subscribe(new Action1<City>() {
+        mSubscription.add(mAppState.getObservable(City.class).subscribe(new RxUtils.ShortSubscription<City>() {
             @Override
-            public void call(final City city) {
+            public void onNext(final City city) {
+                super.onNext(city);
                 if (city != null) {
                     SettingsRequest request = new SettingsRequest(App.getContext());
                     request.cityid = city.id;
@@ -246,6 +226,28 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 }
             }
         }));
+        SystemBarTintManager tintManager = new SystemBarTintManager(this);
+        // enable status bar tint
+        tintManager.setStatusBarTintEnabled(true);
+        tintManager.setStatusBarAlpha(0.25f);
+    }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarTabs;
+    }
+
+    @Override
+    protected boolean isDatingRedesignEnabled() {
+        return mWeakStorage.getDatingRedesignEnabled();
+    }
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
+        return mWeakStorage.getDatingRedesignEnabled() ?
+                new DatingRedesignToolbarViewModel(toolbar, this) :
+                new NavigationToolbarViewModel(toolbar, this);
     }
 
     private void initPopups() {
@@ -266,7 +268,8 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 .addChosenAction(SelectPhotoStartAction.class, ChooseCityPopupAction.class)
                 .addAction(NotificationsDisableStartAction.class)
                 .addAction(PromoPopupStartAction.class)
-                .addAction(InvitePopupAction.class)
+                //TODO Отключаем до момента поддержки пермишинов на контакты
+                //.addAction(InvitePopupAction.class)
                 .addAction(RatePopupStartAction.class);
     }
 
@@ -277,11 +280,6 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             initPopups();
         }
-    }
-
-    @Override
-    protected int getContentLayoutId() {
-        return R.layout.ac_navigation;
     }
 
     private void initFullscreen() {
@@ -411,6 +409,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
         super.onResume();
         //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
         PopupManager.INSTANCE.init(this);
+        Appodeal.onResume(this, Appodeal.INTERSTITIAL);
     }
 
     @Override
@@ -518,6 +517,7 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onDestroy() {
+        ComponentManager.INSTANCE.releaseComponent(NavigationActivityComponent.class);
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
@@ -539,28 +539,16 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
-        boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
-                getSupportFragmentManager(),
-                requestCode,
-                resultCode,
-                data,
-                OwnProfileFragment.class
-        );
-        if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
     }
 
     private void toggleDrawerLayout() {
-        if (!mIsActionBarHidden) {
-            if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
-                if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
-                    mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
-                } else {
-                    mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
-                }
+        if (mDrawerLayout != null && mDrawerLayout.getDrawer() != null) {
+            if (mDrawerLayout.getDrawer().isDrawerOpen(GravityCompat.START)) {
+                mDrawerLayout.getDrawer().closeDrawer(GravityCompat.START);
+            } else {
+                mDrawerLayout.getDrawer().openDrawer(GravityCompat.START);
             }
         }
     }
@@ -590,25 +578,58 @@ public class NavigationActivity extends ParentNavigationActivity implements INav
     }
 
     @Override
-    public void onHideActionBar() {
-        mIsActionBarHidden = true;
-        setMenuLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-    }
-
-    @Override
-    public void onShowActionBar() {
-        mIsActionBarHidden = false;
-        setMenuLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().show();
-        }
-    }
-
-    @Override
     public void onUpClick() {
         toggleDrawerLayout();
+    }
+
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
+        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
+                ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return mWeakStorage.getDatingRedesignEnabled() ? R.layout.ac_new_navigation : R.layout.ac_navigation;
+    }
+
+    @Override
+    public void setToolbarSettings(@NotNull ToolbarSettingsData settings) {
+        if (getToolbarViewModel() instanceof NavigationToolbarViewModel) {
+            NavigationToolbarViewModel toolbarViewModel = (NavigationToolbarViewModel) getToolbarViewModel();
+            CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
+            if (customViewModel != null) {
+                if (toolbarViewModel.isScrimVisible().get()) {
+                    customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+                    customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+                }
+                Boolean isOnline = settings.isOnline();
+                customViewModel.isOnline().set(isOnline != null && isOnline);
+                if (settings.getTitle() != null) {
+                    customViewModel.getTitle().set(settings.getTitle());
+                }
+                if (settings.getSubtitle() != null) {
+                    customViewModel.getSubTitle().set(settings.getSubtitle());
+                }
+            }
+        } else if (getToolbarViewModel() instanceof DatingRedesignToolbarViewModel) {
+            DatingRedesignToolbarViewModel toolbarViewModel = (DatingRedesignToolbarViewModel) getToolbarViewModel();
+            CustomToolbarViewModel customViewModel = toolbarViewModel.getExtraViewModel();
+            if (customViewModel != null) {
+                if (!toolbarViewModel.isDating()) {
+                    customViewModel.getTitleVisibility().set(TextUtils.isEmpty(settings.getTitle()) ? View.GONE : View.VISIBLE);
+                    customViewModel.getSubTitleVisibility().set(TextUtils.isEmpty(settings.getSubtitle()) ? View.GONE : View.VISIBLE);
+                }
+                Boolean isOnline = settings.isOnline();
+                customViewModel.isOnline().set(isOnline != null && isOnline);
+                if (settings.getTitle() != null) {
+                    customViewModel.getTitle().set(settings.getTitle());
+                }
+                if (settings.getSubtitle() != null) {
+                    customViewModel.getSubTitle().set(settings.getSubtitle());
+                }
+            }
+        }
     }
 }

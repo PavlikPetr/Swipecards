@@ -21,15 +21,7 @@ abstract public class WebViewFragment extends BaseFragment {
     private WebViewFragmentBinding mBinding;
     private FullScreenWebChromeClient mFullScreenWebChromeClient;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setNeedTitles(isNeedTitles());
-    }
-
     public abstract String getIntegrationUrl();
-
-    public abstract boolean isNeedTitles();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,9 +30,15 @@ abstract public class WebViewFragment extends BaseFragment {
     }
 
     protected View getView(LayoutInflater inflater) {
-        mBinding = DataBindingUtil.bind(inflater.inflate(R.layout.web_view_fragment, null));
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.web_view_fragment, null, false);
         mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding);
         mBinding.wvWebFrame.setWebChromeClient(mFullScreenWebChromeClient);
+        mBinding.wvWebFrame.setInitialScale(1);
+        mBinding.wvWebFrame.getSettings().setLoadWithOverviewMode(true);
+        mBinding.wvWebFrame.getSettings().setUseWideViewPort(true);
+        mBinding.wvWebFrame.getSettings().setSupportZoom(true);
+        mBinding.wvWebFrame.getSettings().setDisplayZoomControls(false);
+        mBinding.wvWebFrame.getSettings().setBuiltInZoomControls(true);
         mBinding.wvWebFrame.getSettings().setJavaScriptEnabled(true);
         mBinding.wvWebFrame.setVerticalScrollbarOverlay(true);
         mBinding.wvWebFrame.setWebViewClient(new LoaderClient(mBinding.wvWebFrame));

@@ -1,6 +1,10 @@
 package com.topface.topface.ui.fragments.feed.feed_utils
 
+import com.topface.topface.App
 import com.topface.topface.data.FeedItem
+import com.topface.topface.utils.extensions.toLongSafe
+import org.jetbrains.anko.collections.forEachReversedByIndex
+import java.util.*
 
 /** Ништяки для фидов
  * Created by tiberal on 10.08.16.
@@ -22,6 +26,30 @@ fun <T : FeedItem> List<T>.getFirstItem(): T? {
     }
     return item
 }
+
+fun <T : FeedItem> List<T>.getRealDataFirstItem(): T? {
+    if (!isEmpty()) {
+        forEach {
+            if (!it.isEmpty()) {
+                return it
+            }
+        }
+    }
+    return null
+}
+
+fun List<Any>.findLastFeedItem(): FeedItem? {
+    if (!isEmpty()) {
+        forEachReversedByIndex {
+            if (it is FeedItem && !it.isLoaderOrRetrier && it.id.toLongSafe() > 0) {
+                return it
+            }
+        }
+    }
+    return null
+}
+
+fun <T : FeedItem> T.isEmpty() = id == null
 
 fun <T : FeedItem> List<T>.getLastItem(): T? {
     var item: T? = null
@@ -56,3 +84,35 @@ fun <T : FeedItem> MutableList<T>.removeLast() {
 }
 
 fun <T : FeedItem> T?.getUserId() = if (this != null && user != null) user.id else 0
+
+fun <T : FeedItem> MutableList<T>.getFeedIdList(): ArrayList<String> {
+    val list = ArrayList<String>()
+    this.filter { !it.isLoaderOrRetrier }
+            .forEach { list.add(it.id) }
+    return list
+}
+
+fun <T : FeedItem> MutableList<T>.getUserIdList(): List<Int> {
+    var list: List<Int> = listOf()
+    this.filter { !it.isLoaderOrRetrier }
+            .forEach {
+                it.user?.let {
+                    list = list.plus(it.id)
+                }
+            }
+    return list
+}
+
+fun List<Int>.convertFeedIdList(): ArrayList<String> {
+    val list = ArrayList<String>()
+    this.forEach {
+        list.add(it.toString())
+    }
+    return list
+}
+
+// для UI тестирования ТЭГ
+fun <T : FeedItem> T?.getUITestTag(feedType: String = "undefined"):String {
+    val TAG_TEMPLATE = "%s_%d_%s"
+    return if (this != null && user != null) String.format(App.getCurrentLocale(), TAG_TEMPLATE, user.id, this.getUserId(), feedType) else "undefined"
+}

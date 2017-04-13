@@ -28,13 +28,7 @@ public class CountersData implements Parcelable {
     private int mPeopleNearby = 0;
 
     public CountersData(CountersData countersData) {
-        setLikes(countersData.getLikes());
-        setMutual(countersData.getMutual());
-        setDialogs(countersData.getDialogs());
-        setVisitors(countersData.getVisitors());
-        setFans(countersData.getFans());
-        setAdmirations(countersData.getAdmirations());
-        setPeopleNearby(countersData.getPeopleNearby());
+        setCounters(countersData);
     }
 
     public CountersData() {
@@ -48,6 +42,16 @@ public class CountersData implements Parcelable {
         setFans(in.readInt());
         setAdmirations(in.readInt());
         setPeopleNearby(in.readInt());
+    }
+
+    public void setCounters(CountersData countersData) {
+        setLikes(countersData.getLikes());
+        setMutual(countersData.getMutual());
+        setDialogs(countersData.getDialogs());
+        setVisitors(countersData.getVisitors());
+        setFans(countersData.getFans());
+        setAdmirations(countersData.getAdmirations());
+        setPeopleNearby(countersData.getPeopleNearby());
     }
 
 
@@ -142,7 +146,7 @@ public class CountersData implements Parcelable {
             case FragmentIdData.TABBED_VISITORS:
                 return getVisitors() + getFans();
             case FragmentIdData.TABBED_LIKES:
-                return getLikes() + getMutual() + getAdmirations();
+                return getLikes();
             case FragmentIdData.GEO:
                 return getPeopleNearby();
         }

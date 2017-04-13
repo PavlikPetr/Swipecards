@@ -4,10 +4,9 @@ import android.content.Intent;
 
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
-import com.topface.topface.ui.fragments.DatingFragment;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
+import com.topface.topface.ui.fragments.dating.DatingFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 
 public class FeedScreensIntent {
@@ -18,10 +17,6 @@ public class FeedScreensIntent {
     public static void equipNotificationIntent(Intent intent) {
         equipMessageAllIntent(intent);
         intent.putExtra(GCMUtils.NOTIFICATION_INTENT, true);
-    }
-
-    public static void equipPhotoFeedIntent(Intent intent) {
-        equipFeedIntent(intent, new LeftMenuSettingsData(FragmentIdData.PHOTO_BLOG), PhotoblogFragment.class.getName());
     }
 
     private static void equipFeedIntent(Intent intent, LeftMenuSettingsData fragmentSettings, String pageName) {

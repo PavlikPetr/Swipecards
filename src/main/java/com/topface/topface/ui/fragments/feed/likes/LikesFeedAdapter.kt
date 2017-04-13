@@ -1,46 +1,38 @@
 package com.topface.topface.ui.fragments.feed.likes
 
+import android.databinding.ViewDataBinding
+import com.topface.billing.InstantPurchaseModel
+import com.topface.topface.BR
 import com.topface.topface.R
-import com.topface.topface.data.FeedLike
+import com.topface.topface.databinding.AppDayListBinding
 import com.topface.topface.databinding.FeedItemHeartBinding
-import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
+import com.topface.topface.ui.fragments.feed.app_day.AppDayImage
+import com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedAdapter
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
+import com.topface.topface.ui.fragments.feed.feed_base.BaseSymphatiesFeedAdapter
 
 /**
  * Адаптре для симпатий
  * Created by tiberal on 10.08.16.
  */
-class LikesFeedAdapter(private val mNavigator: IFeedNavigator, private val mApi: FeedApi) : BaseFeedAdapter<FeedItemHeartBinding, FeedLike>() {
+class LikesFeedAdapter(private val mInstantPurchaseModel: InstantPurchaseModel, private val mApi: FeedApi) : BaseSymphatiesFeedAdapter() {
 
     override fun bindData(binding: FeedItemHeartBinding?, position: Int) {
         super.bindData(binding, position)
-        binding?.let {
-            val item = getDataItem(position)
-            it.model = LikesItemViewModel(it, item, mNavigator, mApi, handleDuplicates) { isActionModeEnabled }
-        }
-    }
-
-    override fun onViewRecycled(holder: BaseRecyclerViewAdapter.ItemViewHolder?) {
-        holder?.binding?.let {
-            if (it is FeedItemHeartBinding) {
-                it.model.release()
+        binding?.let { bind ->
+            getDataItem(position)?.let {
+                bind.model = LikesItemViewModel(bind, it, mInstantPurchaseModel.navigator, mApi, handleDuplicates) { isActionModeEnabled }
             }
         }
     }
 
-    val handleDuplicates = { isOk: Boolean, userId: Int ->
-        data.forEachIndexed { position, feedItem ->
-            if (feedItem.getUserId().equals(userId)) {
-                feedItem.mutualed = isOk
-                notifyItemChanged(position)
+    override fun bindHeader(binding: ViewDataBinding?, position: Int) {
+        binding?.let { bind ->
+            (getHeaderItem(position) as? List<AppDayImage>)?.let {
+                bind.setVariable(BR.viewModel, AppDayViewModel(bind as AppDayListBinding, it, mInstantPurchaseModel))
             }
         }
     }
 
     override fun getItemLayout() = R.layout.feed_item_heart
-
-
 }

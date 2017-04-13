@@ -33,7 +33,6 @@
     <string name="go_profile_text">перейти</string>
     <string name="editor_send_gcm">Послать GCM токен</string>
     <string name="editor_send_auth">Перепослать авторизацию</string>
-    <string name="editor_offerwall_title">Offerwall Type:</string>
     <string name="enable">Enable</string>
     <string name="disable">Disable</string>
     <string name="cancel">Cancel</string>
@@ -71,7 +70,17 @@
         <item>Выключен всегда</item>
     </string-array>
 
-    <string name="editor_crash_me">Нажми меня чтобы КРАШНУТЬ</string>
     <string name="options_parsing_error">Ошибка парсинга опций, срочно сообщите разработчику</string>
+    <string name="trial_vip_type_text">Тип Trial-Vip</string>
+    <string-array name="trial_vip_types">
+        <item>//-//</item>
+        <item>default</item>
+        <item>Эксперимент 1</item>
+        <item>Эксперимент 2</item>
+        <item>Эксперимент 3</item>
+        <item>Эксперимент 4</item>
+        <item>Эксперимент 5</item>
+        <item>Эксперимент 6</item>
+    </string-array>
 
 </resources>

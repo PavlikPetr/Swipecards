@@ -14,20 +14,17 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.statistics.DatingLockPopupStatistics;
 import com.topface.topface.utils.config.UserConfig;
 
-import javax.inject.Inject;
-
 
 public class DatingLockPopup extends AbstractDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "DatingLockPopup";
-    @Inject
-    NavigationState mNavigationState;
+    private NavigationState mNavigationState;
     private boolean mIsRedirectedToSympathies;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get().inject(this);
+        mNavigationState = App.getAppComponent().navigationState();
         mIsRedirectedToSympathies = false;
         DatingLockPopupStatistics.sendDatingPopupShow();
     }

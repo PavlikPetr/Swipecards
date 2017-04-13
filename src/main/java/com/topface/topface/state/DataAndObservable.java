@@ -6,7 +6,7 @@ import rx.Observable;
  * Created by ppavlik on 14.05.2016.
  * Base object with data and Observable
  */
-class DataAndObservable<DataType, ObservableType extends Observable<DataType>> {
+public class DataAndObservable<DataType, ObservableType extends Observable<DataType>> {
     private ObservableType mObservable;
     private DataType mObject;
 

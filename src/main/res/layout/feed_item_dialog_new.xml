@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogItemNewViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/root"
+        style="@style/NewDating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> model.onClick()}"
+        android:orientation="horizontal"
+        app:onLongClickListener="@{()->model.onLongClick()}">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_width="@dimen/avatar_width"
+                android:layout_height="@dimen/avatar_height"
+                android:layout_marginLeft="@dimen/avatar_marginLeft"
+                android:layout_marginRight="@dimen/avatar_marginRight"
+                app:glideTransformationPhoto="@{model.userPhoto}"
+                app:placeholderRes="@{model.placeholderRes}"
+                app:typeTransformation="@{model.type}"
+                app:radiusOnline="@{model.onLineCircle}"
+                app:outSideCircle="@{model.strokeSize}"/>
+
+        </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingRight="16dp">
+
+                <LinearLayout
+                    android:id="@+id/wrapper_for_name_and_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ifp_name"
+                            app:uiTestTag = "@{model.getTag()}"
+                            style="@style/DialogsNewName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="45dp"
+                            android:text="@{model.name}"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/time"
+                        style="@style/NewDialogTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@{model.dialogTime}"/>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text"
+                        style="@style/DialogsNewMessage"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:drawablePadding="6dp"
+                        android:text="@{model.text}"
+                        android:textColor="@{model.dialogTextColor}"
+                        app:setCompoundDrawablesWithIntrinsicBounds="@{model.dialogMessageIcon}"
+                        app:textTypeface="@{model.dialogMessageStyle}"/>
+
+                    <ImageView
+                        android:id="@+id/onlineFlag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:src="@drawable/new_message"
+                        android:visibility="@{model.counterVisibility}"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+</layout>

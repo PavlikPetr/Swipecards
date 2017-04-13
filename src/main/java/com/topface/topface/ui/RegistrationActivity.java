@@ -5,10 +5,14 @@ import android.support.v7.app.ActionBar;
 import android.view.WindowManager;
 
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.fragments.RecoverPwdFragment;
 import com.topface.topface.ui.fragments.RegistrationFragment;
 
-public class RegistrationActivity extends NoAuthActivity<RegistrationFragment> {
+import org.jetbrains.annotations.NotNull;
+
+public class RegistrationActivity extends NoAuthActivity<RegistrationFragment, AcFragmentFrameBinding> {
 
     public static final int INTENT_REGISTRATION = 4;
 
@@ -37,5 +41,16 @@ public class RegistrationActivity extends NoAuthActivity<RegistrationFragment> {
         arg.putString(RecoverPwdFragment.ARG_EMAIL, getIntent().getStringExtra(RecoverPwdFragment.ARG_EMAIL));
         fragment.setArguments(arg);
         return fragment;
+    }
+
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
     }
 }

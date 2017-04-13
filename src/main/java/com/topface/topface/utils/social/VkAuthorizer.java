@@ -80,9 +80,10 @@ public class VkAuthorizer extends Authorizer {
                     Debug.log("VkAuthorizer: receive new token");
                     String tokenKey = res.accessToken;
                     String userId = res.userId;
+                    String userEmail = res.email;
                     int expiresIn = res.expiresIn;
                     AuthToken authToken = AuthToken.getInstance();
-                    authToken.temporarilySaveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn));
+                    authToken.temporarilySaveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn), userEmail);
                     AuthToken.getVkName(userId, new Handler(new Handler.Callback() {
                         @Override
                         public boolean handleMessage(Message msg) {

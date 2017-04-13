@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogContactsListItemViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> model.goChat()}"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/avatar"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            app:glideTransformationPhoto="@{model.userPhoto}"
+            app:placeholderRes="@{model.placeholderRes}"
+            app:typeTransformation="@{model.type}"
+            app:radiusOnline="@{model.onLineCircle}"
+            app:outSideCircle="@{model.strokeSize}"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingBottom="19dp"
+            android:text="@{model.name}"
+            app:textColor="@{model.nameTextColor}"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+</layout>

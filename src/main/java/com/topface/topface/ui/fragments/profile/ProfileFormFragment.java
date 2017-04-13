@@ -23,6 +23,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
+import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.FlurryOpenEvent;
 import com.topface.topface.ui.OwnGiftsActivity;
 import com.topface.topface.ui.dialogs.CitySearchPopup;
@@ -46,11 +47,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
 
     public static final String PAGE_NAME = "profile.form";
 
-    private FragmentManager mFragmentManager;
+    private TopfaceAppState mAppState;
 
+    private FragmentManager mFragmentManager;
+    private boolean mIsProfileWasUpdated;
     private List<Integer> mMainFormTypes = new ArrayList<>(Arrays.asList(
             new Integer[]{FormItem.AGE, FormItem.CITY, FormItem.NAME, FormItem.SEX, FormItem.STATUS}));
-
     private EditingFinishedListener<FormItem> mFormEditedListener = new EditingFinishedListener<FormItem>() {
         @Override
         public void onEditingFinished(final FormItem data) {
@@ -72,6 +74,12 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             @Override
                             public void success(IApiResponse response) {
                                 form.copy(data);
+                                // сетим в AppState профиль с новыми изменениями
+                                if (mProfileFormListAdapter != null) {
+                                    Profile profile = App.get().getProfile();
+                                    profile.forms = mProfileFormListAdapter.getFormItems();
+                                    mAppState.setData(profile);
+                                }
                             }
 
                             @Override
@@ -87,11 +95,13 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             }
                         });
                         if (isSettingsRequest) {
+                            mIsProfileWasUpdated = false;
                             new ParallelApiRequest(App.getContext())
                                     .addRequest(request)
                                     .addRequest(App.getProfileRequest())
                                     .exec();
                         } else {
+                            mIsProfileWasUpdated = true;
                             request.exec();
                         }
                     }
@@ -159,6 +169,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAppState = App.getAppComponent().appState();
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mUpdateReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         mFragmentManager = getActivity().getSupportFragmentManager();
     }
@@ -187,6 +198,9 @@ public class ProfileFormFragment extends AbstractFormFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mIsProfileWasUpdated) {
+            App.getProfileRequest().exec();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }
 

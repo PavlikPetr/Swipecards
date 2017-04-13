@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.people_nearby.UnavailableGeoBaseViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        style="@style/PopupScroll">
+
+        <LinearLayout
+            style="@style/PopupRootContainer">
+
+            <TextView
+                style="@style/PopupTitle"
+                android:text="@string/access_to_location_popup_title"/>
+
+            <RelativeLayout
+                style="@style/PopupCenterImageContainer">
+
+                <ImageView
+                    style="@style/PopupAnimatedBackground"
+                    app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
+
+                <ImageView
+                    style="@style/PopupUnavailableGeoCenterImage"/>
+            </RelativeLayout>
+
+            <TextView
+                style="@style/PopupMessage"
+                android:text="@{viewModel.text}"/>
+
+            <ImageView
+                style="@style/PopupArrow"/>
+
+            <Button
+                app:uiTestTag="@{viewModel.buttonTag}"
+                style="@style/PopupGreenButton.Background"
+                android:onClick="@{() -> viewModel.onButtonClick()}"
+                android:text="@{viewModel.button}"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

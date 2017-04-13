@@ -1,6 +1,8 @@
 package com.topface.topface.ui.fragments.feed.mutual
 
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedMutual
+import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -15,6 +17,12 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  */
 class MutualFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedMutual>(binding, navigator, api) {
+    override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean {
+        return newCounters.mutual > currentCounters.mutual
+    }
+
+    override val typeFeedFragment: String?
+        get() = null
 
     override val gcmType: Array<Int>
         get() = arrayOf(GCMUtils.GCM_TYPE_MUTUAL)
@@ -42,4 +50,5 @@ class MutualFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeed
         }
     }
 
+    override fun considerDuplicates(first: FeedMutual, second: FeedMutual) = first.user?.id == second.user?.id
 }

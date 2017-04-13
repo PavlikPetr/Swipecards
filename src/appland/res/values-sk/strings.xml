@@ -35,7 +35,6 @@
     <string name="black_list_add">Pridať do čiernej listiny</string>
     <string name="vip_invisible_mode">Neviditeľný režim</string>
     <string name="buying_profile_coins">Na Vašom účte</string>
-    <string name="vip_info_title">VIP privilégiá</string>
     <string name="profile_gifts_empty">Tento užívateľ zatiaľ nedostal darčeky</string>
     <string name="profile_mygifts_empty">Ešte Vám nikto nedal darčeky</string>
     <string name="dating_people_unnoticed">Desať ľudí uniklo Vašej pozornosti</string>
@@ -410,7 +409,6 @@
     <string name="with_vip_find_your_visitors">S VIP statusom sa dozviete, kto bol na Vašej
         stránke
     </string>
-    <string name="on_avatar">Na profilovku</string>
     <string name="your_avatar">Vaša profilovka</string>
     <string name="avatar_set_successfully">Profilový obrázok je nastavený</string>
     <string name="incorrect_photo">Zlá fotografia. Skúste nahrať druhú.</string>
@@ -479,4 +477,5 @@
     <string name="novice_sympathy">Posielajte sympatie iba ľuďom, ktorý sa Vám\nnaozaj páčia\n - a
         môžete začať príjemnú známosť
     </string>
+    <string name="vip_info_title">VIP privilégiá</string>
 </resources>

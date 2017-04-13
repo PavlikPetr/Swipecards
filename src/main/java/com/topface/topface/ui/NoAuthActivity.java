@@ -1,5 +1,6 @@
 package com.topface.topface.ui;
 
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -7,7 +8,7 @@ import android.support.v7.app.ActionBar;
 /**
  * Activity which doesn't need to be auth
  */
-public abstract class NoAuthActivity<T extends Fragment> extends SingleFragmentActivity<T> {
+public abstract class NoAuthActivity<T extends Fragment, V extends ViewDataBinding> extends SingleFragmentActivity<T, V> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

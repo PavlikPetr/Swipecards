@@ -11,7 +11,11 @@
     <dimen name="padding_left_for_online_icon">8dp</dimen>
 
     <dimen name="action_bar_title_size">20sp</dimen>
-    <dimen name="action_bar_subtitle_size">13sp</dimen>
+
+    <dimen name="dating_album_height">432dp</dimen>
+    <dimen name="dating_parent_item_title_size">16sp</dimen>
+    <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
+
 
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>
@@ -19,7 +23,6 @@
     <dimen name="chat_date_line_size">1px</dimen>
 
     <!--CustomCitySearchView padding top-->
-    <dimen name="custom_city_search_view_padding_top">10dp</dimen>
 
     <!--filter fragment dividers height-->
     <dimen name="filter_fragment_divider_height">1dp</dimen>
@@ -70,11 +73,6 @@
 
     <dimen name="auth_buttons_padding">16dp</dimen>
 
-    <dimen name="left_menu_icon_width">24dp</dimen>
-    <dimen name="left_menu_icon_height">24dp</dimen>
-
-    <dimen name="unlock_button_margin_top">10dp</dimen>
-
     <dimen name="unlock_likes_by_coins_button_text_size">15sp</dimen>
 
     <!--Buy products buttons-->
@@ -100,7 +98,6 @@
     <dimen name="left_menu_item_height">48dp</dimen>
     <dimen name="left_menu_item_padding_left">16dp</dimen>
     <dimen name="left_menu_item_padding_right">16dp</dimen>
-    <dimen name="left_menu_item_drawable_padding">32dp</dimen>
     <dimen name="left_menu_item_divider_thickness">2dp</dimen>
     <dimen name="left_menu_badge_width">20dp</dimen>
     <dimen name="left_menu_badge_height">20dp</dimen>
@@ -148,21 +145,13 @@
     <dimen name="filter_value_padding">8dp</dimen>
 
     <!--PhotoSwitcher-->
-    <dimen name="album_gift_margin_right">14dp</dimen>
     <dimen name="album_gift_margin_bottom">14dp</dimen>
-    <dimen name="album_delete_button_padding">8dp</dimen>
-    <dimen name="album_delete_button_margin_right">18dp</dimen>
-    <dimen name="album_avatar_button_drawable_padding">4dp</dimen>
-    <dimen name="album_gift_size">86dp</dimen>
-    <dimen name="album_gift_circle_stroke_width">3dp</dimen>
-    <dimen name="album_buttons_size">26dp</dimen>
 
     <!--PhotoBlog-->
     <dimen name="margin_item_photoblog">16dp</dimen>
     <dimen name="margin_button_photoblog">8dp</dimen>
 
     <!--Rounded images border size-->
-    <dimen name="album_gift_border_size">2dp</dimen>
     <dimen name="mutual_sympathy_border_size">1dp</dimen>
 
     <!--Mutual sympathy stub-->
@@ -173,4 +162,132 @@
     <dimen name="mutual_sympathy_stub_avatar_size">198dp</dimen>
     <dimen name="mutual_sympathy_icon_size">40dp</dimen>
 
+    <dimen name="user_device_icon_padding_left">6dp</dimen>
+
+    <!--Toolbar sizes-->
+    <dimen name="toolbar_title_size">20sp</dimen>
+    <dimen name="toolbar_elevation">10dp</dimen>
+    <dimen name="toolbar_elevation_negative">-10dp</dimen>
+    <dimen name="toolbar_title_padding_left">15dp</dimen>
+    <dimen name="collapsing_scrim_size">100dp</dimen>
+    <dimen name="online_icon_padding">3dp</dimen>
+
+    <!--Popups-->
+    <dimen name="popup_central_picture_size">210dp</dimen>
+    <dimen name="popup_central_picture_margin">24dp</dimen>
+    <dimen name="popup_root_view_padding_top">30dp</dimen>
+    <dimen name="popup_root_view_padding_bottom">30dp</dimen>
+    <dimen name="popup_title_text">25sp</dimen>
+    <dimen name="popup_central_picture_background_circle">156dp</dimen>
+    <dimen name="popup_message_text">16sp</dimen>
+    <dimen name="popup_message_side_padding">30dp</dimen>
+    <dimen name="popup_button_text">14sp</dimen>
+    <dimen name="popup_arrow_padding">16dp</dimen>
+    <dimen name="popup_land_right_part_padding_root">10dp</dimen>
+
+    <dimen name="form_list_padding">30dp</dimen>
+
+    <!-- Метрики для попапа экспериментов 1-2-3 -->
+    <dimen name="experiment_1_2_3_title_top_margin">97dp</dimen>
+    <dimen name="experiment_1_2_3_title_bottom_margin">0dp</dimen>
+    <dimen name="experiment_1_2_3_content_bottom_margin">12dp</dimen>
+    <dimen name="experiment_1_2_3_get_vip_bottom_margin">10dp</dimen>
+    <dimen name="experiment_1_2_3_description_bottom_margin">10dp</dimen>
+
+    <!-- Доп метрика для попапа эксперимента 2 -->
+    <dimen name="experiment_2_get_vip_top_margin">30dp</dimen>
+
+    <!-- Метрики для попапа экспериментов 5 -->
+    <dimen name="experiment_5_title_top_margin">31dp</dimen>
+    <dimen name="experiment_5_title_bottom_margin">3dp</dimen>
+    <dimen name="experiment_5_content_bottom_margin">16dp</dimen>
+    <dimen name="experiment_5_get_vip_bottom_margin">10dp</dimen>
+    <dimen name="experiment_5_description_bottom_margin">10dp</dimen>
+
+    <!-- Метрики для попапа экспериментов 6 -->
+    <dimen name="experiment_6_title_top_margin">90dp</dimen>
+    <dimen name="experiment_6_title_bottom_margin">3dp</dimen>
+    <dimen name="experiment_6_content_bottom_margin">16dp</dimen>
+    <dimen name="experiment_6_get_vip_bottom_margin">10dp</dimen>
+    <dimen name="experiment_6_description_bottom_margin">10dp</dimen>
+
+    <dimen name="admiration_image_width">130dp</dimen>
+    <dimen name="admiration_image_height">130dp</dimen>
+    <dimen name="admiration_popup_label1_margin_top">12dp</dimen>
+
+
+    <!-- Метрики для попапа экспериментов 4 -->
+    <dimen name="experiment_4_title_top_margin">80dp</dimen>
+    <dimen name="experiment_4_title_bottom_margin">10dp</dimen>
+    <dimen name="experiment_4_content_bottom_margin">0dp</dimen>
+    <dimen name="appday_item_decorator_paddings">16dp</dimen>
+
+    <!--Фотоблог в "Люди рядом". Значени отступов для итемов в ленте-->
+    <dimen name="photoblog_item_margin_left">8dp</dimen>
+    <dimen name="photoblog_item_margin_top">8dp</dimen>
+    <dimen name="photoblog_item_margin_right">8dp</dimen>
+    <dimen name="photoblog_item_margin_bottom">8dp</dimen>
+    <dimen name="photoblog_add_button_margin_left">16dp</dimen>
+    <dimen name="photoblog_item_avatar_height">75dp</dimen>
+    <dimen name="photoblog_item_avatar_width">75dp</dimen>
+    <dimen name="photoblog_divider_size">1dp</dimen>
+
+    <!--Редизайн диалогов метрики-->
+    <dimen name="dialog_item_decorator_padding">11dp</dimen>
+    <dimen name="dialog_online_circle">5dp</dimen>
+    <dimen name="dialog_stroke_size">1dp</dimen>
+    <dimen name="avatar_width">62dp</dimen>
+    <dimen name="avatar_height">62dp</dimen>
+    <dimen name="avatar_marginLeft">16dp</dimen>
+    <dimen name="avatar_marginRight">16dp</dimen>
+    <dimen name="divider_size">1dp</dimen>
+
+    <!--Попап меню удаления и добавления в черный список-->
+    <dimen name="popup_menu_circle_online">3dp</dimen>
+    <dimen name="popup_menu_stroke_outside">1dp</dimen>
+    <dimen name="mutual_popup_stroke_outside">9dp</dimen>
+    <dimen name="mutual_popup_avatar">150dp</dimen>
+
+    <!--Редизайн знакомств, метрики-->
+    <dimen name="dating_buttons_padding_top">15dp</dimen>
+    <dimen name="dating_buttons_padding_bottom">13dp</dimen>
+    <dimen name="dating_smaller_buttons_size">60dp</dimen>
+    <dimen name="dating_bigger_buttons_size">76dp</dimen>
+
+    <!--Payment Ninja-->
+    <dimen name="payment_ninja_bottom_sheet_title_padding_left">16dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_title_padding_top">21dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_title_padding_bottom">21dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_title_text_size">16sp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_item_padding_left">16dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_item_padding_top">22dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_item_padding_bottom">22dp</dimen>
+    <dimen name="payment_ninja_bottom_sheet_item_text_size">14sp</dimen>
+    <dimen name="payment_ninja_payments_items_height">60dp</dimen>
+    <dimen name="payment_ninja_payments_different_type_items_margin">10dp</dimen>
+    <dimen name="payment_ninja_payments_same_type_items_divider_height">1dp</dimen>
+    <dimen name="payment_ninja_payments_item_text_padding_left">72dp</dimen>
+    <dimen name="payment_ninja_payments_item_icon_padding_left">16dp</dimen>
+    <dimen name="ninja_payments_screen_item_title_size">16sp</dimen>
+    <dimen name="payment_ninja_payments_item_text_padding_right">10dp</dimen>
+    <dimen name="ninja_payments_screen_item_subtitle_size">13sp</dimen>
+
+    <!-- Material Elevation -->
+    <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
+    <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
+    <dimen name="material_elevation_nav_drawer">16dp</dimen>
+
+    <!--Buy screen metrics-->
+    <dimen name="buy_screen_title_text_size">16sp</dimen>
+    <dimen name="pay_reason_margin_bottom">6dp</dimen>
+    <dimen name="pay_reason_padding_bottom">2dp</dimen>
+    <dimen name="pay_reason_padding_top">16dp</dimen>
+    <dimen name="pay_reason_padding_left">16dp</dimen>
+    <dimen name="pay_reason_padding_right">16dp</dimen>
+    <dimen name="buy_screen_products_unavailable_margins">5dp</dimen>
+    <dimen name="buy_screen_products_likes_section_padding_top">5dp</dimen>
+    <dimen name="buy_screen_products_likes_section_padding_bottom">2dp</dimen>
+    <dimen name="buy_screen_products_coins_section_padding_top">10dp</dimen>
+    <dimen name="buy_screen_products_coins_section_padding_bottom">2dp</dimen>
+    <dimen name="buy_screen_products_list_padding">10dp</dimen>
 </resources>

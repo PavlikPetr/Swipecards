@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.support.annotation.DrawableRes
 import android.view.View
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.BalanceData
@@ -13,16 +14,15 @@ import com.topface.topface.databinding.LayoutEmptyLikesBinding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.state.IStateDataUpdater
-import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedUnlocked
 import com.topface.topface.utils.FlurryManager
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Subscriber
 import rx.Subscription
-import javax.inject.Inject
 
 /**
  * Моделька для заглушки лайков
@@ -32,27 +32,26 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
                                private val mNavigator: IFeedNavigator, private val dataUpdater: IStateDataUpdater,
                                private val mIFeedUnlocked: IFeedUnlocked) : BaseViewModel<LayoutEmptyLikesBinding>(binding) {
 
-    @Inject lateinit var mState: TopfaceAppState
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
     lateinit private var mBalanceData: BalanceData
     private var mBalanceSubscription: Subscription
     private var mOptionsSubscription: Subscription
-    lateinit private var mLikesAccessSubscription: Subscription
     val message = ObservableField<String>()
     val buttonMessage = ObservableField<String>()
     private var mBlockSympathy = dataUpdater.options.blockSympathy
 
     init {
-        //выпилить со вторым даггером
-        App.get().inject(this)
-        mBalanceSubscription = mState.getObservable(BalanceData::class.java).subscribe {
+        mBalanceSubscription = mState.getObservable(BalanceData::class.java).subscribe(shortSubscription {
             mBalanceData = it
-        }
-        mOptionsSubscription = mState.getObservable(Options::class.java).subscribe {
+        })
+        mOptionsSubscription = mState.getObservable(Options::class.java).subscribe(shortSubscription {
             mBlockSympathy = it.blockSympathy.apply {
                 message.set(it.blockSympathy.text ?: context.getString(R.string.likes_buy_vip))
                 buttonMessage.set(it.blockSympathy.buttonText ?: context.getString(R.string.buying_vip_status))
             }
-        }
+        })
     }
 
     /*
@@ -66,7 +65,10 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
     val likesAccessProgressVisibility = ObservableInt(View.INVISIBLE)
     val flipperVisibility = ObservableInt(View.VISIBLE)
 
-    fun onBuyCoins() = mNavigator.showPurchaseCoins()
+    fun onBuyCoins() {
+        NewProductsKeysGeneratedStatistics.sendNow_LIKES_ZERODATA_GO_PURCHASES(context)
+        mNavigator.showPurchaseCoins("EmptyLikes")
+    }
 
     fun onBuyVipClick() {
         if (mBalanceData.money >= mBlockSympathy.price) {
@@ -110,9 +112,6 @@ class LikesLockScreenViewModel(binding: LayoutEmptyLikesBinding, private val mAp
                 maleIcon
             }
 
-    override fun release() {
-        RxUtils.safeUnsubscribe(mBalanceSubscription)
-        RxUtils.safeUnsubscribe(mLikesAccessSubscription)
-    }
+    override fun release() = mBalanceSubscription.safeUnsubscribe()
 
 }

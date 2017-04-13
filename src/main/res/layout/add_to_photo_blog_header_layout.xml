@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:documentation="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="handlers"
-            type="com.topface.topface.viewModels.AddToPhotoBlogHeaderViewModel" />
+            type="com.topface.topface.viewModels.AddToPhotoBlogHeaderViewModel"/>
     </data>
 
     <LinearLayout
@@ -24,9 +25,10 @@
             android:layout_marginBottom="18dp"
             android:text="@{handlers.getDescription}"
             android:textColor="@color/dark_primary_text"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
         <EditText
+            android:id="@+id/leaderComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -35,13 +37,14 @@
             android:maxLength="@{handlers.getMaxLength}"
             android:text="@={handlers.inputText}"
             android:textColorHint="@color/dark_hint_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            documentation:info="id для ui тестирования"/>
 
         <LinearLayout
             android:id="@+id/buttons_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"/>
 
     </LinearLayout>
 

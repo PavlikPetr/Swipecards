@@ -6,6 +6,7 @@ import android.support.annotation.IntDef;
 
 import com.topface.topface.utils.Utils;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,6 +43,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
      */
     public Photo photo;
     public String status;
+    @Nullable
     public Photos photos;
     public int photosCount;
     /**

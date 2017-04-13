@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.adapters.BaseHeaderFooterRecyclerViewAdapter
-import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_utils.getLastItem
 import com.topface.topface.ui.fragments.feed.feed_utils.hasItem
@@ -14,8 +13,8 @@ import com.topface.topface.utils.Utils
 /**
  * Базовый адаптер для всех фидов
  * Created by tiberal on 01.08.16.
- * @param V - feed item binding
- * @param T - feed item data item
+ * @param V feed item binding
+ * @param T feed item data item
  */
 abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFooterRecyclerViewAdapter<V, T>() {
 
@@ -28,17 +27,31 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
 
     private fun handleHighlight(binding: V, position: Int) {
         binding.root.isSelected = false
-        if (getDataItem(position).unread) {
+        val item = getDataItem(position)
+        if (item?.unread ?: false) {
             binding.root.setBackgroundResource(R.drawable.new_feed_list_item_selector)
         } else {
             binding.root.setBackgroundResource(R.drawable.feed_list_item_selector)
         }
-        binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(getDataItem(position)) ?: false
+        if (item != null) {
+            binding.root.isSelected = isActionModeEnabled && isNeedHighLight?.invoke(item) ?: false
+        }
     }
 
     override fun bindData(binding: V?, position: Int) {
         if (binding != null) {
             handleHighlight(binding, position)
+        }
+    }
+
+    override fun bindHeader(binding: ViewDataBinding?, position: Int) {
+        super.bindHeader(binding, position)
+    }
+
+    fun disableAllHighlight() {
+        data.forEachIndexed { position, item ->
+            item.unread = false
+            notifyItemChanged(position)
         }
     }
 
@@ -65,6 +78,8 @@ abstract class BaseFeedAdapter<V : ViewDataBinding, T : FeedItem> : BaseHeaderFo
         return result
     }
 
-
+    override fun getItemId(position: Int): Long {
+        return getDataItem(position)?.id?.toLong() ?: super.getItemId(position)
+    }
 
 }

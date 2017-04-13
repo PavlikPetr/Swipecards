@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -25,28 +28,27 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.state.AuthState;
+import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.dialogs.OldVersionDialog;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.views.RetryViewCreator;
-import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
-import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
-import javax.inject.Inject;
+import org.json.JSONException;
 
 /**
  * Base authorization logic
  */
 public abstract class BaseAuthFragment extends BaseFragment {
 
-    @Inject
-    AdjustManager mAdjustManager;
-    @Inject
-    AuthState mAuthState;
+    private KochavaManager mKochavaManager;
+    private AuthState mAuthState;
     private boolean mHasAuthorized = false;
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mConnectionChangeListener;
@@ -71,7 +73,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+        mAuthState = App.getAppComponent().authState();
     }
 
     protected void initViews(View root) {
@@ -125,6 +127,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
     }
 
     protected void auth(final AuthToken token) {
+        if (mKochavaManager == null) {
+            mKochavaManager = App.getAppComponent().kochavaManager();
+        }
         EasyTracker.sendEvent("Profile", "Auth", "FromActivity" + token.getSocialNet(), 1L);
         showProgress();
         final AuthRequest authRequest = new AuthRequest(token.getTokenInfo(), getActivity());
@@ -138,9 +143,9 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 onSuccessAuthorization(token);
                 mHasAuthorized = true;
                 AppConfig appConfig = App.getAppConfig();
-                App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
                 App.sendReferrerTrack(appConfig.getReferrerTrackData());
-                mAdjustManager.sendRegistrationEvent(token.getSocialNet());
+                mKochavaManager.registration();
+                mKochavaManager.sendReferralTrack();
                 //Отправляем статистику в AppsFlyer
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()
@@ -148,7 +153,28 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 } catch (Exception e) {
                     Debug.error("AppsFlyer Exception", e);
                 }
+                String authStatus = null;
+                try {
+                    authStatus = response.getJsonResult().getString("authStatus");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (authStatus != null) {
+                    sendFirstAuthUser(authRequest.getPlatform(), authStatus);
+                }
                 mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
+                String appLink = FBInvitesUtils.INSTANCE.getAppLinkToSend();
+                if (!TextUtils.isEmpty(appLink)) {
+                    if (authStatus != null) {
+                        Slices slice = new Slices().putSlice("val", appLink);
+                        if (authStatus.equals("regular")) {
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_AUTHORIZE(slice);
+                        } else if (authStatus.equals("created")) {
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_REGISTER(slice);
+                        }
+                    }
+                    FBInvitesUtils.INSTANCE.AppLinkSended();
+                }
             }
 
             @Override
@@ -163,6 +189,15 @@ public abstract class BaseAuthFragment extends BaseFragment {
         }).exec();
     }
 
+    private void sendFirstAuthUser(String platform, String authStatus) {
+        AppConfig appConfig = App.getAppConfig();
+        if (appConfig.isFirstAuth()) {
+            AuthStatistics.sendFirstAuth(platform, authStatus);
+            appConfig.setFirstAuth();
+            appConfig.saveConfig();
+        }
+    }
+
     protected void loadAllProfileData() {
         hideButtons();
         showProgress();
@@ -172,7 +207,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 //После авторизации обязательно бросаем события, что бы профиль загрузился
                 LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(CacheProfile.ACTION_PROFILE_LOAD));
                 onOptionsAndProfileSuccess();
-                new FindAndSendCurrentLocation();
+//                new FindAndSendCurrentLocation();
             }
 
             @Override

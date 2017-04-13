@@ -4,9 +4,6 @@ import android.databinding.ViewStubProxy
 import com.topface.topface.databinding.LayoutEmptyPhotoblogBinding
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
 
-/**
- * Created by tiberal on 05.09.16.
- */
 class PhotoblogLockController(viewStubProxy: ViewStubProxy) :
         BaseFeedLockerController<LayoutEmptyPhotoblogBinding, PhotoblogLockScreenViewModel>(viewStubProxy) {
 

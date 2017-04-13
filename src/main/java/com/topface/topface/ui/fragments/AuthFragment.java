@@ -47,16 +47,19 @@ import com.topface.topface.databinding.FragmentAuthBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.AuthState;
+import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.PasswordRecoverActivity;
 import com.topface.topface.ui.RegistrationActivity;
 import com.topface.topface.ui.RestoreAccountActivity;
 import com.topface.topface.ui.TopfaceAuthActivity;
+import com.topface.topface.ui.auth.AuthFragmentViewModel;
 import com.topface.topface.utils.AuthServiceButtons;
 import com.topface.topface.utils.AuthServiceButtons.SocServicesAuthButtons;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.RxUtils;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 import com.vk.sdk.dialogs.VKOpenAuthDialog;
@@ -64,8 +67,6 @@ import com.vk.sdk.dialogs.VKOpenAuthDialog;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -75,10 +76,8 @@ public class AuthFragment extends BaseAuthFragment {
     public static final String TF_BUTTONS = "tf_buttons";
     public static final String REAUTH_INTENT = "com.topface.topface.action.AUTH";
 
-    @Inject
-    NavigationState mNavigationState;
-    @Inject
-    AuthState mAuthState;
+    private NavigationState mNavigationState;
+    private AuthState mAuthState;
 
     private Subscription mAuthStateSubscription;
     private static final String MAIN_BUTTONS_GA_TAG = "LoginButtonsTest";
@@ -299,12 +298,15 @@ public class AuthFragment extends BaseAuthFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         Debug.log("AF: onCreate");
+        mAuthState = App.getAppComponent().authState();
+        mNavigationState = App.getAppComponent().navigationState();
         View root = inflater.inflate(R.layout.fragment_auth, null);
         mBinding = DataBindingUtil.bind(root);
         mLoginFragmentHandler = new LoginFragmentHandler(getContext());
         mLoginFragmentHandler.setOnAuthButtonsClickListener(mOnAuthButtonsClick);
         mBinding.setHandler(mLoginFragmentHandler);
         mBinding.btnOtherServices.setVisibility(isOtherServicesButtonAvailable() ? View.VISIBLE : View.GONE);
+        mBinding.setViewModel(new AuthFragmentViewModel(getContext()));
         initViews(root);
         if (savedInstanceState != null && savedInstanceState.containsKey(TF_BUTTONS)) {
             setAllSocNetBtnVisibility(!savedInstanceState.getBoolean(TF_BUTTONS), true, false);
@@ -493,6 +495,8 @@ public class AuthFragment extends BaseAuthFragment {
         if (Ssid.isLoaded() && !AuthToken.getInstance().isEmpty()) {
             loadAllProfileData();
         }
+
+        sendLookedAuthScreen();
     }
 
     @Override
@@ -522,15 +526,25 @@ public class AuthFragment extends BaseAuthFragment {
         RxUtils.safeUnsubscribe(mAuthStateSubscription);
     }
 
-    @Override
-    protected String getTitle() {
-        /*
-        * ВНИМАНИЕ - данное решение - хак
-        * иначе, после выполнения здесь, в onDestroy(), actionBar.show();
-        * в следующем фрагменте может обрезаться title, причем не сразу,
-        * а только после подгрузки содержимого фида, например
-        * */
-        return getString(R.string.app_name) + "                          ";
+    //TODO SETTOOLBARSETTINGS
+//    @Override
+//    protected String getTitle() {
+//        /*
+//        * ВНИМАНИЕ - данное решение - хак
+//        * иначе, после выполнения здесь, в onDestroy(), actionBar.show();
+//        * в следующем фрагменте может обрезаться title, причем не сразу,
+//        * а только после подгрузки содержимого фида, например
+//        * */
+//        return getString(R.string.app_name) + "                          ";
+//    }
+
+    private void sendLookedAuthScreen() {
+        AppConfig appConfig = App.getAppConfig();
+        if (appConfig.isFirstViewLoginScreen()) {
+            AuthStatistics.sendFirstViewLoginPage();
+            appConfig.setFirstViewLoginScreen(false);
+            appConfig.saveConfig();
+        }
     }
 
     private boolean isOtherServicesButtonAvailable() {

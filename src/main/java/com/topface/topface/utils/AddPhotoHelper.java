@@ -1,5 +1,6 @@
 package com.topface.topface.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,9 +40,10 @@ import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.extensions.PermissionsExtensionsKt;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
@@ -55,16 +57,15 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
+import permissions.dispatcher.NeedsPermission;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_CAMERA_CHOSEN;
-import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_CANCEL;
-import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_GALLERY_CHOSEN;
-import static com.topface.topface.ui.dialogs.TakePhotoPopup.ACTION_UNDEFINED;
+import static com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup.ACTION_CAMERA_CHOSEN;
+import static com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup.ACTION_CANCEL;
+import static com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup.ACTION_GALLERY_CHOSEN;
+import static com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup.ACTION_UNDEFINED;
 
 /**
  * Хелпер для загрузки фотографий в любой активити
@@ -92,20 +93,20 @@ public class AddPhotoHelper {
     private UserNotificationManager mNotificationManager;
     private File outputFile;
     private DialogInterface.OnCancelListener mOnDialogCancelListener;
-    @Inject
-    static TopfaceAppState mAppState;
-    @Inject
-    EventBus mEventBus;
+    private static TopfaceAppState mAppState;
+    private EventBus mEventBus;
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btnAddPhotoAlbum:
                 case R.id.btnTakeFormGallery:
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                     startChooseFromGallery();
                     break;
                 case R.id.btnAddPhotoCamera:
                 case R.id.btnTakePhoto:
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
                     startCamera();
                     break;
             }
@@ -121,7 +122,8 @@ public class AddPhotoHelper {
     }
 
     public AddPhotoHelper(Activity activity) {
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
+        mEventBus = App.getAppComponent().eventBus();
         minPhotoSize = App.getAppOptions().getMinPhotoSize();
         mActivity = new WeakReference<>(activity);
         mContext = activity.getApplicationContext();
@@ -130,32 +132,32 @@ public class AddPhotoHelper {
     }
 
     private void initPhotoActionSubscription() {
-        mPhotoActionSubscription = mEventBus.getObservable(TakePhotoPopup.TakePhotoActionHolder.class)
-                .filter(new Func1<TakePhotoPopup.TakePhotoActionHolder, Boolean>() {
+        mPhotoActionSubscription = mEventBus.getObservable(TakePhotoActionHolder.class)
+                .filter(new Func1<TakePhotoActionHolder, Boolean>() {
                     @Override
-                    public Boolean call(TakePhotoPopup.TakePhotoActionHolder holder) {
-                        return holder.getAction() != ACTION_UNDEFINED && holder.getPlc() != null;
+                    public Boolean call(TakePhotoActionHolder holder) {
+                        return holder.getAction() != ACTION_UNDEFINED && !TextUtils.isEmpty(holder.getPlc());
                     }
                 })
-                .subscribe(new Action1<TakePhotoPopup.TakePhotoActionHolder>() {
+                .subscribe(new Action1<TakePhotoActionHolder>() {
                     @Override
-                    public void call(TakePhotoPopup.TakePhotoActionHolder holder) {
+                    public void call(TakePhotoActionHolder holder) {
                         if (holder != null) {
-                            switch (holder.getAction()) {
-                                case ACTION_CAMERA_CHOSEN:
+                            switch ((int) holder.getAction()) {
+                                case (int) ACTION_CAMERA_CHOSEN:
                                     startCamera(false);
                                     System.out.println("PopupHive  ACTION_CAMERA_CHOSEN ");
                                     TakePhotoStatistics.sendCameraAction(holder.getPlc());
                                     break;
-                                case ACTION_GALLERY_CHOSEN:
+                                case (int) ACTION_GALLERY_CHOSEN:
                                     startChooseFromGallery(false);
                                     System.out.println("PopupHive  ACTION_GALLERY_CHOSEN ");
                                     TakePhotoStatistics.sendGalleryAction(holder.getPlc());
                                     break;
-                                case ACTION_CANCEL:
+                                case (int) ACTION_CANCEL:
                                     TakePhotoStatistics.sendCancelAction(holder.getPlc());
                             }
-                            mEventBus.setData(new TakePhotoPopup.TakePhotoActionHolder(null));
+                            mEventBus.setData(new TakePhotoActionHolder());
                         }
                     }
                 });
@@ -187,6 +189,7 @@ public class AddPhotoHelper {
         return mOnAddPhotoClickListener;
     }
 
+    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
     public void startCamera() {
         startCamera(false);
     }
@@ -294,7 +297,7 @@ public class AddPhotoHelper {
         return processActivityResult(requestCode, resultCode, data, true);
     }
 
-    public Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
+    private Uri processActivityResult(int requestCode, int resultCode, Intent data, boolean sendPhotoRequest) {
         Uri photoUri = null;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
@@ -636,6 +639,5 @@ public class AddPhotoHelper {
         return currentPhotoSize != null && !(currentPhotoSize.outWidth < minPhotoSize.width ||
                 currentPhotoSize.outHeight < minPhotoSize.height);
     }
-
 }
 

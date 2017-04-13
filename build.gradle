@@ -44,12 +44,19 @@ def getTimestamp() {
 }
 
 buildscript {
-    ext.retrofit_version = '2.1.0'
-    ext.google_play_services_version = '9.4.0'
-    ext.kotlin_version = '1.0.3'
-    ext.anko_version = '0.9'
+    ext {
+        retrofit_version = '2.1.0'
+        google_play_services_version = '9.4.0'
+        kotlin_version = '1.1.0'
+        anko_version = '0.9'
+        permissionsdispatcher_version = '2.2.0'
+        flurry_version = '6.5.0'
+        hockeyAppReleaseAppId = '817b00ae731c4a663272b4c4e53e4b61'
+        hockeyAppQaAppId = '9bf289e229284c0cba8d47eba5da9618'
+    }
     repositories {
         jcenter()
+        mavenCentral()
         //костыль. как тольок будет выложена новыя версия плагина это можно убрать
         maven { url 'https://jitpack.io' }
     }
@@ -62,6 +69,9 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "http://comscore.bintray.com/Analytics"
+        }
         maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
         maven { url 'https://bitbucket.org/atm13/artifacts/raw/master/' }
         maven { url "https://dl.bintray.com/topface/libs" }
@@ -72,17 +82,24 @@ allprojects {
         maven {
             url "https://dl.bintray.com/supersonic/android-sdk"
         }
-        maven { url "https://jitpack.io" }
         jcenter()
         flatDir {
             dirs 'libs'
+        }
+        maven { url "https://jitpack.io" }
+    }
+
+    // Allow 400 errors.
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "400"
         }
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -170,7 +187,8 @@ android {
         buildConfigField "String", "GIT_HEAD_SHA", "null";
         buildConfigField "com.topface.billing.MarketApiType", "MARKET_API_TYPE",
                 "com.topface.billing.MarketApiType.GOOGLE_PLAY";
-        manifestPlaceholders = [applicationClass: "com.topface.topface.App"]
+        manifestPlaceholders = [applicationClass: "com.topface.topface.App",
+                                HOCKEYAPP_APP_ID: "$hockeyAppQaAppId"];
 
         multiDexEnabled true
     }
@@ -223,7 +241,8 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'),
                     getDefaultProguardFile('proguard-android-optimize.txt'),
-                    'proguard-config.txt'
+                    'proguard-config.txt',
+                    'proguard-appodeal.txt'
         }
         release {
             minifyEnabled true
@@ -238,6 +257,7 @@ android {
                     getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-config.txt'
             shrinkResources false
+            manifestPlaceholders = [HOCKEYAPP_APP_ID: "$hockeyAppReleaseAppId"]
         }
         //Специальный тип сборки для тестирования отделом QA,
         //пишем время сборки и SHA текущего комита, это нужно для идентификации сборки
@@ -264,8 +284,6 @@ android {
     dexOptions {
         //@see https://code.google.com/p/android/issues/detail?id=40409
         jumboMode true
-        //@see https://code.google.com/p/android/issues/detail?id=176638
-        incremental true
         javaMaxHeapSize "4g"
     }
 
@@ -290,19 +308,17 @@ android {
 }
 
 dependencies {
-    compile project(':libs:unity-ads-1.5.8')
-    compile project(':libs:cheetah-mobile-3.4.7')
     //Kotlin
     compile "org.jetbrains.anko:anko-sdk15:$anko_version"
-    compile ("org.jetbrains.anko:anko-support-v4:$anko_version"){
+    compile("org.jetbrains.anko:anko-support-v4:$anko_version") {
         exclude module: 'anko-common'
     }
-    compile ("org.jetbrains.anko:anko-appcompat-v7:$anko_version"){
+    compile("org.jetbrains.anko:anko-appcompat-v7:$anko_version") {
         exclude module: 'anko-common'
         exclude module: 'anko-support-v4'
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt 'com.android.databinding:compiler:2.1.3'
+    kapt 'com.android.databinding:compiler:2.3.0'
     //Android Support libs
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'
@@ -314,8 +330,14 @@ dependencies {
         exclude module: 'appcompat-v7'
         exclude module: 'support-v4'
     }
+    // used only for support translucent status bar on china devices
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     //Google play services
     compile "com.google.android.gms:play-services-gcm:$google_play_services_version"
+    compile("com.google.android.gms:play-services-location:$google_play_services_version") {
+        exclude module: 'play-services-base'
+        exclude module: 'play-services-basement'
+    }
     compile("com.google.android.gms:play-services-ads:$google_play_services_version") {
         exclude module: 'play-services-base'
         exclude module: 'play-services-basement'
@@ -335,12 +357,8 @@ dependencies {
         exclude group: 'com.android.support'
     }
     // flurry analytics
-    compile 'com.flurry.android:analytics:6.2.0'
-    //Topface sub libs
-    compile(project(':libs:statistics-android')) {
-        exclude group: 'com.google.code.gson'
-        exclude group: 'com.android.support'
-    }
+    compile "com.flurry.android:analytics:$flurry_version"
+    compile "com.flurry.android:ads:$flurry_version"
     compile project(':libs:PullToRefresh')
 
     compile(project(':libs:tf-offerwall:sdk')) {
@@ -350,16 +368,17 @@ dependencies {
     compile(project(':libs:odnoklassniki')) {
         exclude group: 'com.android.support'
     }
-    compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
-    //Acra
-    compile('ch.acra:acra:4.6.0RC2') {
-        //Удаляем предоставляемыю acra зависимость org.json, так как она все рвно не нужна
-        //и на нее ругается gradle
-        exclude group: 'org.json'
-    }
-    compile('com.android.support:recyclerview-v7:24.2.1') {
+    compile(project(':libs:scruffy-android:scruffy')) {
         exclude group: 'com.android.support'
     }
+    compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
+    compile('com.android.support:cardview-v7:25.0.0') {
+        exclude group: 'com.android.support'
+    }
+    compile('com.android.support:percent:25.0.0') {
+        exclude group: 'com.android.support'
+    }
+
     compile 'com.google.code.gson:gson:2.7'
     //Library for WebSocket and other network requests
     compile 'com.koushikdutta.async:androidasync:2.1.7'
@@ -368,8 +387,8 @@ dependencies {
         exclude group: 'com.intellij'
     }
     //View Bind
-    compile ('com.jakewharton:butterknife:8.2.1'){
-exclude module: 'support-annotations'
+    compile('com.jakewharton:butterknife:8.2.1') {
+        exclude module: 'support-annotations'
     }
     provided 'com.jakewharton:butterknife-compiler:8.2.1'
     kapt 'com.jakewharton:butterknife-compiler:8.2.1'
@@ -380,15 +399,19 @@ exclude module: 'support-annotations'
     //Для Амазона нужна библиотека для поддержки in-app покупок
     amazonCompile 'com.amazon:in-app-purchasing:2.0.1'
     //RxJava
-    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.5'
+    compile('io.reactivex:rxandroid:1.2.1') {
+        exclude module: 'rxjava'
+    }
     compile('io.reactivex:rxkotlin:0.60.0') {
         exclude module: 'kotlin-stdlib'
         exclude module: 'rxjava'
     }
-    //Dagger
-    compile 'com.squareup.dagger:dagger:1.2.2'
-    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
-    kapt 'com.squareup.dagger:dagger-compiler:1.2.2'
+    //DI
+    compile 'com.google.dagger:dagger:2.8'
+    kapt 'com.google.dagger:dagger-compiler:2.8'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.1') {
         exclude group: 'com.android.support'
@@ -396,16 +419,22 @@ exclude module: 'support-annotations'
     compile('com.facebook.android:facebook-android-sdk:4.5.0') {
         exclude group: 'com.android.support'
     }
+    // для appodeal
+    compile 'com.facebook.android:audience-network-sdk:4.12.1'
+    //Expandet FAB
+    compile('net.i2p.android.ext:floatingactionbutton:1.10.1') {
+        exclude module: 'support-annotations'
+    }
     //Animations: NineOldAndroids, ListViewAnimations
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
-    //Adjust sdk
-    compile 'com.adjust.sdk:adjust-android:4.6.0'
     //LeakCanary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+
+
     ifreeCompile('com.ifree.monetize:monetization-library:2.2.5') {
         exclude group: "com.fasterxml.jackson.core"
         exclude module: "support-v4"
@@ -427,8 +456,43 @@ exclude module: 'support-annotations'
         exclude group: 'com.squareup.retrofit2'
         exclude group: 'io.reactivex'
     }
+    /*________________________GLIDE__________________________________*/
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //норм либка с  трансформациями для glide, работает шустро
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    //лоадер для glide
+    compile 'com.github.bumptech.glide:okhttp-integration:1.4.0@aar'
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
+    /*_______________________________________________________________*/
+
+    // add hockeyApp sdk to the project
+    compile 'net.hockeyapp.android:HockeySDK:4.1.1'
+
+    compile("com.github.hotchemi:permissionsdispatcher:$permissionsdispatcher_version") {
+        exclude module: "support-v4"
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'javapoet'
+    }
+    provided("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version") {
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'javapoet'
+    }
+    kapt("com.github.hotchemi:permissionsdispatcher-processor:$permissionsdispatcher_version") {
+        exclude module: 'kotlin-stdlib'
+        exclude module: 'javapoet'
+    }
+    //наша статистика
+    kapt files("libs/processor.jar")
+
+    compile 'com.comscore:android-analytics:5.+'
 }
+
+task processorTask(type: Exec) {
+    commandLine 'cp', 'libs/statistics-android/processor/build/libs/processor.jar', 'libs/'
+}
+
+processorTask.dependsOn(':libs:statistics-android:processor:build')
+preBuild.dependsOn(processorTask)
 
 project(':libs:PullToRefresh') {
     apply plugin: 'com.android.library'
@@ -436,6 +500,15 @@ project(':libs:PullToRefresh') {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
         res.srcDirs = ['library/res']
+    }
+}
+
+project(':libs:scruffy-android') {
+    apply plugin: 'com.android.library'
+    android.sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['scruffy/src/main/java']
+        res.srcDirs = ['scruffy/src/main/res']
     }
 }
 

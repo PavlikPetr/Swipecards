@@ -1,5 +1,7 @@
 package com.topface.topface.data;
 
+import android.text.TextUtils;
+
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.statistics.android.StatisticsConfiguration;
@@ -8,6 +10,10 @@ import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.http.HttpUtils;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Application options
@@ -31,6 +37,7 @@ public class AppOptions extends AbstractData {
     private int sessionTimeout;
     private int maxPartialRequestsCount;
     private Boolean scruffy = null;
+    public Invites invites = new Invites();
 
     public AppOptions(JSONObject data) {
         if (data != null) {
@@ -48,6 +55,7 @@ public class AppOptions extends AbstractData {
             sessionTimeout = item.optInt("sessionTimeout", DEFAULT_SESSION_TIMEOUT);
             scruffy = item.optBoolean("scruffy", false);
             minPhotoSize = JsonUtils.fromJson(item.optString("minPhotoSize"), MinPhotoSize.class);
+            invites = JsonUtils.optFromJson(item.optString("invites"), Invites.class, new Invites());
             JSONObject conditionsJson = item.optJSONObject("conditions");
             if (conditionsJson != null) {
                 conditions = new Conditions(conditionsJson);
@@ -188,6 +196,34 @@ public class AppOptions extends AbstractData {
         public int width = 200;
 
         MinPhotoSize() {
+        }
+    }
+
+    public class Invites {
+        private ArrayList<String> facebookInvites;
+
+        public boolean isLinkValid(String link) {
+            if (!TextUtils.isEmpty(link) && !facebookInvites.isEmpty()) {
+                // можно было бы занести в константы {{tf_uid_hash}} но что-то у меня сомнения в надежности
+                // данная строка настраивается руками в админке, мало ли опечатаются
+                Pattern replace = Pattern.compile("\\{\\{.*\\}\\}");
+                for (String template: facebookInvites) {
+                    Matcher replacer = replace.matcher(template);
+                    Pattern match = Pattern.compile(replacer.replaceAll(".*"));
+                    Matcher matcher = match.matcher(link);
+                    if (matcher.find()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Construct empty invites if not found in options response
+         */
+        Invites() {
+            facebookInvites = new ArrayList<>();
         }
     }
 }

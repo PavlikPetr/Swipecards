@@ -8,10 +8,14 @@ import android.support.v4.app.Fragment;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.BaseFragmentActivity;
-import com.topface.topface.ui.edit.filter.view.FilterFragment;
+import com.topface.topface.ui.edit.filter.view.DatingFilterFragment;
 
-public class EditContainerActivity extends BaseFragmentActivity {
+import org.jetbrains.annotations.NotNull;
+
+public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameBinding> {
 
     public static final int INTENT_EDIT_FILTER = 201;
 
@@ -28,25 +32,23 @@ public class EditContainerActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         switch (intent.getIntExtra(App.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_FILTER:
-                mFragment = new FilterFragment();
+                // хак чтобы тень под тулбаром была на том же фоне, что и фрагмент, при этом с возможностью свитчить
+                // для разных фрагментов
+                getViewBinding().getRoot().setBackgroundColor(getResources().getColor(R.color.gray_bg));
+                mFragment = new DatingFilterFragment();
                 break;
             default:
                 break;
         }
 
-        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(FilterFragment.TAG);
+        Fragment fragmentByTag = getSupportFragmentManager().findFragmentByTag(DatingFilterFragment.TAG);
         if (fragmentByTag != null) {
             mFragment = fragmentByTag;
         }
         if (mFragment != null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.loFrame, mFragment, FilterFragment.TAG).commit();
+                    .replace(R.id.fragment_content, mFragment, DatingFilterFragment.TAG).commit();
         }
-    }
-
-    @Override
-    protected int getContentLayout() {
-        return R.layout.ac_fragment_frame;
     }
 
     @Override
@@ -59,8 +61,23 @@ public class EditContainerActivity extends BaseFragmentActivity {
     }
 
     @Override
+    public void onUpClick() {
+        super.finish();
+    }
+
+    @Override
     public boolean isTrackable() {
         return false;
     }
 
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
 }

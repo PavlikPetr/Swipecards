@@ -22,19 +22,17 @@ import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.state.AuthState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.NavigationActivity;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.cache.SearchCacheManager;
 import com.topface.topface.utils.config.UserConfig;
+import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.popups.PopupManager;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.inject.Inject;
 
 /**
  * AuthorizationManager has to be attached to some Activity (setted on getInstance(...))
@@ -51,10 +49,9 @@ public class AuthorizationManager {
 
     public static final int RESULT_LOGOUT = 666;
     public static final String LOGOUT_INTENT = "com.topface.topface.intent.LOGOUT";
-    @Inject
-    TopfaceAppState mAppState;
-    @Inject
-    AuthState mAuthState;
+    private TopfaceAppState mAppState;
+    private AuthState mAuthState;
+    private WeakStorage mWeakStorage;
 
     private Map<Platform, Authorizer> mAuthorizers = new HashMap<>();
 
@@ -87,7 +84,9 @@ public class AuthorizationManager {
         mAuthorizers.put(Platform.FACEBOOK, new FbAuthorizer());
         mAuthorizers.put(Platform.ODNOKLASSNIKI, new OkAuthorizer());
         mAuthorizers.put(Platform.TOPFACE, new TfAuthorizer());
-        App.get().inject(this);
+        mAppState = App.getAppComponent().appState();
+        mAuthState = App.getAppComponent().authState();
+        mWeakStorage = App.getAppComponent().weakStorage();
     }
 
     public static void saveAuthInfo(IApiResponse response) {
@@ -142,7 +141,6 @@ public class AuthorizationManager {
         Ssid.remove();
         ScruffyRequestManager.getInstance().logout();
         UserNotificationManager.getInstance().removeNotifications();
-        TabbedDialogsFragment.setTabsDefaultPosition();
         AuthToken authToken = AuthToken.getInstance();
         for (Authorizer authorizer : mAuthorizers.values()) {
             authorizer.logout();
@@ -151,6 +149,8 @@ public class AuthorizationManager {
         mAppState.destroyObservable(Options.class);
         CacheProfile.clearProfileAndOptions(mAppState);
         App.getConfig().onLogout();
+        // reset "design verions" in weak storage, couse each user has its own
+        mWeakStorage.resetProfileDialogRedesignEnabled();
         NavigationActivity.isPhotoAsked = false;
         PopupManager.INSTANCE.clear();
         NavigationActivity.hasNewOptionsOrProfile = false;

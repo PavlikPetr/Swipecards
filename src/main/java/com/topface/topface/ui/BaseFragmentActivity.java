@@ -1,61 +1,65 @@
 package com.topface.topface.ui;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.databinding.ViewDataBinding;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
-import com.topface.topface.R;
 import com.topface.topface.data.Options;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
+import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.GoogleMarketApiManager;
-import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.ILifeCycle;
+import com.topface.topface.utils.IStateSaverRegistrator;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.actionbar.ActionBarView;
 import com.topface.topface.utils.gcmutils.GCMUtils;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.social.AuthToken;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public abstract class BaseFragmentActivity extends TrackedFragmentActivity implements IRequestClient {
+public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends TrackedFragmentActivity<T>
+        implements IRequestClient, IStateSaverRegistrator, ITabLayoutHolder {
 
     public static final String AUTH_TAG = "AUTH";
     public static final String GOOGLE_AUTH_STARTED = "google_auth_started";
     public static final String IGNORE_NOTIFICATION_INTENT = "IGNORE_NOTIFICATION_INTENT";
     private static final String APP_START_LABEL_FORM = "gcm_%d_%s";
-    public ActionBarView actionBarView;
     private boolean mIndeterminateSupported = false;
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
     private boolean mNeedAnimate = true;
     private BroadcastReceiver mProfileLoadReceiver;
-    private Toolbar mToolbar;
     private BroadcastReceiver mProfileUpdateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,7 +86,7 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     };
     private boolean mRunning;
     private boolean mGoogleAuthStarted;
-    private boolean mHasContent = true;
+    private ArrayList<ILifeCycle> stateSavers = new ArrayList<>();
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -90,22 +94,11 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         return keyCode == KeyEvent.KEYCODE_MENU || super.onKeyDown(keyCode, event);
     }
 
-    @SuppressWarnings("unused")
-    public IActivityDelegate getActivityDelegate() {
-        return this;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setWindowOptions();
-        if (mHasContent) {
-            setContentView(getContentLayout());
-        }
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
+        super.onCreate(savedInstanceState);
+        FBInvitesUtils.INSTANCE.onCreateActivity(getIntent());
         Intent intent = getIntent();
         if (intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
             App.setStartLabel(String.format(Locale.getDefault(), APP_START_LABEL_FORM,
@@ -113,26 +106,33 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
                     intent.getStringExtra(GCMUtils.GCM_LABEL)));
         }
         LocaleConfig.updateConfiguration(getBaseContext());
-        initActionBar(getSupportActionBar());
     }
 
-    public void setToolBarVisibility(boolean isVisible) {
-        if (mToolbar != null) {
-            mToolbar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        }
+    @Override
+    public void registerLifeCycleDelegate(@NotNull ILifeCycle... stateSaver) {
+        stateSavers.addAll(Arrays.asList(stateSaver));
     }
 
-    protected abstract int getContentLayout();
+    @Override
+    public void unregisterLifeCycleDelegate(@NotNull ILifeCycle... stateSaver) {
+        stateSavers.removeAll(Arrays.asList(stateSaver));
+    }
 
     @Override
     protected void onRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mGoogleAuthStarted = savedInstanceState.getBoolean(GOOGLE_AUTH_STARTED);
+        for (ILifeCycle saver : stateSavers) {
+            saver.onRestoreInstanceState(savedInstanceState);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        for (ILifeCycle saver : stateSavers) {
+            saver.onSavedInstanceState(outState);
+        }
         if (mGoogleAuthStarted) {
             outState.putBoolean(GOOGLE_AUTH_STARTED, true);
         }
@@ -170,27 +170,8 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    /**
-     * Выставляем опции для ActionBar
-     */
-    protected void initActionBar(ActionBar actionBar) {
-        if (actionBar != null) {
-            actionBarView = new ActionBarView(actionBar, this);
-            setActionBarView();
-            initActionBarOptions(actionBar);
-        }
-    }
-
-    protected void initActionBarOptions(ActionBar actionBar) {
-        actionBar.setIcon(android.R.color.transparent);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-    }
-
-    protected void setActionBarView() {
-        actionBarView.setArrowUpView((String) getTitle());
+    protected boolean isDatingRedesignEnabled() {
+        return false;
     }
 
     /**
@@ -210,10 +191,20 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         if (!mNeedAnimate) {
             overridePendingTransition(0, 0);
         }
-        // status bar color
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        if (!isDatingRedesignEnabled()) {
+            if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
+                // для kitkat с отключенной прозрачностью статус бара особые условия
+                // отключаем прозрачность насильно ибо она задана в теме
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            } else {
+                // иначе старая логика
+                // status bar color
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                }
+            }
         }
     }
 
@@ -264,6 +255,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onResume() {
         super.onResume();
+        for (ILifeCycle saver : stateSavers) {
+            saver.onResume();
+        }
         if (GoogleMarketApiManager.isGoogleAccountExists() && mGoogleAuthStarted) {
             App.mOpenIabHelperManager.freeHelper();
             App.mOpenIabHelperManager.init(App.getContext());
@@ -351,6 +345,9 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onPause() {
         super.onPause();
+        for (ILifeCycle saver : stateSavers) {
+            saver.onPause();
+        }
         removeAllRequests();
         if (mProfileLoadReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mProfileLoadReceiver);
@@ -380,16 +377,29 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
-            mGoogleAuthStarted = true;
+        for (ILifeCycle saver : stateSavers) {
+            saver.onActivityResult(requestCode, resultCode, data);
         }
-
-        //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
-        //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
-        //и ответ возвращать тоже в активити.
-        Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-        if (authFragment != null) {
-            authFragment.onActivityResult(requestCode, resultCode, data);
+        //Хак для работы покупок, см подробнее в BillingFragment.processRequestCode()
+        boolean isBillingRequestProcessed = OpenIabFragment.processRequestCode(
+                getSupportFragmentManager(),
+                requestCode,
+                resultCode,
+                data,
+                OwnProfileFragment.class
+        );
+        if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
+            if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
+                mGoogleAuthStarted = true;
+            }
+            //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
+            //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
+            //и ответ возвращать тоже в активити.
+            Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
+            if (authFragment != null) {
+                authFragment.onActivityResult(requestCode, resultCode, data);
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -424,27 +434,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
 
 
     protected boolean isNeedAuth() {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (onPreFinish()) {
-                    finish();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public boolean doPreFinish() {
-        return onPreFinish();
-    }
-
-    protected boolean onPreFinish() {
         return true;
     }
 
@@ -500,14 +489,6 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    public void onUpClick() {
-        if (doPreFinish()) {
-            if (!onSupportNavigateUp()) {
-                finish();
-            }
-        }
-    }
-
     @Override
     public boolean supportShouldUpRecreateTask(Intent targetIntent) {
         return super.supportShouldUpRecreateTask(targetIntent) && isTaskRoot();
@@ -524,12 +505,27 @@ public abstract class BaseFragmentActivity extends TrackedFragmentActivity imple
         }
     }
 
-    @SuppressWarnings("unused")
     public boolean isRunning() {
         return mRunning;
     }
 
-    protected void setHasContent(boolean value) {
-        mHasContent = value;
+    @Override
+    public int getTabLayoutResId() {
+        return 0;
     }
+
+    @Nullable
+    @Override
+    public TabLayout getTabLayout() {
+        return (TabLayout) getViewBinding().getRoot().findViewById(getTabLayoutResId());
+    }
+
+    @Override
+    public void showTabLayout(boolean show) {
+        TabLayout tabLayout = getTabLayout();
+        if (tabLayout != null) {
+            tabLayout.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
 }

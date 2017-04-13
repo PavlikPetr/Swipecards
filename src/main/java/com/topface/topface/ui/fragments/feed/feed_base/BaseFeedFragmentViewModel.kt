@@ -7,36 +7,50 @@ import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.widget.SwipeRefreshLayout
 import android.text.TextUtils
 import android.view.View
+import com.topface.framework.utils.Debug
+import com.topface.topface.App
+import com.topface.topface.R
+import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedItem
 import com.topface.topface.data.FeedListData
+import com.topface.topface.data.FixedViewInfo
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
+import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getFirst
-import com.topface.topface.utils.RxUtils
+import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.debug.FuckingVoodooMagic
+import com.topface.topface.utils.extensions.registerReceiver
+import com.topface.topface.utils.extensions.unregisterReceiver
 import com.topface.topface.utils.gcmutils.GCMUtils
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
+import java.util.*
 
 /**
  * Базовая VM для всех фидов
  * Created by tiberal on 01.08.16.
- * @param T - feed item type
+ * @param T feed item type
  */
 abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBaseBinding, private val mNavigator: IFeedNavigator,
-                                                       private val mApi: FeedApi) : BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener {
+                                                       private val mApi: FeedApi) :
+        BaseViewModel<FragmentFeedBaseBinding>(binding), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
+    private val mState by lazy {
+        App.getAppComponent().appState()
+    }
     var isRefreshing = object : ObservableBoolean() {
         override fun set(value: Boolean) {
             super.set(value)
@@ -53,32 +67,43 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     protected val mAdapter: BaseFeedAdapter<*, T>? by lazy {
         binding.feedList.adapter as? BaseFeedAdapter<*, T>
     }
+
     abstract val feedsType: FeedsCache.FEEDS_TYPE
     abstract val itemClass: Class<T>
     abstract val service: FeedRequest.FeedService
     abstract val gcmType: Array<Int>
+    open val typeFeedFragment: String? = null
+    abstract fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData): Boolean
     open val gcmTypeUpdateAction: String? = null
     open val isForPremium: Boolean = false
     open val isNeedReadItems: Boolean = false
     open val isNeedCacheItems: Boolean = true
+    open val bannerRes: Int = R.layout.app_day_list
+    private val mCounters by lazy {
+        CountersData()
+    }
     private val mCache by lazy {
         FeedCacheManager<T>(context, feedsType)
     }
     private var mCallUpdateSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
+    private var mAppDayRequestSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
     private var mBlackListSubscription: Subscription? = null
+    private var mCountersSubscription: Subscription? = null
 
     private var isDataFromCache: Boolean = false
+    private var mIsAllDataLoaded: Boolean = false
+    private var mStateManager = RunningStateManager()
 
     companion object {
-        val FROM = "from"
-        val TO = "to"
-        val SERVICE = "service"
-        val LEAVE = "leave"
-        val HISTORY_LOAD_FLAG = "history_load_flag"
-        val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
-        val UNREAD_STATE = "unread_state"
+        const val FROM = "from"
+        const val TO = "to"
+        const val SERVICE = "service"
+        const val LEAVE = "leave"
+        const val HISTORY_LOAD_FLAG = "history_load_flag"
+        const val PULL_TO_REF_FLAG = "pull_to_refresh_flag"
+        const val UNREAD_STATE = "unread_state"
     }
 
     private lateinit var mReadItemReceiver: BroadcastReceiver
@@ -99,22 +124,32 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         mUpdaterSubscription = mAdapter?.let { adapter ->
             adapter.updaterObservable.distinct {
-                it?.let {
-                    it.getString(TO, Utils.EMPTY)
-                }
-            }.subscribe(object : RxUtils.ShortSubscription<Bundle>() {
-                override fun onNext(updateBundle: Bundle?) {
-                    updateBundle?.let {
+                it?.getString(TO, Utils.EMPTY)
+            }.subscribe(shortSubscription {
+                if (!mIsAllDataLoaded) {
+                    it?.let {
                         update(it)
                     }
                 }
             })
         }
+        mCountersSubscription = mState.getObservable(CountersData::class.java)
+                .filter { newCounters ->
+                    val isChanged = mCounters.isNotEmpty && isCountersChanged(newCounters, mCounters)
+                    mCounters.setCounters(newCounters)
+                    isChanged
+                }
+                .subscribe(shortSubscription {
+                    it?.let {
+                        loadTopFeeds()
+                    }
+                })
         createAndRegisterBroadcasts()
+        mStateManager.registerAppChangeStateListener(this)
     }
 
     @FuckingVoodooMagic(description = "Эхо некрокода! Как только переделем остальные фрагмент на новый лад это нужно заменить на ивенты")
-    private fun createAndRegisterBroadcasts() {
+    open protected fun createAndRegisterBroadcasts() {
         mGcmReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 for (type in gcmType) {
@@ -138,13 +173,13 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        LocalBroadcastManager.getInstance(context).registerReceiver(mReadItemReceiver, filter)
+        mReadItemReceiver.registerReceiver(context, filter)
         gcmTypeUpdateAction?.let {
-            LocalBroadcastManager.getInstance(context).registerReceiver(mGcmReceiver, IntentFilter(it))
+            mGcmReceiver.registerReceiver(context, IntentFilter(it))
         }
     }
 
-    protected fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
+    open fun makeItemReadWithFeedId(id: String) = mAdapter?.let { adapter ->
         adapter.data.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
                 dataItem.unread = false
@@ -152,7 +187,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
             adapter.notifyItemChanged(position)
         }
     }
-
 
     protected fun makeItemReadUserId(uid: Int, readMessages: Int) =
             mAdapter?.let { adapter ->
@@ -163,19 +197,20 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                             dataItem.unreadCounter = unread
                         } else {
                             dataItem.unread = false
+                            dataItem.unreadCounter = 0
                         }
-                        adapter.notifyItemChanged(position)
+                        adapter.notifyItemChange(position)
                     }
                 }
             }
 
     fun update(updateBundle: Bundle = Bundle()) {
         isFeedProgressBarVisible.set(View.VISIBLE)
-        mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass,
+        mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass,
                 constructFeedRequestArgs(isPullToRef = false, to = updateBundle.getString(TO, Utils.EMPTY))).
                 subscribe(object : Observer<FeedListData<T>> {
                     override fun onCompleted() {
-                        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
+                        mCallUpdateSubscription.safeUnsubscribe()
                         isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
@@ -183,28 +218,65 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         e?.let {
                             onErrorProcess(it)
                         }
+                        mCallUpdateSubscription.safeUnsubscribe()
+                        isFeedProgressBarVisible.set(View.INVISIBLE)
                     }
 
                     override fun onNext(data: FeedListData<T>?) {
-                        data?.let {
-                            if (isDataFromCache) {
-                                mAdapter?.let { adapter ->
-                                    adapter.data.clear()
-                                    adapter.notifyDataSetChanged()
-                                }
-                                isDataFromCache = false
-                            }
-                            handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
-                            val adapter = mAdapter
-                            if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
-                                stubView?.onEmptyFeed()
-                            } else {
-                                isListVisible.set(View.VISIBLE)
-                            }
-                            adapter?.addData(data.items)
-                        }
+                        if (data?.more == false) mIsAllDataLoaded = true
+                        updateFeedsLoaded(data, updateBundle)
                     }
                 })
+    }
+
+    protected open fun updateFeedsLoaded(data: FeedListData<T>?, updateBundle: Bundle) {
+        if (mAdapter == null) return
+        if (isDataFromCache || (mAdapter?.data?.isEmpty() ?: true && !(data?.items?.isEmpty() ?: true))) {
+            typeFeedFragment?.let { getAppDayRequest(it) }
+        }
+        data?.let {
+            if (isDataFromCache) {
+                mAdapter?.let { adapter ->
+                    adapter.data.clear()
+                    adapter.notifyDataSetChanged()
+                }
+                isDataFromCache = false
+            }
+            handleUnreadState(it, updateBundle.getBoolean(PULL_TO_REF_FLAG))
+            val adapter = mAdapter
+            if (adapter != null && adapter.data.isEmpty() && data.items.isEmpty()) {
+                isListVisible.set(View.INVISIBLE)
+                stubView?.onEmptyFeed()
+            } else {
+                isListVisible.set(View.VISIBLE)
+                isLockViewVisible.set(View.GONE)
+                stubView?.onFilledFeed()
+            }
+            adapter?.addData(data.items)
+        }
+    }
+
+    fun getAppDayRequest(typeFeedFragment: String) {
+        mAppDayRequestSubscription = mApi.callAppDayRequest(typeFeedFragment).subscribe(object : Subscriber<AppDay>() {
+            override fun onCompleted() {
+            }
+
+            override fun onError(e: Throwable?) =
+                    e?.let { Debug.log("App day banner error request: $it") } ?: Unit
+
+            override fun onNext(appDay: AppDay?) = appDay?.list?.let { imageArray ->
+                if (!imageArray.isEmpty()) {
+                    mAdapter?.let {
+                        with(it) {
+                            setHeader(FixedViewInfo(bannerRes, imageArray))
+                            notifyItemInserted(0)
+                        }
+                        binding.feedList.layoutManager.scrollToPosition(0)
+                    }
+                }
+
+            } ?: Unit
+        })
     }
 
     private fun onErrorProcess(e: Throwable) {
@@ -248,11 +320,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     fun loadTopFeeds() {
-        val from = mAdapter?.data?.getFirst()?.let {
-            it.id
-        } ?: Utils.EMPTY
+        val from = mAdapter?.data?.getFirst()?.id ?: Utils.EMPTY
         val requestBundle = constructFeedRequestArgs(from = from, to = null)
-        mCallUpdateSubscription = mApi.callUpdate(isForPremium, itemClass, requestBundle)
+        mCallUpdateSubscription = mApi.callFeedUpdate(isForPremium, itemClass, requestBundle)
                 .subscribe(object : Subscriber<FeedListData<T>>() {
                     override fun onCompleted() {
                         if (isRefreshing.get()) {
@@ -264,19 +334,33 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                         e?.let {
                             onErrorProcess(it)
                         }
-                    }
-
-                    override fun onNext(data: FeedListData<T>?) {
-                        data?.let {
-                            if (!data.items.isEmpty()) {
-                                handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
-                                removeOldDuplicates(data)
-                                mAdapter?.addFirst(data.items)
-                                binding.feedList.layoutManager.scrollToPosition(0)
-                            }
+                        if (isRefreshing.get()) {
+                            isRefreshing.set(false)
                         }
                     }
+
+                    override fun onNext(data: FeedListData<T>?) = topFeedsLoaded(data, requestBundle)
+
                 })
+    }
+
+    protected open fun topFeedsLoaded(data: FeedListData<T>?, requestBundle: Bundle) {
+        data?.let {
+            if (!it.items.isEmpty()) {
+                if (mAdapter?.itemCount == 0) {
+                    isListVisible.set(View.VISIBLE)
+                    isLockViewVisible.set(View.GONE)
+                    stubView?.onFilledFeed()
+                }
+                handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
+                removeOldDuplicates(it)
+                mAdapter?.addFirst(it.items)
+                if (isRefreshing.get()) {
+                    binding.feedList.layoutManager.scrollToPosition(0)
+                    isRefreshing.set(false)
+                }
+            }
+        }
     }
 
     @FuckingVoodooMagic(description = "Если нет новых фидов сервер присылает итем от которого проходила выборка(первый)")
@@ -287,7 +371,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 val feed = feedsIterator.next()
                 for (newFeed in data.items) {
                     if (considerDuplicates(feed, newFeed)) {
+                        val pos = adapter.data.indexOf(feed)
                         feedsIterator.remove()
+                        adapter.notifyItemRemove(pos)
                         break
                     }
                 }
@@ -296,7 +382,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     @FuckingVoodooMagic(description = "нужен для removeOldDuplicates")
-    protected fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
+    protected open fun considerDuplicates(first: T, second: T) = if (first.id == null) second.id == null else first.id == second.id
 
     private fun constructFeedRequestArgs(isPullToRef: Boolean = true, from: String? = Utils.EMPTY,
                                          to: String? = Utils.EMPTY) =
@@ -316,10 +402,10 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         return adapter != null && !adapter.data.isEmpty()
     }
 
-    fun onDeleteFeedItems(items: MutableList<T>) {
+    fun onDeleteFeedItems(items: MutableList<T>, idsList: ArrayList<String>) {
         val tempItems = items.toList()
         isLockViewVisible.set(View.VISIBLE)
-        mDeleteSubscription = mApi.callDelete(feedsType, tempItems).subscribe(createSubscriber(tempItems))
+        mDeleteSubscription = mApi.callDelete(feedsType, idsList).subscribe(createSubscriber(tempItems))
     }
 
     fun onAddToBlackList(items: MutableList<T>) {
@@ -329,31 +415,40 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
     }
 
     private fun createSubscriber(items: List<T>) = object : Subscriber<Boolean>() {
-        override fun onCompleted() {
-            isLockViewVisible.set(View.GONE)
-        }
+        override fun onCompleted() = isLockViewVisible.set(View.GONE)
 
         override fun onError(e: Throwable?) {
             Utils.showErrorMessage()
+            isLockViewVisible.set(View.GONE)
         }
 
-        override fun onNext(t: Boolean?) {
-            mAdapter?.let { adapter ->
-                adapter.removeItems(items)
-                if (adapter.data.isEmpty()) {
-                    isListVisible.set(View.INVISIBLE)
-                    stubView?.onEmptyFeed()
-                }
-            }
+        override fun onNext(appDay: Boolean?) =
+                mAdapter?.let { adapter ->
+                    adapter.removeItems(items)
+                    if (adapter.data.isEmpty()) {
+                        isListVisible.set(View.INVISIBLE)
+                        stubView?.onEmptyFeed()
+                    }
+                    mCache.saveToCache(adapter.data)
+                } ?: Unit
+    }
+
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver(context)
+
+    override fun onAppForeground(timeOnStart: Long) {
+        gcmTypeUpdateAction?.let {
+            mGcmReceiver.registerReceiver(context, IntentFilter(it))
+        }
+        for (type in gcmType) {
+            GCMUtils.cancelNotification(context, type)
         }
     }
 
     override fun release() {
+        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(context)
         super.release()
-        RxUtils.safeUnsubscribe(mUpdaterSubscription)
-        RxUtils.safeUnsubscribe(mCallUpdateSubscription)
-        RxUtils.safeUnsubscribe(mDeleteSubscription)
-        RxUtils.safeUnsubscribe(mBlackListSubscription)
+        arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
+                mBlackListSubscription, mCountersSubscription, mAppDayRequestSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
             mAdapter?.let { adapter ->
                 if (!adapter.data.isEmpty()) {
@@ -361,7 +456,6 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 }
             }
         }
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mReadItemReceiver)
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(mGcmReceiver)
+        mStateManager.unregisterAppChangeStateListener(this)
     }
 }

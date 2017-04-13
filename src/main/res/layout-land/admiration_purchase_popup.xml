@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel"/>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:onClick="@{() -> viewModel.skip()}"
+        tools:context=".ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity">
+
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar_view"
+            bind:viewModel="@{toolbarViewModel}"/>
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="6dp"
+            android:orientation="horizontal"
+            android:padding="32dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.50"
+                android:paddingLeft="30dp"
+                android:background="@color/text_white"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/admiration"
+                    style="@style/AdmirationImageStyle"
+                    app:postProcessor="inscribedAvatar"/>
+
+                <com.topface.topface.ui.views.ImageViewRemote
+                    android:id="@+id/user_face"
+                    style="@style/AdmirationPopupUserAvatar"
+                    app:postProcessor="inscribedAvatar"
+                    app:roundedImgBorderColor="@android:color/white"
+                    app:roundedImgBorderWidth="3dp"
+                    app:setPhoto="@{viewModel.userAvatar}"/>
+
+                <Button
+                    android:id="@+id/coins_button"
+                    style="@style/AdmirationPopupBuyCoinsButton"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> viewModel.buyCoins()}"
+                    android:text="@{viewModel.buyCoinsButtonText}"/>
+
+                <TextView
+                    style="@style/AdmirationPopupLabel1Style"
+                    android:id="@+id/label1"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.50"
+                android:background="@drawable/admiration_popup_land_bg">
+
+                <ImageView
+                    android:id="@+id/vip"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/vip_icon_margin_left"
+                    android:src="@drawable/admiration_popup_vip_ico"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingLeft="25dp"
+                    android:paddingStart="25dp">
+
+                    <TextView
+                        android:id="@+id/label2"
+                        style="@style/AdmirationPopupLabel2Style"
+                        android:layout_width="152dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"/>
+
+                    <ImageView
+                        android:id="@+id/arrow_bottom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:src="@drawable/arrow"/>
+
+                    <TextView
+                        android:id="@+id/vip_button"
+                        style="@style/AdmirationPopupBuyVipButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/arrow_bottom"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:onClick="@{() -> viewModel.buyVip()}"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

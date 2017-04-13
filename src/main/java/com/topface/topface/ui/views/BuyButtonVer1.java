@@ -11,6 +11,7 @@ import android.view.View;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.BuyButtonVer1Binding;
+import com.topface.topface.utils.extensions.UiTestsExtensionKt;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
     private static final int PADDING_FIVE = (int) App.getContext().getResources().getDimension(R.dimen.default_purchase_button_container_padding);
 
     private BuyButtonVer1Binding mBinding;
-    private BuyButtonVersion1Handler mBtnHandler;
+    public BuyButtonVersion1Handler mBtnHandler;
 
     public BuyButtonVer1(Context context) {
         this(context, (BuyButtonBuilder) null);
@@ -117,6 +118,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
         setButtonCondition(builder.mHasDiscount, builder.mShowType);
         setTitle(builder.mTitle);
         setOnClickListener(builder.mButtonClickListener);
+        UiTestsExtensionKt.setUiTestTag(mBinding.itText, builder.mTag);
     }
 
     @Override
@@ -130,7 +132,13 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
         private String mTitle;
         private boolean mHasDiscount;
         private int mShowType;
+        private Object mTag;
         private OnClickListener mButtonClickListener;
+
+        public BuyButtonBuilder tag(Object tag) {
+            mTag = tag;
+            return this;
+        }
 
         public BuyButtonBuilder title(String title) {
             mTitle = title;

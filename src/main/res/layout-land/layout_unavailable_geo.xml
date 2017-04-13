@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.people_nearby.UnavailableGeoBaseViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        style="@style/PopupScroll">
+
+        <LinearLayout
+            style="@style/PopupRootContainer">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    style="@style/PopupCenterImageContainer">
+
+                    <ImageView
+                        style="@style/PopupAnimatedBackground"
+                        app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
+
+                    <ImageView
+                        style="@style/PopupUnavailableGeoCenterImage"/>
+                </RelativeLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                style="@style/PopupLandRightContainer">
+
+                <TextView
+                    style="@style/PopupTitle"
+                    android:text="@string/access_to_location_popup_title"/>
+
+                <TextView
+                    style="@style/PopupMessage"
+                    android:text="@{viewModel.text}"/>
+
+                <ImageView
+                    style="@style/PopupArrow"/>
+
+                <Button
+                    style="@style/PopupGreenButton.Background"
+                    android:onClick="@{() -> viewModel.onButtonClick()}"
+                    android:text="@{viewModel.button}"
+                    app:uiTestTag="@{viewModel.buttonTag}"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/albumRoot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/description"
+            app:backgroundDrawable="@{viewModel.albumDefaultBackground}">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="@drawable/new_dating_shadow">
+
+                <com.topface.topface.ui.views.image_switcher.ImageLoader
+                    android:id="@+id/dating_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:currentItemImmediately="@{viewModel.currentItem}"
+                    app:data="@{viewModel.albumData}"
+                    app:necessityPreloadOnStart="@{viewModel.isNeedPreloadOnStart}"
+                    app:onPageChangeListener="@{viewModel}" />
+            </FrameLayout>
+
+            <!--Блок "статуса и каунтера фоток"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:visibility="@{viewModel.isVisible}">
+
+                <TextView
+                    style="@style/DatingStausAndPhotoCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/foto_alpha"
+                    android:drawablePadding="16dp"
+                    android:text="@{viewModel.photoCounter}" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="@{viewModel.statusVisibility}">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:src="@drawable/status_new" />
+
+                    <TextView
+                        style="@style/DatingStausAndPhotoCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="@{viewModel.statusText}"
+                        android:visibility="@{viewModel.photoCounterVisibility}" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="152dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/bg_white"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+            <!--Блок "имени, онлайн-статуса и города"-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:visibility="@{viewModel.isVisible}">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/DatingNameAndAge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="55dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="@{viewModel.name}" />
+                    <!--АХТУНГИ, ПАЦАНЫ!!!!!!!!!!!! Отсуп сверху на 55 и снизу на -55 нужны, чтобы гарантировать место под возраст и онлайн значок-->
+                    <TextView
+                        style="@style/DatingNameAndAge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-55dp"
+                        android:drawablePadding="8dp"
+                        android:drawableRight="@{viewModel.iconOnlineRes}"
+                        android:ellipsize="none"
+                        android:maxLines="1"
+                        android:text="@{viewModel.feedAge}" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/DatingCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="@{viewModel.feedCity}" />
+            </LinearLayout>
+            <!--Блок кнопок-->
+            <include
+                layout="@layout/dating_buttons"
+                bind:viewModel="@{viewModel}" />
+        </LinearLayout>
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/albumRoot"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-20dp"
+            android:background="@drawable/loader_bg"
+            android:theme="@style/CircularProgress"
+            android:visibility="@{viewModel.isDatingProgressBarVisible}" />
+    </RelativeLayout>
+</layout>

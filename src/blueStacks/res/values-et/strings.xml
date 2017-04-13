@@ -33,7 +33,6 @@
   <string name="black_list_add">Lisada musta nimekirja</string>
   <string name="vip_invisible_mode">Nähtamatu rezhiim</string>
   <string name="buying_profile_coins">Sinu kontol/ Sinu arvel</string>
-  <string name="vip_info_title">VIP-eelised</string>
   <string name="profile_gifts_empty">Sellele kasutajale pole/ ei ole veel keegi kingitusi kinkinud.</string>
   <string name="profile_mygifts_empty">Sulle pole veel keegi kingitusi kinkinud.</string>
   <string name="dating_people_unnoticed">Kümme inimest on ilma sinu tähelepanuta jäänud!</string>
@@ -339,4 +338,5 @@ Sa oled müksanud.</string>
   <string name="delete_account_are_you_sure">Kas sa oled päris kindel?</string>
   <string name="delete">Ära kustutada</string>
   <string name="restore">Taastada</string>
+  <string name="vip_info_title">VIP-eelised</string>
 </resources>

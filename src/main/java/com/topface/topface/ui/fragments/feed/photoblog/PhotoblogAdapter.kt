@@ -20,9 +20,7 @@ class PhotoblogAdapter(private val mNavigator: IFeedNavigator) : BaseFeedAdapter
     }
 
     override fun bindHeader(binding: ViewDataBinding?, position: Int) {
-        binding?.let {
-            it.setVariable(BR.viewModel, getHeaderItem(position))
-        }
+        binding?.setVariable(BR.viewModel, getHeaderItem(position))
     }
 
     override fun getItemLayout() = R.layout.feed_photoblog_item

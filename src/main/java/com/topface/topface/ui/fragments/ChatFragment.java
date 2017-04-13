@@ -47,6 +47,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedDialog;
 import com.topface.topface.data.FeedUser;
+import com.topface.topface.data.Gift;
 import com.topface.topface.data.History;
 import com.topface.topface.data.HistoryListData;
 import com.topface.topface.data.IUniversalUser;
@@ -76,10 +77,12 @@ import com.topface.topface.ui.adapters.FeedList;
 import com.topface.topface.ui.adapters.HackBaseAdapterDecorator;
 import com.topface.topface.ui.adapters.IListLoader;
 import com.topface.topface.ui.dialogs.ConfirmEmailDialog;
-import com.topface.topface.ui.dialogs.TakePhotoPopup;
-import com.topface.topface.ui.fragments.feed.DialogsFragment;
+import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup;
+import com.topface.topface.ui.fragments.feed.FeedFragment;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.KeyboardListenerLayout;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.AddPhotoHelper;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.DateUtils;
@@ -106,7 +109,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.LOCK_CHAT;
-import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.MUTUAL_SYMPATHY;
 import static com.topface.topface.utils.controllers.chatStubs.ChatStabsController.SHOW_RETRY;
 
 public class ChatFragment extends AnimatedFragment implements View.OnClickListener {
@@ -127,7 +129,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String MESSAGE = "message";
     public static final String LOADED_MESSAGES = "loaded_messages";
     public static final String CONFIRM_EMAIL_DIALOG_TAG = "configrm_email_dialog_tag";
-    private static final String POPULAR_LOCK_STATE = "chat_blocked";
     private static final String HISTORY_CHAT = "history_chat";
     private static final String SOFT_KEYBOARD_LOCK_STATE = "keyboard_state";
     private static final int DEFAULT_CHAT_UPDATE_PERIOD = 30000;
@@ -137,7 +138,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
     public static final String SEX = "sex";
+    private static final String HISTORY_LAST_ITEM = "history_last_item";
+    public static final String SEND_MESSAGE = "send_message";
+    private Boolean isSendMessage = false;
 
+    private int deleteItemsCount = 0;
     private int mUserId;
     private BroadcastReceiver mNewMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -260,6 +265,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             mBackgroundController.startAnimation();
         }
     };
+    private ArrayList<Gift> mDispatchedGifts = new ArrayList<>();
+    private History mLastDispatchedHistoryItem;
 
     private enum ChatUpdateType {
         UPDATE_COUNTERS("update counters"), PULL_TO_REFRESH("pull to refresh"), RETRY("retry"),
@@ -329,6 +336,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         sendReadDialogsBroadcast(intent);
+        intent = new Intent();
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_OK, intent);
     }
 
     @Override
@@ -422,7 +432,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         for (History message : mHistoryFeedList) {
                             // проверяем тип сообщения, если адаптер пустой по причине блокировки экрана
                             // "FIRST_STAGE", то считаем непрочитанные сообщения в истории переписки
-                            if ((message.type == LOCK_CHAT || message.type == MUTUAL_SYMPATHY) && message.unread) {
+                            if (message.unread) {
                                 loadedItemsCount++;
                             }
                         }
@@ -434,6 +444,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
+                // add KOSTYL for fixing bug with unreadable messages after delete
+                loadedItemsCount += deleteItemsCount;
                 Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ);
                 intent.putExtra(LOADED_MESSAGES, loadedItemsCount);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -459,6 +471,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                         }
                     }
                 }
+                mDispatchedGifts = savedInstanceState.getParcelableArrayList(ChatActivity.DISPATCHED_GIFTS);
+                mLastDispatchedHistoryItem = savedInstanceState.getParcelable(HISTORY_LAST_ITEM);
                 mAdapter.setData(historyData);
                 mUser = JsonUtils.fromJson(savedInstanceState.getString(FRIEND_FEED_USER), FeedUser.class);
                 invalidateUniversalUser();
@@ -575,21 +589,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    protected String getTitle() {
-        return mUserNameAndAge;
-    }
-
-    @Override
-    protected String getDefaultTitle() {
-        return mUserNameAndAge;
-    }
-
-    @Override
-    protected String getSubtitle() {
-        return TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity;
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (!TextUtils.isEmpty(mMessage)) {
@@ -599,6 +598,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         outState.putParcelableArrayList(HISTORY_CHAT, mHistoryFeedList);
         outState.putParcelableArrayList(ADAPTER_DATA, mAdapter.getDataCopy());
         outState.putBoolean(SOFT_KEYBOARD_LOCK_STATE, mKeyboardWasShown);
+        outState.putParcelableArrayList(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+        outState.putParcelable(HISTORY_LAST_ITEM, mLastDispatchedHistoryItem);
         if (mUser != null) {
             try {
                 outState.putString(FRIEND_FEED_USER, mUser.toJson().toString());
@@ -617,7 +618,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
      * @param position сообщени в списке
      */
     private void deleteItem(final int position) {
-        History item = mAdapter.getItem(position);
+        final History item = mAdapter.getItem(position);
         mAnimatedAdapter.decrementAnimationAdapter(mAdapter.getCount());
         if (item != null && (item.id == null || item.isFake())) {
             Utils.showToastNotification(R.string.cant_delete_fake_item, Toast.LENGTH_LONG);
@@ -631,6 +632,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 if (isAdded()) {
                     int invertedPosition = mAdapter.getPosition(position);
                     mAdapter.removeItem(invertedPosition);
+                    if (item.unread) {
+                        deleteItemsCount++;
+                    }
                 }
             }
 
@@ -677,7 +681,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mIsUpdating = true;
             }
         });
-        historyRequest.leave = isTakePhotoApplicable();
+
+        historyRequest.leave = isTakePhotoApplicable() ||
+                mUserType == ChatStabsController.LOCK_CHAT ||
+                mStubsController.isChatLocked();
         registerRequest(historyRequest);
         historyRequest.debug = type.getType();
         if (mAdapter != null) {
@@ -731,7 +738,10 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 }
 
                 refreshActionBarTitles();
-                getTitleSetter().setOnline(data.user.online);
+                ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(mUserNameAndAge, TextUtils.isEmpty(mUserCity) ?
+                        Utils.EMPTY :
+                        mUserCity,
+                        null, data.user.online));
                 mWasFailed = false;
                 mUser = data.user;
                 invalidateUniversalUser();
@@ -743,11 +753,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     if (!data.items.isEmpty()) {
                         if (pullToRefresh) {
                             mAdapter.addFirst(data.items, data.more, mListView.getRefreshableView());
-                            if (!data.more && !data.items.isEmpty()) {
+                            if (!data.more) {
                                 onNewMessageAdded(data.items.get(0));
                             }
                         } else {
                             mAdapter.addAll(data.items, data.more, mListView.getRefreshableView());
+                            onNewMessageAdded(data.items.get(0));
                         }
                     } else {
                         if (!data.more && !pullToRefresh) mAdapter.forceStopLoader();
@@ -796,10 +807,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (mStubsController != null) {
             mStubsController.checkMessage(history);
         }
-        Intent intent = new Intent();
-        intent.putExtra(ChatActivity.LAST_MESSAGE, history);
-        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
-        getActivity().setResult(Activity.RESULT_OK, intent);
+        mLastDispatchedHistoryItem = history;
     }
 
     private void removeOutdatedItems(HistoryListData data) {
@@ -855,13 +863,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     @Override
-    public void setOnline(boolean online) {
-        if (getTitleSetter() != null) {
-            getTitleSetter().setOnline(online);
-        }
-    }
-
-    @Override
     protected void showStubAvatar(int sex) {
         super.showStubAvatar(sex == Profile.TRAP ? mSex : sex);
     }
@@ -900,7 +901,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     break;
                 }
                 startActivityForResult(
-                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId),
+                        GiftsActivity.getSendGiftIntent(getActivity(), mUserId, "chat"),
                         GiftsActivity.INTENT_REQUEST_GIFT
                 );
                 EasyTracker.sendEvent("Chat", "SendGiftClick", "", 1L);
@@ -930,7 +931,12 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     }
 
     private void finish() {
-        getActivity().setResult(Activity.RESULT_CANCELED);
+        Intent intent = new Intent();
+        intent.putExtra(SEND_MESSAGE, isSendMessage);
+        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+        intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+        getActivity().setResult(Activity.RESULT_CANCELED, intent);
         getActivity().finish();
     }
 
@@ -938,7 +944,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        Debug.log("onResume ");
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(mUserNameAndAge, TextUtils.isEmpty(mUserCity) ? Utils.EMPTY : mUserCity));
         setSavedMessage(mMessage);
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard();
@@ -969,6 +975,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     @FuckingVoodooMagic(description = "принудительно скрываем клаву(вдруг на home нажмем), и " +
             "убиреем листенер, т.к. в этом случае не нужно учитывать изменение состояния")
     public void onPause() {
+        if (isAdded() && (mLastDispatchedHistoryItem != null || mDispatchedGifts != null)) {
+            Intent intent = new Intent();
+            intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+            intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+            intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+            intent.putExtra(SEND_MESSAGE, isSendMessage);
+            intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+            getActivity().setResult(Activity.RESULT_OK, intent);
+        }
         mRootLayout.setKeyboardListener(null);
         Utils.hideSoftKeyboard(App.getContext(), mEditBox);
         super.onPause();
@@ -982,6 +997,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         switch (requestCode) {
             case GiftsActivity.INTENT_REQUEST_GIFT:
                 if (resultCode == Activity.RESULT_OK) {
+                    isSendMessage = true;
                     scrollListToTheEnd();
                     Bundle extras = data.getExtras();
                     if (extras != null) {
@@ -993,10 +1009,20 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                                 mStubsController.giftSent();
                             }
                             onNewMessageAdded(sendGiftAnswer.history);
+                            if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
+                                mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift.class));
+                            }
                         }
                         LocalBroadcastManager.getInstance(getActivity())
-                                .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                                .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                     }
+                    Intent intent = new Intent();
+                    intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+                    intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+                    intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
+                    intent.putExtra(SEND_MESSAGE, isSendMessage);
+                    intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                    getActivity().setResult(Activity.RESULT_OK, intent);
                 }
                 break;
             case PurchasesActivity.INTENT_BUY_VIP:
@@ -1053,7 +1079,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
 
     public boolean sendMessage(String text, final boolean cancelable) {
         final History messageItem = new History(text, IListLoader.ItemType.TEMP_MESSAGE);
-        Activity activity = getActivity();
+        final Activity activity = getActivity();
         final MessageRequest messageRequest = new MessageRequest(mUserId, text, activity, App.from(activity).getOptions().blockUnconfirmed);
         if (TextUtils.equals(AuthToken.getInstance().getSocialNet(), AuthToken.SN_TOPFACE)) {
             if (!App.from(activity).getProfile().emailConfirmed) {
@@ -1071,6 +1097,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         messageRequest.callback(new DataApiHandler<History>() {
             @Override
             protected void success(History data, IApiResponse response) {
+                isSendMessage = true;
                 if (mAdapter != null && cancelable) {
                     mAdapter.replaceMessage(messageItem, data, mListView.getRefreshableView());
                     // в момент успешной отправки сообщения, проверяем состоялся ли полноценный диалог
@@ -1080,8 +1107,15 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     onNewMessageAdded(data);
                 }
                 LocalBroadcastManager.getInstance(getActivity())
-                        .sendBroadcast(new Intent(DialogsFragment.REFRESH_DIALOGS));
+                        .sendBroadcast(new Intent(FeedFragment.REFRESH_DIALOGS));
                 scrollListToTheEnd();
+                //на тот случай, если закрыли по up сетим результат сразу
+                Intent intent = new Intent();
+                intent.putExtra(ChatFragment.SEND_MESSAGE, isSendMessage);
+                intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
+                intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
+                intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
+                getActivity().setResult(Activity.RESULT_CANCELED, intent);
             }
 
             @Override
@@ -1244,7 +1278,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     public void onAvatarClick() {
         if (mUser != null) {
             if (!(mUser.deleted || mUser.banned)) {
-                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId, false, true, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, mPhoto, mUserId, mUser.feedItemId,
+                        false, true, Utils.getNameAndAge(mUser.firstName, mUser.age), mUser.city.getName(), "chat"));
             } else {
                 Toast.makeText(getActivity(), R.string.user_deleted_or_banned,
                         Toast.LENGTH_LONG).show();
@@ -1285,7 +1320,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 mAddPhotoHelper.setOnResultHandler(mHandler);
             }
             if (isTakePhotoApplicable()) {
-                TakePhotoPopup.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
+                TakePhotoPopup.Companion.newInstance(TakePhotoStatistics.PLC_CHAT_OPEN).show(getActivity().getSupportFragmentManager(), TakePhotoPopup.TAG);
             }
         }
     }

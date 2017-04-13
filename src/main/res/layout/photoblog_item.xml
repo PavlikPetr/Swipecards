@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PhotoBlogItemViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:foreground="@{viewModel.foregroundRes}">
+
+        <ImageView
+            android:id="@+id/photoblogInGeoAvatar"
+            android:layout_width="@dimen/photoblog_item_avatar_width"
+            android:layout_height="@dimen/photoblog_item_avatar_height"
+            android:onClick="@{() -> viewModel.avatarClickListener.invoke()}"
+            app:glideTransformationPhoto="@{viewModel.userPhoto}"
+            app:placeholderRes="@{viewModel.placeholder}"
+            app:typeTransformation="@{viewModel.type}"/>
+    </FrameLayout>
+</layout>

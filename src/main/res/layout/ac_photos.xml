@@ -1,44 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel" />
+            type="com.topface.topface.ui.fragments.profile.photoswitcher.viewModel.PhotoSwitcherViewModel"/>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
 
     </data>
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <!-- gallery -->
-        <ViewStub
-            android:id="@+id/gallery_album_stub"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inflatedId="@+id/galleryAlbum"
-            android:layout="@layout/ac_photos_image_switcher" />
+            android:orientation="vertical">
 
-        <!-- header bar -->
-        <RelativeLayout
-            android:id="@+id/loPhotoAlbumControl"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <!-- gallery -->
+            <ViewStub
+                android:id="@+id/gallery_album_stub"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inflatedId="@+id/galleryAlbum"
+                android:layout="@layout/ac_photos_image_switcher"/>
 
-            <com.topface.topface.ui.views.ImageViewRemote
-                style="@style/AlbumGift"
-                android:layout_width="@dimen/album_gift_size"
-                android:layout_height="@dimen/album_gift_size"
-                android:onClick="@{viewModel::onGiftClick}"
-                android:visibility="@{!viewModel.ownerProfile}"
-                app:defaultSelector="@{viewModel.GIFT_SELECTOR_RESOURCE}"
-                app:remoteSrc="@{viewModel.giftLink}"
-                app:roundedImgBorderColor="@color/rounded_image_blue_border"
-                app:roundedImgBorderWidth="@dimen/album_gift_border_size" />
+            <!-- header bar -->
+            <RelativeLayout
+                android:id="@+id/loPhotoAlbumControl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/loBottomPanel"
@@ -46,37 +39,42 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true">
 
-                <ImageButton
-                    style="@style/AlbumButton.Avatar"
-                    android:onClick="@{viewModel::onAvatarButtonClick}"
-                    android:src="@{viewModel.avatarSrc}"
-                    android:visibility="@{viewModel.avatarVisibility}"
-                    app:enable="@{viewModel.avatarEnable}" />
+                    <ImageButton
+                        style="@style/AlbumButton.Avatar"
+                        android:onClick="@{viewModel::onAvatarButtonClick}"
+                        android:src="@{viewModel.avatarSrc}"
+                        android:visibility="@{viewModel.avatarVisibility}"
+                        app:enable="@{viewModel.avatarEnable}"/>
 
-                <ImageButton
-                    style="@style/AlbumButton.Trash"
-                    android:onClick="@{viewModel::onDeleteButtonClick}"
-                    android:src="@{viewModel.trashSrc}"
-                    android:visibility="@{viewModel.trashVisibility}"
-                    app:enable="@{viewModel.trashEnable}" />
+                    <ImageButton
+                        style="@style/AlbumButton.Trash"
+                        android:onClick="@{viewModel::onDeleteButtonClick}"
+                        android:src="@{viewModel.trashSrc}"
+                        android:visibility="@{viewModel.trashVisibility}"
+                        app:enable="@{viewModel.trashEnable}"/>
 
-                <TextView
-                    style="@style/ButtonWhiteText.SetAvatar"
-                    android:text="@{viewModel.albumText}" />
+                    <TextView
+                        style="@style/ButtonWhiteText.SetAvatar"
+                        android:text="@{viewModel.albumText}"/>
+                </RelativeLayout>
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lockScreen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_main"
+                android:visibility="gone"/>
+
+            <com.topface.topface.ui.views.LockerView
+                android:id="@+id/llvProfileLoading"
+                style="@style/LoadingLocker"
+                android:visibility="gone"/>
+
+            <include
+                android:id="@+id/toolbarInclude"
+                layout="@layout/toolbar_view"
+                bind:viewModel="@{toolbarViewModel}"/>
+
         </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/lockScreen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/bg_main"
-            android:visibility="gone" />
-
-        <com.topface.topface.ui.views.LockerView
-            android:id="@+id/llvProfileLoading"
-            style="@style/LoadingLocker"
-            android:visibility="gone" />
-
-    </RelativeLayout>
 </layout>

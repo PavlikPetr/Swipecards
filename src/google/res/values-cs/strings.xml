@@ -62,7 +62,6 @@
     <string name="black_list_add">Přidat na černou listinu</string>
     <string name="vip_invisible_mode">Neviditelný režim</string>
     <string name="buying_profile_coins">Na Vašem účtu</string>
-    <string name="vip_info_title">VIP privilegia</string>
     <string name="profile_gifts_empty">Tento uživatel prozatím nedostal žádné dárky</string>
     <string name="profile_mygifts_empty">Prozatím jste nedostali žádné dárky</string>
     <string name="dating_people_unnoticed">Deset lidí uniklo Vaší pozornosti</string>
@@ -524,7 +523,6 @@
     <string name="with_vip_find_your_visitors">Díky VIP-statusu zjistíte kdo prohlížel vaši
         stránku
     </string>
-    <string name="on_avatar">Na profilový obrázek</string>
     <string name="your_avatar">Váš profilový obrázek</string>
     <string name="avatar_set_successfully">Profilový obrázek je úspěšně nastaven</string>
     <string name="incorrect_photo">Uvedená fotografie je chybná. Zkuste nahrát  jinou.</string>
@@ -660,8 +658,6 @@
     </string>
     <string name="dialog">Korespondence</string>
     <string name="reply">Odpovědět</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">viz</string>
     <string name="maximum_number_of_users">Byl vybrán maximální počet uživatelů.</string>
     <string name="logout_if_email_already_registred">Uživatel s touto elektronickou adresou již
         existuje. Pokud je tohle váš e-mail, musíte se odhlásit zе stávajícího účtu a přihlásit se
@@ -734,8 +730,8 @@
     <string name="premium_for_invitations">Abyste získali status VIP na 1 den, musíte nasbírat 5
         registrací.
     </string>
-    <string name="premium_for_invitations_current_status">Získali jste už přihlášení a registrací
-    </string>
+    <string name="premium_for_invitations_current_status">Získali jste už:\nPřihlášení: 
+        %1$d\na Registrací: %2$d</string>
     <string name="no_contacts_available">V přístroji nejsou kontakty, které je možno zobrazit
     </string>
     <string name="sms_invite_title">Získejte VIP na 24 hodin!</string>
@@ -749,4 +745,5 @@
     <string name="novice_sympathy">Posílejte sympatie pouze lidem, které se Vám\nopravdu líbí\ - a
         můžete začít příjemnou známost
     </string>
+    <string name="vip_info_title">VIP privilegia</string>
 </resources>

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -32,6 +34,8 @@ import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.ui.EditorBannersActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.cache.SearchCacheManager;
@@ -43,6 +47,9 @@ import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_ON;
@@ -53,7 +60,7 @@ import static com.topface.topface.utils.notifications.UserNotificationManager.ge
  * Фрагмент админки. Доступен только для редакторов.
  */
 public class EditorFragment extends BaseFragment implements View.OnClickListener {
-    public static final String API_STAGE_TF = "https://api-%s.stage.tf/";
+    public static final String API_STAGE_TF = "https://api-%s.dev.stage.tf/";
     public static final String API_SCRUFFY_STAGE_TF = "wss://api-%s.stage.tf/scruffy/";
     private static final int NETWORK_ERROR_NOTIFICATION_ID = 800;
     private Spinner mApiUrl;
@@ -180,8 +187,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
                 try {
                     getActivity().startActivity(
                             UserProfileActivity.createIntent(null, null,
-                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null)
-                    );
+                                    Integer.parseInt(profileId.getText().toString()), null, true, true, null, null, "editor"));
                 } catch (Exception e) {
                     Debug.error(e);
                 }
@@ -455,7 +461,8 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.editor_menu_admin);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.editor_menu_admin)));
     }
 }

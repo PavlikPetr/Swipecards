@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.app_day.AppDayViewModel"/>
+
+        <variable
+            name="viewModelRedesign"
+            type="com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayViewModel"/>
+    </data>
+
+    <FrameLayout
+        android:id="@+id/app_day_root_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/background_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:visibility="@{viewModel != null ? viewModel.isProgressBarVisible :   viewModelRedesign.isProgressBarVisible}"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/banner_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            android:background="@color/dating_fab_small"
+            app:addOnScrollListener="@{viewModel??viewModelRedesign}"/>
+    </FrameLayout>
+
+</layout>

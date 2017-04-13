@@ -1,31 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
 
-    <ListView
-        android:id="@+id/vkFriendsList"
+    <data>
+
+        <variable
+            name="toolbarViewModel"
+            type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel"/>
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null"
-        android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/mainProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="visible" />
+        <include
+            android:id="@+id/toolbarInclude"
+            layout="@layout/toolbar_view"
+            bind:viewModel="@{toolbarViewModel}"/>
 
-    <TextView
-        android:id="@+id/noOneFriendLoaded"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="@string/friends_empty_list_error"
-        android:textColor="#404040"
-        android:textSize="16sp"
-        android:visibility="gone" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</RelativeLayout>
+            <ListView
+                android:id="@+id/vkFriendsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@null"
+                android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/mainProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/noOneFriendLoaded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/friends_empty_list_error"
+                android:textColor="#404040"
+                android:textSize="16sp"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+    </LinearLayout>
+</layout>

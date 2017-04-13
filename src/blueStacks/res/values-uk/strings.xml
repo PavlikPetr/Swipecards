@@ -43,7 +43,6 @@
   <string name="black_list_add">Додати до чорного списку</string>
   <string name="vip_invisible_mode">Режим невидимки</string>
   <string name="buying_profile_coins">На вашому рахунку</string>
-  <string name="vip_info_title">VIP-привілеї</string>
   <string name="profile_gifts_empty">Цьому користувачу ще ніхто не дарував подарунків</string>
   <string name="profile_mygifts_empty">Вам ще ніхто не дарував подарунків</string>
   <string name="dating_people_unnoticed">Десять людей залишилися без вашої уваги!</string>
@@ -409,7 +408,6 @@
         отримуйте взаємні. Або купіть симпатії і починайте спілкування з тими, кому ви подобаєтеся!</string>
   <string name="with_vip_find_your_visitors">З VIP-статусом ви дізнаєтеся, хто заходив до вас на
         сторінку</string>
-  <string name="on_avatar">На аватарку</string>
   <string name="your_avatar">Ваша аватарка</string>
   <string name="avatar_set_successfully">Аватарка успішно встановлена</string>
   <string name="incorrect_photo">Некоректне фото. Спробуйте завантажити інше</string>
@@ -476,4 +474,5 @@
   <string name="reply">Відповісти</string>
   <string name="novice_sympathy">Відправляйте симпатії тим, хто вам\nдійсно подобається,\nщоб
         почати приємне знайомство</string>
+  <string name="vip_info_title">VIP-привілеї</string>
 </resources>

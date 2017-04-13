@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="ActionBarItemClick">
         <item name="android:background">@drawable/actionbar_pressed_animation</item>
@@ -164,16 +164,63 @@
         <item name="android:background">@drawable/dialog_items_selector_ripple</item>
     </style>
 
-    <style name="FilterDialogSelector">
-        <item name="android:listSelector">@drawable/dialog_items_selector_ripple</item>
-    </style>
-
-    <style name="FilterParamSelector">
-        <item name="android:background">@drawable/white_list_underline</item>
-    </style>
-
     <style name="ItemView">
         <item name="android:background">@color/bg_white</item>
         <item name="android:elevation">@dimen/elevation_value</item>
     </style>
+
+    <style name="FormsSendGiftButton">
+        <item name="android:background">@drawable/forms_send_gift_selector_v21</item>
+    </style>
+
+    <style name="DatingLike" parent="DatingBig">
+        <item name="android:background">@drawable/dating_like_selector_v21</item>
+    </style>
+
+    <style name="NewDatingLike" parent="DatingBig">
+        <item name="android:background">@drawable/new_dating_like_selector_v21</item>
+    </style>
+
+    <style name="DatingSkip" parent="DatingBig">
+        <item name="android:background">@drawable/dating_skip_selector_v21</item>
+    </style>
+
+    <style name="NewDatingSkip" parent="DatingBig">
+        <item name="android:background">@drawable/new_dating_skip_selector_v21</item>
+    </style>
+
+    <style name="DatingBig">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:layout_width">74dp</item>
+        <item name="android:layout_height">74dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="DatingMessage" parent="DatingSmall">
+        <item name="android:background">@drawable/dating_send_message_selector_v21</item>
+    </style>
+
+    <style name="NewDatingMessage" parent="DatingSmall">
+        <item name="android:background">@drawable/new_dating_send_message_selector_v21</item>
+    </style>
+
+    <style name="DatingAdmiration" parent="DatingSmall">
+        <item name="android:background">@drawable/dating_admiration_selector_v21</item>
+    </style>
+
+    <style name="DatingProfile" parent="DatingSmall">
+        <item name="android:background">@drawable/dating_profile_selector_v21</item>
+    </style>
+
+    <style name="DatingSmall">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="PopupGreenButton.Background">
+        <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
 </resources>

@@ -1,6 +1,8 @@
 package com.topface.topface.ui.analytics;
 
-import com.comscore.analytics.comScore;
+import android.databinding.ViewDataBinding;
+
+import com.comscore.Analytics;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -14,7 +16,7 @@ import com.topface.topface.utils.FlurryManager;
 
 import org.jetbrains.annotations.Nullable;
 
-public class TrackedFragmentActivity extends TrackedLifeCycleActivity {
+public abstract class TrackedFragmentActivity<T extends ViewDataBinding> extends TrackedLifeCycleActivity<T> {
     private IBackPressedListener mBackPressedListener;
 
     @Override
@@ -37,7 +39,7 @@ public class TrackedFragmentActivity extends TrackedLifeCycleActivity {
         if (FacebookSdk.isInitialized()) {
             AppEventsLogger.activateApp(this, App.getAppSocialAppsIds().fbId);
         }
-        comScore.onEnterForeground();
+        Analytics.notifyEnterForeground();
     }
 
     @Override
@@ -53,7 +55,7 @@ public class TrackedFragmentActivity extends TrackedLifeCycleActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        comScore.onExitForeground();
+        Analytics.notifyExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
     }
 

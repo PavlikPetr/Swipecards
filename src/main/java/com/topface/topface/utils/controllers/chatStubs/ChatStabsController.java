@@ -33,12 +33,13 @@ public class ChatStabsController {
     public static final int MUTUAL_SYMPATHY = 7;
     public static final int LOCK_CHAT = 35;
     public static final int LOCK_MESSAGE_SEND = 36;
+    public static final int UNDEFINED = 0;
     private static final String POPULAR_USER_DIALOG = "POPULAR_USER_DIALOG";
     private static final String LOCK_TYPE = "lock_type";
     private static final String PHOTO = "photo";
     private static final String HISTORY = "history";
 
-    private int mLockType;
+    private int mLockType = UNDEFINED;
     private PopularUserStub mPopularUserStub;
     private MutualSympathyStub mMutualSympathyStub;
     private ViewStub mViewStub;
@@ -244,8 +245,12 @@ public class ChatStabsController {
         switch (mLockType) {
             case LOCK_MESSAGE_SEND:
             case LOCK_CHAT:
-                showPopularUserDialog();
-                return false;
+                if (!isAccessAllowed()) {
+                    showPopularUserDialog();
+                    return false;
+                } else {
+                    return true;
+                }
             case MUTUAL_SYMPATHY:
                 unlock();
                 break;
@@ -257,8 +262,12 @@ public class ChatStabsController {
         switch (mLockType) {
             case LOCK_CHAT:
             case LOCK_MESSAGE_SEND:
-                showPopularUserDialog();
-                return false;
+                if (!isAccessAllowed()) {
+                    showPopularUserDialog();
+                    return false;
+                } else {
+                    return true;
+                }
         }
         return true;
     }

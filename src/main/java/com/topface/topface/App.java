@@ -15,7 +15,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
-import com.comscore.analytics.comScore;
+import com.comscore.Analytics;
+import com.comscore.PublisherConfiguration;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
@@ -28,16 +29,20 @@ import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
 import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.TFCredentials;
+import com.topface.scruffy.ScruffyManager;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
+import com.topface.topface.data.AdsSettings;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
-import com.topface.topface.data.AdsSettings;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.di.AppComponent;
+import com.topface.topface.di.AppModule;
+import com.topface.topface.di.DaggerAppComponent;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
@@ -55,17 +60,20 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.requests.transport.HttpApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyApiTransport;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
+import com.topface.topface.state.EventBus;
 import com.topface.topface.state.IStateDataUpdater;
 import com.topface.topface.state.OptionsAndProfileProvider;
 import com.topface.topface.statistics.AppStateStatistics;
+import com.topface.topface.statistics.AuthStatistics;
+import com.topface.topface.statistics.CommonSlices;
 import com.topface.topface.ui.ApplicationBase;
 import com.topface.topface.ui.external_libs.AdWords;
-import com.topface.topface.ui.external_libs.AdjustManager;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Connectivity;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Editor;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
@@ -78,19 +86,18 @@ import com.topface.topface.utils.config.FeedsCache;
 import com.topface.topface.utils.config.SessionConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
-import com.topface.topface.utils.debug.HockeySender;
 import com.topface.topface.utils.gcmutils.GcmListenerService;
 import com.topface.topface.utils.gcmutils.RegistrationService;
 import com.topface.topface.utils.geo.FindAndSendCurrentLocation;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+import com.topface.topface.utils.social.FbAppLinkReadyEvent;
 import com.topface.topface.utils.social.FbAuthorizer;
+import com.topface.topface.utils.social.FbInviteTemplatesEvent;
 import com.topface.topface.utils.social.VkAuthorizer;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -99,11 +106,10 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import dagger.ObjectGraph;
+import rx.Subscription;
 
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
-@ReportsCrashes(formUri = "817b00ae731c4a663272b4c4e53e4b61")
 public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static final String TAG = "Topface";
@@ -115,12 +121,15 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     private static final long PROFILE_UPDATE_TIMEOUT = 1000 * 120;
 
     @Inject
-    static RunningStateManager mStateManager;
-    @Inject
-    AdjustManager mAdjustManager;
+    RunningStateManager mStateManager;
     @Inject
     WeakStorage mWeakStorage;
-    private ObjectGraph mGraph;
+    @Inject
+    EventBus mEventBus;
+    @Inject
+    ScruffyManager mScruffyManager;
+    @Inject
+    KochavaManager mKochavaManager;
     private static Context mContext;
     private static Intent mConnectionIntent;
     private static ConnectionChangeReceiver mConnectionReceiver;
@@ -156,16 +165,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .addRequest(getProfileRequest())
                 .callback(handler)
                 .exec();
-    }
-
-    private void initObjectGraphForInjections() {
-        mGraph = ObjectGraph.create(getDaggerModules());
-        mGraph.injectStatics();
-        mGraph.inject(this);
-    }
-
-    public void inject(Object obj) {
-        mGraph.inject(obj);
     }
 
     public static App from(Context context) {
@@ -207,28 +206,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                         Debug.log("Options::fail");
                     }
                 });
-    }
-
-    public static void sendAdjustAttributeData(final AdjustAttributeData attribution) {
-        Debug.log("Adjust:: check settings before send AdjustAttributeData to server");
-        final AppConfig config = getAppConfig();
-        if (!AuthToken.getInstance().isEmpty() && !attribution.isEmpty() && !config.isAdjustAttributeDataSent()) {
-            new AdWords().trackInstall();
-            Debug.log("Adjust:: send AdjustAttributeData");
-            new ReferrerRequest(App.getContext(), attribution).callback(new ApiHandler() {
-                @Override
-                public void success(IApiResponse response) {
-                    Debug.log("Adjust:: attribution sent success");
-                    config.setAdjustAttributeDataSent(true);
-                    config.saveConfig();
-                }
-
-                @Override
-                public void fail(int codeError, IApiResponse response) {
-                    Debug.log("Adjust:: fail while send AdjustAttributeData");
-                }
-            }).exec();
-        }
     }
 
     public static void sendReferrerTrack(final InstallReferrerData referrerTrack) {
@@ -428,6 +405,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         request.exec();
     }
 
+    private static AppComponent appComponent;
+
+    public static AppComponent getAppComponent() {
+        return appComponent;
+    }
+
     @Override
     public void onCreate() {
         /**
@@ -438,9 +421,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             Class.forName("android.os.AsyncTask");
         } catch (Throwable ignore) {
         }
-
         super.onCreate();
         mContext = getApplicationContext();
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(mContext))
+                .build();
+        appComponent.inject(this);
         LeakCanary.install(this);
         FlurryManager.getInstance().init();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
@@ -449,9 +435,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
         }
         initVkSdk();
-        initObjectGraphForInjections();
-        inject(this);
-        mAdjustManager.initAdjust();
+        mKochavaManager.initTracker();
         mProvider = new OptionsAndProfileProvider(this);
         // подписываемся на события о переходе приложения в состояние background/foreground
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
@@ -470,8 +454,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         });
         //Включаем отладку, если это дебаг версия
         enableDebugLogs();
-        //Включаем логирование ошибок
-        initAcra();
         //Базовые настройки приложения, инитим их один раз при старте приложения
         Configurations baseConfig = getConfig();
         Editor.setConfig(baseConfig.getAppConfig());
@@ -494,12 +476,10 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             mConnectionReceiver = new ConnectionChangeReceiver(mContext);
             mConnectionIntent = registerReceiver(mConnectionReceiver, new IntentFilter(CONNECTIVITY_CHANGE_ACTION));
         }
-
-        // Инициализируем общие срезы для статистики
-        StatisticsTracker.getInstance()
-                .setContext(mContext)
-                .putPredefinedSlice("app", BuildConfig.STATISTICS_APP)
-                .putPredefinedSlice("cvn", BuildConfig.VERSION_NAME);
+        StatisticsTracker.getInstance().setContext(mContext);
+        // Инициализируем слушателя опций, который будет обновлять срезы в статистике
+        // на инциализации он засетит дефолтные срезы *app* и *cvn*
+        CommonSlices.Companion.getInstance();
         if (BuildConfig.DEBUG) {
             StatisticsTracker.getInstance().setLogger(new ILogger() {
                 public void log(String msg) {
@@ -507,10 +487,12 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 }
             });
         }
-        // Settings extenede image loader to send statistics
+        // Settings extended image loader to send statistics
         ImageLoaderStaticFactory.setExtendedImageLoader(ExtendedImageLoader.getInstance());
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
+
+        Subscription fbInviteAppLinkSubscription = FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
 
         sendUnauthorizedRequests();
 
@@ -527,10 +509,17 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             }
         };
         AppConfig appConfig = App.getAppConfig();
-        App.sendAdjustAttributeData(appConfig.getAdjustAttributeData());
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
+        lookedAuthScreen();
     }
 
+    private void lookedAuthScreen() {
+        AppConfig appConfig = App.getAppConfig();
+        if (!appConfig.isFirstViewLoginScreen() && AuthToken.getInstance().isEmpty()) {
+            appConfig.setFirstViewLoginScreen(true);
+            appConfig.saveConfig();
+        }
+    }
 
     /**
      * Вызывается в onCreate, но выполняется в отдельном потоке
@@ -555,7 +544,15 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         String adId = TFCredentials.getAdId(mContext);
         AppConfig config = getAppConfig();
         config.setAdId(adId);
+        sentFirstStartApp(config);
         config.saveConfig();
+    }
+
+    private void sentFirstStartApp(AppConfig config) {
+        if (config.isFirstStartApp()) {
+            AuthStatistics.sendFirstStartApp();
+            config.setFirstStartApp();
+        }
     }
 
     private void sendUnauthorizedRequests() {
@@ -582,13 +579,21 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
             @Override
             protected AppOptions parseResponse(ApiResponse response) {
-                return new AppOptions(response.jsonResult);
+                AppOptions appOptions = new AppOptions(response.jsonResult);
+                mEventBus.setData(new FbInviteTemplatesEvent(appOptions.invites));
+                return appOptions;
             }
 
             @Override
             public void fail(int codeError, IApiResponse response) {
             }
         });
+    }
+
+    public void onFbAppLinkReady(String appLink) {
+        if (!TextUtils.isEmpty(appLink)) {
+            mEventBus.setData(new FbAppLinkReadyEvent(appLink));
+        }
     }
 
     public ApiRequest createAppSocialAppsIdsRequest(final ApiHandler handler) {
@@ -623,15 +628,13 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         });
     }
 
-    private void initAcra() {
-        ACRA.init(this);
-        ACRA.getErrorReporter().setReportSender(new HockeySender());
-    }
-
     private void initComScore() {
-        comScore.setAppContext(mContext);
-        comScore.setCustomerC2(COMSCORE_C2);
-        comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
+        PublisherConfiguration publisher = new PublisherConfiguration.Builder()
+                .publisherSecret(COMSCORE_SECRET_KEY)
+                .publisherId(COMSCORE_C2)
+                .build();
+        Analytics.getConfiguration().addClient(publisher);
+        Analytics.start(getApplicationContext());
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
@@ -722,4 +725,5 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public boolean isUserOptionsObtainedFromServer() {
         return mUserOptionsObtainedFromServer;
     }
+
 }

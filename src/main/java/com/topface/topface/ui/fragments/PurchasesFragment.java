@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +13,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.android.Slices;
@@ -28,28 +27,28 @@ import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.extensions.ProductExtensionKt;
+import com.topface.topface.utils.rx.RxUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Subscription;
-import rx.functions.Action1;
 
 public class PurchasesFragment extends BaseFragment {
 
-    @Inject
-    TopfaceAppState mAppState;
+    public TopfaceAppState mAppState;
     public static final String IS_VIP_PRODUCTS = "is_vip_products";
     public static final String LAST_PAGE = "LAST_PAGE";
     public static final String ARG_TAG_EXRA_TEXT = "extra_text";
@@ -71,22 +70,18 @@ public class PurchasesFragment extends BaseFragment {
             setResourceInfoText(null);
         }
     };
-    private TextView mCurCoins;
-    private TextView mCurLikes;
     private boolean mSkipBonus;
     private boolean mIsVip;
     private String mResourceInfoText;
     private BalanceData mBalanceData;
-    private Action1<BalanceData> mBalanceAction = new Action1<BalanceData>() {
+    private RxUtils.ShortSubscription<BalanceData> mBalanceAction = new RxUtils.ShortSubscription<BalanceData>() {
         @Override
-        public void call(BalanceData balanceData) {
+        public void onNext(BalanceData balanceData) {
+            super.onNext(balanceData);
             mBalanceData = balanceData;
-            updateBalanceCounters(balanceData);
         }
     };
     private Subscription mBalanceSubscription;
-    @BindView(R.id.purchasesTabs)
-    TabLayout mTabLayout;
     private TabLayoutCreator mTabLayoutCreator;
     private ArrayList<String> mPagesTitle = new ArrayList<>();
 
@@ -125,7 +120,7 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.from(getActivity()).inject(this);
+        mAppState = App.getAppComponent().appState();
         mBalanceSubscription = mAppState.getObservable(BalanceData.class).subscribe(mBalanceAction);
         if (savedInstanceState != null) {
             mSkipBonus = savedInstanceState.getBoolean(SKIP_BONUS, false);
@@ -138,9 +133,19 @@ public class PurchasesFragment extends BaseFragment {
         View root = inflater.inflate(R.layout.purchases_fragment, null);
         ButterKnife.bind(this, root);
         initViews(root, savedInstanceState);
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
-        mTabLayoutCreator = new TabLayoutCreator(getActivity(), mPager, mTabLayout, mPagesTitle, null);
-        mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
+        Activity activity = getActivity();
+        LocalBroadcastManager.getInstance(activity).registerReceiver(mVipPurchasedReceiver, new IntentFilter(CountersManager.UPDATE_VIP_STATUS));
+        TabLayout tabLayout = null;
+        if (activity instanceof ITabLayoutHolder) {
+            tabLayout = ((ITabLayoutHolder) activity).getTabLayout();
+        }
+        if (tabLayout != null) {
+            mTabLayoutCreator = new TabLayoutCreator(activity, mPager, tabLayout, mPagesTitle, null, null);
+            mTabLayoutCreator.setTabTitle(mPager.getCurrentItem());
+        } else {
+            throw new IllegalStateException("PurchasesFragment:: activity must have TabLayout");
+        }
+
         return root;
     }
 
@@ -154,7 +159,6 @@ public class PurchasesFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         setResourceInfoText(mBalanceData.premium ? null : getInfoText());
-        updateBalanceCounters(mBalanceData);
     }
 
     @Override
@@ -166,6 +170,11 @@ public class PurchasesFragment extends BaseFragment {
     @Override
     public boolean isTrackable() {
         return false;
+    }
+
+    @Override
+    protected boolean isTabbedFragment() {
+        return true;
     }
 
     @Override
@@ -200,7 +209,7 @@ public class PurchasesFragment extends BaseFragment {
 
     private void createTabList(ArrayList<PurchasesTabData> list) {
         for (PurchasesTabData tab : list) {
-            mPagesTitle.add(tab.name.toUpperCase());
+            mPagesTitle.add(tab.name.toUpperCase(App.getCurrentLocale()));
         }
     }
 
@@ -224,7 +233,7 @@ public class PurchasesFragment extends BaseFragment {
         mPagerAdapter = new PurchasesFragmentsAdapter(getChildFragmentManager(), args, tabs.list);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(mPageChangeListener);
-        initBalanceCounters(getSupportActionBar().getCustomView());
+//        initBalanceCounters(getSupportActionBar().getCustomView());
         setResourceInfoText();
         if (savedInstanceState != null) {
             int pos = savedInstanceState.getInt(LAST_PAGE, 0);
@@ -244,18 +253,28 @@ public class PurchasesFragment extends BaseFragment {
             if (TextUtils.equals(tab.type, PurchasesTabData.GPLAY) && !new GoogleMarketApiManager().isMarketApiAvailable()) {
                 iterator.remove();
             } else {
-                Products products = getProductsByTab(tab);
-                if (products != null) {
-                    if ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
-                            (isVip && products.premium.isEmpty()) || !PurchasesTabData.markets.contains(tab.type)) {
-                        iterator.remove();
+                boolean isNeedRemoveTab = true;
+                if (tab.type.equals(PurchasesTabData.PAYMENT_NINJA)) {
+                    PaymentNinjaProductsList productsList = CacheProfile.getPaymentNinjaProductsList();
+                    if (productsList != null) {
+                        if (isVip) {
+                            isNeedRemoveTab = ProductExtensionKt.getVipProducts(productsList).isEmpty();
+                        } else {
+                            isNeedRemoveTab = ProductExtensionKt.getCoinsProducts(productsList).isEmpty() && ProductExtensionKt.getLikesProducts(productsList).isEmpty();
+                        }
                     }
+                } else {
+                    isNeedRemoveTab = isNeedRemoveTab(tab, isVip);
+                }
+                if (isNeedRemoveTab) {
+                    iterator.remove();
                 }
             }
         }
     }
 
-    private Products getProductsByTab(PurchasesTabData tab) {
+
+    private boolean isNeedRemoveTab(PurchasesTabData tab, boolean isVip) {
         Products products = null;
         switch (tab.type) {
             case PurchasesTabData.GPLAY:
@@ -268,34 +287,8 @@ public class PurchasesFragment extends BaseFragment {
                 products = CacheProfile.getPaymentWallProducts(PaymentWallProducts.TYPE.MOBILE);
                 break;
         }
-        return products;
-    }
-
-    private void initBalanceCounters(View root) {
-        final LinearLayout containerView = (LinearLayout) root.findViewById(R.id.resources_layout);
-        containerView.setVisibility(View.VISIBLE);
-        containerView.post(new Runnable() {
-            @Override
-            public void run() {
-                int containerWidth = containerView.getMeasuredWidth();
-                if (mCurCoins != null && mCurLikes != null) {
-                    mCurCoins.setMaxWidth(containerWidth / 2);
-                    mCurLikes.setMaxWidth(containerWidth / 2);
-                }
-            }
-        });
-        mCurCoins = (TextView) root.findViewById(R.id.coins_textview);
-        mCurLikes = (TextView) root.findViewById(R.id.likes_textview);
-        mCurCoins.setSelected(true);
-        mCurLikes.setSelected(true);
-        updateBalanceCounters(mBalanceData);
-    }
-
-    private void updateBalanceCounters(BalanceData balance) {
-        if (mCurCoins != null && mCurLikes != null && balance != null) {
-            mCurCoins.setText(Integer.toString(balance.money));
-            mCurLikes.setText(Integer.toString(balance.likes));
-        }
+        return products != null && ((!isVip && products.coins.isEmpty() && products.likes.isEmpty()) ||
+                (isVip && products.premium.isEmpty()) || !PurchasesTabData.markets.contains(tab.type));
     }
 
     private String getInfoText() {
@@ -339,11 +332,6 @@ public class PurchasesFragment extends BaseFragment {
             text = getResources().getString(R.string.buying_default_message);
         }
         return text;
-    }
-
-    @Override
-    protected String getTitle() {
-        return getString(R.string.purchase_header_title);
     }
 
     public boolean isVipProducts() {

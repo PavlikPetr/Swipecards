@@ -2,8 +2,10 @@ package com.topface.topface.data.search;
 
 
 import com.topface.framework.utils.BackgroundThread;
+import com.topface.topface.App;
 import com.topface.topface.data.FeedUser;
 import com.topface.topface.utils.cache.SearchCacheManager;
+import com.topface.topface.utils.config.UserConfig;
 
 public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
 
@@ -54,4 +56,29 @@ public class CachableSearchList<T extends FeedUser> extends UsersList<T> {
         return result;
     }
 
+    private boolean isValidUserCache() {
+        UserConfig config = App.getUserConfig();
+        if (config.isUserCityChanged()) {
+            config.setUserCityChanged(false);
+            config.saveConfig();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isLocaleChanged() {
+        UserConfig config = App.getUserConfig();
+        if (config.isLocaleChanged()) {
+            config.setLocaleChange(false);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void clearIfNeed() {
+        if (!isValidUserCache() || isLocaleChanged()) {
+            clear();
+        }
+    }
 }

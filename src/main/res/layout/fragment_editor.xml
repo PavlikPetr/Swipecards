@@ -1,290 +1,290 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#4c4c4c">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#4c4c4c">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_height="wrap_content">
+        android:padding="16dp">
 
         <!-- Это просто текстовая информация о пользователе -->
         <TextView
+            android:id="@+id/EditorInfoName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/editor_title_name"
-            android:id="@+id/EditorInfoName" />
+            android:text="@string/editor_title_name"/>
 
         <TextView
+            android:id="@+id/EditorInfoId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/editor_title_id"
             android:autoLink="web"
-            android:id="@+id/EditorInfoId" />
+            android:text="@string/editor_title_id"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/EditorInfoSsid"
-            android:text="@string/editor_title_ssid" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/editor_title_ssid"/>
+
+        <TextView
             android:id="@+id/EditorInfoToken"
-            android:text="@string/editor_title_token" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/editor_title_token"/>
+
+        <TextView
             android:id="@+id/EditorInfoSocialNetwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:autoLink="web"
-            android:text="@string/editor_title_social_link" />
+            android:text="@string/editor_title_social_link"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/EditorInfoEditorStatus"
-            android:text="@string/editor_title_editor_status" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/editor_transport"
-            android:id="@+id/EditorTransport" />
+            android:text="@string/editor_title_editor_status"/>
+
+        <TextView
+            android:id="@+id/EditorTransport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editor_transport"/>
 
         <!-- Настройка подключения к API: URL, версия, ревизия -->
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_marginTop="10dp">
 
             <TextView
+                android:id="@+id/EditorApiTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/EditorApiTitle"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
-                android:text="@string/editor_api_url_title" />
+                android:text="@string/editor_api_url_title"/>
 
             <Spinner
-                android:layout_toRightOf="@id/EditorApiTitle"
                 android:id="@+id/EditorApiUrl"
-                android:layout_alignTop="@id/EditorApiUrl"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/EditorApiUrl"
+                android:layout_toRightOf="@id/EditorApiTitle"/>
 
             <CheckBox
+                android:id="@+id/EditorApiCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
                 android:layout_below="@id/EditorApiUrl"
-                android:id="@+id/EditorApiCheckbox" />
+                android:layout_margin="5dp"/>
 
             <TextView
+                android:id="@+id/EditorLoginText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/general_admin_login"
                 android:layout_alignTop="@id/EditorApiCheckbox"
-                android:layout_toRightOf="@id/EditorApiCheckbox"
                 android:layout_margin="5dp"
-                android:textSize="16sp"
-                android:id="@+id/EditorLoginText" />
+                android:layout_toRightOf="@id/EditorApiCheckbox"
+                android:text="@string/general_admin_login"
+                android:textSize="16sp"/>
 
             <EditText
-                android:inputType="text"
+                android:id="@+id/EditorLogin"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:imeOptions="flagNoExtractUi"
-                android:layout_toRightOf="@id/EditorLoginText"
                 android:layout_alignTop="@id/EditorApiCheckbox"
-                android:id="@+id/EditorLogin" />
+                android:layout_toRightOf="@id/EditorLoginText"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="text"/>
 
 
         </RelativeLayout>
 
         <!-- Настройка подключения к API: URL, версия, ревизия -->
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_marginTop="5dp">
 
             <TextView
+                android:id="@+id/EditorModeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:id="@+id/EditorModeTitle"
-                android:text="@string/editor_title_editor_mode" />
+                android:text="@string/editor_title_editor_mode"/>
 
             <Spinner
-                android:layout_toRightOf="@id/EditorModeTitle"
                 android:id="@+id/EditorMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignTop="@id/EditorModeTitle"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_toRightOf="@id/EditorModeTitle"/>
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_marginTop="5dp">
 
             <TextView
+                android:id="@+id/EditorDebugTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:id="@+id/EditorDebugTitle"
-                android:text="@string/editor_title_debug" />
+                android:text="@string/editor_title_debug"/>
 
             <Spinner
-                android:layout_toRightOf="@id/EditorDebugTitle"
                 android:id="@+id/EditorDebug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignTop="@id/EditorDebugTitle"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_toRightOf="@id/EditorDebugTitle"/>
 
         </RelativeLayout>
 
         <include
             android:id="@+id/loProfileId"
-            android:layout_width="fill_parent"
+            layout="@layout/editor_goprofile"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            layout="@layout/editor_goprofile" />
+            android:layout_marginTop="20dp"/>
 
         <include
             android:id="@+id/loPopupSwitcher"
-            android:layout_width="fill_parent"
+            layout="@layout/editor_form_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            layout="@layout/editor_form_switch" />
+            android:layout_marginTop="20dp"/>
 
         <include
             android:id="@+id/loTestNetworkSwitcher"
-            android:layout_width="fill_parent"
+            layout="@layout/editor_form_switch"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            layout="@layout/editor_form_switch" />
+            android:layout_marginTop="20dp"/>
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="2dp"
             android:gravity="left"
             android:text="@string/editor_network_errors_tip"
-            android:textSize="10sp" />
+            android:textSize="10sp"/>
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/editor_emulate_connection" />
+                android:text="@string/editor_emulate_connection"/>
 
             <Spinner
                 android:id="@+id/spConnection"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
 
             <CheckBox
+                android:id="@+id/debugConnectionEnabled"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/debugConnectionEnabled" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/editor_reconnect_to_stage"
             android:id="@+id/ReconnectWebSocket"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_refresh_profile"
+            android:layout_marginTop="20dp"
+            android:text="@string/editor_reconnect_to_stage"/>
+
+        <Button
             android:id="@+id/EditorRefreshProfile"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_clear_search_cache"
+            android:text="@string/editor_refresh_profile"/>
+
+        <Button
             android:id="@+id/EditorClearSearchCache"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_clear_air_messages"
+            android:text="@string/editor_clear_search_cache"/>
+
+        <Button
             android:id="@+id/EditorClearAirMessages"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_configure_banners"
+            android:text="@string/editor_clear_air_messages"/>
+
+        <Button
             android:id="@+id/EditorConfigureBanners"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_send_gcm"
+            android:text="@string/editor_configure_banners"/>
+
+        <Button
             android:id="@+id/EditorSendGCMToken"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_send_auth"
+            android:text="@string/editor_send_gcm"/>
+
+        <Button
             android:id="@+id/EditorSendAuth"
-            style="@style/Widget.Topface.Button.Big.Gray" />
-
-        <Button
-            android:layout_width="fill_parent"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_send_auth"
-            android:id="@+id/EditorCrash"
-            style="@style/Widget.Topface.Button.Big.Gray" />
+            android:text="@string/editor_send_auth"/>
 
         <Button
-            android:layout_width="fill_parent"
+            android:id="@+id/EditorCrash"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/editor_send_auth"/>
+
+        <Button
+            android:id="@+id/EditorSaveSettings"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="30dp"
-            android:text="@string/editor_save_settings"
-            android:id="@+id/EditorSaveSettings"
-            style="@style/Widget.Topface.Button.Big.Gray" />
+            android:text="@string/editor_save_settings"/>
 
         <Button
-            android:layout_width="fill_parent"
+            android:id="@+id/EditorResetSettings"
+            style="@style/Widget.Topface.Button.Big.Gray"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="@string/editor_reset_settings"
-            android:id="@+id/EditorResetSettings"
-            style="@style/Widget.Topface.Button.Big.Gray" />
+            android:text="@string/editor_reset_settings"/>
     </LinearLayout>
 
 </ScrollView>

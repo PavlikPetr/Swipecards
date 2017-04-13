@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_locale">es_ES</string>
-    <string name="photofeed_title">Poner en el feed</string>
+    <string name="photofeed_title">Aparece en el feed de fotos</string>
     <string name="general_warning">ADVERTENCIA</string>
     <string name="general_ok">OK</string>
     <string name="general_any">Cualquiera</string>
@@ -67,8 +67,7 @@
     <string name="black_list_add">Añadir a la lista negra</string>
     <string name="vip_invisible_mode">Modo invisible</string>
     <string name="buying_profile_coins">En tu cuenta</string>
-    <string name="vip_info_title">Privilegios del estatus VIP</string>
-    <string name="profile_gifts_empty">A este usuario, nadie aún le ha hecho regalos</string>
+    <string name="profile_gifts_empty">Este usuario aún no ha recibido regalos de nadie</string>
     <string name="profile_mygifts_empty">Nadie te ha hecho regalos todavía</string>
     <string name="dating_people_unnoticed">¡Has dejado de atender a diez personas!</string>
     <string name="dating_continue">Continuar una amistad</string>
@@ -216,6 +215,10 @@
     <string name="filter_age_end_prefix">hasta %s</string>
     <string name="filter_constitution_template">Desde %1$d a %2$d</string>
     <string name="filter_cities_all">En todas las ciudades</string>
+    <string name="dating_empty_nothing_found">¡No se ha encontrado nada!</string>
+    <string name="dating_empty_reset">Reiniciar</string>
+    <string name="dating_empty_change_settings">Cambiar</string>
+    <string name="dating_empty_try_to_change_settings_or_reset">Prueba a reiniciar o cambiar tus parámetros de búsqueda</string>
     <string name="purchase_header_title">Saldo:</string>
     <string name="buying_header_title">Compras</string>
     <plurals name="buying_gift_you_need_coins">
@@ -242,6 +245,7 @@
     </string>
     <string name="buying_money">Comprar monedas</string>
     <string name="gifts_title">Selecciona regalo</string>
+    <string name="gifts">Regalos</string>
     <string name="profile_header_title">Mi perfil</string>
     <string name="album_add_photo_title">Agregar foto</string>
     <string name="profile_add_album">Seleccionar de los existentes</string>
@@ -375,14 +379,12 @@
     <string name="vip_info_invisible">Pasa sin dejar rastro visitando las páginas de otros, gracias
         al modo \"invisible\"
     </string>
-    <string name="vip_info_message">Obtenga ventaja - ¡tus mensajes serán destacados entre los
-        demás!
-    </string>
+    <string name="vip_info_message">Llama más la atención - ¡tus mensajes destacarán del
+        fondo general!</string>
     <string name="vip_info_blackList">Evita las personas molestas con ayuda de la \"lista negra\"
     </string>
-    <string name="vip_info_vip">¡Destaca con la ayuda de tu estado VIP en la busqueda y en tu
-        perfil!
-    </string>
+    <string name="vip_info_vip">Con el estatus VIP destacarás entre la multitud en la sección de \"Citas\" 
+        y también en tu perfil</string>
     <string name="buying_vip_status">Comprar estatus de VIP</string>
     <string name="edit_my_city">Mi ciudad</string>
     <string name="my_location">Mi localización</string>
@@ -500,9 +502,8 @@
     <string name="general_photo_deleted">Tu fotografía no cumple con el reglamento y fue eliminada
     </string>
     <string name="general_change">Cambiar</string>
-    <string name="user_does_not_have_gifts">Este usuario aún no tiene regalos, se el primero y
-        llamarás la atención
-    </string>
+    <string name="user_does_not_have_gifts">¡Este usuario aun no tiene regalos, dale el primero y
+        llamarás su atención!</string>
     <string name="status_is_empty">No tiene ningún estado establecido</string>
     <string name="you_dont_have_gifts_yet">Por el momento, no tienes regalos</string>
     <string name="buy_sympathies">Comprar simpatías</string>
@@ -518,7 +519,7 @@
     <string name="settings_edit_profile">Editar perfil</string>
     <string name="general_bookmarks_delete">Eliminar de favoritos</string>
     <string name="general_bookmarks_add">Agregar a favoritos</string>
-    <string name="buy_resources">Comprar la recarga</string>
+    <string name="buy_resources">Comprar recarga</string>
     <string name="user_is_banned">Se ha prohibido el acceso al usuario</string>
     <string name="profile_empty_name">El campo de nombre no puede quedar vacío.</string>
     <string name="general_wrong_photo_upload">Tu fotografía no cumple con el reglamento. Prueba
@@ -563,9 +564,8 @@
     <string name="add_bookmarks_to_be_connected">Agrega nuevos conocidos a esta sección y no
         perderás conexión con ellos
     </string>
-    <string name="nobody_chat_with_you_sympathies_will_help">Nadie te ha escrito aún. Simpatías
-        ayudarán en la busqueda de con quien hablar
-    </string>
+    <string name="nobody_chat_with_you_sympathies_will_help">Nadie te ha escrito aún. Las simpatías
+        te ayudarán en la búsqueda de alguien con quien hablar</string>
     <string name="rate_and_have_mutual_or_buy_and_chat">Pon simpatías a la gente que te ha gustado y
         recibe mutuas. ¡O compra simpatías y empieza la comunicación con aquellos a los que les
         gustas!
@@ -573,7 +573,6 @@
     <string name="with_vip_find_your_visitors">Con el estado VIP sabrás quién ha entrado a tu
         página
     </string>
-    <string name="on_avatar">Al avatar</string>
     <string name="your_avatar">Tu avatar</string>
     <string name="avatar_set_successfully">Avatar establecido con éxito</string>
     <string name="incorrect_photo">Foto incorrecta. Intenta subir otra</string>
@@ -636,9 +635,8 @@
         <item quantity="other">Les has gustado a %d personas</item>
         <item quantity="one">Le has gustado a %d persona</item>
     </plurals>
-    <string name="likes_buy_vip">Para descubrir ahora mismo a quiénes te has gustado, activa el
-        estado VIP
-    </string>
+    <string name="likes_buy_vip">Para descubrir ahora mismo a quiénes les has gustado, activa el
+        estatus VIP</string>
     <string name="or">o</string>
     <string name="settings_delete_account">Eliminar la cuenta</string>
     <string name="chat_block_not_mutual">Empezar la comunicación con un usuario es posible, si este
@@ -741,13 +739,12 @@
     <string name="feedback_subject_ban">Queja sobre restricción de acceso</string>
     <string name="settings_led">Notificación LED</string>
     <string name="open_market_error">No se puede abrir la página de la aplicación</string>
-    <string name="billing_item_already_owned">Tu anterior compra está procesandose, espera por
-        favor
-    </string>
+    <string name="billing_item_already_owned">Tu anterior compra está procesándose, espera por
+        favor</string>
     <string name="dialog">Correspondencia</string>
     <string name="reply">Responder</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">cm</string>
+    <string name="unit_weight">%d kg</string>
+    <string name="unit_height">%d cm</string>
     <string name="maximum_number_of_users">Se ha seleccionado la máxima cantidad de usuarios</string>
     <string name="logout_if_email_already_registred">Usuario con este e-mail ya existe. Si es tu
         e-mail, tienes que salir de esta cuenta y entrar en la %s
@@ -759,9 +756,8 @@
     <string name="hint_faces_filter">Cambia los parametros de busqueda y conoce a la gente
         interesante
     </string>
-    <string name="hint_faces_buy_like">Por más simpatías que tengas, más a menudo te evaluan. No te
-        olvides a recargar la cantidad de simpatías.
-    </string>
+    <string name="hint_faces_buy_like">Cuantas más simpatías tengas, más frecuentemente te evaluarán.
+        No te olvides de recargar tu reserva de simpatías.</string>
     <string name="hint_myprofile_buy_vip">Compra el estado VIP y disfruta de la comunicación sin
         límites
     </string>
@@ -848,6 +844,7 @@
     <string name="go_dating_message">Comienza  a conocer y aquí verás a los usuarios que visitan tu perfil.</string>
     <string name="photo_not_from_main_album">Por los resultados de la moderación, está prohibida esta foto en el avatar</string>
     <string name="sidebar_vk_profile">Perfil VKontakt</string>
+    <string name="fb_invite_friends_menu_item">Invitar amigos</string>
     <string name="title_vk_profile">Perfil VK</string>
     <string name="vk_profile_invite_friends_error">El usuario ha prohibido que le envíen mensajes</string>
     <string name="foreign_profile_empty_gifts_title">Envía un regalo y serás el centro de atención</string>
@@ -869,7 +866,7 @@
     <string name="settings_auto_greeting_subtitle">Permite comenzar un diálogo de manera automática al saludar, para obtener simpatías</string>
     <string name="take_photo_text_1">Por favor, carga tu fotografía para empezar a conocer gente.</string>
     <string name="take_photo_text_2">En la foto debes aparecer tú. Todas las fotografías están sujetas a moderación.</string>
-    <string name="unlock_by_viewed_ad_video_button_text">Bloquear gratis por %s</string>
+    <string name="unlock_by_viewed_ad_video_button_text">Desbloquear gratis por %s</string>
     <plurals name="free_minutes">
         <item quantity="other">%d minutos</item>
         <item quantity="one">%d minuto</item>
@@ -891,16 +888,6 @@
     <string name="NSLocationWhenInUseUsageDescription">Para obtener acceso a la funcionalidad, necesitas obtener acceso previo.</string>
     <string name="buy_button_sticker_popular">Los más\n vendidos</string>
     <string name="buy_button_sticker_best_value">El mejor\n precio</string>
-    <string name="ban_liberty_title">¡Sin publicidad!</string>
-    <string name="ban_liberty_description">Solo conocer gente, nada más</string>
-    <string name="guest_liberty_title">Invitados</string>
-    <string name="guest_liberty_description">Averigua, quién ha entrado a tu página</string>
-    <string name="star_liberty_title">Usuarios populares</string>
-    <string name="star_liberty_description">Las aperturas más populares para comunicarse</string>
-    <string name="crown_liberty_title">Destaca</string>
-    <string name="crown_liberty_description">Es difícil no destacar en la búsqueda y en los mensajes</string>
-    <string name="like_liberty_title">Simpatías</string>
-    <string name="like_liberty_description">Mira a quién le gustas</string>
     <string name="refill_balance_view_title">En tu cuenta</string>
     <string name="access_to_location_popup_title">No es accesible la geolocalización</string>
     <string name="access_to_location_popup_description">Por desgracia, tu geolocalización no es accesible. Para continuar, es necesario que permitas el acceso</string>
@@ -910,7 +897,7 @@
     <string name="city_selector_your_city">Tu ciudad</string>
     <string name="photo_gallery_photo_deleted">La fotografía ha sido eliminada</string>
     <string name="photofeed_add_photo_to_feed_title">¡Subir al primer puesto!</string>
-    <string name="photofeed_add_photo_to_feed_description">Añade una foto con saludo y te verán miles de personas. Llama la atención y conoce a gente nueva ahora mismo.</string>
+    <string name="photofeed_add_photo_to_feed_description">Añade una foto y te verán miles de personas. ¡Hazte notar y empieza a tener citas ahora!</string>
     <string name="offers_screen_title">Bonificaciones</string>
     <string name="offers_loading_text">Estamos cargando las tareas disponibles para ti…</string>
     <string name="offers_empty_text">Desgraciadamente, no hay tareas disponibles para ti, ¡inténtalo más tarde!</string>
@@ -930,8 +917,15 @@
     <string name="mutual_sympathy_in_chat">¡El sentimiento es mutuo!</string>
     <string name="start_chat_with_gift">¡Un regalo es un buen inicio!</string>
     <string name="mutual_sympathy">Simpatía mutua</string>
-    <string name="add_photo_feed_header_description">Publica una foto con un saludo y miles de personas te verán. ¡Date a conocer y empieza a conocer gente ahora!</string>
+    <string name="add_photo_feed_header_description">Añade una foto con un saludo y te verán miles de personas. Hazte notar y empieza a tener citas ahora.</string>
     <string name="publish_photo">Publicar foto</string>
+    <string name="add_to_photo_blog_title">Añadir al feed</string>
+    <string name="add_to_photo_blog_header">Sube una foto y\nmiles de personas te verán.</string>
+    <string name="add_to_photo_blog_button_place">Subir</string>
+    <plurals name="add_to_photo_blog_coins">
+        <item quantity="other">Precio — %d Monedas</item>
+        <item quantity="one">Precio — %d Moneda</item>
+    </plurals>
     <string name="dont_miss_a_beat">¡Estate al loro!</string>
     <string name="push_alert_dating_title">¿Quieres recibir una notificación cuando %s envíe una respuesta mutua?</string>
     <string name="push_alert_chat_title">¿Quieres recibir una notificación cuando %s responda?</string>
@@ -940,4 +934,170 @@
     <string name="mutual_write_them_first">Escríbeles</string>
     <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
     <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
+    <string name="buy_vip_dating_only">Solo citas, así de simple.</string>
+    <string name="buy_vip_message">No esperes a que lleguen las simpatías, ¡empieza una conversación!</string>
+    <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
+    <string name="buy_vip_free_admirations">Envía admiraciones gratis</string>
+    <string name="buy_vip_know_guests">Descubre quién ha visto tu perfil</string>
+    <string name="vip_info_title">Privilegios del estatus VIP</string>
+    <string name="chat_buy_vip_popular_male">¡%s es muy popular!</string>
+    <string name="chat_buy_vip_popular_female">¡%s es muy popular!</string>
+    <string name="buy_vip_to_chat_male">Para empezar a hablar con él, activa tu estado VIP</string>
+    <string name="buy_vip_to_chat_female">Para empezar a hablar con ella, activa tu estado VIP</string>
+    <string name="chat_activate_vip">Activar VIP</string>
+    <string name="chat_no_mutual_symphaty">¡No hay simpatía mutua por ahora!</string>
+    <string name="chat_with_no_mutual_buy_vip">Puedes empezar a chatear sin simpatía mutua, pero para hacerlo, necesitas activar tu estado VIP</string>
+    <string name="about">Sobre ti</string>
+    <string name="moar_info">¡Descubre más información!</string>
+    <string name="geo_switched_off_explanation">Para ver quién está cerca, activa los servicios de geolocalización</string>
+    <string name="turn_on_geo">Permitir los servicios de geolocalización</string>
+    <string name="geo_show_settings_explanation">Para ver quién está cerca, activa los servicios de geolocalización en las opciones de tu teléfono</string>
+    <string name="show_geo_settings">Abrir opciones</string>
+    <string name="buy_vip_button_text_admiration_purchase_popup">Enviar por %d monedas</string>
+    <string name="label1_text_admiration_purchase_popup">El receptor de \"Admiraciones\" recibirá una notificación y lo verá inmediatamente</string>
+    <string name="label2_text_admiration_purchase_popup">¡Envía \"Admiraciones\" gratis!</string>
+    <string name="buy_vip_button_text">Hazte VIP</string>
+    <string name="send_first_gift">¡Envía el primer regalo!</string>
+    <string name="ask_moar_info">¡Descubre más información!</string>
+    <string name="fill_own_profile_boy">Rellena tu perfil para ver lo que te ha escrito %s</string>
+    <string name="fill_own_profile">Rellena tu perfil para ver lo que ha escrito %s</string>
+    <string name="chat_mutual_symphaty">¡Simpatía mutua!</string>
+    <string name="chat_mutual_start_conversation">¡Empieza a chatear!\nUn regalo sería un buen inicio</string>
+    <string name="chat_send_message_button_title">Enviar</string>
+    <string name="know_your_guests_by_sight">Encuentra a tus invitados y fans viendo sus caras</string>
+    <string name="know_your_guests">¡Encuentra a tus invitados!</string>
+    <string name="write_any_girl">¡Escribe a cualquier chica!</string>
+    <string name="write_any_boy">¡Escribe a cualquier chico!</string>
+    <string name="get_more_visitors">¡Consigue más visitas de perfil!</string>
+    <string name="write_beautiful_girls_without_limits">¡Escribe a chicas guapas sin límites!</string>
+    <string name="write_beautiful_boys_without_limits">¡Escribe a chicos guapos sin límites!</string>
+    <string name="seven_days_free">7 días gratis</string>
+    <string name="free_vip">Estatus VIP gratis</string>
+    <string name="no_more_ad">Sin publicidad en la app</string>
+    <string name="i_see_u_face">Descubre quién ha visitado tu página y quiénes son tos fans</string>
+    <string name="buy_vip_write_anyone">Escribe a cualquier chica sin simpatía mutua</string>
+    <string name="buy_vip_write_anyone_boy">Escribe a cualquier chico, incluso sin simpatía mutua</string>
+    <string name="buy_vip_write_anyone_without_mutual">Escribe a cualquiera, incluso sin simpatía mutua</string>
+    <string name="moar_messages">Chatea con usuarios populares</string>
+    <string name="buy_vip_more_views">Recibe 1,5 más de visitas en tu perfil</string>
+    <string name="special_offer">Oferta especial</string>
+    <string name="description_experiment4_view1">¡Con el estatus VIP, %1$s y %2$s te verán!</string>
+    <string name="fake_male_name_1">Conor</string>
+    <string name="fake_male_name_2">Pablo</string>
+    <string name="fake_male_name_3">Pedro</string>
+    <string name="fake_male_name_4">Max</string>
+    <string name="fake_male_name_5">Dani</string>
+    <string name="fake_male_name_6">Álex</string>
+    <string name="fake_male_name_7">Andrés</string>
+    <string name="fake_male_name_8">Guille</string>
+    <string name="fake_male_name_9">Goyo</string>
+    <string name="fake_male_name_10">Gerardo</string>
+    <string name="fake_female_name_1">Natalia</string>
+    <string name="fake_female_name_2">Clara</string>
+    <string name="fake_female_name_3">Carolina</string>
+    <string name="fake_female_name_4">Marga</string>
+    <string name="fake_female_name_5">Winona</string>
+    <string name="fake_female_name_6">Ana</string>
+    <string name="fake_female_name_7">Gracia</string>
+    <string name="fake_female_name_8">Anastasia</string>
+    <string name="fake_female_name_9">Elena</string>
+    <string name="fake_female_name_10">María</string>
+    <string name="dialog_empty_title">Sin mensajes</string>
+    <string name="write_those_with_who_you_have_mutual_sympathy">Escribe a los usuarios con los que tienes simpatía mutua</string>
+    <string name="popup_add_to_black_list">Añadir a la Lista Negra</string>
+    <string name="popup_delete_dialog">Borrar conversación</string>
+    <string name="mutually">Mutua</string>
+    <string name="write_them">Escríbeles</string>
+    <string name="go_dating">Empieza \na ligar</string>
+    <string name="start_dating">Empieza a ligar</string>
+    <string name="no_mutual">No tienes ninguna simpatía mutua</string>
+    <string name="buy_vip_button_title">Hazte VIP</string>
+    <string name="unlock_symphaty_coins_one">Precio de desbloqueo: %d moneda</string>
+    <string name="unlock_symphaty_coins_many">Precio de desbloqueo: %d monedas</string>
+    <string name="unlock_symphaty_coins_few">Precio de desbloqueo: %d monedas</string>
+    <string name="unlock_symphaty_coins_other">Precio de desbloqueo: %d monedas</string>
+    <string name="unlock_symphaty_hours_one">Desbloqueado durante: %d hora</string>
+    <string name="unlock_symphaty_hours_many">Desbloqueado durante: %d horas</string>
+    <string name="unlock_symphaty_hours_few">Desbloqueado durante: %d horas</string>
+    <string name="unlock_symphaty_hours_other">Desbloqueado durante: %d horas</string>
+    <string name="unlock_symphaty_women_one">¡%d chica te ha enviado una simpatía!</string>
+    <string name="unlock_symphaty_women_many">¡%d chicas te han enviado simpatías!</string>
+    <string name="unlock_symphaty_women_few">¡%d chicas te han enviado simpatías!</string>
+    <string name="unlock_symphaty_women_other">¡%d chicas te han enviado simpatías!</string>
+    <string name="unlock_symphaty_men_one">¡%d chico te ha enviado una simpatía!</string>
+    <string name="unlock_symphaty_men_many">¡%d chicos te han enviado simpatías!</string>
+    <string name="unlock_symphaty_men_few">¡%d chicos te han enviado simpatías!</string>
+    <string name="unlock_symphaty_men_other">¡%d chicos te han enviado simpatías!</string>
+    <string name="unlock_symphaty_title">Ahora mismo no puedes ver que usuarios te han enviado simpatías</string>
+    <string name="unlock_symphaty_get_access">Consigue acceso</string>
+    <string name="send_gift_start_dialog">¡Envía un regalo y empieza a chatear ahora!</string>
+    <string name="likes_start_dating_button">Empieza a ligar</string>
+    <string name="likes_empty_title">Aun no tienes ninguna simpatía.\nLas simpatías te ayudan a conocer personas</string>
+    <string name="unlock_sympathy_price">Precio de desbloqueo:</string>
+    <string name="send_gift">Enviar regalo</string>
+    <string name="write_him_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
+    <string name="write_her_without_symphaty">¡Escríbele sin Simpatía Mutua!</string>
+    <string name="people_nearby_popover_text">¡Aparece en el feed de fotos!\nTe verán miles de personas</string>
+    <string name="mutual_popup_you_get_mutual">¡Os gustáis entre vosotros!</string>
+    <string name="start_dialog">Empezar Conversación</string>
+    <string name="continue_to_meet">Seguir Ligando</string>
+    <string name="basic_information">Datos básicos</string>
+    <string name="purchase_successfull">El pago se ha realizado con éxito</string>
+    <string name="now_you_have_VIP">Ahora tienes el estatus VIP</string>
+    <plurals name="you_have_some_coins">
+    </plurals>
+    <plurals name="you_have_some_sympathies">
+    </plurals>
+    <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
+    <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
+    <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>
+    <string name="buy_likes_become_first_in_searchlist_male">¡Aparece antes para las chicas que buscan a chicos como tú!</string>
+    <string name="buy_likes_become_popular_female">Hazte popular</string>
+    <string name="buy_likes_become_popular_male">Hazte popular</string>
+    <string name="you_are_not_shown">Casi no apareces en \"Citas\"</string>
+    <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
+    <string name="offers_free_title">Gratis</string>
+    <string name="offers_free_vip">VIP Gratis</string>
+    <string name="offers_free_coins">Monedas Gratis</string>
+    <string name="offers_free_likes">Simpatías Gratis</string>
+    <string name="permission_alert_button_allow">Ir a</string>
+    <string name="permission_alert_button_disallow">Rechazar</string>
+    <string name="permission_alert_button_message">Para subir fotos necesitas darle a la app acceso a la memoria de tu teléfono a través de Configuración</string>
+    <string name="ninja_hint_card_number">Número de tarjeta</string>
+    <string name="ninja_hint_card_expires">Caducidad</string>
+    <string name="ninja_hint_cvv">CVV/CVC</string>
+    <string name="ninja_button_buy">Comprar</string>
+    <string name="ninja_checkbox_auto_pay">Recarga automática</string>
+    <string name="ninja_text_1">Pago securo</string>
+    <string name="ninja_text_2">Protección de 128-bit SSL</string>
+    <string name="ninja_text_4">Incluyendo el total, aceptas</string>
+    <string name="ninja_text_link">las condiciones del servicio</string>
+    <string name="ninja_text_5">En 7 días tu estado VIP se renovará automáticamente. Tu tarjeta se guardará para futuros pagos. Puedes cancelar tu suscripción y desvincular tu tarjeta en Configuración.</string>
+    <string name="ninja_text_trial_1">Se te cobrará 1€ y será devuelto inmediatamente a tu cuenta para verificar tu tarjeta.</string>
+    <string name="ninja_text_trial_2">En %1$s se completará una transacción para %2$d %3$s. Cada mes tu suscripción se renovará de forma automática y tu tarjeta se quedará guardada para los próximos pagos. Puedes cancelar la suscripción y desvincular tu tarjeta en Configuración.</string>
+    <string name="ninja_settings_toolbar">Pagos</string>
+    <string name="ninja_vip_status_title">Subscripción al estado VIP</string>
+    <string name="ninja_cancel_vip_status">Cancelar suscripción</string>
+    <string name="ninja_use_another_card">Usar otra carta</string>
+    <string name="ninja_delete_card">Borrar corta</string>
+    <string name="ninja_error_dialog_title">Ha ocurrido un error</string>
+    <string name="ninja_error_dialog_message_single">Por favor, vuelve a intentarlo.</string>
+    <string name="ninja_error_dialog_button_retry">Por favor, prueba con otra tarjeta</string>
+    <string name="ninja_error_dialog_button_change">Otros métodos de pago</string>
+    <plurals name="ninja_trial_days">
+        <item quantity="other">%d días</item>
+        <item quantity="one">%d día</item>
+    </plurals>
+    <string name="payment_ninja_card_number">Se está usando para los pagos la tarjeta **%s</string>
+    <string name="ninja_trhu_error">Fecha incorrecta</string>
+    <string name="ninja_number_error">Formato del número de la tarjeta incorrecto</string>
+    <string name="ninja_email_error">Formato de email incorrecto</string>
+    <string name="use_card">Utilizar tarjeta **%s</string>
+    <string name="ninja_no_card_title">Añadir tarjeta</string>
+    <string name="ninja_subscription_expiration">Activo hasta el %s</string>
+    <string name="ninja_subscription_cancelled">Cancelado. Se acaba el %s</string>
+    <string name="ninja_autofilling_cancelled">Cancelado</string>
+    <string name="ninja_autofilling_activated">Activo</string>
+    <string name="ninja_support">Ayuda</string>
+    <string name="ninja_ask_to_delete_card_message">¿Estás seguro?</string>
 </resources>

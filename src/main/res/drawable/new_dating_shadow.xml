@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:gravity="top">
+        <nine-patch
+            android:src="@drawable/dating_gradient">
+        </nine-patch>
+    </item>
+    <item
+        android:gravity="bottom">
+        <rotate
+            android:fromDegrees="180"
+            android:toDegrees="0">
+            <nine-patch
+                android:src="@drawable/dating_gradient">
+            </nine-patch>
+        </rotate>
+    </item>
+</layer-list>

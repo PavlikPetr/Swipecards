@@ -8,6 +8,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.FlurryManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.FbAuthorizer;
@@ -29,11 +30,16 @@ public class AuthRequest extends PrimalAuthRequest {
     public static final String timezone = TimeZone.getDefault().getID();
     private String mSid; // id пользователя в социальной сети
     private String mToken; // токен авторизации в соц сети
+    private String mEmail; // email из ВК для отправки
     private String mPlatform; // код социальной сети
     private String mLogin;  // логин для нашей авторизации
     private String mPassword; // пароль для нашей авторизации
     private String mRefresh; // еще один токен для одноклассников
     private AppsFlyerData mAppsflyer; //ID пользователя в appsflyer
+
+    public String getPlatform() {
+        return mPlatform;
+    }
 
     private AuthRequest(Context context) {
         super(context);
@@ -59,7 +65,12 @@ public class AuthRequest extends PrimalAuthRequest {
             mSid = authTokenInfo.getUserSocialId();
             mToken = authTokenInfo.getTokenKey();
             mRefresh = authTokenInfo.getExpiresIn();
-        } else {
+        } else if (TextUtils.equals(mPlatform, AuthToken.SN_VKONTAKTE)) {
+            mSid = authTokenInfo.getUserSocialId();
+            mToken = authTokenInfo.getTokenKey();
+            mEmail = authTokenInfo.getmUserEmail();
+        }
+        else {
             mSid = authTokenInfo.getUserSocialId();
             mToken = authTokenInfo.getTokenKey();
         }
@@ -93,6 +104,10 @@ public class AuthRequest extends PrimalAuthRequest {
                 .put("refresh", mRefresh)
                 .put("timezone", timezone)
                 .put("token", mToken);
+        String appLink = FBInvitesUtils.INSTANCE.getAppLinkToSend();
+        if (!TextUtils.isEmpty(appLink)) {
+            data.put("fbAppLink", appLink);
+        }
         if (mAppsflyer != null) {
             data.put("appsflyer", mAppsflyer.toJsonWithConversions(App.getConversionHolder()));
         }
@@ -105,6 +120,7 @@ public class AuthRequest extends PrimalAuthRequest {
                 break;
             case AuthToken.SN_VKONTAKTE:
                 data.put("socialAppId", VkAuthorizer.getVkId());
+                data.put("email", mEmail);
                 break;
         }
         return data;

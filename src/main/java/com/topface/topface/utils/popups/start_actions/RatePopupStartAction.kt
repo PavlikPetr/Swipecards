@@ -35,5 +35,8 @@ class RatePopupStartAction(private val mActivity: FragmentActivity, private val 
         rateAppDialog.setOnCancelListener {
             PopupManager.informManager(mFrom)
         }
+        rateAppDialog.setOnDismissListener {
+            PopupManager.informManager(mFrom)
+        }
     }
 }

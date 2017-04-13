@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +15,14 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
+import com.topface.topface.databinding.AcInviteVkFriendsBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.statistics.InvitesStatistics;
 import com.topface.topface.ui.views.ImageViewRemote;
+import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.utils.FlurryManager;
-import com.topface.topface.utils.actionbar.ActionBarTitleSetterDelegate;
+import com.topface.topface.utils.extensions.ResourceExtensionKt;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
@@ -28,6 +30,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiUser;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,12 +38,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.topface.topface.statistics.InvitesStatistics.PLC_VK_INVITES;
 
-public class InviteVkFriendsActivity extends BaseFragmentActivity {
+public class InviteVkFriendsActivity extends BaseFragmentActivity<AcInviteVkFriendsBinding> {
     private final static int ITEMS_COUNT_BEFORE_END = 5;
     private final static int MAX_RE_REQUEST_COUNT = 3;
 
@@ -61,20 +61,18 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     private boolean mIsGettingExtraFriends = false;
     private View mFooterView;
 
-    @BindView(R.id.vkFriendsList)
-    ListView mListView;
-    @BindView(R.id.mainProgressBar)
-    ProgressBar mProgress;
-    @BindView(R.id.noOneFriendLoaded)
-    TextView mNoFriendsTitle;
+
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
+        return new BackToolbarViewModel(toolbar, ResourceExtensionKt.getString(R.string.vk_profile_invite_friends_title), this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(this);
-        new ActionBarTitleSetterDelegate(getSupportActionBar()).setActionBarTitles(R.string.vk_profile_invite_friends_title, null);
         mFooterView = getLayoutInflater().inflate(R.layout.gridview_footer_progress_bar, null);
-        mListView.addFooterView(mFooterView);
+        getViewBinding().vkFriendsList.addFooterView(mFooterView);
         int position = 0;
         if (savedInstanceState != null) {
             mAdapter = new VKFriendsAdapter(parseFriendsList(savedInstanceState.getString(VK_FRIENDS_LIST_DATA)), (ConcurrentHashMap<Integer, Boolean>) savedInstanceState.getSerializable(VK_FRIENDS_BUTTONS_STATE_DATA));
@@ -89,11 +87,11 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         } else {
             mAdapter = new VKFriendsAdapter(new ArrayList<VKApiUser>());
         }
-        mListView.setAdapter(mAdapter);
+        getViewBinding().vkFriendsList.setAdapter(mAdapter);
         setMainProgressVisibility(mAdapter == null || mAdapter.getCount() == 0);
         showProgress(false);
-        mListView.scrollTo(0, position);
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        getViewBinding().vkFriendsList.scrollTo(0, position);
+        getViewBinding().vkFriendsList.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -101,7 +99,9 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                int totalItemsWithoutHeadersAndFooters = totalItemCount - mListView.getHeaderViewsCount() - mListView.getFooterViewsCount();
+                int totalItemsWithoutHeadersAndFooters = totalItemCount -
+                        getViewBinding().vkFriendsList.getHeaderViewsCount() -
+                        getViewBinding().vkFriendsList.getFooterViewsCount();
                 if (totalItemsWithoutHeadersAndFooters - (firstVisibleItem + visibleItemCount) <= ITEMS_COUNT_BEFORE_END
                         && !mIsGettingExtraFriends
                         && (totalItemsWithoutHeadersAndFooters == 0
@@ -170,11 +170,6 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     @Override
-    protected int getContentLayout() {
-        return R.layout.ac_invite_vk_friends;
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
     }
@@ -185,7 +180,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
         outState.putString(VK_FRIENDS_LIST_DATA, packFriendsList());
         outState.putSerializable(VK_FRIENDS_BUTTONS_STATE_DATA, mAdapter != null ? mAdapter.getButtonsStateList() : new ConcurrentHashMap<Integer, Boolean>());
         outState.putBoolean(VK_FRIENDS_GETTING_EXTRA, mIsGettingExtraFriends);
-        outState.putInt(VK_FRIENDS_LIST_SCROLL_POSITION, mListView != null ? mListView.getScrollY() : 0);
+        outState.putInt(VK_FRIENDS_LIST_SCROLL_POSITION, getViewBinding().vkFriendsList.getScrollY());
         outState.putInt(VK_FRIENDS_AVAILABLE_COUNT, mAvailableFriendsCount);
         outState.putInt(VK_DELETED_FRIENDS_COUNT, mAdapter != null ? mAdapter.getDeletedCount() : 0);
     }
@@ -248,6 +243,17 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
 
     private String packFriendsList(List<VKApiUser> friends) {
         return JsonUtils.toJson(friends);
+    }
+
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcInviteVkFriendsBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_invite_vk_friends;
     }
 
     private static class VKFriendsAdapter extends BaseAdapter {
@@ -388,8 +394,8 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     private void setMainProgressVisibility(boolean isVisible) {
-        mProgress.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        mListView.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        getViewBinding().mainProgressBar.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        getViewBinding().vkFriendsList.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
         setNoFriendsTitleVisibility(!isVisible && mAdapter != null && mAdapter.getCount() == 0);
     }
 
@@ -406,7 +412,7 @@ public class InviteVkFriendsActivity extends BaseFragmentActivity {
     }
 
     private void setNoFriendsTitleVisibility(boolean isVisible) {
-        mNoFriendsTitle.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-        mListView.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
+        getViewBinding().noOneFriendLoaded.setVisibility(isVisible ? View.VISIBLE : View.GONE);
+        getViewBinding().vkFriendsList.setVisibility(!isVisible ? View.VISIBLE : View.GONE);
     }
 }

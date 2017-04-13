@@ -20,135 +20,145 @@ import java.util.ArrayList;
  */
 public abstract class BaseHeaderFooterRecyclerViewAdapter<T extends ViewDataBinding, D> extends BaseRecyclerViewAdapter<T, D> {
 
-    protected static final int TYPE_HEADER = 1;
-    protected static final int TYPE_ITEM = 0;
-    protected static final int TYPE_FOOTER = 2;
+	protected static final int TYPE_HEADER = 1;
+	protected static final int TYPE_ITEM = 0;
+	protected static final int TYPE_FOOTER = 2;
 
-    @IntDef({TYPE_HEADER, TYPE_ITEM, TYPE_FOOTER})
-    public @interface ItemType {
-    }
+	@IntDef({TYPE_HEADER, TYPE_ITEM, TYPE_FOOTER})
+	public @interface ItemType {
+	}
 
-    private ArrayList<FixedViewInfo> mHeaders = new ArrayList<>();
-    private ArrayList<FixedViewInfo> mFooters = new ArrayList<>();
-    private int mCurrentPosition;
+	private ArrayList<FixedViewInfo> mHeaders = new ArrayList<>();
+	private ArrayList<FixedViewInfo> mFooters = new ArrayList<>();
+	private int mCurrentPosition;
 
-    @SuppressLint("SwitchIntDef")
-    @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup parent, @ItemType int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        int localPos = getLocalPosition(mCurrentPosition);
-        if (localPos != EMPTY_POS && viewType != TYPE_ITEM) {
-            switch (viewType) {
-                case TYPE_FOOTER:
-                    return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), parent, false),null);
-                case TYPE_HEADER:
-                    return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), parent, false), null);
-            }
-        }
-        return new ItemViewHolder(inflater.inflate(getItemLayout(), parent, false), mItemEventListener);
-    }
+	@SuppressLint("SwitchIntDef")
+	@Override
+	public ItemViewHolder onCreateViewHolder(ViewGroup parent, @ItemType int viewType) {
+		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+		int localPos = getLocalPosition(mCurrentPosition);
+		if (localPos != EMPTY_POS && viewType != TYPE_ITEM) {
+			switch (viewType) {
+				case TYPE_FOOTER:
+					return new ItemViewHolder(inflater.inflate(mFooters.get(localPos).getResId(), parent, false), null);
+				case TYPE_HEADER:
+					return new ItemViewHolder(inflater.inflate(mHeaders.get(localPos).getResId(), parent, false), null);
+			}
+		}
+		return new ItemViewHolder(inflater.inflate(getItemLayout(), parent, false), mItemEventListener);
+	}
 
-    @Override
-    protected int getPositionByView(View v) {
-        return super.getPositionByView(v) - mHeaders.size();
-    }
+	@Override
+	protected int getPositionByView(View v) {
+		return super.getPositionByView(v) - mHeaders.size();
+	}
 
-    @Override
-    public void onBindViewHolder(ItemViewHolder holder, int position) {
-        int localPos = getLocalPosition(position);
-        if (localPos == EMPTY_POS) {
-            return;
-        }
-        switch (getItemType(position)) {
-            case TYPE_ITEM:
-                bindData((T) holder.binding, localPos);
-                break;
-            case TYPE_HEADER:
-                bindHeader(holder.binding, localPos);
-                break;
-            case TYPE_FOOTER:
-                bindFooter(holder.binding, localPos);
-                break;
-        }
-    }
+	@Override
+	public void onBindViewHolder(ItemViewHolder holder, int position) {
+		int localPos = getLocalPosition(position);
+		if (localPos == EMPTY_POS) {
+			return;
+		}
+		switch (getItemType(position)) {
+			case TYPE_ITEM:
+				bindData((T) holder.binding, localPos);
+				break;
+			case TYPE_HEADER:
+				bindHeader(holder.binding, localPos);
+				break;
+			case TYPE_FOOTER:
+				bindFooter(holder.binding, localPos);
+				break;
+		}
+	}
 
-    private int getLocalPosition(int position) {
-        int localPos = EMPTY_POS;
-        switch (getItemType(position)) {
-            case TYPE_ITEM:
-                localPos = position - mHeaders.size();
-                break;
-            case TYPE_HEADER:
-                localPos = position;
-                break;
-            case TYPE_FOOTER:
-                localPos = position - mHeaders.size() - getData().size();
-                break;
-        }
-        return localPos;
-    }
+	private int getLocalPosition(int position) {
+		int localPos = EMPTY_POS;
+		switch (getItemType(position)) {
+			case TYPE_ITEM:
+				localPos = position - mHeaders.size();
+				break;
+			case TYPE_HEADER:
+				localPos = position;
+				break;
+			case TYPE_FOOTER:
+				localPos = position - mHeaders.size() - getData().size();
+				break;
+		}
+		return localPos;
+	}
 
-    @ItemType
-    protected int getItemType(int pos) {
-        if (pos < mHeaders.size()) {
-            return TYPE_HEADER;
-        } else if (pos >= mHeaders.size() + getData().size()) {
-            return TYPE_FOOTER;
-        } else {
-            return TYPE_ITEM;
-        }
-    }
+	@ItemType
+	protected int getItemType(int pos) {
+		if (pos < mHeaders.size()) {
+			return TYPE_HEADER;
+		} else if (pos >= mHeaders.size() + getData().size()) {
+			return TYPE_FOOTER;
+		} else {
+			return TYPE_ITEM;
+		}
+	}
 
-    @Override
-    public int getItemViewType(int position) {
-        mCurrentPosition = position;
-        return getItemType(position);
-    }
+	@Override
+	public int getItemViewType(int position) {
+		mCurrentPosition = position;
+		return getItemType(position);
+	}
 
-    @Override
-    public int getItemCount() {
-        return super.getItemCount() + mHeaders.size() + mFooters.size();
-    }
+	@Override
+	public int getItemCount() {
+		return super.getItemCount() + mHeaders.size() + mFooters.size();
+	}
 
-    @Nullable
-    public Object getHeaderItem(int pos) {
-        if (mHeaders != null && mHeaders.size() > pos) {
-            return mHeaders.get(pos).getData();
-        }
-        return null;
-    }
+	@Nullable
+	public Object getHeaderItem(int pos) {
+		if (mHeaders != null && mHeaders.size() > pos) {
+			return mHeaders.get(pos).getData();
+		}
+		return null;
+	}
 
-    @Nullable
-    public Object getFooterItem(int pos) {
-        if (mFooters != null && mFooters.size() > pos) {
-            return mFooters.get(pos).getData();
-        }
-        return null;
-    }
+	@Nullable
+	public Object getFooterItem(int pos) {
+		if (mFooters != null && mFooters.size() > pos) {
+			return mFooters.get(pos).getData();
+		}
+		return null;
+	}
 
-    public ArrayList<FixedViewInfo> getHeadersData() {
-        return mHeaders;
-    }
+	public ArrayList<FixedViewInfo> getHeadersData() {
+		return mHeaders;
+	}
 
-    public ArrayList<FixedViewInfo> getFootersData() {
-        return mFooters;
-    }
+	public ArrayList<FixedViewInfo> getFootersData() {
+		return mFooters;
+	}
 
-    public void setHeader(FixedViewInfo data) {
-        mHeaders.add(data);
-    }
+	public void setHeader(FixedViewInfo data) {
+		mHeaders.add(data);
+	}
 
-    public void setFooter(FixedViewInfo data) {
-        mFooters.add(data);
-    }
+	public void setFooter(FixedViewInfo data) {
+		mFooters.add(data);
+	}
 
-    public void notifyItemChange(int pos) {
-        if (pos < getItemCount()) {
-            notifyItemChanged(pos + mHeaders.size());
-        }
-    }
+	public void notifyItemChange(int pos) {
+		int headerSize = mHeaders.size();
+		if (pos < getItemCount() - headerSize) {
+			notifyItemChanged(pos + headerSize);
+		}
+	}
 
-    protected void bindHeader(ViewDataBinding binding, int position){}
+	public void notifyItemRemove(int pos) {
+		int headerSize = mHeaders.size();
+		if (pos < getItemCount() - headerSize) {
+			notifyItemRemoved(pos + headerSize);
+		}
+	}
 
-    protected void bindFooter(ViewDataBinding binding, int position){}
+	protected void bindHeader(ViewDataBinding binding, int position) {
+	}
+
+	protected void bindFooter(ViewDataBinding binding, int position) {
+	}
 }

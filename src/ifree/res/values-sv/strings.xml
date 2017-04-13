@@ -65,7 +65,6 @@
     <string name="black_list_add">Lägg till svartlista</string>
     <string name="vip_invisible_mode">\"Osynlig\" funktion</string>
     <string name="buying_profile_coins">På ditt konto</string>
-    <string name="vip_info_title">VIP-förmåner</string>
     <string name="profile_gifts_empty">Denna användare har ännu inte fått några gåvor</string>
     <string name="profile_mygifts_empty">Du har ännu inte fått några gåvor</string>
     <string name="dating_people_unnoticed">Du har ignorerat tio personer!</string>
@@ -550,7 +549,6 @@
     <string name="with_vip_find_your_visitors">Med VIP-status kan du ta reda på vem som besökt din
         sida
     </string>
-    <string name="on_avatar">Till profilbilden.</string>
     <string name="your_avatar">Din profilbild</string>
     <string name="avatar_set_successfully">Profilbilden har framgångsrikt laddats</string>
     <string name="incorrect_photo">Felaktigt foto. Vänligen ladda upp ett annat.</string>
@@ -717,8 +715,6 @@
     </string>
     <string name="dialog">Korrespondens</string>
     <string name="reply">Svara</string>
-    <string name="measurement_unit_weight">vikt</string>
-    <string name="measurement_unit_height">längd</string>
     <string name="maximum_number_of_users">Maximalt antal användare valt</string>
     <string name="logout_if_email_already_registred">Det finns redan en användare med denna
         e-postadressen. Om detta är din e-post, så måste du logga ut ifrån detta kontot och sedan
@@ -815,4 +811,5 @@
     <string name="novice_sympathy">Skicka sympatier till dem\ndu verkligen gillar,\nför att inleda
         ett trevligt förhållande
     </string>
+    <string name="vip_info_title">VIP-förmåner</string>
 </resources>

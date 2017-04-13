@@ -57,4 +57,9 @@ public class FragmentLifreCycleData extends ViewLifreCycleData {
         FragmentLifreCycleData data = (FragmentLifreCycleData) o;
         return mState == data.getState();
     }
+
+    @Override
+    public String toString() {
+        return "class:" + getClassName() + " state = " + getState();
+    }
 }

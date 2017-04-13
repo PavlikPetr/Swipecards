@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.buy.pn_purchase.BuyScreenTextViewModel"/>
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@{viewModel.marginBottom}"
+        android:layout_marginLeft="@{viewModel.marginLeft}"
+        android:layout_marginRight="@{viewModel.marginRight}"
+        android:layout_marginTop="@{viewModel.marginTop}"
+        android:background="@{viewModel.background}"
+        android:onClick="@{() -> viewModel.onClickListener.invoke()}"
+        android:paddingBottom="@{viewModel.paddingBottom}"
+        android:paddingLeft="@{viewModel.paddingLeft}"
+        android:paddingRight="@{viewModel.paddingRight}"
+        android:paddingTop="@{viewModel.paddingTop}"
+        android:text="@{viewModel.text}"
+        android:visibility="@{viewModel.textVisibility}"
+        app:allCaps="@{viewModel.isAllCaps}"
+        app:pxTextSize="@{viewModel.textSize}"
+        app:textColor="@{viewModel.textColor}"
+        tools:ignore="RtlHardcoded"/>
+</layout>

@@ -33,6 +33,8 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.android.Slices;
+import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
@@ -56,7 +58,6 @@ import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.state.CountersDataProvider;
-import com.topface.topface.ui.BaseFragmentActivity;
 import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.adapters.FeedAdapter;
@@ -66,9 +67,11 @@ import com.topface.topface.ui.adapters.LoadingListAdapter;
 import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
+import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
@@ -291,7 +294,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRefreshReceiver, new IntentFilter(REFRESH_DIALOGS));
         View root = inflater.inflate(getLayout(), null);
         ButterKnife.bind(this, root);
-        initNavigationBar();
         mLockView.setVisibility(View.GONE);
         init();
         initViews(root);
@@ -431,10 +433,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
 
     protected ViewStub getEmptyFeedViewStub() {
         return mEmptyScreenStub;
-    }
-
-    protected void initNavigationBar() {
-        setActionBarTitles(getTitle());
     }
 
     abstract protected Type getFeedListDataType();
@@ -745,7 +743,9 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             if (adapter.isMultiSelectionMode()) {
                 adapter.onSelection(item);
             } else {
-                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id, item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age), item.user.city.getName()));
+                startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id,
+                        item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age),
+                        item.user.city.getName(),getFeedService().name().toLowerCase()));
             }
         }
     }
@@ -1123,11 +1123,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         CountersManager.getInstance(getActivity()).setLastRequestMethod(NULL_METHOD);
     }
 
-    @Override
-    public void setNeedTitles(boolean needTitles) {
-        super.setNeedTitles(needTitles);
-    }
-
     protected boolean whetherDeleteIfBlacklisted() {
         return true;
     }
@@ -1266,7 +1261,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     private void setToolBarVisibility(boolean isVisible) {
-        BaseFragmentActivity activity = ((BaseFragmentActivity) getActivity());
+        ToolbarActivity activity = ((ToolbarActivity) getActivity());
         if (activity != null) {
             activity.setToolBarVisibility(isVisible);
         }

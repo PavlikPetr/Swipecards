@@ -30,6 +30,8 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SendMailNotificationsRequest;
 import com.topface.topface.ui.dialogs.NotificationEditDialog;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
+import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.MarketApiManager;
 import com.topface.topface.utils.Utils;
@@ -99,8 +101,10 @@ public class SettingsNotificationsFragment extends BaseFragment {
             // Send empty vibro notification to demonstrate
             if (isChecked) {
                 UserNotificationManager.getInstance().showSimpleNotification(
-                        new NotificationCompat.Builder(getActivity()).setDefaults(Notification.
-                                DEFAULT_VIBRATE).build()
+                        new NotificationCompat.Builder(getActivity())
+                                .setSmallIcon(R.drawable.ic_stat_notify)
+                                .setDefaults(Notification.DEFAULT_VIBRATE)
+                                .build()
                 );
             }
         }
@@ -198,7 +202,7 @@ public class SettingsNotificationsFragment extends BaseFragment {
         }
         if (notification.mail) {
             if (notification.apns) {
-                textBuilder.append(", ").append(context.getString(R.string.on_mail).toLowerCase());
+                textBuilder.append(", ").append(context.getString(R.string.on_mail).toLowerCase(App.getCurrentLocale()));
             } else {
                 textBuilder.append(context.getString(R.string.on_mail));
             }
@@ -236,8 +240,9 @@ public class SettingsNotificationsFragment extends BaseFragment {
     }
 
     @Override
-    protected String getTitle() {
-        return getString(R.string.notifications);
+    public void onResume() {
+        super.onResume();
+        ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.notifications)));
     }
 
     @SuppressWarnings("unused")

@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
 import com.topface.framework.utils.Debug;
-import com.topface.topface.ui.fragments.feed.FeedFragment;
 
 import java.util.ArrayList;
 
@@ -32,10 +31,6 @@ public class TabbedFeedPageAdapter extends HackyFragmentStatePagerAdapter {
 
             Class fragmentClass = Class.forName(fragmentClassName);
             fragment = (Fragment) fragmentClass.newInstance();
-            if (fragment instanceof FeedFragment) {
-                ((FeedFragment) fragment).setNeedTitles(false);
-            }
-
         } catch (Exception ex) {
             Debug.error(ex);
         }

@@ -18,4 +18,7 @@ abstract class AbstractAdsProvider implements IAdsProvider {
     public final boolean isAvailable(IPageWithAds page) {
         return page.getContainerForAd() != null;
     }
+
+    public void clean(IPageWithAds page) {
+    }
 }

@@ -16,6 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
+import com.topface.statistics.processor.utils.RxUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
@@ -37,6 +39,8 @@ import org.jetbrains.annotations.Nullable;
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import java.util.List;
+
+import rx.Subscription;
 
 import static android.view.View.OnClickListener;
 
@@ -69,6 +73,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
             }
         }
     };
+    private Subscription mVipOpenSubscription = null;
 
     private void getDataFromIntent(Bundle args) {
         if (args != null) {
@@ -103,14 +108,13 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setNeedTitles(false);
         getDataFromIntent(getArguments());
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mVipOpenSubscription = NewProductsKeysGeneratedStatistics.sendPost_VIP_OPEN(getActivity().getApplicationContext());
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mBroadcastReceiver, new IntentFilter(CacheProfile.PROFILE_UPDATE_ACTION));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReceiver, new IntentFilter(OpenIabFragment.UPDATE_RESOURCE_INFO));
         mInvisSwitcher.setProgressState(false, App.from(getActivity()).getProfile().invisible);
@@ -120,6 +124,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
+        RxUtils.safeUnsubscribe(mVipOpenSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
@@ -131,33 +136,13 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         mResourceInfo = (TextView) view.findViewById(R.id.payReasonFragmentBuyPremium);
         setResourceInfoText();
         initViews(view);
-        initVipLiberty(inflater, (LinearLayout) view.findViewById(R.id.fbpBtnContainer));
-        initActionBar();
         return view;
-    }
-
-    private void initActionBar() {
-        if (getArguments() != null && getArguments().getBoolean(PurchasesConstants.ACTION_BAR_CONST, false)) {
-            setActionBarTitles(R.string.vip_buy_vip);
-        }
     }
 
     private void initViews(View root) {
         initBuyVipViews(root);
         initEditVipViews(root);
         switchLayouts();
-    }
-
-    private void initVipLiberty(LayoutInflater inflater, LinearLayout root) {
-        if (root != null
-                && PurchaseButtonList.ViewsVersions.V2.getVersionName().equals(getBuyVipViewVersion(null))
-                && isVipLibertyBlockAvailable()) {
-            root.addView(inflater.inflate(R.layout.vip_liberty_list, root, false));
-        }
-    }
-
-    protected boolean isVipLibertyBlockAvailable() {
-        return true;
     }
 
     private void switchLayouts() {
@@ -202,7 +187,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         List<BuyButtonData> availableButtons = getAvailableButtons(products.premium);
         root.findViewById(R.id.fbpBuyingDisabled).setVisibility(availableButtons.isEmpty() ? View.VISIBLE : View.GONE);
 
-        new PurchaseButtonList().getButtonsListView(getBuyVipViewVersion(products, null), btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
+        new PurchaseButtonList().getButtonsListView(btnContainer, availableButtons, App.getContext(), new PurchaseButtonList.BuyButtonClickListener() {
             @Override
             public void onClick(String id, BuyButtonData btnData) {
                 buy(id, btnData);
@@ -213,7 +198,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onResumeFragment() {
         super.onResumeFragment();
-        BuyScreenStatistics.buyScreenShowSendStatistics(getClass().getSimpleName(), getBuyVipViewVersion(PurchaseButtonList.ViewsVersions.V1.getVersionName()));
+        BuyScreenStatistics.buyScreenShowSendStatistics(getClass().getSimpleName());
     }
 
     protected void buy(String id, BuyButtonData curBtn) {

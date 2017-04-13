@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 
@@ -22,27 +20,31 @@ import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
+import com.topface.topface.databinding.AcFragmentFrameBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
+import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
-import com.topface.topface.ui.dialogs.TrialVipPopup;
+import com.topface.topface.ui.bonus.view.BonusFragment;
+import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
-import com.topface.topface.ui.fragments.buy.TransparentMarketFragment;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
-import com.topface.topface.ui.views.ITransparentMarketFragmentRunner;
+import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
+import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
-import com.topface.topface.utils.RxUtils;
-import com.topface.topface.utils.actionbar.ActionBarView;
+import com.topface.topface.utils.rx.RxUtils;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
@@ -54,7 +56,7 @@ import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCTS_TYPE;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRODUCT_ID;
 import static com.topface.topface.ui.PaymentwallActivity.PW_TRANSACTION_ID;
 
-public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> implements TrialVipPopup.OnFragmentActionsListener {
+public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFragmentFrameBinding> {
 
     /**
      * Constant keys for different fragments
@@ -64,7 +66,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
     // здесь настраивается вероятность, с которой будут отображаться экраны в случае "холостого" выхода
     // с экрана покупок
     private enum EXTRA_SCREEN {
-        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 70);
+        //TODO занулил вероятность показа SMS_INVITE_SCREEN пока не впилим роддержку пермишинов для смс и контактов
+        TOPFACE_OFFERWALL_SCREEN(0, 10), BONUS_SCREEN(1, 30), SMS_INVITE_SCREEN(2, 0);
 
         private int pos;
         private int probability;
@@ -84,10 +87,16 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
 
     }
 
-    @Inject
-    static TopfaceAppState mAppState;
-    @Inject
-    EventBus mEventBus;
+    @NotNull
+    @Override
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
+        return new PurchaseToolbarViewModel(toolbar, this);
+    }
+
+
+    private static TopfaceAppState mAppState;
+    private EventBus mEventBus;
+    private PresenterCache mPresenterCache;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
@@ -96,12 +105,16 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
     private boolean mIsOfferwallsReady;
     private Subscription mEventBusSubscriber;
 
-    private TrialVipPopup mTrialVipPopup;
+    private ExperimentBoilerplateFragment mTrialVipPopup;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        App.from(this).inject(this);
+
+        mAppState = App.getAppComponent().appState();
+        mEventBus = App.getAppComponent().eventBus();
+        mPresenterCache = App.getAppComponent().presenterCache();
+
         mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
         if (TFOfferwallSDK.isInitialized()) {
             mIsOfferwallsReady = TFCredentials.getAdId() != null;
@@ -130,6 +143,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
             mTopfaceOfferwallRedirect.setComplited(false);
         }
         RxUtils.safeUnsubscribe(mEventBusSubscriber);
+
+        if (isFinishing()) {
+            mPresenterCache.removePresenter(BonusFragment.TAG);
+        }
         super.onDestroy();
     }
 
@@ -234,15 +251,11 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
     }
 
     @Override
-    protected void initActionBar(ActionBar actionBar) {
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBarView = new ActionBarView(actionBar, this);
-        actionBarView.setPurchasesView((String) getTitle());
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setIcon(android.R.color.transparent);
-        actionBar.setLogo(android.R.color.transparent);
+    protected void initActionBarOptions(@Nullable ActionBar actionBar) {
+        super.initActionBarOptions(actionBar);
+        if (actionBar != null) {
+            actionBar.setDisplayShowCustomEnabled(true);
+        }
     }
 
 
@@ -313,47 +326,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         if (getIntent().getIntExtra(App.INTENT_REQUEST_KEY, -1) == INTENT_BUY_VIP && App.isNeedShowTrial
                 && !profile.premium && new GoogleMarketApiManager().isMarketApiAvailable()
                 && App.get().getOptions().trialVipExperiment.enabled && !profile.paid) {
-            mTrialVipPopup = TrialVipPopup.newInstance(true);
-            mTrialVipPopup.setOnDismissListener(dismissListener);
-            mTrialVipPopup.setOnSubscribe(this);
-            mTrialVipPopup.show(getSupportFragmentManager(), TrialVipPopup.TAG);
+            //noinspection WrongConstant
+            mTrialVipPopup = ExperimentBoilerplateFragment.newInstance();
+            mTrialVipPopup.setDismissListener(dismissListener);
+            mTrialVipPopup.show(getSupportFragmentManager(), ExperimentBoilerplateFragment.TAG);
             App.isNeedShowTrial = false;
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onSubscribeClick() {
-        Fragment f = mTrialVipPopup.getActivity().getSupportFragmentManager().findFragmentByTag(TransparentMarketFragment.class.getSimpleName());
-        final Fragment fragment = f == null ?
-                TransparentMarketFragment.newInstance(App.get().getOptions().trialVipExperiment.subscriptionSku, true, TrialVipPopup.TAG) : f;
-        fragment.setRetainInstance(true);
-        if (fragment instanceof ITransparentMarketFragmentRunner) {
-            ((ITransparentMarketFragmentRunner) fragment).setOnPurchaseCompleteAction(new TransparentMarketFragment.onPurchaseActions() {
-                @Override
-                public void onPurchaseSuccess() {
-                    mTrialVipPopup.dismiss();
-                }
-
-                @Override
-                public void onPopupClosed() {
-
-                }
-            });
-            FragmentTransaction transaction = mTrialVipPopup.getActivity().getSupportFragmentManager().beginTransaction();
-            if (!fragment.isAdded()) {
-                transaction.add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-            } else {
-                transaction.remove(fragment)
-                        .add(fragment, TransparentMarketFragment.class.getSimpleName()).commit();
-            }
-        }
-    }
-
-    @Override
-    public void onFragmentFinish() {
-        Debug.log("TransparentMarketFragment Finish");
     }
 
     @Override
@@ -390,7 +370,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         for (int i = 0; i < extraScreenArray.size(); i++) {
             sum += extraScreenArray.get(i).getProbability();
         }
-        int randomValue = new Random().nextInt(sum - 1) + 1;
+        int n = sum - 1;
+        int randomValue = new Random().nextInt(n <= 0 ? 1 : n) + 1;
         sum = 0;
         for (int i = 0; i < extraScreenArray.size(); i++) {
             EXTRA_SCREEN currentValue = extraScreenArray.get(i);
@@ -416,4 +397,19 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment> impl
         return screensArray;
     }
 
+    @NotNull
+    @Override
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+        return binding.toolbarInclude;
+    }
+
+    @Override
+    public int getLayout() {
+        return R.layout.ac_fragment_frame;
+    }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
+    }
 }

@@ -1,14 +1,17 @@
 package com.topface.topface.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FragmentLifreCycleData;
+import com.topface.topface.data.Options;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.IntegrationSettingsData;
@@ -17,27 +20,30 @@ import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
+import com.topface.topface.statistics.FBInvitesStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.DatingFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.feed.PeopleNearbyFragment;
-import com.topface.topface.ui.fragments.feed.TabbedDialogsFragment;
+import com.topface.topface.ui.fragments.dating.DatingFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
+import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
+import com.topface.topface.utils.config.WeakStorage;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
+import rx.Observable;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -50,7 +56,7 @@ import static com.topface.topface.ui.NavigationActivity.FRAGMENT_SETTINGS;
  */
 public class NavigationManager {
 
-    public static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
+    private static final int CLOSE_LEFT_MENU_TIMEOUT = 250;
 
     @Inject
     NavigationState mNavigationState;
@@ -58,6 +64,8 @@ public class NavigationManager {
     LifeCycleState mLifeCycleState;
     @Inject
     DrawerLayoutState mDrawerLayoutState;
+    @Inject
+    WeakStorage mWeakStorage;
     private ISimpleCallback iNeedCloseMenuCallback;
     private Subscription mDrawerLayoutStateSubscription;
     private IActivityDelegate mActivityDelegate;
@@ -66,7 +74,7 @@ public class NavigationManager {
     private Subscription mNavigationStateSubscription;
 
     public NavigationManager(IActivityDelegate activityDelegate, LeftMenuSettingsData settings) {
-        App.get().inject(this);
+        App.getAppComponent().inject(this);
         mFragmentSettings = settings;
         mActivityDelegate = activityDelegate;
         mNavigationStateSubscription = mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
@@ -121,12 +129,8 @@ public class NavigationManager {
         }
 
         if (oldFragment == null || mFragmentSettings.getUniqueKey() != leftMenuSettingsData.getUniqueKey()) {
-            final String fragmnetName = newFragment.getClass().getName();
+            final String fragmentName = newFragment.getClass().getName();
             FragmentTransaction transaction = fm.beginTransaction();
-            //Меняем фрагменты анимировано, но только на новых устройствах c HW ускорением
-            if (App.getAppConfig().isHardwareAccelerated()) {
-                transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
             if (oldFragment != newFragment && newFragment.isAdded()) {
                 transaction.remove(newFragment);
                 Debug.error("NavigationManager: try detach already added new fragment " + fragmentTag);
@@ -135,32 +139,24 @@ public class NavigationManager {
             transaction.commit();
             Debug.log("NavigationManager: commit " + fm.executePendingTransactions());
             mFragmentSettings = leftMenuSettingsData;
-            /**
+            /*
              * подписываемся на жизненный цикл загруженного фрагмента
              * ждем его загрузки не дольше CLOSE_LEFT_MENU_TIMEOUT мс
              * потом отписываемся и шлем ивент о том, что фрагмент свичнулся
              */
-            mSubscription = mLifeCycleState.getObservable(FragmentLifreCycleData.class)
+            mSubscription = Observable.merge(mLifeCycleState.getObservable(FragmentLifreCycleData.class)
                     .filter(new Func1<FragmentLifreCycleData, Boolean>() {
                         @Override
                         public Boolean call(FragmentLifreCycleData fragmentLifreCycleData) {
                             return fragmentLifreCycleData.getState() == FragmentLifreCycleData.CREATE_VIEW
-                                    && fragmnetName.equals(fragmentLifreCycleData.getClassName());
+                                    && fragmentName.equals(fragmentLifreCycleData.getClassName());
                         }
-                    })
-                    .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                    .subscribe(new Action1<FragmentLifreCycleData>() {
+                    }), Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS))
+                    .first()
+                    .subscribe(new RxUtils.ShortSubscription<Object>() {
                         @Override
-                        public void call(FragmentLifreCycleData fragmentLifreCycleData) {
+                        public void onNext(Object object) {
                             sendNavigationFragmentSwitched(data);
-                        }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Debug.error("Fragment lifecycle observable error " + throwable);
-                            if (throwable.getClass().getName().equals(TimeoutException.class.getName())) {
-                                sendNavigationFragmentSwitched(data);
-                            }
                         }
                     });
         } else {
@@ -170,9 +166,7 @@ public class NavigationManager {
     }
 
     private void sendNavigationFragmentSwitched(WrappedNavigationData data) {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
         mNavigationState.emmitNavigationState(data.addStateToStack(WrappedNavigationData.FRAGMENT_SWITCHED));
     }
 
@@ -185,10 +179,14 @@ public class NavigationManager {
                 fragment = OwnProfileFragment.newInstance();
                 break;
             case FragmentIdData.DATING:
-                fragment = new DatingFragment();
+                fragment = mWeakStorage.getDatingRedesignEnabled() ?
+                        new com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment() :
+                        new DatingFragment();
                 break;
             case FragmentIdData.GEO:
-                fragment = new PeopleNearbyFragment();
+                fragment = App.get().getOptions().peopleNearbyRedesignEnabled ?
+                        new com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment() :
+                        new PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
                 fragment = BonusFragment.newInstance(true);
@@ -220,7 +218,7 @@ public class NavigationManager {
                 fragment = new TabbedLikesFragment();
                 break;
             case FragmentIdData.TABBED_DIALOGS:
-                fragment = new TabbedDialogsFragment();
+                fragment = new DialogsFragment();
                 break;
             default:
                 fragment = OwnProfileFragment.newInstance();
@@ -252,8 +250,8 @@ public class NavigationManager {
                         if (mActivityDelegate != null) {
                             mActivityDelegate.startActivityForResult(PurchasesActivity
                                     .createVipBuyIntent(null, "LeftMenu"), PurchasesActivity.INTENT_BUY_VIP);
-                            selectPreviousLeftMenuItem();
                         }
+                        selectPreviousLeftMenuItem();
                     }
                 });
                 break;
@@ -263,8 +261,34 @@ public class NavigationManager {
                     public void onCall() {
                         if (mActivityDelegate != null) {
                             mActivityDelegate.startActivity(PurchasesActivity.createBuyingIntent("Menu", App.get().getOptions().topfaceOfferwallRedirect));
-                            selectPreviousLeftMenuItem();
                         }
+                        selectPreviousLeftMenuItem();
+                    }
+                });
+                break;
+            case FragmentIdData.FB_INVITE_FRIENDS:
+                closeMenuAndSwitchAfter(new ISimpleCallback() {
+                    @Override
+                    public void onCall() {
+                        String uid = Integer.toString(App.get().getProfile().uid);
+                        FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_BUTTON_CLICK();
+                        FBInvitesStatisticsGeneratedStatistics
+                                .sendNow_FB_INVITE_BUTTON_CLICK_UNIQUE(uid.concat("_")
+                                        .concat(FBInvitesStatistics.FB_INVITE_BUTTON_CLICK_UNIQUE));
+                        Options options = App.get().getOptions();
+                        BaseFragment fragment = mActivityDelegate != null ?
+                                (BaseFragment) mActivityDelegate.getSupportFragmentManager()
+                                        .findFragmentById(R.id.fragment_content) : null;
+                        Activity activity = fragment != null ? fragment.getActivity() : null;
+                        if (activity != null && FBInvitesUtils.INSTANCE.isFBInviteApplicable(options)) {
+                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_SHOW();
+                            FBInvitesStatisticsGeneratedStatistics
+                                    .sendNow_FB_INVITE_SHOW_UNIQUE(uid.concat("_")
+                                            .concat(FBInvitesStatistics.FB_INVITE_SHOW_UNIQUE));
+                            FBInvitesUtils.INSTANCE.showFBInvitePopup(activity, options.fbInviteSettings.getAppLink(),
+                                    options.fbInviteSettings.getIconUrl());
+                        }
+                        selectPreviousLeftMenuItem();
                     }
                 });
                 break;
@@ -297,38 +321,24 @@ public class NavigationManager {
         if (iNeedCloseMenuCallback != null) {
             iNeedCloseMenuCallback.onCall();
         }
-        /**
+        /*
          * ждем когда будет закрыто левое меню, но не дольше CLOSE_LEFT_MENU_TIMEOUT мс
          * после этого отписываемся и шлем ивент о смене подсвеченного итема в левом меню
          */
-        mDrawerLayoutStateSubscription = mDrawerLayoutState.getObservable()
+        mDrawerLayoutStateSubscription = Observable.merge(mDrawerLayoutState.getObservable()
                 .filter(new Func1<DrawerLayoutStateData, Boolean>() {
                     @Override
                     public Boolean call(DrawerLayoutStateData drawerLayoutStateData) {
                         return drawerLayoutStateData.getState() == DrawerLayoutStateData.CLOSED;
                     }
-                })
-                .timeout(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS)
-                .subscribe(new Action1<DrawerLayoutStateData>() {
+                }), Observable.timer(CLOSE_LEFT_MENU_TIMEOUT, TimeUnit.MILLISECONDS))
+                .first()
+                .subscribe(new RxUtils.ShortSubscription<Object>() {
                     @Override
-                    public void call(DrawerLayoutStateData drawerLayoutStateData) {
-                        drawerLayoutStateUsubscribe();
-                        callback.onCall();
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                        drawerLayoutStateUsubscribe();
+                    public void onNext(Object object) {
                         callback.onCall();
                     }
                 });
-    }
-
-    private void drawerLayoutStateUsubscribe() {
-        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
-            mDrawerLayoutStateSubscription.unsubscribe();
-        }
     }
 
     private void selectPreviousLeftMenuItem() {
@@ -344,12 +354,8 @@ public class NavigationManager {
     public void onDestroy() {
         RxUtils.safeUnsubscribe(mNavigationStateSubscription);
         mActivityDelegate = null;
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
-            mSubscription.unsubscribe();
-        }
-        if (mDrawerLayoutStateSubscription != null && !mDrawerLayoutStateSubscription.isUnsubscribed()) {
-            mDrawerLayoutStateSubscription.unsubscribe();
-        }
+        RxUtils.safeUnsubscribe(mSubscription);
+        RxUtils.safeUnsubscribe(mDrawerLayoutStateSubscription);
         iNeedCloseMenuCallback = null;
     }
 }

@@ -63,7 +63,6 @@
     <string name="black_list_add">Pridėti į juodąjį sąrašą</string>
     <string name="vip_invisible_mode">Nematomas režimas</string>
     <string name="buying_profile_coins">Jūsų sąskaitoje</string>
-    <string name="vip_info_title">VIP privilegijos</string>
     <string name="profile_gifts_empty">Šiam vartotojui dar niekas nedovanojo dovanų</string>
     <string name="profile_mygifts_empty">Jums dar niekas nedovanojo dovanų</string>
     <string name="dating_people_unnoticed">Be jūsų dėmesio liko dešimt žmonių!</string>
@@ -571,7 +570,6 @@
     <string name="with_vip_find_your_visitors">Su VIP-statusu jūs sužinosite, kas buvo užsukęs į
         jūsų puslapį
     </string>
-    <string name="on_avatar">Paveiksliukui</string>
     <string name="your_avatar">Jūsų avataras</string>
     <string name="avatar_set_successfully">Avataras sėkmingai nustatytas</string>
     <string name="incorrect_photo">Netinkama foto. Pamėginkite įkelti kitą</string>
@@ -747,8 +745,6 @@
     </string>
     <string name="dialog">Susirašinėjimas</string>
     <string name="reply">Atsakyti</string>
-    <string name="measurement_unit_weight">kg</string>
-    <string name="measurement_unit_height">cm</string>
     <string name="maximum_number_of_users">Pasirinktas maksimalus vartotojų kiekis</string>
     <string name="logout_if_email_already_registred">Vartotojas su tokiu el. paštu jau egzistuoja.
         Jeigu tai jūsų el. paštas, jums būtina išeiti iš dabartinės paskyros ir įeiti į paskyrą %s
@@ -842,4 +838,5 @@
     <string name="novice_sympathy">Siųskite simpatijas tiems, kas jums\ntikrai patinka,\nkad
         pradėtumėte malonią pažintį
     </string>
+    <string name="vip_info_title">VIP privilegijos</string>
 </resources>

@@ -2,18 +2,14 @@ package com.topface.topface.data.leftMenu;
 
 import android.support.annotation.IntDef;
 
-/**
- * Created by ppavlik on 17.05.16.
- */
 public class DrawerLayoutStateData {
 
     public static final int UNDEFINED = 0;
-    public static final int STATE_CHANGED = 1;
-    public static final int SLIDE = 2;
-    public static final int OPENED = 3;
-    public static final int CLOSED = 4;
+    public static final int SLIDE = 1;
+    public static final int OPENED = 2;
+    public static final int CLOSED = 3;
 
-    @IntDef({UNDEFINED, STATE_CHANGED, SLIDE, OPENED, CLOSED})
+    @IntDef({UNDEFINED, SLIDE, OPENED, CLOSED})
     public @interface DrawerLayoutState {
     }
 

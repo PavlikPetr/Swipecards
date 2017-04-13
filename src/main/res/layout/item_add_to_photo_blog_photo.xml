@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.topface.topface.glide.tranformation.GlideTransformationType" />
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.add_to_photo_blog.PhotoItemViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:foreground="@{viewModel.foregroundDrawable}" >
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:onClick="@{() -> viewModel.onClick()}"
+            app:glideTransformationPhoto="@{viewModel.userPhoto}"
+            app:placeholderRes="@{viewModel.placeholderRes}"
+            app:typeTransformation="@{GlideTransformationType.CROP_CIRCLE_TYPE}" />
+    </FrameLayout>
+
+</layout>

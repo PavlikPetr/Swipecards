@@ -2,8 +2,10 @@ package com.topface.topface.utils.config;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.AbstractConfig;
@@ -12,7 +14,6 @@ import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.social.AppSocialAppsIds;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
 import com.topface.topface.utils.Editor;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.http.ConnectionManager;
@@ -23,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,13 +62,20 @@ public class AppConfig extends AbstractConfig {
     public static final String CONVERT_CONFIG = "convert_config";
     public static final String POPUP_NOTIFICATION_DISABLE_TIME = "popup_notification_disable_time";
     private static final String DATA_APP_SOCIAL_IDS = "data_app_social_ids";
-    private static final String ADJUST_ATTRIBUTION = "adjust_attribution";
     private static final String IS_ADJUST_ATTRIBUTION_SENT = "is_adjust_attribution_sent";
     private static final String IS_HARDWARE_ACCELERATED = "is_hardware_accelerated";
     private static final String IS_REFERRER_TRACK_SENT = "is_referrer_track_sent";
     private static final String REFERRER_TRACK = "referrer_track";
+    private static final String PERMISSIONS_REQUEST_STATE = "permissions_request_state";
 
     private static final String DEFAULT_REFERRER_TRACK = "";
+    private static final String APP_FIRST_START = "mobile_app_first_start";
+    private static final String APP_FIRST_AUTH = "mobile_first_auth";
+    private static final String DEVICE_ACTIVATED = "mobile_device_activated";
+    private static final String DEVICE_ACTIVATION_COUNTER = "device_activation_counter";
+    private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
+    private static final String FB_APP_LINK = "fb_app_link";
+    private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
 
     public AppConfig(Context context) {
         super(context);
@@ -112,8 +121,6 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, POPUP_NOTIFICATION_DISABLE_TIME, 0L);
         // social ids for social platforms obtained from server
         addField(settingsMap, DATA_APP_SOCIAL_IDS, "");
-        // данные referrer, полученные от Adjust
-        addField(settingsMap, ADJUST_ATTRIBUTION, "");
         // информация о том была ли отправка на сервер данных referrer пользователя
         addField(settingsMap, IS_ADJUST_ATTRIBUTION_SENT, false);
         // current device, current session hardwareaccelerated state
@@ -122,6 +129,22 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, IS_REFERRER_TRACK_SENT, false);
         // данные referrer track
         addField(settingsMap, REFERRER_TRACK, DEFAULT_REFERRER_TRACK);
+        // храним статус пермишинов в приложении
+        addField(settingsMap, PERMISSIONS_REQUEST_STATE, "");
+        // ключ, который устанавливается при первом открытии приложения для данной установки
+        addField(settingsMap, APP_FIRST_START, true);
+        // ключ, который устанавливается при первой успешной авторизации пользователя для данной установки
+        addField(settingsMap, APP_FIRST_AUTH, true);
+        // ключ, который устанавливается при первой успешной активации девайса
+        addField(settingsMap, DEVICE_ACTIVATED, false);
+        // ключ, который устанавливает количество отправленных симпатий
+        addField(settingsMap, DEVICE_ACTIVATION_COUNTER, 0);
+        // ключ, который устанавливает статус первого просмотра экрана логина
+        addField(settingsMap, FIRST_VIEW_LOGIN_SCREEN, false);
+        // был ли обнаружен переход по приглашению из FB
+        addField(settingsMap, FB_APP_LINK, "");
+        // счетчик показов экрана "Люди рядом" с разблокированными пермишинами
+        addField(settingsMap, GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, 0);
     }
 
     protected SharedPreferences getPreferences() {
@@ -418,30 +441,6 @@ public class AppConfig extends AbstractConfig {
     }
 
     /**
-     * Save last catched user referrer
-     *
-     * @param adjustAttributeData user referrer
-     * @return state of operation
-     */
-    public boolean setAdjustAttributeData(AdjustAttributeData adjustAttributeData) {
-        return setField(getSettingsMap(), ADJUST_ATTRIBUTION, JsonUtils.toJson(adjustAttributeData));
-    }
-
-    /**
-     * Return last saved user referrer
-     *
-     * @return user referrer
-     */
-    @Nullable
-    public AdjustAttributeData getAdjustAttributeData() {
-        String adjustAttributionData = getStringField(getSettingsMap(), ADJUST_ATTRIBUTION);
-        if (!TextUtils.isEmpty(adjustAttributionData)) {
-            return JsonUtils.fromJson(adjustAttributionData, AdjustAttributeData.class);
-        }
-        return new AdjustAttributeData(null);
-    }
-
-    /**
      * @return true if user referrer was sent to server
      */
     public boolean isAdjustAttributeDataSent() {
@@ -502,5 +501,104 @@ public class AppConfig extends AbstractConfig {
     @Nullable
     public InstallReferrerData getReferrerTrackData() {
         return new InstallReferrerData(getStringField(getSettingsMap(), REFERRER_TRACK));
+    }
+
+    /**
+     * Return wrote permissions state map
+     *
+     * @return permissions state map
+     */
+    public HashMap<String, Integer> getPermissionStateMap() {
+        HashMap<String, Integer> permissions = JsonUtils.fromJson(getStringField(getSettingsMap(), PERMISSIONS_REQUEST_STATE), new TypeToken<HashMap<String, Integer>>() {
+        }.getType());
+        return permissions == null ? new HashMap<String, Integer>() : permissions;
+    }
+
+    /**
+     * Put permission state
+     *
+     * @param permissions  permissions name list
+     * @param grantResults permissions state list
+     */
+    public void putPermissionsState(@NonNull String[] permissions, @NonNull int[] grantResults) {
+        HashMap<String, Integer> currentPermissions = getPermissionStateMap();
+        for (int i = 0; i < Math.min(permissions.length, grantResults.length); i++) {
+            currentPermissions.put(permissions[i], grantResults[i]);
+        }
+        setField(getSettingsMap(), PERMISSIONS_REQUEST_STATE, JsonUtils.toJson(currentPermissions));
+    }
+
+    // проверка первого открытия приложения для данной установки
+    public boolean isFirstStartApp() {
+        return getBooleanField(getSettingsMap(), APP_FIRST_START);
+    }
+
+    // установка условия первого открытия
+    public void setFirstStartApp() {
+        setField(getSettingsMap(), APP_FIRST_START, false);
+    }
+
+    // проверка первой успешной авторизации для данной установки
+    public boolean isFirstAuth() {
+        return getBooleanField(getSettingsMap(), APP_FIRST_AUTH);
+    }
+
+    // установка первой успешной авторизации для данной установки
+    public void setFirstAuth() {
+        setField(getSettingsMap(), APP_FIRST_AUTH, false);
+    }
+
+    // проверка активации девайса
+    public boolean isDeviceActivated() {
+        return getBooleanField(getSettingsMap(), DEVICE_ACTIVATED);
+    }
+
+    // установка активации девайса
+    public void setDeviceActivated() {
+        setField(getSettingsMap(), DEVICE_ACTIVATED, true);
+    }
+
+    // установка количество отправленных лайков для данной установки
+    public void setDeviceActivationCounter(int counter) {
+        setField(getSettingsMap(), DEVICE_ACTIVATION_COUNTER, counter);
+    }
+
+    // получение ранее отпраленных лайков для данной установки
+    public int getDeviceActivationCounter() {
+        return getIntegerField(getSettingsMap(), DEVICE_ACTIVATION_COUNTER);
+    }
+
+    /* Тут устанавливаю статус первого просмотра экрана логина (просмотрен) */
+    public void setFirstViewLoginScreen(boolean looked) {
+        setField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN, looked);
+    }
+
+    /* Получение статуса первого просмотра экрана логина */
+    public boolean isFirstViewLoginScreen() {
+        return getBooleanField(getSettingsMap(), FIRST_VIEW_LOGIN_SCREEN);
+    }
+
+    // запоминаем fb invite applink
+    public void setFBInviteAppLink(String appLink) {
+        setField(getSettingsMap(), FB_APP_LINK, appLink);
+    }
+
+    // достаем fb invite applink
+    public String getFBInviteAppLink() {
+        return getStringField(getSettingsMap(), FB_APP_LINK);
+    }
+
+    /**
+     * @return geo screen with granted permissions shows count
+     */
+    public int getGeoScreenShowCount() {
+        return getIntegerField(getSettingsMap(), GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT);
+    }
+
+    /**
+     * Increment geo screen with granted permissions shows count
+     */
+    public void incrGeoScreenShowCount() {
+        setField(getSettingsMap(), GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, getGeoScreenShowCount() + 1);
     }
 }

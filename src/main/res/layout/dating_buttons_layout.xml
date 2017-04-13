@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/dating_buttons_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/show_chat"
+                style="@style/DatingMessage"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.showChat()}"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/skip"
+                style="@style/DatingSkip"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.skip()}"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/loader_bg"
+                android:theme="@style/CircularProgress"
+                android:visibility="@{model.isDatingProgressBarVisible}"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/send_like"
+                style="@style/DatingLike"
+                android:layout_width="74dp"
+                android:layout_height="74dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.sendLike()}"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/send_admiration"
+                style="@style/DatingAdmiration"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:clickable="@{model.isDatingButtonsLocked}"
+                android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
+                bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</layout>

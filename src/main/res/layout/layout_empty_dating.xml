@@ -1,0 +1,52 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.dating.DatingEmptyFragmentViewModel"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        style="@style/PopupScroll">
+
+        <LinearLayout
+            style="@style/PopupRootContainer">
+
+            <TextView
+                style="@style/PopupTitle"
+                android:text="@string/dating_empty_nothing_found"/>
+
+            <RelativeLayout
+                style="@style/PopupCenterImageContainer">
+
+                <ImageView
+                    style="@style/PopupAnimatedBackground"
+                    app:animationSrc="@{@anim/unavailable_location_smaller_circle_animation}"/>
+
+                <ImageView
+                    style="@style/PopupEmptyDatingCenterImage"/>
+            </RelativeLayout>
+
+            <TextView
+                style="@style/PopupMessage"
+                android:text="@string/dating_empty_try_to_change_settings_or_reset"/>
+
+            <ImageView
+                style="@style/PopupArrow"/>
+
+            <Button
+                android:id="@+id/btnChangeFilterDating"
+                style="@style/PopupGreenButton.Background"
+                android:onClick="@{() -> viewModel.onChangeDatingFilter()}"
+                android:text="@string/dating_empty_change_settings"/>
+
+            <Button
+                android:id="@+id/btnClearFilterDating"
+                style="@style/PopupBorderlessdButton"
+                android:onClick="@{() -> viewModel.onCleanDatingFilter()}"
+                android:text="@string/dating_empty_reset"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

@@ -105,7 +105,7 @@ public class ProfileFormListAdapter extends AbstractFormListAdapter {
 
             // real forms
             for (FormItem item : profile.forms) {
-                if (!(item.isOnlyForWomen() && profile.sex == Profile.BOY)) {
+                if (item != null && !(item.isOnlyForWomen() && profile.sex == Profile.BOY) && item.type == FormItem.DATA) {
                     formInfo.fillFormItem(item);
                     forms.add(item);
                 }
