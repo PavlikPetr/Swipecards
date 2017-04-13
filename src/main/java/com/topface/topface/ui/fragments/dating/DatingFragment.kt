@@ -42,6 +42,7 @@ import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
 import rx.Subscription
@@ -77,13 +78,13 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
-        DatingAlbumViewModel(mCollapseBinding, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
+        DatingAlbumViewModel(context, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
             with(mCollapseBinding.albumRoot) {
                 mLoadBackgroundSubscription.safeUnsubscribe()
                 mLoadBackgroundSubscription = loadBackground(it)
                         .retry(2)
                         .applySchedulers()
-                        .subscribe(com.topface.topface.utils.rx.shortSubscription {
+                        .subscribe(shortSubscription {
                             android.graphics.drawable.TransitionDrawable(kotlin.arrayOf((background as? TransitionDrawable)
                                     ?.getDrawable(1) ?: com.topface.topface.R.drawable.bg_blur.getDrawable() ?: it, it)).apply {
                                 if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
