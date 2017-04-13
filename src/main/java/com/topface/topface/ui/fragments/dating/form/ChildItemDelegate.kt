@@ -23,7 +23,7 @@ class ChildItemDelegate(private val mApi: FeedApi) : ExpandableItemDelegate<Chil
     override val itemLayout: Int
         get() = R.layout.child_form_item
 
-    override fun bind(binding: ChildFormItemBinding, data: ExpandableItem<FormModel>?, position: Int) =
-            data?.data?.let { binding.model = ChildItemViewModel(mApi,it) }
+    override fun bind(binding: ChildFormItemBinding, data: ExpandableItem<FormModel>?, position: Int) = null
+//            data?.data?.let { binding.model = ChildItemViewModel(mApi,it) }
 
 }

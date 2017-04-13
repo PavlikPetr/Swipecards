@@ -51,12 +51,12 @@ class GiftsItemDelegate(private val mApi: FeedApi, private val mNavigator: IFeed
                 Debug.log("GIFTS_BUGS adapter init has gifts ${giftsModel.gifts.items.isNotEmpty()} moar? =  ${giftsModel.gifts.more}")
                 giftsList.adapter = FormGiftsAdapter(giftsModel.gifts.items.isNotEmpty() || giftsModel.gifts.more).apply {
                     mAdapter = this
-                    mViewModel = GiftsItemViewModel(mApi, mNavigator, giftsModel.gifts, giftsModel.userId) {
-                        //добавляем подарочки в search user, чтобы не загружать их заново после поворота
-                        giftsModel.gifts.items.addAll(it.items)
-                        addData(it.items)
-                        notifyDataSetChanged()
-                    }
+//                    mViewModel = GiftsItemViewModel(mApi, mNavigator, giftsModel.gifts, giftsModel.userId) {
+//                        //добавляем подарочки в search user, чтобы не загружать их заново после поворота
+//                        giftsModel.gifts.items.addAll(it.items)
+//                        addData(it.items)
+//                        notifyDataSetChanged()
+//                    }
                     Debug.log("GIFTS_BUGS try add items ${giftsModel.gifts.items.count()}")
                     addData(giftsModel.gifts.items)
                     notifyDataSetChanged()

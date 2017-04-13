@@ -31,8 +31,7 @@ import com.topface.topface.ui.fragments.dating.form.ParentItemDelegate
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
-import com.topface.topface.ui.new_adapter.CompositeAdapter
-import com.topface.topface.ui.new_adapter.IType
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
@@ -85,6 +84,10 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         FeedApi(context, this)
     }
 
+    private val mTypeProvider by lazy{
+        DatingTypeProvider()
+    }
+
     private val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
     }
@@ -132,11 +135,17 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 
     private fun initFormList() = with(mBinding.formsList) {
         layoutManager = LinearLayoutManager(context)
-        adapter = CompositeAdapter<IType>().apply {
-            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
-            addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
-            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
-        }
+        adapter = CompositeAdapter(mTypeProvider){Bundle()}
+                .addAdapterComponent(ChildItemComponent(mApi))
+                .addAdapterComponent(ParentItemComponent())
+                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator,context))
+
+//                CompositeAdapter<IType>().apply {
+//            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
+//            addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
+//            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
+//        }
+
         addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
                 if (layoutManager.getPosition(view) == 0) {

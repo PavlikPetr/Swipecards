@@ -176,7 +176,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = with((binding.formsList
-            .adapter as CompositeAdapter<IType>).data) {
+            .adapter as CompositeAdapter).data) {
         clear()
         if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
         // перед отображением статуса пропускаем значение через "нормализатор"

@@ -6,6 +6,7 @@ import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.requests.IApiResponse
+import com.topface.topface.ui.fragments.dating.FormModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.RxUtils

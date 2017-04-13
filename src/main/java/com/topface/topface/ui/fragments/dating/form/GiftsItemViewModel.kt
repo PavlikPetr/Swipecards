@@ -15,8 +15,10 @@ import rx.Subscription
  * Created by tiberal on 07.11.16.
  */
 class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFeedNavigator, gifts: Profile.Gifts,
-                         private val userId: Int, val update: (Profile.Gifts) -> Unit) {
-
+                         private val userId: Int
+//                         , val update: (Profile.Gifts) -> Unit
+) {
+    val mData = ObservableField<Profile.Gifts>()
     val amount = ObservableField<String>(if (gifts.more) gifts.count.toString() else Utils.EMPTY)
     var gifts: Profile.Gifts = gifts
         set(value) {
@@ -35,7 +37,8 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
                     override fun onNext(data: Profile.Gifts?) {
                         Debug.log("GIFTS_BUGS loadGifts onNext ${data?.items?.count()}")
                         data?.let {
-                            update(it)
+                            mData.set(it)
+//                            update(it)
                             // говно со счетчиками и веб подарками на сервере
                             // ответ на этот запрос приносит обновленные поля more и count
                             // изначально может прийти more == true и count == 1, но это будет от веб-подарка

@@ -7,6 +7,7 @@ import com.topface.topface.data.Gift
 import com.topface.topface.databinding.FormGiftItemBinding
 import com.topface.topface.ui.adapters.BaseRecyclerViewAdapter
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
+import com.topface.topface.utils.BindingsAdapters
 import com.topface.topface.utils.extensions.getGiftTag
 import com.topface.topface.utils.extensions.setUiTestTag
 
@@ -37,7 +38,8 @@ class FormGiftsAdapter(var hasGifts: Boolean) : BaseRecyclerViewAdapter<ViewData
             if (hasGifts && itemBinding is FormGiftItemBinding) {
                 with(itemBinding.formGiftItem) {
                     val item = data[position]
-                    setRemoteSrc(item.link)
+//                    setRemoteSrc(item.link)
+                    BindingsAdapters.setImgeByGlideWithPlaceholder(this, item.link, R.drawable.girl_2)
                     setUiTestTag(item.getGiftTag())
                 }
             }
