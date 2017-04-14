@@ -498,6 +498,7 @@
         позже.
     </string>
     <string name="general_block">Блокировать</string>
+    <string name="general_block_v2">Заблокировать</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
     <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего
@@ -974,7 +975,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification"/>
+    <string name="receive_rate_notification" />
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1283,7 +1284,7 @@
     <string name="onboarding_button_next">Далее</string>
     <string name="num_from_num">%1$s из %2$s</string>
     <string name="onboarding_get_access">Получи доступ</string>
-    <string name="searching_couple_for_you">Идет поиск пары по вашим критериями</string>
+    <string name="searching_couple_for_you">Идет поиск пары по вашим критериям</string>
 
     <!--ОЦенка приложения-->
     <string name="rate">Оценить</string>

@@ -9,6 +9,12 @@ public class HistoryListData extends FeedListData<History> {
 
     public FeedUser user;
 
+    /**
+     * Признак "подозрительности" пользователя,
+     * если true - надо будет показать плашку "заблокировать/пожаловаться" в чате
+     */
+    public boolean isSuspiciousUser;
+
     public HistoryListData(JSONObject data, Class<History> itemClass) {
         super(data, itemClass);
     }

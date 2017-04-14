@@ -1471,16 +1471,18 @@
         <item name="textAllCaps">true</item>
         <item name="android:textSize">18sp</item>
     </style>
-
-    <style name="PopupBorderlessdButton" parent="@style/Widget.AppCompat.Button.Borderless">
+    <style name="PopupBorderlessButtonNoPadding" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
         <item name="textAllCaps">true</item>
-        <item name="android:paddingTop">20dp</item>
-        <item name="android:paddingBottom">20dp</item>
         <item name="android:textColor">@color/popup_borderless_button_text</item>
         <item name="android:textSize">@dimen/popup_button_text</item>
+    </style>
+
+    <style name="PopupBorderlessButton" parent="PopupBorderlessButtonNoPadding">
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:paddingBottom">20dp</item>
     </style>
 
     <style name="PopupCenterImageContainerBase">
@@ -1647,32 +1649,16 @@
         <item name="android:src">@drawable/forms_send_gift_selector</item>
     </style>
 
-    <style name="DatingMessage" parent="DatingSmall">
-        <item name="android:src">@drawable/dating_send_message_selector</item>
-    </style>
-
     <style name="NewDatingMessage" parent="DatingSmall">
         <item name="android:src">@drawable/new_dating_send_message_selector</item>
-    </style>
-
-    <style name="DatingSkip" parent="DatingBig">
-        <item name="android:src">@drawable/dating_skip_selector</item>
     </style>
 
     <style name="NewDatingSkip" parent="DatingBig">
         <item name="android:src">@drawable/new_dating_skip_selector</item>
     </style>
 
-    <style name="DatingLike" parent="DatingBig">
-        <item name="android:src">@drawable/dating_like_selector</item>
-    </style>
-
     <style name="NewDatingLike" parent="DatingBig">
         <item name="android:src">@drawable/new_dating_like_selector</item>
-    </style>
-
-    <style name="DatingAdmiration" parent="DatingSmall">
-        <item name="android:src">@drawable/dating_admiration_selector</item>
     </style>
 
     <style name="DatingProfile" parent="DatingSmall">

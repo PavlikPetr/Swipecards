@@ -263,43 +263,47 @@ public class OverflowMenu {
 
     public void onMenuClicked(MenuItem item) {
         int itemId = item.getItemId();
-        Integer profileId = getProfileId();
         if (isCurrentIdOverflowMenuItem(itemId)) {
             OverflowMenuItem overflowMenuItem = findOverflowMenuItemById(itemId);
-            switch (overflowMenuItem) {
-                case SEND_SYMPATHY_ACTION:
-                    onClickSendSymphatyAction();
-                    break;
-                case SEND_ADMIRATION_ACTION:
-                    onClickSendAdmirationAction();
-                    break;
-                case OPEN_CHAT_ACTION:
-                    onClickOpenChatAction();
-                    break;
-                case SEND_GIFT_ACTION:
-                    onClickSendGiftAction();
-                    break;
-                case COMPLAIN_ACTION:
-                    if (profileId != null && mFragmentDelegate != null) {
-                        mFragmentDelegate.getActivity().startActivity(ComplainsActivity.createIntent(profileId));
-                    }
-                    break;
-                case OPEN_PROFILE_FOR_EDITOR_STUB:
-                    if (mSavedResponse != null && profileId != null && mFragmentDelegate != null) {
-                        mFragmentDelegate.getActivity().startActivity(EditorProfileActionsActivity.createIntent(profileId, mSavedResponse));
-                    }
-                    break;
-                case ADD_TO_BLACK_LIST_ACTION:
-                    onClickAddToBlackList();
-                    break;
-                case ADD_TO_BOOKMARK_ACTION:
-                    onClickAddToBookmarkAction();
-                    break;
-                default:
-                    break;
-            }
-            initOverfowMenu();
+            processOverFlowMenuItem(overflowMenuItem);
         }
+    }
+
+    public void processOverFlowMenuItem(OverflowMenuItem overflowMenuItem) {
+        Integer profileId = getProfileId();
+        switch (overflowMenuItem) {
+            case SEND_SYMPATHY_ACTION:
+                onClickSendSymphatyAction();
+                break;
+            case SEND_ADMIRATION_ACTION:
+                onClickSendAdmirationAction();
+                break;
+            case OPEN_CHAT_ACTION:
+                onClickOpenChatAction();
+                break;
+            case SEND_GIFT_ACTION:
+                onClickSendGiftAction();
+                break;
+            case COMPLAIN_ACTION:
+                if (profileId != null && mFragmentDelegate != null) {
+                    mFragmentDelegate.getActivity().startActivity(ComplainsActivity.createIntent(profileId));
+                }
+                break;
+            case OPEN_PROFILE_FOR_EDITOR_STUB:
+                if (mSavedResponse != null && profileId != null && mFragmentDelegate != null) {
+                    mFragmentDelegate.getActivity().startActivity(EditorProfileActionsActivity.createIntent(profileId, mSavedResponse));
+                }
+                break;
+            case ADD_TO_BLACK_LIST_ACTION:
+                onClickAddToBlackList();
+                break;
+            case ADD_TO_BOOKMARK_ACTION:
+                onClickAddToBookmarkAction();
+                break;
+            default:
+                break;
+        }
+        initOverfowMenu();
     }
 
     public void initOverfowMenu() {

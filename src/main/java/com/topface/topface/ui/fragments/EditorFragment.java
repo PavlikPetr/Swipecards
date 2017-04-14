@@ -1,9 +1,7 @@
 package com.topface.topface.ui.fragments;
 
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -46,9 +42,6 @@ import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
@@ -279,25 +272,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private void initApiUrl(View rootLayout) {
         ((TextView) rootLayout.findViewById(R.id.EditorTransport)).append(App.getApiTransport());
         mApiUrl = (Spinner) rootLayout.findViewById(R.id.EditorApiUrl);
-
-        TextWatcher watcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (mConfigInited) {
-                    saveApiUrl();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        };
-
-        mCustomApi.addTextChangedListener(watcher);
 
         //Создаем стандартный адаптер
         @SuppressWarnings("unchecked") ArrayAdapter<CharSequence> adapter = new ArrayAdapter<>(

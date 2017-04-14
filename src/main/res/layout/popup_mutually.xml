@@ -5,7 +5,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.dating.dating_redesign.PopupMutualViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.design.v1.PopupMutualViewModel"/>
     </data>
 
     <RelativeLayout
@@ -121,7 +121,7 @@
 
         <Button
             android:id="@+id/btnClearFilterDating"
-            style="@style/PopupBorderlessdButton"
+            style="@style/PopupBorderlessButton"
             android:layout_below="@+id/btnChangeFilterDating"
             android:layout_centerHorizontal="true"
             android:onClick="@{() -> model.closePopup()}"

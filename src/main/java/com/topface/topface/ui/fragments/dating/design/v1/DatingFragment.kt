@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.dating.dating_redesign
+package com.topface.topface.ui.fragments.dating.design.v1
 
 import android.content.Context
 import android.content.Intent
@@ -48,7 +48,7 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
                         .subscribe(shortSubscription {
                             TransitionDrawable(arrayOf((background as? TransitionDrawable)
                                     ?.getDrawable(1) ?: R.drawable.bg_blur.getDrawable() ?: it, it)).apply {
-                                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
                                     @Suppress("DEPRECATION")
                                     setBackgroundDrawable(this)
                                 } else {

@@ -1,6 +1,7 @@
 package com.topface.topface.di
 
 import com.topface.topface.App
+import com.topface.topface.chat.SuspiciousUserCache
 import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.state.*
 import com.topface.topface.ui.NavigationActivity
@@ -30,6 +31,7 @@ interface AppComponent {
 
     fun kochavaManager(): KochavaManager
     fun adjustManager(): AdjustManager
+    fun suspiciousUserCache(): SuspiciousUserCache
 
     fun inject(app: App)
     fun inject(manager: NavigationManager)

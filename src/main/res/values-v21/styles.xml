@@ -173,16 +173,8 @@
         <item name="android:background">@drawable/forms_send_gift_selector_v21</item>
     </style>
 
-    <style name="DatingLike" parent="DatingBig">
-        <item name="android:background">@drawable/dating_like_selector_v21</item>
-    </style>
-
     <style name="NewDatingLike" parent="DatingBig">
         <item name="android:background">@drawable/new_dating_like_selector_v21</item>
-    </style>
-
-    <style name="DatingSkip" parent="DatingBig">
-        <item name="android:background">@drawable/dating_skip_selector_v21</item>
     </style>
 
     <style name="NewDatingSkip" parent="DatingBig">
@@ -196,16 +188,8 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
-    <style name="DatingMessage" parent="DatingSmall">
-        <item name="android:background">@drawable/dating_send_message_selector_v21</item>
-    </style>
-
     <style name="NewDatingMessage" parent="DatingSmall">
         <item name="android:background">@drawable/new_dating_send_message_selector_v21</item>
-    </style>
-
-    <style name="DatingAdmiration" parent="DatingSmall">
-        <item name="android:background">@drawable/dating_admiration_selector_v21</item>
     </style>
 
     <style name="DatingProfile" parent="DatingSmall">
