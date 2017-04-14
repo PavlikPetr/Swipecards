@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.dating
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
@@ -20,19 +21,17 @@ import com.topface.topface.data.Photo
 import com.topface.topface.data.Photos
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
-import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.views.image_switcher.ImageClick
 import com.topface.topface.ui.views.image_switcher.PhotoAlbumAdapter
 import com.topface.topface.ui.views.image_switcher.PreloadPhoto
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.*
-import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
-import com.topface.topface.viewModels.BaseViewModel
 import rx.Observer
 import rx.Subscription
 import java.util.*
@@ -43,12 +42,12 @@ import kotlin.properties.Delegates
  * Моделька для альбома в дейтинге
  * Created by tiberal on 11.10.16.
  */
-class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: FeedApi,
+class DatingAlbumViewModel(private val mContext: Context, private val mApi: FeedApi,
                            private val mUserSearchList: CachableSearchList<SearchUser>,
                            private val mNavigator: IFeedNavigator,
                            private val mAlbumActionsListener: IDatingAlbumView,
                            private val mLoadBackground: (link: String) -> Unit) :
-        BaseViewModel<DatingAlbumLayoutBinding>(binding), ViewPager.OnPageChangeListener {
+        ViewPager.OnPageChangeListener, ILifeCycle {
 
     val photosCounter = ObservableField<String>()
     val nameAgeOnline = ObservableField<String>()
@@ -63,6 +62,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     private var mPreloadTarget: Target<GlideDrawable>? = null
     private var mOnImageClickSubscription: Subscription? = null
     private var mLoadLinksSubscription: Subscription? = null
+    private var mLoadBackgroundSubscription: Subscription? = null
 
     private var mCurrentPosition by Delegates.observable(0) { prop, old, new ->
         updatePhotosCounter(new)
@@ -113,7 +113,7 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
     private fun preloadPhoto() {
         mUserSearchList.getOrNull(mUserSearchList.searchPosition + 1)?.photo?.defaultLink?.let {
             mPreloadTarget.clear()
-            mPreloadTarget = Glide.with(binding.root.context)
+            mPreloadTarget = Glide.with(mContext)
                     .fromString()
                     .fitCenter()
                     .loadLinkToSameCache(it)
@@ -241,9 +241,9 @@ class DatingAlbumViewModel(binding: DatingAlbumLayoutBinding, private val mApi: 
         setCurrentUser(getInt(CURRENT_ITEM))
     }
 
-    override fun release() {
-        super.release()
-        arrayOf(mAlbumSubscription, mOnImageClickSubscription, mLoadLinksSubscription).safeUnsubscribe()
+    fun release() {
+        arrayOf(mAlbumSubscription, mOnImageClickSubscription,
+                mLoadLinksSubscription, mLoadBackgroundSubscription).safeUnsubscribe()
         mPreloadTarget.clear()
     }
 
