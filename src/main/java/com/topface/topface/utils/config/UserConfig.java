@@ -230,7 +230,7 @@ public class UserConfig extends AbstractConfig {
         // время последнего закрытия popover на экране Люди рядом
         addField(settingsMap, PEOPLE_NEARBY_POPOVER_CLOSE_TIME, 0L);
         // время последего закрытия попапа оценки восхищения
-        addField(settingsMap,RATING_POPUP, 0L);
+        addField(settingsMap,RATING_POPUP, -1L);
         // является ли оценка приложения ниже 4х
         addField(settingsMap, RATING_POPUP_VALUE, false);
     }
