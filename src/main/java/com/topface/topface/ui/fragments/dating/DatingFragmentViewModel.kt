@@ -20,6 +20,7 @@ import com.topface.topface.data.search.OnUsersListEventsListener
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
@@ -224,7 +225,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
             }
         }
         /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
-        По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
+    По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
         if (mUserSearchList.isEnded && !mUpdateInProcess) {
             if (resultCode == Activity.RESULT_CANCELED
                     && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
@@ -235,7 +236,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 Debug.log("LOADER_INTEGRATION after album")
                 update(false, false)
             }
-
+            if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                Debug.log("LOADER_INTEGRATION after questionnaire")
+                update(false, false)
+            }
         }
     }
 
