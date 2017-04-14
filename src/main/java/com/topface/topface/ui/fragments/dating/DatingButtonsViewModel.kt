@@ -139,10 +139,10 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
 
         val buttonsFactory = ButtonsFactory()
-        btnMessageDrawable.set(buttonsFactory.constructButtonMessage().getDrawable())
-        btnLikeDrawable.set(buttonsFactory.constructButtonLike().getDrawable())
-        btnSkipDrawable.set(buttonsFactory.constructButtonSkip().getDrawable())
-        btnAdmirationDrawable.set(buttonsFactory.constructButtonAdmiration().getDrawable())
+        btnMessageDrawable.set(buttonsFactory.constructButtonMessage()?.getDrawable())
+        btnLikeDrawable.set(buttonsFactory.constructButtonLike()?.getDrawable())
+        btnSkipDrawable.set(buttonsFactory.constructButtonSkip()?.getDrawable())
+        btnAdmirationDrawable.set(buttonsFactory.constructButtonAdmiration()?.getDrawable())
     }
 
     private fun isNeedTakePhoto() = !App.getConfig().userConfig.isUserAvatarAvailable

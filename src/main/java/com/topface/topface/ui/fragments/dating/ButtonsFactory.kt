@@ -8,30 +8,59 @@ import com.topface.topface.R
  * Constructs buttons drawables based on dating-design version
  */
 internal class ButtonsFactory {
-    private val mDesignVersion = App.get().options.dialogDesignVersion
-    private val mLollipop = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-
-    fun constructButtonMessage() = if (mDesignVersion == DatingFragmentFactory.V2_DESIGN) {
-        if (mLollipop) R.drawable.dating_send_message_selector_v2_v21 else R.drawable.dating_send_message_selector_v2
-    } else {
-        if (mLollipop) R.drawable.dating_send_message_selector_v21 else R.drawable.dating_send_message_selector
+    companion object {
+        private const val LIKE = 1
+        private const val SKIP = 2
+        private const val ADMIRATION = 3
+        private const val MESSAGES = 4
     }
 
-    fun constructButtonLike() = if (mDesignVersion == DatingFragmentFactory.V2_DESIGN) {
-        if (mLollipop) R.drawable.dating_like_selector_v2_v21 else R.drawable.dating_like_selector_v2
-    } else {
-        if (mLollipop) R.drawable.dating_like_selector_v21 else R.drawable.dating_like_selector
+    private val mButtonDrawables: MutableMap<Int, Int> = mutableMapOf()
+
+    init {
+        val designVersion = App.get().options.dialogDesignVersion
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // LOLLIPOP drawables
+            when(designVersion) {
+                DatingFragmentFactory.V2_DESIGN -> {
+                    mButtonDrawables[LIKE] = R.drawable.dating_like_selector_v2_v21
+                    mButtonDrawables[SKIP] = R.drawable.dating_skip_selector_v2_v21
+                    mButtonDrawables[MESSAGES] = R.drawable.dating_send_message_selector_v2_v21
+                    mButtonDrawables[ADMIRATION] = R.drawable.dating_admiration_selector_v2_v21
+                }
+                else -> {
+                    mButtonDrawables[LIKE] = R.drawable.dating_like_selector_v21
+                    mButtonDrawables[SKIP] = R.drawable.dating_skip_selector_v21
+                    mButtonDrawables[MESSAGES] = R.drawable.dating_send_message_selector_v21
+                    mButtonDrawables[ADMIRATION] = R.drawable.dating_admiration_selector_v21
+                }
+            }
+        } else {
+            // PRE-LOLLIPOP drawables
+            when(designVersion) {
+                DatingFragmentFactory.V2_DESIGN -> {
+                    mButtonDrawables[LIKE] = R.drawable.dating_like_selector_v2
+                    mButtonDrawables[SKIP] = R.drawable.dating_skip_selector_v2
+                    mButtonDrawables[MESSAGES] = R.drawable.dating_send_message_selector_v2
+                    mButtonDrawables[ADMIRATION] = R.drawable.dating_admiration_selector_v2
+                }
+                else -> {
+                    mButtonDrawables[LIKE] = R.drawable.dating_like_selector
+                    mButtonDrawables[SKIP] = R.drawable.dating_skip_selector
+                    mButtonDrawables[MESSAGES] = R.drawable.dating_send_message_selector
+                    mButtonDrawables[ADMIRATION] = R.drawable.dating_admiration_selector
+                }
+            }
+        }
     }
 
-    fun constructButtonSkip() = if (mDesignVersion == DatingFragmentFactory.V2_DESIGN) {
-        if (mLollipop) R.drawable.dating_skip_selector_v2_v21 else R.drawable.dating_skip_selector_v2
-    } else {
-        if (mLollipop) R.drawable.dating_skip_selector_v21 else R.drawable.dating_skip_selector
-    }
+    private fun constructButtonDrawable(id: Int) = mButtonDrawables[id]
 
-    fun constructButtonAdmiration() = if (mDesignVersion == DatingFragmentFactory.V2_DESIGN) {
-        if (mLollipop) R.drawable.dating_admiration_selector_v2_v21 else R.drawable.dating_admiration_selector_v2
-    } else {
-        if (mLollipop) R.drawable.dating_admiration_selector_v21 else R.drawable.dating_admiration_selector
-    }
+    fun constructButtonMessage() = constructButtonDrawable(MESSAGES)
+
+    fun constructButtonLike() = constructButtonDrawable(LIKE)
+
+    fun constructButtonSkip() = constructButtonDrawable(SKIP)
+
+    fun constructButtonAdmiration() = constructButtonDrawable(ADMIRATION)
 }
