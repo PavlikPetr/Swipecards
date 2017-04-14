@@ -380,6 +380,7 @@ public class Options extends AbstractData {
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
             datingRedesign = response.optInt("datingRedesign");
+            datingRedesign = 2;
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
