@@ -39,6 +39,7 @@ import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.statistics.TakePhotoStatistics;
 import com.topface.topface.ui.NavigationActivity;
+import com.topface.topface.ui.dialogs.PermissionAlertDialogFactory;
 import com.topface.topface.ui.dialogs.TakePhotoDialog;
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder;
 import com.topface.topface.ui.fragments.profile.ProfilePhotoFragment;
@@ -57,6 +58,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
 import rx.Subscription;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -637,5 +639,12 @@ public class AddPhotoHelper {
                 currentPhotoSize.outHeight < minPhotoSize.height);
     }
 
+    @OnNeverAskAgain({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    public void onNeverAskAgain() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            new PermissionAlertDialogFactory().constructNeverAskAgain(activity);
+        }
+    }
 }
 

@@ -1293,4 +1293,8 @@
     <string name="we_are_glad_that_you_like">Мы рады, что вам нравится!</string>
     <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?!</string>
     <string name="send_rate_feedback">Оставить отзыв</string>
+
+    <string name="permission_alert_button_allow">Перейти</string>
+    <string name="permission_alert_button_disallow">Отклонить</string>
+    <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>
 </resources>
