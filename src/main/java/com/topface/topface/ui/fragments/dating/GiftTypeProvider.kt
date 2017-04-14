@@ -3,11 +3,10 @@ package com.topface.topface.ui.fragments.dating
 import com.topface.topface.data.Gift
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 
-class DatingTypeProvider : ITypeProvider {
+class GiftTypeProvider : ITypeProvider {
     override fun getType(java: Class<*>) = when (java) {
-        FormModel::class.java -> 1
-        ParentModel::class.java -> 2
-        GiftsModel::class.java -> 3
+        Gift::class.java -> 1
+        FakeGift::class.java -> 2
         else -> 0
     }
 }

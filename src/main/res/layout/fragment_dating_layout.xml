@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
             android:fadingEdge="none"
-            app:bindDataToCompositeAdapter="@{dataModel.mUserSearchList}"/>
+            app:bindDataToCompositeAdapterWithSmoothUpdate="@{dataModel.data}"/>
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/right_labels"

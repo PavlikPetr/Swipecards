@@ -11,17 +11,10 @@ class ParentItemComponent : AdapterComponent<ParentItemBinding, ParentModel>() {
     override val itemLayout: Int
         get() = R.layout.parent_item
 
-
-    init {
-        Debug.error("---------------КОНСТРУКТОР Парент Итем Компонент-----------")
-    }
     override val bindingClass: Class<ParentItemBinding>
         get() = ParentItemBinding::class.java
 
-
-    override fun bind(binding: ParentItemBinding, data: ParentModel?, position: Int)
-    {
-        Debug.error("------------------${data?.data}------------")
-        data?.let {ParentItemViewModel(it, position)}
+    override fun bind(binding: ParentItemBinding, data: ParentModel?, position: Int) {
+        data?.let { binding.model = ParentItemViewModel(it, position) }
     }
 }

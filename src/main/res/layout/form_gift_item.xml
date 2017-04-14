@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<com.topface.topface.ui.views.ImageViewRemote-->
-        <!--android:id="@+id/form_gift_item"-->
-        <!--android:layout_width="48dp"-->
-        <!--android:layout_height="48dp"-->
-        <!--/>-->
+    <data>
 
-    <ImageView
-        android:id="@+id/form_gift_item"
-        android:layout_width="48dp"
-        android:layout_height="48dp"/>
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.dating.GiftListItemViewModel"/>
+    </data>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/form_gift_item"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:remoteSrcGlide="@{model.giftLink}"/>
+    </FrameLayout>
 </layout>

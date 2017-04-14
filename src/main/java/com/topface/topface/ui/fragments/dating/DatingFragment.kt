@@ -101,6 +101,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.bindModels()
         mAnchorBinding.setModel(mDatingButtonsViewModel)
         mBinding.setModel(mDatingButtonsViewModel)
+        mBinding.setDataModel(mDatingFragmentViewModel)
         mCollapseBinding.model = mDatingAlbumViewModel
     }
 
@@ -133,11 +134,31 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         ChildItemDelegate(mApi)
     }
 
-    private fun initFormList() = with(mBinding.formsList) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = CompositeAdapter(mTypeProvider){Bundle()}
+    private var mAdapter: CompositeAdapter? = null
+    private var mRecyclerView: RecyclerView? = null
+
+    private fun initFormList() = with(mBinding) {
+        val linLayManager = LinearLayoutManager(context)
+        formsList.addItemDecoration(object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+                if (linLayManager.getPosition(view) == 0) {
+                    outRect?.top = dimen(R.dimen.form_list_padding)
+                } else {
+                    outRect?.top = 0
+                }
+            }
+        })
+        formsList.layoutManager = linLayManager
+
+        mAdapter = CompositeAdapter(mTypeProvider){Bundle()}
                 .addAdapterComponent(ParentItemComponent())
-//                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator,context))
+                .addAdapterComponent(ChildItemComponent(mApi))
+                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator,context))
+        formsList.adapter = mAdapter
+
+        mRecyclerView = formsList
+
+
 
 //                CompositeAdapter<IType>().apply {
 //            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
@@ -145,15 +166,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
 //            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
 //        }
 
-        addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-                if (layoutManager.getPosition(view) == 0) {
-                    outRect?.top = dimen(R.dimen.form_list_padding)
-                } else {
-                    outRect?.top = 0
-                }
-            }
-        })
+
     }
 
     override fun onDestroyView() {

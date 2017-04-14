@@ -2,10 +2,14 @@ package com.topface.topface.ui.fragments.dating.form
 
 import android.databinding.ObservableField
 import com.topface.framework.utils.Debug
+import com.topface.topface.App
 import com.topface.topface.data.Profile
+import com.topface.topface.state.EventBus
+import com.topface.topface.ui.fragments.dating.FakeGift
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscriber
 import rx.Subscription
@@ -15,17 +19,24 @@ import rx.Subscription
  * Created by tiberal on 07.11.16.
  */
 class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFeedNavigator, gifts: Profile.Gifts,
-                         private val userId: Int
-//                         , val update: (Profile.Gifts) -> Unit
-) {
-    val mData = ObservableField<Profile.Gifts>()
+                         private val userId: Int) {
+
+    val data = MultiObservableArrayList<Any>()
     val amount = ObservableField<String>(if (gifts.more) gifts.count.toString() else Utils.EMPTY)
+
     var gifts: Profile.Gifts = gifts
         set(value) {
             amount.set(value.count.toString())
             field = value
         }
     private var mLoadGiftsSubscription: Subscription? = null
+    private val mEventBus: EventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
+
+    fun loadFakeGift() {
+        this@GiftsItemViewModel.data.addAll(listOf(FakeGift()))
+    }
 
     fun loadGifts(lastGiftId: Int) {
         //если подарочки есть, а приходит дефолтный id(-1 от нас или 0 если только что отправили
@@ -37,8 +48,8 @@ class GiftsItemViewModel(private val mApi: FeedApi, private val mNavigator: IFee
                     override fun onNext(data: Profile.Gifts?) {
                         Debug.log("GIFTS_BUGS loadGifts onNext ${data?.items?.count()}")
                         data?.let {
-                            mData.set(it)
-//                            update(it)
+                            this@GiftsItemViewModel.data.addAll(it.items)
+                            mEventBus.setData(GiftId(it.items.last().id))
                             // говно со счетчиками и веб подарками на сервере
                             // ответ на этот запрос приносит обновленные поля more и count
                             // изначально может прийти more == true и count == 1, но это будет от веб-подарка

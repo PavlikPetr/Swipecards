@@ -4,6 +4,7 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.support.annotation.DrawableRes
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.ui.fragments.dating.FormModel
