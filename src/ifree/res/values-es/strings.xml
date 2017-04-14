@@ -1058,4 +1058,13 @@
     <string name="num_from_num">%1$s de %2$s</string>
     <string name="onboarding_get_access">Consigue acceso</string>
     <string name="searching_couple_for_you">Búsqueda de pareja basada en tus criterios</string>
+    <string name="rate">Valoración</string>
+    <string name="rate_our_app">¡Valora nuestra app!</string>
+    <string name="what_we_can_improve">Por favor, escribe qué podemos mejorar</string>
+    <string name="we_are_glad_that_you_like">¡Nos alegramos de que te guste!</string>
+    <string name="could_you_give_us_feedback">¿Podrías dejarnos una opinión en Google Play?</string>
+    <string name="send_rate_feedback">Déjanos tu opinión</string>
+    <string name="permission_alert_button_allow">Ir a</string>
+    <string name="permission_alert_button_disallow">Rechazar</string>
+    <string name="permission_alert_button_message">Para subir fotos necesitas darle a la app acceso a la memoria de tu teléfono a través de Configuración</string>
 </resources>
