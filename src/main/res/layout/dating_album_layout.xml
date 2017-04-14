@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.dating.DatingAlbumViewModel" />
+            type="com.topface.topface.ui.fragments.dating.DatingAlbumViewModel"/>
     </data>
 
     <FrameLayout
-        android:id="@+id/albumRoot"F
+        android:id="@+id/albumRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dating_fragment_background_color"
@@ -23,7 +23,7 @@
             app:currentItemImmediately="@{model.currentItem}"
             app:data="@{model.albumData}"
             app:necessityPreloadOnStart="@{model.isNeedPreloadOnStart}"
-            app:onPageChangeListener="@{model}" />
+            app:onPageChangeListener="@{model}"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                     android:singleLine="true"
                     android:text="@{model.nameAgeOnline}"
                     android:textSize="24sp"
-                    app:online="@{model.isOnline}" />
+                    app:online="@{model.isOnline}"/>
             </FrameLayout>
 
             <TextView
@@ -65,7 +65,7 @@
                 android:paddingStart="8dp"
                 android:text="@{model.photosCounter}"
                 android:textSize="14sp"
-                android:visibility="@{model.isPhotosCounterVisible}" />
+                android:visibility="@{model.isPhotosCounterVisible}"/>
         </LinearLayout>
     </FrameLayout>
 </layout>

@@ -79,7 +79,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
-        DatingAlbumViewModel(mCollapseBinding, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
+        DatingAlbumViewModel(context, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
             with(mCollapseBinding.albumRoot) {
                 mLoadBackgroundSubscription.safeUnsubscribe()
                 mLoadBackgroundSubscription = loadBackground(it)

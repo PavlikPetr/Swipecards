@@ -222,6 +222,7 @@ public class Options extends AbstractData {
 
     /**
      * Some dating designs has translucent status bar
+     *
      * @return true if current design has translucent status bar
      */
     public boolean isTranslucentDating() {
@@ -380,7 +381,6 @@ public class Options extends AbstractData {
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
             datingRedesign = response.optInt("datingRedesign");
-            datingRedesign = 2;
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
