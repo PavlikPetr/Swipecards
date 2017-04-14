@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.dating.dating_redesign
+package com.topface.topface.ui.fragments.dating
 
 import android.databinding.ObservableField
 import com.topface.topface.App

@@ -239,14 +239,14 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     }
 
     @Override
-    protected boolean isDatingRedesignEnabled() {
-        return mWeakStorage.getDatingRedesignEnabled();
+    protected boolean isTranslucentDating() {
+        return mWeakStorage.getIsTranslucentDating();
     }
 
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
-        return mWeakStorage.getDatingRedesignEnabled() ?
+        return mWeakStorage.getIsTranslucentDating() ?
                 new DatingRedesignToolbarViewModel(toolbar, this) :
                 new NavigationToolbarViewModel(toolbar, this);
     }
@@ -608,13 +608,13 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     @NotNull
     @Override
     public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
-        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
+        return mWeakStorage.getIsTranslucentDating() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }
 
     @Override
     public int getLayout() {
-        return mWeakStorage.getDatingRedesignEnabled() ? R.layout.ac_new_navigation : R.layout.ac_navigation;
+        return mWeakStorage.getIsTranslucentDating() ? R.layout.ac_new_navigation : R.layout.ac_navigation;
     }
 
     @Override

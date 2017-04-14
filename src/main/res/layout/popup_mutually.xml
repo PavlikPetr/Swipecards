@@ -5,7 +5,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.dating.dating_redesign.PopupMutualViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.design.v1.PopupMutualViewModel"/>
     </data>
 
     <RelativeLayout

@@ -29,7 +29,7 @@ import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
-import com.topface.topface.ui.fragments.dating.DatingFragment;
+import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.people_nearby.PeopleNearbyFragment;
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment;
@@ -179,9 +179,7 @@ public class NavigationManager {
                 fragment = OwnProfileFragment.newInstance();
                 break;
             case FragmentIdData.DATING:
-                fragment = mWeakStorage.getDatingRedesignEnabled() ?
-                        new com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment() :
-                        new DatingFragment();
+                fragment = new DatingFragmentFactory(mWeakStorage.getIsTranslucentDating()).construct();
                 break;
             case FragmentIdData.GEO:
                 fragment = App.get().getOptions().peopleNearbyRedesignEnabled ?
