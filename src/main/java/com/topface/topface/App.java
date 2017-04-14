@@ -128,7 +128,8 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     WeakStorage mWeakStorage;
     @Inject
     EventBus mEventBus;
-    private AdjustManager mAdjustManager;
+    @Inject
+    AdjustManager mAdjustManager;
     @Inject
     KochavaManager mKochavaManager;
     private static Context mContext;
@@ -472,10 +473,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             AppEventsLogger.newLogger(App.getContext()).logEvent(AppEventsConstants.EVENT_NAME_ACTIVATED_APP);
         }
         initVkSdk();
-
-        mAdjustManager = getAppComponent().adjustManager();
         mAdjustManager.initAdjust();
-        mKochavaManager = getAppComponent().kochavaManager();
         mKochavaManager.initTracker();
         mProvider = new OptionsAndProfileProvider(this);
         // подписываемся на события о переходе приложения в состояние background/foreground
@@ -535,7 +533,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
-        Subscription fbInviteAppLinkSubscription = FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
+        FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
 
         sendUnauthorizedRequests();
 
