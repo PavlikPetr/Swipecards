@@ -68,40 +68,38 @@ public class VkAuthorizer extends Authorizer {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        {
-            if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
-                @Override
-                public void onResult(VKAccessToken res) {
-                    if (res == null) {
-                        Debug.log("VkAuthorizer: received token == null");
-                        onError(new VKError(VKError.VK_API_ERROR));
-                        return;
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                if (res == null) {
+                    Debug.log("VkAuthorizer: received token == null");
+                    onError(new VKError(VKError.VK_API_ERROR));
+                    return;
+                }
+                Debug.log("VkAuthorizer: receive new token");
+                String tokenKey = res.accessToken;
+                String userId = res.userId;
+                String userEmail = res.email;
+                int expiresIn = res.expiresIn;
+                AuthToken authToken = AuthToken.getInstance();
+                authToken.temporarilySaveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn), userEmail);
+                AuthToken.getVkName(userId, new Handler(new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        SessionConfig sessionConfig = App.getSessionConfig();
+                        sessionConfig.setSocialAccountName((String) msg.obj);
+                        sessionConfig.saveConfig();
+                        return true;
                     }
-                    Debug.log("VkAuthorizer: receive new token");
-                    String tokenKey = res.accessToken;
-                    String userId = res.userId;
-                    String userEmail = res.email;
-                    int expiresIn = res.expiresIn;
-                    AuthToken authToken = AuthToken.getInstance();
-                    authToken.temporarilySaveToken(AuthToken.SN_VKONTAKTE, userId, tokenKey, String.valueOf(expiresIn), userEmail);
-                    AuthToken.getVkName(userId, new Handler(new Handler.Callback() {
-                        @Override
-                        public boolean handleMessage(Message msg) {
-                            SessionConfig sessionConfig = App.getSessionConfig();
-                            sessionConfig.setSocialAccountName((String) msg.obj);
-                            sessionConfig.saveConfig();
-                            return true;
-                        }
-                    }));
-                }
-
-                @Override
-                public void onError(VKError error) {
-                    Debug.log("VkAuthorizer: captcha error");
-                }
-            })) {
-                super.onActivityResult(requestCode, resultCode, data);
+                }));
             }
+
+            @Override
+            public void onError(VKError error) {
+                Debug.log("VkAuthorizer: captcha error");
+            }
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
