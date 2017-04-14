@@ -167,6 +167,11 @@ class DatingAlbumViewModel(private val mContext: Context, private val mApi: Feed
         subscribeIfNeeded()
     }
 
+    override fun onPause() {
+        super.onPause()
+        arrayOf(mOnImageClickSubscription, mLoadLinksSubscription).safeUnsubscribe()
+    }
+
     private fun subscribeIfNeeded() {
         if (mOnImageClickSubscription?.isUnsubscribed ?: true) {
             mOnImageClickSubscription = mEventBus.getObservable(ImageClick::class.java).subscribe(shortSubscription {

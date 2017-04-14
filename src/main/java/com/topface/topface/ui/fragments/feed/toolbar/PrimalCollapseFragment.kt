@@ -29,7 +29,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         DataBindingUtil.inflate<T>(context.layoutInflater, anchorViewResId, null, false)
     }
     protected val mCollapseBinding: V by lazy {
-        DataBindingUtil.inflate<V>(context.layoutInflater, collapseViewResId, mAppBarBinding.rootCoordinator, false)
+        DataBindingUtil.inflate<V>(context.layoutInflater, collapseViewResId, null, false)
     }
 
     private val mAppBarBinding by lazy {

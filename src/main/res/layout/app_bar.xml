@@ -32,6 +32,7 @@
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_layout"
                 android:layout_width="match_parent"
+                android:background="@color/dating_fragment_background_color"
                 android:layout_height="match_parent"
                 app:collapsedTitleTextColor="@{@color/toolbar_transparent_title_color}"
                 app:contentScrim="@color/toolbar_background"
@@ -42,8 +43,8 @@
 
                 <FrameLayout
                     android:id="@+id/collapse_frame"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dating_album_height"
                     android:visibility="@{model.collapseVisibility}" />
 
                 <include
