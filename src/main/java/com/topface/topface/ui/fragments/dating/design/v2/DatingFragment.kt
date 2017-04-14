@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Rect
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -38,9 +39,14 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.utils.*
+import com.topface.topface.utils.extensions.getDrawable
+import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
+import rx.Subscription
 
 /**
  * Знакомства. Такие дела.
@@ -58,6 +64,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         get() = dimen(R.dimen.dating_album_height)
 
     private lateinit var mAddPhotoHelper: AddPhotoHelper
+    private var mLoadBackgroundSubscription: Subscription? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentDatingV2Binding>(context.layoutInflater, R.layout.fragment_dating_v2, null, false)
@@ -72,7 +79,25 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 mDatingButtonsView = this, mEmptySearchVisibility = this, mStartAdmirationPurchasePopup = this)
     }
     private val mDatingAlbumViewModel by lazy {
-        DatingAlbumViewModel(mCollapseBinding, mApi, mController, mUserSearchList, mNavigator, mAlbumActionsListener = this)
+        DatingAlbumViewModel(context, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
+            with(mCollapseBinding.albumRoot) {
+                mLoadBackgroundSubscription.safeUnsubscribe()
+                mLoadBackgroundSubscription = loadBackground(it)
+                        .retry(2)
+                        .applySchedulers()
+                        .subscribe(com.topface.topface.utils.rx.shortSubscription {
+                            android.graphics.drawable.TransitionDrawable(kotlin.arrayOf((background as? TransitionDrawable)
+                                    ?.getDrawable(1) ?: com.topface.topface.R.drawable.bg_blur.getDrawable() ?: it, it)).apply {
+                                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                                    @Suppress("DEPRECATION")
+                                    setBackgroundDrawable(this)
+                                } else {
+                                    background = this
+                                }
+                            }.startTransition(300)
+                        })
+            }
+        }
     }
     private val mDatingFragmentViewModel by lazy {
         DatingFragmentViewModel(mBinding, mApi, mUserSearchList, mDatingViewModelEvents = this,
@@ -156,6 +181,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         mDatingAlbumViewModel.release()
         govnocod.onDestroyView()
         mAddPhotoHelper.releaseHelper()
+        mLoadBackgroundSubscription.safeUnsubscribe()
     }
 
     override fun onDetach() {
@@ -177,6 +203,13 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         } else {
             mAddPhotoHelper.processActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    override fun onShowProgress() {
+        mDatingAlbumViewModel.onShowProgress()
+    }
+
+    override fun onHideProgress() {
     }
 
     override fun onDataReceived(user: SearchUser) {
@@ -241,7 +274,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             mDatingOptionMenuManager.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun isExpanded(isExpanded: Boolean) = with(mBinding.formsList) {
-        if(isExpanded) {
+        if (isExpanded) {
             stopScroll()
             smoothScrollToPosition(0)
         }

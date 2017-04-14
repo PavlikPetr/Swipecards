@@ -222,6 +222,7 @@ public class Options extends AbstractData {
 
     /**
      * Some dating designs has translucent status bar
+     *
      * @return true if current design has translucent status bar
      */
     public boolean isTranslucentDating() {

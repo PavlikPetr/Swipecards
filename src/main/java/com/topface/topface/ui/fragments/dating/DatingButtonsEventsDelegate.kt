@@ -8,4 +8,6 @@ import com.topface.topface.data.search.SearchUser
 interface DatingButtonsEventsDelegate {
     fun showTakePhoto()
     fun onNewSearchUser(user: SearchUser)
+    fun onShowProgress()
+    fun onHideProgress()
 }
