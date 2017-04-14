@@ -543,10 +543,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
         if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                // редиректим юзера на экран знакомств
-                App.getAppComponent().navigationState()
-                        .emmitNavigationState(new WrappedNavigationData(new LeftMenuSettingsData(FragmentIdData.DATING),
-                                WrappedNavigationData.SELECT_EXTERNALY));
                 // если попали сюда, значит юзер произвел покупку, поэтому лучше запускать очередь
                 // попапов с обновленным профилем
                 App.sendProfileRequest(new ApiHandler() {
