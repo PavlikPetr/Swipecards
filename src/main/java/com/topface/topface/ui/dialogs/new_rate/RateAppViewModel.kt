@@ -1,6 +1,5 @@
 package com.topface.topface.ui.dialogs.new_rate
 
-import android.animation.LayoutTransition
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableFloat
 import android.databinding.ObservableInt
@@ -32,11 +31,16 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
     val layoutGoogleVisibility = ObservableInt(View.GONE)
     val layoutFeedbackVisibility = ObservableInt(View.GONE)
 
+    /**
+     * результат голосования
+     * first - была ли нажата оценка?
+     * second - норм оценка была нажата?
+     */
+    var rateResult = Pair(false, false)
+
     private val mEventBus by lazy {
         App.getAppComponent().eventBus()
     }
-
-    private val userConfig by lazy { App.getUserConfig() }
 
     fun okButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_RATE(Slices().apply { putSlice(RATING, currentRating?.toString()) })
@@ -46,11 +50,11 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
         } else if (rateInInt >= 4) {
             layoutRateVisibility.set(View.GONE)
             layoutGoogleVisibility.set(View.VISIBLE)
-            cleanPopupDisplaying()
+            rateResult = Pair(true, true)
         } else {
             layoutRateVisibility.set(View.GONE)
             layoutFeedbackVisibility.set(View.VISIBLE)
-            cleanPopupDisplaying()
+            rateResult = Pair(true, false)
         }
         mEventBus.setData(AppPopupModel(currentRating.get()))
     }
@@ -62,19 +66,10 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
 
     private fun sendRateRequest(rating: Long) = AppRateRequest(App.getContext(), rating).exec()
 
-    private fun cleanPopupDisplaying() {
-        with(userConfig) {
-            setRatingPopup(0L)
-            setRatingPopupValue(false)
-            saveConfig()
-        }
-    }
-
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
         sendRateRequest(AppRateRequest.NO_RATE)
-        cleanPopupDisplaying()
         iDialogCloser.closeIt()
     }
 
