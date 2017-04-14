@@ -6,7 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
@@ -33,6 +35,7 @@ import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.utils.EasyTracker
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.cache.SearchCacheManager
+import com.topface.topface.utils.extensions.getDrawable
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import com.topface.topface.viewModels.BaseViewModel
@@ -78,6 +81,10 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     val isDatingProgressBarVisible = ObservableInt(View.VISIBLE)
     val isDatingButtonsLocked = ObservableBoolean(false)
 
+    val btnMessageDrawable = ObservableField<Drawable>()
+    val btnLikeDrawable = ObservableField<Drawable>()
+    val btnSkipDrawable = ObservableField<Drawable>()
+    val btnAdmirationDrawable = ObservableField<Drawable>()
     /*
        isDatingButtonsVisible  неистово срет вызовами, по этому не можем ипользовать эту переменную
        для определения состояния кнопок. И поэтому пояаилось это.
@@ -130,6 +137,12 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }
         LocalBroadcastManager.getInstance(context)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
+
+        val buttonsFactory = ButtonsFactory()
+        btnMessageDrawable.set(buttonsFactory.constructButtonMessage().getDrawable())
+        btnLikeDrawable.set(buttonsFactory.constructButtonLike().getDrawable())
+        btnSkipDrawable.set(buttonsFactory.constructButtonSkip().getDrawable())
+        btnAdmirationDrawable.set(buttonsFactory.constructButtonAdmiration().getDrawable())
     }
 
     private fun isNeedTakePhoto() = !App.getConfig().userConfig.isUserAvatarAvailable
