@@ -170,7 +170,6 @@
 
         <activity
             android:name=".experiments.onboarding.question.QuestionnaireActivity"
-            android:launchMode="singleInstance"
             android:parentActivityName=".ui.NavigationActivity"
             android:screenOrientation="portrait" />
 
