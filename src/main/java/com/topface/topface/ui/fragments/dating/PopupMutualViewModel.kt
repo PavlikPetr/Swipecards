@@ -6,7 +6,6 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
-import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getDimen
 
@@ -26,6 +25,8 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
         iDialogCloser.closeIt()
     }
 
-    fun closePopup() = iDialogCloser.closeIt()
+    fun closePopup() {
+        iDialogCloser.closeIt()
+    }
 
 }
