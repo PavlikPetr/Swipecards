@@ -25,8 +25,6 @@
             <ImageButton
                 android:id="@+id/show_chat"
                 style="@style/DatingSmall.Message"
-                android:layout_width="@dimen/dating_small_button_size"
-                android:layout_height="@dimen/dating_small_button_size"
                 android:clickable="@{model.isDatingButtonsLocked}"
                 android:onClick="@{() -> model.showChat()}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
@@ -41,8 +39,6 @@
             <ImageButton
                 android:id="@+id/skip"
                 style="@style/DatingBig.Skip"
-                android:layout_width="@dimen/dating_big_button_size"
-                android:layout_height="@dimen/dating_big_button_size"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -72,8 +68,6 @@
             <ImageButton
                 android:id="@+id/send_like"
                 style="@style/DatingBig.Like"
-                android:layout_width="@dimen/dating_big_button_size"
-                android:layout_height="@dimen/dating_big_button_size"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -89,8 +83,6 @@
             <ImageButton
                 android:id="@+id/send_admiration"
                 style="@style/DatingSmall.Admiration"
-                android:layout_width="@dimen/dating_small_button_size"
-                android:layout_height="@dimen/dating_small_button_size"
                 android:clickable="@{model.isDatingButtonsLocked}"
                 android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
