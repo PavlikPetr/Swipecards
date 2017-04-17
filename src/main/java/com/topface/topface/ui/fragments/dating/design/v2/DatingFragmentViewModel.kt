@@ -21,6 +21,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.databinding.FragmentDatingV2Binding
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
@@ -239,7 +240,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingV2Binding, priv
                 Debug.log("LOADER_INTEGRATION after album")
                 update(false, false)
             }
-
+            if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                Debug.log("LOADER_INTEGRATION after questionnaire")
+                update(false, false)
+            }
         }
     }
 
