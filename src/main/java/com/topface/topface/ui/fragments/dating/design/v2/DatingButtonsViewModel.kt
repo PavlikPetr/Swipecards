@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.dating
+package com.topface.topface.ui.fragments.dating.design.v2
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -19,12 +19,15 @@ import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Rate
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
-import com.topface.topface.databinding.DatingButtonsLayoutBinding
+import com.topface.topface.databinding.DatingButtonsLayoutV2Binding
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.SendLikeRequest
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.statistics.AuthStatistics
 import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.ui.fragments.dating.DatingButtonsEventsDelegate
+import com.topface.topface.ui.fragments.dating.IDatingButtonsView
+import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -42,10 +45,10 @@ import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 
 /**
- * VM for dating buttons
- * Created by tiberal on 11.10.16.
+ * VM for dating buttons (design version 2)
+ * Created by tiberal on 11.10.16. (copypasted by m.bayutin)
  */
-class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
+class DatingButtonsViewModel(binding: DatingButtonsLayoutV2Binding,
                              private val mApi: FeedApi,
                              private val mNavigator: IFeedNavigator,
                              private val mUserSearchList: CachableSearchList<SearchUser>,
@@ -53,7 +56,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
                              private val mDatingButtonsView: IDatingButtonsView,
                              private val mEmptySearchVisibility: IEmptySearchVisibility,
                              private val mStartAdmirationPurchasePopup: IStartAdmirationPurchasePopup) :
-        BaseViewModel<DatingButtonsLayoutBinding>(binding), IAppBarState {
+        BaseViewModel<DatingButtonsLayoutV2Binding>(binding), IAppBarState {
 
     var currentUser: SearchUser? = null
         set(value) {

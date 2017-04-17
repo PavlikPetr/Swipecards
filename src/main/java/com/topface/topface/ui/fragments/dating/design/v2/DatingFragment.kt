@@ -20,7 +20,7 @@ import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
-import com.topface.topface.databinding.DatingButtonsLayoutBinding
+import com.topface.topface.databinding.DatingButtonsLayoutV2Binding
 import com.topface.topface.databinding.FragmentDatingV2Binding
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -52,12 +52,12 @@ import rx.Subscription
  * Знакомства. Такие дела.
  * Created by tiberal on 07.10.16.
  */
-class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, DatingAlbumLayoutBinding>()
+class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutV2Binding, DatingAlbumLayoutBinding>()
         , DatingButtonsEventsDelegate, IDatingViewModelEvents, IDatingButtonsView, IEmptySearchVisibility,
         IStartAdmirationPurchasePopup, IDatingAlbumView {
 
     override val anchorViewResId: Int
-        get() = R.layout.dating_buttons_layout
+        get() = R.layout.dating_buttons_layout_v2
     override val collapseViewResId: Int
         get() = R.layout.dating_album_layout
     override val toolbarSize: Int

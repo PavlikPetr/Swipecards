@@ -15,6 +15,15 @@
     <dimen name="dating_album_height">432dp</dimen>
     <dimen name="dating_parent_item_title_size">16sp</dimen>
     <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
+    <dimen name="dating_small_button_size">56dp</dimen>
+    <dimen name="dating_big_button_size">74dp</dimen>
+    <dimen name="dating_big_button_size_v2">84dp</dimen>
+    <!--Редизайн знакомств, метрики-->
+    <dimen name="dating_buttons_padding_top">15dp</dimen>
+    <dimen name="dating_buttons_padding_bottom">13dp</dimen>
+    <dimen name="dating_smaller_buttons_size">60dp</dimen>
+    <dimen name="dating_bigger_buttons_size">76dp</dimen>
+
 
 
     <!-- for chat -->
@@ -247,12 +256,6 @@
     <dimen name="popup_menu_stroke_outside">1dp</dimen>
     <dimen name="mutual_popup_stroke_outside">9dp</dimen>
     <dimen name="mutual_popup_avatar">150dp</dimen>
-
-    <!--Редизайн знакомств, метрики-->
-    <dimen name="dating_buttons_padding_top">15dp</dimen>
-    <dimen name="dating_buttons_padding_bottom">13dp</dimen>
-    <dimen name="dating_smaller_buttons_size">60dp</dimen>
-    <dimen name="dating_bigger_buttons_size">76dp</dimen>
 
     <!--Метрики для опросника-->
     <dimen name="questionnaire_counters_text_size">14sp</dimen>
