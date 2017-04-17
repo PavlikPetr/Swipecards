@@ -1668,24 +1668,32 @@
     <style name="DatingBig">
         <item name="android:background">@null</item>
         <item name="android:clickable">true</item>
-        <item name="android:layout_width">74dp</item>
-        <item name="android:layout_height">74dp</item>
+        <item name="android:layout_width">@dimen/dating_big_button_size</item>
+        <item name="android:layout_height">@dimen/dating_big_button_size</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="DatingBig.V2">
+        <item name="android:layout_width">@dimen/dating_big_button_size_v2</item>
+        <item name="android:layout_height">@dimen/dating_big_button_size_v2</item>
     </style>
 
     <style name="DatingSmall">
         <item name="android:background">@null</item>
         <item name="android:clickable">true</item>
-        <item name="android:layout_width">56dp</item>
-        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_width">@dimen/dating_small_button_size</item>
+        <item name="android:layout_height">@dimen/dating_small_button_size</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
+    <!-- для единообразия именования, завел пустой стиль -->
+    <style name="DatingSmall.V2" />
 
     <style name="DatingBig.Like">
         <item name="android:src">@drawable/dating_like_selector</item>
     </style>
 
-    <style name="DatingBig.LikeV2">
+    <style name="DatingBig.V2.Like">
         <item name="android:src">@drawable/dating_like_selector_v2</item>
     </style>
 
@@ -1693,7 +1701,7 @@
         <item name="android:src">@drawable/dating_skip_selector</item>
     </style>
 
-    <style name="DatingBig.SkipV2">
+    <style name="DatingBig.V2.Skip">
         <item name="android:src">@drawable/dating_skip_selector_v2</item>
     </style>
 
@@ -1701,7 +1709,7 @@
         <item name="android:src">@drawable/dating_send_message_selector</item>
     </style>
 
-    <style name="DatingSmall.MessageV2">
+    <style name="DatingSmall.V2.Message">
         <item name="android:src">@drawable/dating_send_message_selector_v2</item>
     </style>
 
@@ -1709,7 +1717,7 @@
         <item name="android:src">@drawable/dating_admiration_selector</item>
     </style>
 
-    <style name="DatingSmall.AdmirationV2">
+    <style name="DatingSmall.V2.Admiration">
         <item name="android:src">@drawable/dating_admiration_selector_v2</item>
     </style>
 
