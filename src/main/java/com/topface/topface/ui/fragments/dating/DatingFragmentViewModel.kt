@@ -182,7 +182,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     @Suppress("UNCHECKED_CAST")
     fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) {
         data.replaceData(ArrayList<Any>())
-        Debug.error("----------------Метод препэйрФормсДАта-----------")
         if (!user.city.name.isNullOrEmpty()) data.add(ParentModel(user.city.name, false, R.drawable.pin))
         val status = Profile.normilizeStatus(user.status)
         if (!status.isNullOrEmpty()) {

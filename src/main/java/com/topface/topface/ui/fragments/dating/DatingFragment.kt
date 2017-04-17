@@ -149,24 +149,12 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
             }
         })
         formsList.layoutManager = linLayManager
-
         mAdapter = CompositeAdapter(mTypeProvider){Bundle()}
                 .addAdapterComponent(ParentItemComponent())
                 .addAdapterComponent(ChildItemComponent(mApi))
-                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator,context))
+                .addAdapterComponent(GiftListItemComponent(mApi,mNavigator))
         formsList.adapter = mAdapter
-
         mRecyclerView = formsList
-
-
-
-//                CompositeAdapter<IType>().apply {
-//            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
-//            addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
-//            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
-//        }
-
-
     }
 
     override fun onDestroyView() {

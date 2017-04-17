@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.dating
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.topface.framework.utils.Debug
@@ -16,10 +15,9 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
-import kotlin.properties.Delegates
 
 
-class GiftListItemComponent(private val mApi: FeedApi, private val mNavigator: IFeedNavigator, private val mContext: Context) : AdapterComponent<GiftsFormItemBinding, GiftsModel>() {
+class GiftListItemComponent(private val mApi: FeedApi, private val mNavigator: IFeedNavigator) : AdapterComponent<GiftsFormItemBinding, GiftsModel>() {
 
     companion object {
         const val TO = "to"
@@ -34,7 +32,7 @@ class GiftListItemComponent(private val mApi: FeedApi, private val mNavigator: I
     private lateinit var mAdapter: CompositeAdapter
     private var mGiftsModel: GiftsModel? = null
 
-    var bibirock by Delegates.notNull<Int>()
+    var lastGiftsId = -1
 
 
     private val mGiftTypeProvider by lazy { GiftTypeProvider() }
@@ -44,7 +42,10 @@ class GiftListItemComponent(private val mApi: FeedApi, private val mNavigator: I
         get() = GiftsFormItemBinding::class.java
 
     init {
-        mEventBusSubscription = mEventBus.getObservable(GiftId::class.java).subscribe(shortSubscription { bibirock = it.value })
+        mEventBusSubscription = mEventBus.getObservable(GiftId::class.java).subscribe(shortSubscription {
+            Debug.error("------------------lastGiftsId = ${it.value}----------------------")
+            lastGiftsId = it.value
+        })
     }
 
     override fun bind(binding: GiftsFormItemBinding, data: GiftsModel?, position: Int) {
@@ -55,22 +56,22 @@ class GiftListItemComponent(private val mApi: FeedApi, private val mNavigator: I
                         mGiftsModel = giftsModel
                         if (giftsModel.gifts != null) {
                             mModel = GiftsItemViewModel(mApi, mNavigator, it, giftsModel.userId)
-                            mAdapter = CompositeAdapter(mGiftTypeProvider) {
-                                Bundle().apply {
-                                    putInt(TO, bibirock)
+                            mAdapter = CompositeAdapter(mGiftTypeProvider) { Bundle().apply {
+                                    putInt(TO, if (giftsModel.gifts.items.isEmpty()) giftsModel.gifts.items.last().feedId else -1)
                                 }
                             }
                                     .addAdapterComponent(GiftItemComponent())
                                     .addAdapterComponent(GiftEmptyComponent())
+
                             mAdapter.updateObservable
                                     .distinct { it?.getInt(TO, -1) }
                                     .subscribe(shortSubscription {
-                                        Debug.error("-----giftsModel.gifts.more-------${giftsModel.gifts.more}----------${giftsModel.gifts.gifts.last().id}-----------")
                                         if (giftsModel.gifts.more) {
                                             mModel?.loadGifts(it.getInt(TO, -1))
                                         } else {
                                             mModel?.loadFakeGift()
                                         }
+                                        mAdapter.notifyDataSetChanged()
                                     })
                             adapter = mAdapter
                             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
