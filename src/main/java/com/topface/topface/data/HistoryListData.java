@@ -22,6 +22,7 @@ public class HistoryListData extends FeedListData<History> {
     @Override
     protected void fillData(JSONObject data) {
         this.user = JsonUtils.fromJson(Utils.optString(data, "user"), FeedUser.class);
+        this.isSuspiciousUser = data.optBoolean("isSuspiciousUser");
         super.fillData(data);
     }
 }
