@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools" >
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.design.v2.DatingButtonsViewModel"/>
     </data>
 
     <LinearLayout
@@ -24,7 +24,7 @@
 
             <ImageButton
                 android:id="@+id/show_chat"
-                style="@style/DatingSmall.Message"
+                style="@style/DatingSmall.MessageV2"
                 android:layout_width="@dimen/dating_small_button_size"
                 android:layout_height="@dimen/dating_small_button_size"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -40,9 +40,9 @@
 
             <ImageButton
                 android:id="@+id/skip"
-                style="@style/DatingBig.Skip"
-                android:layout_width="@dimen/dating_big_button_size"
-                android:layout_height="@dimen/dating_big_button_size"
+                style="@style/DatingBig.SkipV2"
+                android:layout_width="@dimen/dating_big_button_size_v2"
+                android:layout_height="@dimen/dating_big_button_size_v2"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -71,9 +71,9 @@
 
             <ImageButton
                 android:id="@+id/send_like"
-                style="@style/DatingBig.Like"
-                android:layout_width="@dimen/dating_big_button_size"
-                android:layout_height="@dimen/dating_big_button_size"
+                style="@style/DatingBig.LikeV2"
+                android:layout_width="@dimen/dating_big_button_size_v2"
+                android:layout_height="@dimen/dating_big_button_size_v2"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -88,7 +88,7 @@
 
             <ImageButton
                 android:id="@+id/send_admiration"
-                style="@style/DatingSmall.Admiration"
+                style="@style/DatingSmall.AdmirationV2"
                 android:layout_width="@dimen/dating_small_button_size"
                 android:layout_height="@dimen/dating_small_button_size"
                 android:clickable="@{model.isDatingButtonsLocked}"

@@ -1681,6 +1681,38 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="DatingBig.Like">
+        <item name="android:src">@drawable/dating_like_selector</item>
+    </style>
+
+    <style name="DatingBig.LikeV2">
+        <item name="android:src">@drawable/dating_like_selector_v2</item>
+    </style>
+
+    <style name="DatingBig.Skip">
+        <item name="android:src">@drawable/dating_skip_selector</item>
+    </style>
+
+    <style name="DatingBig.SkipV2">
+        <item name="android:src">@drawable/dating_skip_selector_v2</item>
+    </style>
+
+    <style name="DatingSmall.Message">
+        <item name="android:src">@drawable/dating_send_message_selector</item>
+    </style>
+
+    <style name="DatingSmall.MessageV2">
+        <item name="android:src">@drawable/dating_send_message_selector_v2</item>
+    </style>
+
+    <style name="DatingSmall.Admiration">
+        <item name="android:src">@drawable/dating_admiration_selector</item>
+    </style>
+
+    <style name="DatingSmall.AdmirationV2">
+        <item name="android:src">@drawable/dating_admiration_selector_v2</item>
+    </style>
+
     <style name="EmptyDialogView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

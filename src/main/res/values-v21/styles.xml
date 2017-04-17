@@ -203,6 +203,38 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="DatingBig.Like">
+        <item name="android:background">@drawable/dating_like_selector_v21</item>
+    </style>
+
+    <style name="DatingBig.LikeV2">
+        <item name="android:background">@drawable/dating_like_selector_v2_v21</item>
+    </style>
+
+    <style name="DatingBig.Skip">
+        <item name="android:background">@drawable/dating_skip_selector_v21</item>
+    </style>
+
+    <style name="DatingBig.SkipV2">
+        <item name="android:background">@drawable/dating_skip_selector_v2_v21</item>
+    </style>
+
+    <style name="DatingSmall.Message">
+        <item name="android:background">@drawable/dating_send_message_selector_v21</item>
+    </style>
+
+    <style name="DatingSmall.MessageV2">
+        <item name="android:background">@drawable/dating_send_message_selector_v2_v21</item>
+    </style>
+
+    <style name="DatingSmall.Admiration">
+        <item name="android:background">@drawable/dating_admiration_selector_v21</item>
+    </style>
+
+    <style name="DatingSmall.AdmirationV2">
+        <item name="android:background">@drawable/dating_admiration_selector_v2_v21</item>
+    </style>
+
     <style name="PopupGreenButton.Background">
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
