@@ -196,7 +196,7 @@ public class GCMUtils {
         } else if (getType(data) == GCM_TYPE_HAS_FEED_AD) {
             LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
             return false;
-        } else if (App.getAppConfig().getQuestionnaireData().isEmpty()) {
+        } else if (!App.getAppConfig().getQuestionnaireData().isEmpty()) {
             Debug.log("GCM: we can not display a notification while the user answers questions in the questionnaire");
             return false;
         }

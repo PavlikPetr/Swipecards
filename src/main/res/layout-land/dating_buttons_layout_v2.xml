@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.topface.topface.ui.fragments.dating.design.v2.DatingButtonsViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/dating_buttons_root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/show_chat"
+            style="@style/DatingSmall.V2.Message"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="24dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.showChat()}"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+
+        <ImageButton
+            android:id="@+id/skip"
+            style="@style/DatingBig.V2.Skip"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.skip()}"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/loader_bg"
+            android:theme="@style/CircularProgress"
+            android:visibility="@{model.isDatingProgressBarVisible}"/>
+
+        <ImageButton
+            android:id="@+id/send_like"
+            style="@style/DatingBig.V2.Like"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="15dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.sendLike()}"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+        <ImageButton
+            android:id="@+id/send_admiration"
+            style="@style/DatingSmall.V2.Admiration"
+            android:layout_marginRight="15dp"
+            android:clickable="@{model.isDatingButtonsLocked}"
+            android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
+            bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
+
+    </LinearLayout>
+
+</layout>

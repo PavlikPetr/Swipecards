@@ -330,8 +330,7 @@
   <string name="rate_popup_set_rate">Evaluer</string>
   <string name="rate_popup_later">Demander plus tard</string>
   <string name="rate_popup_cancel">Non, merci</string>
-  <string name="rate_popup_error">Veuillez nous indiquer combien d\'étoiles mérite notre
-        application !</string>
+  <string name="rate_popup_error">Veuillez nous indiquer combien d\'étoiles mérite notre application !</string>
   <string name="feedback_popup_title">Vous nous avez donné une mauvaise note. Dites-nous ce que
         vous n\'avez pas aimé dans cette application. Aidez-nous à l\'améliorer. Merci !</string>
   <string name="settings_melody">Sonnerie de notification</string>
@@ -978,4 +977,13 @@
   <string name="num_from_num">%1$s de %2$s</string>
   <string name="onboarding_get_access">Avoir accès</string>
   <string name="searching_couple_for_you">Recherche par paire selon vos critères</string>
+  <string name="rate">Évaluation</string>
+  <string name="rate_our_app">Évaluez notre application !</string>
+  <string name="what_we_can_improve">Veuillez nous dire ce que nous pouvons améliorer</string>
+  <string name="we_are_glad_that_you_like">Nous sommes heureux que vous l\'aimiez !</string>
+  <string name="could_you_give_us_feedback">Pourriez-vous nous donner vos commentaires sur Google Play?</string>
+  <string name="send_rate_feedback">Laisser un commentaire</string>
+  <string name="permission_alert_button_allow">Aller à</string>
+  <string name="permission_alert_button_disallow">Décliner</string>
+  <string name="permission_alert_button_message">Pour télécharger des photos, vous devez donner à l\'application l\'accès à la mémoire de votre téléphone via les Paramètres</string>
 </resources>

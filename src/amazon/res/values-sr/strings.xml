@@ -355,8 +355,7 @@
     <string name="rate_popup_set_rate">Оцени</string>
     <string name="rate_popup_later">Питајте поново касније</string>
     <string name="rate_popup_cancel">Не, хвала</string>
-    <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!
-    </string>
+    <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!</string>
     <string name="feedback_popup_title">Дали сте нам ниску оцену. Кажите нам шта Вам се није свиђало
         у апликацији. Помозите нам да постанемо бољи. Хвала Вам!
     </string>

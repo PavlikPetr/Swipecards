@@ -48,8 +48,8 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         fun saveRatingPopupStatus(value: Long, isBadRate: Boolean) {
             val userConfig = App.getUserConfig()
             with(userConfig) {
-                setRatingPopup(value)
-                setRatingPopupValue(isBadRate)
+                ratingPopup = value
+                ratingPopupValue = isBadRate
                 saveConfig()
             }
         }
@@ -91,7 +91,19 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
 
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
-        saveRatingPopupStatus(0, false)
+        val rateResult = mViewModel.rateResult
+        if (rateResult.first) {
+            if (rateResult.second) {
+                // stop showing this popup
+                saveRatingPopupStatus(0, false)
+            } else {
+                // была нажата плохая оценка, запомним это
+                saveRatingPopupStatus(System.currentTimeMillis(), true)
+            }
+        } else {
+            // было выбрано "не сейчас"/"закрыть" запомним это
+            saveRatingPopupStatus(System.currentTimeMillis(), false)
+        }
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
     }
 

@@ -21,6 +21,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -212,9 +213,21 @@ public class Options extends AbstractData {
     public boolean peopleNearbyRedesignEnabled;
 
     /**
-     * {Boolean} datingRedesignEnabled - флаг определяющий показ нового экрана "Знакомства"
+     * {int} datingRedesign - версия дизайна экрана "Знакомства"
+     * 0 - дейтинг со скролящейся анкетой
+     * 1 - дейтинг без анкеты, с полупрозрачным тулбаром
+     * 2 - скролящаяся анкета с увеличенными кнопками и без fab (см тикет #55472)
      */
-    public Boolean datingRedesignEnabled = false;
+    public int datingRedesign = 0;
+
+    /**
+     * Some dating designs has translucent status bar
+     *
+     * @return true if current design has translucent status bar
+     */
+    public boolean isTranslucentDating() {
+        return datingRedesign == DatingFragmentFactory.V1_DESIGN;
+    }
 
     /**
      * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
@@ -367,7 +380,7 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
-            datingRedesignEnabled = response.optBoolean("datingRedesignEnabled");
+            datingRedesign = response.optInt("datingRedesign");
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());

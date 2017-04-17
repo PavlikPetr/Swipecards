@@ -49,7 +49,7 @@
             android:text="@string/send_rate_feedback"/>
 
         <Button
-            style="@style/PopupBorderlessdButton"
+            style="@style/PopupBorderlessButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"

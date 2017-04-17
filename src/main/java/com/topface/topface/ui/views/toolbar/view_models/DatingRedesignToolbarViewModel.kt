@@ -14,7 +14,7 @@ import com.topface.topface.data.FragmentLifreCycleData
 import com.topface.topface.data.FragmentLifreCycleData.*
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
 import com.topface.topface.databinding.ToolbarBinding
-import com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragment
+import com.topface.topface.ui.fragments.dating.design.v1.DatingFragment
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils

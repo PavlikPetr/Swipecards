@@ -20,7 +20,7 @@
 
         <ImageButton
             android:id="@+id/show_chat"
-            style="@style/DatingMessage"
+            style="@style/DatingSmall.Message"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="24dp"
             android:clickable="@{model.isDatingButtonsLocked}"
@@ -30,7 +30,7 @@
 
         <ImageButton
             android:id="@+id/skip"
-            style="@style/DatingSkip"
+            style="@style/DatingBig.Skip"
             android:layout_marginBottom="15dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="15dp"
@@ -48,7 +48,7 @@
 
         <ImageButton
             android:id="@+id/send_like"
-            style="@style/DatingLike"
+            style="@style/DatingBig.Like"
             android:layout_marginBottom="15dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="24dp"
@@ -59,7 +59,7 @@
 
         <ImageButton
             android:id="@+id/send_admiration"
-            style="@style/DatingAdmiration"
+            style="@style/DatingSmall.Admiration"
             android:layout_marginRight="15dp"
             android:clickable="@{model.isDatingButtonsLocked}"
             android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
