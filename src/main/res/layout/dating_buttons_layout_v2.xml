@@ -24,9 +24,7 @@
 
             <ImageButton
                 android:id="@+id/show_chat"
-                style="@style/DatingSmall.MessageV2"
-                android:layout_width="@dimen/dating_small_button_size"
-                android:layout_height="@dimen/dating_small_button_size"
+                style="@style/DatingSmall.V2.Message"
                 android:clickable="@{model.isDatingButtonsLocked}"
                 android:onClick="@{() -> model.showChat()}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
@@ -40,9 +38,7 @@
 
             <ImageButton
                 android:id="@+id/skip"
-                style="@style/DatingBig.SkipV2"
-                android:layout_width="@dimen/dating_big_button_size_v2"
-                android:layout_height="@dimen/dating_big_button_size_v2"
+                style="@style/DatingBig.V2.Skip"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -71,9 +67,7 @@
 
             <ImageButton
                 android:id="@+id/send_like"
-                style="@style/DatingBig.LikeV2"
-                android:layout_width="@dimen/dating_big_button_size_v2"
-                android:layout_height="@dimen/dating_big_button_size_v2"
+                style="@style/DatingBig.V2.Like"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:clickable="@{model.isDatingButtonsLocked}"
@@ -88,9 +82,7 @@
 
             <ImageButton
                 android:id="@+id/send_admiration"
-                style="@style/DatingSmall.AdmirationV2"
-                android:layout_width="@dimen/dating_small_button_size"
-                android:layout_height="@dimen/dating_small_button_size"
+                style="@style/DatingSmall.V2.Admiration"
                 android:clickable="@{model.isDatingButtonsLocked}"
                 android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
