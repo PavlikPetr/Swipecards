@@ -22,97 +22,102 @@
 
     </data>
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:animateLayoutChanges="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="30dp"
-        android:textColor="@color/list_text_black"
-        android:windowIsFloating="true"
-        android:windowIsTranslucent="true">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/rate_popup_corners_background"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:animateLayoutChanges="true"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:visibility="@{viewModel.layoutRateVisibility}">
+            android:paddingTop="30dp"
+            android:textColor="@color/list_text_black"
+            android:windowIsFloating="true"
+            android:windowIsTranslucent="true">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_ill_people"/>
-
-            <TextView
-                android:id="@+id/rate_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="30dp"
+                android:background="@drawable/rate_popup_corners_background"
                 android:gravity="center_horizontal"
-                android:text="@string/rate_our_app"
-                android:textColor="@color/black"
-                android:textSize="22sp"/>
+                android:orientation="vertical"
+                android:visibility="@{viewModel.layoutRateVisibility}">
 
-            <RatingBar
-                style="@style/RatingBarForApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginTop="35dp"
-                app:setOnRatingBarChangeListener="@{viewModel.onRatingChanged}"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_ill_people"/>
 
-            <Button
-                style="@style/Widget.Topface.Button.Big.Blue"
+                <TextView
+                    android:id="@+id/rate_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/rate_our_app"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"/>
+
+                <RatingBar
+                    style="@style/RatingBarForApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_marginTop="35dp"
+                    app:setOnRatingBarChangeListener="@{viewModel.onRatingChanged}"/>
+
+                <Button
+                    style="@style/Widget.Topface.Button.Big.Blue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="28dp"
+                    android:enabled="@{viewModel.buttonEnabled}"
+                    android:onClick="@{()->viewModel.okButtonClick()}"
+                    android:text="@string/rate"/>
+
+                <Button
+                    style="@style/PopupBorderlessButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{()->viewModel.closeButtonClick()}"
+                    android:text="@string/thanks_for_your_rate_close"
+                    android:textColor="#b9b9b9"/>
+            </LinearLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="28dp"
-                android:enabled="@{viewModel.buttonEnabled}"
-                android:onClick="@{()->viewModel.okButtonClick()}"
-                android:text="@string/rate"/>
+                android:animateLayoutChanges="true"
+                android:visibility="@{viewModel.layoutGoogleVisibility}">
 
-            <Button
-                style="@style/PopupBorderlessButton"
+                <include
+                    layout="@layout/google_feedback_invite"
+                    bind:viewModel="@{googleIntiteViewModel}"/>
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="8dp"
-                android:onClick="@{()->viewModel.closeButtonClick()}"
-                android:text="@string/thanks_for_your_rate_close"
-                android:textColor="#b9b9b9"/>
+                android:visibility="@{viewModel.layoutFeedbackVisibility}">
+
+                <include
+                    layout="@layout/google_feedback_popup"
+                    bind:viewModel="@{feedbackViewModel}"/>
+            </FrameLayout>
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:visibility="@{viewModel.layoutGoogleVisibility}">
-
-            <include
-                layout="@layout/google_feedback_invite"
-                bind:viewModel="@{googleIntiteViewModel}"/>
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.layoutFeedbackVisibility}">
-
-            <include
-                layout="@layout/google_feedback_popup"
-                bind:viewModel="@{feedbackViewModel}"/>
-        </FrameLayout>
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </layout>
