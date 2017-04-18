@@ -139,6 +139,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String PAGE_NAME = "Chat";
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
+    public static final String MUTUAL = "is_mutual";
     public static final String SEX = "sex";
     private static final String HISTORY_LAST_ITEM = "history_last_item";
     public static final String SEND_MESSAGE = "send_message";
@@ -731,6 +732,9 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
+                Intent intent = new Intent();
+                intent.putExtra(ChatFragment.MUTUAL, data.mutualTime != 0);
+                getActivity().setResult(Activity.RESULT_OK, intent);
                 mHistoryFeedList = data.items;
                 App.getAppComponent().suspiciousUserCache().setUserIsSuspiciousIfNeed(mUserId, data.isSuspiciousUser);
                 if (!data.items.isEmpty() && !isPopularLockOn) {
