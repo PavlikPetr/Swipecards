@@ -167,7 +167,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
-    private Boolean isMutual;
     private boolean mIsUpdating;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
@@ -733,10 +732,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
-                Debug.error(response.toString());
-                isMutual = data.mutualTime != 0;
                 Intent intent = new Intent();
-                intent.putExtra(ChatFragment.MUTUAL, isMutual);
+                intent.putExtra(ChatFragment.MUTUAL, data.mutualTime != 0);
                 getActivity().setResult(Activity.RESULT_OK, intent);
                 mHistoryFeedList = data.items;
                 App.getAppComponent().suspiciousUserCache().setUserIsSuspiciousIfNeed(mUserId, data.isSuspiciousUser);
