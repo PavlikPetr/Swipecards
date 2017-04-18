@@ -81,8 +81,8 @@ public class ComplainsMessageFragment extends BaseFragment {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                Activity activity = getActivity();
-                if (activity != null) {
+                if (isAdded()) {
+                    Activity activity = getActivity();
                     activity.setResult(Activity.RESULT_OK);
                     Utils.showToastNotification(R.string.general_complain_sended, Toast.LENGTH_SHORT);
                     activity.finish();
