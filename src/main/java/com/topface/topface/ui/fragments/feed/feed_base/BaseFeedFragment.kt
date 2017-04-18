@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.feed_base
 
-import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -16,11 +15,8 @@ import com.topface.topface.banners.IPageWithAds
 import com.topface.topface.banners.PageInfo
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.FragmentFeedBaseBinding
-import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.adapters.ItemEventListener
-import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory

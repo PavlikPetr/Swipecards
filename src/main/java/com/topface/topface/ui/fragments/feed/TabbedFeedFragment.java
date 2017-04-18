@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
@@ -280,9 +279,9 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
         if (requestCode == ChatActivity.REQUEST_CHAT) {
-                if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.Companion.isApplicable(App.get().getOptions().ratePopupNewVersion)) {
-                    (new FeedNavigator((IActivityDelegate) getActivity())).showRateAppFragment();
-                }
+            if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.Companion.isApplicable(App.get().getOptions().ratePopupNewVersion)) {
+                (new FeedNavigator((IActivityDelegate) getActivity())).showRateAppFragment();
+            }
         }
     }
 
