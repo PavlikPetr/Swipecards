@@ -369,6 +369,7 @@
   <string name="general_reconnect_social">Cannot connect to the social network. Please try again
         later.</string>
   <string name="general_block">Lock</string>
+  <string name="general_block_v2">Block</string>
   <string name="general_buying_disabled">At the moment this purchase is unavailable.</string>
   <string name="ban_flood_detected">You are making requests to the server too often. Please wait a
         few moments before continuing.</string>

@@ -395,6 +395,7 @@
         Por favor tente novamente mais tarde.
     </string>
     <string name="general_block">Bloquear</string>
+    <string name="general_block_v2">Bloquear</string>
     <string name="general_buying_disabled">De momento a compra está indisponível.</string>
     <string name="ban_flood_detected">Estás a fazer pedidos ao servidor com demasiada frequência.
         Por favor aguarda um momento antes de continuar.

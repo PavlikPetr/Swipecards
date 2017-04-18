@@ -371,6 +371,7 @@
   <string name="general_reconnect_social">Impossibile collegarsi alla rete sociale. Riprova più
         tardi.</string>
   <string name="general_block">Blocca</string>
+  <string name="general_block_v2">Blocca</string>
   <string name="general_buying_disabled">Attualmente è impossibile effettuare l’acquisto</string>
   <string name="ban_flood_detected">Invii troppo spesso le richieste al server. Attendere prego
         per continuare ad utilizzare l’applicazione.</string>
