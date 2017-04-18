@@ -19,7 +19,6 @@ import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.OnUsersListEventsListener
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
-import com.topface.topface.databinding.FragmentDatingLayoutBinding
 import com.topface.topface.databinding.FragmentDatingV2Binding
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -33,12 +32,12 @@ import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.new_adapter.CompositeAdapter
 import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.FormItem
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -64,6 +63,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingV2Binding, priv
     private val mState by lazy {
         App.getAppComponent().appState()
     }
+
+    val data = MultiObservableArrayList<Any>()
 
     private var mProfileSubscription = CompositeSubscription()
     private var mUpdateSubscription: Subscription? = null
@@ -180,17 +181,15 @@ class DatingFragmentViewModel(private val binding: FragmentDatingV2Binding, priv
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = with((binding.formsList
-            .adapter as CompositeAdapter<IType>).data) {
-        clear()
-        if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
-        // перед отображением статуса пропускаем значение через "нормализатор"
+    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = data.replaceData(MultiObservableArrayList<Any>().apply {
+        if (!user.city.name.isNullOrEmpty()) add(ParentModel(user.city.name, false, R.drawable.pin))
         val status = Profile.normilizeStatus(user.status)
-        if (!status.isNullOrEmpty()) addExpandableItem(ParentModel(status, false, R.drawable.status))
-        addExpandableItem(GiftsModel(user.gifts, user.id))
-        val forms: MutableList<IType>
-        // проверяем не только все поля анкеты, но и статус. Статус имеет проверку на корректность данных
-        forms = mutableListOf <IType>().apply {
+        if (!status.isNullOrEmpty()) {
+            add(ParentModel(status, false, R.drawable.status))
+        }
+        add(GiftsModel(user.gifts, user.id))
+        add(ParentModel(R.string.about.getString(), true, R.drawable.about))
+        addAll(mutableListOf <FormModel>().apply {
             var hasEmptyItem = false
             user.forms.forEach {
                 if (it.isEmpty && !hasEmptyItem) {
@@ -202,9 +201,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingV2Binding, priv
                 val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
                 add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
             }
-        }
-        addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
-    }
+        })
+    })
 
     private fun getFormValue(formItem: FormItem): String {
         if (formItem.value.isNullOrEmpty()) {
