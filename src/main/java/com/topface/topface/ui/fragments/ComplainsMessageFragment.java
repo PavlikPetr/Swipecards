@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -80,9 +81,11 @@ public class ComplainsMessageFragment extends BaseFragment {
         request.callback(new ApiHandler() {
             @Override
             public void success(IApiResponse response) {
-                if (getActivity() != null) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.setResult(Activity.RESULT_OK);
                     Utils.showToastNotification(R.string.general_complain_sended, Toast.LENGTH_SHORT);
-                    getActivity().finish();
+                    activity.finish();
                 }
             }
 
