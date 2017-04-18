@@ -26,14 +26,11 @@ import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
-import com.topface.topface.ui.fragments.dating.form.ChildItemDelegate
-import com.topface.topface.ui.fragments.dating.form.GiftsItemDelegate
-import com.topface.topface.ui.fragments.dating.form.ParentItemDelegate
+import com.topface.topface.ui.fragments.dating.form.gift.GiftListItemComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.toolbar.PrimalCollapseFragment
-import com.topface.topface.ui.new_adapter.CompositeAdapter
-import com.topface.topface.ui.new_adapter.IType
+import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
@@ -110,8 +107,16 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         FeedApi(context, this)
     }
 
+    private val mTypeProvider by lazy {
+        DatingTypeProvider()
+    }
+
     private val mNavigator by lazy {
         FeedNavigator(activity as IActivityDelegate)
+    }
+
+    private val mGiftsComponent by lazy {
+        GiftListItemComponent(mApi, mNavigator)
     }
     //~~~~~~~~~~~~~~~~~~~~~~~ конец ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -119,6 +124,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         super.bindModels()
         mAnchorBinding.setModel(mDatingButtonsViewModel)
         mBinding.model = mDatingButtonsViewModel
+        mBinding.dataModel = mDatingFragmentViewModel
         mCollapseBinding.model = mDatingAlbumViewModel
     }
 
@@ -143,22 +149,12 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         return mBinding.root
     }
 
-    //todo доработать составной адаптер прокидывать в делегат изменения стейта
-    val govnocod by lazy {
-        GiftsItemDelegate(mApi, mNavigator)
-    }
-    val govnocod1 by lazy {
-        ChildItemDelegate(mApi)
-    }
+    private var mAdapter: CompositeAdapter? = null
+    private var mRecyclerView: RecyclerView? = null
 
-    private fun initFormList() = with(mBinding.formsList) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = CompositeAdapter<IType>().apply {
-            addAdapterItemDelegate(ChildItemDelegate.TYPE, govnocod1)
-            addAdapterItemDelegate(ParentItemDelegate.TYPE, ParentItemDelegate())
-            addAdapterItemDelegate(GiftsItemDelegate.TYPE, govnocod)
-        }
-        addItemDecoration(object : RecyclerView.ItemDecoration() {
+    private fun initFormList() = with(mBinding) {
+        val layoutManager = LinearLayoutManager(context)
+        formsList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
                 if (layoutManager.getPosition(view) == 0) {
                     outRect?.top = dimen(R.dimen.form_list_padding)
@@ -167,6 +163,13 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
                 }
             }
         })
+        formsList.layoutManager = layoutManager
+        mAdapter = CompositeAdapter(mTypeProvider) { Bundle() }
+                .addAdapterComponent(ParentItemComponent())
+                .addAdapterComponent(ChildItemComponent(mApi))
+                .addAdapterComponent(activity.registerLifeCycleDelegate(mGiftsComponent))
+        formsList.adapter = mAdapter
+        mRecyclerView = formsList
     }
 
     override fun onDestroyView() {
@@ -174,9 +177,9 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         mDatingButtonsViewModel.release()
         mDatingFragmentViewModel.release()
         mDatingAlbumViewModel.release()
-        govnocod.onDestroyView()
         mAddPhotoHelper.releaseHelper()
         mLoadBackgroundSubscription.safeUnsubscribe()
+        activity.unregisterLifeCycleDelegate(mGiftsComponent)
     }
 
     override fun onDetach() {
@@ -190,7 +193,6 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
         mDatingAlbumViewModel.onActivityResult(requestCode, resultCode, data)
-        govnocod.onActivityResult(requestCode, resultCode, data)
         mDatingButtonsViewModel.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
                 resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {

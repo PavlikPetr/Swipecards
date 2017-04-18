@@ -13,7 +13,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.RatePopupNewVersion
 import com.topface.topface.databinding.RateAppLayoutBinding
-import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.http.IRequestClient
