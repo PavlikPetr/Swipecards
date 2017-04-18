@@ -24,3 +24,5 @@ data class ParentModel(val data: String, val isTitleItem: Boolean, val icon: Int
 data class GiftsModel(val gifts: Profile.Gifts?, val userId: Int) : IType {
     override fun getType() = 2
 }
+
+data class GiftId(val value: Int)

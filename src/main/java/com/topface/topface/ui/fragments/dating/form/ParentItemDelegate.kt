@@ -20,7 +20,8 @@ class ParentItemDelegate : ExpandableItemDelegate<ParentItemBinding, ParentModel
     override val bindingClass: Class<ParentItemBinding>
         get() = ParentItemBinding::class.java
 
-    override fun bind(binding: ParentItemBinding, data: ExpandableItem<ParentModel>?, position: Int) =
-            data?.let { binding.model = ParentItemViewModel(it, position) }
+    override fun bind(binding: ParentItemBinding, data: ExpandableItem<ParentModel>?, position: Int){
+//            data?.let { binding.model = ParentItemViewModel(it, position) }
+    }
 
 }

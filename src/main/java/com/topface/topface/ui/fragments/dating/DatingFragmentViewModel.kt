@@ -24,17 +24,13 @@ import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
-import com.topface.topface.ui.fragments.dating.form.FormModel
-import com.topface.topface.ui.fragments.dating.form.GiftsModel
-import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.new_adapter.CompositeAdapter
-import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.FormItem
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -45,6 +41,7 @@ import rx.Observer
 import rx.Subscriber
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /** Бизнеслогика для дейтинга
@@ -63,9 +60,15 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     private var mProfileSubscription = CompositeSubscription()
     private var mUpdateSubscription: Subscription? = null
+
+    private val mDatingTypeProvider by lazy {
+        DatingTypeProvider()
+    }
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
+    var data = MultiObservableArrayList<Any>()
+
     var currentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
@@ -79,6 +82,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     init {
+        Debug.error("----------------init ДэйтингФрагментВьюмодел-----------")
+
         mProfileSubscription.add(mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }
                 .subscribe(shortSubscription { profile ->
@@ -176,30 +181,27 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = with((binding.formsList
-            .adapter as CompositeAdapter<IType>).data) {
-        clear()
-        if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
-        // перед отображением статуса пропускаем значение через "нормализатор"
+    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) {
+        data.replaceData(ArrayList<Any>())
+        if (!user.city.name.isNullOrEmpty()) data.add(ParentModel(user.city.name, false, R.drawable.pin))
         val status = Profile.normilizeStatus(user.status)
-        if (!status.isNullOrEmpty()) addExpandableItem(ParentModel(status, false, R.drawable.status))
-        addExpandableItem(GiftsModel(user.gifts, user.id))
-        val forms: MutableList<IType>
-        // проверяем не только все поля анкеты, но и статус. Статус имеет проверку на корректность данных
-        forms = mutableListOf <IType>().apply {
-            var hasEmptyItem = false
-            user.forms.forEach {
-                if (it.isEmpty && !hasEmptyItem) {
-                    hasEmptyItem = true
-                    //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
-                    add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
-                            it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
-                }
-                val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
-                add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
-            }
+        if (!status.isNullOrEmpty()) {
+            data.add(ParentModel(status, false, R.drawable.status))
         }
-        addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
+        data.add(GiftsModel(user.gifts, user.id))
+        data.addAll(mutableListOf <FormModel>().apply {
+                var hasEmptyItem = false
+                user.forms.forEach {
+                    if (it.isEmpty && !hasEmptyItem) {
+                        hasEmptyItem = true
+                        //если у юзера есть пустые поля в анкете, то добавляем строку с просьбой отправить запрос на добавление инфы
+                        add(0, FormModel(Pair(R.string.ask_moar_info.getString(), Utils.EMPTY), currentUser?.id,
+                                it.dataType.type, true, R.drawable.arrow_bottom_large, R.color.ask_moar_item_background))
+                    }
+                    val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
+                    add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
+                }
+            })
     }
 
     private fun getFormValue(formItem: FormItem): String {

@@ -396,6 +396,7 @@
         más tarde.
     </string>
     <string name="general_block">Bloquear</string>
+    <string name="general_block_v2">Bloquear</string>
     <string name="general_buying_disabled">En estos momentos, la compra es imposible</string>
     <string name="ban_flood_detected">Haces peticiones al servidor demasiado a menudo. Para seguir
         usando la aplicación
