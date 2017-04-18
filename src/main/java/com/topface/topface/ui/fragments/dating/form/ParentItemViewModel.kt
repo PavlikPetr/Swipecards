@@ -4,14 +4,13 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import org.jetbrains.anko.dimen
 
 class ParentItemViewModel(val data: ParentModel,
                           val itemPosition: Int) {
-    val dividerVisibility = ObservableInt(if (data!=null) View.GONE else View.VISIBLE)
+    val dividerVisibility = ObservableInt(if (data != null) View.GONE else View.VISIBLE)
     val itemIcon = ObservableInt(data.icon)
     val titleText = ObservableField<String>(data.data)
     val titleTextSize = ObservableInt(getTextSize())

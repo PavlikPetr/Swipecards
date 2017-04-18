@@ -153,17 +153,17 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     private var mRecyclerView: RecyclerView? = null
 
     private fun initFormList() = with(mBinding) {
-        val linLayManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
         formsList.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
-                if (linLayManager.getPosition(view) == 0) {
+                if (layoutManager.getPosition(view) == 0) {
                     outRect?.top = dimen(R.dimen.form_list_padding)
                 } else {
                     outRect?.top = 0
                 }
             }
         })
-        formsList.layoutManager = linLayManager
+        formsList.layoutManager = layoutManager
         mAdapter = CompositeAdapter(mTypeProvider) { Bundle() }
                 .addAdapterComponent(ParentItemComponent())
                 .addAdapterComponent(ChildItemComponent(mApi))

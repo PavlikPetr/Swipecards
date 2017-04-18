@@ -1,7 +1,7 @@
 package com.topface.topface.experiments.fb_invitation
 
 import com.topface.topface.App
-import com.topface.topface.ui.fragments.dating.mutual_popup.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 
 class FBInvitationViewModel(private val close: IDialogCloser) {
 

@@ -6,7 +6,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
-import com.topface.topface.ui.fragments.dating.mutual_popup.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogPopupEvent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.config.FeedsCache
