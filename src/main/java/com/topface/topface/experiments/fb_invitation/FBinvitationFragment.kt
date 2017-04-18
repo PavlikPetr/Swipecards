@@ -12,7 +12,7 @@ import com.topface.statistics.generated.QuestionnaireStatisticsGeneratedStatisti
 import com.topface.topface.R
 import com.topface.topface.databinding.FbInvitationBinding
 import com.topface.topface.ui.dialogs.BaseDialog
-import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.fragments.dating.mutual_popup.IDialogCloser
 import org.jetbrains.anko.layoutInflater
 
 class FBinvitationFragment : BaseDialog(), IDialogCloser {

@@ -18,7 +18,7 @@ public class FeedGiftsRequest extends ApiRequest {
 
     @Override
     protected JSONObject getRequestData() throws JSONException {
-        JSONObject result = new JSONObject().put("limit", 7).put("userId", uid);
+        JSONObject result = new JSONObject().put("limit", limit).put("userId", uid);
         if (from != -1) result.put("to", from);
         return result;
     }

@@ -4,6 +4,7 @@ import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutEmptyDatingBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
+import com.topface.topface.ui.fragments.dating.mutual_popup.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate

@@ -81,8 +81,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     init {
-        Debug.error("----------------init ДэйтингФрагментВьюмодел-----------")
-
         mProfileSubscription.add(mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.dating == t2.dating }
                 .subscribe(shortSubscription { profile ->

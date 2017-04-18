@@ -468,21 +468,20 @@ public class AuthFragment extends BaseAuthFragment {
                                 break;
                             case AuthTokenStateData.TOKEN_NOT_READY:
                                 if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
-                                    hideButtons();
-                                    showProgress();
                                     mNavigator.showFBInvitationPopup();
+                                } else {
                                     hideProgress();
                                     showButtons(true);
                                 }
                                 break;
-//                            case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
-//                                showProgress();
-//                                if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
-//                                    mNavigator.showFBInvitationPopup();
-//                                } else {
-//                                    sendQuestionnaireGetListRequestIfNeeded();
-//                                }
-//                                break;
+                            case AuthTokenStateData.TOKEN_STATUS_UNDEFINED:
+                                showProgress();
+                                if (!App.getAppConfig().getQuestionnaireData().isEmpty() && mNavigator != null) {
+                                    mNavigator.showFBInvitationPopup();
+                                } else {
+                                    sendQuestionnaireGetListRequestIfNeeded();
+                                }
+                                break;
                         }
                     }
                 }, new Action1<Throwable>() {
