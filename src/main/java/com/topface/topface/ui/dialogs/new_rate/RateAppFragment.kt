@@ -19,7 +19,6 @@ import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.http.IRequestClient
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
-import org.jetbrains.anko.layoutInflater
 
 class RateAppFragment : DialogFragment(), IDialogCloser {
 
@@ -69,10 +68,10 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         GoogleFeedbackInviteViewModel(this, activity as IActivityDelegate)
     }
 
-    private val mApi by lazy { FeedApi(context, activity as IRequestClient) }
+    private val mApi by lazy { FeedApi(activity.applicationContext, activity as IRequestClient) }
 
     private val mBinding by lazy {
-        DataBindingUtil.inflate<RateAppLayoutBinding>(context.layoutInflater, R.layout.rate_app_layout, null, false)
+        DataBindingUtil.inflate<RateAppLayoutBinding>(activity.layoutInflater, R.layout.rate_app_layout, null, false)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View = with(mBinding) {
