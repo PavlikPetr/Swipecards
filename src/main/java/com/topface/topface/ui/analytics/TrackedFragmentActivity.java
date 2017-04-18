@@ -2,7 +2,7 @@ package com.topface.topface.ui.analytics;
 
 import android.databinding.ViewDataBinding;
 
-import com.comscore.Analytics;
+import com.comscore.analytics.comScore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.analytics.HitBuilders;
@@ -39,7 +39,7 @@ public abstract class TrackedFragmentActivity<T extends ViewDataBinding> extends
         if (FacebookSdk.isInitialized()) {
             AppEventsLogger.activateApp(this, App.getAppSocialAppsIds().fbId);
         }
-        Analytics.notifyEnterForeground();
+        comScore.onEnterForeground();
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class TrackedFragmentActivity<T extends ViewDataBinding> extends
     @Override
     protected void onPause() {
         super.onPause();
-        Analytics.notifyExitForeground();
+        comScore.onExitForeground();
         StatisticsTracker.getInstance().activityStop(this);
     }
 
