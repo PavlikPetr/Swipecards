@@ -7,7 +7,6 @@ import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.ui.fragments.dating.ParentModel
 import org.jetbrains.anko.dimen
 
 class ParentItemViewModel(val data: ParentModel,

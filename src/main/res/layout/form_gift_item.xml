@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.dating.GiftListItemViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.form.gift.GiftListItemViewModel"/>
     </data>
 
     <FrameLayout

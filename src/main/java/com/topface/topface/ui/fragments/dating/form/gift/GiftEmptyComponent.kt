@@ -1,7 +1,8 @@
-package com.topface.topface.ui.fragments.dating
+package com.topface.topface.ui.fragments.dating.form.gift
 
 import com.topface.topface.R
 import com.topface.topface.databinding.NoGiftsLayoutBinding
+import com.topface.topface.ui.fragments.dating.form.FakeGift
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 class GiftEmptyComponent: AdapterComponent<NoGiftsLayoutBinding, FakeGift>() {
@@ -10,5 +11,5 @@ class GiftEmptyComponent: AdapterComponent<NoGiftsLayoutBinding, FakeGift>() {
     override val bindingClass: Class<NoGiftsLayoutBinding>
         get() = NoGiftsLayoutBinding::class.java
 
-    override fun bind(binding:NoGiftsLayoutBinding, data: FakeGift?, position: Int) {}
+    override fun bind(binding: NoGiftsLayoutBinding, data: FakeGift?, position: Int) {}
 }

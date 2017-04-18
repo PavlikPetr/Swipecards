@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.dating
+package com.topface.topface.ui.fragments.dating.mutual_popup
 
 import android.databinding.ObservableField
 import com.topface.topface.App
@@ -6,6 +6,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
+import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getDimen
 

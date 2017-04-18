@@ -1,6 +1,7 @@
-package com.topface.topface.ui.fragments.dating
+package com.topface.topface.ui.fragments.dating.form.gift
 
 import com.topface.topface.data.Gift
+import com.topface.topface.ui.fragments.dating.form.FakeGift
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 
 class GiftTypeProvider : ITypeProvider {
