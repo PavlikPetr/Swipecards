@@ -194,7 +194,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showRateAppFragment() {
-        val mRateAppFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(RateAppFragment.TAG)?.let { it as RateAppFragment } ?: RateAppFragment()
-        mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)
+        val mRateAppFragment = mActivityDelegate.fragmentManager.findFragmentByTag(RateAppFragment.TAG) as? RateAppFragment ?: RateAppFragment()
+        if (!mRateAppFragment.isAdded){
+        mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)}
     }
 }

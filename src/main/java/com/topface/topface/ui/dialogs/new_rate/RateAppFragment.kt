@@ -1,17 +1,18 @@
 package com.topface.topface.ui.dialogs.new_rate
 
+import android.app.DialogFragment
 import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.RatePopupNewVersion
 import com.topface.topface.databinding.RateAppLayoutBinding
-import com.topface.topface.ui.dialogs.RoundedPopupFragment
 import com.topface.topface.ui.fragments.dating.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.IActivityDelegate
@@ -20,7 +21,7 @@ import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
-class RateAppFragment : RoundedPopupFragment(), IDialogCloser {
+class RateAppFragment : DialogFragment(), IDialogCloser {
 
     companion object {
         const val TAG = "RateAppFragment"
@@ -78,7 +79,8 @@ class RateAppFragment : RoundedPopupFragment(), IDialogCloser {
         viewModel = mViewModel
         feedbackViewModel = mFeedbackViewModel
         googleIntiteViewModel = mGoogleIntiteViewModel
-        super.onCreateView(inflater, container, savedInstanceState)
+        dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.window.setBackgroundDrawableResource(R.drawable.rate_popup_corners_background)
         root
     }
 

@@ -4,19 +4,15 @@ import android.content.Intent
 import android.databinding.ViewDataBinding
 import android.databinding.ViewStubProxy
 import com.topface.billing.InstantPurchaseModel
-import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.LayoutEmptyDialogsBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.ChatActivity
-import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragment
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedLockerController
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.convertFeedIdList
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserIdList
-import com.topface.topface.utils.IActivityDelegate
 import java.util.*
 
 /**
@@ -48,8 +44,6 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
         adapter
     }
 
-    private val mFeedNavigator by lazy {FeedNavigator(activity as IActivityDelegate)}
-
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyDialogsBinding> {
         override fun construct(binding: ViewDataBinding) = DialogsLockScreenViewModel(binding as LayoutEmptyDialogsBinding, mNavigator, this@DialogsFragment)
     }
@@ -59,10 +53,9 @@ class DialogsFragment : BaseFeedFragment<FeedDialog, LayoutEmptyDialogsBinding>(
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ChatActivity.REQUEST_CHAT) {
-            if (RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
-                mFeedNavigator.showRateAppFragment()
+            data?.let {
+                mViewModel.updatePreview(it)
             }
-            data?.let { mViewModel.updatePreview(it) }
         }
     }
 }

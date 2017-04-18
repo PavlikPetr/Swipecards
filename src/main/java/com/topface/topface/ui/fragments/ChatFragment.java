@@ -139,6 +139,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private static final String PAGE_NAME = "Chat";
     public static final String GIFT_DATA = "gift_data";
     public static final String BANNED_USER = "banned_user";
+    public static final String MUTUAL = "is_mutual";
     public static final String SEX = "sex";
     private static final String HISTORY_LAST_ITEM = "history_last_item";
     public static final String SEND_MESSAGE = "send_message";
@@ -166,6 +167,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     };
     private String mMessage;
     private ArrayList<History> mHistoryFeedList;
+    private Boolean isMutual;
     private boolean mIsUpdating;
     private PullToRefreshListView mListView;
     private ChatListAdapter mAdapter;
@@ -731,6 +733,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         historyRequest.callback(new DataApiHandler<HistoryListData>() {
             @Override
             protected void success(HistoryListData data, IApiResponse response) {
+                Debug.error(response.toString());
+                isMutual = data.mutualTime != 0;
+                Intent intent = new Intent();
+                intent.putExtra(ChatFragment.MUTUAL, isMutual);
+                getActivity().setResult(Activity.RESULT_OK, intent);
                 mHistoryFeedList = data.items;
                 App.getAppComponent().suspiciousUserCache().setUserIsSuspiciousIfNeed(mUserId, data.isSuspiciousUser);
                 if (!data.items.isEmpty() && !isPopularLockOn) {
