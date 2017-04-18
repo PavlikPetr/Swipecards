@@ -86,10 +86,6 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mBannersController = BannersController(this, App.get().options)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
     protected fun initScreenView(binding: FragmentFeedBaseBinding) {
         with(binding.feedList) {
             itemAnimator = null
