@@ -198,14 +198,14 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
     private IComplainHeaderActionListener mComplainHeaderActionListener = new IComplainHeaderActionListener() {
         @Override
         public void onComplain() {
-            getOverflowMenu().processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.COMPLAIN_ACTION);
-            hideComplainHeader();
+            startActivityForResult(ComplainsActivity.createIntent(mUserId, true), ComplainsActivity.REQUEST_CODE);
         }
 
         @Override
         public void onBlock() {
             getOverflowMenu().processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION);
             hideComplainHeader();
+            getActivity().finish();
         }
 
         @Override
@@ -1059,6 +1059,13 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     mAdapter.getData().clear();
                 }
                 update(false, ChatUpdateType.INITIAL);
+                break;
+            case ComplainsActivity.REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    hideComplainHeader();
+                    // after success complain sent - block user
+                    mComplainHeaderActionListener.onBlock();
+                }
                 break;
             default:
                 if (resultCode == Activity.RESULT_CANCELED) {
