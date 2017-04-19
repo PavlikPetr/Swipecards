@@ -212,4 +212,10 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <style name="RoundedPopup" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/rate_popup_corners_background</item>
+        <item name="android:windowMinWidthMajor">65%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
 </resources>
