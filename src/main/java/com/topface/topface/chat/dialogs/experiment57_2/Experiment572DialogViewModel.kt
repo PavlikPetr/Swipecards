@@ -12,20 +12,15 @@ import com.topface.topface.utils.extensions.getString
 
 class Experiment572DialogViewModel(data: Bundle, val action:() -> Unit) {
 
-    companion object {
-        private fun createUserMessage(user: FeedUser) = String.format(
-                (if (user.sex == User.BOY) R.string.chat_buy_vip_popular_male else R.string.chat_buy_vip_popular_female).getString()
-                , user.firstName)
-
-        // todo use new correct string
-        private fun createVipMessage(user: FeedUser) =
-                (if (user.sex == User.BOY)R.string.buy_vip_to_chat_male else R.string.buy_vip_to_chat_female).getString()
-    }
-
     private val mUser: FeedUser = data.getParcelable(ARG_USER)
 
-    val userMessage = ObservableField(createUserMessage(mUser))
-    val vipMessage = ObservableField(createVipMessage(mUser))
+    val userMessage = ObservableField(String.format(
+            (if (mUser.sex == User.BOY) R.string.chat_buy_vip_popular_male else R.string.chat_buy_vip_popular_female).getString()
+            , mUser.firstName)
+    )
+    val vipMessage = ObservableField(
+            (if (mUser.sex == User.BOY)R.string.buy_vip_to_chat_male else R.string.buy_vip_to_chat_female).getString()
+    )
     val photo = ObservableField(mUser.photo)
     val placeholderResId = ObservableField(if (mUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val photoTransformType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
