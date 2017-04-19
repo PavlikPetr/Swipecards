@@ -976,6 +976,18 @@
   <string name="start_dialog">Започети разговор</string>
   <string name="continue_to_meet">Наставити упознавање</string>
   <string name="basic_information">Основна информација</string>
+  <string name="purchase_successfull">Куповина је успешно завршена!</string>
+  <string name="now_you_have_VIP">Сада имате VIP-статус</string>
+  <plurals name="you_have_some_coins">
+    <item quantity="few">Сада имате %d новчића</item>
+    <item quantity="other">Сада имате %d новчића</item>
+    <item quantity="one">Сада имате %d новчић</item>
+  </plurals>
+  <plurals name="you_have_some_sympathies">
+    <item quantity="few">Сада имате %d свиђања</item>
+    <item quantity="other">Сада имате %d свиђања</item>
+    <item quantity="one">Сада имате %d свиђање</item>
+  </plurals>
   <string name="photo_feed_add_photo">Нађите се у листи фотографија!\nХиљаде људи ће Вас видети.</string>
   <string name="buy_likes_get_more_likes">Добијте више свиђања!</string>
   <string name="buy_likes_become_first_in_searchlist_female">Будите први приказани момцима који траже девојке као што сте Ви!</string>
@@ -1002,4 +1014,47 @@
   <string name="permission_alert_button_allow">Иди на</string>
   <string name="permission_alert_button_disallow">Одбити</string>
   <string name="permission_alert_button_message">Да бисте поставили фотографије, морате да апликацији дате приступ меморији Вашег телефона преко Подешавања</string>
+  <string name="ninja_hint_card_number">Број картице</string>
+  <string name="ninja_hint_card_expires">Важи до</string>
+  <string name="ninja_hint_cvv">CVV/CVC</string>
+  <string name="ninja_button_buy">Купити</string>
+  <string name="ninja_checkbox_auto_pay">Аутоматско попуњавање</string>
+  <string name="ninja_text_1">Безбедно плаћање</string>
+  <string name="ninja_text_2">128-bit SSL Secured</string>
+  <string name="ninja_text_4">Укључујући дату услугу, сагласни сте са</string>
+  <string name="ninja_text_link">правила сервиса</string>
+  <string name="ninja_text_5">Кроз 7 дана VIP-статус ће бити аутоматски обновљен. Ваша картица ће бити запамћена за будућа плаћања. Можете отказати своју претплату и уклонити картицу у Подешавањима.</string>
+  <string name="ninja_text_trial_1">1 евро ће бити наплаћен и одмах враћен на Ваш налог како бисмо верификовали картицу</string>
+  <string name="ninja_text_trial_2">Кроз %1$s ће трансакција за %2$d %3$s бити потврђена. Сваког месеца ће Ваша претплата бити аутоматски обнављана и Ваша картица ће бити сачувана за следећа плаћања. Можете отказати претплату и уклонити картицу у Подешавањима.</string>
+  <string name="ninja_settings_toolbar">Плаћања</string>
+  <string name="ninja_vip_status_title">Претплата на VIP-статус</string>
+  <string name="ninja_cancel_vip_status">Отказати претплату</string>
+  <string name="ninja_use_another_card">Користити другу картицу</string>
+  <string name="ninja_delete_card">Уклонити картицу</string>
+  <string name="ninja_error_dialog_title">Дошло је до грешке</string>
+  <string name="ninja_error_dialog_message_dual">Молимо Вас да покушате поново или да изаберете други начин плаћања</string>
+  <string name="ninja_error_dialog_message_single">Пробајте још једанпут.</string>
+  <string name="ninja_error_dialog_button_retry">Пробати другу картицу</string>
+  <string name="ninja_error_dialog_button_change">Други начин плаћања</string>
+  <plurals name="ninja_trial_days">
+    <item quantity="few">%d дана</item>
+    <item quantity="other">%d дана</item>
+    <item quantity="one">%d дан</item>
+  </plurals>
+  <string name="payment_ninja_card_number">Картица **%s се користи за плаћање</string>
+  <string name="ninja_cvv_error">Неисправан код</string>
+  <string name="ninja_trhu_error">Неисправан датум</string>
+  <string name="ninja_number_error">Неисправан формат броја картице</string>
+  <string name="ninja_email_error">Неисправан формат е-поште</string>
+  <string name="use_card">Искористити картицу **%s</string>
+  <string name="ninja_no_card_title">Додати картицу</string>
+  <string name="ninja_subscription_expiration">Активна до %s</string>
+  <string name="ninja_subscription_cancelled">Отказано. Истиче %s</string>
+  <string name="ninja_autofilling_cancelled">Отказано</string>
+  <string name="ninja_autofilling_activated">Активно</string>
+  <string name="ninja_support">Подршка</string>
+  <string name="ninja_ask_to_delete_card_message">Да ли сте сигурни?</string>
+  <string name="ninja_product_by_price">%1$s за %2$s</string>
+  <string name="ninja_trial_vip_product">Пробни VIP-статус</string>
+  <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
 </resources>

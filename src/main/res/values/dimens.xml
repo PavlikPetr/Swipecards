@@ -18,13 +18,6 @@
     <dimen name="dating_small_button_size">56dp</dimen>
     <dimen name="dating_big_button_size">74dp</dimen>
     <dimen name="dating_big_button_size_v2">84dp</dimen>
-    <!--Редизайн знакомств, метрики-->
-    <dimen name="dating_buttons_padding_top">15dp</dimen>
-    <dimen name="dating_buttons_padding_bottom">13dp</dimen>
-    <dimen name="dating_smaller_buttons_size">60dp</dimen>
-    <dimen name="dating_bigger_buttons_size">76dp</dimen>
-
-
 
     <!-- for chat -->
     <dimen name="chat_balloon_max_width">260dp</dimen>

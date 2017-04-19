@@ -1313,10 +1313,6 @@
     <string name="permission_alert_button_allow">Перейти</string>
     <string name="permission_alert_button_disallow">Отклонить</string>
     <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>
-
-    <string name="permission_alert_button_allow">Перейти</string>
-    <string name="permission_alert_button_disallow">Отклонить</string>
-    <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>
     <!-- Payment Ninja -->
     <string name="ninja_hint_card_number">Номер карты</string>
     <string name="ninja_hint_card_expires">Действует до</string>

@@ -44,24 +44,7 @@ class TakePhotoPopup : AbstractDialogFragment() {
 
     lateinit var mEventBus: EventBus
     private var mArgs: Bundle? = null
-    private lateinit var mBinding: TakePhotoDialogBinding
-    private val mViewModel by lazy {
-        TakePhotoPopupViewModel(mBinding, {
-            activity.askUnlockStoragePermissionIfNeed()
-            TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this)
-        }, {
-            activity.askUnlockStoragePermissionIfNeed()
-            TakePhotoPopupPermissionsDispatcher.takeExternalPhotoWithCheck(this)
-        })
-    }
-    private val mToolbarViewModel by lazy {
-        BackToolbarViewModel(mBinding.toolbarInclude, R.string.take_photo.getString(), object : IToolbarNavigation {
-            override fun onUpButtonClick() {
-                mEventBus.setData(TakePhotoActionHolder(ACTION_CANCEL, getPlc()))
-                dialog.cancel()
-            }
-        })
-    }
+    private var mBinding: TakePhotoDialogBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,9 +71,23 @@ class TakePhotoPopup : AbstractDialogFragment() {
     override fun initViews(root: View) = with(TakePhotoDialogBinding.bind(root)) {
         releaseViewModels()
         mBinding = this
-        viewModel = mViewModel
-        toolbarViewModel = mToolbarViewModel
-        mToolbarViewModel.init()
+        viewModel = TakePhotoPopupViewModel(
+                this, {
+            activity.askUnlockStoragePermissionIfNeed()
+            TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this@TakePhotoPopup)
+        }, {
+            activity.askUnlockStoragePermissionIfNeed()
+            TakePhotoPopupPermissionsDispatcher.takeExternalPhotoWithCheck(this@TakePhotoPopup)
+        }
+        )
+
+        toolbarViewModel = BackToolbarViewModel(this.toolbarInclude, R.string.take_photo.getString(), object : IToolbarNavigation {
+            override fun onUpButtonClick() {
+                mEventBus.setData(TakePhotoActionHolder(ACTION_CANCEL, getPlc()))
+                dialog.cancel()
+            }
+        })
+        toolbarViewModel.init()
     }
 
 
@@ -121,7 +118,6 @@ class TakePhotoPopup : AbstractDialogFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mToolbarViewModel.release()
-        mViewModel.release()
+        releaseViewModels()
     }
 }

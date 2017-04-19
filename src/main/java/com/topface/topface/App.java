@@ -16,8 +16,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
-import com.comscore.Analytics;
-import com.comscore.PublisherConfiguration;
 import com.comscore.analytics.comScore;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;

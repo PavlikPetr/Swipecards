@@ -318,7 +318,6 @@
     <color name="questionnaire_text_input_appearance_hint_text_color">@color/questionnaire_blue</color>
     <color name="questionnaire_button_pink">#fe63cd</color>
     <color name="questionnaire_blue">#499AFF</color>
-    <color name="dating_filter_background">#f5f5f5</color>
 
     <color name="rate_text">#666666</color>
     <!-- Payment Ninja -->
