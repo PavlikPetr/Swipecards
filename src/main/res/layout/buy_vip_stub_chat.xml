@@ -64,7 +64,7 @@
             android:layout_height="74dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="176dp"
-            android:src="@drawable/ic_mutually"/>
+            android:src="@drawable/decor_two_chats_clouds"/>
 
         <ImageView
             android:id="@+id/icPen"
