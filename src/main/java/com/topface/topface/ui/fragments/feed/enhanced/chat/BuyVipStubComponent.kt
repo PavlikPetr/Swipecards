@@ -4,12 +4,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.BuyVipStubChatBinding
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 /**
  * Компонент заглушки "купите Vip" в редизайне чата
  */
-class BuyVipStubComponent(private val mFeed: FeedUser, private val mFeedNavigator) : AdapterComponent<BuyVipStubChatBinding, FeedUser>() {
+class BuyVipStubComponent(private val mFeed: FeedUser, private val mFeedNavigator: FeedNavigator) : AdapterComponent<BuyVipStubChatBinding, FeedUser>() {
 
     private val mViewModel by lazy {
         BuyVipStubViewModel(mFeed,mFeedNavigator)

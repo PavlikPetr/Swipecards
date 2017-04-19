@@ -78,7 +78,6 @@
             android:id="@+id/icPen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/avatarUserPhoto"
             android:layout_alignBottom="@id/mutualIC"
             android:layout_toLeftOf="@id/viewForLayout"
             android:layout_marginRight="80dp"
