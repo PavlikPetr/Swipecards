@@ -62,7 +62,7 @@
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
-            app:typeTransformation="@{viewModel.type}"/>
+            app:typeTransformation="@{viewModel.mutualType}"/>
 
         <ImageView
             android:id="@+id/icArrow"

@@ -13,11 +13,12 @@ import com.topface.topface.utils.extensions.getString
 class MutualStubChatViewModel(private val mMutualItem: FeedUser = FeedUser()) {
 
     val userPhoto = App.get().profile.photo
-    val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
+    val type = GlideTransformationType.CROP_CIRCLE_TYPE
     val userPlaceholderRes = ObservableField((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
     else R.drawable.dialogues_av_girl_small))
 
     val mutualUserPhoto = ObservableField(mMutualItem.photo)
+    val mutualType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val mutualPlaceholderRes = ObservableField(if (mMutualItem.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
 
