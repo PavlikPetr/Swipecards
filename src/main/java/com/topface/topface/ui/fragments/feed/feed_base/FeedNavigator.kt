@@ -25,10 +25,10 @@ import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoiler
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity
 import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
-import com.topface.topface.ui.fragments.dating.MutualPopupFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
+import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -194,7 +194,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showRateAppFragment() {
-        val mRateAppFragment = mActivityDelegate.supportFragmentManager.findFragmentByTag(RateAppFragment.TAG)?.let { it as RateAppFragment } ?: RateAppFragment()
-        mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)
+        val mRateAppFragment = mActivityDelegate.fragmentManager.findFragmentByTag(RateAppFragment.TAG) as? RateAppFragment ?: RateAppFragment()
+        if (!mRateAppFragment.isAdded) {
+            mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)
+        }
     }
 }

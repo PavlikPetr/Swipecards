@@ -6,7 +6,7 @@ import android.databinding.ObservableField
 import android.os.Bundle
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.App
-import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.settings.FeedbackMessageFragment
 import com.topface.topface.utils.ClientUtils

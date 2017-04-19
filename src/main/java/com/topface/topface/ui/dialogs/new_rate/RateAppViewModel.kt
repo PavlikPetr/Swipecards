@@ -11,7 +11,7 @@ import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.requests.AppRateRequest
 import com.topface.topface.ui.dialogs.new_rate.RateAppFragment.Companion.RATING
-import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.utils.ILifeCycle
 
 class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
