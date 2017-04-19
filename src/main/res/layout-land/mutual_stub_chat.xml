@@ -120,7 +120,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:text="@{viewModel.stubText}"
-                android:textColor="@color/mutual_sympathy_stub_aditional_info"
+                android:textColor="@color/google_grey_500"
                 android:textSize="16sp"/>
 
         </LinearLayout>
