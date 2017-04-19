@@ -3,8 +3,10 @@ package com.topface.topface.utils.config;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.App;
+import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.utils.Utils;
 
 
@@ -17,7 +19,10 @@ public class WeakStorage extends AbstractConfig {
     private static final String APPODEAL_BANNER_SEGMENT_NAME = "appodeal_banner_segment_name";
     private static final String APPODEAL_FULLSCREEN_SEGMENT_NAME = "appodeal_fullscreen_segment_name";
     private static final String PROFILE_DIALOG_REDESIGN_ENABLED = "profile_dialog_redesign_enabled";
-    private static final String DATING_REDESIGN_ENABLED = "dating_redesign_enabled";
+    private static final String IS_TRANSLUCENT_DATING = "dating_redesign_enabled";
+    private static final String IS_FIRST_SESSION = "is_first_session";
+    private static final String IS_QUESTIONNAIRE_REQUEST_SENT = "is_questionnaire_request_sent";
+    private static final String AUTH_TOKEN_STATE = "auth_token_state";
 
     public WeakStorage() {
         super(App.getContext());
@@ -33,7 +38,13 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, PROFILE_DIALOG_REDESIGN_ENABLED, Utils.EMPTY);
         // строковая обертка над boolean чтобы знать что значение было установлено
         // если установлено, то отражает разрешение на показ редизайна знакомств
-        addField(settingsMap, DATING_REDESIGN_ENABLED, Utils.EMPTY);
+        addField(settingsMap, IS_TRANSLUCENT_DATING, Utils.EMPTY);
+        // если это первая сессия после установки - true
+        addField(settingsMap, IS_FIRST_SESSION, false);
+        // признак того был ли отправлен запрос на получениенастроек для опросника
+        addField(settingsMap, IS_QUESTIONNAIRE_REQUEST_SENT, false);
+        // статус токена авторизации
+        addField(settingsMap, AUTH_TOKEN_STATE, Utils.EMPTY);
     }
 
     @Override
@@ -88,18 +99,70 @@ public class WeakStorage extends AbstractConfig {
     /**
      * @return true if must use new design for dating
      */
-    public boolean getDatingRedesignEnabled() {
+    public boolean getIsTranslucentDating() {
         SettingsMap settingsMap = getSettingsMap();
-        if (TextUtils.isEmpty(getStringField(settingsMap, DATING_REDESIGN_ENABLED))) {
-            setField(settingsMap, DATING_REDESIGN_ENABLED, String.valueOf(App.get().getOptions().datingRedesignEnabled));
+        if (TextUtils.isEmpty(getStringField(settingsMap, IS_TRANSLUCENT_DATING))) {
+            setField(settingsMap, IS_TRANSLUCENT_DATING, String.valueOf(App.get().getOptions().isTranslucentDating()));
         }
-        return Boolean.valueOf(getStringField(getSettingsMap(), DATING_REDESIGN_ENABLED));
+        return Boolean.valueOf(getStringField(getSettingsMap(), IS_TRANSLUCENT_DATING));
     }
 
     /**
      * Resets stored "design version" for dating
      */
-    public void resetDatingRedesignEnabled() {
-        setField(getSettingsMap(), DATING_REDESIGN_ENABLED, Utils.EMPTY);
+    public void resetIsTranslucentDating() {
+        setField(getSettingsMap(), IS_TRANSLUCENT_DATING, Utils.EMPTY);
+    }
+
+    /**
+     * Метод установки флага на текущую сессию
+     * Если эта сессия первая после установки, не обновления, значит сетим true
+     *
+     * @param isFirst true if this session first after install app
+     */
+    public void setFirstSessionAfterInstallAttribute(boolean isFirst) {
+        setField(getSettingsMap(), IS_FIRST_SESSION, isFirst);
+    }
+
+    /**
+     * Признак того, что текущая сессия является первой после установки приложения
+     */
+    public boolean isFirstSessionAfterInstall() {
+        return getBooleanField(getSettingsMap(), IS_FIRST_SESSION);
+    }
+
+    /**
+     * Метода переводит в состояние true статус отправки запроса на получение настроек для опросника
+     */
+    public void questionnaireRequestSent() {
+        setField(getSettingsMap(), IS_QUESTIONNAIRE_REQUEST_SENT, true);
+    }
+
+    /**
+     * Получить текущий статус отправки запроса для опросника
+     *
+     * @return true если запрос в этой сессии уже был отправлен
+     */
+    public boolean isQuestionnaireRequestSent() {
+        return getBooleanField(getSettingsMap(), IS_QUESTIONNAIRE_REQUEST_SENT);
+    }
+
+    /**
+     * Set current state of auth token
+     *
+     * @param data current auth token state
+     */
+    public void setAuthTokenState(AuthTokenStateData data) {
+        setField(getSettingsMap(), AUTH_TOKEN_STATE, JsonUtils.toJson(data));
+    }
+
+    /**
+     * Get current state of auth token
+     *
+     * @return current auth token state
+     */
+    public AuthTokenStateData getAuthTokenState() {
+        AuthTokenStateData state = JsonUtils.fromJson(getStringField(getSettingsMap(), AUTH_TOKEN_STATE), AuthTokenStateData.class);
+        return state == null ? new AuthTokenStateData() : state;
     }
 }

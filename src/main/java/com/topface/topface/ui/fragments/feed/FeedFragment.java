@@ -33,8 +33,6 @@ import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.generated.NonClassifiedStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
@@ -71,7 +69,6 @@ import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
-import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel;
 import com.topface.topface.utils.CountersManager;
 import com.topface.topface.utils.ListUtils;
 import com.topface.topface.utils.Utils;
@@ -745,7 +742,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
             } else {
                 startActivity(UserProfileActivity.createIntent(null, item.user.photo, item.user.id,
                         item.id, false, true, Utils.getNameAndAge(item.user.firstName, item.user.age),
-                        item.user.city.getName(),getFeedService().name().toLowerCase()));
+                        item.user.city.getName(), getFeedService().name().toLowerCase()));
             }
         }
     }
@@ -1168,9 +1165,8 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ChatActivity.REQUEST_CHAT) {
-            onChatActivityResult(resultCode, data);
-        }
+
+        onChatActivityResult(resultCode, data);
     }
 
     protected void onChatActivityResult(int resultCode, Intent data) {

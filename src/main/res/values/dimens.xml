@@ -15,6 +15,15 @@
     <dimen name="dating_album_height">432dp</dimen>
     <dimen name="dating_parent_item_title_size">16sp</dimen>
     <dimen name="dating_parent_item_subtitle_size">14sp</dimen>
+    <dimen name="dating_small_button_size">56dp</dimen>
+    <dimen name="dating_big_button_size">74dp</dimen>
+    <dimen name="dating_big_button_size_v2">84dp</dimen>
+    <!--Редизайн знакомств, метрики-->
+    <dimen name="dating_buttons_padding_top">15dp</dimen>
+    <dimen name="dating_buttons_padding_bottom">13dp</dimen>
+    <dimen name="dating_smaller_buttons_size">60dp</dimen>
+    <dimen name="dating_bigger_buttons_size">76dp</dimen>
+
 
 
     <!-- for chat -->
@@ -248,6 +257,19 @@
     <dimen name="mutual_popup_stroke_outside">9dp</dimen>
     <dimen name="mutual_popup_avatar">150dp</dimen>
 
+    <!--Метрики для опросника-->
+    <dimen name="questionnaire_counters_text_size">14sp</dimen>
+    <dimen name="questionnaire_third_type_title_text_size">24sp</dimen>
+    <dimen name="questionnaire_appearance_error_text_size">14sp</dimen>
+    <dimen name="questionnaire_appearance_hint_text_size">14sp</dimen>
+    <dimen name="questionnaire_digit_input_text_size">30sp</dimen>
+    <dimen name="questionnaire_unit_text_size">22sp</dimen>
+    <dimen name="questionnaire_unit_padding_left">8dp</dimen>
+    <dimen name="questionnaire_text_input_appearance_hint_text_size">11sp</dimen>
+    <dimen name="questionnaire_text_input_text_size">14sp</dimen>
+    <dimen name="questionnaire_digit_input_one_sign_width">20dp</dimen>
+    <dimen name="questionnaire_container_padding">16dp</dimen>
+
     <!--Редизайн знакомств, метрики-->
     <dimen name="dating_buttons_padding_top">15dp</dimen>
     <dimen name="dating_buttons_padding_bottom">13dp</dimen>
@@ -276,6 +298,13 @@
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
     <!-- https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-elevation-android -->
     <dimen name="material_elevation_nav_drawer">16dp</dimen>
+
+    <dimen name="questionnaire_big_avatar">156dp</dimen>
+    <dimen name="questionnaire_middle_avatar">140dp</dimen>
+    <dimen name="questionnaire_small_avatar">124dp</dimen>
+    <dimen name="questionnaire_avatar_margin_top">8dp</dimen>
+    <dimen name="questionnaire_avatar_margin_from_side">70dp</dimen>
+
 
     <!--Buy screen metrics-->
     <dimen name="buy_screen_title_text_size">16sp</dimen>

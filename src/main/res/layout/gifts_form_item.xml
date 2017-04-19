@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,7 +10,7 @@
             type="com.topface.topface.ui.fragments.dating.form.GiftsItemViewModel"/>
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -65,7 +66,8 @@
             android:layout_alignTop="@+id/send_gift"
             android:layout_toRightOf="@+id/send_gift"
             android:fadeScrollbars="false"
-            android:fadingEdge="none"/>
+            android:fadingEdge="none"
+            app:bindDataToCompositeAdapterWithSmoothUpdate="@{model.data}"/>
 
         <View
             android:layout_width="25dp"

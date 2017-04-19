@@ -178,6 +178,7 @@
     <string name="general_settings">Ustawienia</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Nieprawidłowa wartość</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Spróbuj ponownie</string>
@@ -390,6 +391,7 @@
         później.
     </string>
     <string name="general_block">Zablokuj</string>
+    <string name="general_block_v2">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
     <string name="ban_flood_detected">Robisz żądania do serwera zbyt często. Poczekaj                                                                                                                                                                                                           
           kilka chwil zanim zaczniesz kontynuować.</string>
@@ -951,10 +953,18 @@
     <string name="send_gift">Wyślij prezent</string>
     <string name="people_nearby_popover_text">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy</string>
     <string name="mutual_popup_you_get_mutual">Lubicie się nawzajem!</string>
+    <string name="continue_to_meet">Kontynuuj randkowanie</string>
+    <string name="basic_information">Podstawowe informacje</string>
     <string name="photo_feed_add_photo">Zostań wyróżniony pośród innych zdjęć!\nTysiące ludzi cię zobaczy.</string>
     <string name="buy_likes_get_more_likes">Zdobądź więcej sympatii!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Bądź pierwsza na listach facetów, którzy szukają dziewczyny takiej jak ty!</string>
     <string name="buy_likes_become_first_in_searchlist_male">Bądź pierwszy na listach kobiet, które szukają faceta takiego jak ty!</string>
     <string name="buy_likes_become_popular_female">Stań się popularna</string>
     <string name="buy_likes_become_popular_male">Stań się popularny</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Przekonaj się, kogo szukasz</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Pośród 100 milionów innych użytkowników</string>
+    <string name="fb_invitation_intelligent_selection_filter">Inteligentne filtrowanie</string>
+    <string name="fb_invitation_personalized_approach">Spersonalizowane podejście</string>
+    <string name="fb_invitation_button_text">Zaloguj się przez Facebooka</string>
+    <string name="could_you_give_us_feedback">Czy chciałbyś wystawić nam opinię w sklepie Google Play?!</string>
 </resources>

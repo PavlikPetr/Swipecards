@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.onboarding.question.range.QRangeFragmentViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="72dp"
+            android:gravity="center"
+            android:text="@{viewModel.title}"
+            android:textColor="@color/dark_primary_text"
+            android:textSize="24sp"
+            tools:text="Какого они должны быть возраста?" />
+
+        <com.topface.topface.ui.views.RangeSeekBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_item_height"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/filter_both_side_item_padding"
+            android:layout_marginRight="@dimen/filter_both_side_item_padding"
+            android:gravity="center_vertical"
+            app:currentMaxValue="@{viewModel.end}"
+            app:currentMinValue="@{viewModel.start}"
+            app:maxValue="@{viewModel.maxValue}"
+            app:maxValueTitle="@{viewModel.maxValueTitle}"
+            app:minValue="@{viewModel.minValue}"
+            app:minValueTitle="@{viewModel.minValueTitle}"
+            app:range="5"
+            app:setOnRangeSeekBarChangeListener="@{viewModel}"
+            app:textColor="@color/filter_item_text_color"
+            app:textPadding="@dimen/filter_value_padding"
+            app:textSize="18sp" />
+
+        <Button
+            style="@style/QuestionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:onClick="@{() -> viewModel.onNext()}"
+            android:text="@string/onboarding_button_next" />
+    </FrameLayout>
+</layout>

@@ -18,9 +18,12 @@ import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -31,7 +34,7 @@ import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
+import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -179,6 +182,33 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showPurchaseProduct(skuId: String, from: String) =
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
+
+    override fun showFBInvitationPopup() =
+            with(mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)
+                    ?.let { it as? FBinvitationFragment } ?: FBinvitationFragment()) {
+                if (!isAdded) {
+                    show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+                }
+            }
+
+    override fun showQuestionnaire(): Boolean {
+        val config = App.getAppConfig()
+        val startPosition = config.currentQuestionPosition
+        val data = config.questionnaireData
+        if (startPosition != Integer.MIN_VALUE && !data.isEmpty()) {
+            mActivityDelegate.startActivityForResult(QuestionnaireActivity.getIntent(data,
+                    startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE)
+            return true
+        }
+        return false
+    }
+
+    override fun showRateAppFragment() {
+        val mRateAppFragment = mActivityDelegate.fragmentManager.findFragmentByTag(RateAppFragment.TAG) as? RateAppFragment ?: RateAppFragment()
+        if (!mRateAppFragment.isAdded) {
+            mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)
+        }
+    }
 
     override fun showPurchaseSuccessfullFragment(sku: String) {
         mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {

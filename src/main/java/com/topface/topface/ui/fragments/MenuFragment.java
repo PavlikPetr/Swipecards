@@ -334,7 +334,7 @@ public class MenuFragment extends Fragment {
                 profile.firstName,
                 profile.age,
                 profile.city != null ? profile.city.getName() : Utils.EMPTY,
-                mWeakStorage.getDatingRedesignEnabled()
+                mWeakStorage.getIsTranslucentDating()
         ), mOnHeaderClick);
     }
 

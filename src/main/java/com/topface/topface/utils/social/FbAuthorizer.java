@@ -38,7 +38,8 @@ public class FbAuthorizer extends Authorizer {
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
 
-    private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends", "user_photos", "user_birthday");
+    private Collection<String> PERMISSIONS = Arrays.asList("email", "public_profile", "user_friends",
+            "user_photos", "user_birthday", "user_location");
 
     public FbAuthorizer() {
         super();
@@ -68,6 +69,7 @@ public class FbAuthorizer extends Authorizer {
                             accessToken.getToken(),
                             accessToken.getExpires().toString()
                     );
+
                     return;
                 }
                 sendTokenIntent(AuthTokenStateData.TOKEN_NOT_READY);
@@ -132,9 +134,8 @@ public class FbAuthorizer extends Authorizer {
     }
 
     public static String getFbId() {
-        return App.getAppConfig().getStageChecked()
-                ? STAGE_AUTH_FACEBOOK_ID
-                : App.getAppSocialAppsIds().fbId;
+        return App.getAppConfig().getStageChecked() ? STAGE_AUTH_FACEBOOK_ID :
+                App.getAppSocialAppsIds().fbId;
     }
 
     @Override

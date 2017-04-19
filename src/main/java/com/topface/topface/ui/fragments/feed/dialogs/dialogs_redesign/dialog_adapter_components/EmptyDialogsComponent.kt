@@ -16,6 +16,5 @@ class EmptyDialogsComponent : AdapterComponent<LayoutEmptyDialogItemBinding, Emp
     override val bindingClass: Class<LayoutEmptyDialogItemBinding>
         get() = LayoutEmptyDialogItemBinding::class.java
 
-    override fun bind(binding: LayoutEmptyDialogItemBinding, data: EmptyDialogsStubItem?, position: Int) {
-    }
+    override fun bind(binding: LayoutEmptyDialogItemBinding, data: EmptyDialogsStubItem?, position: Int) {}
 }

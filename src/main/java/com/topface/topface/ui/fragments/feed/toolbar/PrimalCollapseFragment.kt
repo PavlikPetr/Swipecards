@@ -54,7 +54,7 @@ abstract class PrimalCollapseFragment<out T : ViewDataBinding, out V : ViewDataB
         setupToolbar(toolbarSize)
         with(mAppBarBinding) {
             anchorFrame.addView(mAnchorBinding.root)
-            collapseFrame.addView(mCollapseBinding.root)
+            collapseFrame.addView(mCollapseBinding.root.apply { layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT) })
             appbar.addOnOffsetChangedListener(mAppBarModel)
         }
         return super.onCreateView(inflater, container, savedInstanceState)
