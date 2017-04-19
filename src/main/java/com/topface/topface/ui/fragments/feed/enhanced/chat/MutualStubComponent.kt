@@ -9,7 +9,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 /**
  * Заглушка "взаимных симпатий" в чате
  */
-class MutualStubComponent(private val mMutualItem: FeedUser = FeedUser()) : AdapterComponent<MutualStubChatBinding, FeedUser>() {
+class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<MutualStubChatBinding, FeedUser>() {
 
     private val mViewModel by lazy {
         MutualStubChatViewModel(mMutualItem)

@@ -10,7 +10,7 @@ import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 
 
-class MutualStubChatViewModel(private val mMutualItem: FeedUser = FeedUser()) {
+class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
 
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CROP_CIRCLE_TYPE
