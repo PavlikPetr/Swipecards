@@ -51,6 +51,8 @@ buildscript {
         anko_version = '0.9'
         permissionsdispatcher_version = '2.2.0'
         flurry_version = '6.5.0'
+        dagger = '2.10'
+        leakcanary = '1.4'
         hockeyAppReleaseAppId = '817b00ae731c4a663272b4c4e53e4b61'
         hockeyAppQaAppId = '9bf289e229284c0cba8d47eba5da9618'
     }
@@ -314,7 +316,7 @@ dependencies {
         exclude module: 'anko-support-v4'
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    kapt 'com.android.databinding:compiler:2.3.0'
+    kapt 'com.android.databinding:compiler:2.3.1'
     //Android Support libs
     compile(rootProject.ANDROID_BUILD_SUPPORT_LIBRARY_VERSION) {
         exclude group: 'com.android.support'
@@ -401,10 +403,28 @@ dependencies {
         exclude module: 'rxjava'
     }
 
-    compile 'com.google.dagger:dagger:2.8'
-    annotationProcessor "com.google.dagger:dagger-compiler:2.8"
-    kapt 'com.google.dagger:dagger-compiler:2.8'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile "com.google.dagger:dagger:$dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
+    compile("com.google.dagger:dagger-android:$dagger") {
+        exclude group: 'com.google.dagger'
+        exclude group: 'com.android.support'
+    }
+    compile("com.google.dagger:dagger-android-support:$dagger") {
+        exclude group: 'com.google.dagger'
+        exclude group: 'com.android.support'
+        exclude group: 'com.google.code.findbugs'
+    }
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
+
+    kapt "com.google.dagger:dagger-compiler:$dagger"
+    kapt "com.google.dagger:dagger-android:$dagger"
+    kapt "com.google.dagger:dagger-android-support:$dagger"
+    kapt "com.google.dagger:dagger-android-processor:$dagger"
+
+//    compile 'com.google.dagger:dagger:2.8'
+//    annotationProcessor "com.google.dagger:dagger-compiler:2.8"
+//    kapt 'com.google.dagger:dagger-compiler:2.8'
+//    provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.8') {
@@ -423,10 +443,10 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
     //LeakCanary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
-    qaCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$leakcanary"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
+    qaCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary"
 
 
     ifreeCompile('com.ifree.monetize:monetization-library:2.2.5') {
