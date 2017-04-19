@@ -18,7 +18,6 @@ import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment.Companion.PAGE_NAME
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.*
-import com.topface.topface.ui.fragments.feed.enhanced.chat.MutualStubComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -78,7 +77,6 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
                 .addAdapterComponent(AppDayItemComponent(mApi, InstantPurchaseModel(mNavigator, PAGE_NAME)))
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
-                .addAdapterComponent(MutualStubComponent())
                 .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))
                 .addAdapterComponent(activity.registerLifeCycleDelegate(ContactsItemComponent(mNavigator, context.applicationContext, mApi)))
     }

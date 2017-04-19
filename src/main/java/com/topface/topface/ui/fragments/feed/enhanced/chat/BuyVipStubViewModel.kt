@@ -20,10 +20,8 @@ class BuyVipStubViewModel(private val mFeedUser: FeedUser, private val mFeedNavi
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
     val type = GlideTransformationType.CROP_CIRCLE_TYPE
 
-    private fun getTitle(mFeedUser: FeedUser): String {
-        val title = mFeedUser.firstName + if (isMan) R.string.very_popular_man.getString() else R.string.very_popular_girl.getString()
-        return title
-    }
+    private fun getTitle(mFeedUser: FeedUser) = String.format(
+            if (isMan) R.string.chat_buy_vip_popular_male.getString() else R.string.chat_buy_vip_popular_female.getString(), mFeedUser.firstName);
 
     fun buyVip() = mFeedNavigator.showPurchaseVip("chat_stub")
 
