@@ -57,8 +57,8 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
     override fun closeIt() {
         if (RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
             mNavigator.showRateAppFragment()
-            dialog.cancel()
         }
+        dialog.cancel()
     }
 
 }
