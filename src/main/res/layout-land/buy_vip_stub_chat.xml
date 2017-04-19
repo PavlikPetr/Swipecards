@@ -32,37 +32,20 @@
             android:layout_toRightOf="@id/icCircle"
             android:src="@drawable/envelop"/>
 
-        <!--Юзер-->
-        <ImageView
-            android:id="@+id/avatarUserPhoto"
-            android:layout_width="@dimen/mutual_popup_avatar"
-            android:layout_height="@dimen/mutual_popup_avatar"
-            android:layout_above="@id/icArrow"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@id/icArrow"
-            android:src="@drawable/girl_blur_6"
-            app:animationSrc="@{@anim/mutual_popup_right}"
-            app:glideTransformationPhoto="@{viewModel.userPhoto}"
-            app:outSideCircle="@{viewModel.outsideCircle}"
-            app:placeholderRes="@{viewModel.userPlaceholderRes}"
-            app:typeTransformation="@{viewModel.type}"/>
-
-        <!--взаимный юзер-->
+        <!--чат- юзер-->
         <ImageView
             android:id="@+id/avatarUser"
             android:layout_width="@dimen/mutual_popup_avatar"
             android:layout_height="@dimen/mutual_popup_avatar"
-            android:layout_above="@id/icArrow"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="34dp"
-            android:layout_toLeftOf="@id/icPen"
             android:src="@drawable/man_blur_5"
             app:animationSrc="@{@anim/mutual_popup_left}"
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
-            app:typeTransformation="@{viewModel.type}"/>
+            app:typeTransformation="@{viewModel.type}"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/icPen"
+            android:layout_alignEnd="@+id/icPen"/>
 
         <ImageView
             android:id="@+id/icArrow"
@@ -109,20 +92,38 @@
             android:gravity="center_horizontal"
             android:layout_centerVertical="true"
             android:orientation="vertical">
+            <TextView
+                android:id="@+id/stub_title"
+                android:layout_below="@+id/mutualIC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/black"
+                android:textSize="20sp"/>
 
             <TextView
-                style="@style/MutualPopupTitle"
-                android:ellipsize="end"
-                android:text="@string/mutual_popup_you_get_mutual"/>
-
-            <TextView
+                android:layout_below="@+id/stub_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:text="@{viewModel.stubText}"
                 android:textColor="@color/mutual_sympathy_stub_aditional_info"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:id="@+id/textView2"/>
+
+            <Button
+                android:id="@+id/btnChangeFilterDating"
+                style="@style/PopupGreenButton.Background"
+                android:layout_marginTop="32dp"
+                android:onClick="@{() -> viewModel.buyVip()}"
+                android:text="@string/get_vip"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:layout_below="@+id/textView2"
+                android:layout_centerHorizontal="true"/>
 
         </LinearLayout>
     </RelativeLayout>

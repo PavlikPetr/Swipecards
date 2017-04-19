@@ -1342,4 +1342,9 @@
     <!--mutual stub for chat-->
     <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
     <string name="write_him_first">Напиши ему первой!</string>
+    <string name="very_popular_girl"> очень популярна!</string>
+    <string name="very_popular_man"> очень популярен!</string>
+    <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
+    <string name="write_to_him_only_vip">Вы можете написать ему, но только с VIP.</string>
+    <string name="get_vip">Получить VIP</string>
 </resources>

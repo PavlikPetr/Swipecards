@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import com.topface.topface.data.FeedDialog
+import com.topface.topface.data.FeedUser
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 
@@ -27,6 +28,9 @@ class DialogTypeProvider : ITypeProvider {
         }
         if (java == AppDayStubItem::class.java) {
             return 6
+        }
+        if (java == FeedUser::class.java) {
+            return 7
         }
         return 0
     }

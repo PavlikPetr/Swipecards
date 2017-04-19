@@ -1,4 +1,4 @@
-package com.topface.topface.ui.chat_redesign
+package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import android.databinding.ObservableField
 import com.topface.topface.App
@@ -10,7 +10,7 @@ import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 
 
-class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
+class MutualStubChatViewModel(private val mMutualItem: FeedUser = FeedUser()) {
 
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
@@ -23,6 +23,4 @@ class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
 
     val stubText = ObservableField<String>((if (App.get().profile.sex == User.BOY) R.string.write_her_something_first.getString()
     else R.string.write_him_first.getString()))
-
-
 }

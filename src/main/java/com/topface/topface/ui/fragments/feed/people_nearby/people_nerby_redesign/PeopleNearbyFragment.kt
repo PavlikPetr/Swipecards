@@ -17,9 +17,11 @@ import com.topface.topface.R
 import com.topface.topface.databinding.PeopleNearbyFragmentLayoutBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.MutualStubComponent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_utils.findLastFeedItem
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.PeopleNearbyFragment.Companion.PAGE_NAME
 import com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign.people_nearby_adapter_components.*
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter

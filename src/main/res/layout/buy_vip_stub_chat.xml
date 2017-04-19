@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.chat.MutualStubChatViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.BuyVipStubViewModel"/>
     </data>
 
     <RelativeLayout
@@ -33,36 +33,20 @@
             android:layout_toLeftOf="@+id/icPen"
             android:src="@drawable/envelop"/>
 
-        <!--Юзер-->
-        <ImageView
-            android:layout_width="@dimen/mutual_popup_avatar"
-            android:layout_height="@dimen/mutual_popup_avatar"
-            android:layout_above="@+id/icArrow"
-            android:layout_marginBottom="16dp"
-            android:layout_marginLeft="14dp"
-            android:layout_toRightOf="@+id/icArrow"
-            android:src="@drawable/girl_blur_6"
-            app:glideTransformationPhoto="@{viewModel.userPhoto}"
-            app:placeholderRes="@{viewModel.userPlaceholderRes}"
-            app:outSideCircle="@{viewModel.outsideCircle}"
-            app:typeTransformation="@{viewModel.type}"
-            app:animationSrc="@{@anim/mutual_popup_right}"/>
-
-        <!--Взаимный-->
+        <!--Чат-юзер-->
         <ImageView
             android:id="@+id/avatarUser"
             android:layout_width="@dimen/mutual_popup_avatar"
             android:layout_height="@dimen/mutual_popup_avatar"
-            android:layout_above="@+id/icArrow"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="14dp"
-            android:layout_toLeftOf="@+id/icPen"
             android:src="@drawable/man_blur_5"
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
             app:typeTransformation="@{viewModel.type}"
-            app:animationSrc="@{@anim/mutual_popup_left}"/>
+            app:animationSrc="@{@anim/mutual_popup_left}"
+            android:layout_above="@+id/icArrow"
+            android:layout_alignRight="@+id/icPen"
+            android:layout_alignEnd="@+id/icPen"/>
 
         <ImageView
             android:id="@+id/icArrow"
@@ -99,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:text="@string/mutual_popup_you_get_mutual"
+            android:text="@{viewModel.title}"
             android:textColor="@color/black"
             android:textSize="20sp"/>
 
@@ -111,7 +95,19 @@
             android:layout_marginTop="16dp"
             android:text="@{viewModel.stubText}"
             android:textColor="@color/mutual_sympathy_stub_aditional_info"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:id="@+id/textView2"/>
+
+        <Button
+            android:id="@+id/btnChangeFilterDating"
+            style="@style/PopupGreenButton.Background"
+            android:layout_marginTop="32dp"
+            android:onClick="@{() -> viewModel.buyVip()}"
+            android:text="@string/get_vip"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:layout_below="@+id/textView2"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 
