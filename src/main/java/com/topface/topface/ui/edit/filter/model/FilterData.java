@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import com.topface.topface.data.City;
 import com.topface.topface.data.DatingFilter;
 import com.topface.topface.data.Profile;
-import com.topface.topface.databinding.DatingFilterBinding;
 import com.topface.topface.ui.edit.filter.viewModel.DatingFilterViewModel;
 import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
+import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,29 +22,50 @@ public class FilterData implements Cloneable, Parcelable {
     public int sex;
 
     public FilterData(@NotNull DatingFilter filter) {
-        city = filter.city;
-        isOnlineOnly = DatingFilter.getOnlyOnlineField();
-        ageStart = filter.ageStart;
-        ageEnd = filter.ageEnd;
-        isPrettyOnly = filter.beautiful;
-        sex = filter.sex;
+        if (filter != null) {
+            city = filter.city;
+            isOnlineOnly = DatingFilter.getOnlyOnlineField();
+            ageStart = filter.ageStart;
+            ageEnd = filter.ageEnd;
+            isPrettyOnly = filter.beautiful;
+            sex = filter.sex;
+        } else {
+            fillFakeFilter();
+        }
     }
 
     public FilterData(@NotNull FilterViewModel model) {
-        city = model.city.get();
-        isOnlineOnly = model.onlineOnly.get();
-        ageStart = model.ageStart.get();
-        ageEnd = model.ageEnd.get();
-        isPrettyOnly = model.prettyOnly.get();
-        sex = model.isMaleSelected.get() ? Profile.BOY : Profile.GIRL;
+        if (model != null) {
+            city = model.city.get();
+            isOnlineOnly = model.onlineOnly.get();
+            ageStart = model.ageStart.get();
+            ageEnd = model.ageEnd.get();
+            isPrettyOnly = model.prettyOnly.get();
+            sex = model.isMaleSelected.get() ? Profile.BOY : Profile.GIRL;
+        } else {
+            fillFakeFilter();
+        }
     }
 
     public FilterData(@NotNull DatingFilterViewModel model) {
-        city = model.getCity().get();
-        isOnlineOnly = model.getOnlineOnly().get();
-        ageStart = model.getAgeStart().get();
-        ageEnd = model.getAgeEnd().get();
-        sex = model.isMaleSelected().get() ? Profile.BOY : Profile.GIRL;
+        if (model != null) {
+            city = model.getCity().get();
+            isOnlineOnly = model.getOnlineOnly().get();
+            ageStart = model.getAgeStart().get();
+            ageEnd = model.getAgeEnd().get();
+            sex = model.isMaleSelected().get() ? Profile.BOY : Profile.GIRL;
+        } else {
+            fillFakeFilter();
+        }
+    }
+
+    private void fillFakeFilter() {
+        city = City.createCity(City.ALL_CITIES, Utils.EMPTY, Utils.EMPTY);
+        isOnlineOnly = false;
+        ageStart = DatingFilter.MIN_AGE;
+        ageEnd = DatingFilter.MAX_AGE;
+        isPrettyOnly = false;
+        sex = Profile.GIRL;
     }
 
     protected FilterData(Parcel in) {
