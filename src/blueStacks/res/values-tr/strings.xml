@@ -368,6 +368,7 @@
   <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar 
        deneyin.</string>
   <string name="general_block">Engelle</string>
+  <string name="general_block_v2">Engelle</string>
   <string name="general_buying_disabled">Şu an satın alma mümkün değil.</string>
   <string name="ban_flood_detected">Sunucuya çok sık istek gönderiyorsunuz. Devam etmeden 
         önce lütfen bir süre bekleyin.</string>
