@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.dating.dating_redesign
 
 import android.databinding.ObservableField
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
