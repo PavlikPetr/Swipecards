@@ -278,7 +278,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
-        if (requestCode == ChatActivity.REQUEST_CHAT) {
+        if (requestCode == ChatActivity.REQUEST_CHAT && data != null && data.hasExtra(ChatFragment.MUTUAL)) {
             if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.Companion.isApplicable(App.get().getOptions().ratePopupNewVersion)) {
                 (new FeedNavigator((IActivityDelegate) getActivity())).showRateAppFragment();
             }

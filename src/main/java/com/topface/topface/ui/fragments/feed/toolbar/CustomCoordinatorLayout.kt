@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
-import com.topface.framework.utils.Debug
 import com.topface.topface.utils.Utils
 
 /**
@@ -40,7 +39,21 @@ class CustomCoordinatorLayout(context: Context, attrs: AttributeSet?, defStyleAt
                 }
             }
         }
-        return senMotionEvent(motionEvent)
+        try {
+            return senMotionEvent(motionEvent)
+        } catch (ex: IllegalArgumentException) {
+            ex.printStackTrace()
+        }
+        return false
+    }
+
+    override fun onTouchEvent(ev: MotionEvent?): Boolean {
+        try {
+            return super.onTouchEvent(ev)
+        } catch (ex: IllegalArgumentException) {
+            ex.printStackTrace()
+        }
+        return false
     }
 
     public fun setViewConfigList(list: List<ViewConfig>?) = list?.let { mViewConfigList = it }
