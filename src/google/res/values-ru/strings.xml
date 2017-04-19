@@ -1338,4 +1338,8 @@
     <string name="ninja_product_by_price">%1$s за %2$s</string>
     <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
     <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
+
+    <!--mutual stub for chat-->
+    <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
+    <string name="write_him_first">Напиши ему первой!</string>
 </resources>

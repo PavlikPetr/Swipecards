@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.dating.dating_redesign
 
 import android.databinding.ObservableField
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
@@ -16,7 +17,7 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
     val userPhoto = App.get().profile.photo
     val type = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val userPlaceholderRes = ObservableField((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
-                                                                                else R.drawable.dialogues_av_girl_small))
+    else R.drawable.dialogues_av_girl_small))
 
     val mutualUserPhoto = ObservableField(mutualUser.photo)
     val mutualPlaceholderRes = ObservableField(if (mutualUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
