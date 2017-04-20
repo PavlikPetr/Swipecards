@@ -37,31 +37,30 @@
             android:id="@+id/avatarUser"
             android:layout_width="@dimen/mutual_popup_avatar"
             android:layout_height="@dimen/mutual_popup_avatar"
+            android:layout_alignEnd="@+id/icPen"
+            android:layout_alignRight="@+id/icPen"
+            android:layout_centerVertical="true"
             android:src="@drawable/man_blur_5"
-            app:animationSrc="@{@anim/mutual_popup_left}"
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
-            app:typeTransformation="@{viewModel.type}"
-            android:layout_centerVertical="true"
-            android:layout_alignRight="@+id/icPen"
-            android:layout_alignEnd="@+id/icPen"/>
+            app:typeTransformation="@{viewModel.type}"/>
 
         <ImageView
             android:id="@+id/icArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/mutualIC"
-            android:layout_toLeftOf="@id/mutualIC"
             android:layout_marginRight="33dp"
+            android:layout_toLeftOf="@id/mutualIC"
             android:src="@drawable/arrow_to_left"/>
 
         <FrameLayout
             android:id="@+id/viewForLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:visibility="invisible"></FrameLayout>
 
         <ImageView
@@ -69,9 +68,9 @@
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_below="@id/viewForLayout"
+            android:layout_marginRight="120dp"
             android:layout_marginTop="50dp"
             android:layout_toLeftOf="@id/viewForLayout"
-            android:layout_marginRight="120dp"
             android:src="@drawable/decor_two_chats_clouds"/>
 
         <ImageView
@@ -79,23 +78,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/mutualIC"
-            android:layout_toLeftOf="@id/viewForLayout"
             android:layout_marginRight="80dp"
+            android:layout_toLeftOf="@id/viewForLayout"
             android:src="@drawable/pen"/>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/viewForLayout"
             android:gravity="center_horizontal"
-            android:layout_centerVertical="true"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/stub_title"
-                android:layout_below="@+id/mutualIC"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/mutualIC"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:text="@{viewModel.title}"
@@ -103,26 +103,26 @@
                 android:textSize="20sp"/>
 
             <TextView
-                android:layout_below="@+id/stub_title"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/stub_title"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:text="@{viewModel.stubText}"
                 android:textColor="@color/google_grey_500"
-                android:textSize="16sp"
-                android:id="@+id/textView2"/>
+                android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/btnChangeFilterDating"
                 style="@style/PopupGreenButton.Background"
+                android:layout_below="@+id/textView2"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="32dp"
                 android:onClick="@{() -> viewModel.buyVip()}"
                 android:text="@string/get_vip"
                 android:textAllCaps="true"
-                android:textSize="18sp"
-                android:layout_below="@+id/textView2"
-                android:layout_centerHorizontal="true"/>
+                android:textSize="18sp"/>
 
         </LinearLayout>
     </RelativeLayout>

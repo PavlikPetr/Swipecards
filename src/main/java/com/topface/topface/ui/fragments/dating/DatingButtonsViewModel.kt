@@ -163,6 +163,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     fun sendLike() = sendSomething {
+        mNavigator.showMutualPopup(it)
         if (!it.rated) {
             mLikeSubscription = mApi.callSendLike(it.id, App.get().options.blockUnconfirmed,
                     getMutualId(it), SendLikeRequest.FROM_SEARCH)

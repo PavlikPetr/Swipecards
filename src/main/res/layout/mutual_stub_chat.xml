@@ -35,8 +35,8 @@
 
         <!--Юзер-->
         <ImageView
-            android:layout_width="@dimen/mutual_popup_avatar"
-            android:layout_height="@dimen/mutual_popup_avatar"
+            android:layout_width="@dimen/mutual_stub__avatar"
+            android:layout_height="@dimen/mutual_stub__avatar"
             android:layout_above="@+id/icArrow"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="14dp"
@@ -44,9 +44,7 @@
             android:src="@drawable/girl_blur_6"
             app:glideTransformationPhoto="@{viewModel.userPhoto}"
             app:placeholderRes="@{viewModel.userPlaceholderRes}"
-            app:outSideCircle="@{viewModel.outsideCircle}"
-            app:typeTransformation="@{viewModel.type}"
-            app:animationSrc="@{@anim/mutual_popup_right}"/>
+            app:typeTransformation="@{viewModel.type}"/>
 
         <!--Взаимный-->
         <ImageView
@@ -61,8 +59,7 @@
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
-            app:typeTransformation="@{viewModel.mutualType}"
-            app:animationSrc="@{@anim/mutual_popup_left}"/>
+            app:typeTransformation="@{viewModel.mutualType}"/>
 
         <ImageView
             android:id="@+id/icArrow"

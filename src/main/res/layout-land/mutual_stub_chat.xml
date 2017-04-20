@@ -35,16 +35,14 @@
         <!--Юзер-->
         <ImageView
             android:id="@+id/avatarUserPhoto"
-            android:layout_width="@dimen/mutual_popup_avatar"
-            android:layout_height="@dimen/mutual_popup_avatar"
+            android:layout_width="@dimen/mutual_stub__avatar"
+            android:layout_height="@dimen/mutual_stub__avatar"
             android:layout_above="@id/icArrow"
             android:layout_marginBottom="16dp"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/icArrow"
             android:src="@drawable/girl_blur_6"
-            app:animationSrc="@{@anim/mutual_popup_right}"
             app:glideTransformationPhoto="@{viewModel.userPhoto}"
-            app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.userPlaceholderRes}"
             app:typeTransformation="@{viewModel.type}"/>
 
@@ -58,7 +56,6 @@
             android:layout_marginRight="34dp"
             android:layout_toLeftOf="@id/icPen"
             android:src="@drawable/man_blur_5"
-            app:animationSrc="@{@anim/mutual_popup_left}"
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
