@@ -123,6 +123,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="-55dp"
+                        android:layout_marginStart="-55dp"
+                        android:drawableEnd="@{viewModel.iconOnlineRes}"
                         android:drawablePadding="8dp"
                         android:drawableRight="@{viewModel.iconOnlineRes}"
                         android:ellipsize="none"

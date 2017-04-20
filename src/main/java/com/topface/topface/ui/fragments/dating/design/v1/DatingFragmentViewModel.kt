@@ -75,9 +75,9 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
     val name = ObservableField<String>()
     val feedAge = ObservableField<String>()
     val feedCity = ObservableField<String>()
-    val iconOnlineRes = ObservableField(0)
+    val iconOnlineRes = ObservableInt(0)
     val isNeedPreloadOnStart = ObservableBoolean(false)
-    val isDatingProgressBarVisible = ObservableField<Int>(View.VISIBLE)
+    val isDatingProgressBarVisible = ObservableInt(View.VISIBLE)
     val statusText = object : ObservableField<String>() {
         override fun set(value: String?) {
             val status = Profile.normilizeStatus(value)
@@ -85,8 +85,8 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
             statusVisibility.set(if (status.isNullOrEmpty()) View.GONE else View.VISIBLE)
         }
     }
-    val statusVisibility = ObservableField<Int>(View.GONE)
-    val photoCounterVisibility = ObservableField<Int>(View.GONE)
+    val statusVisibility = ObservableInt(View.GONE)
+    val photoCounterVisibility = ObservableInt(View.GONE)
     val photoCounter = object : ObservableField<String>() {
         override fun set(value: String?) {
             super.set(value)
