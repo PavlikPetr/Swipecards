@@ -53,8 +53,8 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(FROM)) {
             NonClassifiedStatisticsGeneratedStatistics.sendNow_PROFILE_OPEN(new Slices().putSlice("plc", intent.getStringExtra(FROM)));

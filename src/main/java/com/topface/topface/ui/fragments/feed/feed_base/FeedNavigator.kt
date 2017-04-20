@@ -33,6 +33,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -89,7 +90,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
             it.user?.let {
-                showChat(it) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, banned) }
+                showChat(it) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, banned) }
             }
         }
     }
@@ -99,7 +100,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
      */
     override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
         user?.let {
-            showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
+            showChat(user) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
         }
     }
 

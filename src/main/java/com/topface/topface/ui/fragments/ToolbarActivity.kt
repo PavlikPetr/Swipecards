@@ -31,7 +31,6 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = DataBindingUtil.setContentView<T>(this, getLayout())
-        setContentView(viewBinding.root)
         toolbarBinding = getToolbarBinding(viewBinding)
         viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
         setSupportActionBar(toolbarBinding?.toolbar)

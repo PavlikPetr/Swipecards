@@ -16,7 +16,7 @@ import rx.Subscriber
  * Адаптер - конструктор, реализуем компонент, подсовываем сюда и все работает
  * Created by tiberal on 28.11.16.
  */
-class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitObject: () -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
+class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitObject: (CompositeAdapter) -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
 
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
@@ -67,7 +67,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
                                 if (firstVisibleItem != RecyclerView.NO_POSITION &&
                                         lastVisibleItem != RecyclerView.NO_POSITION && visibleItemCount != 0 &&
                                         firstVisibleItem + visibleItemCount >= data.size - 1) {
-                                    subscriber.onNext(updaterEmitObject())
+                                    subscriber.onNext(updaterEmitObject(this@CompositeAdapter))
                                 }
                             } else {
                                 subscriber.onNext(Bundle())

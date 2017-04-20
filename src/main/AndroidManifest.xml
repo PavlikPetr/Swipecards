@@ -245,6 +245,17 @@
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value=".ui.NavigationActivity"/>
         </activity>
+
+        <activity
+            android:name=".ui.fragments.feed.enhanced.chat.ChatActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/Theme.Topface.Chat"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity"/>
+        </activity>
+
         <activity
                 android:name=".ui.UserProfileActivity"
                 android:parentActivityName=".ui.NavigationActivity"
