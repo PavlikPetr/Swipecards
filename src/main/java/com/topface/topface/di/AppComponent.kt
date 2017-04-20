@@ -13,9 +13,6 @@ import com.topface.topface.utils.config.WeakStorage
 import dagger.Component
 import javax.inject.Singleton
 
-/**
- * Created by tiberal on 02.02.17.
- */
 @Component(modules = arrayOf(AppModule::class, GarbageModule::class))
 @Singleton
 interface AppComponent {

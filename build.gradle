@@ -403,28 +403,21 @@ dependencies {
         exclude module: 'rxjava'
     }
 
-    compile "com.google.dagger:dagger:$dagger"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
-    compile("com.google.dagger:dagger-android:$dagger") {
-        exclude group: 'com.google.dagger'
-        exclude group: 'com.android.support'
-    }
-    compile("com.google.dagger:dagger-android-support:$dagger") {
-        exclude group: 'com.google.dagger'
-        exclude group: 'com.android.support'
-        exclude group: 'com.google.code.findbugs'
-    }
-    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
+//    compile "com.google.dagger:dagger:$dagger"
+//    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
+////    compile("com.google.dagger:dagger-android-support:$dagger") {
+//////        exclude group: 'com.google.dagger'
+//////        exclude group: 'com.android.support'
+////    }
+//    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
+//
+//    kapt "com.google.dagger:dagger-compiler:$dagger"
+//    kapt "com.google.dagger:dagger-android-processor:$dagger"
 
-    kapt "com.google.dagger:dagger-compiler:$dagger"
-    kapt "com.google.dagger:dagger-android:$dagger"
-    kapt "com.google.dagger:dagger-android-support:$dagger"
-    kapt "com.google.dagger:dagger-android-processor:$dagger"
-
-//    compile 'com.google.dagger:dagger:2.8'
-//    annotationProcessor "com.google.dagger:dagger-compiler:2.8"
-//    kapt 'com.google.dagger:dagger-compiler:2.8'
-//    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.google.dagger:dagger:2.8'
+    annotationProcessor "com.google.dagger:dagger-compiler:2.8"
+    kapt 'com.google.dagger:dagger-compiler:2.8'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.8') {
