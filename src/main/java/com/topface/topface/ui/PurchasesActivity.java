@@ -108,8 +108,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     private ExperimentBoilerplateFragment mTrialVipPopup;
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         mAppState = App.getAppComponent().appState();
         mEventBus = App.getAppComponent().eventBus();

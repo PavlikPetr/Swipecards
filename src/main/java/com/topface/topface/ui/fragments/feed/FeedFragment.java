@@ -66,6 +66,7 @@ import com.topface.topface.ui.adapters.MultiselectionController;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.ToolbarActivity;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
 import com.topface.topface.ui.views.BackgroundProgressBarController;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.SwipeRefreshController;
@@ -728,7 +729,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         //Open chat activity
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
-            Intent intent = ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city.name
+            Intent intent = ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city.name
                     , null, user.photo, false, item.type, user.banned);
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }

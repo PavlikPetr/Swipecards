@@ -26,6 +26,7 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
@@ -367,7 +368,7 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
+                    return ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
                             null, null, true, null, false);
                 }
                 return i;
@@ -378,7 +379,6 @@ public class GCMUtils {
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
         Intent i = null;
-        String pageName;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:
