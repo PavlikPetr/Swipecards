@@ -411,6 +411,8 @@ public class Options extends AbstractData {
             JSONObject rateAppSplitJsonObject = response.optJSONObject("rateAppSplitPopup");
             if (rateAppSplitJsonObject != null) {
                 ratePopupNewVersion = JsonUtils.fromJson(rateAppSplitJsonObject.toString(), RatePopupNewVersion.class);
+//                ratePopupNewVersion.setNotNowTimeout(rateAppSplitJsonObject.getInt("notNowTimeout"));
+//                ratePopupNewVersion.setBadRateTimeout(rateAppSplitJsonObject.getInt("badRateTimeout"));
             }
 
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");

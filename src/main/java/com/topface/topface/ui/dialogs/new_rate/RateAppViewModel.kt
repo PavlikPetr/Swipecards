@@ -75,7 +75,6 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
 
     //    сохраняем состояние
     override fun onSavedInstanceState(state: Bundle) {
-        super.onSavedInstanceState(state)
         with(state) {
             putBoolean(IS_ENABLED_BUTTON, buttonEnabled.get())
             putFloat(CURRENT_RATING, currentRating.get())
@@ -83,10 +82,10 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
             putInt(IS_ENABLED_FEEDBACK_LAYOUT, layoutFeedbackVisibility.get())
             putInt(IS_ENABLED_GOOGLE_LAYOUT, layoutGoogleVisibility.get())
         }
+        super.onSavedInstanceState(state)
     }
 
     override fun onRestoreInstanceState(state: Bundle) {
-        super.onRestoreInstanceState(state)
         with(state) {
             buttonEnabled.set(this.getBoolean(IS_ENABLED_BUTTON, buttonEnabled.get()))
             currentRating.set(this.getFloat(CURRENT_RATING, currentRating.get()))
@@ -94,6 +93,7 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
             layoutFeedbackVisibility.set(this.getInt(IS_ENABLED_FEEDBACK_LAYOUT, layoutFeedbackVisibility.get()))
             layoutGoogleVisibility.set(this.getInt(IS_ENABLED_GOOGLE_LAYOUT, layoutGoogleVisibility.get()))
         }
+        super.onRestoreInstanceState(state)
     }
 
 }

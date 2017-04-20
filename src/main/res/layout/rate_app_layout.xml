@@ -72,6 +72,7 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginRight="32dp"
                     android:layout_marginTop="35dp"
+                    app:setRating="@{viewModel.currentRating}"
                     app:setOnRatingBarChangeListener="@{viewModel.onRatingChanged}"/>
 
                 <Button

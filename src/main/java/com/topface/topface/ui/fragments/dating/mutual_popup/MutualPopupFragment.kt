@@ -30,7 +30,7 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
         }
     }
 
-    private val mNavigator by lazy { FeedNavigator(activity as IActivityDelegate) }
+    private val mNavigator by lazy { FeedNavigator(activity as IActivityDelegate)}
 
     private val mViewModel by lazy {
         PopupMutualViewModel(mNavigator, arguments.getParcelable(MUTUAL_USER_TAG), this)
@@ -45,7 +45,7 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
 
     override fun onCancel(dialog: DialogInterface?) {
         if (RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
-            mNavigator.showRateAppFragment()
+            FeedNavigator(activity as IActivityDelegate).showRateAppFragment()                  //todo немного странный, но работающий вариант
         }
         super.onCancel(dialog)
     }
@@ -54,11 +54,6 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
 
     override fun getDialogLayoutRes() = R.layout.popup_mutually
 
-    override fun closeIt() {
-        if (RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
-            mNavigator.showRateAppFragment()
-        }
-        dialog.cancel()
-    }
+    override fun closeIt() = dialog.cancel()
 
 }
