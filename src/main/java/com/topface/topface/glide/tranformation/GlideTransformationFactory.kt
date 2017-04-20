@@ -12,7 +12,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation
  * Created by siberia87 on 30.11.16.
  */
 class GlideTransformationFactory(val mContext: Context) {
-    fun construct(@GlideTransformationType.GlideTransformationType type: Long, radiusOnline: Float?, outSideLine: Float?, circleColor: Int?): Array<Transformation<Bitmap>> =
+    fun construct(@GlideTransformationType.GlideTransformationType type: Long, radiusOnline: Float?, outSideLine: Float?, circleColor: Int = Color.WHITE): Array<Transformation<Bitmap>> =
             when (type) {
                 GlideTransformationType.ADMIRATION_TYPE -> arrayOf(AdmirationTransformation(mContext))
 
@@ -34,7 +34,7 @@ class GlideTransformationFactory(val mContext: Context) {
                 GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND -> arrayOf(
                         CropAtImageViewTransformation(mContext),
                         CropCircleTransformation(mContext),
-                        DrawCircleUnderAvatar(mContext, outSideLine as Float, circleColor as Int))
+                        DrawCircleUnderAvatar(mContext, outSideLine as Float, circleColor))
 
                 else -> arrayOf(CropAtImageViewTransformation(mContext), CropCircleTransformation(mContext))
             }
