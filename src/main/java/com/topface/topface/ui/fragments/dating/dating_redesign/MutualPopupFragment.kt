@@ -33,32 +33,20 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
 
     private val mNavigator by lazy { FeedNavigator(activity as IActivityDelegate) }
 
-//    private val mViewModel by lazy {
-//        PopupMutualViewModel(mNavigator, arguments.getParcelable(MUTUAL_USER_TAG), this)
-//    }
-
     private val mViewModel by lazy {
-        MutualStubChatViewModel(arguments.getParcelable(MUTUAL_USER_TAG))
+        PopupMutualViewModel(mNavigator, arguments.getParcelable(MUTUAL_USER_TAG), this)
     }
 
-//    private var mBinding by Delegates.notNull<PopupMutuallyBinding>()
-
-    private var mBinding by Delegates.notNull<MutualStubChatBinding>()
-
-//    override fun initViews(root: View?) {
-//        mBinding = PopupMutuallyBinding.bind(root)
-//        mBinding.setModel(mViewModel)
-//    }
+    private var mBinding by Delegates.notNull<PopupMutuallyBinding>()
 
     override fun initViews(root: View?) {
-        mBinding = MutualStubChatBinding.bind(root)
-        mBinding.setViewModel(mViewModel)
+        mBinding = PopupMutuallyBinding.bind(root)
+        mBinding.setModel(mViewModel)
     }
+
     override fun isModalDialog() = false
 
-//    override fun getDialogLayoutRes() = R.layout.popup_mutually
-
-    override fun getDialogLayoutRes() = R.layout.mutual_stub_chat
+    override fun getDialogLayoutRes() = R.layout.popup_mutually
 
     override fun closeIt() = dialog.cancel()
 
