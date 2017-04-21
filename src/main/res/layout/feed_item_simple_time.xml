@@ -7,25 +7,25 @@
 
         <variable
             name="model"
-            type="com.topface.topface.ui.fragments.feed.visitors.VisitorsItemViewModel" />
+            type="com.topface.topface.ui.fragments.feed.visitors.VisitorsItemViewModel"/>
 
         <variable
             name="longClickListener"
-            type="android.view.View.OnLongClickListener" />
+            type="android.view.View.OnLongClickListener"/>
 
         <variable
             name="clickListener"
-            type="android.view.View.OnClickListener" />
+            type="android.view.View.OnClickListener"/>
     </data>
 
     <LinearLayout
         android:id="@+id/item_layout"
-        app:uiTestTag = "@{model.getTag()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener::onClick}"
         android:orientation="horizontal"
-        app:onLongItemClick="@{longClickListener}">
+        app:onLongItemClick="@{longClickListener}"
+        app:uiTestTag="@{model.getTag()}">
 
         <FrameLayout
             android:id="@+id/frame_avatar"
@@ -36,7 +36,7 @@
             <include
                 android:id="@+id/avatar_frame"
                 layout="@layout/feed_item_round_avatar"
-                bind:avatarHolder="@{model.avatarHolder}" />
+                bind:avatarHolder="@{model.avatarHolder}"/>
         </FrameLayout>
 
         <LinearLayout
@@ -54,7 +54,7 @@
 
                 <include
                     layout="@layout/feed_item_user_name_age"
-                    bind:nameAndAge="@{model.nameAndAge}" />
+                    bind:nameAndAge="@{model.nameAndAge}"/>
 
                 <TextView
                     android:id="@+id/time"
@@ -63,7 +63,7 @@
                     android:layout_height="match_parent"
                     android:gravity="right"
                     android:paddingRight="12dp"
-                    android:text="@{model.time}" />
+                    android:text="@{model.time}"/>
             </LinearLayout>
 
             <TextView
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{model.text}" />
+                android:text="@{model.text}"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

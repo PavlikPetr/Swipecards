@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.support.annotation.IntDef
 import android.support.v4.content.ContextCompat
 import com.topface.topface.App
+import com.topface.topface.ui.dialogs.PermissionAlertDialogFactory
 import com.topface.topface.ui.dialogs.AlertDialogFactory
 import permissions.dispatcher.PermissionUtils
 
@@ -116,4 +117,3 @@ fun Activity.askUnlockStoragePermissionIfNeed() {
         }
     }
 }
-

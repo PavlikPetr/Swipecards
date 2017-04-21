@@ -97,6 +97,8 @@ public class UserConfig extends AbstractConfig {
     private static final String TRIAL_SHOWS_IN_VISITORS = "trial_shows_in_visitors";
     public static final String TRIAL_VIP_POPUP_SHOW_COUNTER = "trial_vip_popup_show_counter";
     public static final String PEOPLE_NEARBY_POPOVER_CLOSE_TIME = "people_nearby_popover_show_time";
+    public static final String RATING_POPUP = "rating_pupup";
+    public static final String RATING_POPUP_VALUE = "rating_pupup_value";
     private String mUnique;
     private DailyConfigExtension mConfigExtension;
 
@@ -227,6 +229,10 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap, TRIAL_VIP_POPUP_SHOW_COUNTER, 0);
         // время последнего закрытия popover на экране Люди рядом
         addField(settingsMap, PEOPLE_NEARBY_POPOVER_CLOSE_TIME, 0L);
+        // время последего закрытия попапа оценки восхищения
+        addField(settingsMap,RATING_POPUP, -1L);
+        // является ли оценка приложения ниже 4х
+        addField(settingsMap, RATING_POPUP_VALUE, false);
     }
 
     @Override
@@ -860,5 +866,43 @@ public class UserConfig extends AbstractConfig {
      */
     public long getPeopleNearbyPopoverClose() {
         return getLongField(getSettingsMap(), PEOPLE_NEARBY_POPOVER_CLOSE_TIME);
+    }
+
+    /**
+     * Set time of last Rating popup close
+     *
+     * @param time current time of popover close
+     * @return true if set successfull
+     */
+    public boolean setRatingPopup(long time) {
+        return setField(getSettingsMap(), RATING_POPUP, time);
+    }
+
+    /**
+     * Get time of last Rating popup close
+     *
+     * @return time of last popup close
+     */
+    public long getRatingPopup() {
+        return getLongField(getSettingsMap(), RATING_POPUP);
+    }
+
+    /**
+     * Set value of isBadRate of Rating popup
+     *
+     * @param isBadRateValue current value of isBadRate of Rating popup
+     * @return true if set successfull
+     */
+    public boolean setRatingPopupValue(boolean isBadRateValue) {
+        return setField(getSettingsMap(), RATING_POPUP_VALUE, isBadRateValue);
+    }
+
+    /**
+     * Get value of isBadRate of Rating popup
+     *
+     * @return boolean value of isBadRate of Rating popup
+     */
+    public boolean getRatingPopupValue() {
+        return getBooleanField(getSettingsMap(), RATING_POPUP_VALUE);
     }
 }

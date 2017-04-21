@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.graphics.Typeface
 import android.view.View
 import com.topface.topface.R
@@ -24,11 +25,11 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
     val placeholderRes = ObservableField(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
     val onLineCircle = ObservableField(R.dimen.dialog_online_circle.getDimen())
     val strokeSize = ObservableField(R.dimen.dialog_stroke_size.getDimen())
-    val counterVisibility: ObservableField<Int> = ObservableField(if (item.unread) View.VISIBLE else View.GONE)
+    val counterVisibility = ObservableInt(if (item.unread) View.VISIBLE else View.GONE)
     val name: ObservableField<String> = ObservableField(item.user.firstName)
-    val dialogTextColor: ObservableField<Int> = ObservableField(if (item.unread) R.color.message_unread.getColor() else R.color.message_was_read.getColor())
-    val dialogMessageStyle: ObservableField<Int> = ObservableField(if (item.unread) Typeface.BOLD else Typeface.NORMAL)
-    val dialogMessageIcon: ObservableField<Int> = ObservableField(prepareMessageIcon())
+    val dialogTextColor = ObservableInt(if (item.unread) R.color.message_unread.getColor() else R.color.message_was_read.getColor())
+    val dialogMessageStyle = ObservableInt(if (item.unread) Typeface.BOLD else Typeface.NORMAL)
+    val dialogMessageIcon = ObservableInt(prepareMessageIcon())
     val dialogTime: ObservableField<String> = ObservableField(item.createdRelative)
     val text: ObservableField<String> = ObservableField(prepareDialogText())
 

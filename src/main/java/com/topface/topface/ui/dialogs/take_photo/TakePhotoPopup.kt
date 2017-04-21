@@ -73,12 +73,12 @@ class TakePhotoPopup : AbstractDialogFragment() {
         mBinding = this
         viewModel = TakePhotoPopupViewModel(
                 this, {
-                    activity.askUnlockStoragePermissionIfNeed()
-                    TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this@TakePhotoPopup)
-                }, {
-                    activity.askUnlockStoragePermissionIfNeed()
-                    TakePhotoPopupPermissionsDispatcher.takeExternalPhotoWithCheck(this@TakePhotoPopup)
-                }
+            activity.askUnlockStoragePermissionIfNeed()
+            TakePhotoPopupPermissionsDispatcher.takePhotoWithCheck(this@TakePhotoPopup)
+        }, {
+            activity.askUnlockStoragePermissionIfNeed()
+            TakePhotoPopupPermissionsDispatcher.takeExternalPhotoWithCheck(this@TakePhotoPopup)
+        }
         )
 
         toolbarViewModel = BackToolbarViewModel(this.toolbarInclude, R.string.take_photo.getString(), object : IToolbarNavigation {

@@ -98,7 +98,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
                             mIsProfileWasUpdated = false;
                             new ParallelApiRequest(App.getContext())
                                     .addRequest(request)
-                                    .addRequest(App.getProfileRequest())
+                                    .addRequest(App.getProfileRequest(null))
                                     .exec();
                         } else {
                             mIsProfileWasUpdated = true;
@@ -199,7 +199,7 @@ public class ProfileFormFragment extends AbstractFormFragment {
     public void onDestroy() {
         super.onDestroy();
         if (mIsProfileWasUpdated) {
-            App.getProfileRequest().exec();
+            App.getProfileRequest(null).exec();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mUpdateReceiver);
     }

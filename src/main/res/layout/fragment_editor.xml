@@ -204,6 +204,13 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <include
+            android:id="@+id/reserveSocialAppIds"
+            layout="@layout/editor_form_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"/>
+
         <Button
             android:id="@+id/ReconnectWebSocket"
             style="@style/Widget.Topface.Button.Big.Gray"

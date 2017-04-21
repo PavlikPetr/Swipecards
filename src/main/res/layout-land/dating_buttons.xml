@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.dating.dating_redesign.DatingFragmentViewModel"/>
+            type="com.topface.topface.ui.fragments.dating.design.v1.DatingFragmentViewModel"/>
 
     </data>
 

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
@@ -15,8 +16,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
-import com.comscore.Analytics;
-import com.comscore.PublisherConfiguration;
+import com.comscore.analytics.comScore;
 import com.facebook.appevents.AppEventsConstants;
 import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.core.ExtendedImageLoader;
@@ -105,8 +105,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
 public class App extends ApplicationBase implements IStateDataUpdater {
@@ -159,7 +157,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                 .addRequest(getUserOptionsRequest())
                 .addRequest(getProductsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
-                .addRequest(getProfileRequest())
+                .addRequest(getProfileRequest(null))
                 .callback(handler)
                 .exec();
     }
@@ -177,7 +175,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
     public static void sendUserOptionsAndPurchasesRequest() {
         new ParallelApiRequest(App.getContext())
-                .addRequest(getProfileRequest())
+                .addRequest(getProfileRequest(null))
                 .addRequest(getUserOptionsRequest())
                 .addRequest(StoresManager.getPaymentwallProductsRequest())
                 .addRequest(getProductsRequest())
@@ -227,11 +225,11 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
     }
 
-    public static void sendProfileRequest() {
-        getProfileRequest().exec();
+    public static void sendProfileRequest(ApiHandler handler) {
+        getProfileRequest(handler).exec();
     }
 
-    public static ApiRequest getProfileRequest() {
+    public static ApiRequest getProfileRequest(final ApiHandler handler) {
         mLastProfileUpdate = System.currentTimeMillis();
         return new ProfileRequest(App.getContext())
                 .callback(new DataApiHandler<Profile>() {
@@ -249,6 +247,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
                             App.getContext().startService(intent);
                         }
                         CacheProfile.sendUpdateProfileBroadcast();
+                        if (handler != null) {
+                            handler.success(response);
+                        }
                     }
 
                     @Override
@@ -258,6 +259,17 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
                     @Override
                     public void fail(int codeError, IApiResponse response) {
+                        if (handler != null) {
+                            handler.fail(codeError, response);
+                        }
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        if (handler != null) {
+                            handler.always(response);
+                        }
                     }
                 });
     }
@@ -285,7 +297,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     public static void checkProfileUpdate() {
         if (System.currentTimeMillis() > mLastProfileUpdate + PROFILE_UPDATE_TIMEOUT) {
             mLastProfileUpdate = System.currentTimeMillis();
-            getProfileRequest().exec();
+            getProfileRequest(null).exec();
         }
     }
 
@@ -440,7 +452,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             public void onAppForeground(long timeOnStart) {
                 AppStateStatistics.sendAppForegroundState();
                 FlurryManager.getInstance().sendAppInForegroundEvent();
-                sendBannerSettingsRequest(getContext());
+                if (!AuthToken.getInstance().isEmpty()) {
+                    sendBannerSettingsRequest(getContext());
+                }
             }
 
             @Override
@@ -489,7 +503,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         // Settings common image to display error
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
-        Subscription fbInviteAppLinkSubscription = FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
+        FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
 
         sendUnauthorizedRequests();
 
@@ -507,7 +521,27 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         };
         AppConfig appConfig = App.getAppConfig();
         App.sendReferrerTrack(appConfig.getReferrerTrackData());
+        appConfig.incrAppStartEventNumber();
+        appConfig.saveConfig();
+        setSessionState();
         lookedAuthScreen();
+    }
+
+    private void setSessionState() {
+        AppConfig appConfig = getAppConfig();
+        if (appConfig.isFirstSessionAfterInstall()) {
+            boolean isFirstInstall;
+            try {
+                long firstInstallTime = mContext.getPackageManager().getPackageInfo(getPackageName(), 0).firstInstallTime;
+                long lastUpdateTime = mContext.getPackageManager().getPackageInfo(getPackageName(), 0).lastUpdateTime;
+                isFirstInstall = firstInstallTime == lastUpdateTime;
+            } catch (PackageManager.NameNotFoundException e) {
+                isFirstInstall = false;
+            }
+            appConfig.setFirstSessionAfterInstallAttribute(false);
+            mWeakStorage.setFirstSessionAfterInstallAttribute(isFirstInstall && AuthToken.getInstance().isEmpty());
+            appConfig.saveConfig();
+        }
     }
 
     private void lookedAuthScreen() {
@@ -626,12 +660,9 @@ public class App extends ApplicationBase implements IStateDataUpdater {
     }
 
     private void initComScore() {
-        PublisherConfiguration publisher = new PublisherConfiguration.Builder()
-                .publisherSecret(COMSCORE_SECRET_KEY)
-                .publisherId(COMSCORE_C2)
-                .build();
-        Analytics.getConfiguration().addClient(publisher);
-        Analytics.start(getApplicationContext());
+        comScore.setAppContext(mContext);
+        comScore.setCustomerC2(COMSCORE_C2);
+        comScore.setPublisherSecret(COMSCORE_SECRET_KEY);
     }
 
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)

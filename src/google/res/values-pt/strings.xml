@@ -182,6 +182,7 @@
     <string name="general_settings">Definições</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Valor incorreto</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
@@ -394,6 +395,7 @@
         Por favor tente novamente mais tarde.
     </string>
     <string name="general_block">Bloquear</string>
+    <string name="general_block_v2">Bloquear</string>
     <string name="general_buying_disabled">De momento a compra está indisponível.</string>
     <string name="ban_flood_detected">Estás a fazer pedidos ao servidor com demasiada frequência.
         Por favor aguarda um momento antes de continuar.
@@ -1021,9 +1023,9 @@
     <string name="unlock_symphaty_hours_few">Desbloqueado por: %d horas</string>
     <string name="unlock_symphaty_hours_other">Desbloqueado por: %d horas</string>
     <string name="unlock_symphaty_women_one">%d mulher enviou-te um Gosto!</string>
-    <string name="unlock_symphaty_women_many">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_women_many">%d raparigas enviaram-te Gostos!</string>
     <string name="unlock_symphaty_women_few">%d mulheres enviaram-te Gostos!</string>
-    <string name="unlock_symphaty_women_other">%d mulheres enviaram-te Gostos!</string>
+    <string name="unlock_symphaty_women_other">%d raparigas enviaram-te Gostos!</string>
     <string name="unlock_symphaty_men_one">%d homem enviou-te um Gosto!</string>
     <string name="unlock_symphaty_men_many">%d homens enviaram-te Gostos!</string>
     <string name="unlock_symphaty_men_few">%d homens enviaram-te Gostos!</string>
@@ -1039,12 +1041,85 @@
     <string name="write_her_without_symphaty">Envia-lhe uma mensagem mesmo sem Gosto Mútuo!</string>
     <string name="people_nearby_popover_text">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te</string>
     <string name="mutual_popup_you_get_mutual">Vocês gostam um do outro!</string>
+    <string name="start_dialog">Começar Conversa</string>
+    <string name="continue_to_meet">Continuar a namorar</string>
+    <string name="basic_information">Informações básicas</string>
+    <string name="purchase_successfull">O pagamento foi bem sucedido</string>
+    <string name="now_you_have_VIP">Agora tens o estatuto VIP</string>
+    <plurals name="you_have_some_coins">
+        <item quantity="other">Agora tens %d Moedas</item>
+        <item quantity="one">Agora tens %d Moeda</item>
+    </plurals>
+    <plurals name="you_have_some_sympathies">
+        <item quantity="other">Agora tens %d Gostos</item>
+        <item quantity="one">Agora tens %d Gosto</item>
+    </plurals>
     <string name="photo_feed_add_photo">Fica em destaque no feed de fotos!\nMilhares de pessoas irão ver-te.</string>
     <string name="buy_likes_get_more_likes">Obtém mais Gostos!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Aparece primeiro a homens à procura de mulheres como tu!</string>
-    <string name="buy_likes_become_first_in_searchlist_male">Aparece primeiro a mulheres à procura de homens como tu!</string>
+    <string name="buy_likes_become_first_in_searchlist_male">Aparece primeiro a raparigas à procura de homens como tu!</string>
     <string name="buy_likes_become_popular_female">Torna-te popular</string>
     <string name="buy_likes_become_popular_male">Torna-te popular</string>
     <string name="you_are_not_shown">Quase não apareces em \"Namorar\"</string>
     <string name="you_are_not_shown_answer">Responde a alguns dos Gostos que recebes e irás aparecer mais frequentemente.</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Encontra quem estás à procura</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Entre mais de 100 milhões de pessoas</string>
+    <string name="fb_invitation_intelligent_selection_filter">Filtro de seleção inteligente</string>
+    <string name="fb_invitation_personalized_approach">Abordagem personalizada</string>
+    <string name="fb_invitation_button_text">Entra com o Facebook</string>
+    <string name="onboarding_button_next">Próximo</string>
+    <string name="num_from_num">%1$s de %2$s</string>
+    <string name="onboarding_get_access">Obtém Acesso</string>
+    <string name="searching_couple_for_you">Procura de par baseada nos teus critérios</string>
+    <string name="rate">Classifica</string>
+    <string name="rate_our_app">Classifica a nossa app!</string>
+    <string name="what_we_can_improve">Por favor escreve o que é que podemos melhorar</string>
+    <string name="we_are_glad_that_you_like">Estamos felizes por gostares!</string>
+    <string name="could_you_give_us_feedback">Bondosamente, darias-nos feedback no Google Play?</string>
+    <string name="send_rate_feedback">Deixa feedback</string>
+    <string name="permission_alert_button_allow">Ir para</string>
+    <string name="permission_alert_button_disallow">Rejeitar</string>
+    <string name="permission_alert_button_message">Para carregares fotos tens que permitir que a aplicação tenha acesso à memória do teu telemóvel em Definições</string>
+    <string name="ninja_hint_card_number">Número do cartão</string>
+    <string name="ninja_hint_card_expires">Ativo até</string>
+    <string name="ninja_hint_cvv">CVV/CVC</string>
+    <string name="ninja_button_buy">Comprar</string>
+    <string name="ninja_checkbox_auto_pay">Recarregar automaticamente</string>
+    <string name="ninja_text_1">Pagamento seguro</string>
+    <string name="ninja_text_2">Segurança 128-bit SSL</string>
+    <string name="ninja_text_4">Incluindo o total dado, concordas em</string>
+    <string name="ninja_text_link">as regras do serviço</string>
+    <string name="ninja_text_5">O estatuto VIP é automaticamente renovado dentro de 7 dias. O teu cartão será guardado para futuros pagamentos. Podes cancelar a subscrição e remover o teu cartão em Definições.</string>
+    <string name="ninja_text_trial_1">1€ será retirado e imediatamente reposto para que o teu cartão seja verificado.</string>
+    <string name="ninja_text_trial_2">Em %1$s uma transação será completada por %2$d %3$s. A tua subscrição será automaticamente renovada e o teu cartão será guardado para futuros pagamentos cada mês. Podes cancelar a subscrição e remover o teu cartão em Definições.</string>
+    <string name="ninja_settings_toolbar">Pagamentos</string>
+    <string name="ninja_vip_status_title">Subscrição ao estatuto VIP</string>
+    <string name="ninja_cancel_vip_status">Cancelar subscrição</string>
+    <string name="ninja_use_another_card">Usa outro cartão</string>
+    <string name="ninja_delete_card">Eliminar cartão</string>
+    <string name="ninja_error_dialog_title">Ocorreu um erro</string>
+    <string name="ninja_error_dialog_message_dual">Por favor tenta outra vez ou escolhe outro método de pagamento</string>
+    <string name="ninja_error_dialog_message_single">Por favor tentar outra vez.</string>
+    <string name="ninja_error_dialog_button_retry">Por favor tenta outro cartão</string>
+    <string name="ninja_error_dialog_button_change">Outro método de pagamento</string>
+    <plurals name="ninja_trial_days">
+        <item quantity="other">%d dias</item>
+        <item quantity="one">%d dia</item>
+    </plurals>
+    <string name="payment_ninja_card_number">O cartão **%s está a ser usado para pagamento</string>
+    <string name="ninja_cvv_error">CVV/CVC incorreto</string>
+    <string name="ninja_trhu_error">Data incorreta</string>
+    <string name="ninja_number_error">Formato do número do cartão incorreto</string>
+    <string name="ninja_email_error">Formato de email incorreto</string>
+    <string name="use_card">Usar o cartão **%s</string>
+    <string name="ninja_no_card_title">Adicionar cartão</string>
+    <string name="ninja_subscription_expiration">Ativo até %s</string>
+    <string name="ninja_subscription_cancelled">Cancelado. Expirando %s</string>
+    <string name="ninja_autofilling_cancelled">Cancelado</string>
+    <string name="ninja_autofilling_activated">Ativo</string>
+    <string name="ninja_support">Apoio</string>
+    <string name="ninja_ask_to_delete_card_message">Tens a certeza?</string>
+    <string name="ninja_product_by_price">%1$s por %2$s</string>
+    <string name="ninja_trial_vip_product">Teste do estatuto VIP</string>
+    <string name="ninja_vip_product_by_price">%1$s VIP por %2$s</string>
 </resources>

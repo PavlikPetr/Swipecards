@@ -51,6 +51,6 @@ abstract class BaseToolbarViewModel(binding: ToolbarViewBinding,
         // если включен новый дизайн диалогов, то надо добавить паддинг, что бы тулбар
         // был ниже прозрачного статус бара
         // учитывать topPadding надо только в тулбарах с прозрачным StatusBar'ом
-        if (App.get().options.datingRedesignEnabled) topPadding.set(getStatusBarHeight(binding.appContext()))
+        if (App.get().options.isTranslucentDating) topPadding.set(getStatusBarHeight(binding.appContext()))
     }
 }

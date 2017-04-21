@@ -171,6 +171,7 @@
   <string name="general_settings">Ayarlar</string>
   <string name="general_vk_profile">VK</string>
   <string name="general_ok_profile">Tamam</string>
+  <string name="general_wrong_field_value">Yanlış değer</string>
   <string name="auth_btn_vk">VKontakte</string>
   <string name="auth_btn_fb">Facebook</string>
   <string name="auth_retry">Tekrar deneyin</string>
@@ -367,6 +368,7 @@
   <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar 
        deneyin.</string>
   <string name="general_block">Engelle</string>
+  <string name="general_block_v2">Engelle</string>
   <string name="general_buying_disabled">Şu an satın alma mümkün değil.</string>
   <string name="ban_flood_detected">Sunucuya çok sık istek gönderiyorsunuz. Devam etmeden 
         önce lütfen bir süre bekleyin.</string>
@@ -938,6 +940,19 @@
   <string name="write_her_without_symphaty">Ortak Beğeni olmadan ona yaz</string>
   <string name="people_nearby_popover_text">Fotoğraf akışında özellikli ol!\nBinlerce insan seni görecek</string>
   <string name="mutual_popup_you_get_mutual">Birbirinizi beğeniyorsunuz!</string>
+  <string name="start_dialog">Sohbete başla</string>
+  <string name="continue_to_meet">Arkadaşlık kurmaya devam et</string>
+  <string name="basic_information">Bilgiler</string>
+  <string name="purchase_successfull">Ödeme başarılı!</string>
+  <string name="now_you_have_VIP">Artık sizde bir VIP Üyesiniz.</string>
+  <plurals name="you_have_some_coins">
+    <item quantity="other">Artık %d Krediniz var</item>
+    <item quantity="one">Artık %d Krediniz var</item>
+  </plurals>
+  <plurals name="you_have_some_sympathies">
+    <item quantity="other">Artık %d Beğeniz var</item>
+    <item quantity="one">Artık %d Beğeniz var</item>
+  </plurals>
   <string name="photo_feed_add_photo">Fotoğraf akışında özellikli ol!\nBinlerce insan seni görecek</string>
   <string name="buy_likes_get_more_likes">Daha çok Beğeni alın!</string>
   <string name="buy_likes_become_first_in_searchlist_female">Sizin gibi kızları arayan erkeklere ilk gösterilen olun!</string>
@@ -946,4 +961,65 @@
   <string name="buy_likes_become_popular_male">Popüler olun</string>
   <string name="you_are_not_shown">“Tanışma”da neredeyse gösterilmiyorsun</string>
   <string name="you_are_not_shown_answer">Gelen Beğenilerin bazılarına cevap ver ve daha sık gösterilirsin.</string>
+  <string name="fb_invitation_find_what_you_are_looking_for">Aradığın kişinin kim olduğunu öğren</string>
+  <string name="fb_invitation_amoung_more_than_100_mln_people">100 Milyon kullanıcı arasında</string>
+  <string name="fb_invitation_intelligent_selection_filter">Akıllı seçim fonksiyonu aktif</string>
+  <string name="fb_invitation_personalized_approach">Özelleştirilmiş yaklaşım</string>
+  <string name="fb_invitation_button_text">Facebook ile Giriş Yap</string>
+  <string name="onboarding_button_next">İleri</string>
+  <string name="num_from_num">%2$s\'dan %1$s</string>
+  <string name="onboarding_get_access">Erişim sağla</string>
+  <string name="searching_couple_for_you">Kriterlerinize göre eş araması</string>
+  <string name="rate">Değerlendir</string>
+  <string name="rate_our_app">Uygulamamızı değerlendir!</string>
+  <string name="what_we_can_improve">Lütfen neleri geliştirmemiz gerektiğini yazın</string>
+  <string name="we_are_glad_that_you_like">Beğendiğinize sevindik!</string>
+  <string name="could_you_give_us_feedback">Bizimle Google Play\'de yorumlarınızı paylaşmak ister misiniz?</string>
+  <string name="send_rate_feedback">Yorum yaz</string>
+  <string name="permission_alert_button_allow">Şuraya git</string>
+  <string name="permission_alert_button_disallow">Reddet</string>
+  <string name="permission_alert_button_message">Fotoğraf yükleyebilmek için, Ayarlar sayfasında uygulamaya telefon hafızasına erişebilmesi için erişim vermelisiniz.</string>
+  <string name="ninja_hint_card_number">Kredi kartı numarası</string>
+  <string name="ninja_hint_card_expires">Şu zamana kadar aktif:</string>
+  <string name="ninja_hint_cvv">CVV/CVC</string>
+  <string name="ninja_button_buy">Satın al</string>
+  <string name="ninja_checkbox_auto_pay">Otomatik yükleme</string>
+  <string name="ninja_text_1">Güvenli ödeme</string>
+  <string name="ninja_text_2">128-bit SSL ile korunmalı</string>
+  <string name="ninja_text_4">Yazılan tutar da dahil, kabul ettiğiniz</string>
+  <string name="ninja_text_link">servisin kuralları</string>
+  <string name="ninja_text_5">7 gün içinde VIP üyelik otomatik olarak yenilenecektir. Kredi kartınız gelecek ödemeler için kayıt edilecektir. Dilediğiniz zaman Ayarlar sayfasından, aboneliğinizi iptal edebilir ve kredi kartınızı silebilirsiniz.</string>
+  <string name="ninja_text_trial_1">Kartınızı onaylayabilmek için hesabınızdan €1 çekilecek ve  geri iade edilecektir.</string>
+  <string name="ninja_text_trial_2">%1$s içinde %2$d %3$s ücret karşılığı işlem tamamlanacaktır.
+Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki ödemeler için kaydedilecektir. Aboneliğinizi dilediğiniz zaman iptal edebilir, ayrıca istediğiniz zaman kredi kartınızı Ayarlar sayfasından silebilirsiniz.</string>
+  <string name="ninja_settings_toolbar">Ödemeler</string>
+  <string name="ninja_vip_status_title">VIP Üyelik için abonelik</string>
+  <string name="ninja_cancel_vip_status">Aboneliği iptal et</string>
+  <string name="ninja_use_another_card">Başka bir kart kullanın</string>
+  <string name="ninja_delete_card">Kartı sil</string>
+  <string name="ninja_error_dialog_title">Bir hata oluştu</string>
+  <string name="ninja_error_dialog_message_dual">Lütfen daha sonra tekrar deneyin ya da farklı bir kredi kartı ile deneme yapın.</string>
+  <string name="ninja_error_dialog_message_single">Lütfen daha sonra tekrar deneyin.</string>
+  <string name="ninja_error_dialog_button_retry">Lütfen başka bir kredi kartı deneyin</string>
+  <string name="ninja_error_dialog_button_change">Diğer ödeme seçenekleri</string>
+  <plurals name="ninja_trial_days">
+    <item quantity="other">%d gün</item>
+    <item quantity="one">%d gün</item>
+  </plurals>
+  <string name="payment_ninja_card_number">**%s kartı ödeme için kullanılıyor</string>
+  <string name="ninja_cvv_error">Yanlış CVV/CVC</string>
+  <string name="ninja_trhu_error">Yanlış tarih</string>
+  <string name="ninja_number_error">Yanlış Kredi Kartı numarası formatı</string>
+  <string name="ninja_email_error">Yanlış email formatı</string>
+  <string name="use_card">**%s kartını kullan</string>
+  <string name="ninja_no_card_title">Kredi kartı ekle</string>
+  <string name="ninja_subscription_expiration">Bitmesine kalan süre %s</string>
+  <string name="ninja_subscription_cancelled">İptal edildi. Sürenin bitmesine kalan süre %s</string>
+  <string name="ninja_autofilling_cancelled">İptal edildi</string>
+  <string name="ninja_autofilling_activated">Aktif</string>
+  <string name="ninja_support">Destek</string>
+  <string name="ninja_ask_to_delete_card_message">Buna emin misiniz?</string>
+  <string name="ninja_product_by_price">%2$s için %1$s</string>
+  <string name="ninja_trial_vip_product">VIP Üyelik Deneme Süresi</string>
+  <string name="ninja_vip_product_by_price">%1$s VIP için %2$s</string>
 </resources>

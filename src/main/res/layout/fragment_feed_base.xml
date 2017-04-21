@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="BaseFeedFragmentViewModel&lt;FeedItem>"/>
+            type="BaseFeedFragmentViewModel&lt;FeedItem&gt;"/>
     </data>
 
     <LinearLayout

@@ -39,7 +39,7 @@
             android:lines="1"
             android:paddingBottom="19dp"
             android:text="@{model.name}"
-            app:textColor="@{model.nameTextColor}"
+            android:textColor="@{model.nameTextColor}"
             android:textSize="15sp"/>
 
     </LinearLayout>

@@ -301,8 +301,26 @@
     <color name="online_circle">#4cda65</color>
     <color name="circle_around_online_circle">@color/bg_white</color>
 
-    <color name="dating_filter_background">#f5f5f5</color>
+    <color name="view_pager_indicator_select">#fe63cd</color>
+    <color name="view_pager_indicator_non_select">#e0e0e0</color>
 
+    <!--Цвета для экранов опросника-->
+    <color name="dating_filter_background"> #f5f5f5 </color>
+    <color name="questions_button_color">#fe63cd</color>
+    <color name="questions_button_color_pressed">#C94FA3</color>
+    <color name="questionnaire_counters_text_color">#878787</color>
+    <color name="questionnaire_third_type_title_text_color">#000000</color>
+    <color name="questionnaire_appearance_error_text_color">#ff2e48</color>
+    <color name="questionnaire_appearance_hint_text_color">#9A9999</color>
+    <color name="questionnaire_input_text_color">#de000000</color>
+    <color name="questionnaire_unit_text_color">#000000</color>
+    <color name="questionnaire_multiselect_checkbox_item">#ffffff</color>
+    <color name="questionnaire_multiselect_checkbox_item_pressed">#F4F4F4</color>
+    <color name="questionnaire_text_input_appearance_hint_text_color">@color/questionnaire_blue</color>
+    <color name="questionnaire_button_pink">#fe63cd</color>
+    <color name="questionnaire_blue">#499AFF</color>
+
+    <color name="rate_text">#666666</color>
     <!-- Payment Ninja -->
     <color name="ninja_error_text">#F45430</color>
     <color name="ninja_color_accent">#499AFF</color>

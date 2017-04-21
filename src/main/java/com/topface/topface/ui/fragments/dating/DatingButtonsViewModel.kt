@@ -130,6 +130,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }
         LocalBroadcastManager.getInstance(context)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
+
     }
 
     private fun isNeedTakePhoto() = !App.getConfig().userConfig.isUserAvatarAvailable
@@ -294,12 +295,14 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     private fun showProgress() {
+        mDatingButtonsEvents.onShowProgress()
         isDatingProgressBarVisible.set(View.VISIBLE)
         isDatingButtonsVisible.set(View.INVISIBLE)
         mLockDatingButtonsVisibility = true
     }
 
     private fun hideProgress() {
+        mDatingButtonsEvents.onHideProgress()
         mLockDatingButtonsVisibility = false
         isDatingProgressBarVisible.set(View.GONE)
         isDatingButtonsVisible.set(View.VISIBLE)

@@ -740,10 +740,10 @@ public class Utils {
         return new ArrayList<>(Arrays.asList(position[0], position[1]));
     }
 
-    public static boolean isKitKatWithNoTranslucent(boolean isDatingRedesignEnabled) {
+    public static boolean isKitKatWithNoTranslucent(boolean isTranslucentDating) {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
                 && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-                && !isDatingRedesignEnabled;
+                && !isTranslucentDating;
     }
 
     public static String convertToHex(final byte[] bytes) {
