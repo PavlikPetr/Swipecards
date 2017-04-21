@@ -113,6 +113,8 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(this)
         mFeedbackViewModel.release()
+        mGoogleIntiteViewModel.release()
+        mViewModel.release()
     }
 
     override fun closeIt() = dialog.cancel()

@@ -30,7 +30,7 @@ class MutualPopupFragment : AbstractDialogFragment(), IDialogCloser {
         }
     }
 
-    private var mNavigator:FeedNavigator? = null
+    private var mNavigator: FeedNavigator? = null
         get() = FeedNavigator(activity as IActivityDelegate)
 
     private val mViewModel by lazy {

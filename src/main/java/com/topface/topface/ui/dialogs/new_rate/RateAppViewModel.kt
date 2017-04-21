@@ -14,7 +14,7 @@ import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.dialogs.new_rate.RateAppFragment.Companion.RATING
 import com.topface.topface.utils.ILifeCycle
 
-class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
+class RateAppViewModel(private var iDialogCloser: IDialogCloser?) : ILifeCycle {
 
     companion object {
         const val IS_ENABLED_BUTTON = "enabled_button"
@@ -71,7 +71,7 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
         sendRateRequest(AppRateRequest.NO_RATE)
-        iDialogCloser.closeIt()
+        iDialogCloser?.closeIt()
     }
 
     //    сохраняем состояние
@@ -96,6 +96,10 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
             layoutGoogleVisibility.set(this.getInt(IS_ENABLED_GOOGLE_LAYOUT, layoutGoogleVisibility.get()))
         }
         super.onRestoreInstanceState(state)
+    }
+
+    fun release() {
+        iDialogCloser = null
     }
 
 }

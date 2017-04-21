@@ -5,7 +5,7 @@ import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
 
-class GoogleFeedbackInviteViewModel(private val mDialogCloser: IDialogCloser, private val mActivityDelegate: IActivityDelegate) {
+class GoogleFeedbackInviteViewModel(private var mDialogCloser: IDialogCloser?, private var mActivityDelegate: IActivityDelegate?) {
 
     companion object {
         const val GPLAY_ACTIVITY = 9999
@@ -13,12 +13,17 @@ class GoogleFeedbackInviteViewModel(private val mDialogCloser: IDialogCloser, pr
 
     fun okButtonClick() {
         Utils.goToMarket(mActivityDelegate, GPLAY_ACTIVITY)
-        mDialogCloser.closeIt()
+        mDialogCloser?.closeIt()
     }
 
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
-        mDialogCloser.closeIt()
+        mDialogCloser?.closeIt()
+    }
+
+    fun release() {
+        mActivityDelegate = null
+        mDialogCloser = null
     }
 }

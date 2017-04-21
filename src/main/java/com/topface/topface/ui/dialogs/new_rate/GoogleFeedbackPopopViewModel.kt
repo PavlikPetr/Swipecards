@@ -16,7 +16,7 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 
 
-class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, private val mApi: FeedApi) : ILifeCycle {
+class GoogleFeedbackPopopViewModel(private var mDialogCloseable: IDialogCloser?, private val mApi: FeedApi) : ILifeCycle {
 
     companion object {
         const val FEEDBACK_POPUP_TEXT = "feedback_popup_text"
@@ -56,13 +56,13 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
             FeedbackMessageFragment.fillVersion(App.getContext(), this)
             mGoogleFeedbackSubscription.add(mApi.callSendFeedbackRequest(this).subscribe())
         }
-        mDialogCloseable.closeIt()
+        mDialogCloseable?.closeIt()
     }
 
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
-        mDialogCloseable.closeIt()
+        mDialogCloseable?.closeIt()
     }
 
     override fun onSavedInstanceState(state: Bundle) {
@@ -85,6 +85,7 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
 
     fun release() {
         text.removeOnPropertyChangedCallback(mTextChangeListener)
+        mDialogCloseable = null
         mGoogleFeedbackSubscription.clear()
     }
 }
