@@ -30,7 +30,6 @@
             tools:targetApi="ice_cream_sandwich" />
 
         <CheckBox
-            android:id="@+id/online_only"
             style="@style/DatingFilterSwitch"
             android:checked="@={viewModel.isChecked}"
             android:enabled="true"
