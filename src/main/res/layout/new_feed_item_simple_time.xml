@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+       <import type="com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedItemViewModel"/>
+
+        <import type="com.topface.topface.data.FeedItem"/>
+
+        <variable
+            name="viewModel"
+            type="BaseFeedItemViewModel&lt;FeedItem>"/>
+
+        <variable
+            name="longClickListener"
+            type="android.view.View.OnLongClickListener"/>
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/item_layout"
+        app:uiTestTag = "@{viewModel.getTag()}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener::onClick}"
+        app:onLongItemClick="@{longClickListener}"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/frame_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.onAvatarClick()}">
+
+            <include
+                android:id="@+id/avatar_frame"
+                layout="@layout/feed_item_round_avatar"
+                bind:avatarHolder="@{viewModel.avatarHolder}"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingBottom="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include
+                    layout="@layout/feed_item_user_name_age"
+                    bind:nameAndAge="@{viewModel.nameAndAge}"/>
+
+                <TextView
+                    android:id="@+id/time"
+                    style="@style/ListTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:paddingRight="12dp"
+                    android:text="@{viewModel.time}"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/ListMessageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{viewModel.text}"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

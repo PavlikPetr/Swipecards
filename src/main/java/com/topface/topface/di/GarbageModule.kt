@@ -2,6 +2,7 @@ package com.topface.topface.di
 
 import com.topface.topface.chat.SuspiciousUserCache
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
+import com.topface.topface.utils.RunningStateManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -15,9 +16,9 @@ class GarbageModule {
 
     @Provides
     @Singleton
-    fun providesKochavaManager() = KochavaManager()
+    fun providesSuspiciousUserCache() = SuspiciousUserCache()
 
     @Provides
     @Singleton
-    fun providesSuspiciousUserCache() = SuspiciousUserCache()
+    fun providesKochavaManager(runningStateManager: RunningStateManager) = KochavaManager(runningStateManager)
 }

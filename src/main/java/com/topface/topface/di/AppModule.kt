@@ -159,5 +159,4 @@ class AppModule(private val mContext: Context) {
     @Singleton
     fun providesPresenterCache() = PresenterCache()
 
-
 }

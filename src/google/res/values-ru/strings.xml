@@ -975,7 +975,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1130,6 +1130,11 @@
     <string name="mutual_write_them_first">Напишите им</string>
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
+
+    <string name="you_can_write_wom">Теперь вы можете написать ей!</string>
+    <string name="you_can_write_man">Теперь вы можете написать ему!</string>
+    <string name="see_next">Смотреть дальше</string>
+    <string name="go_to_messages">Перейти в сообщения</string>
 
     <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
     <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
@@ -1289,6 +1294,11 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+
+    <string name="offers_free_title">Бесплатно</string>
+    <string name="offers_free_vip">Бесплатный VIP</string>
+    <string name="offers_free_coins">Бесплатные монеты</string>
+    <string name="offers_free_likes">Бесплатные симпатии</string>
 
     <string name="fb_invitation_find_what_you_are_looking_for">Найдёте то, что ищете</string>
     <string name="fb_invitation_amoung_more_than_100_mln_people">Среди более 100 миллионов людей</string>

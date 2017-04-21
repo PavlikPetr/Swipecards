@@ -13,12 +13,11 @@ import com.topface.topface.utils.Utils
  */
 class AppDayItemViewModel(private val mContext: Context, val image: AppDayImage, private val mInstantPurchaseModel: InstantPurchaseModel) {
     companion object {
+        const val TAG_LOG = "app_of_the_day_banner_clicked"
         private const val WEBVIEW = 1;
         private const val BROWSER = 2;
         private const val PRODUCT = 3;
     }
-
-    val TAG_LOG = "app_of_the_day_banner_clicked"
 
     val iconUrl = ObservableField(image.imgSrc)
 

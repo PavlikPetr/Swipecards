@@ -3,8 +3,8 @@ package com.topface.topface.ui.fragments.feed;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
-import com.topface.topface.ui.fragments.feed.fans.FansFragment;
-import com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.fans.FansFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 

@@ -31,4 +31,6 @@ public interface IAdsProvider {
 
         void onAdShow();
     }
+
+    void clean(IPageWithAds page);
 }
