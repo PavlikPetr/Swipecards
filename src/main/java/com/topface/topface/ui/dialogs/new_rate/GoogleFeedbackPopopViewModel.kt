@@ -58,6 +58,7 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
         }
         mDialogCloseable.closeIt()
     }
+
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
@@ -76,7 +77,7 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
     override fun onRestoreInstanceState(state: Bundle) {
         super.onRestoreInstanceState(state)
         with(state) {
-            rateValue = this.getFloat(FEEDBACK_POPUP_RATE_VALUE,0F)
+            rateValue = this.getFloat(FEEDBACK_POPUP_RATE_VALUE, 0F)
             buttonEnabled.set(this.getBoolean(FEEDBACK_POPUP_BUTTON_ENABLED, false))
             text.set(this.getString(FEEDBACK_POPUP_TEXT, Utils.EMPTY))
         }

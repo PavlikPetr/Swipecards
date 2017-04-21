@@ -84,7 +84,6 @@ class RateAppViewModel(private val iDialogCloser: IDialogCloser) : ILifeCycle {
             putInt(IS_ENABLED_FEEDBACK_LAYOUT, layoutFeedbackVisibility.get())
             putInt(IS_ENABLED_GOOGLE_LAYOUT, layoutGoogleVisibility.get())
         }
-        super.onSavedInstanceState(state)
     }
 
     override fun onRestoreInstanceState(state: Bundle) {
