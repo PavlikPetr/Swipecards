@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import com.topface.statistics.android.Slices
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
@@ -88,7 +89,9 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_SHOW()
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_SHOW(Slices().apply {
+            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+        })
     }
 
     override fun onCancel(dialog: DialogInterface?) {
@@ -106,7 +109,9 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
             // было выбрано "не сейчас"/"закрыть" запомним это
             saveRatingPopupStatus(System.currentTimeMillis(), false)
         }
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE(Slices().apply {
+            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+        })
     }
 
     override fun onDetach() {

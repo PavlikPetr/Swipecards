@@ -44,7 +44,10 @@ class RateAppViewModel(private var iDialogCloser: IDialogCloser?) : ILifeCycle {
     }
 
     fun okButtonClick() {
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_RATE(Slices().apply { putSlice(RATING, currentRating?.toString()) })
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_RATE(Slices().apply {
+            putSlice(RATING, currentRating?.toString())
+            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+        })
         val rateInInt = currentRating.get()
         sendRateRequest(rateInInt.toLong())
         if (rateInInt <= 0) {
@@ -68,7 +71,9 @@ class RateAppViewModel(private var iDialogCloser: IDialogCloser?) : ILifeCycle {
     private fun sendRateRequest(rating: Long) = AppRateRequest(App.getContext(), rating).exec()
 
     fun closeButtonClick() {
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
+        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE(Slices().apply {
+            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+        })
         sendRateRequest(AppRateRequest.NO_RATE)
         iDialogCloser?.closeIt()
     }

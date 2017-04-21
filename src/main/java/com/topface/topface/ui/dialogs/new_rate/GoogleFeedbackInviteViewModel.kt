@@ -1,6 +1,8 @@
 package com.topface.topface.ui.dialogs.new_rate
 
+import com.topface.statistics.android.Slices
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
+import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
@@ -17,7 +19,9 @@ class GoogleFeedbackInviteViewModel(private var mDialogCloser: IDialogCloser?, p
     }
 
     fun closeButtonClick() {
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
+        sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE(Slices().apply {
+            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+        })
         mDialogCloser?.closeIt()
     }
 

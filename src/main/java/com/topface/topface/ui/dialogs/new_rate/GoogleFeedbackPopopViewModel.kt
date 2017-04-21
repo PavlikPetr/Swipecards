@@ -4,7 +4,9 @@ import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.os.Bundle
+import com.topface.statistics.android.Slices
 import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics
+import com.topface.statistics.generated.RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE
 import com.topface.topface.App
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -60,7 +62,9 @@ class GoogleFeedbackPopopViewModel(private var mDialogCloseable: IDialogCloser?,
     }
 
     fun closeButtonClick() {
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
+        sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE(Slices().apply {
+            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+        })
         mDialogCloseable?.closeIt()
     }
 
