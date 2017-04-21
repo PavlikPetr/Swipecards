@@ -58,6 +58,7 @@
             android:src="@drawable/man_blur_5"
             app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
             app:outSideCircle="@{viewModel.outsideCircle}"
+            app:circleColor="@{viewModel.circleColor}"
             app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
             app:typeTransformation="@{viewModel.mutualType}"/>
 

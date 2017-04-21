@@ -21,6 +21,7 @@ class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
     val mutualType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val mutualPlaceholderRes = ObservableField(if (mMutualItem.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
+    val circleColor = R.color.ask_moar_item_background
 
     val stubText = ObservableField<String>((if (App.get().profile.sex == User.BOY) R.string.write_her_something_first.getString()
     else R.string.write_him_first.getString()))
