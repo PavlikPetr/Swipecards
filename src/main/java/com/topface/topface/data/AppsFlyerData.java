@@ -5,10 +5,8 @@ import android.content.SharedPreferences;
 
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
-import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.requests.ReferrerLogRequest;
-import com.topface.topface.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,7 +85,7 @@ public class AppsFlyerData implements SerializableToJson {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            new ReferrerLogRequest(context, null, referralData, null).exec();
+            new ReferrerLogRequest(context, null, referralData).exec();
         }
     }
 

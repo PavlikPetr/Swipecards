@@ -6,7 +6,7 @@ import android.view.View
 import com.topface.topface.R
 import com.topface.topface.databinding.BasePurchaseSuccessfullBinding
 import com.topface.topface.ui.dialogs.AbstractDialogFragment
-import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.utils.IActivityDelegate
 import kotlin.properties.Delegates
 
@@ -33,7 +33,7 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
 
     override fun initViews(root: View?) {
         mBinding = BasePurchaseSuccessfullBinding.bind(root)
-        mBinding.setViewModel(mViewModel)
+        mBinding.viewModel = mViewModel
     }
 
     override fun isModalDialog() = false

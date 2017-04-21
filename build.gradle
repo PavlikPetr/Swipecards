@@ -66,6 +66,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath rootProject.ANDROID_BUILD_GRADLE_PLUGIN_VERSION
         classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'org.codehaus.groovy:groovy-android-gradle-plugin:1.1.0'
     }
 }
 
@@ -98,6 +99,7 @@ allprojects {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'groovyx.android'
 
 android {
     compileSdkVersion Integer.parseInt(rootProject.ANDROID_BUILD_MAX_SDK_VERSION)
@@ -305,7 +307,19 @@ android {
     }
 }
 
+androidGroovy {
+    options {
+        configure(groovyOptions) {
+            encoding = 'UTF-8'
+            forkOptions.jvmArgs = ['-noverify'] // maybe necessary if you use Google Play Services
+            javaAnnotationProcessing = true
+        }
+        skipJavaC = true
+    }
+}
+
 dependencies {
+    compile "org.codehaus.groovy:groovy:2.4.10:grooid"
     //Kotlin
     compile "org.jetbrains.anko:anko-sdk15:$anko_version"
     compile("org.jetbrains.anko:anko-support-v4:$anko_version") {
@@ -405,10 +419,10 @@ dependencies {
 
 //    compile "com.google.dagger:dagger:$dagger"
 //    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
-////    compile("com.google.dagger:dagger-android-support:$dagger") {
-//////        exclude group: 'com.google.dagger'
-//////        exclude group: 'com.android.support'
-////    }
+//    compile("com.google.dagger:dagger-android-support:$dagger") {
+//        exclude group: 'com.google.dagger'
+//        exclude group: 'com.android.support'
+//    }
 //    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger"
 //
 //    kapt "com.google.dagger:dagger-compiler:$dagger"
