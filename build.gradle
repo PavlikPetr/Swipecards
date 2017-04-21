@@ -327,6 +327,7 @@ android {
 
 dependencies {
     /*----------- Плагин groovy для получения нормальных ошибок при сборке и генерации -----------*/
+    // https://github.com/groovy/groovy-android-gradle-plugin
 //    compile "org.codehaus.groovy:groovy:2.4.10:grooid"
     /*------------------------------------------- END -------------------------------------------*/
     //Kotlin
