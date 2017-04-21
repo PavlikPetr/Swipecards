@@ -55,7 +55,6 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         }
     }
 
-
     private val mViewModel by lazy {
         RateAppViewModel(this).apply {
             activity.registerLifeCycleDelegate(this)
@@ -107,7 +106,6 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         }
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
     }
-
 
     override fun onDetach() {
         super.onDetach()
