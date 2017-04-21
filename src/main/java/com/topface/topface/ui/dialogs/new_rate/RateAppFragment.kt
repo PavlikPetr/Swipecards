@@ -62,7 +62,9 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
     }
 
     private val mFeedbackViewModel by lazy {
-        GoogleFeedbackPopopViewModel(this, mApi)
+        GoogleFeedbackPopopViewModel(this, mApi).apply {
+            activity.registerLifeCycleDelegate(this)
+        }
     }
 
     private val mGoogleIntiteViewModel by lazy {
@@ -110,6 +112,7 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
     override fun onDetach() {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(this)
+        mFeedbackViewModel.release()
     }
 
     override fun closeIt() = dialog.cancel()
