@@ -16,7 +16,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation
  * Отрисовка кружка под аватаром
  * Created by garastard on 25.01.17.
  */
-open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: Float, val color: Int = Color.WHITE) : Transformation<Bitmap> {
+open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: Float, val color: Int) : Transformation<Bitmap> {
 
     protected val mBitmapPool: BitmapPool by lazy {
         Glide.get(mContext).bitmapPool
@@ -30,7 +30,7 @@ open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: F
         val canvFromRes = Canvas(bitmapForCircle)
         val radiusCircle = resWidth / 2.toFloat()
         canvFromRes.drawCircle(radiusCircle, radiusCircle, radiusCircle, Paint().apply {
-            color = Color.WHITE
+            color = this@DrawCircleUnderAvatar.color
             isAntiAlias = true
             style = Paint.Style.FILL
         })

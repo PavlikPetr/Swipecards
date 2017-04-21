@@ -426,7 +426,7 @@ public class BindingsAdapters {
 
     @SuppressWarnings("unchecked")
     @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle", "circleColor"}, requireAll = false)
-    public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine, Integer circleColor) {
+    public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine, int circleColor) {
         Context context = imageView.getContext().getApplicationContext();
         imageView.setImageResource(placeholderRes); /// Наговнякано, но работает
         if (photo == null) {
