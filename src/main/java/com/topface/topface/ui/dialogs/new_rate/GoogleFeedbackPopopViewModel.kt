@@ -14,19 +14,19 @@ import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
-import kotlin.properties.Delegates
 
 
-class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, private val mApi: FeedApi) : ILifeCycle {
+class GoogleFeedbackPopopViewModel(private var mDialogCloseable: IDialogCloser?, private val mApi: FeedApi) : ILifeCycle {
 
     companion object {
         const val FEEDBACK_POPUP_TEXT = "feedback_popup_text"
+        const val FEEDBACK_POPUP_RATE_VALUE = "feedback_popup_rate_value"
         const val FEEDBACK_POPUP_BUTTON_ENABLED = "feedback_popup_button_enabled"
     }
 
     val text = ObservableField<String>()
     val buttonEnabled = ObservableBoolean(false)
-    var rateValue by Delegates.notNull<Float>()
+    var rateValue = 0F
     private val mEventBus by lazy {
         App.getAppComponent().eventBus()
     }
@@ -56,18 +56,18 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
             FeedbackMessageFragment.fillVersion(App.getContext(), this)
             mGoogleFeedbackSubscription.add(mApi.callSendFeedbackRequest(this).subscribe())
         }
-        mDialogCloseable.closeIt()
+        mDialogCloseable?.closeIt()
     }
 
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
-        mDialogCloseable.closeIt()
+        mDialogCloseable?.closeIt()
     }
 
     override fun onSavedInstanceState(state: Bundle) {
         super.onSavedInstanceState(state)
         with(state) {
+            putFloat(FEEDBACK_POPUP_RATE_VALUE, rateValue)
             putBoolean(FEEDBACK_POPUP_BUTTON_ENABLED, buttonEnabled.get())
             putString(FEEDBACK_POPUP_TEXT, text.get())
         }
@@ -76,13 +76,15 @@ class GoogleFeedbackPopopViewModel(private val mDialogCloseable: IDialogCloser, 
     override fun onRestoreInstanceState(state: Bundle) {
         super.onRestoreInstanceState(state)
         with(state) {
-            buttonEnabled.set(this.getBoolean(RateAppViewModel.IS_ENABLED_BUTTON, false))
+            rateValue = this.getFloat(FEEDBACK_POPUP_RATE_VALUE, 0F)
+            buttonEnabled.set(this.getBoolean(FEEDBACK_POPUP_BUTTON_ENABLED, false))
             text.set(this.getString(FEEDBACK_POPUP_TEXT, Utils.EMPTY))
         }
     }
 
     fun release() {
         text.removeOnPropertyChangedCallback(mTextChangeListener)
+        mDialogCloseable = null
         mGoogleFeedbackSubscription.clear()
     }
 }

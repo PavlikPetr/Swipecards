@@ -185,9 +185,6 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         data?.let {
             if (requestCode == ChatActivity.REQUEST_CHAT) {
-                if (RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
-                    mFeedNavigator.showRateAppFragment()
-                }
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
                     removeItemByUserId(userId)?.let {

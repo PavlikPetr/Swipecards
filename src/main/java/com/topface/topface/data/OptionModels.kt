@@ -13,6 +13,6 @@ data class FBInviteSettings(var enabled: Boolean = false, var appLink: String = 
 /**
  * Модель для запроса опций нового варианта попапа оценки приложения
  */
-data class RatePopupNewVersion(var enabled: Boolean = false, var notNowTimeout: Long = 0, var badRateTimeout: Long = 0) {
+data class RatePopupNewVersion(var enabled: Boolean = false, var notNowTimeout: Int = 0, var badRateTimeout: Int = 0) {
     fun isEmpty() = this == RatePopupNewVersion()
 }

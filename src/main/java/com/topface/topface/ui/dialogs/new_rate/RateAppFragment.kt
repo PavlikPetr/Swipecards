@@ -15,6 +15,7 @@ import com.topface.topface.data.RatePopupNewVersion
 import com.topface.topface.databinding.RateAppLayoutBinding
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.http.IRequestClient
 import com.topface.topface.utils.registerLifeCycleDelegate
@@ -30,13 +31,13 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
 
             val userConfig = App.getUserConfig()
             val dateStart = userConfig.ratingPopup
-            val rateTimeout = if (userConfig.ratingPopupValue) ratePopupOptions.badRateTimeout else ratePopupOptions.notNowTimeout
+            var rateTimeout = if (userConfig.ratingPopupValue) ratePopupOptions.badRateTimeout.toLong() else ratePopupOptions.notNowTimeout.toLong()
             // first time do not show rate popup
             if (dateStart.toInt() == -1) {
                 saveRatingPopupStatus(System.currentTimeMillis(), false)
                 return false
             }
-            return dateStart.toInt() != 0 && System.currentTimeMillis() - dateStart > rateTimeout && ratePopupOptions.enabled
+            return dateStart.toInt() != 0 && System.currentTimeMillis() - dateStart > rateTimeout * DateUtils.MINUTE_IN_MILLISECONDS && ratePopupOptions.enabled
         }
 
         /**
@@ -61,7 +62,9 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
     }
 
     private val mFeedbackViewModel by lazy {
-        GoogleFeedbackPopopViewModel(this, mApi)
+        GoogleFeedbackPopopViewModel(this, mApi).apply {
+            activity.registerLifeCycleDelegate(this)
+        }
     }
 
     private val mGoogleIntiteViewModel by lazy {
@@ -109,8 +112,11 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
     override fun onDetach() {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(this)
+        mFeedbackViewModel.release()
+        mGoogleIntiteViewModel.release()
+        mViewModel.release()
     }
 
-    override fun closeIt() = dialog.dismiss()
+    override fun closeIt() = dialog.cancel()
 
 }
