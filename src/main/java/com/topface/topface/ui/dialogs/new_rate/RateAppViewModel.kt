@@ -69,7 +69,6 @@ class RateAppViewModel(private var iDialogCloser: IDialogCloser?) : ILifeCycle {
 
     fun closeButtonClick() {
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_CLOSE()
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE()
         sendRateRequest(AppRateRequest.NO_RATE)
         iDialogCloser?.closeIt()
     }
