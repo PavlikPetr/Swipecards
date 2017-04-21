@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
 import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.QuestionnaireStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
