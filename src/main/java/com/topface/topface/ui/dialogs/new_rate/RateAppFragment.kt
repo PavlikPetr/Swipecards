@@ -108,10 +108,10 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         } else {
             // было выбрано "не сейчас"/"закрыть" запомним это
             saveRatingPopupStatus(System.currentTimeMillis(), false)
+            RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE(Slices().apply {
+                putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
+            })
         }
-        RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE(Slices().apply {
-            putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
-        })
     }
 
     override fun onDetach() {
