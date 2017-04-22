@@ -907,6 +907,10 @@
     <string name="mutual_write_them_first">Write to them</string>
     <string name="mutual_no_mutuals">You do not have any mutual Likes yet</string>
     <string name="mutual_module_title">MUTUAL</string>
+    <string name="you_can_write_wom">Now you can write to her!</string>
+    <string name="you_can_write_man">Now you can write to him!</string>
+    <string name="see_next">See next</string>
+    <string name="go_to_messages">Go to Messages</string>
     <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
     <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>
     <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
@@ -1082,4 +1086,21 @@
     <string name="ninja_product_by_price">%1$s for %2$s</string>
     <string name="ninja_trial_vip_product">Trial VIP-status</string>
     <string name="ninja_vip_product_by_price">%1$s VIP for %2$s</string>
+    <string name="profile_card_online">Online now</string>
+    <plurals name="profile_card_photo">
+        <item quantity="other">%d photo</item>
+        <item quantity="one">%d photo</item>
+    </plurals>
+    <string name="serial_likes_empty_title">No Likes remaining</string>
+    <string name="serial_likes_empty_desc">Use Dating to get new Likes</string>
+    <string name="serial_likes_go_dating">Go to Dating</string>
+    <string name="serial_likes_go_messages">Go to Messages</string>
+    <string name="serial_likes_open_now">Open now</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="other">Until the next %d Likes</item>
+        <item quantity="one">Until the next %d Likes</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">hr</string>
+    <string name="serial_likes_timer_mm">min</string>
+    <string name="serial_likes_timer_ss">sec</string>
 </resources>

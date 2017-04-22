@@ -938,6 +938,10 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="mutual_write_them_first">Scrivi a loro</string>
     <string name="mutual_no_mutuals">In questo momento non hai Like reciproci</string>
     <string name="mutual_module_title">RECIPROCAMENTE</string>
+    <string name="you_can_write_wom">Ora le puoi scrivere!</string>
+    <string name="you_can_write_man">Ora gli puoi scrivere!</string>
+    <string name="see_next">Vai al prossimo</string>
+    <string name="go_to_messages">Vai ai Messaggi</string>
     <string name="buy_vip_dating_only">Solo appuntamento, puro e semplice.</string>
     <string name="buy_vip_message">Non aspettare i Like, inizia subito una conversazione!</string>
     <string name="buy_vip_write_tops">Scrivi ai profili Migliori senza restrizioni</string>
@@ -1113,4 +1117,21 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="ninja_product_by_price">%1$s per %2$s</string>
     <string name="ninja_trial_vip_product">Status VIP di prova</string>
     <string name="ninja_vip_product_by_price">%1$s VIP per %2$s</string>
+    <string name="profile_card_online">Online adesso</string>
+    <plurals name="profile_card_photo">
+        <item quantity="other">%d foto</item>
+        <item quantity="one">%d foto</item>
+    </plurals>
+    <string name="serial_likes_empty_title">Nessun Like rimanente</string>
+    <string name="serial_likes_empty_desc">Usa Incontri per avere nuovi Like</string>
+    <string name="serial_likes_go_dating">Vai agli Incontri</string>
+    <string name="serial_likes_go_messages">Vai agli Incontri</string>
+    <string name="serial_likes_open_now">Apri adesso</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="other">Prima dei prossimi %d Like</item>
+        <item quantity="one">Prima dei prossimi %d Like</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">ore</string>
+    <string name="serial_likes_timer_mm">min</string>
+    <string name="serial_likes_timer_ss">sec</string>
 </resources>

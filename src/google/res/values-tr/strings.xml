@@ -851,6 +851,10 @@
     <string name="mutual_write_them_first">Onlara mesaj yaz</string>
     <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
     <string name="mutual_module_title">ORTAK</string>
+    <string name="you_can_write_wom">Artık ona mesaj yazabilirsin!</string>
+    <string name="you_can_write_man">Artık ona mesaj yazabilirsin!</string>
+    <string name="see_next">Sonrakini gör</string>
+    <string name="go_to_messages">Mesajlara git</string>
     <string name="buy_vip_dating_only">Sadece buluşmalar, açık ve net.</string>
     <string name="buy_vip_message">Beğenileri bekleme, sohbete başla!</string>
     <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
@@ -1027,4 +1031,21 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
     <string name="ninja_product_by_price">%2$s için %1$s</string>
     <string name="ninja_trial_vip_product">VIP Üyelik Deneme Süresi</string>
     <string name="ninja_vip_product_by_price">%1$s VIP için %2$s</string>
+    <string name="profile_card_online">Şu an Online</string>
+    <plurals name="profile_card_photo">
+        <item quantity="other">%d fotoğraf</item>
+        <item quantity="one">%d fotoğraf</item>
+    </plurals>
+    <string name="serial_likes_empty_title">Beğeniler tükendi</string>
+    <string name="serial_likes_empty_desc">Yeni beğeniler almak için Arkadaşlık sayfasını kullan</string>
+    <string name="serial_likes_go_dating">Arkadaşlık sayfasına git</string>
+    <string name="serial_likes_go_messages">Mesajlar ayfasına git</string>
+    <string name="serial_likes_open_now">Şu an açık</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="other">Sonraki %d beğeniye kadar</item>
+        <item quantity="one">Sonraki %d beğeniye kadar</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">saat</string>
+    <string name="serial_likes_timer_mm">dak.</string>
+    <string name="serial_likes_timer_ss">san.</string>
 </resources>

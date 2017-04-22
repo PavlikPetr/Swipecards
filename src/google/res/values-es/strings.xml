@@ -854,6 +854,10 @@
     <string name="mutual_write_them_first">Escríbeles</string>
     <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
     <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
+    <string name="you_can_write_wom">¡Ahora puedes escribirla!</string>
+    <string name="you_can_write_man">¡Ahora puedes escribirle!</string>
+    <string name="see_next">Ver siguiente</string>
+    <string name="go_to_messages">Ir a los Mensajes</string>
     <string name="buy_vip_dating_only">Solo citas, así de simple.</string>
     <string name="buy_vip_message">No esperes a que lleguen las simpatías, ¡empieza una conversación!</string>
     <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
@@ -1021,4 +1025,21 @@
     <string name="ninja_product_by_price">%1$s por %2$s</string>
     <string name="ninja_trial_vip_product">Estatus VIP de prueba</string>
     <string name="ninja_vip_product_by_price">%1$s VIP por %2$s</string>
+    <string name="profile_card_online">Conectado ahora</string>
+    <plurals name="profile_card_photo">
+        <item quantity="other">%d foto</item>
+        <item quantity="one">%d foto</item>
+    </plurals>
+    <string name="serial_likes_empty_title">No te quedan Simpatías</string>
+    <string name="serial_likes_empty_desc">Usa las Citas para conseguir Simpatías nuevas</string>
+    <string name="serial_likes_go_dating">Ir a Citas</string>
+    <string name="serial_likes_go_messages">Ir a Mensajes</string>
+    <string name="serial_likes_open_now">Abierto ahora</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="other">Hasta las siguientes %d Simpatías</item>
+        <item quantity="one">Hasta las siguientes %d Simpatías</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">h</string>
+    <string name="serial_likes_timer_mm">min</string>
+    <string name="serial_likes_timer_ss">s</string>
 </resources>
