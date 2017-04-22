@@ -78,6 +78,8 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         DataBindingUtil.inflate<RateAppLayoutBinding>(activity.layoutInflater, R.layout.rate_app_layout, null, false)
     }
 
+    var sendClose = true
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View = with(mBinding) {
         viewModel = mViewModel
         feedbackViewModel = mFeedbackViewModel
@@ -98,6 +100,7 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         super.onCancel(dialog)
         val rateResult = mViewModel.rateResult
         if (rateResult.first) {
+            sendClose = false
             if (rateResult.second) {
                 // stop showing this popup
                 saveRatingPopupStatus(0, false)
@@ -108,6 +111,8 @@ class RateAppFragment : DialogFragment(), IDialogCloser {
         } else {
             // было выбрано "не сейчас"/"закрыть" запомним это
             saveRatingPopupStatus(System.currentTimeMillis(), false)
+        }
+        if (sendClose) {
             RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLOSE(Slices().apply {
                 putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
             })
