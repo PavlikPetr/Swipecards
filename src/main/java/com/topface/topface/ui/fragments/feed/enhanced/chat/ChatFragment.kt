@@ -14,12 +14,13 @@ import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.chat.ChatViewModelComponent
 import com.topface.topface.di.chat.DaggerChatViewModelComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
-import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
+import com.topface.topface.ui.fragments.feed.enhanced.utils.DaggerFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
 
-class ChatFragment : BaseFragment() {
+class ChatFragment : DaggerFragment() {
 
     companion object {
         const val USER_TYPE = "type"
@@ -44,6 +45,8 @@ class ChatFragment : BaseFragment() {
         }.chatViewModel()
     }
 
+    override fun getViewModel(): IViewModelLifeCycle = mViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ComponentManager.obtainComponent(ChatComponent::class.java) {
@@ -55,6 +58,7 @@ class ChatFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         return mBinding.apply {
             chat.layoutManager = LinearLayoutManager(context)
             chat.adapter = adapter
@@ -62,7 +66,10 @@ class ChatFragment : BaseFragment() {
         }.root
     }
 
-    //todo подвязаться на жизненный цикл
+    override fun terminateImmortalComponent() {
+        ComponentManager.releaseComponent(ChatComponent::class.java)
+    }
+
     override fun onDestroyView() {
         ComponentManager.releaseComponent(ChatComponent::class.java)
         super.onDestroyView()
