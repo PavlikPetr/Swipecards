@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
+import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
 import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.chat.ChatViewModelComponent
+import com.topface.topface.di.chat.DaggerChatViewModelComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
