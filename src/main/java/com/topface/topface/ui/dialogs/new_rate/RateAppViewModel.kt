@@ -44,11 +44,11 @@ class RateAppViewModel(private var iDialogCloser: IDialogCloser?) : ILifeCycle {
     }
 
     fun okButtonClick() {
+        val rateInInt = currentRating.get()
         RatePopupStatisticsGeneratedStatistics.sendNow_RATE_POPUP_CLICK_BUTTON_RATE(Slices().apply {
-            putSlice(RATING, currentRating?.toString())
+            putSlice(RATING, rateInInt.toString())
             putSlice(RatePopupStatistics.DIALOG_TYPE, RatePopupStatistics.NEW_DIALOG)
         })
-        val rateInInt = currentRating.get()
         sendRateRequest(rateInInt.toLong())
         if (rateInInt <= 0) {
         } else if (rateInInt >= 4) {
