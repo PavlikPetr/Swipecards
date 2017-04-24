@@ -16,8 +16,8 @@ import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
-import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
+import com.topface.topface.requests.response.SimpleResponse
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.Utils
@@ -29,6 +29,7 @@ import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 /**
  * ВьюМодель добавления карт
@@ -84,10 +85,17 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val secondDescriptionText = ObservableField<String>()
     val isFirstDescriptionVisible = ObservableBoolean(false)
     val isSecondDescriptionVisible = ObservableBoolean(false)
+    val progressVisibility = ObservableInt(View.GONE)
+    val buttonTextVisibility = ObservableInt(View.VISIBLE)
 
     val isButtonEnabled = ObservableBoolean(false)
     val isInputEnabled = ObservableBoolean(true)
     val titleVisibility = ObservableInt(View.GONE)
+
+    private var mIsProgressVisible by Delegates.observable(false) { property, oldValue, newValue ->
+        progressVisibility.set(if (newValue) View.VISIBLE else View.GONE)
+        buttonTextVisibility.set(if (newValue) View.GONE else View.VISIBLE)
+    }
 
     val numberWatcher = NumberWatcher()
     val trhuWatcher = TrhuWatcher()
@@ -211,12 +219,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                     emailText.get() ?: ""
             )
             isInputEnabled.set(false)
+            mIsProgressVisible = true
             AddCardRequest().getRequestObservable(App.get(), cardModel)
                     .applySchedulers()
-                    .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
+                    .subscribe(object : RxUtils.ShortSubscription<SimpleResponse>() {
                         override fun onCompleted() {
                             super.onCompleted()
                             isInputEnabled.set(true)
+                            mIsProgressVisible = false
                         }
 
                         override fun onError(e: Throwable?) {
@@ -235,7 +245,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                             isButtonEnabled.set(false)
                         }
 
-                        override fun onNext(t: IApiResponse?) {
+                        override fun onNext(type: SimpleResponse?) {
                             mProduct?.let {
                                 sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
                             }

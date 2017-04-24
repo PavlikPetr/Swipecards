@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.data.Profile
 import com.topface.topface.ui.edit.EditSwitcherViewModel
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -14,29 +13,25 @@ import rx.Subscription
  * Created by ppavlik on 24.04.17.
  */
 
-class EditorViewModel {
+class EditorViewModel(private var mIsSelected: Boolean) {
 
-    private var mProfileSubscription: Subscription? = null
+    private var mCheckedSubscription: Subscription? = null
 
     val viewModel by lazy {
-        EditSwitcherViewModel(isCheckedDefault = false, textDefault = R.string.editor_test_buy.getString())
+        EditSwitcherViewModel(isCheckedDefault = mIsSelected, textDefault = R.string.editor_test_buy.getString())
                 .apply {
-                    setViewVisible(false)
-                    isChecked.set(false)
+                    setViewVisible(true)
                 }
     }
 
     init {
-        mProfileSubscription = App.getAppComponent().appState().getObservable(Profile::class.java)
-                .map { it.isEditor }
-                .distinctUntilChanged()
-                .subscribe(shortSubscription {
-                    it?.let { viewModel.setViewVisible(it) }
-                })
+        mCheckedSubscription = viewModel.isChecked.filedObservable.subscribe(shortSubscription {
+            it?.let { App.getAppComponent().eventBus().setData(EditorSwitch(it)) }
+        })
     }
 
     fun release() {
-        mProfileSubscription.safeUnsubscribe()
+        mCheckedSubscription.safeUnsubscribe()
         viewModel.release()
     }
 }

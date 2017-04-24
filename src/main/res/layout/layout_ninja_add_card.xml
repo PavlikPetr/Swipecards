@@ -129,15 +129,23 @@
             </android.support.design.widget.TextInputLayout>
 
             <!-- purchase button -->
-            <Button
-                style="@style/PopupGreenButton.Background"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:enabled="@{viewModel.isButtonEnabled &amp;&amp; viewModel.isInputEnabled}"
-                android:minWidth="146dp"
-                android:onClick="@{()->viewModel.onClick()}"
-                android:text="@string/ninja_button_buy"/>
+            <FrameLayout
+                style="@style/AddPaymentNinjaCardView"
+                android:enabled="@{viewModel.isButtonEnabled}"
+                android:onClick="@{()->viewModel.onClick()}">
+
+                <TextView
+                    style="@style/AddPaymentNinjaCardText"
+                    android:text="@string/ninja_button_buy"
+                    android:visibility="@{viewModel.buttonTextVisibility}"/>
+
+                <ProgressBar
+                    style="@style/TopFaceProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="@{viewModel.progressVisibility}"/>
+            </FrameLayout>
 
             <!-- connection info -->
             <LinearLayout

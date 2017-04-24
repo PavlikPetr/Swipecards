@@ -8,6 +8,7 @@ import com.topface.topface.requests.DataApiHandler
 import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.requests.response.SimpleResponse
+import com.topface.topface.utils.Utils
 import rx.Emitter
 import rx.Observable
 
@@ -23,7 +24,7 @@ fun PaymentNinjaPurchaseRequest.getRequestSubscriber() =
         Observable.fromEmitter<SimpleResponse>({ emitter ->
             callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
                 override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
-                override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
+                override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response?.jsonResult?.toString() ?: Utils.EMPTY, SimpleResponse::class.java)
                 override fun fail(codeError: Int, response: IApiResponse) {
                     emitter.onError(Throwable(codeError.toString()))
                 }

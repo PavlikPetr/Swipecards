@@ -17,11 +17,11 @@ class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBL
                             textDefault: String) {
 
     val textVisibility = ObservableInt(textVisibilityDefault)
-    val switchVisibility = ObservableInt(View.VISIBLE)
-    val progressVisibility = ObservableInt(View.GONE)
+    val switchVisibility = ObservableInt(switcVisibilityDefault)
+    val progressVisibility = ObservableInt(progressVisibilityDefault)
     val text = ObservableField<String>(textDefault)
     val isChecked = RxFieldObservable(isCheckedDefault)
-    val isEnabled = ObservableBoolean()
+    val isEnabled = ObservableBoolean(true)
 
     fun setViewVisible(isVisible: Boolean) {
         textVisibility.set(if (isVisible) textVisibilityDefault else View.GONE)
@@ -33,6 +33,10 @@ class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBL
         progressVisibility.set(if (isVisible) View.VISIBLE else View.GONE)
         textVisibility.set(if (isVisible) View.INVISIBLE else View.VISIBLE)
         switchVisibility.set(if (isVisible) View.INVISIBLE else View.VISIBLE)
+    }
+
+    fun onRootViewClick() {
+        isChecked.set(!isChecked.get())
     }
 
     fun release() {}
