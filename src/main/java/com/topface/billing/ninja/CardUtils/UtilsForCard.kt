@@ -41,7 +41,7 @@ object UtilsForCard {
         val currentYear = calendar.get(Calendar.YEAR)
         val millenium = currentYear / 1000 * 1000
 
-        val currentYearValid = if (yearInt + millenium > currentYear) true else (yearInt + millenium == currentYear) && (mounthInt > calendar.get(Calendar.MONTH) + 1)
+        val currentYearValid = if (yearInt + millenium > currentYear) true else (yearInt + millenium == currentYear) && (mounthInt > calendar.get(Calendar.MONTH))
 
         return isDigits(trhuText) && (mounthInt in 1..12) && currentYearValid
     }

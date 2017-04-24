@@ -9,10 +9,10 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import com.topface.billing.ninja.CardType.Companion.CVV_DEFAULT
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
@@ -55,7 +55,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     val cvvText = ObservableField<String>()
-    val cvvMaxLength = ObservableInt(4)
+    val cvvMaxLength = ObservableInt(CVV_DEFAULT)
     val cvvError = ObservableField<String>()
 
     val trhuText = RxFieldObservable<String>()
@@ -263,19 +263,16 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     private fun validateNumber(): Boolean {
-        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
+        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) && numberText.get().length <= numberMaxLength.get()) {
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
-                Debug.error("---------------------ОШИБКА ввода номера карты--------------------------------")
                 numberError.set(R.string.ninja_number_error.getString())
                 readyCheck.put(numberText, false)
             } else {
                 numberError.set(Utils.EMPTY)
                 readyCheck.put(numberText, true)
-                Debug.error("---------------------Номер введен корректно------------------${readyCheck[numberText]}--------------")
             }
         } else {
-            Debug.error("---------------------ОШИБКА заполните поле ввода номера карты -----------------------")
             numberError.set(R.string.ninja_number_error.getString())
             readyCheck.put(numberText, false)
         }
@@ -287,7 +284,6 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
         val trhuString = trhuText.get()
         if (!trhuString.isNullOrEmpty() && trhuString.length == UtilsForCard.TRHU_LENGTH) {
             if (!UtilsForCard.isValidTrhu(trhuString)) {
-                Debug.error("---------------------ОШИБКА ввода Срока годности карты------------------------")
                 trhuError.set(R.string.ninja_trhu_error.getString())
                 readyCheck.put(trhuText, false)
             } else {
@@ -303,9 +299,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     private fun validateCvv(): Boolean {
-        if (cvvText.get().length > 2 && !cvvText.get().isNullOrEmpty()) {
+        if (!cvvText.get().isNullOrEmpty() && cvvText.get().length == cvvMaxLength.get()) {
             if (!UtilsForCard.isDigits(cvvText.get())) {
-                Debug.error("--------------------Все очень плохо-----слишком мало букав---или введен текст-------------------")
                 cvvError.set(R.string.ninja_cvv_error.getString())
                 readyCheck.put(cvvText, false)
             } else {
@@ -313,7 +308,6 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                 readyCheck.put(cvvText, true)
             }
         } else {
-            Debug.error("---------------------ОШИБКА заполните поле cvv -----------------------")
             cvvError.set(R.string.ninja_cvv_error.getString())
             readyCheck.put(cvvText, false)
         }
@@ -323,7 +317,6 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
 
     private fun validateEmail(): Boolean {
         if (!emailText.get().matches(EMAIL_ADDRESS.toRegex())) {
-            Debug.error("--------------------EMAIL невалидный-----------------------------")
             emailError.set(R.string.ninja_email_error.getString())
             readyCheck.put(emailText, false)
         } else {
