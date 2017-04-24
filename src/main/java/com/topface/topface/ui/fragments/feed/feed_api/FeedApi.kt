@@ -452,8 +452,8 @@ class FeedApi(private val mContext: Context, private var mRequestClient: IReques
     fun deleteMessage(item: History): Observable<SimpleResponse> {
         return Observable.fromEmitter({
             DeleteMessagesRequest(item.id, mContext).callback(object : DataApiHandler<SimpleResponse>() {
-                override fun parseResponse(response: ApiResponse?) = response?.jsonResult?.toString()?.run {
-                    JsonUtils.fromJson<SimpleResponse>(this, SimpleResponse::class.java)
+                override fun parseResponse(response: ApiResponse?) = response?.jsonResult?.toString()?.let {
+                    JsonUtils.fromJson<SimpleResponse>(it, SimpleResponse::class.java)
                 }
                 override fun success(data: SimpleResponse?, response: IApiResponse?) = it.onNext(data)
                 override fun fail(codeError: Int, response: IApiResponse?) {
