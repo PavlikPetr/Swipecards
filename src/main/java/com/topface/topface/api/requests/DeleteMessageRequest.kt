@@ -8,7 +8,7 @@ class DeleteMessageRequest(private val mId: String) : BaseScruffyRequest<Complet
 
     override fun getMethod() = "message.delete"
 
-    override fun createJson(json: JsonObject)= with(json) {
+    override fun createJson(json: JsonObject) = with(json) {
         add("userIds", listOf<String>(mId).stringListToJsonArray())
     }
 
