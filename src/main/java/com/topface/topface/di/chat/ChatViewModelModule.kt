@@ -11,6 +11,6 @@ class ChatViewModelModule {
 
     @Provides
     @ScreenScope
-    fun provideFansViewModel(): ChatViewModel = ChatViewModel()
+    fun provideChatViewModel(): ChatViewModel = ChatViewModel()
 
 }

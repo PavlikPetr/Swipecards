@@ -10,10 +10,8 @@ import com.topface.topface.R
 import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
-import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.chat.ChatViewModelComponent
 import com.topface.topface.di.chat.DaggerChatViewModelComponent
-import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
 import com.topface.topface.ui.fragments.feed.enhanced.utils.DaggerFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -37,7 +35,7 @@ class ChatFragment : DaggerFragment() {
     @Inject lateinit var adapter: CompositeAdapter
 
     private val mBinding: NewChatFragmentBinding by lazy {
-        DataBindingUtil.inflate<NewChatFragmentBinding>(context.layoutInflater, R.layout.new_chat_fragment, null, false)
+        DataBindingUtil.inflate<NewChatFragmentBinding>(context.applicationContext.layoutInflater, R.layout.new_chat_fragment, null, false)
     }
     private val mViewModel by lazy {
         ComponentManager.obtainComponent(ChatViewModelComponent::class.java) {
@@ -49,18 +47,13 @@ class ChatFragment : DaggerFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ComponentManager.obtainComponent(ChatComponent::class.java) {
-            ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
-                    .add(ChatModule()).apply {
-                inject(this@ChatFragment)
-            }
-        }
+        ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return mBinding.apply {
-            chat.layoutManager = LinearLayoutManager(context)
+            chat.layoutManager = LinearLayoutManager(context.applicationContext)
             chat.adapter = adapter
             viewModel = mViewModel
         }.root
@@ -71,7 +64,7 @@ class ChatFragment : DaggerFragment() {
     }
 
     override fun onDestroyView() {
-        ComponentManager.releaseComponent(ChatComponent::class.java)
         super.onDestroyView()
+        adapter.releaseComponents()
     }
 }

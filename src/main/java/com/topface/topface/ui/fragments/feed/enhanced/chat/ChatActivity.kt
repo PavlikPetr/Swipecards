@@ -7,6 +7,10 @@ import com.topface.topface.R
 import com.topface.topface.data.experiments.FeedScreensIntent
 import com.topface.topface.databinding.AcFragmentFrameBinding
 import com.topface.topface.databinding.ToolbarViewBinding
+import com.topface.topface.di.ComponentManager
+import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.di.chat.ChatModule
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.CheckAuthActivity
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
@@ -17,6 +21,7 @@ import com.topface.topface.utils.extensions.finishWithResult
 import com.topface.topface.utils.extensions.goneIfEmpty
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
+import javax.inject.Inject
 
 class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
 
@@ -27,6 +32,8 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
         const val DISPATCHED_GIFTS = "com.topface.topface.ui.ChatActivity_dispatched_gifts"
     }
 
+    @Inject lateinit var eventBus: EventBus
+
     private var mTakePhotoSubscription: Subscription? = null
 
     override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarViewBinding = binding.toolbarInclude
@@ -34,12 +41,13 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     override fun getLayout() = R.layout.ac_fragment_frame
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        ComponentManager.obtainComponent(ChatComponent::class.java) {
+            App.getAppComponent().add(ChatModule())
+        }.inject(this)
         super.onCreate(savedInstanceState)
-        App.getAppComponent().eventBus().apply {
-            mTakePhotoSubscription = getObservable(TakePhotoActionHolder::class.java)
-                    .filter { it != null && it.action == TakePhotoPopup.ACTION_CANCEL }
-                    .subscribe({ finishWithResult(RESULT_CANCELED) }, { Debug.error("Take photo popup actions subscription catch error", it) })
-        }
+        mTakePhotoSubscription = eventBus.getObservable(TakePhotoActionHolder::class.java)
+                .filter { it != null && it.action == TakePhotoPopup.ACTION_CANCEL }
+                .subscribe({ finishWithResult(RESULT_CANCELED) }, { Debug.error("Take photo popup actions subscription catch error", it) })
     }
 
     override fun onDestroy() {

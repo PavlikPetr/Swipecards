@@ -76,6 +76,7 @@ abstract class DaggerFragment : BaseFragment() {
         if (isAdded && ((onSaveInstanceStateWasCalled && onStartAfterSavedStateWasCalled) || !onSaveInstanceStateWasCalled)) {
             terminateImmortalComponent()
             mViewModelLifeCycle?.release()
+            mViewModelLifeCycle = null
         }
         super.onDetach()
         mViewModelLifeCycle?.unbind()
@@ -83,11 +84,6 @@ abstract class DaggerFragment : BaseFragment() {
 
     protected open fun terminateImmortalComponent() {
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        mViewModelLifeCycle?.release()
     }
 
 }

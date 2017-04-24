@@ -191,7 +191,8 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     override fun onDestroyView() {
         (mBinding.bannerContainerForFeeds as ViewGroup).removeViewInLayout(g.v)
         super.onDestroyView()
-        mViewModel.release()
+        //пока пусть будет так, похоже что это лишнее, на дестрое вьюхи не надо релизить модель.
+        //mViewModel.release()
         mAdapter.releaseComponents()
     }
 

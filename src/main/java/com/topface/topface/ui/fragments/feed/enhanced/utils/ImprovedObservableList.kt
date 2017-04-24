@@ -11,7 +11,9 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import java.lang.ref.WeakReference
 import java.util.*
 
-open class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = ObservableArrayList())
+typealias ChatData = ImprovedObservableList<Any>
+
+class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = ObservableArrayList())
     : ObservableList<T> by observableList {
 
     var weakListener: WeakReference<ObservableList.OnListChangedCallback<out ObservableList<T>>>? = null
@@ -42,10 +44,9 @@ open class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> 
         weakListener = null
     }
 }
-class ChatObservableList : ImprovedObservableList<String>()
 
 @BindingAdapter("bindDataToChatRecycler")
-fun bindDataToChatRecycler(recyclerView: RecyclerView, data: ChatObservableList) {
+fun bindDataToChatRecycler(recyclerView: RecyclerView, data: ChatData) {
     data.canAddListener = true
     if (!data.isListenerAdded()) {
         attachListener(recyclerView, data)

@@ -28,13 +28,12 @@ class ChatModule {
 
     @Provides
     @FragmentScope
-    fun provideCompositeAdapter(typeProvider: ITypeProvider, loaderStubComponent: LoaderStubComponent): CompositeAdapter {
-        val adapter = CompositeAdapter(typeProvider) {
-            Bundle().apply {
-                //todo итем для подгрузки
-            }
+    fun provideCompositeAdapter(typeProvider: ITypeProvider, loaderStubComponent: LoaderStubComponent)
+            = CompositeAdapter(typeProvider) {
+        Bundle().apply {
+            //todo итем для подгрузки
         }
-        adapter.addAdapterComponent(loaderStubComponent)
-        return adapter
+    }.apply {
+        addAdapterComponent(loaderStubComponent)
     }
 }
