@@ -10,6 +10,7 @@ import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatComplainEvent
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatDeleteEvent
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.ILifeCycle
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
@@ -23,7 +24,7 @@ class ChatPopupMenuViewModel(private val mItem: History, private val mItemPositi
     private val mEventBus by lazy { App.getAppComponent().eventBus() }
 
     fun copyMessage() {
-        mClipboardManager.primaryClip = ClipData.newPlainText("", mItem.text)
+        mClipboardManager.primaryClip = ClipData.newPlainText(Utils.EMPTY, mItem.text)
         R.string.general_msg_copied.showLongToast()
         mIDialogCloser?.closeIt()
     }

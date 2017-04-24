@@ -50,7 +50,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
     }
 
     private val mViewModel by lazy{
-        ChatPopupMenuViewModel(mItem, mPosition, this@ChatPopupMenu, mApi, mClipboardManager).apply {
+        ChatPopupMenuViewModel(mItem, mPosition, this, mApi, mClipboardManager).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }
