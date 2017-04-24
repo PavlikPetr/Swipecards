@@ -1357,7 +1357,7 @@
         <item quantity="other">%d фото</item>
     </plurals>
     <string name="serial_likes_empty_title">Симпатии закончились</string>
-    <string name="serial_likes_empty_desc">Используй знакомства чтобы получить новые симпатии</string>
+    <string name="serial_likes_empty_desc">Используй знакомства, чтобы получить новые симпатии</string>
     <string name="serial_likes_go_dating">Перейти в знакомства</string>
     <string name="serial_likes_go_messages">Перейти в сообщения</string>
     <string name="serial_likes_open_now">Открыть сейчас</string>
