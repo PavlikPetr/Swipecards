@@ -9,7 +9,6 @@ import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 
 /**
  * Интерфейс навигации в  фидах

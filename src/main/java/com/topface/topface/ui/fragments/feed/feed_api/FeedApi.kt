@@ -457,7 +457,6 @@ class FeedApi(private val mContext: Context, private var mRequestClient: IReques
                 }
                 override fun success(data: SimpleResponse?, response: IApiResponse?) = it.onNext(data)
                 override fun fail(codeError: Int, response: IApiResponse?) {
-                    Debug.log(response.toString())
                     Utils.showErrorMessage()
                 }
             }).exec()

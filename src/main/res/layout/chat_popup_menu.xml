@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.chat.ChatPopupMenuViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenuViewModel"/>
     </data>
 
     <LinearLayout

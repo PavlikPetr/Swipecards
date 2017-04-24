@@ -1,4 +1,4 @@
-package com.topface.topface.ui.fragments.feed.enhanced.chat
+package com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu
 
 import android.content.ClipboardManager
 import android.content.Context
@@ -23,9 +23,9 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
     companion object {
         const val TAG = "ChatPopupMenu"
         const val CHAT_ITEM = "chat_item"
-        const val CHAT_ITEM_POSITION = "chat_item"
+        const val CHAT_ITEM_POSITION = "chat_item_position"
 
-        fun getInstance(item: History, position: Int) = ChatPopupMenu().apply {
+        fun newInstance(item: History, position: Int) = ChatPopupMenu().apply {
             arguments = Bundle().apply {
                 putParcelable(CHAT_ITEM, item)
                 putInt(CHAT_ITEM_POSITION, position)
@@ -35,7 +35,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
 
     private val mItem: History = arguments.getParcelable(CHAT_ITEM)
 
-    private val mPosition = arguments.getInt(CHAT_ITEM)
+    private val mPosition = arguments.getInt(CHAT_ITEM_POSITION)
 
     private val mClipboardManager by lazy {
         activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -63,7 +63,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
 
     override fun onDetach() {
         super.onDetach()
-        activity.unregisterLifeCycleDelegate(this)
+        activity.unregisterLifeCycleDelegate(mViewModel)
         mViewModel.release()
     }
 
