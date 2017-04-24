@@ -13,3 +13,6 @@
 [submodule "libs/statistics-android"]
 	path = libs/statistics-android
 	url = git@github.com:Topface/statistics-android.git
+[submodule "libs/scruffy-android"]
+	path = libs/scruffy-android
+	url = git@github.com:Topface/scruffy-android.git

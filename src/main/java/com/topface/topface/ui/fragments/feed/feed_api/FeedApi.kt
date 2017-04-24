@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.feed_api
 import android.content.Context
 import android.os.Bundle
 import android.os.Looper
-import android.widget.Toast
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
@@ -37,13 +36,13 @@ import java.util.*
  * Created by tiberal on 09.08.16.
  */
 
-class FeedApi(private val mContext: Context, private val mRequestClient: IRequestClient,
+class FeedApi(private val mContext: Context, private var mRequestClient: IRequestClient? = null,
               private val mDeleteRequestFactory: IRequestFactory? = null, private val mFeedRequestFactory: IRequestFactory? = null) {
 
     fun callStandartMessageRequest(userId: Int, messageId: Int, blockUnconfirmed: Boolean = App.get().options.blockUnconfirmed): Observable<IApiResponse> {
         return Observable.create {
             val request = StandardMessageSendRequest(mContext, userId, messageId, blockUnconfirmed)
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : SimpleApiHandler() {
                 override fun success(response: IApiResponse) = it.onNext(response)
                 override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
@@ -61,7 +60,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
             request.uid = userId
             request.from = from
             request.limit = limit
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : DataApiHandler<FeedListData<FeedGift>>() {
                 override fun success(data: FeedListData<FeedGift>?, response: IApiResponse?) {
                     val gifts = Profile.Gifts()
@@ -109,7 +108,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     fun callDatingUpdate(onlyOnline: Boolean, isNeedRefresh: Boolean): Observable<UsersList<SearchUser>> {
         return Observable.create {
             val request = SearchRequest(onlyOnline, mContext, isNeedRefresh, true, true)
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : DataApiHandler<UsersList<SearchUser>>() {
                 override fun parseResponse(response: ApiResponse): UsersList<SearchUser> = UsersList(response, SearchUser::class.java)
                 override fun success(data: UsersList<SearchUser>, response: IApiResponse) = it.onNext(data)
@@ -145,7 +144,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     fun callFilterRequest(filter: FilterData): Observable<DatingFilter> {
         return Observable.create {
             val request = FilterRequest(filter, mContext)
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : DataApiHandler<DatingFilter>() {
                 override fun parseResponse(response: ApiResponse): DatingFilter = DatingFilter(response.getJsonResult())
                 override fun success(dataFilter: DatingFilter, response: IApiResponse) = it.onNext(dataFilter)
@@ -166,7 +165,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     fun callResetFilterRequest(): Observable<DatingFilter> {
         return Observable.create {
             val request = ResetFilterRequest(mContext)
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : DataApiHandler<DatingFilter>() {
                 override fun parseResponse(response: ApiResponse) = DatingFilter(response.getJsonResult())
                 override fun success(dataFilter: DatingFilter, response: IApiResponse) = it.onNext(dataFilter)
@@ -187,7 +186,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     fun callLikesAccessRequest(): Observable<IApiResponse> {
         return Observable.create {
             val request = BuyLikesAccessRequest(mContext)
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : SimpleApiHandler() {
                 override fun success(response: IApiResponse) = it.onNext(response)
                 override fun fail(codeError: Int, response: IApiResponse) = it.onError(Throwable(codeError.toString()))
@@ -202,7 +201,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
     fun callAppDayRequest(typeFeedFragment: String): Observable<AppDay> {
         return Observable.create {
             val request = AppDayRequest(mContext, typeFeedFragment)
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.callback(object : DataApiHandler<AppDay>() {
                 override fun success(data: AppDay?, response: IApiResponse?) =
                         it.onNext(data)
@@ -221,7 +220,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         return Observable.create {
             val request = mFeedRequestFactory?.construct(requestArgs)
             if (request != null) {
-                mRequestClient.registerRequest(request)
+                mRequestClient?.registerRequest(request)
                 request.callback(object : DataApiHandler<FeedListData<T>>(Looper.getMainLooper()) {
                     override fun parseResponse(response: ApiResponse): FeedListData<T> = FeedListData(response.jsonResult, mItemClass)
                     override fun success(data: FeedListData<T>, response: IApiResponse) = it.onNext(data)
@@ -268,7 +267,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                     it.onCompleted()
                 }
             }))
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.exec()
         }
     }
@@ -284,7 +283,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                         it.onCompleted()
                     }
                 })
-                mRequestClient.registerRequest(this)
+                mRequestClient?.registerRequest(this)
                 exec()
             }
         }
@@ -305,7 +304,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                         it.onCompleted()
                     }
                 })
-                mRequestClient.registerRequest(deleteFeedsRequest)
+                mRequestClient?.registerRequest(deleteFeedsRequest)
                 deleteFeedsRequest.exec()
             } else {
                 Utils.showErrorMessage()
@@ -334,14 +333,14 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                     it.onCompleted()
                 }
             })
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.exec()
         }
     }
 
     fun callSkipRequest(id: Int): Observable<IApiResponse> = Observable.create { subscriber ->
         val skipRateRequest = SkipRateRequest(mContext)
-        mRequestClient.registerRequest(skipRateRequest)
+        mRequestClient?.registerRequest(skipRateRequest)
         skipRateRequest.userid = id
         skipRateRequest.callback(object : SimpleApiHandler() {
             override fun success(response: IApiResponse?) {
@@ -379,7 +378,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                     JsonUtils.fromJson<SimpleResponse>(this, SimpleResponse::class.java)
                 }
             })
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.exec()
         }
     }
@@ -399,7 +398,7 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                     JsonUtils.fromJson<SimpleResponse>(this, SimpleResponse::class.java)
                 }
             })
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.exec()
         }
     }
@@ -444,9 +443,25 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
                     JsonUtils.fromJson<DialogContacts>(this, DialogContacts::class.java)
                 }
             })
-            mRequestClient.registerRequest(request)
+            mRequestClient?.registerRequest(request)
             request.exec()
         }
+    }
+
+    fun deleteMessage(item: History): Observable<SimpleResponse> {
+        return Observable.fromEmitter({
+            DeleteMessagesRequest(item.id, mContext).callback(object : DataApiHandler<SimpleResponse>() {
+                override fun parseResponse(response: ApiResponse?) = response?.jsonResult?.toString()?.let {
+                    JsonUtils.fromJson<SimpleResponse>(it, SimpleResponse::class.java)
+                }
+
+                override fun success(data: SimpleResponse?, response: IApiResponse?) = it.onNext(data)
+                override fun fail(codeError: Int, response: IApiResponse?) {
+                    it.onError(Exception(codeError.toString()))
+                    Utils.showErrorMessage()
+                }
+            }).exec()
+        }, Emitter.BackpressureMode.LATEST)
     }
 
     private fun getFeedIntIds(list: List<FeedItem>): ArrayList<Int> {
@@ -466,5 +481,4 @@ class FeedApi(private val mContext: Context, private val mRequestClient: IReques
         }
         return ids
     }
-
 }

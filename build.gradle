@@ -47,7 +47,7 @@ buildscript {
     ext {
         retrofit_version = '2.1.0'
         google_play_services_version = '9.4.0'
-        kotlin_version = '1.1.0'
+        kotlin_version = '1.1.1'
         anko_version = '0.9'
         permissionsdispatcher_version = '2.2.0'
         flurry_version = '6.5.0'
@@ -101,6 +101,7 @@ allprojects {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 /*----------- Плагин groovy для получения нормальных ошибок при сборке и генерации -----------*/
 //apply plugin: 'groovyx.android'
 /*------------------------------------------- END -------------------------------------------*/
@@ -326,6 +327,7 @@ android {
 
 dependencies {
     /*----------- Плагин groovy для получения нормальных ошибок при сборке и генерации -----------*/
+    // https://github.com/groovy/groovy-android-gradle-plugin
 //    compile "org.codehaus.groovy:groovy:2.4.10:grooid"
     /*------------------------------------------- END -------------------------------------------*/
     //Kotlin
@@ -388,6 +390,9 @@ dependencies {
     compile(project(':libs:odnoklassniki')) {
         exclude group: 'com.android.support'
     }
+    compile(project(':libs:scruffy-android:scruffy')) {
+        exclude group: 'com.android.support'
+    }
     compile 'com.nostra13.universalimageloader:library:1.9.5@aar'
     compile(rootProject.ANDROID_BUILD_SUPPORT_CARDVIEW_VERSION) {
         exclude group: 'com.android.support'
@@ -426,7 +431,6 @@ dependencies {
     }
 
     compile "com.google.dagger:dagger:$dagger"
-    annotationProcessor "com.google.dagger:dagger-compiler:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
     provided 'org.glassfish:javax.annotation:10.0-b28'
 
@@ -516,6 +520,15 @@ project(':libs:PullToRefresh') {
         manifest.srcFile 'library/AndroidManifest.xml'
         java.srcDirs = ['library/src']
         res.srcDirs = ['library/res']
+    }
+}
+
+project(':libs:scruffy-android') {
+    apply plugin: 'com.android.library'
+    android.sourceSets.main {
+        manifest.srcFile 'AndroidManifest.xml'
+        java.srcDirs = ['scruffy/src/main/java']
+        res.srcDirs = ['scruffy/src/main/res']
     }
 }
 

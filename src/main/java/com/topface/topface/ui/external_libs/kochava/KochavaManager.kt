@@ -16,7 +16,7 @@ import com.topface.topface.utils.social.AuthToken
  * Created by ppavlik on 28.02.17.
  */
 
-class KochavaManager {
+class KochavaManager(private val mRunningStateManager: RunningStateManager) {
 
     companion object {
         private const val APP_GUID = "kotopface-android-s07"
@@ -53,18 +53,17 @@ class KochavaManager {
             Debug.log("$TAG init kochava. Create instance of tracker.")
         }
         // register running state manager reporter and send event about session start/end to kochava
-        App.getAppComponent().runningStateManager()
-                .registerAppChangeStateListener(object : RunningStateManager.OnAppChangeStateListener {
-                    override fun onAppForeground(timeOnStart: Long) {
-                        Debug.log("$TAG send start session event")
-                        kochavaTracker.startSession()
-                    }
+        mRunningStateManager.registerAppChangeStateListener(object : RunningStateManager.OnAppChangeStateListener {
+            override fun onAppForeground(timeOnStart: Long) {
+                Debug.log("$TAG send start session event")
+                kochavaTracker.startSession()
+            }
 
-                    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
-                        Debug.log("$TAG send end session event")
-                        kochavaTracker.endSession()
-                    }
-                })
+            override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
+                Debug.log("$TAG send end session event")
+                kochavaTracker.endSession()
+            }
+        })
         Debug.log("$TAG kochava device id ${Feature.getKochavaDeviceId()}")
     }
 

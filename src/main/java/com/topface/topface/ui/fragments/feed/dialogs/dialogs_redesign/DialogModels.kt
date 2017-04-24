@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import com.topface.topface.data.FeedDialog
+import com.topface.topface.data.FeedItem
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
@@ -28,17 +29,17 @@ class DialogContactsStubItem(val dialogContacts: DialogContacts = DialogContacts
 /**
  * Пустой итем для отображения заглушки "Топай знакомиться" в контактах
  */
-class GoDatingContactsStubItem()
+class GoDatingContactsStubItem
 
 /**
  * Пустой итем для отображения заглушки "Взаимных нет, вообще нет. Дуй знакомиться" в контактах
  */
-class UForeverAloneStubItem()
+class UForeverAloneStubItem
 
 /**
  * Пустой итем для отображения рекламы приложения дня
  */
-class AppDayStubItem(var appDay: AppDay) : FeedDialog()
+open class AppDayStubItem(var appDay: AppDay) : FeedDialog()
 
 /**
  * Ивент о загрузке контактов есть/нет
