@@ -15,11 +15,9 @@ import com.topface.topface.databinding.ChatPopupMenuBinding
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.http.IRequestClient
-import org.jetbrains.anko.layoutInflater
+import com.topface.topface.utils.registerLifeCycleDelegate
 
 class ChatPopupMenu : DialogFragment(), IDialogCloser {
-
-    private var mItem: History? = null
 
     companion object {
         const val TAG = "ChatPopupMenu"
@@ -34,26 +32,36 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
-        mItem = arguments.getParcelable(CHAT_ITEM)
-        val position = arguments.getInt(CHAT_ITEM)
-        mItem?.let {
-            viewModel = ChatPopupMenuViewModel(it, position, this@ChatPopupMenu, mApi, mClipboardManager)
-            dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
-        }
-        root
-    }
+    private val mItem: History = arguments.getParcelable(CHAT_ITEM)
+    private val mPosition = arguments.getInt(CHAT_ITEM)
 
     private val mClipboardManager by lazy {
         activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
     private val mBinding by lazy {
-        DataBindingUtil.inflate<ChatPopupMenuBinding>(context.layoutInflater, R.layout.chat_popup_menu, null, false)
+        DataBindingUtil.inflate<ChatPopupMenuBinding>(activity.layoutInflater, R.layout.chat_popup_menu, null, false)
     }
 
     private val mApi by lazy {
         FeedApi(context, activity as IRequestClient)
+    }
+
+    private val mViewModel by lazy{
+        ChatPopupMenuViewModel(mItem, mPosition, this@ChatPopupMenu, mApi, mClipboardManager).apply {
+            activity.registerLifeCycleDelegate(this)
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? = with(mBinding) {
+        viewModel = mViewModel
+        dialog.window.requestFeature(Window.FEATURE_NO_TITLE)
+        root
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mViewModel.release()
     }
 
     override fun closeIt() {

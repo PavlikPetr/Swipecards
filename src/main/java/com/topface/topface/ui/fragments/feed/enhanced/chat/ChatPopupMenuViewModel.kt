@@ -13,7 +13,7 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 
 class ChatPopupMenuViewModel(private val mItem: History, private val mItemPosition: Int,
-                             private val mIDialogCloser: IDialogCloser, private val mApi: FeedApi,
+                             private var mIDialogCloser: IDialogCloser?, private val mApi: FeedApi,
                              private val mClipboardManager: ClipboardManager) : ILifeCycle {
 
     private val mChatPopupSubscription = CompositeSubscription()
@@ -23,22 +23,23 @@ class ChatPopupMenuViewModel(private val mItem: History, private val mItemPositi
     fun copyMessage() {
         mClipboardManager.primaryClip = ClipData.newPlainText("", mItem.text)
         R.string.general_msg_copied.showLongToast()
-        mIDialogCloser.closeIt()
+        mIDialogCloser?.closeIt()
     }
 
     fun complain() {
         mEventBus.setData(ChatComplainEvent(mItemPosition))
-        mIDialogCloser.closeIt()
+        mIDialogCloser?.closeIt()
     }
 
     fun deleteMessage() {
         mChatPopupSubscription.add(mApi.deleteMessage(mItem).subscribe(shortSubscription {
             mEventBus.setData(ChatDeleteEvent(mItemPosition))
         }))
-        mIDialogCloser.closeIt()
+        mIDialogCloser?.closeIt()
     }
 
     fun release() {
         mChatPopupSubscription.clear()
+        mIDialogCloser = null
     }
 }
