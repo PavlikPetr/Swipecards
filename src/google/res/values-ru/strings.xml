@@ -1348,4 +1348,26 @@
     <string name="ninja_product_by_price">%1$s за %2$s</string>
     <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
     <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
+    
+    <string name="profile_card_online">Сейчас онлайн</string>
+    <plurals name="profile_card_photo">
+        <item quantity="one">%d фото</item>
+        <item quantity="few">%d фото</item>
+        <item quantity="many">%d фото</item>
+        <item quantity="other">%d фото</item>
+    </plurals>
+    <string name="serial_likes_empty_title">Симпатии закончились</string>
+    <string name="serial_likes_empty_desc">Используй знакомства чтобы получить новые симпатии</string>
+    <string name="serial_likes_go_dating">Перейти в знакомства</string>
+    <string name="serial_likes_go_messages">Перейти в сообщения</string>
+    <string name="serial_likes_open_now">Открыть сейчас</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="one">До открытия %d следующей симпатии</item>
+        <item quantity="few">До открытия %d следующих симпатий</item>
+        <item quantity="many">До открытия %d следующих симпатий</item>
+        <item quantity="other">До открытия %d следующих симпатий</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">час</string>
+    <string name="serial_likes_timer_mm">мин</string>
+    <string name="serial_likes_timer_ss">сек</string>
 </resources>
