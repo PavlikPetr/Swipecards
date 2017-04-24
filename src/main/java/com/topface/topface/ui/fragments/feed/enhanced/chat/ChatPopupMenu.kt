@@ -16,6 +16,7 @@ import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.http.IRequestClient
 import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 
 class ChatPopupMenu : DialogFragment(), IDialogCloser {
 
@@ -33,6 +34,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
     }
 
     private val mItem: History = arguments.getParcelable(CHAT_ITEM)
+
     private val mPosition = arguments.getInt(CHAT_ITEM)
 
     private val mClipboardManager by lazy {
@@ -61,10 +63,9 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
 
     override fun onDetach() {
         super.onDetach()
+        activity.unregisterLifeCycleDelegate(this)
         mViewModel.release()
     }
 
-    override fun closeIt() {
-        dialog.cancel()
-    }
+    override fun closeIt() = dialog.cancel()
 }
