@@ -36,6 +36,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -250,4 +251,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
+
+    override fun showChatPopupMenu(item: History, position: Int) =
+            ChatPopupMenu.getInstance(item, position).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
 }

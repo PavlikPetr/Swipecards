@@ -49,4 +49,5 @@ interface IFeedNavigator {
     fun showFBInvitationPopup()
     fun showQuestionnaire(): Boolean
     fun showRateAppFragment()
+    fun showChatPopupMenu(item: History, position: Int)
 }
