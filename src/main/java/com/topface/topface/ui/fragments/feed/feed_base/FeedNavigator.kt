@@ -216,9 +216,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String, isTestPurchase: Boolean) {
         mActivityDelegate.startActivityForResult(NinjaAddCardActivity
-                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                .createIntent(fromInstantPurchase = false, product = product, source = source, isTestPurchase = isTestPurchase),
                 NinjaAddCardActivity.REQUEST_CODE)
     }
 

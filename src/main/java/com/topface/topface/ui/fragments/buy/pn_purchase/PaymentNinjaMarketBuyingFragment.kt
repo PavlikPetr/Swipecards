@@ -6,14 +6,23 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
+import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.buy.pn_purchase.components.*
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.getRequestSubscriber
+import com.topface.topface.utils.extensions.isCradAvailable
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
 
 /**
  * Fragment to buy payment ninja products
@@ -38,6 +47,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     private var mText: String? = null
     private var mFrom: String? = null
     private var mIsPremiumProducts = false
+    private var mPurchaseSubscription: Subscription? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<FragmentPnBuyBinding>(context.layoutInflater,
@@ -45,7 +55,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        PaymentNinjaMarketBuyingFragmentViewModel(mFeedNavigator, mIsPremiumProducts, mFrom ?: "")
+        PaymentNinjaMarketBuyingFragmentViewModel(mIsPremiumProducts)
     }
 
     private val mPnBuyingTypeProvider by lazy {
@@ -56,15 +66,34 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
         FeedNavigator(activity as IActivityDelegate)
     }
 
+    private val mEditorViewModel by lazy {
+        EditorViewModel().viewModel
+    }
+
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
-                    mViewModel.buyProduct(it)
+                    buyProduct(it)
                 })
                 .addAdapterComponent(BuyScreenTitleComponent(mText))
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())
                 .addAdapterComponent(BuyScreenLikesSectionComponent())
                 .addAdapterComponent(BuyScreenUnavailableComponent())
+    }
+
+    private fun buyProduct(product: PaymentNinjaProduct) {
+        if (!App.get().options.paymentNinjaInfo.isCradAvailable() ||
+                !mViewModel.isChecked.get()) {
+            mFeedNavigator.showPaymentNinjaAddCardScreen(product, mFrom ?: Utils.EMPTY, mEditorViewModel.isChecked.get())
+        } else {
+            mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom ?: Utils.EMPTY,
+                    mEditorViewModel.isChecked.get(), false)
+                    .getRequestSubscriber()
+                    .applySchedulers()
+                    .subscribe(shortSubscription {
+                        mFeedNavigator.showPurchaseSuccessfullFragment(product.type)
+                    })
+        }
     }
 
     private fun initList() = with(mBinding.buttonsRecyclerView) {
@@ -83,11 +112,15 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         initList()
-        return mBinding.apply { viewModel = mViewModel }.root
+        return mBinding.apply {
+            viewModel = mViewModel
+            switchViewModel = mEditorViewModel
+        }.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel.release()
+        mPurchaseSubscription.safeUnsubscribe()
     }
 }

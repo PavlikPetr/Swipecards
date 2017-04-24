@@ -78,6 +78,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val productTitle = ObservableField<String>()
 
     val isAutoPayDescriptionVisible = ObservableBoolean(false)
+    val isAutoPayEnabled = ObservableBoolean(true)
     val isEmailFormNeeded = ObservableBoolean(false)
     val firstDescriptionText = ObservableField<String>()
     val secondDescriptionText = ObservableField<String>()
@@ -91,8 +92,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     val numberWatcher = NumberWatcher()
     val trhuWatcher = TrhuWatcher()
 
-    val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
-
+    private val mProduct: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
+    private val mIsTestPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_TEST_PURCHASE, false)
     private val mSource: String? = data.getString(NinjaAddCardActivity.EXTRA_SOURCE)
 
     private val readyCheck: MutableMap<Any, Boolean> = mutableMapOf()
@@ -106,7 +107,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             put(trhuText, false)
             put(emailText, !isEmailDefined)
         }
-        product?.let {
+        mProduct?.let {
             productTitle.set(it.getPurchaseScreenTitle())
             titleVisibility.set(View.VISIBLE)
 
@@ -221,7 +222,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                         override fun onError(e: Throwable?) {
                             super.onError(e)
                             mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
-                                    product == null) {
+                                    mProduct == null) {
                                 if (isEmailFormNeeded.get()) {
                                     emailText.set("")
                                 }
@@ -235,16 +236,9 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                         }
 
                         override fun onNext(t: IApiResponse?) {
-                            // todo send "buy payment ninja product" here and after success show dialog
-                            // если есть продукт, значит надо провести покупку. Ориентируясь на успешность этого
-                            // запроса на сервер покажем экран успешной покупки mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
-                            // если продукт null, значит закрываем активити, но при этом не забываем сообщить о том, что карта добавлена
-                            // успешно
-                            product?.let {
-                                mNavigator.showPurchaseSuccessfullFragment(it.type)
-                                //sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
-                            } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
-                                    Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                            mProduct?.let {
+                                sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
+                            }
                         }
                     })
         }
@@ -278,7 +272,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             } else {
                 numberError.set(Utils.EMPTY)
                 readyCheck.put(numberText, true)
-                Debug.error("---------------------Номер введен корректно------------------${readyCheck.get(numberText)}--------------")
+                Debug.error("---------------------Номер введен корректно------------------${readyCheck[numberText]}--------------")
             }
         } else {
             Debug.error("---------------------ОШИБКА заполните поле ввода номера карты -----------------------")
@@ -286,7 +280,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(numberText, false)
         }
         updateButton()
-        return readyCheck.get(numberText) ?: false
+        return readyCheck[numberText] ?: false
     }
 
     private fun validateTrhu(): Boolean {
@@ -305,7 +299,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(trhuText, false)
         }
         updateButton()
-        return readyCheck.get(trhuText) ?: false
+        return readyCheck[trhuText] ?: false
     }
 
     private fun validateCvv(): Boolean {
@@ -324,7 +318,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(cvvText, false)
         }
         updateButton()
-        return readyCheck.get(cvvText) ?: false
+        return readyCheck[cvvText] ?: false
     }
 
     private fun validateEmail(): Boolean {
@@ -337,16 +331,18 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(emailText, true)
         }
         updateButton()
-        return readyCheck.get(emailText) ?: false
+        return readyCheck[emailText] ?: false
     }
 
-    fun navigateToRules(): Unit? = product?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? = mProduct?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
 
     private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
-        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source).getRequestSubscriber()
+        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source, mIsTestPurchase, isAutoPayEnabled.get()).getRequestSubscriber()
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     mNavigator.showPurchaseSuccessfullFragment(productType)
+                    mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                            Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                 })
     }
 }

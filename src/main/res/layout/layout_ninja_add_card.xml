@@ -53,12 +53,12 @@
                     style="@style/NinjaInputTextEdit"
                     android:drawableRight="@{viewModel.cardIcon}"
                     android:enabled="@{viewModel.isInputEnabled}"
-                    android:hint="@string/ninja_hint_card_number"
-                    android:text="@={viewModel.numberText}"
                     android:focusableInTouchMode="true"
+                    android:hint="@string/ninja_hint_card_number"
                     android:maxLength="@{viewModel.numberMaxLength}"
-                    app:setOnFocusChangeListener="@{viewModel::onNumberChange}"
-                    app:addTextChangedListener="@{viewModel.numberWatcher}"/>
+                    android:text="@={viewModel.numberText}"
+                    app:addTextChangedListener="@{viewModel.numberWatcher}"
+                    app:setOnFocusChangeListener="@{viewModel::onNumberChange}"/>
             </android.support.design.widget.TextInputLayout>
 
             <!-- card additional data -->
@@ -84,8 +84,8 @@
                         android:hint="@string/ninja_hint_card_expires"
                         android:maxLength="5"
                         android:text="@={viewModel.trhuText}"
-                        app:setOnFocusChangeListener="@{viewModel::onTrhuChange}"
-                        app:addTextChangedListener="@{viewModel.trhuWatcher}"/>
+                        app:addTextChangedListener="@{viewModel.trhuWatcher}"
+                        app:setOnFocusChangeListener="@{viewModel::onTrhuChange}"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <!-- CVV/CVC -->
@@ -183,7 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:button="@drawable/green_checkbox_selector"
-                android:checked="true"
+                android:checked="@={viewModel.isAutoPayEnabled}"
                 android:enabled="@{viewModel.isInputEnabled}"
                 android:paddingLeft="12dp"
                 android:text="@string/ninja_checkbox_auto_pay"

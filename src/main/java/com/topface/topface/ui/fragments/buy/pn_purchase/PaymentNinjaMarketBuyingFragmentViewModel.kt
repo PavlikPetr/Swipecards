@@ -7,7 +7,6 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Options
-import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.databinding.SingleObservableArrayList
@@ -21,7 +20,7 @@ import rx.Subscription
  * Buy buttons view model
  * Created by petrp on 02.03.2017.
  */
-class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: FeedNavigator, private val mIsVipPurchaseProducts: Boolean, private val mFrom: String) {
+class PaymentNinjaMarketBuyingFragmentViewModel(private val mIsVipPurchaseProducts: Boolean) {
     val isCheckBoxVisible = ObservableInt(View.GONE)
     val isChecked = ObservableBoolean(true)
     val cardInfo = ObservableField("")
@@ -57,7 +56,6 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: FeedNavi
     }
 
     private var mOptionsSubscription: Subscription? = null
-    private var mPurchaseSubscription: Subscription? = null
 
     init {
         mOptionsSubscription = App.getAppComponent().appState().getObservable(Options::class.java)
@@ -76,21 +74,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: FeedNavi
                 })
     }
 
-    fun buyProduct(product: PaymentNinjaProduct) {
-        if (!App.get().options.paymentNinjaInfo.isCradAvailable() ||
-                !isChecked.get()) {
-            mNavigator.showPaymentNinjaAddCardScreen(product, mFrom)
-        } else {
-            mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom)
-                    .getRequestSubscriber()
-                    .applySchedulers()
-                    .subscribe(shortSubscription {
-                        mNavigator.showPurchaseSuccessfullFragment(product.type)
-                    })
-        }
-    }
-
     fun release() {
-        arrayOf(mPurchaseSubscription, mOptionsSubscription).safeUnsubscribe()
+        mOptionsSubscription.safeUnsubscribe()
     }
 }

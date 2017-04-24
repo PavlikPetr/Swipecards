@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel" />
+            type="com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel"/>
+
+        <variable
+            name="switchViewModel"
+            type="com.topface.topface.ui.edit.EditSwitcherViewModel"/>
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <include
+            layout="@layout/editor_switch"
+            bind:viewModel="@{switchViewModel}"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/buttonsRecyclerView"
@@ -27,14 +36,14 @@
             android:paddingStart="@dimen/buy_screen_products_list_padding"
             android:requiresFadingEdge="none"
             app:bindDataToCompositeAdapter="@{viewModel.data}"
-            tools:targetApi="ice_cream_sandwich" />
+            tools:targetApi="ice_cream_sandwich"/>
 
         <CheckBox
             style="@style/DatingFilterSwitch"
             android:checked="@={viewModel.isChecked}"
-            android:enabled="true"
             android:clickable="true"
+            android:enabled="true"
             android:text="@{viewModel.cardInfo}"
-            android:visibility="@{viewModel.isCheckBoxVisible}" />
+            android:visibility="@{viewModel.isCheckBoxVisible}"/>
     </LinearLayout>
 </layout>

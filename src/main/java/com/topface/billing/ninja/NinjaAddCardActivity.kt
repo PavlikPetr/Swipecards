@@ -20,17 +20,21 @@ import com.topface.topface.utils.IActivityDelegate
 class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), IFinishDelegate {
     companion object {
         const val EXTRA_FROM_INSTANT_PURCHASE = "NinjaAddCardActivity.Extra.FromInstantPurchase"
+        const val EXTRA_IS_TEST_PURCHASE = "NinjaAddCardActivity.Extra.IsTestPurchase"
         const val EXTRA_BUY_PRODUCT = "NinjaAddCardActivity.Extra.BuyProduct"
         const val EXTRA_SOURCE = "NinjaAddCardActivity.Extra.Source"
         const val REQUEST_CODE = 231
         const val CARD_SENDED_SUCCESFULL = "NinjaAddCardActivity.CardSendedSuccesfull"
         const val UNKNOWN_PLACE = "unknown_place"
 
-        fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null, source: String) = Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
-            putExtra(EXTRA_FROM_INSTANT_PURCHASE, fromInstantPurchase)
-            product?.let { putExtra(EXTRA_BUY_PRODUCT, it) }
-            putExtra(EXTRA_SOURCE, source.takeIf(String::isNotEmpty) ?: UNKNOWN_PLACE)
-        }
+        fun createIntent(fromInstantPurchase: Boolean, product: PaymentNinjaProduct? = null,
+                         source: String, isTestPurchase: Boolean) =
+                Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
+                    putExtra(EXTRA_FROM_INSTANT_PURCHASE, fromInstantPurchase)
+                    putExtra(EXTRA_IS_TEST_PURCHASE, isTestPurchase)
+                    product?.let { putExtra(EXTRA_BUY_PRODUCT, it) }
+                    putExtra(EXTRA_SOURCE, source.takeIf(String::isNotEmpty) ?: UNKNOWN_PLACE)
+                }
     }
 
     private val mFeedNavigator by lazy {
@@ -45,7 +49,6 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         intent?.let {
             viewBinding.viewModel = AddCardViewModel(it.extras, mFeedNavigator, this)
         }

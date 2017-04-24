@@ -42,7 +42,7 @@ interface IFeedNavigator {
     fun showPurchaseProduct(skuId: String, from: String)
     fun showPurchaseSuccessfullFragment(sku: String)
     fun showMutualPopup(mutualUser: FeedUser)
-    fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String)
+    fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String, isTestPurchase: Boolean = false)
     fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
     fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
     fun showPaymentNinjaHelp()
