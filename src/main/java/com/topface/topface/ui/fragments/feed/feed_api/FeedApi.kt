@@ -448,22 +448,6 @@ class FeedApi(private val mContext: Context, private var mRequestClient: IReques
         }
     }
 
-    fun deleteMessage(item: History): Observable<SimpleResponse> {
-        return Observable.fromEmitter({
-            DeleteMessagesRequest(item.id, mContext).callback(object : DataApiHandler<SimpleResponse>() {
-                override fun parseResponse(response: ApiResponse?) = response?.jsonResult?.toString()?.let {
-                    JsonUtils.fromJson<SimpleResponse>(it, SimpleResponse::class.java)
-                }
-
-                override fun success(data: SimpleResponse?, response: IApiResponse?) = it.onNext(data)
-                override fun fail(codeError: Int, response: IApiResponse?) {
-                    it.onError(Exception(codeError.toString()))
-                    Utils.showErrorMessage()
-                }
-            }).exec()
-        }, Emitter.BackpressureMode.LATEST)
-    }
-
     private fun getFeedIntIds(list: List<FeedItem>): ArrayList<Int> {
         val ids = ArrayList<Int>()
         list.filter {
