@@ -12,7 +12,13 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> viewModel.onRootViewClick()}">
+        android:onClick="@{() -> viewModel.onRootViewClick()}"
+        android:paddingBottom="@{viewModel.rootPaddingBottom}"
+        android:paddingEnd="@{viewModel.rootPaddingRight}"
+        android:paddingLeft="@{viewModel.rootPaddingLeft}"
+        android:paddingRight="@{viewModel.rootPaddingRight}"
+        android:paddingStart="@{viewModel.rootPaddingLeft}"
+        android:paddingTop="@{viewModel.rootPaddingTop}">
 
         <LinearLayout
             android:layout_width="match_parent"

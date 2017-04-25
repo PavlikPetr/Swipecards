@@ -3,6 +3,7 @@ package com.topface.billing.ninja
 import android.content.Context
 import android.os.Looper
 import com.topface.framework.JsonUtils
+import com.topface.topface.App
 import com.topface.topface.requests.ApiResponse
 import com.topface.topface.requests.DataApiHandler
 import com.topface.topface.requests.IApiResponse
@@ -28,7 +29,7 @@ class AddCardRequest {
         const val KEY_SECURITY_CODE = "security_code"
     }
 
-    fun getRequestObservable(context: Context, addCardModel: AddCardModel) =
+    fun getRequestObservable(context: Context, addCardModel: AddCardModel): Observable<SimpleResponse> =
             OffersUtils.getRequestInstance(ADD_CARD_LINK)
                     .create(Request::class.java)
                     .setParams(HashMap<String, String>().apply {
@@ -46,7 +47,12 @@ class AddCardRequest {
             Observable.fromEmitter<SimpleResponse>({ emitter ->
                 val sendRequest = SendCardTokenRequest(context, SendCardTokenModel(addCardResponse.id, email))
                 sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
-                    override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
+                    override fun success(data: SimpleResponse?, response: IApiResponse?) {
+                        emitter.onNext(data)
+                        // карта добавлена, надо бы и опции апнуть
+                        App.getUserOptionsRequest().exec()
+                    }
+
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response?.jsonResult?.toString() ?: Utils.EMPTY, SimpleResponse::class.java)
                     override fun fail(codeError: Int, response: IApiResponse?) = emitter.onError(Throwable(codeError.toString()))
                     override fun always(response: IApiResponse) {

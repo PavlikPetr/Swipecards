@@ -9,9 +9,9 @@ import org.json.JSONObject
  * Запрос дефолтной карты пользователя
  * Created by ppavlik on 16.03.17.
  */
-class DefaultCardRequest(context: Context) : ApiRequest(context) {
+class PaymentNinjaGetCardRequest(context: Context) : ApiRequest(context) {
 
-    override fun getServiceName() = "paymentNinja.getDefaultCard"
+    override fun getServiceName() = "paymentNinja.getCard"
 
     override fun getRequestData() = JSONObject()
 }

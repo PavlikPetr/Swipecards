@@ -13,7 +13,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/buy_screen_products_list_padding"
+        android:paddingLeft="@dimen/buy_screen_products_list_padding"
+        android:paddingRight="@dimen/buy_screen_products_list_padding"
+        android:paddingStart="@dimen/buy_screen_products_list_padding">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/buttonsRecyclerView"
@@ -21,10 +25,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:fadingEdge="none"
-            android:paddingEnd="@dimen/buy_screen_products_list_padding"
-            android:paddingLeft="@dimen/buy_screen_products_list_padding"
-            android:paddingRight="@dimen/buy_screen_products_list_padding"
-            android:paddingStart="@dimen/buy_screen_products_list_padding"
             android:requiresFadingEdge="none"
             app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}"
             tools:targetApi="ice_cream_sandwich"/>
@@ -36,5 +36,44 @@
             android:enabled="true"
             android:text="@{viewModel.cardInfo}"
             android:visibility="@{viewModel.isCheckBoxVisible}"/>
+
+        <LinearLayout
+            style="@style/PaymentNinjaAutoFillRoot">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.autofillVisibility}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment_ninja_autofill_title"
+                    android:textColor="#737373"
+                    android:textSize="14sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onLinkClick()}"
+                    android:text="@string/payment_ninja_autofill_link"
+                    android:textColor="@color/ninja_color_accent"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+            <!-- auto pay options and description -->
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:button="@null"
+                android:checked="@={viewModel.isAutoFillEnabled}"
+                android:clickable="true"
+                android:drawableEnd="@drawable/green_checkbox_selector"
+                android:drawableLeft="@null"
+                android:drawableRight="@drawable/green_checkbox_selector"
+                android:drawableStart="@null"/>
+        </LinearLayout>
     </LinearLayout>
 </layout>

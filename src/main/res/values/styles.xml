@@ -1287,8 +1287,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/filter_item_height</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
-        <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">@dimen/filter_item_text_size</item>
         <item name="android:textColor">@color/dark_primary_text</item>
@@ -1963,6 +1961,14 @@
 
     <style name="AddPaymentNinjaCardView" parent="AddPaymentNinjaCardViewBase">
         <item name="android:background">@drawable/green_button_selector</item>
+    </style>
+
+    <style name="PaymentNinjaAutoFillRoot">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingBottom">8dp</item>
     </style>
 
 </resources>

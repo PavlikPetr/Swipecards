@@ -11,6 +11,7 @@ import com.topface.topface.data.Profile
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.CacheProfile
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.*
 import com.topface.topface.utils.rx.applySchedulers
@@ -25,9 +26,15 @@ import rx.Subscription
 class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNavigator,
                                                 private val mIsVipPurchaseProducts: Boolean,
                                                 private val mFrom: String) {
+    companion object {
+        const val AUTOREFILL_RULES_URL = "https://topface.com/en/autorefill/"
+    }
+
     val isCheckBoxVisible = ObservableInt(View.GONE)
     val isChecked = ObservableBoolean(true)
-    val cardInfo = ObservableField("")
+    val cardInfo = ObservableField(Utils.EMPTY)
+    val autofillVisibility = ObservableInt(View.GONE)
+    val isAutoFillEnabled = ObservableBoolean(true)
     val data = MultiObservableArrayList<Any>().apply {
         if (mIsVipPurchaseProducts) {
             with(CacheProfile.getPaymentNinjaProductsList().getVipProducts().filter { it.displayOnBuyScreen }) {
@@ -60,6 +67,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     }
 
     private var mIsTestPurchase = false
+    private var mAutoFillUrl: String? = null
 
     private var mOptionsSubscription: Subscription? = null
     private var mProfileSubscription: Subscription? = null
@@ -110,6 +118,16 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                 .subscribe(shortSubscription {
                     it?.let { mIsTestPurchase = it.isChecked }
                 })
+        initAutofillView()
+    }
+
+    private fun initAutofillView() {
+        data.find {
+            (it as? PaymentNinjaProduct)?.isAutoRefilled ?: false
+        }?.let {
+            autofillVisibility.set(View.VISIBLE)
+            mAutoFillUrl = (it as? PaymentNinjaProduct)?.subscriptionInfo?.url
+        }
     }
 
     fun buyProduct(product: PaymentNinjaProduct) {
@@ -118,7 +136,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
             mNavigator.showPaymentNinjaAddCardScreen(product, mFrom, mIsTestPurchase)
         } else {
             mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom,
-                    mIsTestPurchase, false)
+                    mIsTestPurchase, isAutoFillEnabled.get())
                     .getRequestSubscriber()
                     .applySchedulers()
                     .subscribe(shortSubscription {
@@ -126,6 +144,8 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                     })
         }
     }
+
+    fun onLinkClick() = mNavigator.openUrl(mAutoFillUrl?.takeIf(String::isNotEmpty) ?: AUTOREFILL_RULES_URL)
 
     fun release() {
         arrayOf(mOptionsSubscription, mProfileSubscription, mEditorSwitchSubscription, mPurchaseSubscription).safeUnsubscribe()

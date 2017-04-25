@@ -13,6 +13,10 @@ import com.topface.topface.utils.rx.RxFieldObservable
 class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBLE,
                             private val switcVisibilityDefault: Int = View.VISIBLE,
                             private val progressVisibilityDefault: Int = View.GONE,
+                            val rootPaddingLeft: Int = 0,
+                            val rootPaddingRight: Int = 0,
+                            val rootPaddingTop: Int = 0,
+                            val rootPaddingBottom: Int = 0,
                             isCheckedDefault: Boolean,
                             textDefault: String) {
 

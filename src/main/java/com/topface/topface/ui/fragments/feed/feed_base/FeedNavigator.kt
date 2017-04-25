@@ -210,10 +210,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showPurchaseSuccessfullFragment(sku: String) {
+    override fun showPurchaseSuccessfullFragment(sku: String, finishBundle: Bundle) {
         mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
             it as PurchaseSuccessfullFragment
-        } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+        } ?: PurchaseSuccessfullFragment.getInstance(sku, finishBundle).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
     override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String, isTestPurchase: Boolean) {
@@ -249,5 +249,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 mActivityDelegate.applicationContext,
                 FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
+    }
+
+    override fun openUrl(url: String) {
+        Utils.goToUrl(mActivityDelegate, url)
     }
 }

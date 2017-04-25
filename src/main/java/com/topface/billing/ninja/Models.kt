@@ -1,5 +1,9 @@
 package com.topface.billing.ninja
 
+import android.os.Parcel
+import android.os.Parcelable
+import com.topface.topface.utils.Utils
+
 /**
  * Models used for Payment Ninja
  * Created by m.bayutin on 02.03.17.
@@ -36,3 +40,40 @@ data class AddCardModel(val project: String, val number: String, val expirationM
  * email - {String} email пользователя
  * */
 data class SendCardTokenModel(val token: String, val email: String)
+
+/**
+ * Settings for 3D secure purchase
+ *
+ * @param errorCode - tf api error code
+ * @param MD - put it to POST
+ * @param PaReq - put it to POST
+ * @param termUrl - put it to POST
+ * @param acsUrl - url for 3d secure validation
+ * @param successUrl - url in success of 3d secure validation
+ * @param failUrl - url in faile of 3d secure validation
+ */
+data class ThreeDSecureParams(val errorCode: Int = 0, val MD: String = Utils.EMPTY, val PaReq: String = Utils.EMPTY,
+                              val termUrl: String = Utils.EMPTY, val acsUrl: String = Utils.EMPTY,
+                              val successUrl: String = Utils.EMPTY, val failUrl: String = Utils.EMPTY) : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<ThreeDSecureParams> = object : Parcelable.Creator<ThreeDSecureParams> {
+            override fun createFromParcel(source: Parcel): ThreeDSecureParams = ThreeDSecureParams(source)
+            override fun newArray(size: Int): Array<ThreeDSecureParams?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readInt(), source.readString(), source.readString(),
+            source.readString(), source.readString(), source.readString(), source.readString())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(errorCode)
+        dest?.writeString(MD)
+        dest?.writeString(PaReq)
+        dest?.writeString(termUrl)
+        dest?.writeString(acsUrl)
+        dest?.writeString(successUrl)
+        dest?.writeString(failUrl)
+    }
+}

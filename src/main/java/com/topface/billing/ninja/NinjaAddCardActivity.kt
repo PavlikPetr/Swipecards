@@ -2,22 +2,22 @@ package com.topface.billing.ninja
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.View
+import com.topface.billing.ninja.fragments.AddCardFragment
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutNinjaAddCardBinding
 import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
-import com.topface.topface.utils.IActivityDelegate
 
 /**
  * Add bank card activity
  * Created by m.bayutin on 02.03.17.
  */
-class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), IFinishDelegate {
+class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
     companion object {
         const val EXTRA_FROM_INSTANT_PURCHASE = "NinjaAddCardActivity.Extra.FromInstantPurchase"
         const val EXTRA_IS_TEST_PURCHASE = "NinjaAddCardActivity.Extra.IsTestPurchase"
@@ -37,9 +37,15 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
                 }
     }
 
-    private val mFeedNavigator by lazy {
-        FeedNavigator(this as IActivityDelegate)
+    private val mAddCardFragment by lazy {
+        (supportFragmentManager.findFragmentByTag(AddCardFragment.TAG)
+                as? AddCardFragment) ?: AddCardFragment.newInstance(intent.extras)
     }
+
+//    private val mThreeDSecureFragment by lazy {
+//        (supportFragmentManager.findFragmentByTag(ThreeDSecureFragment.TAG)
+//                as? ThreeDSecureFragment) ?: ThreeDSecureFragment.newInstance(intent.extras)
+//    }
 
     override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding): ToolbarViewBinding = binding.toolbarInclude.apply { root?.visibility = View.GONE }
 
@@ -49,13 +55,11 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>(), 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        intent?.let {
-            viewBinding.viewModel = AddCardViewModel(it.extras, mFeedNavigator, this)
-        }
+        addFragment(mAddCardFragment, AddCardFragment.TAG)
     }
 
-    override fun finishWithResult(resultCode: Int, data: Intent) {
-        setResult(resultCode, data)
-        finish()
+    fun addFragment(fragment: Fragment, tag: String) {
+        supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_content, fragment, tag).commit()
     }
 }
