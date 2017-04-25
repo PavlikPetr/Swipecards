@@ -143,10 +143,12 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     fun update(isNeedRefresh: Boolean, isAddition: Boolean, onlyOnline: Boolean = DatingFilter.getOnlyOnlineField()) {
+        Debug.error("                    isNeedRefresh            = $isNeedRefresh")
         Debug.log("LOADER_INTEGRATION start update")
         if (!mUpdateInProcess) {
             mDatingButtonsView.lockControls()
             if (isNeedRefresh) {
+                Debug.error("__________________ЩА ЗАКЛИРИМ_________________")
                 mUserSearchList.clear()
                 currentUser = null
             }
@@ -166,11 +168,27 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 }
 
                 override fun onNext(usersList: UsersList<SearchUser>?) {
+                    Debug.error("                    isNeedRefresh    в онНэксте        = $isNeedRefresh")
                     Debug.log("LOADER_INTEGRATION onNext")
+                    if (isNeedRefresh) {
+                        Debug.error("__________________ЩА ЗАКЛИРИМ____В онНЕксте_____________")
+                        mUserSearchList.clear()
+                        currentUser = null
+                    }
                     if (usersList != null && usersList.size != 0) {
+                        Debug.error("!!!!!!!!!!!!!!!!!!!!!!!!!!userList!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        for (i in 0..10) {
+                            Debug.error("      $i           ${usersList.get(i).firstName}     ${if (usersList.get(i).sex == Profile.BOY) "man" else "woman"}")
+                        }
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
+
+                        Debug.error("!!!!!!!!!!!!!!!!!!!!!!!!!!mUserSearchList!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                        for (i in 0..10) {
+                            Debug.error("      $i           ${mUserSearchList.get(i).firstName}     ${if (mUserSearchList.get(i).sex == Profile.BOY) "man" else "woman"}")
+                        }
+                        Debug.error("__________________________________________${mUserSearchList.currentUser.firstName}______________________________________")
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
@@ -233,6 +251,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+            Debug.error("___________onActivityResult_________________________________________")
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             data?.let {
@@ -268,12 +287,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 profile.dating = filter
                 mState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
-                update(false, false)
-                mNewFilter = false
+                Debug.error("____________________________________метод sendFilterRequest_________________________________________")
+                update(true, false)
+                mNewFilter = true
             }
 
             override fun onCompleted() {
-                mNewFilter = false
+                mNewFilter = true
                 mDatingButtonsView.lockControls()
             }
 
@@ -305,8 +325,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         arrayOf(mProfileSubscription, mUpdateSubscription).safeUnsubscribe()
     }
 
-    override fun onEmptyList(usersList: UsersList<SearchUser>?) = update(mNewFilter, false)
-
+    override fun onEmptyList(usersList: UsersList<SearchUser>?) {
+        Debug.error("____________________________________метод onEmptyList__________________________________________")
+        update(mNewFilter, false)
+    }
 
     override fun onPreload(usersList: UsersList<SearchUser>?) {
         if (!mNewFilter) {
