@@ -615,6 +615,13 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                     Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
+                        if (isNeedRefresh) {
+                            mUserSearchList.replace(usersList)
+                            mUserSearchList.updateSignature()
+                            currentUser = null
+                        } else {
+                            mUserSearchList.addAndUpdateSignature(usersList)
+                        }
                         //Добавляем новых пользователей
                         mUserSearchList.addAndUpdateSignature(usersList)
                         mPreloadManager.preloadPhoto(mUserSearchList)
@@ -649,7 +656,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                 profile.dating = filter
                 mAppState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
-                update(false, false)
+                update(true, false)
                 mNewFilter = false
             }
 
