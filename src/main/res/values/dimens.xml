@@ -249,6 +249,7 @@
     <dimen name="popup_menu_stroke_outside">1dp</dimen>
     <dimen name="mutual_popup_stroke_outside">9dp</dimen>
     <dimen name="mutual_popup_avatar">150dp</dimen>
+    <dimen name="mutual_stub__avatar">144dp</dimen>
 
     <!--Метрики для опросника-->
     <dimen name="questionnaire_counters_text_size">14sp</dimen>

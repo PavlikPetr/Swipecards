@@ -242,7 +242,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mActivityDelegate.supportFragmentManager
                 .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
                 ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
-                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+                .show(mActivityDelegate.supportFragmentManager, SettingsPaymentNinjaModalBottomSheet.TAG)
     }
 
     override fun showPaymentNinjaHelp() {
