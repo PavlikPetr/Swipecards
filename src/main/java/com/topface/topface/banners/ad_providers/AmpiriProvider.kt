@@ -32,7 +32,20 @@ class AmpiriProvider: AbstractAdsProvider() {
                             override fun onAdLoaded(p0: InterstitialAd) = callbacks.onInterstitialLoaded(false)
                             override fun onAdOpened(p0: InterstitialAd) = callbacks.onInterstitialShown()
                             override fun onAdClosed(p0: InterstitialAd) = callbacks.onInterstitialClosed()
-                        })
+                        }).apply { fillUserSettings() }
+
+        private fun fillUserSettings() {
+            with(Calendar.getInstance()) {
+                val birthYear = get(Calendar.YEAR) - App.get().profile.age
+                if (birthYear > 0) {
+                    set(Calendar.YEAR, birthYear)
+                    Ampiri.setUserBirthday(time)
+                }
+            }
+            Ampiri.setUserGender(if (App.get().profile.sex == Profile.BOY) Gender.MALE else Gender.FEMALE)
+            // todo fill users interests if we can get some from profile
+            //Ampiri.setUserInterests(null)
+        }
     }
 
     override fun injectBannerInner(page: IPageWithAds, callbacks: IAdsProvider.IAdProviderCallbacks) =
@@ -73,19 +86,6 @@ class AmpiriProvider: AbstractAdsProvider() {
     }
 
     override fun getBannerName() = AdProvidersFactory.BANNER_AMPIRI
-
-    private fun fillUserSettings() {
-        with(Calendar.getInstance()) {
-            val birthYear = get(Calendar.YEAR) - App.get().profile.age
-            if (birthYear > 0) {
-                set(Calendar.YEAR, birthYear)
-                Ampiri.setUserBirthday(time)
-            }
-        }
-        Ampiri.setUserGender(if (App.get().profile.sex == Profile.BOY) Gender.MALE else Gender.FEMALE)
-        // todo fill users interests if we can get some from profile
-        //Ampiri.setUserInterests(null)
-    }
 
     private var mAmpiriBannerLifeCycler: AmpiriBannerLifeCycler? = null
     private class AmpiriBannerLifeCycler(val ads: StandardAd): ILifeCycle {
