@@ -5,6 +5,7 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.MutualStubChatBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
+import kotlin.properties.Delegates
 
 /**
  * Заглушка "взаимных симпатий" в чате
@@ -16,10 +17,18 @@ class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<
     override val bindingClass: Class<MutualStubChatBinding>
         get() = MutualStubChatBinding::class.java
 
+    private var mViewModel by Delegates.notNull<MutualStubChatViewModel>()
+
     override fun bind(binding: MutualStubChatBinding, data: FeedUser?, position: Int) =
             with(binding) {
-                setViewModel(data?.let { MutualStubChatViewModel(it) })
+                data?.let { mViewModel = MutualStubChatViewModel(it) }
+                setViewModel(mViewModel)
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
             }
+
+    override fun release() {
+        super.release()
+        mViewModel.release()
+    }
 }

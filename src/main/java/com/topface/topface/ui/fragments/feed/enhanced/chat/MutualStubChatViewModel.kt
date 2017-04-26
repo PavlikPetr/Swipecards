@@ -5,10 +5,14 @@ import android.databinding.ObservableInt
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
+import com.topface.topface.data.Profile
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
+import rx.Subscription
 
 
 class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
@@ -26,4 +30,19 @@ class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
 
     val stubText = ObservableField((if (App.get().profile.sex == User.BOY) R.string.write_her_something_first.getString()
     else R.string.write_him_first.getString()))
+
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
+    private var mProfileSubscription: Subscription? = null
+
+    init {
+        mProfileSubscription = mAppState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.photo == t2.photo }
+                .subscribe(shortSubscription {
+                    userPhoto.set(it.photo)
+                })
+    }
+
+    fun release() = mProfileSubscription.safeUnsubscribe()
 }
