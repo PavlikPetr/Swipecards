@@ -170,7 +170,14 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                     if (usersList != null && usersList.size != 0) {
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
-                        mUserSearchList.addAndUpdateSignature(usersList)
+                        // а вот иначе не работает, прости меня, Бог хорошего и логичного кода, я все исправлю, едва будет время.
+                        if (isNeedRefresh) {
+                            mUserSearchList.replace(usersList)
+                            mUserSearchList.updateSignature()
+                            currentUser = null
+                        } else {
+                            mUserSearchList.addAndUpdateSignature(usersList)
+                        }
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
@@ -268,7 +275,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 profile.dating = filter
                 mState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
-                update(false, false)
+                update(true, false)
                 mNewFilter = false
             }
 
