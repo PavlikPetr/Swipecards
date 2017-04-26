@@ -1,0 +1,129 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.BuyVipStubViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/icCircle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/avatarUser"
+            android:layout_marginBottom="13dp"
+            android:layout_marginRight="90dp"
+            android:layout_toLeftOf="@+id/icPen"
+            android:src="@drawable/stroke_1"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="16dp"
+            android:layout_above="@id/avatarUser"
+            android:layout_marginBottom="16dp"
+            android:layout_toRightOf="@id/icCircle"
+            android:src="@drawable/envelop"/>
+
+        <!--чат- юзер-->
+        <ImageView
+            android:id="@+id/avatarUser"
+            android:layout_width="@dimen/mutual_popup_avatar"
+            android:layout_height="@dimen/mutual_popup_avatar"
+            android:layout_alignEnd="@+id/icPen"
+            android:layout_alignRight="@+id/icPen"
+            android:layout_centerVertical="true"
+            android:src="@drawable/man_blur_5"
+            app:glideTransformationPhoto="@{viewModel.mutualUserPhoto}"
+            app:outSideCircle="@{viewModel.outsideCircle}"
+            app:placeholderRes="@{viewModel.mutualPlaceholderRes}"
+            app:typeTransformation="@{viewModel.type}"/>
+
+        <ImageView
+            android:id="@+id/icArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/mutualIC"
+            android:layout_marginRight="33dp"
+            android:layout_toLeftOf="@id/mutualIC"
+            android:src="@drawable/arrow_to_left"/>
+
+        <FrameLayout
+            android:id="@+id/viewForLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"></FrameLayout>
+
+        <ImageView
+            android:id="@+id/mutualIC"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_below="@id/viewForLayout"
+            android:layout_marginRight="120dp"
+            android:layout_marginTop="50dp"
+            android:layout_toLeftOf="@id/viewForLayout"
+            android:src="@drawable/decor_two_chats_clouds"/>
+
+        <ImageView
+            android:id="@+id/icPen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/mutualIC"
+            android:layout_marginRight="80dp"
+            android:layout_toLeftOf="@id/viewForLayout"
+            android:src="@drawable/pen"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/viewForLayout"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/stub_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mutualIC"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:text="@{viewModel.title}"
+                android:textColor="@color/dark_primary_text"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/stub_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:text="@{viewModel.stubText}"
+                android:textColor="@color/google_grey_500"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btnChangeFilterDating"
+                style="@style/PopupGreenButton.Background"
+                android:layout_below="@+id/textView2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="32dp"
+                android:onClick="@{() -> viewModel.buyVip()}"
+                android:text="@string/get_vip"
+                android:textAllCaps="true"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>

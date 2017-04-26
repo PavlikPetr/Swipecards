@@ -202,6 +202,7 @@
     <color name="dark_secondary_text">#8A000000</color>
     <color name="dark_hint_text">#61000000</color>
     <color name="dark_divider">#1F000000</color>
+    <color name="google_grey_500">#9e9e9e</color>
     <!-- White colors, for usage on light backgrounds -->
     <color name="white_primary_text">#FFFFFF</color>
     <color name="white_secondary_text">#B3FFFFFF</color>
