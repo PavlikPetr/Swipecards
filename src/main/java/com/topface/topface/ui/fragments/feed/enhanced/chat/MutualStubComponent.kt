@@ -11,9 +11,6 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  */
 class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<MutualStubChatBinding, FeedUser>() {
 
-    private val mViewModel by lazy {
-        MutualStubChatViewModel(mMutualItem)
-    }
     override val itemLayout: Int
         get() = R.layout.mutual_stub_chat
     override val bindingClass: Class<MutualStubChatBinding>
@@ -21,7 +18,7 @@ class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<
 
     override fun bind(binding: MutualStubChatBinding, data: FeedUser?, position: Int) =
             with(binding) {
-                setViewModel(mViewModel)
+                setViewModel(data?.let { MutualStubChatViewModel(it) })
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
             }
