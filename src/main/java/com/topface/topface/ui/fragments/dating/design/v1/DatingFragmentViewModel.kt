@@ -615,6 +615,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
                     Debug.log("LOADER_INTEGRATION onNext")
                     if (usersList != null && usersList.size != 0) {
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
+                        // а вот иначе не работает, прости меня, Бог хорошего и логичного кода, я все исправлю, едва будет время.
                         if (isNeedRefresh) {
                             mUserSearchList.replace(usersList)
                             mUserSearchList.updateSignature()
