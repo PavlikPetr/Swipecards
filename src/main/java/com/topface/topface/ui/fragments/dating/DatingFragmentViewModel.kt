@@ -147,7 +147,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         if (!mUpdateInProcess) {
             mDatingButtonsView.lockControls()
             if (isNeedRefresh) {
-                Debug.error("-------------------------------------------------------------------------------------чистим Userlist and CurrentUser")
                 mUserSearchList.clear()
                 currentUser = null
             }
@@ -171,7 +170,14 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                     if (usersList != null && usersList.size != 0) {
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
-                        mUserSearchList.addAndUpdateSignature(usersList)
+                        // а вот иначе не работает, прости меня, Бог хорошего и логичного кода, я все исправлю, едва будет время.
+                        if (isNeedRefresh) {
+                            mUserSearchList.replace(usersList)
+                            mUserSearchList.updateSignature()
+                            currentUser = null
+                        } else {
+                            mUserSearchList.addAndUpdateSignature(usersList)
+                        }
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
@@ -234,12 +240,11 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
+            Debug.error("---------------------------------onActivityResult-------- RESULT_OK---------INTENT_EDIT_FILTER----------------------")
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             data?.let {
                 it.extras?.apply {
-                    mUserSearchList.clear()
-                    currentUser = null
                     updateSearchListWithFilter(it.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
                 }
             }
