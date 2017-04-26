@@ -13,7 +13,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 class BuyVipStubComponent(private val mFeed: FeedUser, private val mFeedNavigator: FeedNavigator) : AdapterComponent<BuyVipStubChatBinding, FeedUser>() {
 
     private val mViewModel by lazy {
-        BuyVipStubViewModel(mFeed,mFeedNavigator)
+        BuyVipStubViewModel(mFeed, mFeedNavigator)
     }
 
     override val itemLayout: Int
