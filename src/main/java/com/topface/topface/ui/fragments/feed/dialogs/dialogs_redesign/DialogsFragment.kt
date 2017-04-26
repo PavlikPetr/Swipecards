@@ -133,7 +133,6 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         }
     }
 
-
     private fun initList() = with(mBinding.dialogsList) {
         layoutManager = LinearLayoutManager(context)
         addItemDecoration(mDecorator)

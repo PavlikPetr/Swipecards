@@ -3,7 +3,6 @@ package com.topface.topface.ui.fragments.feed.feed_api
 import android.content.Context
 import android.os.Bundle
 import android.os.Looper
-import android.widget.Toast
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
@@ -466,5 +465,4 @@ class FeedApi(private val mContext: Context, private var mRequestClient: IReques
         }
         return ids
     }
-
 }
