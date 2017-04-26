@@ -492,36 +492,49 @@ dependencies {
     /*________________________AMPIRI_________________________________*/
     compile ('com.ampiri.sdk:ampiri-sdk:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-adcolony:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-admob:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-unityads:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-applovin:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-chartboost:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-facebook:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-mopub:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'com.mopub'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-nativex:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-vungle:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
+        exclude group: 'com.vungle'
     }
     compile ('com.ampiri.sdk:ampiri-sdk-mediation-baidu:3.9.0') {
         exclude group: 'com.google.android.gms'
+        exclude group: 'javax.inject'
     }
     /*_______________________________________________________________*/
 
