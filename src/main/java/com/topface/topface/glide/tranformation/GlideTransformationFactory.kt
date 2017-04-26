@@ -11,7 +11,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation
  * Created by siberia87 on 30.11.16.
  */
 class GlideTransformationFactory(val mContext: Context) {
-    fun construct(@GlideTransformationType.GlideTransformationType type: Long, radiusOnline: Float?, outSideLine: Float?): Array<Transformation<Bitmap>> =
+    fun construct(@GlideTransformationType.GlideTransformation type: Long, radiusOnline: Float?, outSideLine: Float?): Array<Transformation<Bitmap>> =
             when (type) {
                 GlideTransformationType.ADMIRATION_TYPE -> arrayOf(AdmirationTransformation(mContext))
 
