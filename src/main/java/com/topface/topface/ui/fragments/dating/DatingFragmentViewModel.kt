@@ -240,7 +240,6 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
-            Debug.error("---------------------------------onActivityResult-------- RESULT_OK---------INTENT_EDIT_FILTER----------------------")
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
             data?.let {
