@@ -3,10 +3,10 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog
 import android.databinding.ObservableField
 import android.os.Bundle
 import com.topface.topface.R
-import com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogFragment.Companion.ARG_USER
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
+import com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogFragment.Companion.ARG_USER
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 

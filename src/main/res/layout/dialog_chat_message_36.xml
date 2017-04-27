@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogViewModel" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -27,11 +29,11 @@
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     android:layout_gravity="center"
+                    android:src="@drawable/dialogues_av_girl_big"
                     bind:glideTransformationPhoto="@{viewModel.photo}"
-                    bind:placeholderRes="@{viewModel.placeholderResId}"
-                    bind:typeTransformation="@{viewModel.photoTransformType}"
                     bind:outSideCircle="@{viewModel.outsideCircle}"
-                    android:src="@drawable/dialogues_av_girl_big" />
+                    bind:placeholderRes="@{viewModel.placeholderResId}"
+                    bind:typeTransformation="@{viewModel.photoTransformType}" />
 
                 <View
                     android:layout_width="match_parent"
@@ -52,29 +54,27 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@{viewModel.userMessage}"
-                tools:text="Мария очень популярна!"
                 android:textColor="@color/dark_primary_text"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:text="Мария очень популярна!" />
 
-            <!-- todo use predefined text color google_gray_500 -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:padding="24dp"
                 android:text="@{viewModel.vipMessage}"
-                tools:text="Вы можете написать ей,\nно только с VIP."
                 android:textColor="@color/google_grey_500"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="Вы можете написать ей,\nно только с VIP." />
 
-            <!-- todo use normal string res -->
             <Button
                 style="@style/PopupGreenButton.Background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewModel.onButtonClick()}"
-                tools:text="получить VIP"
-                android:text="@string/get_vip" />
+                android:text="@string/get_vip"
+                tools:text="получить VIP" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>
