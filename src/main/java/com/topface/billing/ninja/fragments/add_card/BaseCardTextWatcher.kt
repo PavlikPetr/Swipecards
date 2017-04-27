@@ -1,4 +1,4 @@
-package com.topface.billing.ninja
+package com.topface.billing.ninja.fragments.add_card
 
 import android.text.Editable
 import android.text.TextWatcher

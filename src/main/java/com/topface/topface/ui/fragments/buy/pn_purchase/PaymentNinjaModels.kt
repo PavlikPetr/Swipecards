@@ -26,7 +26,14 @@ class BuyScreenProductUnavailable
  *
  * @param - test purchases switch current state
  */
-data class EditorSwitch(var isChecked: Boolean)
+data class TestPurchaseSwitch(var isChecked: Boolean)
+
+/**
+ * 3DSecure purchase settings item
+ *
+ * @param - 3ds purchases switch current state
+ */
+data class ThreeDSecurePurchaseSwitch(var isChecked: Boolean)
 
 /**
  * Модель продукта Payment Ninja

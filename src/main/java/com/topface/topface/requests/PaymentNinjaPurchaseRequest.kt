@@ -10,7 +10,7 @@ import org.json.JSONObject
  * Created by ppavlik on 16.03.17.
  */
 class PaymentNinjaPurchaseRequest(context: Context, val productId: String, val place: String,
-                                  val isTest: Boolean, val isAutoFillEnabled: Boolean) : ApiRequest(context) {
+                                  val isTest: Boolean, val isAutoFillEnabled: Boolean, val isNeed3DS: Boolean) : ApiRequest(context) {
 
     override fun getServiceName() = "paymentNinja.purchase"
 
@@ -19,6 +19,7 @@ class PaymentNinjaPurchaseRequest(context: Context, val productId: String, val p
         put("place", place)
         put("isTest", isTest)
         put("enableAutorefill", isAutoFillEnabled)
+        put("force3ds", isNeed3DS)
     }
 }
 

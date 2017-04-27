@@ -9,24 +9,22 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 
 /**
- * Вью-модель для переключателя тестовых покупок
- * Created by ppavlik on 24.04.17.
+ * Вью-модель переключателя для создания тестовой карты с 3ds
+ * Created by ppavlik on 27.04.17.
  */
-
-class EditorViewModel(private var mIsSelected: Boolean) {
+class Editor3DSecureSwitchViewModel(private var mIsSelected: Boolean) {
 
     private var mCheckedSubscription: Subscription? = null
 
     val viewModel by lazy {
-        EditSwitcherViewModel(isCheckedDefault = mIsSelected, textDefault = R.string.editor_test_buy.getString())
-                .apply {
-                    setViewVisible(true)
-                }
+        EditSwitcherViewModel(isCheckedDefault = mIsSelected, textDefault = R.string.editor_3ds_switch.getString()).apply {
+            setProgressVisible(false)
+        }
     }
 
     init {
         mCheckedSubscription = viewModel.isChecked.filedObservable.subscribe(shortSubscription {
-            it?.let { App.getAppComponent().eventBus().setData(TestPurchaseSwitch(it)) }
+            it?.let { App.getAppComponent().eventBus().setData(ThreeDSecurePurchaseSwitch(it)) }
         })
     }
 

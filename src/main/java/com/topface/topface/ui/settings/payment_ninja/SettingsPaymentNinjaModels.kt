@@ -2,7 +2,7 @@ package com.topface.topface.ui.settings.payment_ninja
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.topface.billing.ninja.AddCardRequest
+import com.topface.billing.ninja.fragments.add_card.AddCardRequest
 import com.topface.topface.utils.Utils
 
 /**

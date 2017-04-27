@@ -1,14 +1,16 @@
-package com.topface.billing.ninja.fragments
+package com.topface.billing.ninja.fragments.add_card
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.billing.ninja.AddCardViewModel
+import com.topface.billing.ninja.IFinishDelegate
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutNinjaAddCardFragmentBinding
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.buy.pn_purchase.Editor3DSecureSwitchViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
@@ -18,7 +20,7 @@ import org.jetbrains.anko.layoutInflater
  * Created by ppavlik on 25.04.17.
  */
 
-class AddCardFragment : BaseFragment() {
+class AddCardFragment : BaseFragment(), IFinishDelegate {
 
     companion object {
         const val TAG = "AddCardFragment.TAG"
@@ -37,9 +39,24 @@ class AddCardFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        AddCardViewModel(arguments, mFeedNavigator)
+        AddCardViewModel(arguments, mFeedNavigator, this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            mBinding.apply { viewModel = mViewModel }.root
+            mBinding.apply {
+                viewModel = mViewModel
+            }.root
+
+    override fun finishWithResult(resultCode: Int, data: Intent) {
+        with(activity) {
+            setResult(resultCode, data)
+            finish()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mViewModel.release()
+    }
+
 }

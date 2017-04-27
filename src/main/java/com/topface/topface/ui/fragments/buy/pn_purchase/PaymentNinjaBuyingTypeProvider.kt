@@ -13,7 +13,8 @@ class PaymentNinjaBuyingTypeProvider : ITypeProvider {
         BuyScreenLikesSection::class.java -> 3
         BuyScreenCoinsSection::class.java -> 4
         BuyScreenProductUnavailable::class.java -> 5
-        EditorSwitch::class.java -> 6
+        TestPurchaseSwitch::class.java -> 6
+        ThreeDSecurePurchaseSwitch::class.java -> 7
         else -> 0
     }
 }

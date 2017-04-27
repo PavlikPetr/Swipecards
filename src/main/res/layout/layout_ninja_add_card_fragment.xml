@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.billing.ninja.AddCardViewModel"/>
+            type="com.topface.billing.ninja.fragments.add_card.AddCardViewModel"/>
 
     </data>
 
@@ -140,7 +140,7 @@
                     android:visibility="@{viewModel.buttonTextVisibility}"/>
 
                 <ProgressBar
-                    style="@style/TopFaceProgressBar.Small"
+                    style="@style/SmallWhiteProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -219,7 +219,6 @@
                 android:textColor="@color/ninja_color_accent"
                 android:visibility="@{viewModel.isAutoPayDescriptionVisible}"
                 tools:text="правилами оказания услуги"/>
-
         </LinearLayout>
     </ScrollView>
 </layout>

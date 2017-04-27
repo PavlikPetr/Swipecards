@@ -18,6 +18,7 @@ import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 
 /**
  * Buy buttons view model
@@ -66,12 +67,17 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
         }
     }
 
+    private val mEventBus by lazy {
+        App.getAppComponent().eventBus()
+    }
+
     private var mIsTestPurchase = false
+    private var mIs3DSAvailable = false
     private var mAutoFillUrl: String? = null
 
     private var mOptionsSubscription: Subscription? = null
     private var mProfileSubscription: Subscription? = null
-    private var mEditorSwitchSubscription: Subscription? = null
+    private var mSwitchSubscription = CompositeSubscription()
     private var mPurchaseSubscription: Subscription? = null
 
     init {
@@ -82,19 +88,19 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                 .subscribe(shortSubscription {
                     it?.let {
                         if (it) {
-                            if (data.find { it is EditorSwitch } == null) {
+                            if (data.find { it is TestPurchaseSwitch } == null) {
                                 // находим заголовок списка и после него добавляем переключатель тестовых покупок
                                 // ну а если не нашли заголовок, то ставим в начало списка
                                 with(data.indexOfFirst { it is BuyScreenTitle } + 1) {
                                     if (data.isEntry(this)) {
-                                        data.add(this, EditorSwitch(mIsTestPurchase))
+                                        data.addAll(this, arrayListOf(TestPurchaseSwitch(mIsTestPurchase), ThreeDSecurePurchaseSwitch(mIs3DSAvailable)))
                                     } else {
-                                        data.add(EditorSwitch(mIsTestPurchase))
+                                        data.addAll(arrayOf(TestPurchaseSwitch(mIsTestPurchase), ThreeDSecurePurchaseSwitch(mIs3DSAvailable)))
                                     }
                                 }
                             } else Unit
                         } else {
-                            data.remove(data.find { it is EditorSwitch })
+                            data.remove(data.find { it is TestPurchaseSwitch })
                         }
                     }
                 })
@@ -112,12 +118,18 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                         }
                     }
                 })
-        mEditorSwitchSubscription = App.getAppComponent().eventBus()
-                .getObservable(EditorSwitch::class.java)
-                .distinctUntilChanged()
+        mSwitchSubscription.add(mEventBus
+                .getObservable(TestPurchaseSwitch::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.isChecked == t2.isChecked }
                 .subscribe(shortSubscription {
                     it?.let { mIsTestPurchase = it.isChecked }
-                })
+                }))
+        mSwitchSubscription.add(mEventBus
+                .getObservable(ThreeDSecurePurchaseSwitch::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.isChecked == t2.isChecked }
+                .subscribe(shortSubscription {
+                    it?.let { mIs3DSAvailable = it.isChecked }
+                }))
         initAutofillView()
     }
 
@@ -133,10 +145,10 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     fun buyProduct(product: PaymentNinjaProduct) {
         if (!App.get().options.paymentNinjaInfo.isCradAvailable() ||
                 !isChecked.get()) {
-            mNavigator.showPaymentNinjaAddCardScreen(product, mFrom, mIsTestPurchase)
+            mNavigator.showPaymentNinjaAddCardScreen(product, mFrom, mIsTestPurchase, mIs3DSAvailable)
         } else {
             mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom,
-                    mIsTestPurchase, isAutoFillEnabled.get())
+                    mIsTestPurchase, isAutoFillEnabled.get(), mIs3DSAvailable)
                     .getRequestSubscriber()
                     .applySchedulers()
                     .subscribe(shortSubscription {
@@ -148,6 +160,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     fun onLinkClick() = mNavigator.openUrl(mAutoFillUrl?.takeIf(String::isNotEmpty) ?: AUTOREFILL_RULES_URL)
 
     fun release() {
-        arrayOf(mOptionsSubscription, mProfileSubscription, mEditorSwitchSubscription, mPurchaseSubscription).safeUnsubscribe()
+        mSwitchSubscription.safeUnsubscribe()
+        arrayOf(mOptionsSubscription, mProfileSubscription, mPurchaseSubscription).safeUnsubscribe()
     }
 }

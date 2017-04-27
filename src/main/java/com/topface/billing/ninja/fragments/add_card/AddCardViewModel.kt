@@ -1,22 +1,30 @@
-package com.topface.billing.ninja
+package com.topface.billing.ninja.fragments.add_card
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.Observable
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
+import android.os.Debug
 import android.text.TextUtils
 import android.view.View
-import com.topface.billing.ninja.CardType.Companion.CVV_DEFAULT
+import com.topface.billing.ninja.AddCardModel
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
+import com.topface.billing.ninja.IFinishDelegate
+import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.ThreeDSecureParams
+import com.topface.billing.ninja.fragments.add_card.CardType.Companion.CVV_DEFAULT
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
+import com.topface.topface.ui.fragments.buy.pn_purchase.ThreeDSecurePurchaseSwitch
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getPurchaseScreenTitle
@@ -36,7 +44,8 @@ import kotlin.properties.Delegates
  * ВьюМодель добавления карт
  */
 
-class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNavigator) {
+class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNavigator,
+                       private val mFinishCallback: IFinishDelegate) {
 
     val numberText = RxFieldObservable<String>()
     val numberMaxLength = ObservableInt(19)
@@ -101,7 +110,9 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
 
     private val mProduct: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
     private val mIsTestPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_TEST_PURCHASE, false)
+    private val mIs3DSPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_3DS_PURCHASE, false)
     private val mSource: String? = data.getString(NinjaAddCardActivity.EXTRA_SOURCE)
+    private var m3DSSwitchSubscription: Subscription? = null
 
     private val readyCheck: MutableMap<Any, Boolean> = mutableMapOf()
 
@@ -199,6 +210,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
         cvvText.removeOnPropertyChangedCallback(cvvChangedCallback)
         emailText.removeOnPropertyChangedCallback(emailChangedCallback)
         mPurchaseRequestSubscription.safeUnsubscribe()
+        m3DSSwitchSubscription.safeUnsubscribe()
     }
 
     fun onClick() {
@@ -225,7 +237,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                     .subscribe({
                         mProduct?.let {
                             sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
-                        }
+                        } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                                Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                     }, {
                         mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
                                 mProduct == null) {
@@ -263,7 +276,9 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     }
 
     private fun validateNumber(): Boolean {
-        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) && numberText.get().length <= numberMaxLength.get()) {
+        if (!numberText.get().isNullOrEmpty() &&
+                UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) &&
+                numberText.get().length <= numberMaxLength.get()) {
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
                 numberError.set(R.string.ninja_number_error.getString())
@@ -330,10 +345,12 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     fun navigateToRules(): Unit? = mProduct?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
 
     private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
-        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source, mIsTestPurchase, isAutoPayEnabled.get()).getRequestSubscriber()
+        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source,
+                mIsTestPurchase, isAutoPayEnabled.get(), mIs3DSPurchase).getRequestSubscriber()
                 .applySchedulers()
                 .subscribe({
-                    mNavigator.showPurchaseSuccessfullFragment(productType, Bundle().apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                    mNavigator.showPurchaseSuccessfullFragment(productType, Bundle()
+                            .apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
                 },
                         { handlePurchaseError(JsonUtils.fromJson(it.message, ThreeDSecureParams::class.java)) },
                         {
@@ -343,6 +360,6 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     }
 
     private fun handlePurchaseError(secureSettings: ThreeDSecureParams) {
-
+        App.getAppComponent().eventBus().setData(secureSettings)
     }
 }

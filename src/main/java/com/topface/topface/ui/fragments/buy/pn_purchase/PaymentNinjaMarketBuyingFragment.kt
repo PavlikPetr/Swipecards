@@ -66,7 +66,8 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())
                 .addAdapterComponent(BuyScreenLikesSectionComponent())
                 .addAdapterComponent(BuyScreenUnavailableComponent())
-                .addAdapterComponent(EditorComponent())
+                .addAdapterComponent(TestPurchaseComponent())
+                .addAdapterComponent(ThreeDSecureComponent())
     }
 
     private fun initList() = with(mBinding.buttonsRecyclerView) {

@@ -49,12 +49,12 @@ data class SendCardTokenModel(val token: String, val email: String)
  * @param PaReq - put it to POST
  * @param termUrl - put it to POST
  * @param acsUrl - url for 3d secure validation
- * @param successUrl - url in success of 3d secure validation
- * @param failUrl - url in faile of 3d secure validation
+ * @param paymentSuccessUrl - url in success of 3d secure validation
+ * @param paymentFailUrl - url in faile of 3d secure validation
  */
 data class ThreeDSecureParams(val errorCode: Int = 0, val MD: String = Utils.EMPTY, val PaReq: String = Utils.EMPTY,
                               val termUrl: String = Utils.EMPTY, val acsUrl: String = Utils.EMPTY,
-                              val successUrl: String = Utils.EMPTY, val failUrl: String = Utils.EMPTY) : Parcelable {
+                              val paymentSuccessUrl: String = Utils.EMPTY, val paymentFailUrl: String = Utils.EMPTY) : Parcelable {
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<ThreeDSecureParams> = object : Parcelable.Creator<ThreeDSecureParams> {
             override fun createFromParcel(source: Parcel): ThreeDSecureParams = ThreeDSecureParams(source)
@@ -73,7 +73,7 @@ data class ThreeDSecureParams(val errorCode: Int = 0, val MD: String = Utils.EMP
         dest?.writeString(PaReq)
         dest?.writeString(termUrl)
         dest?.writeString(acsUrl)
-        dest?.writeString(successUrl)
-        dest?.writeString(failUrl)
+        dest?.writeString(paymentSuccessUrl)
+        dest?.writeString(paymentFailUrl)
     }
 }
