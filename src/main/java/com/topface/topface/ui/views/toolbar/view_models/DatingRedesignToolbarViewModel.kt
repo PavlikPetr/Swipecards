@@ -1,7 +1,6 @@
 package com.topface.topface.ui.views.toolbar.view_models
 
 import android.databinding.DataBindingUtil
-import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import com.topface.topface.data.CountersData
 import com.topface.topface.data.FragmentLifreCycleData
 import com.topface.topface.data.FragmentLifreCycleData.*
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.fragments.dating.design.v1.DatingFragment
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
@@ -28,7 +27,7 @@ import kotlin.properties.Delegates
 /**
  *  toolbar для редизайна знакомств
  */
-class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
+class DatingRedesignToolbarViewModel @JvmOverloads constructor(binding: ToolbarViewBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation) {
 
     private val mState by lazy {

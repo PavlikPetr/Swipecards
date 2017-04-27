@@ -13,7 +13,7 @@ import org.json.JSONObject;
 /**
  * Абстрактный класс, реализующий основные поля и возможности элеметнов ленты (Диалоги, Лайки, Симпатии)
  */
-abstract public class FeedItem extends LoaderData implements Parcelable {
+public class FeedItem extends LoaderData implements Parcelable {
 
     public static final String NULL_USER = "null_user";
 

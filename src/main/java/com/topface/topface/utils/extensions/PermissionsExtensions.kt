@@ -12,6 +12,7 @@ import android.support.annotation.IntDef
 import android.support.v4.content.ContextCompat
 import com.topface.topface.App
 import com.topface.topface.ui.dialogs.PermissionAlertDialogFactory
+import com.topface.topface.ui.dialogs.AlertDialogFactory
 import permissions.dispatcher.PermissionUtils
 
 /**
@@ -112,7 +113,7 @@ fun Activity.isPermissinsBlockedForever(vararg permissions: String) =
 fun Activity.askUnlockStoragePermissionIfNeed() {
     this?.let {
         if (it.isPermissinsBlockedForever(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            PermissionAlertDialogFactory().constructNeverAskAgain(it)
+            AlertDialogFactory().constructNeverAskAgain(it)
         }
     }
 }

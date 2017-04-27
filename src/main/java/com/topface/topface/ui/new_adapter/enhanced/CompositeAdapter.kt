@@ -21,6 +21,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
     private var mRecyclerView: RecyclerView? = null
+    private var doOnRelease: (() -> Unit)? = null
 
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
@@ -99,5 +100,16 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun getItemCount() = data.count()
 
-    fun releaseComponents() = components.values.forEach(AdapterComponent<*, *>::release)
+
+    fun releaseComponents() {
+        doOnRelease?.invoke()
+        doOnRelease = null
+        components.values.forEach(AdapterComponent<*, *>::release)
+        mRecyclerView?.addOnScrollListener(null)
+        mRecyclerView = null
+    }
+
+    fun doOnRelease(onRelease: () -> Unit) {
+        doOnRelease = onRelease
+    }
 }

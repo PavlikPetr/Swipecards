@@ -1,6 +1,7 @@
 package com.topface.topface.banners;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,6 +28,8 @@ class BannerInjector implements IBannerInjector {
 
     private final AdProvidersFactory mProvidersFactory;
     private final List<WeakReference<IPageWithAds>> mUsedPages = new ArrayList<>();
+    @Nullable
+    private IAdsProvider mCurrentAdsProvider;
 
     public BannerInjector(AdProvidersFactory providersFactory, Context context) {
         mProvidersFactory = providersFactory;
@@ -37,6 +40,7 @@ class BannerInjector implements IBannerInjector {
         if (canInject(page)) {
             String banner = lookupBannerFor(page);
             IAdsProvider provider = getProvider(banner);
+            mCurrentAdsProvider = provider;
             showAd(page, provider);
         }
     }
@@ -97,7 +101,8 @@ class BannerInjector implements IBannerInjector {
     }
 
     private void injectGag(IPageWithAds page) {
-        showAd(page, getProvider(App.get().getOptions().fallbackTypeBanner), true);
+        mCurrentAdsProvider = getProvider(App.get().getOptions().fallbackTypeBanner);
+        showAd(page, mCurrentAdsProvider, true);
     }
 
     private IAdsProvider getProvider(String banner) {
@@ -128,6 +133,9 @@ class BannerInjector implements IBannerInjector {
     private void cleanUp(IPageWithAds page) {
         ViewGroup container = page.getContainerForAd();
         if (container != null) {
+            if (mCurrentAdsProvider != null) {
+                mCurrentAdsProvider.clean(page);
+            }
             unbindDrawables(container);
             container.removeAllViews();
         }

@@ -10,7 +10,7 @@ import com.topface.statistics.generated.QuestionnaireStatisticsGeneratedStatisti
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.AcQuestionnaireBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.experiments.onboarding.question.questionnaire_result.QuestionnaireResultFragment
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.NavigationActivity
@@ -155,11 +155,11 @@ class QuestionnaireActivity : BaseFragmentActivity<AcQuestionnaireBinding>(), IQ
         finish()
     }
 
-    override fun getToolbarBinding(binding: AcQuestionnaireBinding): ToolbarBinding = binding.toolbarInclude
+    override fun getToolbarBinding(binding: AcQuestionnaireBinding): ToolbarViewBinding = binding.toolbarInclude
 
     override fun getLayout() = R.layout.ac_questionnaire
 
-    override fun generateToolbarViewModel(toolbar: ToolbarBinding) = InvisibleToolbarViewModel(toolbar)
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) = InvisibleToolbarViewModel(toolbar)
 
     override fun onUpButtonClick() {
         //ничего не делаем

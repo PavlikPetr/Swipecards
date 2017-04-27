@@ -130,7 +130,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 }
             }
         });
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         return root;
     }
 
@@ -209,7 +209,12 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onDestroyView() {
         super.onDestroyView();
         mCountersDataProvider.unsubscribe();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(mHasFeedAdReceiver);
+        mHasFeedAdReceiver = null;
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
+            mBannersController = null;
+        }
     }
 
     @Override
@@ -221,12 +226,16 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mPager = null;
         if (mBannersController != null) {
             mBannersController.onDestroy();
+            mBannersController = null;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mBannersController != null) {
+            mBannersController.onResume(getActivity());
+        }
         if (mRefresher != null) {
             mRefresher.refreshBanner();
         }
@@ -278,7 +287,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
-        if (requestCode == ChatActivity.REQUEST_CHAT) {
+        if (requestCode == ChatActivity.REQUEST_CHAT && data != null && data.hasExtra(ChatFragment.MUTUAL)) {
             if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.Companion.isApplicable(App.get().getOptions().ratePopupNewVersion)) {
                 (new FeedNavigator((IActivityDelegate) getActivity())).showRateAppFragment();
             }

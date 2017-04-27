@@ -8,7 +8,7 @@ import android.support.v7.app.ActionBar
 import android.view.View
 import com.topface.topface.BR
 import com.topface.topface.R
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.CrashReportActivity
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.utils.IToolbarSettings
@@ -19,13 +19,13 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 
 /**
  * Created by ppavlik on 14.10.16.
- * Base activity for a whole project, cause it hold a toolbar
+ * Base activity for a whole project, cause it hold a toolbar_view
  */
 
 abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), IToolbarNavigation, IToolbarSettings {
 
     lateinit var viewBinding: T
-    var toolbarBinding: ToolbarBinding? = null
+    var toolbarBinding: ToolbarViewBinding? = null
     private var mToolbarBaseViewModel: BaseToolbarViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +82,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         return true
     }
 
-    open protected fun generateToolbarViewModel(toolbar: ToolbarBinding): BaseToolbarViewModel {
+    open protected fun generateToolbarViewModel(toolbar: ToolbarViewBinding): BaseToolbarViewModel {
         return BackToolbarViewModel(toolbar, getString(R.string.app_name), this)
     }
 
@@ -96,7 +96,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         return mToolbarBaseViewModel as BaseToolbarViewModel
     }
 
-    abstract fun getToolbarBinding(binding: T): ToolbarBinding
+    abstract fun getToolbarBinding(binding: T): ToolbarViewBinding
 
     @LayoutRes
     abstract fun getLayout(): Int

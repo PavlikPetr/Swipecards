@@ -49,7 +49,7 @@
 
                 <include
                     android:id="@+id/toolbarInclude"
-                    layout="@layout/toolbar"
+                    layout="@layout/toolbar_view"
                     bind:viewModel="@{viewModel}" />
 
             </android.support.design.widget.CollapsingToolbarLayout>

@@ -28,7 +28,7 @@
 
         <include
             android:id="@+id/toolbarInclude"
-            layout="@layout/toolbar"
+            layout="@layout/toolbar_view"
             bind:viewModel="@{toolbarViewModel}"/>
 
         <FrameLayout

@@ -9,7 +9,7 @@ import android.view.View;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.RestoreAccountActivityBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
@@ -61,7 +61,7 @@ public class RestoreAccountActivity extends TrackedFragmentActivity<RestoreAccou
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull RestoreAccountActivityBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull RestoreAccountActivityBinding binding) {
         return binding.toolbarInclude;
     }
 

@@ -19,6 +19,7 @@ public class SessionConfig extends AbstractConfig {
     private static final String DATA_PROFILE = "data_profile_user_data";
     private static final String DATA_OPTIONS = "data_options";
     private static final String DATA_MARKET_PRODUCTS = "data_google_products";
+    private static final String DATA_PAYMENT_NINJA_PRODUCTS = "data_payment_ninja_products";
     private static final String DATA_MARKET_PRODUCTS_DETAILS = "data_google_products_details";
     private static final String DATA_PAYMENTWALL_PRODUCTS = "data_pw_products";
     private static final String DATA_PAYMENTWALL_MOBILE_PRODUCTS = "data_pw_mobile_products";
@@ -45,6 +46,8 @@ public class SessionConfig extends AbstractConfig {
         addField(settingsMap, SETTINGS_SOCIAL_ACCOUNT_EMAIL, Utils.EMPTY);
         //GCM registration id
         addField(settingsMap, GCM_REG_ID, Utils.EMPTY);
+        //Payment Ninja products
+        addField(settingsMap, DATA_PAYMENT_NINJA_PRODUCTS, Utils.EMPTY);
     }
 
     @Override
@@ -126,6 +129,18 @@ public class SessionConfig extends AbstractConfig {
     }
 
     /**
+     * Sets payment ninja products cache from payment ninja products request
+     *
+     * @param googleProductsResponseJson payment ninja products json response
+     * @return true on success
+     */
+    public boolean setPaymentNinjaProductsData(String googleProductsResponseJson) {
+        boolean res = setField(getSettingsMap(), DATA_PAYMENT_NINJA_PRODUCTS, googleProductsResponseJson);
+        this.saveConfig();
+        return res;
+    }
+
+    /**
      * Sets google products dateils cache from openIab helper
      *
      * @param googleProductsDetailsJson google play products details json
@@ -154,6 +169,15 @@ public class SessionConfig extends AbstractConfig {
     }
 
     /**
+     * Payment ninja products cached json response
+     *
+     * @return payment ninja products json
+     */
+    public String getPaymentNinjaProductsData() {
+        return getStringField(getSettingsMap(), DATA_PAYMENT_NINJA_PRODUCTS);
+    }
+
+    /**
      * Google products details cached json response
      *
      * @return google products details json
@@ -172,6 +196,13 @@ public class SessionConfig extends AbstractConfig {
      */
     public void resetGoogleProductsData() {
         resetAndSaveConfig(DATA_MARKET_PRODUCTS);
+    }
+
+    /**
+     * Resets saved payment ninja products data
+     */
+    public void resetPaymentNinjaProductsData() {
+        resetAndSaveConfig(DATA_PAYMENT_NINJA_PRODUCTS);
     }
 
     /**

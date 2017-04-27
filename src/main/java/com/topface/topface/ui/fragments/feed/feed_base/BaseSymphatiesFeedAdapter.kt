@@ -9,7 +9,7 @@ import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
  * Адаптре для симпатий
  * Created by tiberal on 10.08.16.
  */
-abstract class BaseSymphatiesFeedAdapter() : BaseFeedAdapter<FeedItemHeartBinding, FeedLike>() {
+abstract class BaseSymphatiesFeedAdapter : BaseFeedAdapter<FeedItemHeartBinding, FeedLike>() {
 
     override fun onViewRecycled(holder: ItemViewHolder?) {
         holder?.binding?.let {

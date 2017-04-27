@@ -181,31 +181,31 @@
             android:theme="@style/FullyTranslucent" />
         <!-- Активити попапа восхищения -->
         <activity
-            android:name=".ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:theme="@style/AdmirationPurchasePopupStyle">
+                android:name=".ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:theme="@style/AdmirationPurchasePopupStyle">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
 
         <activity
-            android:name=".ui.AddToPhotoBlogActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.AddToPhotoBlogActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.InviteVkFriendsActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.InviteVkFriendsActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -226,9 +226,9 @@
             android:name=".ui.edit.EditContainerActivity"
             android:theme="@style/Theme.Topface.Light" />
         <activity
-            android:name=".ui.settings.SettingsContainerActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:theme="@style/Theme.Topface">
+                android:name=".ui.settings.SettingsContainerActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:theme="@style/Theme.Topface">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
@@ -242,96 +242,96 @@
         <activity android:name=".ui.BlackListActivity" />
         <activity android:name=".ui.bonus.view.BonusActivity" />
         <activity
-            android:name=".ui.ChatActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:theme="@style/Theme.Topface.Chat"
-            android:windowSoftInputMode="stateAlwaysHidden">
+                android:name=".ui.ChatActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:theme="@style/Theme.Topface.Chat"
+                android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.UserProfileActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:theme="@style/NoWindowAnimation"
-            android:windowSoftInputMode="stateAlwaysHidden">
+                android:name=".ui.UserProfileActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:theme="@style/NoWindowAnimation"
+                android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.OwnProfileActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:theme="@style/NoWindowAnimation">
+                android:name=".ui.OwnProfileActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.OwnGiftsActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:theme="@style/Theme.Topface.Gifts">
+                android:name=".ui.OwnGiftsActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:theme="@style/Theme.Topface.Gifts">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.ComplainsActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.ComplainsActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.EditorBannersActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.EditorBannersActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.EditorProfileActionsActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.EditorProfileActionsActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.RegistrationActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+                android:name=".ui.RegistrationActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.PasswordRecoverActivity"
-            android:parentActivityName=".ui.NavigationActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+                android:name=".ui.PasswordRecoverActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.PurchasesActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.PurchasesActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
         </activity>
         <activity
-            android:name=".ui.ComplainsMessageActivity"
-            android:parentActivityName=".ui.ComplainsActivity"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+                android:name=".ui.ComplainsMessageActivity"
+                android:parentActivityName=".ui.ComplainsActivity"
+                android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.ComplainsActivity" />
         </activity>
         <activity android:name=".ui.PaymentwallActivity" />
         <activity
-            android:name="ru.ok.android.sdk.OkAuthActivity"
-            android:configChanges="orientation"
-            android:launchMode="singleTask">
+                android:name="ru.ok.android.sdk.OkAuthActivity"
+                android:configChanges="orientation"
+                android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -347,11 +347,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.SMSInviteActivity"
-            android:parentActivityName=".ui.NavigationActivity">
+                android:name=".ui.SMSInviteActivity"
+                android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity" />
+        </activity>
+
+        <activity
+                android:name="com.topface.billing.ninja.NinjaAddCardActivity"
+                android:parentActivityName=".ui.NavigationActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/NinjaTheme"
+                android:windowSoftInputMode="adjustResize">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".ui.NavigationActivity"/>
         </activity>
 
         <!-- ADS -->
@@ -379,8 +390,8 @@
             android:parentActivityName=".ui.PurchasesActivity" />
 
         <receiver
-            android:name=".receivers.TestNotificationsReceiver"
-            tools:ignore="ExportedReceiver">
+                android:name=".receivers.TestNotificationsReceiver"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.actions.NOTIFY" />
                 <action android:name="com.topface.topface.actions.TEST_NETWORK_ERRORS_ON" />
@@ -392,8 +403,8 @@
         <!-- Amazon In-App Purchasing -->
         <!-- suppress AndroidDomInspection -->
         <receiver
-            android:name="com.amazon.inapp.purchasing.ResponseReceiver"
-            tools:ignore="ExportedReceiver">
+                android:name="com.amazon.inapp.purchasing.ResponseReceiver"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action
                     android:name="com.amazon.inapp.purchasing.NOTIFY"
@@ -401,9 +412,9 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -411,9 +422,9 @@
 
         <!-- Topface install referrer receiver -->
         <receiver
-            android:name=".receivers.InstallReferrerReceiver"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name=".receivers.InstallReferrerReceiver"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -421,51 +432,43 @@
 
         <!-- AdWords -->
         <receiver
-            android:name="com.google.ads.conversiontracking.InstallReceiver"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name="com.google.ads.conversiontracking.InstallReceiver"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.adjust.sdk.AdjustReferrerReceiver"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.yandex.metrica.MetricaEventHandler"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name="com.yandex.metrica.MetricaEventHandler"
+                android:enabled="true"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
         <!--kochava receiver-->
         <receiver
-            android:name="com.kochava.android.tracker.ReferralCapture"
-            android:exported="true"
-            tools:ignore="ExportedReceiver">
+                android:name="com.kochava.android.tracker.ReferralCapture"
+                android:exported="true"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
@@ -474,8 +477,8 @@
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
         <receiver
-            android:name=".receivers.NotificationClosedReceiver"
-            tools:ignore="ExportedReceiver">
+                android:name=".receivers.NotificationClosedReceiver"
+                tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.NOTIFICATION_CLOSED" />
             </intent-filter>
@@ -489,9 +492,9 @@
         <!-- gcm -->
 
         <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
+                android:name="com.google.android.gms.gcm.GcmReceiver"
+                android:exported="true"
+                android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -501,15 +504,15 @@
         </receiver>
 
         <service
-            android:name=".utils.gcmutils.GcmListenerService"
-            android:exported="false">
+                android:name=".utils.gcmutils.GcmListenerService"
+                android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name=".utils.gcmutils.InstanceIDListenerService"
-            android:exported="false">
+                android:name=".utils.gcmutils.InstanceIDListenerService"
+                android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
@@ -527,9 +530,9 @@
             android:value="android" />
 
         <receiver
-            android:name="com.appodeal.ads.AppodealPackageAddedReceiver"
-            android:enabled="true"
-            android:exported="true">
+                android:name="com.appodeal.ads.AppodealPackageAddedReceiver"
+                android:enabled="true"
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
 
@@ -661,10 +664,10 @@
             android:theme="@android:style/Theme" />
 
         <service
-            android:name="com.yandex.metrica.MetricaService"
-            android:enabled="true"
-            android:exported="true"
-            android:process=":Metrica">
+                android:name="com.yandex.metrica.MetricaService"
+                android:enabled="true"
+                android:exported="true"
+                android:process=":Metrica">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -679,9 +682,9 @@
         </service>
 
         <receiver
-            android:name="com.yandex.metrica.MetricaEventHandler"
-            android:enabled="true"
-            android:exported="true">
+                android:name="com.yandex.metrica.MetricaEventHandler"
+                android:enabled="true"
+                android:exported="true">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>

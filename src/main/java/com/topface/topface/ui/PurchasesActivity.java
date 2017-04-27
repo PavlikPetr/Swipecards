@@ -21,11 +21,13 @@ import com.topface.topface.data.Profile;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
+import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.bonus.view.BonusActivity;
+import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
 import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
@@ -35,7 +37,6 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel;
 import com.topface.topface.ui.views.toolbar.view_models.PurchaseToolbarViewModel;
 import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.PurchasesUtils;
-import com.topface.topface.utils.controllers.startactions.TrialVipPopupAction;
 import com.topface.topface.utils.rx.RxUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -88,13 +89,14 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return new PurchaseToolbarViewModel(toolbar, this);
     }
 
 
     private static TopfaceAppState mAppState;
     private EventBus mEventBus;
+    private PresenterCache mPresenterCache;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
 
@@ -111,6 +113,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
         mAppState = App.getAppComponent().appState();
         mEventBus = App.getAppComponent().eventBus();
+        mPresenterCache = App.getAppComponent().presenterCache();
 
         mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
         if (TFOfferwallSDK.isInitialized()) {
@@ -140,6 +143,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
             mTopfaceOfferwallRedirect.setComplited(false);
         }
         RxUtils.safeUnsubscribe(mEventBusSubscriber);
+
+        if (isFinishing()) {
+            mPresenterCache.removePresenter(BonusFragment.TAG);
+        }
         super.onDestroy();
     }
 
@@ -363,31 +370,8 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         for (int i = 0; i < extraScreenArray.size(); i++) {
             sum += extraScreenArray.get(i).getProbability();
         }
-        //TODO
-        /**
-         * FATAL EXCEPTION: main
-         Process: com.topface.topface, PID: 21584
-         java.lang.IllegalArgumentException: n <= 0: -1
-         at java.util.Random.nextInt(Random.java:182)
-         at com.topface.topface.ui.PurchasesActivity.getRandomPosByProbability(PurchasesActivity.java:367)
-         at com.topface.topface.ui.PurchasesActivity.isScreenShow(PurchasesActivity.java:315)
-         at com.topface.topface.ui.PurchasesActivity.onPreFinish(PurchasesActivity.java:311)
-         at com.topface.topface.ui.fragments.ToolbarActivity.doPreFinish(ToolbarActivity.kt:79)
-         at com.topface.topface.ui.fragments.ToolbarActivity.onUpClick(ToolbarActivity.kt:71)
-         at com.topface.topface.ui.PurchasesActivity.onUpClick(PurchasesActivity.java:342)
-         at com.topface.topface.ui.fragments.ToolbarActivity.onUpButtonClick(ToolbarActivity.kt:67)
-         at com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel$init$1$1.onClick(BaseToolbarViewModel.kt:33)
-         at android.view.View.performClick(View.java:5204)
-         at android.view.View$PerformClick.run(View.java:21153)
-         at android.os.Handler.handleCallback(Handler.java:739)
-         at android.os.Handler.dispatchMessage(Handler.java:95)
-         at android.os.Looper.loop(Looper.java:148)
-         at android.app.ActivityThread.main(ActivityThread.java:5417)
-         at java.lang.reflect.Method.invoke(Native Method)
-         at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:726)
-         at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:616)
-         */
-        int randomValue = new Random().nextInt(sum - 1) + 1;
+        int n = sum - 1;
+        int randomValue = new Random().nextInt(n <= 0 ? 1 : n) + 1;
         sum = 0;
         for (int i = 0; i < extraScreenArray.size(); i++) {
             EXTRA_SCREEN currentValue = extraScreenArray.get(i);
@@ -415,7 +399,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull AcFragmentFrameBinding binding) {
         return binding.toolbarInclude;
     }
 

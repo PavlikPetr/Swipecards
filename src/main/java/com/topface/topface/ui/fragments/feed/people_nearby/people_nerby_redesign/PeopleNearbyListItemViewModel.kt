@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.people_nearby.people_nerby_redesign
 
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import com.topface.topface.R
 import com.topface.topface.data.FeedGeo
 import com.topface.topface.data.Profile
@@ -22,7 +23,7 @@ class PeopleNearbyListItemViewModel(private val mItem: FeedGeo, private val mNav
     val placeholderRes = ObservableField(if (mItem.user.sex == Profile.BOY) R.drawable.nearby_av_man else R.drawable.nearby_av_girl)
     val nameAndAge = ObservableField(mFeedUser.nameAndAge)
     val distance = ObservableField(prepareDistanceText())
-    val onlineImage = ObservableField(prepareImageForOnline())
+    val onlineImage = ObservableInt(prepareImageForOnline())
 
     private fun prepareImageForOnline() = if (mFeedUser.online) R.drawable.im_list_online else 0
 

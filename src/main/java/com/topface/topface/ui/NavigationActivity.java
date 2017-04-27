@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appodeal.ads.Appodeal;
 import com.appsflyer.AppsFlyerLib;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.topface.framework.utils.Debug;
@@ -25,14 +26,16 @@ import com.topface.topface.data.City;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
 import com.topface.topface.data.leftMenu.DrawerLayoutStateData;
-import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
-import com.topface.topface.databinding.ToolbarBinding;
+import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
+import com.topface.topface.di.ComponentManager;
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
+import com.topface.topface.di.navigation_activity.NavigationActivityModule;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -40,7 +43,7 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData;
+import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
@@ -82,6 +85,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import kotlin.jvm.functions.Function0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -129,7 +133,14 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        App.getAppComponent().inject(this);
+        NavigationActivityComponent component = ComponentManager.INSTANCE
+                .obtainComponent(NavigationActivityComponent.class, new Function0<NavigationActivityComponent>() {
+                    @Override
+                    public NavigationActivityComponent invoke() {
+                        return App.getAppComponent().add(new NavigationActivityModule(NavigationActivity.this));
+                    }
+                });
+        component.inject(this);
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
@@ -145,13 +156,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         setNeedTransitionAnimation(false);
         super.onCreate(savedInstanceState);
-        mSubscription.add(mAppState.getObservable(AdjustAttributeData.class).subscribe(new RxUtils.ShortSubscription<AdjustAttributeData>() {
-            @Override
-            public void onNext(AdjustAttributeData adjustAttributionData) {
-                super.onNext(adjustAttributionData);
-                App.sendAdjustAttributeData(adjustAttributionData);
-            }
-        }));
         mSubscription.add(mNavigationState.getNavigationObservable().filter(new Func1<WrappedNavigationData, Boolean>() {
             @Override
             public Boolean call(WrappedNavigationData wrappedNavigationData) {
@@ -245,7 +249,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @NotNull
     @Override
-    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarBinding toolbar) {
+    protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
         return mWeakStorage.getIsTranslucentDating() ?
                 new DatingRedesignToolbarViewModel(toolbar, this) :
                 new NavigationToolbarViewModel(toolbar, this);
@@ -411,6 +415,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         super.onResume();
         //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
         PopupManager.INSTANCE.init(this);
+        Appodeal.onResume(this, Appodeal.INTERSTITIAL);
     }
 
     @Override
@@ -518,6 +523,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     protected void onDestroy() {
+        ComponentManager.INSTANCE.releaseComponent(NavigationActivityComponent.class);
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
@@ -607,7 +613,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @NotNull
     @Override
-    public ToolbarBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
+    public ToolbarViewBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
         return mWeakStorage.getIsTranslucentDating() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }

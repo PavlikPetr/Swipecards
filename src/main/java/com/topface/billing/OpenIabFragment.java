@@ -30,7 +30,6 @@ import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.requests.handlers.ErrorCodes;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.external_libs.AdWords;
-import com.topface.topface.ui.external_libs.AdjustManager;
 import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
@@ -80,7 +79,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
      */
     public static final int PURCHASE_ERROR_ITEM_ALREADY_OWNED = 7;
 
-    AdjustManager mAdjustManager;
     KochavaManager mKochavaManager;
 
     private boolean mHasDeferredPurchase = false;
@@ -437,9 +435,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
         // Отправлем покупку на сервер для проверки и начисления
         final PurchaseRequest validateRequest = PurchaseRequest.getValidateRequest(purchase, context);
         if (validateRequest != null) {
-            if (mAdjustManager == null) {
-                mAdjustManager = App.getAppComponent().adjustManager();
-            }
             if (mKochavaManager == null) {
                 mKochavaManager = App.getAppComponent().kochavaManager();
             }
@@ -463,7 +458,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     }
                     UserConfig userConfig = App.getUserConfig();
                     if (!userConfig.getFirstPayFlag()) {
-                        mAdjustManager.sendFirstPayEvent(verify.revenue);
                         if (!isTestPurchase) {
                             if (isTrialPurchase) {
                                 adWords.trackTrial();
@@ -487,7 +481,6 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
                     if (isNeedSendPurchasesStatistics()) {
                         //Статистика AppsFlyer
                         if (verify.revenue > 0) {
-                            mAdjustManager.sendPurchaseEvent(verify.revenue);
                             if (!isTestPurchase) {
                                 if (isTrialPurchase) {
                                     adWords.trackTrial();

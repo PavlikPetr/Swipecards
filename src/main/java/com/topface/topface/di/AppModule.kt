@@ -8,8 +8,8 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.NavigationState
+import com.topface.topface.mvp.PresenterCache
 import com.topface.topface.state.*
-import com.topface.topface.ui.external_libs.adjust.AdjustAttributeData
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.config.WeakStorage
@@ -48,10 +48,6 @@ class AppModule(private val mContext: Context) {
                     val config = App.getUserConfig()
                     config.okUserData = data as OkUserData
                     config.saveConfig()
-                } else if (data.javaClass == AdjustAttributeData::class.java) {
-                    val config = App.getAppConfig()
-                    config.adjustAttributeData = data as AdjustAttributeData
-                    config.saveConfig()
                 } else if (data.javaClass == Options::class.java) {
                     CacheProfile.setOptions(JsonUtils.optionsToJson(data as Options))
                 } else if (data.javaClass == Profile::class.java) {
@@ -73,8 +69,6 @@ class AppModule(private val mContext: Context) {
                     return profile as T
                 } else if (OkUserData::class.java == classType) {
                     return App.getUserConfig().okUserData as T
-                } else if (AdjustAttributeData::class.java == classType) {
-                    return App.getAppConfig().adjustAttributeData as T?
                 }
                 return null
             }
@@ -161,5 +155,8 @@ class AppModule(private val mContext: Context) {
     @Singleton
     fun providesWeakStorage() = WeakStorage()
 
+    @Provides
+    @Singleton
+    fun providesPresenterCache() = PresenterCache()
 
 }

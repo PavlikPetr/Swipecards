@@ -29,7 +29,10 @@ import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.ui.dialogs.SelectLanguageDialog;
 import com.topface.topface.ui.fragments.profile.ProfileInnerFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
+import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.MarketApiManager;
+import com.topface.topface.utils.extensions.SomeExtensionsKt;
+import com.topface.topface.utils.rx.RxUtils;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -37,6 +40,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import rx.Subscription;
+import rx.functions.Func1;
 
 @FlurryOpenEvent(name = SettingsFragment.PAGE_NAME)
 public class SettingsFragment extends ProfileInnerFragment {
@@ -48,6 +53,8 @@ public class SettingsFragment extends ProfileInnerFragment {
 
     private TextView preloadPhotoName;
     private boolean mIsAllowedAutoReply;
+    private View mRootView;
+    private Subscription mPaymentInfoSubscription = null;
 
     @BindView(R.id.loNotifications)
     View mLoNotifications;
@@ -113,17 +120,18 @@ public class SettingsFragment extends ProfileInnerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saved) {
         super.onCreateView(inflater, container, saved);
-        View view = inflater.inflate(R.layout.fragment_settings, null);
-        ButterKnife.bind(this, view);
+        mRootView = inflater.inflate(R.layout.fragment_settings, null);
+        ButterKnife.bind(this, mRootView);
         mMarketApiManager = new MarketApiManager();
 
         // Account
-        initAccountViews(view);
+        initAccountViews();
 
         // Auto reply settings
         boolean isAutoreplyAllow = App.get().getOptions().isAutoreplyAllow;
         mIsAllowedAutoReply = isAutoreplyAllow;
         setAutoReplySettings(isAutoreplyAllow);
+        subscibePaymentInfoUpdate();
 
         // Init settings views
         /*
@@ -132,9 +140,37 @@ public class SettingsFragment extends ProfileInnerFragment {
          to abort views initialization if activity is finishing.
           */
         if (!getActivity().isFinishing()) {
-            initViews(view);
+            initViews();
         }
-        return view;
+        return mRootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RxUtils.safeUnsubscribe(mPaymentInfoSubscription);
+    }
+
+    private void subscibePaymentInfoUpdate() {
+        mPaymentInfoSubscription = App.getAppComponent().appState()
+                .getObservable(Options.class)
+                .map(new Func1<Options, PaymentInfo>() {
+                    @Override
+                    public PaymentInfo call(Options options) {
+                        return options.paymentNinjaInfo;
+                    }
+                })
+                .distinctUntilChanged()
+                .compose(RxUtils.<PaymentInfo>applySchedulers())
+                .subscribe(new RxUtils.ShortSubscription<PaymentInfo>() {
+                    @Override
+                    public void onNext(PaymentInfo type) {
+                        super.onNext(type);
+                        if (type != null) {
+                            initPurchases(type);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -187,7 +223,7 @@ public class SettingsFragment extends ProfileInnerFragment {
 
     }
 
-    private void initViews(View root) {
+    private void initViews() {
         View frame;
 
         // Notifications
@@ -207,15 +243,28 @@ public class SettingsFragment extends ProfileInnerFragment {
         }
 
         //Preload photo
-        frame = root.findViewById(R.id.loPreloadPhoto);
+        frame = mRootView.findViewById(R.id.loPreloadPhoto);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_loading_photo);
         preloadPhotoName = (TextView) frame.findViewWithTag("tvText");
         preloadPhotoName.setVisibility(View.VISIBLE);
         preloadPhotoName.setText(App.getUserConfig().getPreloadPhotoType().getName());
     }
 
-    private void initAccountViews(View root) {
-        ViewGroup frame = (ViewGroup) root.findViewById(R.id.loAccount);
+    private void initPurchases(PaymentInfo info) {
+        View frame = mRootView.findViewById(R.id.loPurchases);
+        if (SomeExtensionsKt.isCradAvailable(info)) {
+            frame.setVisibility(View.VISIBLE);
+            ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.ninja_settings_toolbar);
+            TextView text = (TextView) frame.findViewWithTag("tvText");
+            text.setText(String.format(App.getCurrentLocale(), getString(R.string.payment_ninja_card_number), info.getLastDigits()));
+            text.setVisibility(View.VISIBLE);
+        } else {
+            frame.setVisibility(View.GONE);
+        }
+    }
+
+    private void initAccountViews() {
+        ViewGroup frame = (ViewGroup) mRootView.findViewById(R.id.loAccount);
         ((TextView) frame.findViewWithTag("tvTitle")).setText(R.string.settings_account);
         mSocialNameText = (TextView) frame.findViewWithTag("tvText");
         getSocialAccountName(mSocialNameText);
@@ -254,7 +303,13 @@ public class SettingsFragment extends ProfileInnerFragment {
             }
         });
         preloadPhotoSelectorDialog.show(getActivity().getSupportFragmentManager(), PreloadPhotoSelectorDialog.class.getName());
+    }
 
+    @SuppressWarnings("unused")
+    @OnClick(R.id.loPurchases)
+    protected void showPurchasesScreen() {
+        Intent intent = new Intent(App.getContext(), SettingsContainerActivity.class);
+        startActivityForResult(intent, SettingsContainerActivity.INTENT_PURCHASES);
     }
 
     @Override

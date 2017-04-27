@@ -19,7 +19,7 @@ import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.ChatFragment
-import com.topface.topface.ui.fragments.feed.dialogs.DialogsFragment
+import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment.Companion.PAGE_NAME
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.*
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_api.FeedRequestFactory
@@ -41,7 +41,7 @@ import org.jetbrains.anko.layoutInflater
  * Новый дейтинг фрагмент с симпатиями и восхищениями
  * Created by tiberal on 30.11.16.
  */
-@FlurryOpenEvent(name = DialogsFragment.PAGE_NAME)
+@FlurryOpenEvent(name = PAGE_NAME)
 class DialogsFragment : BaseFragment(), IPageWithAds {
 
     companion object {

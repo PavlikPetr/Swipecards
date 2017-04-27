@@ -975,7 +975,7 @@
     <string name="receive_mutual_notification">Получать уведомление\nо новой взаимной симпатии
     </string>
     <string name="receive_sympathy_notification">Получать уведомление\nо новой симпатии</string>
-    <string name="receive_rate_notification" />
+    <string name="receive_rate_notification"/>
     <string name="receive_guest_notification">Получать уведомление\nо новом госте</string>
     <string name="on_phone">На телефон</string>
     <string name="on_mail">На e-mail</string>
@@ -1131,6 +1131,11 @@
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
 
+    <string name="you_can_write_wom">Теперь вы можете написать ей!</string>
+    <string name="you_can_write_man">Теперь вы можете написать ему!</string>
+    <string name="see_next">Смотреть дальше</string>
+    <string name="go_to_messages">Перейти в сообщения</string>
+
     <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
     <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
     <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
@@ -1265,6 +1270,22 @@
     <string name="start_dialog">Начать диалог</string>
     <string name="continue_to_meet">Продолжить знакомиться</string>
     <string name="basic_information">Основная информация</string>
+    <string name="purchase_successfull">Покупка успешно завершена!</string>
+    <string name="now_you_have_VIP">Теперь у вас VIP-статус</string>
+
+    <plurals name="you_have_some_coins">
+        <item quantity="one">Теперь у вас %d монета</item>
+        <item quantity="few">Теперь у вас %d монеты</item>
+        <item quantity="many">Теперь у вас %d монет</item>
+        <item quantity="other">Теперь у вас %d монет</item>
+    </plurals>
+
+    <plurals name="you_have_some_sympathies">
+        <item quantity="one">Теперь у вас %d симпатия</item>
+        <item quantity="few">Теперь у вас %d симпатии</item>
+        <item quantity="many">Теперь у вас %d симпатий</item>
+        <item quantity="other">Теперь у вас %d симпатий</item>
+    </plurals>
     <string name="photo_feed_add_photo">Встаньте в ленту!\nВас увидят тысячи людей.</string>
     <string name="buy_likes_get_more_likes">Получите больше симпатий!</string>
     <string name="buy_likes_become_first_in_searchlist_female">Встаньте первой в поиске у мужчин, ищущих таких, как вы!</string>
@@ -1273,6 +1294,11 @@
     <string name="buy_likes_become_popular_male">Стать популярным</string>
     <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
     <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+
+    <string name="offers_free_title">Бесплатно</string>
+    <string name="offers_free_vip">Бесплатный VIP</string>
+    <string name="offers_free_coins">Бесплатные монеты</string>
+    <string name="offers_free_likes">Бесплатные симпатии</string>
 
     <string name="fb_invitation_find_what_you_are_looking_for">Найдёте то, что ищете</string>
     <string name="fb_invitation_amoung_more_than_100_mln_people">Среди более 100 миллионов людей</string>
@@ -1291,10 +1317,63 @@
     <string name="rate_our_app">Оцените наше приложение!</string>
     <string name="what_we_can_improve">Напишите, пожалуйста, что нам улучшить</string>
     <string name="we_are_glad_that_you_like">Мы рады, что вам нравится!</string>
-    <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?!</string>
+    <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?</string>
     <string name="send_rate_feedback">Оставить отзыв</string>
 
     <string name="permission_alert_button_allow">Перейти</string>
     <string name="permission_alert_button_disallow">Отклонить</string>
     <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>
+    <!-- Payment Ninja -->
+    <string name="ninja_hint_card_number">Номер карты</string>
+    <string name="ninja_hint_card_expires">Действует до</string>
+    <string name="ninja_hint_cvv">CVV/CVC</string>
+    <string name="ninja_button_buy">Купить</string>
+    <string name="ninja_checkbox_auto_pay">Автопополнение счета</string>
+    <string name="ninja_text_1">Безопасный платеж</string>
+    <string name="ninja_text_2">128-bit SSL Secured</string>
+    <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
+    <string name="ninja_text_link">правилами оказания услуги</string>
+    <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
+    <string name="ninja_text_trial_1">У вас спишется и сразу вернётся €1 для того, чтобы подтвердить действительность карты.</string>
+    <string name="ninja_text_trial_2">Через %1$s будет проведена транзакция на %2$d %3$s, каждый месяц подписка будет автоматически обновляться. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках</string>
+    <string name="ninja_settings_toolbar">Платежи</string>
+    <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
+    <string name="ninja_cancel_vip_status">Отменить подписку</string>
+    <string name="ninja_use_another_card">Использовать другую карту</string>
+    <string name="ninja_delete_card">Удалить карту</string>
+    <string name="ninja_error_dialog_title">Произошла ошибка</string>
+    <string name="ninja_error_dialog_message_dual">Попробуйте ещё раз или выберите другой способ оплаты.</string>
+    <string name="ninja_error_dialog_message_single">Попробуйте ещё раз.</string>
+    <string name="ninja_error_dialog_button_retry">Попробовать другую карту</string>
+    <string name="ninja_error_dialog_button_change">Другой способ оплаты</string>
+    <plurals name="ninja_trial_days">
+        <item quantity="one">%d день</item>
+        <item quantity="few">%d дня</item>
+        <item quantity="many">%d дней</item>
+        <item quantity="other">%d дней</item>
+    </plurals>
+
+    <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
+    <string name="ninja_cvv_error">Неверный код</string>
+    <string name="ninja_trhu_error">Неверная дата</string>
+    <string name="ninja_card_number_error">Неверный номер карты</string>
+    <string name="ninja_email_error">Неверный формат Email</string>
+    <string name="use_card">Использовать карту **%s</string>
+    <string name="ninja_no_card_title">Добавить карту</string>
+    <string name="ninja_subscription_expiration">Активна до %s</string>
+    <string name="ninja_subscription_cancelled">Отменена. Истекает %s</string>
+    <string name="ninja_autofilling_cancelled">Отменено</string>
+    <string name="ninja_autofilling_activated">Активно</string>
+    <string name="ninja_support">Поддержка</string>
+    <string name="ninja_ask_to_delete_card_message">Вы уверены?</string>
+    <string name="ninja_product_by_price">%1$s за %2$s</string>
+    <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
+    <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
+
+    <!--mutual stub for chat-->
+    <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
+    <string name="write_him_first">Напиши ему первой!</string>
+    <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
+    <string name="write_to_him_only_vip">Вы можете написать ему, но только с VIP.</string>
+    <string name="get_vip">Получить VIP</string>
 </resources>

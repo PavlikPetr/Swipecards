@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -423,8 +425,8 @@ public class BindingsAdapters {
 
 
     @SuppressWarnings("unchecked")
-    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle"}, requireAll = false)
-    public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine) {
+    @BindingAdapter(value = {"glideTransformationPhoto", "typeTransformation", "placeholderRes", "radiusOnline", "outSideCircle", "circleColor"}, requireAll = false)
+    public static <T extends IPhoto> void setPhotoWithTransformation(final ImageView imageView, T photo, Long type, Integer placeholderRes, Float radiusOnline, Float outSideLine, int circleColor) {
         Context context = imageView.getContext().getApplicationContext();
         imageView.setImageResource(placeholderRes); /// Наговнякано, но работает
         if (photo == null) {
@@ -447,14 +449,14 @@ public class BindingsAdapters {
                     .load(suitableLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine, circleColor))
                     .into(target);
         } else if (defaultLink != null) {
             Glide.with(context)
                     .load(defaultLink)
                     .placeholder(placeholderRes)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine))
+                    .bitmapTransform(new GlideTransformationFactory(context).construct(type, radiusOnline, outSideLine, circleColor))
                     .into(target);
         } else {
             Glide.with(context).load(placeholderRes).into(target);
@@ -495,4 +497,19 @@ public class BindingsAdapters {
             view.getLayoutManager().onRestoreInstanceState(state);
         }
     }
+
+    @BindingAdapter("setNumberSelection")
+    public static void setNumberSelection(EditText view, String string) {
+        if (string != null) {
+            view.setSelection(string.length());
+        }
+    }
+
+    @BindingAdapter("setFocusOnEditText")
+    public static void setNumberSelection(EditText view, Boolean isNeedfocus) {
+        if (isNeedfocus) {
+            view.requestFocus();
+        }
+    }
+
 }

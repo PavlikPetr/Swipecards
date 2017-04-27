@@ -111,9 +111,27 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         }
                     }
                 }))
+        mProfileSubscription.add(
+                mState.getObservable(Profile::class.java)
+                        .distinctUntilChanged { t1, t2 ->
+                            t1.dating == t2.dating
+                        }
+                        .skip(1)
+                        .subscribe(shortSubscription {
+                            it.dating?.let {
+                                updateSearchListWithFilter(FilterData(it))
+                            }
+                        })
+        )
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
+    }
+
+    private fun updateSearchListWithFilter(filterData: FilterData) {
+        sendFilterRequest(filterData)
+        mNewFilter = true
+        FlurryManager.getInstance().sendFilterChangedEvent()
     }
 
     private fun createAndRegisterBroadcasts() {
@@ -152,7 +170,14 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                     if (usersList != null && usersList.size != 0) {
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
-                        mUserSearchList.addAndUpdateSignature(usersList)
+                        // а вот иначе не работает, прости меня, Бог хорошего и логичного кода, я все исправлю, едва будет время.
+                        if (isNeedRefresh) {
+                            mUserSearchList.replace(usersList)
+                            mUserSearchList.updateSignature()
+                            currentUser = null
+                        } else {
+                            mUserSearchList.addAndUpdateSignature(usersList)
+                        }
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
@@ -217,12 +242,13 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
-            if (data != null && data.extras != null) {
-                sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
-                mNewFilter = true
-                FlurryManager.getInstance().sendFilterChangedEvent()
+            data?.let {
+                it.extras?.apply {
+                    updateSearchListWithFilter(it.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
+                }
             }
         }
+
         /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
     По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
         if (mUserSearchList.isEnded && !mUpdateInProcess) {
@@ -249,7 +275,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 profile.dating = filter
                 mState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
-                update(false, false)
+                update(true, false)
                 mNewFilter = false
             }
 

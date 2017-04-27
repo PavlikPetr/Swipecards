@@ -10,13 +10,12 @@ import com.topface.topface.R
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.CustomTitleAndSubtitleToolbarAdditionalViewBinding
-import com.topface.topface.databinding.ToolbarBinding
+import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.fragments.feed.toolbar.IAppBarState
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.isHasNotification
-import com.topface.topface.utils.rx.RxUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
@@ -26,7 +25,7 @@ import rx.subscriptions.CompositeSubscription
  * вью модель тулбара для чата
  */
 
-class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarBinding, mNavigation: IToolbarNavigation? = null)
+class NavigationToolbarViewModel @JvmOverloads constructor(binding: ToolbarViewBinding, mNavigation: IToolbarNavigation? = null)
     : BaseToolbarViewModel(binding, mNavigation), IAppBarState {
 
     private val mState by lazy {

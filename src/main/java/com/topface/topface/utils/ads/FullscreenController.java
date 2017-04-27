@@ -40,7 +40,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.popups.PopupManager;
