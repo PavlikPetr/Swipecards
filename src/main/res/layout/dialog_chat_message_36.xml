@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.topface.topface.chat.dialogs.experiment57_2.Experiment572DialogViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogViewModel"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -37,14 +37,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/chat_57_2_decor" />
+                    android:background="@drawable/decor_chat_36" />
 
                 <View
                     android:layout_width="74dp"
                     android:layout_height="74dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="70dp"
-                    android:background="@drawable/decor_mutually" />
+                    android:background="@drawable/decor_two_chats_clouds_white" />
             </FrameLayout>
 
             <TextView
@@ -64,7 +64,7 @@
                 android:padding="24dp"
                 android:text="@{viewModel.vipMessage}"
                 tools:text="Вы можете написать ей,\nно только с VIP."
-                android:textColor="#9e9e9e"
+                android:textColor="@color/google_grey_500"
                 android:textSize="16sp" />
 
             <!-- todo use normal string res -->
@@ -73,7 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewModel.onButtonClick()}"
-                android:text="получить VIP" />
+                tools:text="получить VIP"
+                android:text="@string/get_vip" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </layout>

@@ -1,4 +1,4 @@
-package com.topface.topface.chat.dialogs.experiment57_2
+package com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -7,21 +7,21 @@ import android.view.View
 import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
-import com.topface.topface.databinding.DialogChat572Binding
+import com.topface.topface.databinding.DialogChatMessage36Binding
 import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.analytics.TrackedDialogFragment
 import org.jetbrains.anko.layoutInflater
 
 /**
- * HOW TO USE from ChatFragment
- * (Experiment572DialogFragment.Companion.newInstance(mUser)).show(getActivity().getSupportFragmentManager(), Experiment572DialogFragment.TAG);
+ * HOW TO USE from ChatFragment (java)
+ * (ChatMessage36DialogFragment.Companion.newInstance(mUser)).show(getActivity().getSupportFragmentManager(), ChatMessage36DialogFragment.TAG);
  */
-class Experiment572DialogFragment: TrackedDialogFragment() {
+class ChatMessage36DialogFragment : TrackedDialogFragment() {
     companion object {
-        const val TAG = "Experiment572DialogFragment.Tag"
-        internal const val ARG_USER = "Experiment572DialogFragment.ArgUser"
+        const val TAG = "ChatMessage36DialogFragment.Tag"
+        internal const val ARG_USER = "ChatMessage36DialogFragment.ArgUser"
 
-        fun newInstance(user: FeedUser) = Experiment572DialogFragment().apply {
+        fun newInstance(user: FeedUser) = ChatMessage36DialogFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(ARG_USER, user)
             }
@@ -29,7 +29,7 @@ class Experiment572DialogFragment: TrackedDialogFragment() {
     }
 
     private val mBinding by lazy {
-        DataBindingUtil.inflate<DialogChat572Binding>(context.layoutInflater, R.layout.dialog_chat_57_2, null, false)
+        DataBindingUtil.inflate<DialogChatMessage36Binding>(context.layoutInflater, R.layout.dialog_chat_message_36, null, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +38,7 @@ class Experiment572DialogFragment: TrackedDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View = with(mBinding) {
-        viewModel = Experiment572DialogViewModel(arguments) {
+        viewModel = ChatMessage36DialogViewModel(arguments) {
             startActivity(PurchasesActivity.createVipBuyIntent(null, "PopularUserBlockDialog"))
             dialog.dismiss()
         }
