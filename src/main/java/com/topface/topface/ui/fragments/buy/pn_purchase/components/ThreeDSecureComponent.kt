@@ -19,8 +19,9 @@ class ThreeDSecureComponent : AdapterComponent<EditorSwitchBinding, ThreeDSecure
     private var mViewModel: Editor3DSecureSwitchViewModel? = null
 
     override fun bind(binding: EditorSwitchBinding, data: ThreeDSecurePurchaseSwitch?, position: Int) {
-        mViewModel = Editor3DSecureSwitchViewModel(data?.isChecked ?: false)
-        binding.viewModel = mViewModel?.viewModel
+        mViewModel = Editor3DSecureSwitchViewModel(data?.isChecked ?: false).apply {
+            binding.viewModel = viewModel
+        }
     }
 
     override fun release() {
