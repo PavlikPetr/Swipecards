@@ -4,15 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
-import com.topface.billing.ninja.fragments.ThreeDSecureFragment
 import com.topface.billing.ninja.fragments.add_card.AddCardFragment
+import com.topface.billing.ninja.fragments.three_d_secure.ThreeDSecureFragment
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutNinjaAddCardBinding
 import com.topface.topface.databinding.ToolbarViewBinding
+import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
@@ -35,9 +37,9 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
         const val SHOW_3DS = 1
         private const val FRAGMENT_TYPE = "NinjaAddCardActivity.Show.FragmentType"
 
-        fun createIntent(settings: ThreeDSecureParams) =
+        fun createIntent(error: PurchaseError) =
                 Intent(App.getContext(), NinjaAddCardActivity::class.java).apply {
-                    putExtra(ThreeDSecureFragment.EXTRA_SETTINGS, settings)
+                    putExtra(ThreeDSecureFragment.EXTRA_SETTINGS, error)
                     putExtra(FRAGMENT_TYPE, SHOW_3DS)
                 }
 
@@ -67,11 +69,15 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        m3DSecureSubscription = mEventBus.getObservable(ThreeDSecureParams::class.java)
+        m3DSecureSubscription = mEventBus.getObservable(PurchaseError::class.java)
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     it?.let {
-                        addFragment(get3DSecureFragment(it), ThreeDSecureFragment.TAG)
+                        if (it.settings.errorCode == ErrorCodes.PAYMENT_NINJA_3DSECURE_ERROR) {
+                            addFragment(get3DSecureFragment(it), ThreeDSecureFragment.TAG)
+                        } else {
+                            Utils.showErrorMessage()
+                        }
                     }
                 })
         when (intent.getIntExtra(FRAGMENT_TYPE, SHOW_ADD_CARD)) {
@@ -89,9 +95,9 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
             (supportFragmentManager.findFragmentByTag(ThreeDSecureFragment.TAG)
                     as? ThreeDSecureFragment) ?: ThreeDSecureFragment.newInstance(intent.extras)
 
-    private fun get3DSecureFragment(settings: ThreeDSecureParams) =
+    private fun get3DSecureFragment(error: PurchaseError) =
             (supportFragmentManager.findFragmentByTag(ThreeDSecureFragment.TAG)
-                    as? ThreeDSecureFragment) ?: ThreeDSecureFragment.newInstance(settings)
+                    as? ThreeDSecureFragment) ?: ThreeDSecureFragment.newInstance(error)
 
     private fun getAddCardFragment() =
             (supportFragmentManager.findFragmentByTag(AddCardFragment.TAG)

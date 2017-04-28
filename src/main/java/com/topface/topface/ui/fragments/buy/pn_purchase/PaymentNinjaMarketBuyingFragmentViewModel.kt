@@ -4,11 +4,15 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
+import com.topface.billing.ninja.PurchaseError
+import com.topface.billing.ninja.ThreeDSecureParams
+import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Options
 import com.topface.topface.data.Profile
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
+import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.Utils
@@ -120,13 +124,13 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                 })
         mSwitchSubscription.add(mEventBus
                 .getObservable(TestPurchaseSwitch::class.java)
-                .distinctUntilChanged { t1, t2 -> t1.isChecked == t2.isChecked }
+                .distinctUntilChanged { (isChecked1), (isChecked2) -> isChecked1 == isChecked2 }
                 .subscribe(shortSubscription {
                     it?.let { mIsTestPurchase = it.isChecked }
                 }))
         mSwitchSubscription.add(mEventBus
                 .getObservable(ThreeDSecurePurchaseSwitch::class.java)
-                .distinctUntilChanged { t1, t2 -> t1.isChecked == t2.isChecked }
+                .distinctUntilChanged { (isChecked1), (isChecked2) -> isChecked1 == isChecked2 }
                 .subscribe(shortSubscription {
                     it?.let { mIs3DSAvailable = it.isChecked }
                 }))
@@ -151,8 +155,17 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                     mIsTestPurchase, isAutoFillEnabled.get(), mIs3DSAvailable)
                     .getRequestSubscriber()
                     .applySchedulers()
-                    .subscribe(shortSubscription {
+                    .subscribe({
                         mNavigator.showPurchaseSuccessfullFragment(product.type)
+                    }, {
+                        it?.let {
+                            val error = JsonUtils.fromJson(it.message, ThreeDSecureParams::class.java)
+                            if (error.errorCode == ErrorCodes.PAYMENT_NINJA_3DSECURE_ERROR) {
+                                mNavigator.showPaymentNinja3DS(PurchaseError(error, product))
+                            } else {
+                                Utils.showErrorMessage()
+                            }
+                        }
                     })
         }
     }

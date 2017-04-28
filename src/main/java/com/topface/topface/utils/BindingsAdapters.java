@@ -1,12 +1,16 @@
 package com.topface.topface.utils;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
@@ -20,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -505,10 +510,27 @@ public class BindingsAdapters {
     }
 
     @BindingAdapter("setFocusOnEditText")
-    public static void setNumberSelection(EditText view, Boolean isNeedfocus ) {
-        if (isNeedfocus){
+    public static void setNumberSelection(EditText view, Boolean isNeedfocus) {
+        if (isNeedfocus) {
             view.requestFocus();
         }
     }
 
+    @BindingAdapter("setJavaScriptEnabled")
+    public static void setJavaScriptEnabled(WebView view, boolean isEnabled) {
+        view.getSettings().setJavaScriptEnabled(isEnabled);
+    }
+
+    @BindingAdapter({"postUrl", "postData"})
+    public static void setPostUrl(WebView view, String url, String postData) {
+        view.postUrl(url, postData.getBytes());
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    @BindingAdapter({"layerType", "paint"})
+    public static void setLayerType(WebView view, int layerType, Paint paint) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            view.setLayerType(layerType, paint);
+        }
+    }
 }

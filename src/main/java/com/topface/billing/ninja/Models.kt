@@ -2,6 +2,7 @@ package com.topface.billing.ninja
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.utils.Utils
 
 /**
@@ -75,5 +76,30 @@ data class ThreeDSecureParams(val errorCode: Int = 0, val MD: String = Utils.EMP
         dest?.writeString(acsUrl)
         dest?.writeString(paymentSuccessUrl)
         dest?.writeString(paymentFailUrl)
+    }
+}
+
+/**
+ * Error object of PN purchase
+ *
+ * @param settings - Settings for 3D secure purchase
+ * @param product - PN product
+ */
+data class PurchaseError(val settings: ThreeDSecureParams = ThreeDSecureParams(), val product: PaymentNinjaProduct = PaymentNinjaProduct()) : Parcelable {
+    companion object {
+        @JvmField val CREATOR: Parcelable.Creator<PurchaseError> = object : Parcelable.Creator<PurchaseError> {
+            override fun createFromParcel(source: Parcel): PurchaseError = PurchaseError(source)
+            override fun newArray(size: Int): Array<PurchaseError?> = arrayOfNulls(size)
+        }
+    }
+
+    constructor(source: Parcel) : this(source.readParcelable<ThreeDSecureParams>(ThreeDSecureParams::class.java.classLoader),
+            source.readParcelable<PaymentNinjaProduct>(PaymentNinjaProduct::class.java.classLoader))
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeParcelable(settings, 0)
+        dest?.writeParcelable(product, 0)
     }
 }

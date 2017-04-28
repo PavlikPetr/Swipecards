@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.PurchaseError
 import com.topface.billing.ninja.dialogs.ErrorDialogFactory
 import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
@@ -210,10 +211,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showPurchaseSuccessfullFragment(sku: String, finishBundle: Bundle) {
+    override fun showPurchaseSuccessfullFragment(type: String, finishBundle: Bundle) {
         mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
             it as PurchaseSuccessfullFragment
-        } ?: PurchaseSuccessfullFragment.getInstance(sku, finishBundle).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+        } ?: PurchaseSuccessfullFragment.getInstance(type, finishBundle).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
     override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String, isTestPurchase: Boolean, is3DSPurchase: Boolean) {
@@ -253,5 +254,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
 
     override fun openUrl(url: String) {
         Utils.goToUrl(mActivityDelegate, url)
+    }
+
+    override fun showPaymentNinja3DS(error: PurchaseError) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(error),
+                NinjaAddCardActivity.REQUEST_CODE)
     }
 }

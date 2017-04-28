@@ -10,7 +10,6 @@ import com.topface.billing.ninja.IFinishDelegate
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutNinjaAddCardFragmentBinding
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.buy.pn_purchase.Editor3DSecureSwitchViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
@@ -58,5 +57,4 @@ class AddCardFragment : BaseFragment(), IFinishDelegate {
         super.onDestroyView()
         mViewModel.release()
     }
-
 }
