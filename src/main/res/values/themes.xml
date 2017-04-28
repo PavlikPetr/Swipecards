@@ -213,6 +213,12 @@
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="RoundedPopup" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/rate_popup_corners_background</item>
+        <item name="android:windowMinWidthMajor">65%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+
     <!-- Theme for Payment Ninja add-card activity -->
     <style name="NinjaTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/light_theme_color_primary</item>
@@ -224,5 +230,4 @@
     <style name="NinjaTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/popup_borderless_button_text</item>
     </style>
-
 </resources>
