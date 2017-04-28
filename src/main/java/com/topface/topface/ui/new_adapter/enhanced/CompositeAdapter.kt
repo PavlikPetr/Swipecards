@@ -16,14 +16,15 @@ import rx.Subscriber
  * Адаптер - конструктор, реализуем компонент, подсовываем сюда и все работает
  * Created by tiberal on 28.11.16.
  */
-class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitObject: () -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
+class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyType:Int = ProvideItemTypeStategyFactory.DEFAULT,
+                       private var updaterEmitObject: () -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
 
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
     private var mRecyclerView: RecyclerView? = null
     private var doOnRelease: (() -> Unit)? = null
 
-    var provideItemTypeStrategy = DefaultProvideItemTypeStrategy(typeProvider)
+    var provideItemTypeStrategy = ProvideItemTypeStategyFactory(provideItemTypeStrategyType).construct(typeProvider)
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
