@@ -6,7 +6,6 @@ import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.FeedItem
-import com.topface.topface.data.History
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.utils.config.FeedsCache
 import rx.Observable
@@ -22,7 +21,7 @@ interface IApi {
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
-    fun deleteMessage(item: History): Observable<Completed>
+    fun deleteMessage(item: com.topface.topface.data.History): Observable<Completed>
 
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Completed>
 

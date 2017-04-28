@@ -40,7 +40,8 @@ class ChatModule(val chatActivity: ChatActivity) {
     @FragmentScope
     fun provideTypeProvider() = object : ITypeProvider {
         override fun getType(java: Class<*>) = when (java) {
-            ChatLoader::class.java -> 1
+            FeedUser::class.java -> 1
+            ChatLoader::class.java -> 2
             else -> 0
         }
     }
