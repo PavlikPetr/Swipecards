@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
+import com.topface.billing.ninja.PurchaseError
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
@@ -39,14 +40,17 @@ interface IFeedNavigator {
 
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
-    fun showPurchaseSuccessfullFragment(sku: String)
+    fun showPurchaseSuccessfullFragment(type: String, finishBundle: Bundle = Bundle())
     fun showMutualPopup(mutualUser: FeedUser)
-    fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String)
+    fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String, isTestPurchase: Boolean = false, is3DSPurchase: Boolean = false)
     fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
     fun showPaymentNinjaErrorDialog(singleButton: Boolean, onRetryAction: () -> Unit)
     fun showPaymentNinjaHelp()
     fun showFBInvitationPopup()
     fun showQuestionnaire(): Boolean
     fun showRateAppFragment()
+    fun showPaymentNinja3DS(error:PurchaseError)
+
+    fun openUrl(url: String)
     fun showChatPopupMenu(item: History, position: Int)
 }

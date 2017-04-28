@@ -1376,4 +1376,6 @@
     <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
     <string name="write_to_him_only_vip">Вы можете написать ему, но только с VIP.</string>
     <string name="get_vip">Получить VIP</string>
+    <string name="payment_ninja_autofill_title">Автопополнение счета</string>
+    <string name="payment_ninja_autofill_link">Правила оказания услуги</string>
 </resources>

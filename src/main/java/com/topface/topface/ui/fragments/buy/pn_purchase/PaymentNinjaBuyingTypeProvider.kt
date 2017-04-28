@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.buy.pn_purchase
 
-import com.topface.topface.data.BuyButtonData
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 
 /**
@@ -14,6 +13,8 @@ class PaymentNinjaBuyingTypeProvider : ITypeProvider {
         BuyScreenLikesSection::class.java -> 3
         BuyScreenCoinsSection::class.java -> 4
         BuyScreenProductUnavailable::class.java -> 5
+        TestPurchaseSwitch::class.java -> 6
+        ThreeDSecurePurchaseSwitch::class.java -> 7
         else -> 0
     }
 }

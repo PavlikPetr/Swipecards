@@ -31,30 +31,6 @@ class DataAndSimpleObservable<DataType> extends DataAndObservable<DataType, Obse
                 mSubscriber = subscriber;
             }
         })
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        Debug.error("DataAndSimpleObservable subscribe");
-                    }
-                })
-                .doOnError(new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Debug.error("DataAndSimpleObservable failed");
-                    }
-                })
-                .doOnUnsubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        Debug.error("DataAndSimpleObservable unsubscribed");
-                    }
-                })
-                .doOnNext(new Action1<DataType>() {
-                    @Override
-                    public void call(DataType dataType) {
-                        Debug.error("DataAndSimpleObservable onNext " + dataType.toString());
-                    }
-                })
                 .onBackpressureDrop().subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread()).share();
     }
