@@ -730,7 +730,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
             Intent intent = ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city.name
-                    , null, user.photo, false, item.type, user.banned);
+                    , null, user.photo, false, item.type, user.inBlacklist, user.bookmarked, user.banned);
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }

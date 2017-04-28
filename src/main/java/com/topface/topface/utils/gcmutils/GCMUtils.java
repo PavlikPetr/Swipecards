@@ -369,7 +369,7 @@ public class GCMUtils {
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
                     return ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
-                            null, null, true, null, false);
+                            null, null, true, null, false, false, false);
                 }
                 return i;
             }

@@ -10,7 +10,7 @@ object GlideTransformationType {
 
     @Retention(AnnotationRetention.SOURCE)
     @IntDef(CROP_CIRCLE_TYPE, ADMIRATION_TYPE, ADMIRATION_AND_ONLINE_TYPE, ONLINE_CIRCLE_TYPE, CIRCLE_AVATAR_WITH_STROKE_AROUND)
-    annotation class GlideTransformationType
+    annotation class GlideTransformation
 
     /**
      * @param CROP_CIRCLE_TYPE - параметр для выбора transition скругления аватарки

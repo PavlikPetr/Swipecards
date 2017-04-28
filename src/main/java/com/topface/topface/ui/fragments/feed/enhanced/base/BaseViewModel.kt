@@ -6,6 +6,8 @@ import com.topface.topface.utils.ILifeCycle
 
 open class BaseViewModel : IViewModelLifeCycle, ILifeCycle {
 
+    override var args: Bundle? = null
+
     override fun unbind() {
     }
 

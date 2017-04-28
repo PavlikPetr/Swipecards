@@ -78,7 +78,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showProfile(item: SearchUser?, from: String) =
+    override fun showProfile(item: FeedUser?, from: String) =
             item?.let {
                 if (!it.isEmpty) {
                     mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, it.photo,
@@ -93,7 +93,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
             it.user?.let {
-                showChat(it) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, banned) }
+                //todo тут тож махнуть надо
+                showChat(it) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, inBlacklist, bookmarked, banned) }
             }
         }
     }
@@ -103,7 +104,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
      */
     override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
         user?.let {
-            showChat(user) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
+            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
         }
     }
 
@@ -251,4 +252,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
+
+    override fun showComplainScreen(userId: Int, feedId: String?, isNeedResult: Boolean?) {
+        val intent = when {
+            feedId != null && isNeedResult == null -> ComplainsActivity.createIntent(userId, feedId)
+            feedId == null && isNeedResult != null -> ComplainsActivity.createIntent(userId, isNeedResult)
+            else -> ComplainsActivity.createIntent(userId)
+        }
+        mActivityDelegate.startActivityForResult(intent, ComplainsActivity.REQUEST_CODE)
+    }
+
+
 }

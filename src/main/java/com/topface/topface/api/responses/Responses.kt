@@ -2,7 +2,6 @@ package com.topface.topface.api.responses
 
 import com.topface.topface.data.FeedItem
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Топливо для скраффи
@@ -25,6 +24,12 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
                 val state: State, val city: City, val photo: Photo, val premium: Boolean,
                 val background: Int, val banned: Boolean, val deleted: Boolean, val inBlacklist: Boolean,
                 val photos: List<Photo>, val photosCount: Int, val status: String, val distance: Int)
+
+data class HistoryItem(val text: String, val latitude: Float, val longitude: Float, val type: Int,
+                       val id: Int, val created: Long, val target: Int, val unread: Boolean)
+
+data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
+                   val items: ArrayList<HistoryItem>)
 
 /**
  *   id String так как сервер может прислать "1487110175:110148795" и все упадет. Плохие они.

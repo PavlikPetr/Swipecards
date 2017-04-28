@@ -3,6 +3,8 @@ package com.topface.topface.api
 import android.os.Bundle
 import com.topface.topface.api.requests.AppDayRequest
 import com.topface.topface.api.requests.BlackListAddRequest
+import com.topface.topface.api.requests.DialogGetRequest
+import com.topface.topface.api.requests.SendMessageRequest
 import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.FeedItem
@@ -33,5 +35,9 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T> =
             mFeedRequestFactory.construct(args, clazz).subscribe()
+
+    override fun callDialogGet(userId: Int, from: String?, to: String?) = DialogGetRequest(userId, from, to).subscribe()
+
+    override fun callSendMessage(userId: Int, message: String, isInstant: Boolean) = SendMessageRequest(userId, message, isInstant).subscribe()
 
 }

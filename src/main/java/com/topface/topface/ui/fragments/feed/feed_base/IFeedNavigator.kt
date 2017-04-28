@@ -9,7 +9,6 @@ import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
-import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 
 /**
  * Интерфейс навигации в  фидах
@@ -20,7 +19,7 @@ interface IFeedNavigator {
     fun showPurchaseCoins(from: String, itemType: Int = -1, price: Int = -1)
     fun showPurchaseVip(from: String)
     fun <T : FeedItem> showProfile(item: T?, from: String)
-    fun showProfile(item: SearchUser?, from: String)
+    fun showProfile(item: FeedUser?, from: String)
     fun <T : FeedItem> showChat(item: T?)
     fun showChat(user: FeedUser?, answer: SendGiftAnswer?)
     fun showDating()
@@ -49,4 +48,5 @@ interface IFeedNavigator {
     fun showFBInvitationPopup()
     fun showQuestionnaire(): Boolean
     fun showRateAppFragment()
+    fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
 }

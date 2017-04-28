@@ -47,7 +47,7 @@ buildscript {
     ext {
         retrofit_version = '2.1.0'
         google_play_services_version = '9.4.0'
-        kotlin_version = '1.1.1'
+        kotlin_version = '1.1.2'
         anko_version = '0.9'
         permissionsdispatcher_version = '2.2.0'
         flurry_version = '6.5.0'
@@ -432,7 +432,7 @@ dependencies {
 
     compile "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+   // provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.8') {
