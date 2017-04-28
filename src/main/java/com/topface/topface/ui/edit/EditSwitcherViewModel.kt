@@ -42,6 +42,4 @@ class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBL
     fun onRootViewClick() {
         isChecked.set(!isChecked.get())
     }
-
-    fun release() {}
 }

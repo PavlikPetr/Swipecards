@@ -40,6 +40,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     val cardInfo = ObservableField(Utils.EMPTY)
     val autofillVisibility = ObservableInt(View.GONE)
     val isAutoFillEnabled = ObservableBoolean(true)
+    val progressVisibility = ObservableBoolean(false)
     val data = MultiObservableArrayList<Any>().apply {
         if (mIsVipPurchaseProducts) {
             with(CacheProfile.getPaymentNinjaProductsList().getVipProducts().filter { it.displayOnBuyScreen }) {
@@ -151,14 +152,17 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                 !isChecked.get()) {
             mNavigator.showPaymentNinjaAddCardScreen(product, mFrom, mIsTestPurchase, mIs3DSAvailable)
         } else {
+            progressVisibility.set(true)
             mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom,
                     mIsTestPurchase, isAutoFillEnabled.get(), mIs3DSAvailable)
                     .getRequestSubscriber()
                     .applySchedulers()
                     .subscribe({
                         mNavigator.showPurchaseSuccessfullFragment(product.type)
+                        progressVisibility.set(false)
                     }, {
                         it?.let {
+                            progressVisibility.set(false)
                             val error = JsonUtils.fromJson(it.message, ThreeDSecureParams::class.java)
                             if (error.errorCode == ErrorCodes.PAYMENT_NINJA_3DSECURE_ERROR) {
                                 mNavigator.showPaymentNinja3DS(PurchaseError(error, product))

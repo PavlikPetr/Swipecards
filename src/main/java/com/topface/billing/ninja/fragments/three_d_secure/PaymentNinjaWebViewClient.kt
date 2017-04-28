@@ -14,7 +14,9 @@ class PaymentNinjaWebViewClient(private val mCallback: IPaymentNinjaWebViewClien
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
-        url?.let { mCallback?.onPageStarted(it) }
+        if (url != null && mCallback != null) {
+            mCallback.onPageStarted(url)
+        }
     }
 
     override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
@@ -24,6 +26,8 @@ class PaymentNinjaWebViewClient(private val mCallback: IPaymentNinjaWebViewClien
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        url?.let { mCallback?.onPageFinished(it) }
+        if (url != null && mCallback != null) {
+            mCallback.onPageFinished(url)
+        }
     }
 }

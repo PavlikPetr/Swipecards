@@ -7,16 +7,12 @@ import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
-import android.os.Debug
 import android.text.TextUtils
 import android.view.View
-import com.topface.billing.ninja.AddCardModel
+import com.topface.billing.ninja.*
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
-import com.topface.billing.ninja.IFinishDelegate
-import com.topface.billing.ninja.NinjaAddCardActivity
-import com.topface.billing.ninja.ThreeDSecureParams
 import com.topface.billing.ninja.fragments.add_card.CardType.Companion.CVV_DEFAULT
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
@@ -24,7 +20,6 @@ import com.topface.topface.R
 import com.topface.topface.data.Products
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
-import com.topface.topface.ui.fragments.buy.pn_purchase.ThreeDSecurePurchaseSwitch
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getPurchaseScreenTitle
@@ -93,15 +88,15 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val secondDescriptionText = ObservableField<String>()
     val isFirstDescriptionVisible = ObservableBoolean(false)
     val isSecondDescriptionVisible = ObservableBoolean(false)
-    val progressVisibility = ObservableInt(View.GONE)
+    val progressVisibility = ObservableBoolean(false)
     val buttonTextVisibility = ObservableInt(View.VISIBLE)
     val buttonText = ObservableField<String>(R.string.general_add.getString())
     val isButtonEnabled = ObservableBoolean(false)
     val isInputEnabled = ObservableBoolean(true)
     val titleVisibility = ObservableInt(View.GONE)
 
-    private var mIsProgressVisible by Delegates.observable(false) { property, oldValue, newValue ->
-        progressVisibility.set(if (newValue) View.VISIBLE else View.GONE)
+    private var mIsProgressVisible by Delegates.observable(false) { _, _, newValue ->
+        progressVisibility.set(newValue)
         buttonTextVisibility.set(if (newValue) View.GONE else View.VISIBLE)
     }
 
@@ -351,15 +346,19 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                 .subscribe({
                     mNavigator.showPurchaseSuccessfullFragment(productType, Bundle()
                             .apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                    mIsProgressVisible = false
+                    isInputEnabled.set(true)
                 },
-                        { handlePurchaseError(JsonUtils.fromJson(it.message, ThreeDSecureParams::class.java)) },
-                        {
+                        { error ->
+                            mProduct?.let {
+                                handlePurchaseError(PurchaseError(JsonUtils.fromJson(error.message, ThreeDSecureParams::class.java), it))
+                            }
                             mIsProgressVisible = false
                             isInputEnabled.set(true)
                         })
     }
 
-    private fun handlePurchaseError(secureSettings: ThreeDSecureParams) {
+    private fun handlePurchaseError(secureSettings: PurchaseError) {
         App.getAppComponent().eventBus().setData(secureSettings)
     }
 }

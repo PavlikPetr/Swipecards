@@ -45,13 +45,13 @@ class ThreeDSecureViewModel(private val mSettings: PurchaseError, private var mF
         finishWithFail()
     }
 
-    private fun checkLink(paymentSuccessUrl: String, paymentFailUrl: String, currentLink: String) {
-        if (currentLink == paymentSuccessUrl) {
-            finishWithSuccess()
-        } else if (currentLink == paymentFailUrl) {
-            finishWithSuccess()
-        }
-    }
+    private fun checkLink(paymentSuccessUrl: String, paymentFailUrl: String, currentLink: String) =
+            when (currentLink) {
+                paymentSuccessUrl -> finishWithSuccess()
+                paymentFailUrl -> finishWithSuccess()
+                else -> {
+                }
+            }
 
     private fun finishWithFail() {
         mFinishCallback?.finishWithResult(Activity.RESULT_CANCELED)

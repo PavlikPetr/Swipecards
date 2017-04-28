@@ -30,6 +30,5 @@ class Editor3DSecureSwitchViewModel(private var mIsSelected: Boolean) {
 
     fun release() {
         mCheckedSubscription.safeUnsubscribe()
-        viewModel.release()
     }
 }

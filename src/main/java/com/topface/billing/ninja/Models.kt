@@ -68,15 +68,16 @@ data class ThreeDSecureParams(val errorCode: Int = 0, val MD: String = Utils.EMP
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeInt(errorCode)
-        dest?.writeString(MD)
-        dest?.writeString(PaReq)
-        dest?.writeString(termUrl)
-        dest?.writeString(acsUrl)
-        dest?.writeString(paymentSuccessUrl)
-        dest?.writeString(paymentFailUrl)
-    }
+    override fun writeToParcel(dest: Parcel?, flags: Int): Unit =
+            dest?.let {
+                it.writeInt(errorCode)
+                it.writeString(MD)
+                it.writeString(PaReq)
+                it.writeString(termUrl)
+                it.writeString(acsUrl)
+                it.writeString(paymentSuccessUrl)
+                it.writeString(paymentFailUrl)
+            } ?: Unit
 }
 
 /**
@@ -98,8 +99,9 @@ data class PurchaseError(val settings: ThreeDSecureParams = ThreeDSecureParams()
 
     override fun describeContents() = 0
 
-    override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeParcelable(settings, 0)
-        dest?.writeParcelable(product, 0)
-    }
+    override fun writeToParcel(dest: Parcel?, flags: Int): Unit =
+            dest?.let {
+                it.writeParcelable(settings, 0)
+                it.writeParcelable(product, 0)
+            } ?: Unit
 }
