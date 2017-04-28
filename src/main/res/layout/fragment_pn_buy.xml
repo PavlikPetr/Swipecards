@@ -34,7 +34,7 @@
                 tools:targetApi="ice_cream_sandwich"/>
 
             <CheckBox
-                style="@style/DatingFilterSwitch"
+                style="@style/PaymentNinjaCardSwitch"
                 android:checked="@={viewModel.isChecked}"
                 android:clickable="true"
                 android:enabled="true"
