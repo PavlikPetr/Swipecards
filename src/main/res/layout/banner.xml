@@ -5,4 +5,10 @@
               android:gravity="center"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="#1F1F1F"/>
+              android:background="#1F1F1F">
+    <ViewStub
+        android:id="@+id/ampiri_banner_stub"
+        android:layout="@layout/banner_ampiri"
+        android:layout_width="@dimen/ampiri_banner_width"
+        android:layout_height="@dimen/ampiri_banner_height" />
+</LinearLayout>
