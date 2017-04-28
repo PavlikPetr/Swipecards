@@ -48,7 +48,7 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
         mViewModel.release()
         activity?.let {
             (it as IActivityDelegate).apply {
-                setResult(Activity.RESULT_OK, Intent().apply { putExtras(arguments.getBundle(FINISH_BUNDLE)) })
+                setResult(Activity.RESULT_OK, Intent().putExtras(arguments.getBundle(FINISH_BUNDLE)))
                 finish()
             }
         }
