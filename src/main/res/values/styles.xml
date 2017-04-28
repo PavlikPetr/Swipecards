@@ -1287,9 +1287,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/filter_item_height</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
-        <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
-        <item name="android:background">@android:color/transparent</item>
+         <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">@dimen/filter_item_text_size</item>
         <item name="android:textColor">@color/dark_primary_text</item>
         <item name="android:textStyle">normal</item>
@@ -1609,8 +1607,8 @@
         <item name="android:text">@string/label1_text_admiration_purchase_popup</item>
         <item name="android:textColor">@color/label1_text_color</item>
         <item name="android:textSize">@dimen/main_label_text_size</item>
-        <item name="android:layout_alignEnd">@+id/coins_button</item>
-        <item name="android:layout_alignStart">@+id/coins_button</item>
+        <item name="android:layout_alignEnd" tools:ignore="NewApi">@+id/coins_button</item>
+        <item name="android:layout_alignStart" tools:ignore="NewApi">@+id/coins_button</item>
         <item name="android:layout_alignRight">@+id/coins_button</item>
         <item name="android:layout_alignLeft">@+id/coins_button</item>
         <item name="android:layout_width">200dp</item>
@@ -1941,6 +1939,36 @@
         <item name="android:minHeight">48dip</item>
         <item name="android:maxHeight">488dip</item>
         <item name="android:progressDrawable">@drawable/rate_ratingbar</item>
+    </style>
+
+    <style name="AddPaymentNinjaCardText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">@drawable/add_card_text_color_selector</item>
+        <item name="android:textSize">@dimen/popup_button_text</item>
+        <item name="android:textAllCaps" tools:ignore="NewApi">true</item>
+        <item name="textAllCaps">true</item>
+    </style>
+
+    <style name="AddPaymentNinjaCardViewBase">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:minWidth">146dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="AddPaymentNinjaCardView" parent="AddPaymentNinjaCardViewBase">
+        <item name="android:background">@drawable/green_button_selector</item>
+    </style>
+
+    <style name="PaymentNinjaAutoFillRoot">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingBottom">8dp</item>
     </style>
 
     <style name="ChatMenuPopup">

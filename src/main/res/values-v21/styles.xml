@@ -209,7 +209,7 @@
     </style>
 
     <!-- для единообразия именования, завел пустой стиль -->
-    <style name="DatingSmall.V2" />
+    <style name="DatingSmall.V2"/>
 
     <style name="DatingBig.Like">
         <item name="android:background">@drawable/dating_like_selector_v21</item>
@@ -244,6 +244,10 @@
     </style>
 
     <style name="PopupGreenButton.Background">
+        <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
+    <style name="AddPaymentNinjaCardView" parent="AddPaymentNinjaCardViewBase">
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
 

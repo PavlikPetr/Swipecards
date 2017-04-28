@@ -83,5 +83,6 @@
         <item>Эксперимент 5</item>
         <item>Эксперимент 6</item>
     </string-array>
+    <string name="editor_3ds_switch">Платеж с 3DS</string>
 
 </resources>

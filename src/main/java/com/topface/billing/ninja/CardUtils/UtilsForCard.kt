@@ -2,7 +2,7 @@ package com.topface.billing.ninja.CardUtils
 
 import android.text.Editable
 import android.text.SpannableStringBuilder
-import com.topface.billing.ninja.CardType
+import com.topface.billing.ninja.fragments.add_card.CardType
 import com.topface.framework.utils.Debug
 import java.util.*
 

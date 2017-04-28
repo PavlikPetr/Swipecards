@@ -25,7 +25,7 @@ class BuyButtonComponent(private val onClick: (data: PaymentNinjaProduct) -> Uni
                     .discount(false)
                     .tag(product.getTag())
                     .showType(product.showType)
-                    .title(product.getTitle())
+                    .title(product.title)
                     .onClick {
                         onClick(product)
                     }
