@@ -2,7 +2,7 @@ package com.topface.topface.ui.settings.payment_ninja
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.topface.billing.ninja.AddCardRequest
+import com.topface.billing.ninja.fragments.add_card.AddCardRequest
 import com.topface.topface.utils.Utils
 
 /**
@@ -104,27 +104,27 @@ data class CardList(var items: Array<CardInfo>) : Parcelable {
 /**
  * Данные о подписке, для отображения на экране "Платежи"
  *
- * @param id - id подписки
- * @param type - тип подписки. 0 - подписка VIP, 1 - подписка монеты, 2 - подписка на симпатии, 3- автопополнение
+ * @param type - тип подписки. {premium, coinsAutoRefill}
  * @param title - название продукта
  * @param expire - дата окончания действия
  * @param enabled - информация об активности подписки/автопоплнения (false - отменено)
  */
-data class SubscriptionInfo(var id: String, var type: Int, var title: String, var expire: Long, var enabled: Boolean) : Parcelable {
+data class SubscriptionInfo(var type: String, var title: String, var expire: Long, var enabled: Boolean) : Parcelable {
     companion object {
+        const val SUBSCRIPTION_TYPE_PREMIUM = "premium"
+        const val SUBSCRIPTION_TYPE_AUTO_REFILL = "coinsAutoRefill"
         @JvmField val CREATOR: Parcelable.Creator<SubscriptionInfo> = object : Parcelable.Creator<SubscriptionInfo> {
             override fun createFromParcel(source: Parcel): SubscriptionInfo = SubscriptionInfo(source)
             override fun newArray(size: Int): Array<SubscriptionInfo?> = arrayOfNulls(size)
         }
     }
 
-    constructor(source: Parcel) : this(source.readString(), source.readInt(), source.readString(), source.readLong(), 1 == source.readInt())
+    constructor(source: Parcel) : this(source.readString(), source.readString(), source.readLong(), 1 == source.readInt())
 
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
-        dest?.writeString(id)
-        dest?.writeInt(type)
+        dest?.writeString(type)
         dest?.writeString(title)
         dest?.writeLong(expire)
         dest?.writeInt((if (enabled) 1 else 0))

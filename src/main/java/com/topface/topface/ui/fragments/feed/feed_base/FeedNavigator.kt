@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.PurchaseError
 import com.topface.billing.ninja.dialogs.ErrorDialogFactory
 import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
@@ -36,6 +37,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
@@ -212,15 +214,15 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showPurchaseSuccessfullFragment(sku: String) {
+    override fun showPurchaseSuccessfullFragment(type: String, finishBundle: Bundle) {
         mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
             it as PurchaseSuccessfullFragment
-        } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+        } ?: PurchaseSuccessfullFragment.getInstance(type, finishBundle).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
-    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String, isTestPurchase: Boolean, is3DSPurchase: Boolean) {
         mActivityDelegate.startActivityForResult(NinjaAddCardActivity
-                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                .createIntent(fromInstantPurchase = false, product = product, source = source, isTestPurchase = isTestPurchase, is3DSPurchase = is3DSPurchase),
                 NinjaAddCardActivity.REQUEST_CODE)
     }
 
@@ -243,7 +245,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mActivityDelegate.supportFragmentManager
                 .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
                 ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
-                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+                .show(mActivityDelegate.supportFragmentManager, SettingsPaymentNinjaModalBottomSheet.TAG)
     }
 
     override fun showPaymentNinjaHelp() {
@@ -251,6 +253,19 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 mActivityDelegate.applicationContext,
                 FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
+    }
+
+    override fun showChatPopupMenu(item: History, position: Int) =
+            ChatPopupMenu.newInstance(item, position).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
+
+    override fun openUrl(url: String) {
+        Utils.goToUrl(mActivityDelegate, url)
+    }
+
+    override fun showPaymentNinja3DS(error: PurchaseError) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(error),
+                NinjaAddCardActivity.REQUEST_CODE)
     }
 
     override fun showComplainScreen(userId: Int, feedId: String?, isNeedResult: Boolean?) {

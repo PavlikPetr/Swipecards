@@ -13,6 +13,7 @@ import com.topface.topface.ui.fragments.buy.pn_purchase.components.*
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.Utils
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -45,7 +46,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
     }
 
     private val mViewModel by lazy {
-        PaymentNinjaMarketBuyingFragmentViewModel(mFeedNavigator, mIsPremiumProducts, mFrom ?: "")
+        PaymentNinjaMarketBuyingFragmentViewModel(mFeedNavigator, mIsPremiumProducts, mFrom ?: Utils.EMPTY)
     }
 
     private val mPnBuyingTypeProvider by lazy {
@@ -65,6 +66,8 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
                 .addAdapterComponent(BuyScreenCoinsSectionComponent())
                 .addAdapterComponent(BuyScreenLikesSectionComponent())
                 .addAdapterComponent(BuyScreenUnavailableComponent())
+                .addAdapterComponent(TestPurchaseComponent())
+                .addAdapterComponent(ThreeDSecureComponent())
     }
 
     private fun initList() = with(mBinding.buttonsRecyclerView) {
@@ -83,7 +86,9 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         initList()
-        return mBinding.apply { viewModel = mViewModel }.root
+        return mBinding.apply {
+            viewModel = mViewModel
+        }.root
     }
 
     override fun onDestroyView() {
