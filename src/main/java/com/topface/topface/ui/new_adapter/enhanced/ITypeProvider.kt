@@ -6,4 +6,5 @@ package com.topface.topface.ui.new_adapter.enhanced
  */
 interface ITypeProvider {
     fun getType(java: Class<*>): Int
+    fun getTypeByData(data: Any): Int = getType(data.javaClass)
 }
