@@ -177,7 +177,6 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     fun onLinkClick() = mNavigator.openUrl(mAutoFillUrl?.takeIf(String::isNotEmpty) ?: AUTOREFILL_RULES_URL)
 
     fun release() {
-        mSwitchSubscription.safeUnsubscribe()
-        arrayOf(mOptionsSubscription, mProfileSubscription, mPurchaseSubscription).safeUnsubscribe()
+        arrayOf(mOptionsSubscription, mProfileSubscription, mPurchaseSubscription, mSwitchSubscription).safeUnsubscribe()
     }
 }
