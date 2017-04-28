@@ -1,6 +1,7 @@
-package com.topface.billing.ninja
+package com.topface.billing.ninja.fragments.add_card
 
 import android.content.Context
+import com.topface.billing.ninja.SendCardTokenModel
 import com.topface.topface.requests.ApiRequest
 import org.json.JSONObject
 
