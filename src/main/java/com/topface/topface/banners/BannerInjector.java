@@ -115,7 +115,6 @@ class BannerInjector implements IBannerInjector {
         if (pagesInfo != null && pagesInfo.containsKey(pageName)) {
             PageInfo pageInfo = pagesInfo.get(pageName);
             if (pageInfo != null) {
-                if (pageInfo.getBanner().equals("APPODEAL")) return "AMPIRI";
                 return pageInfo.getBanner();
             }
         }
