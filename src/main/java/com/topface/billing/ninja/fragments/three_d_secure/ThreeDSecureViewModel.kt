@@ -49,8 +49,7 @@ class ThreeDSecureViewModel(private val mSettings: PurchaseError, private var mF
             when (currentLink) {
                 paymentSuccessUrl -> finishWithSuccess()
                 paymentFailUrl -> finishWithSuccess()
-                else -> {
-                }
+                else -> Unit
             }
 
     private fun finishWithFail() {

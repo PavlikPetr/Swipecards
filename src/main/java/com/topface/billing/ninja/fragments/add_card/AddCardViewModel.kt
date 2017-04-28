@@ -121,7 +121,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
             put(emailText, !isEmailDefined)
         }
         mProduct?.let {
-            productTitle.set(it.getPurchaseScreenTitle())
+            productTitle.set(it.title)
             titleVisibility.set(View.VISIBLE)
             buttonText.set(R.string.ninja_button_buy.getString())
 

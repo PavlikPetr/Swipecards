@@ -32,6 +32,5 @@ class EditorViewModel(private var mIsSelected: Boolean) {
 
     fun release() {
         mCheckedSubscription.safeUnsubscribe()
-        viewModel.release()
     }
 }

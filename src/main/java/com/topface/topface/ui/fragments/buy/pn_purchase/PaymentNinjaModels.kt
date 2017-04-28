@@ -54,6 +54,7 @@ data class ThreeDSecurePurchaseSwitch(var isChecked: Boolean)
  * @param typeOfSubscription - 0- не подписка 1- автопополнение (когда кончится) 2- подписка (раз в месяц)
  * @param currencyCode - строковый код валюты
  * @param subscriptionInfo - Инфо о подписке
+ * @param title - текст для кнопки покупки
  */
 data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int = 0, var titleTemplate: String = Utils.EMPTY,
                                var totalPriceTemplate: String = Utils.EMPTY, var isSubscription: Boolean = false, var period: Int = 0,
@@ -61,7 +62,7 @@ data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int =
                                var displayOnBuyScreen: Boolean = false, var durationTitle: String = Utils.EMPTY,
                                var divider: Float = 0f, var typeOfSubscription: Int = 0, val currencyCode: String = Utils.EMPTY,
                                var subscriptionInfo: PaymentNinjaSubscriptionInfo = PaymentNinjaSubscriptionInfo(),
-                               var isAutoRefilled: Boolean = false) : Parcelable {
+                               var isAutoRefilled: Boolean = false, val title: String = Utils.EMPTY) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readString(),
@@ -80,7 +81,8 @@ data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int =
             source.readInt(),
             source.readString(),
             source.readParcelable(PaymentNinjaSubscriptionInfo::class.java.classLoader),
-            source.readByte().toInt() == 1
+            source.readByte().toInt() == 1,
+            source.readString()
     )
 
     override fun writeToParcel(dest: Parcel?, flags: Int) =
@@ -102,6 +104,7 @@ data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int =
                 it.writeString(currencyCode)
                 it.writeParcelable(subscriptionInfo, flags)
                 it.writeByte((if (isAutoRefilled) 1 else 0).toByte())
+                it.writeString(title)
             } ?: Unit
 
     override fun describeContents() = 0
