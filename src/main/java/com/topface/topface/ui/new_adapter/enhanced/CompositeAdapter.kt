@@ -23,6 +23,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     private var mRecyclerView: RecyclerView? = null
     private var doOnRelease: (() -> Unit)? = null
 
+    var provideItemTypeStrategy = DefaultProvideItemTypeStrategy(typeProvider)
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
@@ -43,7 +44,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
         holder?.apply {
             mRecyclerView?.layoutManager?.getPosition(itemView)?.let {
                 if (ListUtils.isEntry(it, data)) {
-                    components[typeProvider.getTypeByData(data[it])]?.onViewRecycled(holder, data[it], it)
+                    components[provideItemTypeStrategy.provide(data[it])]?.onViewRecycled(holder, data[it], it)
                 }
             }
         }
@@ -83,7 +84,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     }
 
     override fun onBindViewHolder(holder: ViewHolder<ViewDataBinding>?, position: Int) {
-        components[typeProvider.getTypeByData(data[position])]?.onBindViewHolder(holder, data[position], position)
+        components[provideItemTypeStrategy.provide(data[position])]?.onBindViewHolder(holder, data[position], position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<ViewDataBinding>? {
@@ -97,7 +98,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
         }
     }
 
-    override fun getItemViewType(position: Int) = typeProvider.getTypeByData(data[position])
+    override fun getItemViewType(position: Int) = provideItemTypeStrategy.provide(data[position])
 
     override fun getItemCount() = data.count()
 
