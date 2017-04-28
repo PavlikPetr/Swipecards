@@ -10,14 +10,14 @@ class DefaultProvideItemTypeStrategy(override val typeProvider: ITypeProvider): 
 }
 
 class DummyStrategy(override val typeProvider: ITypeProvider): IProvideItemTypeStrategy {
-    override fun provide(item: Any): Int = 0
+    override fun provide(item: Any) = 0
 }
 
-class ProvideItemTypeStategyFactory(val type: Int) {
+class ProvideItemTypeStrategyFactory(val typeProvider: ITypeProvider) {
     companion object {
         const val DEFAULT = 1
     }
-    fun construct(typeProvider: ITypeProvider) = when(type) {
+    fun construct(type: Int) = when(type) {
         DEFAULT -> DefaultProvideItemTypeStrategy(typeProvider)
         else -> DummyStrategy(typeProvider)
     }
