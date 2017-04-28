@@ -183,7 +183,6 @@
     <string name="general_settings">Подешавања</string>
     <string name="general_vk_profile">ВК</string>
     <string name="general_ok_profile">OK</string>
-    <string name="general_wrong_field_value">Неисправна вредност</string>
     <string name="auth_btn_vk">ВКонтакте</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Покушај поново</string>
@@ -356,7 +355,8 @@
     <string name="rate_popup_set_rate">Оцени</string>
     <string name="rate_popup_later">Питајте поново касније</string>
     <string name="rate_popup_cancel">Не, хвала</string>
-    <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!</string>
+    <string name="rate_popup_error">Молимо, реците нам колико звездица заслужује наша апликација!
+    </string>
     <string name="feedback_popup_title">Дали сте нам ниску оцену. Кажите нам шта Вам се није свиђало
         у апликацији. Помозите нам да постанемо бољи. Хвала Вам!
     </string>
@@ -404,7 +404,6 @@
         покушајте поново касније.
     </string>
     <string name="general_block">Закључати</string>
-    <string name="general_block_v2">Блокирати</string>
     <string name="general_buying_disabled">У овом тренутку куповина није могућа</string>
     <string name="ban_flood_detected">Веома често шаљете упите серверу. Сачекајте неколико тренутака
         пре него што наставите.
@@ -1079,21 +1078,10 @@
     <string name="buy_likes_become_popular_male">Постати популаран</string>
     <string name="you_are_not_shown">Скоро да Вас и не приказују у \"Познанствима\"</string>
     <string name="you_are_not_shown_answer">Одговорите на нека пристигла свиђања и бићете чешће приказивани.</string>
-    <string name="fb_invitation_find_what_you_are_looking_for">Пронађите оно што тражжите</string>
-    <string name="fb_invitation_amoung_more_than_100_mln_people">Међу више од 100 милиона људи</string>
-    <string name="fb_invitation_intelligent_selection_filter">Филтер паметне претраге</string>
-    <string name="fb_invitation_personalized_approach">Персонализовани прилаз</string>
-    <string name="fb_invitation_button_text">Пријавити се преко Facebook-а</string>
-    <string name="onboarding_button_next">Даље</string>
-    <string name="num_from_num">%1$s из %2$s</string>
-    <string name="onboarding_get_access">Добити приступ</string>
-    <string name="searching_couple_for_you">Тражење пара по Вашим критеријумима</string>
-    <string name="rate">Оценити</string>
-    <string name="rate_our_app">Оцените нашу апликацију!</string>
-    <string name="what_we_can_improve">Напишите нам, молимо Вас, шта би требало да исправимо</string>
-    <string name="we_are_glad_that_you_like">Драго нам је што Вам се допада!</string>
-    <string name="could_you_give_us_feedback">Да ли бисте могли да нам оставите коментар на Google Play-у?</string>
-    <string name="send_rate_feedback">Оставити коментар</string>
+    <string name="offers_free_title">Бесплатно</string>
+    <string name="offers_free_vip">Бесплатан VIP</string>
+    <string name="offers_free_coins">Бесплатни новчићи</string>
+    <string name="offers_free_likes">Бесплатна свиђања</string>
     <string name="permission_alert_button_allow">Иди на</string>
     <string name="permission_alert_button_disallow">Одбити</string>
     <string name="permission_alert_button_message">Да бисте поставили фотографије, морате да апликацији дате приступ меморији Вашег телефона преко Подешавања</string>

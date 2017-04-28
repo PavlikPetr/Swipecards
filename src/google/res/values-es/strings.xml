@@ -173,7 +173,6 @@
     <string name="general_settings">Ajustes</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
-    <string name="general_wrong_field_value">Valor incorrecto</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
@@ -331,7 +330,8 @@
     <string name="rate_popup_set_rate">Dar una valoración</string>
     <string name="rate_popup_later">Preguntar más tarde</string>
     <string name="rate_popup_cancel">No, gracias</string>
-    <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra aplicación.</string>
+    <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra
+        aplicación.</string>
     <string name="feedback_popup_title">Has puesto una nota baja. Cuéntanos qué es lo que no te
         gusta en la aplicación. Ayúdanos a mejorar. ¡Gracias!</string>
     <string name="settings_melody">Melodía para notificaciones</string>
@@ -374,7 +374,6 @@
     <string name="general_reconnect_social">Imposible de conectar a la red social. Prueba de nuevo
         más tarde.</string>
     <string name="general_block">Bloquear</string>
-    <string name="general_block_v2">Bloquear</string>
     <string name="general_buying_disabled">En estos momentos, la compra es imposible</string>
     <string name="ban_flood_detected">Haces peticiones al servidor demasiado a menudo. Para seguir
         usando la aplicación
@@ -855,6 +854,10 @@
     <string name="mutual_write_them_first">Escríbeles</string>
     <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
     <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
+    <string name="you_can_write_wom">¡Ahora puedes escribirla!</string>
+    <string name="you_can_write_man">¡Ahora puedes escribirle!</string>
+    <string name="see_next">Ver siguiente</string>
+    <string name="go_to_messages">Ir a los Mensajes</string>
     <string name="buy_vip_dating_only">Solo citas, así de simple.</string>
     <string name="buy_vip_message">No esperes a que lleguen las simpatías, ¡empieza una conversación!</string>
     <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
@@ -965,10 +968,6 @@
     <string name="basic_information">Datos básicos</string>
     <string name="purchase_successfull">El pago se ha realizado con éxito</string>
     <string name="now_you_have_VIP">Ahora tienes el estatus VIP</string>
-    <plurals name="you_have_some_coins">
-    </plurals>
-    <plurals name="you_have_some_sympathies">
-    </plurals>
     <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
     <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
     <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>
@@ -977,21 +976,10 @@
     <string name="buy_likes_become_popular_male">Hazte popular</string>
     <string name="you_are_not_shown">Casi no apareces en \"Citas\"</string>
     <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
-    <string name="fb_invitation_find_what_you_are_looking_for">Descubre a quien estás buscando</string>
-    <string name="fb_invitation_amoung_more_than_100_mln_people">Entre más de 100 millones de personas</string>
-    <string name="fb_invitation_intelligent_selection_filter">Filtro de selección inteligente</string>
-    <string name="fb_invitation_personalized_approach">Enfoque personalizado</string>
-    <string name="fb_invitation_button_text">Inicia sesión con Facebook</string>
-    <string name="onboarding_button_next">Siguiente</string>
-    <string name="num_from_num">%1$s de %2$s</string>
-    <string name="onboarding_get_access">Consigue acceso</string>
-    <string name="searching_couple_for_you">Búsqueda de pareja basada en tus criterios</string>
-    <string name="rate">Valoración</string>
-    <string name="rate_our_app">¡Valora nuestra app!</string>
-    <string name="what_we_can_improve">Por favor, escribe qué podemos mejorar</string>
-    <string name="we_are_glad_that_you_like">¡Nos alegramos de que te guste!</string>
-    <string name="could_you_give_us_feedback">¿Podrías dejarnos una opinión en Google Play?</string>
-    <string name="send_rate_feedback">Déjanos tu opinión</string>
+    <string name="offers_free_title">Gratis</string>
+    <string name="offers_free_vip">VIP Gratis</string>
+    <string name="offers_free_coins">Monedas Gratis</string>
+    <string name="offers_free_likes">Simpatías Gratis</string>
     <string name="permission_alert_button_allow">Ir a</string>
     <string name="permission_alert_button_disallow">Rechazar</string>
     <string name="permission_alert_button_message">Para subir fotos necesitas darle a la app acceso a la memoria de tu teléfono a través de Configuración</string>
@@ -1037,4 +1025,21 @@
     <string name="ninja_product_by_price">%1$s por %2$s</string>
     <string name="ninja_trial_vip_product">Estatus VIP de prueba</string>
     <string name="ninja_vip_product_by_price">%1$s VIP por %2$s</string>
+    <string name="profile_card_online">Conectado ahora</string>
+    <plurals name="profile_card_photo">
+        <item quantity="other">%d foto</item>
+        <item quantity="one">%d foto</item>
+    </plurals>
+    <string name="serial_likes_empty_title">No te quedan Simpatías</string>
+    <string name="serial_likes_empty_desc">Usa las Citas para conseguir Simpatías nuevas</string>
+    <string name="serial_likes_go_dating">Ir a Citas</string>
+    <string name="serial_likes_go_messages">Ir a Mensajes</string>
+    <string name="serial_likes_open_now">Abierto ahora</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="other">Hasta las siguientes %d Simpatías</item>
+        <item quantity="one">Hasta las siguientes %d Simpatías</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">h</string>
+    <string name="serial_likes_timer_mm">min</string>
+    <string name="serial_likes_timer_ss">s</string>
 </resources>

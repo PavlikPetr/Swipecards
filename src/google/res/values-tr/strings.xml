@@ -176,7 +176,6 @@
     <string name="general_settings">Ayarlar</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">Tamam</string>
-    <string name="general_wrong_field_value">Yanlış değer</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tekrar deneyin</string>
@@ -378,7 +377,6 @@
     <string name="general_reconnect_social">Sosyal ağa bağlanamıyor. Daha sonra tekrar 
        deneyin.</string>
     <string name="general_block">Engelle</string>
-    <string name="general_block_v2">Engelle</string>
     <string name="general_buying_disabled">Şu an satın alma mümkün değil.</string>
     <string name="ban_flood_detected">Sunucuya çok sık istek gönderiyorsunuz. Devam etmeden 
         önce lütfen bir süre bekleyin.</string>
@@ -853,6 +851,10 @@
     <string name="mutual_write_them_first">Onlara mesaj yaz</string>
     <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
     <string name="mutual_module_title">ORTAK</string>
+    <string name="you_can_write_wom">Artık ona mesaj yazabilirsin!</string>
+    <string name="you_can_write_man">Artık ona mesaj yazabilirsin!</string>
+    <string name="see_next">Sonrakini gör</string>
+    <string name="go_to_messages">Mesajlara git</string>
     <string name="buy_vip_dating_only">Sadece buluşmalar, açık ve net.</string>
     <string name="buy_vip_message">Beğenileri bekleme, sohbete başla!</string>
     <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
@@ -979,21 +981,10 @@
     <string name="buy_likes_become_popular_male">Popüler olun</string>
     <string name="you_are_not_shown">“Tanışma”da neredeyse gösterilmiyorsun</string>
     <string name="you_are_not_shown_answer">Gelen Beğenilerin bazılarına cevap ver ve daha sık gösterilirsin.</string>
-    <string name="fb_invitation_find_what_you_are_looking_for">Aradığın kişinin kim olduğunu öğren</string>
-    <string name="fb_invitation_amoung_more_than_100_mln_people">100 Milyon kullanıcı arasında</string>
-    <string name="fb_invitation_intelligent_selection_filter">Akıllı seçim fonksiyonu aktif</string>
-    <string name="fb_invitation_personalized_approach">Özelleştirilmiş yaklaşım</string>
-    <string name="fb_invitation_button_text">Facebook ile Giriş Yap</string>
-    <string name="onboarding_button_next">İleri</string>
-    <string name="num_from_num">%2$s\'dan %1$s</string>
-    <string name="onboarding_get_access">Erişim sağla</string>
-    <string name="searching_couple_for_you">Kriterlerinize göre eş araması</string>
-    <string name="rate">Değerlendir</string>
-    <string name="rate_our_app">Uygulamamızı değerlendir!</string>
-    <string name="what_we_can_improve">Lütfen neleri geliştirmemiz gerektiğini yazın</string>
-    <string name="we_are_glad_that_you_like">Beğendiğinize sevindik!</string>
-    <string name="could_you_give_us_feedback">Bizimle Google Play\'de yorumlarınızı paylaşmak ister misiniz?</string>
-    <string name="send_rate_feedback">Yorum yaz</string>
+    <string name="offers_free_title">Bedava</string>
+    <string name="offers_free_vip">Bedava VIP</string>
+    <string name="offers_free_coins">Bedava Kredi</string>
+    <string name="offers_free_likes">Bedava Kredi</string>
     <string name="permission_alert_button_allow">Şuraya git</string>
     <string name="permission_alert_button_disallow">Reddet</string>
     <string name="permission_alert_button_message">Fotoğraf yükleyebilmek için, Ayarlar sayfasında uygulamaya telefon hafızasına erişebilmesi için erişim vermelisiniz.</string>
@@ -1040,4 +1031,21 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
     <string name="ninja_product_by_price">%2$s için %1$s</string>
     <string name="ninja_trial_vip_product">VIP Üyelik Deneme Süresi</string>
     <string name="ninja_vip_product_by_price">%1$s VIP için %2$s</string>
+    <string name="profile_card_online">Şu an Online</string>
+    <plurals name="profile_card_photo">
+        <item quantity="other">%d fotoğraf</item>
+        <item quantity="one">%d fotoğraf</item>
+    </plurals>
+    <string name="serial_likes_empty_title">Beğeniler tükendi</string>
+    <string name="serial_likes_empty_desc">Yeni beğeniler almak için Arkadaşlık sayfasını kullan</string>
+    <string name="serial_likes_go_dating">Arkadaşlık sayfasına git</string>
+    <string name="serial_likes_go_messages">Mesajlar ayfasına git</string>
+    <string name="serial_likes_open_now">Şu an açık</string>
+    <plurals name="serial_likes_limit">
+        <item quantity="other">Sonraki %d beğeniye kadar</item>
+        <item quantity="one">Sonraki %d beğeniye kadar</item>
+    </plurals>
+    <string name="serial_likes_timer_hh">saat</string>
+    <string name="serial_likes_timer_mm">dak.</string>
+    <string name="serial_likes_timer_ss">san.</string>
 </resources>
