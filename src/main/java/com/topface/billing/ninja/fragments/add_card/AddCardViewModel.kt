@@ -1,4 +1,4 @@
-package com.topface.billing.ninja
+package com.topface.billing.ninja.fragments.add_card
 
 import android.app.Activity
 import android.content.Intent
@@ -9,32 +9,38 @@ import android.databinding.ObservableInt
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import com.topface.billing.ninja.CardType.Companion.CVV_DEFAULT
+import com.topface.billing.ninja.*
 import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
+import com.topface.billing.ninja.fragments.add_card.CardType.Companion.CVV_DEFAULT
+import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
-import com.topface.topface.requests.IApiResponse
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getPurchaseScreenTitle
 import com.topface.topface.utils.extensions.getRequestSubscriber
 import com.topface.topface.utils.extensions.getString
-import com.topface.topface.utils.rx.*
+import com.topface.topface.utils.rx.RxFieldObservable
+import com.topface.topface.utils.rx.applySchedulers
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 /**
  * ВьюМодель добавления карт
  */
 
-class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNavigator, private val mFinishCallback: IFinishDelegate) {
+class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNavigator,
+                       private val mFinishCallback: IFinishDelegate) {
 
     val numberText = RxFieldObservable<String>()
     val numberMaxLength = ObservableInt(19)
@@ -73,27 +79,35 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
 
     val emailText = ObservableField<String>()
     val emailError = ObservableField<String>()
-
     val cardFieldsSubscription = CompositeSubscription()
     val productTitle = ObservableField<String>()
-
     val isAutoPayDescriptionVisible = ObservableBoolean(false)
+    val isAutoPayEnabled = ObservableBoolean(true)
     val isEmailFormNeeded = ObservableBoolean(false)
     val firstDescriptionText = ObservableField<String>()
     val secondDescriptionText = ObservableField<String>()
     val isFirstDescriptionVisible = ObservableBoolean(false)
     val isSecondDescriptionVisible = ObservableBoolean(false)
-
+    val progressVisibility = ObservableBoolean(false)
+    val buttonTextVisibility = ObservableInt(View.VISIBLE)
+    val buttonText = ObservableField<String>(R.string.general_add.getString())
     val isButtonEnabled = ObservableBoolean(false)
     val isInputEnabled = ObservableBoolean(true)
     val titleVisibility = ObservableInt(View.GONE)
 
+    private var mIsProgressVisible by Delegates.observable(false) { _, _, newValue ->
+        progressVisibility.set(newValue)
+        buttonTextVisibility.set(if (newValue) View.GONE else View.VISIBLE)
+    }
+
     val numberWatcher = NumberWatcher()
     val trhuWatcher = TrhuWatcher()
 
-    val product: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
-
+    private val mProduct: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
+    private val mIsTestPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_TEST_PURCHASE, false)
+    private val mIs3DSPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_3DS_PURCHASE, false)
     private val mSource: String? = data.getString(NinjaAddCardActivity.EXTRA_SOURCE)
+    private var m3DSSwitchSubscription: Subscription? = null
 
     private val readyCheck: MutableMap<Any, Boolean> = mutableMapOf()
 
@@ -106,11 +120,12 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             put(trhuText, false)
             put(emailText, !isEmailDefined)
         }
-        product?.let {
-            productTitle.set(it.getPurchaseScreenTitle())
+        mProduct?.let {
+            productTitle.set(it.title)
             titleVisibility.set(View.VISIBLE)
+            buttonText.set(R.string.ninja_button_buy.getString())
 
-            if (it.type == Products.ProductType.COINS.getName() && it.typeOfSubscription == 1) {
+            if (it.type == Products.ProductType.COINS.getName() && it.isAutoRefilled) {
                 isAutoPayDescriptionVisible.set(true)
                 firstDescriptionText.set(it.subscriptionInfo.text)
                 isFirstDescriptionVisible.set(true)
@@ -190,6 +205,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
         cvvText.removeOnPropertyChangedCallback(cvvChangedCallback)
         emailText.removeOnPropertyChangedCallback(emailChangedCallback)
         mPurchaseRequestSubscription.safeUnsubscribe()
+        m3DSSwitchSubscription.safeUnsubscribe()
     }
 
     fun onClick() {
@@ -210,42 +226,28 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
                     emailText.get() ?: ""
             )
             isInputEnabled.set(false)
+            mIsProgressVisible = true
             AddCardRequest().getRequestObservable(App.get(), cardModel)
                     .applySchedulers()
-                    .subscribe(object : RxUtils.ShortSubscription<IApiResponse>() {
-                        override fun onCompleted() {
-                            super.onCompleted()
-                            isInputEnabled.set(true)
-                        }
-
-                        override fun onError(e: Throwable?) {
-                            super.onError(e)
-                            mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
-                                    product == null) {
-                                if (isEmailFormNeeded.get()) {
-                                    emailText.set("")
-                                }
-                                numberText.set("")
-                                cvvText.set("")
-                                trhuText.set("")
-                                numberFocus.set(true)
+                    .subscribe({
+                        mProduct?.let {
+                            sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
+                        } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                                Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                    }, {
+                        mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
+                                mProduct == null) {
+                            if (isEmailFormNeeded.get()) {
+                                emailText.set("")
                             }
-                            isInputEnabled.set(true)
-                            isButtonEnabled.set(false)
+                            numberText.set("")
+                            cvvText.set("")
+                            trhuText.set("")
+                            numberFocus.set(true)
                         }
-
-                        override fun onNext(t: IApiResponse?) {
-                            // todo send "buy payment ninja product" here and after success show dialog
-                            // если есть продукт, значит надо провести покупку. Ориентируясь на успешность этого
-                            // запроса на сервер покажем экран успешной покупки mFeedNavigator?.showPurchaseSuccessfullFragment(it.type)
-                            // если продукт null, значит закрываем активити, но при этом не забываем сообщить о том, что карта добавлена
-                            // успешно
-                            product?.let {
-                                mNavigator.showPurchaseSuccessfullFragment(it.type)
-                                //sendPurchaseRequest(it.id, mSource ?: NinjaAddCardActivity.UNKNOWN_PLACE, it.type)
-                            } ?: mFinishCallback.finishWithResult(Activity.RESULT_OK,
-                                    Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
-                        }
+                        isInputEnabled.set(true)
+                        isButtonEnabled.set(false)
+                        mIsProgressVisible = false
                     })
         }
     }
@@ -269,7 +271,9 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
     }
 
     private fun validateNumber(): Boolean {
-        if (!numberText.get().isNullOrEmpty() && UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) && numberText.get().length <= numberMaxLength.get()) {
+        if (!numberText.get().isNullOrEmpty() &&
+                UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) &&
+                numberText.get().length <= numberMaxLength.get()) {
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
                 numberError.set(R.string.ninja_number_error.getString())
@@ -283,7 +287,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(numberText, false)
         }
         updateButton()
-        return readyCheck.get(numberText) ?: false
+        return readyCheck[numberText] ?: false
     }
 
     private fun validateTrhu(): Boolean {
@@ -301,7 +305,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(trhuText, false)
         }
         updateButton()
-        return readyCheck.get(trhuText) ?: false
+        return readyCheck[trhuText] ?: false
     }
 
     private fun validateCvv(): Boolean {
@@ -318,7 +322,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(cvvText, false)
         }
         updateButton()
-        return readyCheck.get(cvvText) ?: false
+        return readyCheck[cvvText] ?: false
     }
 
     private fun validateEmail(): Boolean {
@@ -330,16 +334,31 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: FeedNav
             readyCheck.put(emailText, true)
         }
         updateButton()
-        return readyCheck.get(emailText) ?: false
+        return readyCheck[emailText] ?: false
     }
 
-    fun navigateToRules(): Unit? = product?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? = mProduct?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
 
     private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
-        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source).getRequestSubscriber()
+        mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source,
+                mIsTestPurchase, isAutoPayEnabled.get(), mIs3DSPurchase).getRequestSubscriber()
                 .applySchedulers()
-                .subscribe(shortSubscription {
-                    mNavigator.showPurchaseSuccessfullFragment(productType)
-                })
+                .subscribe({
+                    mNavigator.showPurchaseSuccessfullFragment(productType, Bundle()
+                            .apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                    mIsProgressVisible = false
+                    isInputEnabled.set(true)
+                },
+                        { error ->
+                            mProduct?.let {
+                                handlePurchaseError(PurchaseError(JsonUtils.fromJson(error.message, ThreeDSecureParams::class.java), it))
+                            }
+                            mIsProgressVisible = false
+                            isInputEnabled.set(true)
+                        })
+    }
+
+    private fun handlePurchaseError(secureSettings: PurchaseError) {
+        App.getAppComponent().eventBus().setData(secureSettings)
     }
 }

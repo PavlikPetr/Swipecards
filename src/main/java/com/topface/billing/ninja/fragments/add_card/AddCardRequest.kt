@@ -1,11 +1,20 @@
-package com.topface.billing.ninja
+package com.topface.billing.ninja.fragments.add_card
 
 import android.content.Context
 import android.os.Looper
+import com.topface.billing.ninja.AddCardModel
+import com.topface.billing.ninja.AddCardResponse
+import com.topface.billing.ninja.Request
+import com.topface.billing.ninja.SendCardTokenModel
+import com.topface.billing.ninja.fragments.add_card.SendCardTokenRequest
+import com.topface.framework.JsonUtils
 import com.topface.topface.App
+import com.topface.topface.requests.ApiResponse
+import com.topface.topface.requests.DataApiHandler
 import com.topface.topface.requests.IApiResponse
-import com.topface.topface.requests.handlers.ApiHandler
+import com.topface.topface.requests.response.SimpleResponse
 import com.topface.topface.ui.external_libs.offers.OffersUtils
+import com.topface.topface.utils.Utils
 import rx.Emitter
 import rx.Observable
 import java.util.*
@@ -25,7 +34,7 @@ class AddCardRequest {
         const val KEY_SECURITY_CODE = "security_code"
     }
 
-    fun getRequestObservable(context: Context, addCardModel: AddCardModel) =
+    fun getRequestObservable(context: Context, addCardModel: AddCardModel): Observable<SimpleResponse> =
             OffersUtils.getRequestInstance(ADD_CARD_LINK)
                     .create(Request::class.java)
                     .setParams(HashMap<String, String>().apply {
@@ -40,15 +49,22 @@ class AddCardRequest {
                     }
 
     private fun getSendCardTokenRequestObservable(context: Context, email: String, addCardResponse: AddCardResponse) =
-            Observable.fromEmitter<IApiResponse>({ emitter ->
+            Observable.fromEmitter<SimpleResponse>({ emitter ->
                 val sendRequest = SendCardTokenRequest(context, SendCardTokenModel(addCardResponse.id, email))
-                sendRequest.callback(object : ApiHandler(Looper.getMainLooper()) {
-                    override fun success(response: IApiResponse) = emitter.onNext(response)
-                    override fun fail(codeError: Int, response: IApiResponse) = emitter.onError(Throwable(codeError.toString()))
+                sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
+                    override fun success(data: SimpleResponse?, response: IApiResponse?) {
+                        emitter.onNext(data)
+                        // карта добавлена, надо бы и опции апнуть
+                        App.getUserOptionsRequest().exec()
+                    }
+
+                    override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response?.jsonResult?.toString() ?: Utils.EMPTY, SimpleResponse::class.java)
+                    override fun fail(codeError: Int, response: IApiResponse?) = emitter.onError(Throwable(codeError.toString()))
                     override fun always(response: IApiResponse) {
                         super.always(response)
                         emitter.onCompleted()
                     }
+
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
 }
