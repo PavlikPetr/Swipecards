@@ -1287,7 +1287,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/filter_item_height</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@android:color/transparent</item>
+         <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">@dimen/filter_item_text_size</item>
         <item name="android:textColor">@color/dark_primary_text</item>
         <item name="android:textStyle">normal</item>
@@ -1969,6 +1969,20 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="ChatMenuPopup">
+        <item name="android:textColor">@color/dark_primary_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:gravity">left</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">2</item>
     </style>
 
 </resources>

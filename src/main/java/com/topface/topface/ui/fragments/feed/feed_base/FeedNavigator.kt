@@ -37,6 +37,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -242,7 +243,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mActivityDelegate.supportFragmentManager
                 .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
                 ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
-                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+                .show(mActivityDelegate.supportFragmentManager, SettingsPaymentNinjaModalBottomSheet.TAG)
     }
 
     override fun showPaymentNinjaHelp() {
@@ -251,6 +252,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
+
+    override fun showChatPopupMenu(item: History, position: Int) =
+            ChatPopupMenu.newInstance(item, position).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
 
     override fun openUrl(url: String) {
         Utils.goToUrl(mActivityDelegate, url)
