@@ -41,8 +41,8 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun onViewRecycled(holder: ViewHolder<ViewDataBinding>?) {
         super.onViewRecycled(holder)
-        holder?.apply {
-            mRecyclerView?.layoutManager?.getPosition(itemView)?.let {
+        holder?.let {
+            mRecyclerView?.layoutManager?.getPosition(it.itemView)?.let {
                 if (ListUtils.isEntry(it, data)) {
                     components[provideItemTypeStrategy.provide(data[it])]?.onViewRecycled(holder, data[it], it)
                 }
