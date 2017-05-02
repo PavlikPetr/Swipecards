@@ -1,7 +1,16 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 
-/**
- * Created by barma on 28.04.2017.
- */
-class UserGiftComponent {
+import com.topface.topface.R
+import com.topface.topface.databinding.ItemChatD1UserGiftBinding
+import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
+
+class UserGiftComponent: AdapterComponent<ItemChatD1UserGiftBinding, UserGift>() {
+    override val itemLayout: Int
+        get() = R.layout.item_chat_d1_user_gift
+    override val bindingClass: Class<ItemChatD1UserGiftBinding>
+        get() = ItemChatD1UserGiftBinding::class.java
+
+    override fun bind(binding: ItemChatD1UserGiftBinding, data: UserGift?, position: Int) {
+        data?.let { binding.viewModel = GiftViewModel(it) }
+    }
 }

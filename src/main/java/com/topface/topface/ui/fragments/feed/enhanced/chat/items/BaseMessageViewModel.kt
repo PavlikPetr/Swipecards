@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 
-/**
- * Created by barma on 28.04.2017.
- */
-open class BaseMessageViewModel {
+import com.topface.topface.api.responses.HistoryItem
+
+open class BaseMessageViewModel(val item: HistoryItem) {
 }
