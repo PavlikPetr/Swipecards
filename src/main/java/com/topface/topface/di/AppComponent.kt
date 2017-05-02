@@ -8,6 +8,8 @@ import com.topface.topface.api.Api
 import com.topface.topface.data.leftMenu.NavigationState
 import com.topface.topface.mvp.PresenterCache
 import com.topface.topface.di.api.ApiModule
+import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.state.*
@@ -47,4 +49,5 @@ interface AppComponent {
     fun inject(manager: NavigationManager)
 
     fun add(module: NavigationActivityModule): NavigationActivityComponent
+    fun add(chatModule: ChatModule): ChatComponent
 }
