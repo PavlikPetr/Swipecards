@@ -8,7 +8,6 @@ import com.topface.topface.di.feed.visitors.VisitorsModule
 import com.topface.topface.di.scope.ActivityScope
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import dagger.Subcomponent
 

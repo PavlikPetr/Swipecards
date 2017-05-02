@@ -98,15 +98,17 @@ public class AddPhotoHelper {
     private View.OnClickListener mOnAddPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Activity activity = getActivity();
+            if (activity == null) return;
             switch (view.getId()) {
                 case R.id.btnAddPhotoAlbum:
                 case R.id.btnTakeFormGallery:
-                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(activity);
                     startChooseFromGallery();
                     break;
                 case R.id.btnAddPhotoCamera:
                 case R.id.btnTakePhoto:
-                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(getActivity());
+                    PermissionsExtensionsKt.askUnlockStoragePermissionIfNeed(activity);
                     startCamera();
                     break;
             }

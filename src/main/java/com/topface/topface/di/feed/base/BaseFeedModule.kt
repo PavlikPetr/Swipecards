@@ -16,8 +16,6 @@ import dagger.Provides
 @Module
 class BaseFeedModule(private val mFragment: BaseFeedFragment<*>) {
 
-    private lateinit var mAdapter: CompositeAdapter
-
     @Provides
     @FragmentScope
     fun provideActionModeController() =
@@ -30,14 +28,11 @@ class BaseFeedModule(private val mFragment: BaseFeedFragment<*>) {
 
     @Provides
     @FragmentScope
-    fun provideCompositeAdapter(typeProvider: ITypeProvider): CompositeAdapter {
-        mAdapter = CompositeAdapter(typeProvider) {
-            Bundle().apply {
-                if (mAdapter.data.isNotEmpty()) {
-                    putString(FeedRequestFactory.TO, (mAdapter.data.last() as FeedItem).id)
-                }
+    fun provideCompositeAdapter(typeProvider: ITypeProvider) = CompositeAdapter(typeProvider) {
+        Bundle().apply {
+            if (it.data.isNotEmpty()) {
+                putString(FeedRequestFactory.TO, (it.data.last() as FeedItem).id)
             }
         }
-        return mAdapter
     }
 }

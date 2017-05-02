@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="com.topface.topface.glide.tranformation.GlideTransformationType"/>
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.ChatToolbarAvatarModel"/>
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/toolbar_avatar_root"
+                 style="@style/ActionBarItemClick"
+                 android:layout_width="wrap_content"
+                 android:layout_height="fill_parent"
+                 android:minWidth="48dp"
+                 android:onClick="@{()-> viewModel.goToProfile()}"
+                 android:paddingLeft="16dp"
+                 android:paddingRight="16dp">
+
+        <ImageView
+            android:id="@+id/toolbar_avatar"
+            style="@style/NavigationBarAvatar"
+            android:layout_gravity="center"
+            app:glideTransformationPhoto="@{viewModel.photo}"
+            app:placeholderRes="@{viewModel.placeholderRes}"
+            app:typeTransformation="@{GlideTransformationType.CROP_CIRCLE_TYPE}"/>
+
+    </FrameLayout>
+
+</layout>

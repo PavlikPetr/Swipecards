@@ -13,8 +13,8 @@ import com.topface.topface.utils.social.AuthToken;
 public abstract class CheckAuthActivity<T extends Fragment, V extends ViewDataBinding> extends SingleFragmentActivity<T, V> {
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         checkAuth();
     }
 

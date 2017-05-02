@@ -9,8 +9,6 @@ import android.view.View;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.data.Photo;
-import com.topface.topface.data.SendGiftAnswer;
 import com.topface.topface.data.experiments.FeedScreensIntent;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
@@ -50,8 +48,8 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mEventBus = App.getAppComponent().eventBus();
         mTakePhotoSubscription = mEventBus.getObservable(TakePhotoActionHolder.class)
                 .filter(new Func1<TakePhotoActionHolder, Boolean>() {
@@ -99,31 +97,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
     @Override
     protected ChatFragment createFragment() {
         return new ChatFragment();
-    }
-
-    //Если itemType соответствует популярному юзеру не показываем клаву в чате
-    public static Intent createIntent(int id, int sex, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, int itemType, boolean isBanned) {
-        return createIntent(id, sex, nameAndAge, city, feedItemId, photo, fromGcm, null, isBanned).putExtra(ChatFragment.USER_TYPE, itemType);
-    }
-
-    public static Intent createIntent(int id, int sex, String nameAndAge, String city, String feedItemId, Photo photo, boolean fromGcm, SendGiftAnswer answer, boolean isBanned) {
-        Intent intent = new Intent(App.getContext(), ChatActivity.class);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, id);
-        intent.putExtra(ChatFragment.INTENT_USER_NAME_AND_AGE, nameAndAge);
-        intent.putExtra(ChatFragment.INTENT_USER_CITY, city);
-        intent.putExtra(ChatFragment.GIFT_DATA, answer);
-        intent.putExtra(ChatFragment.SEX, sex);
-        intent.putExtra(ChatFragment.BANNED_USER, isBanned);
-        if (!TextUtils.isEmpty(feedItemId)) {
-            intent.putExtra(ChatFragment.INTENT_ITEM_ID, feedItemId);
-        }
-        if (fromGcm) {
-            intent.putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT);
-        }
-        if (photo != null) {
-            intent.putExtra(ChatFragment.INTENT_AVATAR, photo);
-        }
-        return intent;
     }
 
     @NotNull
