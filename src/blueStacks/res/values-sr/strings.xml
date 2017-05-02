@@ -996,6 +996,10 @@
   <string name="buy_likes_become_popular_male">Постати популаран</string>
   <string name="you_are_not_shown">Скоро да Вас и не приказују у \&quot;Познанствима\&quot;</string>
   <string name="you_are_not_shown_answer">Одговорите на нека пристигла свиђања и бићете чешће приказивани.</string>
+  <string name="offers_free_title">Бесплатно</string>
+  <string name="offers_free_vip">Бесплатан VIP</string>
+  <string name="offers_free_coins">Бесплатни новчићи</string>
+  <string name="offers_free_likes">Бесплатна свиђања</string>
   <string name="fb_invitation_find_what_you_are_looking_for">Пронађите оно што тражжите</string>
   <string name="fb_invitation_amoung_more_than_100_mln_people">Међу више од 100 милиона људи</string>
   <string name="fb_invitation_intelligent_selection_filter">Филтер паметне претраге</string>
@@ -1044,7 +1048,6 @@
   <string name="payment_ninja_card_number">Картица **%s се користи за плаћање</string>
   <string name="ninja_cvv_error">Неисправан код</string>
   <string name="ninja_trhu_error">Неисправан датум</string>
-  <string name="ninja_number_error">Неисправан формат броја картице</string>
   <string name="ninja_email_error">Неисправан формат е-поште</string>
   <string name="use_card">Искористити картицу **%s</string>
   <string name="ninja_no_card_title">Додати картицу</string>

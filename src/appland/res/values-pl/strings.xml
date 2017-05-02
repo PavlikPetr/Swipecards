@@ -966,7 +966,7 @@
     <string name="fb_invitation_intelligent_selection_filter">Inteligentne filtrowanie</string>
     <string name="fb_invitation_personalized_approach">Spersonalizowane podejście</string>
     <string name="fb_invitation_button_text">Zaloguj się przez Facebooka</string>
-    <string name="could_you_give_us_feedback">Czy chciałbyś wystawić nam opinię w sklepie Google Play?!</string>
+    <string name="could_you_give_us_feedback">Czy chciałbyś wystawić nam opinię w sklepie Google Play?</string>
     <string name="ninja_hint_card_number">Numer karty</string>
     <string name="ninja_hint_card_expires">Ważna do dnia</string>
     <string name="ninja_hint_cvv">CVV/CVC</string>
@@ -984,7 +984,6 @@
     <string name="ninja_error_dialog_button_retry">Spróbuj użyć innej karty</string>
     <string name="ninja_error_dialog_button_change">Inna metoda płatności</string>
     <string name="ninja_cvv_error">Nieprawidłowy kod</string>
-    <string name="ninja_number_error">Nieprawidłowy format numeru karty</string>
     <string name="ninja_email_error">Nieprawidłowy format adresu e-mail</string>
     <string name="ninja_no_card_title">Dodaj kartę</string>
     <string name="ninja_subscription_expiration">Dostępna do %s</string>
