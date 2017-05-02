@@ -853,6 +853,10 @@
   <string name="mutual_write_them_first">Escríbeles</string>
   <string name="mutual_no_mutuals">Ahora mismo no tienes simpatías mutuas</string>
   <string name="mutual_module_title">SIMPATÍAS MUTUAS</string>
+  <string name="you_can_write_wom">¡Ahora puedes escribirla!</string>
+  <string name="you_can_write_man">¡Ahora puedes escribirle!</string>
+  <string name="see_next">Ver siguiente</string>
+  <string name="go_to_messages">Ir a los Mensajes</string>
   <string name="buy_vip_dating_only">Solo citas, así de simple.</string>
   <string name="buy_vip_message">No esperes a que lleguen las simpatías, ¡empieza una conversación!</string>
   <string name="buy_vip_write_tops">Escribe a los perfiles más importantes sin restricciones</string>
@@ -973,6 +977,10 @@
   <string name="buy_likes_become_popular_male">Hazte popular</string>
   <string name="you_are_not_shown">Casi no apareces en \&quot;Citas\&quot;</string>
   <string name="you_are_not_shown_answer">Responde a algunas Simpatías recibidas y aparecerás más.</string>
+  <string name="offers_free_title">Gratis</string>
+  <string name="offers_free_vip">VIP Gratis</string>
+  <string name="offers_free_coins">Monedas Gratis</string>
+  <string name="offers_free_likes">Simpatías Gratis</string>
   <string name="fb_invitation_find_what_you_are_looking_for">Descubre a quien estás buscando</string>
   <string name="fb_invitation_amoung_more_than_100_mln_people">Entre más de 100 millones de personas</string>
   <string name="fb_invitation_intelligent_selection_filter">Filtro de selección inteligente</string>
@@ -1020,7 +1028,6 @@
   <string name="payment_ninja_card_number">Se está usando para los pagos la tarjeta **%s</string>
   <string name="ninja_cvv_error">CVV/CVC incorrecto</string>
   <string name="ninja_trhu_error">Fecha incorrecta</string>
-  <string name="ninja_number_error">Formato del número de la tarjeta incorrecto</string>
   <string name="ninja_email_error">Formato de email incorrecto</string>
   <string name="use_card">Utilizar tarjeta **%s</string>
   <string name="ninja_no_card_title">Añadir tarjeta</string>

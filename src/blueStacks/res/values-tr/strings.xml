@@ -835,6 +835,10 @@
   <string name="mutual_write_them_first">Onlara mesaj yaz</string>
   <string name="mutual_no_mutuals">Şu anda ortak beğeniniz yok</string>
   <string name="mutual_module_title">ORTAK</string>
+  <string name="you_can_write_wom">Artık ona mesaj yazabilirsin!</string>
+  <string name="you_can_write_man">Artık ona mesaj yazabilirsin!</string>
+  <string name="see_next">Sonrakini gör</string>
+  <string name="go_to_messages">Mesajlara git</string>
   <string name="buy_vip_dating_only">Sadece buluşmalar, açık ve net.</string>
   <string name="buy_vip_message">Beğenileri bekleme, sohbete başla!</string>
   <string name="buy_vip_write_tops">Sınırlama olmadan en iyi profillere mesaj yaz.</string>
@@ -961,6 +965,10 @@
   <string name="buy_likes_become_popular_male">Popüler olun</string>
   <string name="you_are_not_shown">“Tanışma”da neredeyse gösterilmiyorsun</string>
   <string name="you_are_not_shown_answer">Gelen Beğenilerin bazılarına cevap ver ve daha sık gösterilirsin.</string>
+  <string name="offers_free_title">Bedava</string>
+  <string name="offers_free_vip">Bedava VIP</string>
+  <string name="offers_free_coins">Bedava Kredi</string>
+  <string name="offers_free_likes">Bedava Kredi</string>
   <string name="fb_invitation_find_what_you_are_looking_for">Aradığın kişinin kim olduğunu öğren</string>
   <string name="fb_invitation_amoung_more_than_100_mln_people">100 Milyon kullanıcı arasında</string>
   <string name="fb_invitation_intelligent_selection_filter">Akıllı seçim fonksiyonu aktif</string>
@@ -1009,7 +1017,6 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="payment_ninja_card_number">**%s kartı ödeme için kullanılıyor</string>
   <string name="ninja_cvv_error">Yanlış CVV/CVC</string>
   <string name="ninja_trhu_error">Yanlış tarih</string>
-  <string name="ninja_number_error">Yanlış Kredi Kartı numarası formatı</string>
   <string name="ninja_email_error">Yanlış email formatı</string>
   <string name="use_card">**%s kartını kullan</string>
   <string name="ninja_no_card_title">Kredi kartı ekle</string>

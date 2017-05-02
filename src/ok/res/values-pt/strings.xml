@@ -1062,6 +1062,10 @@
     <string name="buy_likes_become_popular_male">Torna-te popular</string>
     <string name="you_are_not_shown">Quase não apareces em \"Namorar\"</string>
     <string name="you_are_not_shown_answer">Responde a alguns dos Gostos que recebes e irás aparecer mais frequentemente.</string>
+    <string name="offers_free_title">Grátis</string>
+    <string name="offers_free_vip">VIP grátis</string>
+    <string name="offers_free_coins">Moedas grátis</string>
+    <string name="offers_free_likes">Gostos grátis</string>
     <string name="fb_invitation_find_what_you_are_looking_for">Encontra quem estás à procura</string>
     <string name="fb_invitation_amoung_more_than_100_mln_people">Entre mais de 100 milhões de pessoas</string>
     <string name="fb_invitation_intelligent_selection_filter">Filtro de seleção inteligente</string>
@@ -1109,7 +1113,6 @@
     <string name="payment_ninja_card_number">O cartão **%s está a ser usado para pagamento</string>
     <string name="ninja_cvv_error">CVV/CVC incorreto</string>
     <string name="ninja_trhu_error">Data incorreta</string>
-    <string name="ninja_number_error">Formato do número do cartão incorreto</string>
     <string name="ninja_email_error">Formato de email incorreto</string>
     <string name="use_card">Usar o cartão **%s</string>
     <string name="ninja_no_card_title">Adicionar cartão</string>
