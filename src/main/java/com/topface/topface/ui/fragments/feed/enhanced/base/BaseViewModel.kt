@@ -4,19 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import com.topface.topface.utils.ILifeCycle
 
-open class BaseViewModel : ILifeCycle {
+open class BaseViewModel : IViewModelLifeCycle, ILifeCycle {
 
-    /**
-     * Отцепить view model от вьюхи. Тут нужно убивать любые ссылки на вьюху.
-     */
-    open fun unbind() {
+    override var args: Bundle? = null
+
+    override fun unbind() {
     }
 
-    /**
-     * Освободить ресурсы view model. View model больше не нужна, остановить все запросы
-     * и освободить все, что освобождается
-     */
-    open fun release() {
+    override fun release() {
     }
 
     /**

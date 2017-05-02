@@ -20,7 +20,7 @@ interface IFeedNavigator {
     fun showPurchaseCoins(from: String, itemType: Int = -1, price: Int = -1)
     fun showPurchaseVip(from: String)
     fun <T : FeedItem> showProfile(item: T?, from: String)
-    fun showProfile(item: SearchUser?, from: String)
+    fun showProfile(item: FeedUser?, from: String)
     fun <T : FeedItem> showChat(item: T?)
     fun showChat(user: FeedUser?, answer: SendGiftAnswer?)
     fun showDating()
@@ -53,4 +53,5 @@ interface IFeedNavigator {
 
     fun openUrl(url: String)
     fun showChatPopupMenu(item: History, position: Int)
+    fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
 }

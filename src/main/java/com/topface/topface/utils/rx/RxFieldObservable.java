@@ -11,6 +11,8 @@ import rx.Subscriber;
  * rx обертка для ObservableField
  * Created by tiberal on 28.06.16.
  */
+@Deprecated
+//use com.topface.topface.utils.rx.RxObservableField
 public class RxFieldObservable<T> extends ObservableField<T> {
 
     private Observable<T> mFiledObservable;

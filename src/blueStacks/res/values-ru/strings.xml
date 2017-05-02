@@ -903,6 +903,10 @@
   <string name="mutual_write_them_first">Напишите им</string>
   <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
   <string name="mutual_module_title">ВЗАИМНО</string>
+  <string name="you_can_write_wom">Теперь вы можете написать ей!</string>
+  <string name="you_can_write_man">Теперь вы можете написать ему!</string>
+  <string name="see_next">Смотреть дальше</string>
+  <string name="go_to_messages">Перейти в сообщения</string>
   <string name="buy_vip_dating_only">Только знакомства, ничего лишнего</string>
   <string name="buy_vip_message">Не ждите симпатии, начинайте общение</string>
   <string name="buy_vip_write_tops">Пишите популярным без ограничений</string>
@@ -1033,6 +1037,10 @@
   <string name="buy_likes_become_popular_male">Стать популярным</string>
   <string name="you_are_not_shown">Вас почти не показывают в «Знакомствах»</string>
   <string name="you_are_not_shown_answer">Ответьте на часть пришедших симпатий, и вас будут показывать чаще.</string>
+  <string name="offers_free_title">Бесплатно</string>
+  <string name="offers_free_vip">Бесплатный VIP</string>
+  <string name="offers_free_coins">Бесплатные монеты</string>
+  <string name="offers_free_likes">Бесплатные симпатии</string>
   <string name="fb_invitation_find_what_you_are_looking_for">Найдёте то, что ищете</string>
   <string name="fb_invitation_amoung_more_than_100_mln_people">Среди более 100 миллионов людей</string>
   <string name="fb_invitation_intelligent_selection_filter">Интеллектуальный механизм подбора</string>
@@ -1046,7 +1054,7 @@
   <string name="rate_our_app">Оцените наше приложение!</string>
   <string name="what_we_can_improve">Напишите, пожалуйста, что нам улучшить</string>
   <string name="we_are_glad_that_you_like">Мы рады, что вам нравится!</string>
-  <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?!</string>
+  <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?</string>
   <string name="send_rate_feedback">Оставить отзыв</string>
   <string name="permission_alert_button_allow">Перейти</string>
   <string name="permission_alert_button_disallow">Отклонить</string>
@@ -1082,8 +1090,8 @@
   <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
   <string name="ninja_cvv_error">Неверный код</string>
   <string name="ninja_trhu_error">Неверная дата</string>
-  <string name="ninja_number_error">Неверный формат номера карты</string>
-  <string name="ninja_email_error">Неверный формат email</string>
+  <string name="ninja_card_number_error">Неверный номер карты</string>
+  <string name="ninja_email_error">Неверный формат Email</string>
   <string name="use_card">Использовать карту **%s</string>
   <string name="ninja_no_card_title">Добавить карту</string>
   <string name="ninja_subscription_expiration">Активна до %s</string>
@@ -1095,4 +1103,11 @@
   <string name="ninja_product_by_price">%1$s за %2$s</string>
   <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
   <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
+  <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
+  <string name="write_him_first">Напиши ему первой!</string>
+  <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
+  <string name="write_to_him_only_vip">Вы можете написать ему, но только с VIP.</string>
+  <string name="get_vip">Получить VIP</string>
+  <string name="payment_ninja_autofill_title">Автопополнение счета</string>
+  <string name="payment_ninja_autofill_link">Правила оказания услуги</string>
 </resources>

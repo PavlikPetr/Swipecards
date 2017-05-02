@@ -1287,7 +1287,9 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/filter_item_height</item>
         <item name="android:gravity">center_vertical</item>
-         <item name="android:background">@android:color/transparent</item>
+        <item name="android:paddingLeft">@dimen/filter_both_side_item_padding</item>
+        <item name="android:paddingRight">@dimen/filter_both_side_item_padding</item>
+        <item name="android:background">@android:color/transparent</item>
         <item name="android:textSize">@dimen/filter_item_text_size</item>
         <item name="android:textColor">@color/dark_primary_text</item>
         <item name="android:textStyle">normal</item>
@@ -1983,6 +1985,11 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:maxLines">2</item>
+    </style>
+
+    <style name="PaymentNinjaCardSwitch" parent="DatingFilterSwitch">
+        <item name="android:paddingLeft">@dimen/empty_value</item>
+        <item name="android:paddingRight">@dimen/empty_value</item>
     </style>
 
 </resources>

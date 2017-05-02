@@ -1069,6 +1069,10 @@
     <string name="buy_likes_become_popular_male">Devenez populaire</string>
     <string name="you_are_not_shown">Vous apparaissez difficilement dans les \"Rencontres\"</string>
     <string name="you_are_not_shown_answer">Envoyez un J\'aime en réponse à plusieurs J\'aime reçus et apparaissez ainsi plus souvent.</string>
+    <string name="offers_free_title">Gratuit</string>
+    <string name="offers_free_vip">VIP gratuit</string>
+    <string name="offers_free_coins">Pièces gratuites</string>
+    <string name="offers_free_likes">J\'aime gratuits</string>
     <string name="fb_invitation_find_what_you_are_looking_for">Trouvez qui vous recherchez</string>
     <string name="fb_invitation_amoung_more_than_100_mln_people">Parmi plus de 100 millions de personnes</string>
     <string name="fb_invitation_intelligent_selection_filter">Filtre de sélection intelligente</string>
@@ -1116,7 +1120,6 @@
     <string name="payment_ninja_card_number">La carte **%s sera utilisée pour le paiement</string>
     <string name="ninja_cvv_error">CVV / CVC incorrects</string>
     <string name="ninja_trhu_error">Date incorrecte</string>
-    <string name="ninja_number_error">Format de numéro de carte incorrect</string>
     <string name="ninja_email_error">Format d\'e-mail incorrect</string>
     <string name="use_card">Utiliser la carte **%s</string>
     <string name="ninja_no_card_title">Ajouter une carte</string>

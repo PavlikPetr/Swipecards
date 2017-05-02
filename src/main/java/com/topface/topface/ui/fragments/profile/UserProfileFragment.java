@@ -39,10 +39,10 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
-import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
@@ -55,7 +55,6 @@ import com.topface.topface.utils.rx.RxUtils;
 import java.util.ArrayList;
 
 import rx.Subscription;
-import rx.functions.Action1;
 
 /**
  * Created by kirussell on 18.03.14.
@@ -442,9 +441,10 @@ public class UserProfileFragment extends AbstractProfileFragment {
                     public Intent getOpenChatIntent() {
                         Profile profile = getProfile();
                         if (profile != null) {
-                            return ChatActivity.createIntent(profile.uid, profile.sex, profile.getNameAndAge(),
+                            User user = getUser();
+                            return ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.getNameAndAge(),
                                     profile.city == null ? "" : profile.city.name,
-                                    null, profile.photo, false, null, getUser().banned);
+                                    null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned);
                         }
                         return null;
                     }

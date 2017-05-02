@@ -589,7 +589,7 @@
     <item quantity="zero">%d Likes</item>
     <item quantity="many">%d sympathies</item>
     <item quantity="other">%d Likes</item>
-    <item quantity="one">%d Likes</item>
+    <item quantity="one">%d Like</item>
   </plurals>
   <plurals name="popup_vip_messages">
     <item quantity="other">You have %d new Express-Delivery Messages</item>
@@ -837,6 +837,10 @@
   <string name="mutual_write_them_first">Write to them</string>
   <string name="mutual_no_mutuals">You do not have any mutual Likes yet</string>
   <string name="mutual_module_title">MUTUAL</string>
+  <string name="you_can_write_wom">Now you can write to her!</string>
+  <string name="you_can_write_man">Now you can write to him!</string>
+  <string name="see_next">See next</string>
+  <string name="go_to_messages">Go to Messages</string>
   <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
   <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>
   <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
@@ -963,6 +967,10 @@
   <string name="buy_likes_become_popular_male">Become popular</string>
   <string name="you_are_not_shown">You are hardly being shown in \&quot;Dating\&quot;</string>
   <string name="you_are_not_shown_answer">Respond to some incoming Likes and you will be shown more often.</string>
+  <string name="offers_free_title">Free</string>
+  <string name="offers_free_vip">Free VIP</string>
+  <string name="offers_free_coins">Free Coins</string>
+  <string name="offers_free_likes">Free Likes</string>
   <string name="fb_invitation_find_what_you_are_looking_for">Find who you\'re searching for</string>
   <string name="fb_invitation_amoung_more_than_100_mln_people">Among more than 100 million people</string>
   <string name="fb_invitation_intelligent_selection_filter">Smart selection filter</string>
@@ -1010,7 +1018,6 @@
   <string name="payment_ninja_card_number">Card **%s is being used for payment</string>
   <string name="ninja_cvv_error">Incorrect CVV/CVC</string>
   <string name="ninja_trhu_error">Incorrect date</string>
-  <string name="ninja_number_error">Incorrect card number format</string>
   <string name="ninja_email_error">Incorrect email format</string>
   <string name="use_card">Use card **%s</string>
   <string name="ninja_no_card_title">Add card</string>
