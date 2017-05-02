@@ -276,14 +276,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                 numberText.get().length <= numberMaxLength.get()) {
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
-                numberError.set(R.string.ninja_number_error.getString())
+                numberError.set(R.string.ninja_card_number_error.getString())
                 readyCheck.put(numberText, false)
             } else {
                 numberError.set(Utils.EMPTY)
                 readyCheck.put(numberText, true)
             }
         } else {
-            numberError.set(R.string.ninja_number_error.getString())
+            numberError.set(R.string.ninja_card_number_error.getString())
             readyCheck.put(numberText, false)
         }
         updateButton()
