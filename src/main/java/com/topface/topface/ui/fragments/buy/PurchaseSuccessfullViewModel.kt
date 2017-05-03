@@ -50,7 +50,7 @@ class PurchaseSuccessfullViewModel(private val mType: String, private val mIDial
                         Utils.getQuantityString(R.plurals.you_have_some_sympathies, balanceData.likes, balanceData.likes)
                     })
 
-    fun preparePopupImage() = if (mType == Products.ProductType.COINS.getName()) R.drawable.pic_coins else R.drawable.pic_coins  // todo вставить картинку для симпатий
+    fun preparePopupImage() = if (mType == Products.ProductType.COINS.getName()) R.drawable.pic_coins else R.drawable.decor_symphaty_purchase_success
 
     fun closeDialog() = mIDialogCloser.closeIt()
 
