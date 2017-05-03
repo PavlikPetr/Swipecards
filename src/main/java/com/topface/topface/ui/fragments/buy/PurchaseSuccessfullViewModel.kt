@@ -7,6 +7,7 @@ import com.topface.topface.R
 import com.topface.topface.data.BalanceData
 import com.topface.topface.data.Products
 import com.topface.topface.ui.dialogs.IDialogCloser
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
