@@ -1041,6 +1041,7 @@
   <string name="ninja_product_by_price">%1$s por %2$s</string>
   <string name="ninja_trial_vip_product">Estatus VIP de prueba</string>
   <string name="ninja_vip_product_by_price">%1$s VIP por %2$s</string>
+  <string name="pn_email">E-mail</string>
   <string name="write_her_something_first">¡Sé el primero en escribirle!</string>
   <string name="write_him_first">¡Sé la primera en escribirle!</string>
   <string name="write_to_her_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>

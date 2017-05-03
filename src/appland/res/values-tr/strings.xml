@@ -1048,6 +1048,7 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
     <string name="ninja_product_by_price">%2$s için %1$s</string>
     <string name="ninja_trial_vip_product">VIP Üyelik Deneme Süresi</string>
     <string name="ninja_vip_product_by_price">%1$s VIP için %2$s</string>
+    <string name="pn_email">E-mail</string>
     <string name="write_her_something_first">Ona ilk sen birşeyler yaz</string>
     <string name="write_him_first">Ona ilk sen birşeyler yaz!</string>
     <string name="write_to_her_only_vip">Ona yazabilmek için VIP üye olmalısınız!</string>

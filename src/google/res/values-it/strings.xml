@@ -1133,6 +1133,7 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="ninja_product_by_price">%1$s per %2$s</string>
     <string name="ninja_trial_vip_product">Status VIP di prova</string>
     <string name="ninja_vip_product_by_price">%1$s VIP per %2$s</string>
+    <string name="pn_email">E-mail</string>
     <string name="write_her_something_first">Scrivile qualcosa per primo!</string>
     <string name="write_him_first">Scrivigli qualcosa per prima!</string>
     <string name="write_to_her_only_vip">Puoi scriverle soltanto se possiedi lo Status VIP.</string>
