@@ -4,7 +4,6 @@ import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.api.responses.HistoryItem.Companion.STUB_BUY_VIP
 import com.topface.topface.api.responses.HistoryItem.Companion.STUB_CHAT_LOADER
 import com.topface.topface.api.responses.HistoryItem.Companion.STUB_MUTUAL
-import com.topface.topface.data.FeedUser
 
 /**
  * Модельки для чата
@@ -55,14 +54,14 @@ class Divider: HistoryItem()
 /**
  * заглушка чата про взаимные симпатии
  */
-class MutualStub: FeedUser(), IChatItem {
+class MutualStub: IChatItem {
     override fun getItemType() = STUB_MUTUAL
 }
 
 /**
  * заглушка чата про покупку вип
  */
-class BuyVipStub: FeedUser(), IChatItem {
+class BuyVipStub: IChatItem {
     override fun getItemType() = STUB_BUY_VIP
 }
 

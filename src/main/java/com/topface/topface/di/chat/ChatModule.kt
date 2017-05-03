@@ -19,7 +19,7 @@ import dagger.Provides
 
 //todo если нужно делегировать вызовы активити, то в конструктор передавать IStateSaverRegistrator
 @Module
-class ChatModule(val chatActivity: ChatActivity) {
+class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
 
     @Provides
     @FragmentScope
@@ -67,7 +67,7 @@ class ChatModule(val chatActivity: ChatActivity) {
         addAdapterComponent(UserGiftComponent())
         addAdapterComponent(FriendGiftComponent())
         addAdapterComponent(DividerComponent())
-        addAdapterComponent(MutualStubComponent())
-        addAdapterComponent(BuyVipStubComponent(feedNavigator))
+        addAdapterComponent(MutualStubComponent(feedUser))
+        addAdapterComponent(BuyVipStubComponent(feedNavigator, feedUser))
     }
 }

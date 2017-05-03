@@ -49,8 +49,13 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     override fun getLayout() = R.layout.ac_fragment_frame
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
+        user?.let {
+            onToolbarSettings(ToolbarSettingsData(it.nameAndAge,
+                    it.city.name, isOnline = it.online))
+        }
         ComponentManager.obtainComponent(ChatComponent::class.java) {
-            App.getAppComponent().add(ChatModule(this))
+            App.getAppComponent().add(ChatModule(this, user))
         }.inject(this)
         addPhotoHelper.setOnResultHandler(object : Handler() {
             override fun handleMessage(msg: Message) {
@@ -61,11 +66,6 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
         mTakePhotoSubscription = eventBus.getObservable(TakePhotoActionHolder::class.java)
                 .filter { it != null && it.action == TakePhotoPopup.ACTION_CANCEL }
                 .subscribe({ finishWithResult(RESULT_CANCELED) }, { Debug.error("Take photo popup actions subscription catch error", it) })
-        val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
-        user?.let {
-            onToolbarSettings(ToolbarSettingsData(it.nameAndAge,
-                    it.city.name, isOnline = it.online))
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
