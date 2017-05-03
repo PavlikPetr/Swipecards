@@ -1031,6 +1031,7 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="payment_ninja_card_number">La carta **%s è in uso per il pagamento</string>
   <string name="ninja_cvv_error">CVV non valido</string>
   <string name="ninja_trhu_error">Data non corretta</string>
+  <string name="ninja_card_number_error">Il numero della carta non è valido</string>
   <string name="ninja_email_error">Formato email non valido</string>
   <string name="use_card">Usa carta **%s</string>
   <string name="ninja_no_card_title">Aggiungi carta</string>
@@ -1043,4 +1044,11 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="ninja_product_by_price">%1$s per %2$s</string>
   <string name="ninja_trial_vip_product">Status VIP di prova</string>
   <string name="ninja_vip_product_by_price">%1$s VIP per %2$s</string>
+  <string name="write_her_something_first">Scrivile qualcosa per primo!</string>
+  <string name="write_him_first">Scrivigli qualcosa per prima!</string>
+  <string name="write_to_her_only_vip">Puoi scriverle soltanto se possiedi lo Status VIP.</string>
+  <string name="write_to_him_only_vip">Puoi scrivergli soltanto se possiedi lo Status VIP.</string>
+  <string name="get_vip">Diventa VIP</string>
+  <string name="payment_ninja_autofill_title">Ricarica automatica</string>
+  <string name="payment_ninja_autofill_link">Regole del Servizio</string>
 </resources>

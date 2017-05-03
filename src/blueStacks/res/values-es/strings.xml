@@ -1028,6 +1028,7 @@
   <string name="payment_ninja_card_number">Se está usando para los pagos la tarjeta **%s</string>
   <string name="ninja_cvv_error">CVV/CVC incorrecto</string>
   <string name="ninja_trhu_error">Fecha incorrecta</string>
+  <string name="ninja_card_number_error">Número de tarjeta no válido</string>
   <string name="ninja_email_error">Formato de email incorrecto</string>
   <string name="use_card">Utilizar tarjeta **%s</string>
   <string name="ninja_no_card_title">Añadir tarjeta</string>
@@ -1040,4 +1041,11 @@
   <string name="ninja_product_by_price">%1$s por %2$s</string>
   <string name="ninja_trial_vip_product">Estatus VIP de prueba</string>
   <string name="ninja_vip_product_by_price">%1$s VIP por %2$s</string>
+  <string name="write_her_something_first">¡Sé el primero en escribirle!</string>
+  <string name="write_him_first">¡Sé la primera en escribirle!</string>
+  <string name="write_to_her_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>
+  <string name="write_to_him_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>
+  <string name="get_vip">Ser VIP</string>
+  <string name="payment_ninja_autofill_title">Rellenar saldo automáticamente</string>
+  <string name="payment_ninja_autofill_link">Reglas del servicio</string>
 </resources>

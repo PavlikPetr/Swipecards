@@ -1017,6 +1017,7 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="payment_ninja_card_number">**%s kartı ödeme için kullanılıyor</string>
   <string name="ninja_cvv_error">Yanlış CVV/CVC</string>
   <string name="ninja_trhu_error">Yanlış tarih</string>
+  <string name="ninja_card_number_error">Geçersiz kart numarası</string>
   <string name="ninja_email_error">Yanlış email formatı</string>
   <string name="use_card">**%s kartını kullan</string>
   <string name="ninja_no_card_title">Kredi kartı ekle</string>
@@ -1029,4 +1030,11 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="ninja_product_by_price">%2$s için %1$s</string>
   <string name="ninja_trial_vip_product">VIP Üyelik Deneme Süresi</string>
   <string name="ninja_vip_product_by_price">%1$s VIP için %2$s</string>
+  <string name="write_her_something_first">Ona ilk sen birşeyler yaz</string>
+  <string name="write_him_first">Ona ilk sen birşeyler yaz!</string>
+  <string name="write_to_her_only_vip">Ona yazabilmek için VIP üye olmalısınız!</string>
+  <string name="write_to_him_only_vip">Ona yazabilmek için VIP üye olmalısınız!</string>
+  <string name="get_vip">VIP Satın al</string>
+  <string name="payment_ninja_autofill_title">Otomatik yükleme</string>
+  <string name="payment_ninja_autofill_link">Servis Kuralları</string>
 </resources>
