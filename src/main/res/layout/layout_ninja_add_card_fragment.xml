@@ -51,12 +51,14 @@
 
                 <android.support.design.widget.TextInputEditText
                     style="@style/NinjaInputTextEdit"
+                    android:focusable="true"
                     android:drawableRight="@{viewModel.cardIcon}"
                     android:enabled="@{viewModel.isInputEnabled}"
-                    android:focusableInTouchMode="true"
                     android:hint="@string/ninja_hint_card_number"
+                    android:focusableInTouchMode="true"
                     android:maxLength="@{viewModel.numberMaxLength}"
                     android:text="@={viewModel.numberText}"
+                    app:setRequestFocus="@{viewModel.needFocus}"
                     app:addTextChangedListener="@{viewModel.numberWatcher}"
                     app:setOnFocusChangeListener="@{viewModel::onNumberChange}"/>
             </android.support.design.widget.TextInputLayout>
@@ -85,6 +87,7 @@
                         android:maxLength="5"
                         android:text="@={viewModel.trhuText}"
                         app:addTextChangedListener="@{viewModel.trhuWatcher}"
+                        app:clearFocus="@{viewModel.clearFocus}"
                         app:setOnFocusChangeListener="@{viewModel::onTrhuChange}"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -105,6 +108,7 @@
                         android:inputType="numberPassword"
                         android:maxLength="@{viewModel.cvvMaxLength}"
                         android:text="@={viewModel.cvvText}"
+                        app:clearFocus="@{viewModel.clearFocus}"
                         app:setOnFocusChangeListener="@{viewModel::onCvvChange}"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -125,7 +129,8 @@
                     android:enabled="@{viewModel.isInputEnabled}"
                     android:hint="@string/pn_email"
                     android:inputType="textEmailAddress"
-                    android:text="@={viewModel.emailText}"/>
+                    android:text="@={viewModel.emailText}"
+                    app:clearFocus="@{viewModel.clearFocus}"/>
             </android.support.design.widget.TextInputLayout>
 
             <!-- purchase button -->
