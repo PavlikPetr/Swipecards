@@ -18,6 +18,7 @@ import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.*
+import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -36,7 +37,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     }
 
     val isCheckBoxVisible = ObservableInt(View.GONE)
-    val isChecked = ObservableBoolean(true)
+    val isChecked = RxObservableField(true)
     val cardInfo = ObservableField(Utils.EMPTY)
     val autofillVisibility = ObservableInt(View.GONE)
     val isAutoFillEnabled = ObservableBoolean(true)
@@ -123,6 +124,8 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                         }
                     }
                 })
+        mSwitchSubscription.add(isChecked.asRx.distinctUntilChanged()
+                .subscribe(shortSubscription { it?.let { initAutofillView(it) } }))
         mSwitchSubscription.add(mEventBus
                 .getObservable(TestPurchaseSwitch::class.java)
                 .distinctUntilChanged { (isChecked1), (isChecked2) -> isChecked1 == isChecked2 }
@@ -135,17 +138,19 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                 .subscribe(shortSubscription {
                     it?.let { mIs3DSAvailable = it.isChecked }
                 }))
-        initAutofillView()
+        initAutofillView(isChecked.get())
     }
 
-    private fun initAutofillView() {
-        data.find {
-            (it as? PaymentNinjaProduct)?.isAutoRefilled ?: false
-        }?.let {
-            autofillVisibility.set(View.VISIBLE)
-            mAutoFillUrl = (it as? PaymentNinjaProduct)?.subscriptionInfo?.url
-        }
-    }
+    private fun initAutofillView(isCardChecked: Boolean) =
+            if (isCardChecked) {
+                data.find {
+                    (it as? PaymentNinjaProduct)?.isAutoRefilled ?: false
+                }?.let {
+                    mAutoFillUrl = (it as? PaymentNinjaProduct)?.subscriptionInfo?.url
+                    isAutoFillEnabled.set(true)
+                    autofillVisibility.set(View.VISIBLE)
+                } ?: autofillVisibility.set(View.GONE)
+            } else autofillVisibility.set(View.GONE)
 
     fun buyProduct(product: PaymentNinjaProduct) {
         if (!App.get().options.paymentNinjaInfo.isCradAvailable() ||

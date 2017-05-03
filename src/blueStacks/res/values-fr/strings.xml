@@ -1010,7 +1010,6 @@
   <string name="ninja_text_2">Sécurisé SSL 128 bits</string>
   <string name="ninja_text_4">En incluant la somme donnée, vous acceptez</string>
   <string name="ninja_text_link">Les règles du service</string>
-  <string name="ninja_text_5">Dans 7 jours, le statut VIP sera automatiquement renouvelé. Votre carte sera enregistrée pour des paiements futurs. Vous pouvez annuler votre abonnement et supprimer les informations de votre carte dans les Paramètres.</string>
   <string name="ninja_text_trial_1">€ 1 sera facturé puis immédiatement retourné sur votre compte, afin de vérifier votre carte.</string>
   <string name="ninja_text_trial_2">Dans %1$s, une transaction sera terminée pour %2$d %3$s. Chaque mois, votre abonnement sera automatiquement renouvelé et votre carte sera enregistrée pour les paiements à venir. Vous pouvez annuler votre abonnement et supprimer votre carte dans les Paramètres.</string>
   <string name="ninja_settings_toolbar">Paiements</string>

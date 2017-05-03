@@ -996,7 +996,6 @@
   <string name="ninja_text_2">128-bit SSL ile korunmalı</string>
   <string name="ninja_text_4">Yazılan tutar da dahil, kabul ettiğiniz</string>
   <string name="ninja_text_link">servisin kuralları</string>
-  <string name="ninja_text_5">7 gün içinde VIP üyelik otomatik olarak yenilenecektir. Kredi kartınız gelecek ödemeler için kayıt edilecektir. Dilediğiniz zaman Ayarlar sayfasından, aboneliğinizi iptal edebilir ve kredi kartınızı silebilirsiniz.</string>
   <string name="ninja_text_trial_1">Kartınızı onaylayabilmek için hesabınızdan €1 çekilecek ve  geri iade edilecektir.</string>
   <string name="ninja_text_trial_2">%1$s içinde %2$d %3$s ücret karşılığı işlem tamamlanacaktır.
 Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki ödemeler için kaydedilecektir. Aboneliğinizi dilediğiniz zaman iptal edebilir, ayrıca istediğiniz zaman kredi kartınızı Ayarlar sayfasından silebilirsiniz.</string>
@@ -1017,6 +1016,7 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="payment_ninja_card_number">**%s kartı ödeme için kullanılıyor</string>
   <string name="ninja_cvv_error">Yanlış CVV/CVC</string>
   <string name="ninja_trhu_error">Yanlış tarih</string>
+  <string name="ninja_card_number_error">Geçersiz kart numarası</string>
   <string name="ninja_email_error">Yanlış email formatı</string>
   <string name="use_card">**%s kartını kullan</string>
   <string name="ninja_no_card_title">Kredi kartı ekle</string>
@@ -1029,4 +1029,12 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="ninja_product_by_price">%2$s için %1$s</string>
   <string name="ninja_trial_vip_product">VIP Üyelik Deneme Süresi</string>
   <string name="ninja_vip_product_by_price">%1$s VIP için %2$s</string>
+  <string name="pn_email">E-mail</string>
+  <string name="write_her_something_first">Ona ilk sen birşeyler yaz</string>
+  <string name="write_him_first">Ona ilk sen birşeyler yaz!</string>
+  <string name="write_to_her_only_vip">Ona yazabilmek için VIP üye olmalısınız!</string>
+  <string name="write_to_him_only_vip">Ona yazabilmek için VIP üye olmalısınız!</string>
+  <string name="get_vip">VIP Satın al</string>
+  <string name="payment_ninja_autofill_title">Otomatik yükleme</string>
+  <string name="payment_ninja_autofill_link">Servis Kuralları</string>
 </resources>

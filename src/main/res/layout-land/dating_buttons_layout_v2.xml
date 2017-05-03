@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools">
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
-
 
         <ImageButton
             android:id="@+id/show_chat"
@@ -64,7 +63,5 @@
             android:clickable="@{model.isDatingButtonsLocked}"
             android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
             bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
-
     </LinearLayout>
-
 </layout>

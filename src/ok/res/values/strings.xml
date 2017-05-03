@@ -1070,7 +1070,6 @@
     <string name="ninja_text_2">128-bit SSL Secured</string>
     <string name="ninja_text_4">Including the given sum, you agree to</string>
     <string name="ninja_text_link">the service\'s rules</string>
-    <string name="ninja_text_5">In 7 days VIP-status will automatically renew. Your card will be saved for future payments. You can cancel your subscription and unlink your card in Settings.</string>
     <string name="ninja_text_trial_1">€1 will be charged and immediately returned to your account in order to verify your card.</string>
     <string name="ninja_text_trial_2">In %1$s a transaction will be completed for %2$d %3$s. Each month your subscription will be automatically renewed and your card saved for the upcoming payments. You can cancel your subscription and unlink your card in Settings.</string>
     <string name="ninja_settings_toolbar">Payments</string>
@@ -1090,7 +1089,8 @@
     <string name="payment_ninja_card_number">Card **%s is being used for payment</string>
     <string name="ninja_cvv_error">Incorrect CVV/CVC</string>
     <string name="ninja_trhu_error">Incorrect date</string>
-    <string name="ninja_email_error">Incorrect email format</string>
+    <string name="ninja_card_number_error">Invalid card number</string>
+    <string name="ninja_email_error">Incorrect e-mail format</string>
     <string name="use_card">Use card **%s</string>
     <string name="ninja_no_card_title">Add card</string>
     <string name="ninja_subscription_expiration">Active until %s</string>
@@ -1102,4 +1102,12 @@
     <string name="ninja_product_by_price">%1$s for %2$s</string>
     <string name="ninja_trial_vip_product">Trial VIP-status</string>
     <string name="ninja_vip_product_by_price">%1$s VIP for %2$s</string>
+    <string name="pn_email">E-mail</string>
+    <string name="write_her_something_first">Write her something first!</string>
+    <string name="write_him_first">Write to him first!</string>
+    <string name="write_to_her_only_vip">You can write to her but only with VIP status.</string>
+    <string name="write_to_him_only_vip">You can write to him but only with VIP status.</string>
+    <string name="get_vip">Get VIP</string>
+    <string name="payment_ninja_autofill_title">Autofill balance</string>
+    <string name="payment_ninja_autofill_link">Service Rules</string>
 </resources>

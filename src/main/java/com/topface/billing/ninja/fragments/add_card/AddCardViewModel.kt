@@ -14,15 +14,17 @@ import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
 import com.topface.billing.ninja.fragments.add_card.CardType.Companion.CVV_DEFAULT
+import com.topface.billing.ninja.fragments.add_card.CardType.Companion.MASTERCARD
+import com.topface.billing.ninja.fragments.add_card.CardType.Companion.VISA
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.getPurchaseScreenTitle
 import com.topface.topface.utils.extensions.getRequestSubscriber
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.RxFieldObservable
@@ -46,7 +48,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
-    val numberFocus = ObservableBoolean()
+    val needFocus = ObservableBoolean()
+    val clearFocus = ObservableBoolean(false)
 
     private var mPurchaseRequestSubscription: Subscription? = null
 
@@ -103,6 +106,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val numberWatcher = NumberWatcher()
     val trhuWatcher = TrhuWatcher()
 
+    var stopValidate = false // костыльный флаг для остановки проверки
+
     private val mProduct: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
     private val mIsTestPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_TEST_PURCHASE, false)
     private val mIs3DSPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_3DS_PURCHASE, false)
@@ -137,12 +142,16 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                     isFirstDescriptionVisible.set(true)
                     isSecondDescriptionVisible.set(true)
                     firstDescriptionText.set(R.string.ninja_text_trial_1.getString())
-                    val days = Utils.getQuantityString(R.plurals.ninja_trial_days, it.trialPeriod, it.trialPeriod)
-                    secondDescriptionText.set(String.format(R.string.ninja_text_trial_2.getString(), days, it.price, it.currencyCode))
-                } else {
-                    // vip
+                    secondDescriptionText.set(String.format(R.string.ninja_text_trial_2.getString(),
+                            Utils.getQuantityString(R.plurals.ninja_trial_days, it.trialPeriod, it.trialPeriod),
+                            it.price, it.currencyCode))
+                } else if (it.isSubscription) {
+                    // vip subscription
                     isFirstDescriptionVisible.set(true)
-                    firstDescriptionText.set(R.string.ninja_text_5.getString())
+                    firstDescriptionText.set(String.format(R.string.ninja_text_6.getString(),
+                            Utils.getQuantityString(R.plurals.ninja_trial_days, it.period, it.period)))
+                } else {
+                    isFirstDescriptionVisible.set(false)
                 }
             }
         }
@@ -188,9 +197,16 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
     private fun setTemplate(cardType: CardType) {
-        numberMaxLength.set(cardType.numberMaxLength)
-        cvvMaxLength.set(cardType.cvvMaxLength)
-        cardIcon.set(cardType.cardIcon)
+        // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir", "default"
+        if (cardType in listOf<CardType>(VISA, MASTERCARD)) {
+            numberMaxLength.set(cardType.numberMaxLength)
+            cvvMaxLength.set(cardType.cvvMaxLength)
+            cardIcon.set(cardType.cardIcon)
+            numberError.set(Utils.EMPTY)  // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir","default"
+        } else {
+            numberError.set(R.string.ninja_card_number_error.getString())
+            readyCheck.put(numberText, false)
+        }
     }
 
     private fun giveMeBrand(cardNumber: String, cardBrands: HashMap<Regex, CardType>): CardType {
@@ -237,13 +253,23 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                     }, {
                         mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
                                 mProduct == null) {
+                            stopValidate = true
                             if (isEmailFormNeeded.get()) {
                                 emailText.set("")
                             }
-                            numberText.set("")
                             cvvText.set("")
                             trhuText.set("")
-                            numberFocus.set(true)
+                            numberText.set("")
+
+                            clearFocus.set(true)
+                            needFocus.set(true)
+
+                            with(readyCheck) {
+                                put(numberText, false)
+                                put(cvvText, false)
+                                put(trhuText, false)
+                                put(emailText, !TextUtils.isEmpty(App.get().options.paymentNinjaInfo.email))
+                            }
                         }
                         isInputEnabled.set(true)
                         isButtonEnabled.set(false)
@@ -253,21 +279,24 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     }
 
     fun onNumberChange(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+        if (!hasFocus && !stopValidate) {
             validateNumber()
         }
+        stopValidate = false
     }
 
     fun onTrhuChange(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+        if (!hasFocus && !stopValidate) {
             validateTrhu()
         }
+        stopValidate = false
     }
 
     fun onCvvChange(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+        if (!hasFocus && !stopValidate) {
             validateCvv()
         }
+        stopValidate = false
     }
 
     private fun validateNumber(): Boolean {
@@ -337,7 +366,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
         return readyCheck[emailText] ?: false
     }
 
-    fun navigateToRules(): Unit? = mProduct?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? =
+            Utils.goToUrl(App.getContext(), mProduct?.subscriptionInfo?.url ?: PaymentNinjaMarketBuyingFragmentViewModel.AUTOREFILL_RULES_URL)
 
     private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
         mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source,

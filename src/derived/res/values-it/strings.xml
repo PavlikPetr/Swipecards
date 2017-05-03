@@ -1100,7 +1100,6 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="ninja_text_2">Sicurezza 128-bit SSL</string>
     <string name="ninja_text_4">Pagando la somma stabilita, dichiari di accettare</string>
     <string name="ninja_text_link">le regole del servizio</string>
-    <string name="ninja_text_5">Fra 7 giorni il tuo profilo VIP verrà rinnovato. I dati della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento e rimuovere le informazioni sulla tua carta tramite le Impostazioni.</string>
     <string name="ninja_text_trial_1">Verrà addebitato e subito restituito 1€ per verificare la tua carta.</string>
     <string name="ninja_text_trial_2">Fra %1$s verrà processata una transazione per %2$d %3$s. Il tuo abbonamento verrà automaticamente rinnovato ogni mese e i dettagli della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento insieme alle informazioni sulla tua carta dalle Impostazioni.</string>
     <string name="ninja_settings_toolbar">Pagamenti</string>
@@ -1120,6 +1119,7 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="payment_ninja_card_number">La carta **%s è in uso per il pagamento</string>
     <string name="ninja_cvv_error">CVV non valido</string>
     <string name="ninja_trhu_error">Data non corretta</string>
+    <string name="ninja_card_number_error">Il numero della carta non è valido</string>
     <string name="ninja_email_error">Formato email non valido</string>
     <string name="use_card">Usa carta **%s</string>
     <string name="ninja_no_card_title">Aggiungi carta</string>
@@ -1132,4 +1132,12 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="ninja_product_by_price">%1$s per %2$s</string>
     <string name="ninja_trial_vip_product">Status VIP di prova</string>
     <string name="ninja_vip_product_by_price">%1$s VIP per %2$s</string>
+    <string name="pn_email">E-mail</string>
+    <string name="write_her_something_first">Scrivile qualcosa per primo!</string>
+    <string name="write_him_first">Scrivigli qualcosa per prima!</string>
+    <string name="write_to_her_only_vip">Puoi scriverle soltanto se possiedi lo Status VIP.</string>
+    <string name="write_to_him_only_vip">Puoi scrivergli soltanto se possiedi lo Status VIP.</string>
+    <string name="get_vip">Diventa VIP</string>
+    <string name="payment_ninja_autofill_title">Ricarica automatica</string>
+    <string name="payment_ninja_autofill_link">Regole del Servizio</string>
 </resources>
