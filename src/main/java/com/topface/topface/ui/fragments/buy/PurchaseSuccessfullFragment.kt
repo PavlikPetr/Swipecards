@@ -52,6 +52,10 @@ class PurchaseSuccessfullFragment : AbstractDialogFragment(), IDialogCloser {
                 finish()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         mViewModel.release()
     }
 
