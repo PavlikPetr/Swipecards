@@ -29,6 +29,7 @@ abstract class BaseToolbarViewModel(binding: ToolbarViewBinding,
     val upIcon = ObservableInt(R.drawable.ic_arrow_up_gray)
     val visibility = ObservableInt(View.VISIBLE)
     val shadowVisibility = ObservableInt(View.VISIBLE)
+    val rootViewVisibility = ObservableInt(View.VISIBLE)
     /**
      * Верхний отступ/высота подставляемой вместо statusBar вьюшки
      * для toolBar'ов, с прозрачным statusBar
