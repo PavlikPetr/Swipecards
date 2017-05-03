@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.chat.items.GiftViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.items.GiftViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:paddingLeft="56dp"
+        android:paddingRight="16dp"
+        android:paddingTop="9dp">
+
+        <ImageView
+            style="@style/ChatImage.Gift.Holo"
+            android:layout_gravity="right|top"
+            android:background="@drawable/chat_item_d1_bg_user"
+            bind:remoteSrcGlide="@{viewModel.link}"
+            tools:src="@drawable/feed_banned_female_avatar" />
+    </FrameLayout>
 </layout>
