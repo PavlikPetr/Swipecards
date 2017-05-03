@@ -13,6 +13,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="@{viewModel.visibility}"
         android:paddingTop="@{viewModel.topPadding}"
         app:layout_collapseMode="pin">
 
@@ -21,7 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="@{viewModel.background}"
-            android:visibility="@{viewModel.visibility}"
             app:navigationIcon="@{viewModel.upIcon}"
             app:subtitle="@{viewModel.subTitle}"
             app:subtitleTextColor="@{viewModel.subTitleTextColor}"
