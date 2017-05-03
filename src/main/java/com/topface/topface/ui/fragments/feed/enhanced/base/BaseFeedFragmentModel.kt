@@ -45,7 +45,7 @@ import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -143,9 +143,9 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
             mCache.restoreFromCache(itemClass)?.let {
                 if (data.isEmpty()) {
                     data.addAll(it)
-                    isDataFromCache = true
                 }
             }
+            isDataFromCache = true
         } else {
             isListVisible.set(View.INVISIBLE)
         }
@@ -221,7 +221,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
     }
 
     fun update(updateBundle: Bundle = Bundle(), force: Boolean = false) {
-        if (mAtomicUpdaterSubscription.get() == null && isDataFromCache ||
+        if (mAtomicUpdaterSubscription.get() == null && (!isNeedCacheItems || isDataFromCache) ||
                 mAtomicUpdaterSubscription.get()?.isUnsubscribed ?: false &&
                         updateBundle.getString(TO, Utils.EMPTY) != Utils.EMPTY || force) {
             isFeedProgressBarVisible.set(View.VISIBLE)
