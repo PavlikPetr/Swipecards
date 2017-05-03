@@ -9,8 +9,7 @@
     </data>
 
     <android.support.v4.widget.NestedScrollView
-        style="@style/PopupScroll"
-        android:fillViewport="true">
+        style="@style/PopupScroll">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,8 +60,17 @@
                 style="@style/PurchasePopupText"
                 android:layout_below="@+id/centerImage"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="132dp"
                 android:text="@{viewModel.popupText}"/>
+
+            <Button
+                style="@style/PopupBorderlessButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/popupText"
+                android:layout_centerHorizontal="true"
+                android:onClick="@{() -> viewModel.closeDialog()}"
+                android:text="@string/thanks_for_your_rate_close"/>
 
         </RelativeLayout>
 
