@@ -78,11 +78,12 @@ object ChatIntentCreator {
         return intent
     }
 
-    private fun getChatClass() = if (isOldChat()) {
-        com.topface.topface.ui.ChatActivity::class.java
-    } else {
-        com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
-    }
+    private fun getChatClass() = com.topface.topface.ui.ChatActivity::class.java
+//    private fun getChatClass() = if (isOldChat()) {
+//        com.topface.topface.ui.ChatActivity::class.java
+//    } else {
+//        com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
+//    }
 
     private fun isOldChat() = false
 

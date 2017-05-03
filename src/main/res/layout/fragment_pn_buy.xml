@@ -42,21 +42,21 @@
                 android:visibility="@{viewModel.isCheckBoxVisible}"/>
 
             <LinearLayout
-                style="@style/PaymentNinjaAutoFillRoot">
+                style="@style/PaymentNinjaAutoFillRoot"
+                android:visibility="@{viewModel.autofillVisibility}">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:visibility="@{viewModel.autofillVisibility}">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/payment_ninja_autofill_title"
                         android:textColor="#737373"
-                        android:textSize="14sp"/>
+                        android:textSize="13sp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                         android:onClick="@{() -> viewModel.onLinkClick()}"
                         android:text="@string/payment_ninja_autofill_link"
                         android:textColor="@color/ninja_color_accent"
-                        android:textSize="14sp"/>
+                        android:textSize="13sp"/>
                 </LinearLayout>
                 <!-- auto pay options and description -->
                 <CheckBox
@@ -83,8 +83,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:clickable="true"
             android:layout_height="match_parent"
+            android:clickable="true"
             android:visibility="@{viewModel.progressVisibility}">
 
             <ProgressBar
