@@ -44,8 +44,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 app:errorEnabled="true"
                 app:errorTextAppearance="@style/NinjaErrorTextAppearance"
                 app:hintTextAppearance="@style/NinjaHintTextAppearance"
@@ -89,6 +87,7 @@
                         android:maxLength="5"
                         android:text="@={viewModel.trhuText}"
                         app:addTextChangedListener="@{viewModel.trhuWatcher}"
+                        app:clearFocus="@{viewModel.clearFocus}"
                         app:setOnFocusChangeListener="@{viewModel::onTrhuChange}"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -109,6 +108,7 @@
                         android:inputType="numberPassword"
                         android:maxLength="@{viewModel.cvvMaxLength}"
                         android:text="@={viewModel.cvvText}"
+                        app:clearFocus="@{viewModel.clearFocus}"
                         app:setOnFocusChangeListener="@{viewModel::onCvvChange}"/>
                 </android.support.design.widget.TextInputLayout>
 
@@ -129,7 +129,8 @@
                     android:enabled="@{viewModel.isInputEnabled}"
                     android:hint="@string/pn_email"
                     android:inputType="textEmailAddress"
-                    android:text="@={viewModel.emailText}"/>
+                    android:text="@={viewModel.emailText}"
+                    app:clearFocus="@{viewModel.clearFocus}"/>
             </android.support.design.widget.TextInputLayout>
 
             <!-- purchase button -->

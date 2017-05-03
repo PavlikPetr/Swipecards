@@ -45,7 +45,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
-    val needFocus = ObservableBoolean(true)
+    val needFocus = ObservableBoolean()
+    val clearFocus = ObservableBoolean(false)
 
     private var mPurchaseRequestSubscription: Subscription? = null
 
@@ -101,6 +102,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
 
     val numberWatcher = NumberWatcher()
     val trhuWatcher = TrhuWatcher()
+
+    var stopValidate = false // костыльный флаг для остановки проверки
 
     private val mProduct: PaymentNinjaProduct? = data.getParcelable(NinjaAddCardActivity.EXTRA_BUY_PRODUCT)
     private val mIsTestPurchase = data.getBoolean(NinjaAddCardActivity.EXTRA_IS_TEST_PURCHASE, false)
@@ -187,15 +190,15 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
     private fun setTemplate(cardType: CardType) {
-        // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir"
-        if (cardType.name in listOf<String>("american_express", "diners", "discover", "jcb", "mir")) {
+        // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir", "default"
+        if (cardType.name in listOf<String>("american_express", "diners", "discover", "jcb", "mir", "default")) {
             numberError.set(R.string.ninja_card_number_error.getString())
             readyCheck.put(numberText, false)
         } else {
             numberMaxLength.set(cardType.numberMaxLength)
             cvvMaxLength.set(cardType.cvvMaxLength)
             cardIcon.set(cardType.cardIcon)
-            numberError.set(Utils.EMPTY)  // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir"
+            numberError.set(Utils.EMPTY)  // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir","default"
         }
     }
 
@@ -243,13 +246,23 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                     }, {
                         mNavigator.showPaymentNinjaErrorDialog(data.getBoolean(NinjaAddCardActivity.EXTRA_FROM_INSTANT_PURCHASE) ||
                                 mProduct == null) {
+                            stopValidate = true
                             if (isEmailFormNeeded.get()) {
                                 emailText.set("")
                             }
                             cvvText.set("")
                             trhuText.set("")
                             numberText.set("")
+
+                            clearFocus.set(true)
                             needFocus.set(true)
+
+                            with(readyCheck) {
+                                put(numberText, false)
+                                put(cvvText, false)
+                                put(trhuText, false)
+                                put(emailText, !TextUtils.isEmpty(App.get().options.paymentNinjaInfo.email))
+                            }
                         }
                         isInputEnabled.set(true)
                         isButtonEnabled.set(false)
@@ -259,21 +272,24 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     }
 
     fun onNumberChange(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+        if (!hasFocus && !stopValidate) {
             validateNumber()
         }
+        stopValidate = false
     }
 
     fun onTrhuChange(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+        if (!hasFocus && !stopValidate) {
             validateTrhu()
         }
+        stopValidate = false
     }
 
     fun onCvvChange(v: View, hasFocus: Boolean) {
-        if (!hasFocus) {
+        if (!hasFocus && !stopValidate) {
             validateCvv()
         }
+        stopValidate = false
     }
 
     private fun validateNumber(): Boolean {
