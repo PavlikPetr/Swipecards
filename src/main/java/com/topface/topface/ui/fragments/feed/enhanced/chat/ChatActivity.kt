@@ -49,6 +49,7 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     override fun getLayout() = R.layout.ac_fragment_frame
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
         user?.let {
             onToolbarSettings(ToolbarSettingsData(it.nameAndAge,
@@ -62,7 +63,6 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
                 AddPhotoHelper.handlePhotoMessage(msg)
             }
         })
-        super.onCreate(savedInstanceState)
         mTakePhotoSubscription = eventBus.getObservable(TakePhotoActionHolder::class.java)
                 .filter { it != null && it.action == TakePhotoPopup.ACTION_CANCEL }
                 .subscribe({ finishWithResult(RESULT_CANCELED) }, { Debug.error("Take photo popup actions subscription catch error", it) })
