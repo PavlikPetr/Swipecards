@@ -44,6 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 app:errorEnabled="true"
                 app:errorTextAppearance="@style/NinjaErrorTextAppearance"
                 app:hintTextAppearance="@style/NinjaHintTextAppearance"
@@ -51,12 +53,14 @@
 
                 <android.support.design.widget.TextInputEditText
                     style="@style/NinjaInputTextEdit"
+                    android:focusable="true"
                     android:drawableRight="@{viewModel.cardIcon}"
                     android:enabled="@{viewModel.isInputEnabled}"
-                    android:focusableInTouchMode="true"
                     android:hint="@string/ninja_hint_card_number"
+                    android:focusableInTouchMode="true"
                     android:maxLength="@{viewModel.numberMaxLength}"
                     android:text="@={viewModel.numberText}"
+                    app:setRequestFocus="@{viewModel.needFocus}"
                     app:addTextChangedListener="@{viewModel.numberWatcher}"
                     app:setOnFocusChangeListener="@{viewModel::onNumberChange}"/>
             </android.support.design.widget.TextInputLayout>

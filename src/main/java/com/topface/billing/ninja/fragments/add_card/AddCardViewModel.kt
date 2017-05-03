@@ -22,7 +22,6 @@ import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.extensions.getPurchaseScreenTitle
 import com.topface.topface.utils.extensions.getRequestSubscriber
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.RxFieldObservable
@@ -46,7 +45,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val numberMaxLength = ObservableInt(19)
     val cardIcon = ObservableInt()
     val numberError = ObservableField<String>()
-    val numberFocus = ObservableBoolean()
+    val needFocus = ObservableBoolean(true)
 
     private var mPurchaseRequestSubscription: Subscription? = null
 
@@ -188,9 +187,16 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
     private fun setTemplate(cardType: CardType) {
-        numberMaxLength.set(cardType.numberMaxLength)
-        cvvMaxLength.set(cardType.cvvMaxLength)
-        cardIcon.set(cardType.cardIcon)
+        // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir"
+        if (cardType.name in listOf<String>("american_express", "diners", "discover", "jcb", "mir")) {
+            numberError.set(R.string.ninja_card_number_error.getString())
+            readyCheck.put(numberText, false)
+        } else {
+            numberMaxLength.set(cardType.numberMaxLength)
+            cvvMaxLength.set(cardType.cvvMaxLength)
+            cardIcon.set(cardType.cardIcon)
+            numberError.set(Utils.EMPTY)  // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir"
+        }
     }
 
     private fun giveMeBrand(cardNumber: String, cardBrands: HashMap<Regex, CardType>): CardType {
@@ -240,10 +246,10 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                             if (isEmailFormNeeded.get()) {
                                 emailText.set("")
                             }
-                            numberText.set("")
                             cvvText.set("")
                             trhuText.set("")
-                            numberFocus.set(true)
+                            numberText.set("")
+                            needFocus.set(true)
                         }
                         isInputEnabled.set(true)
                         isButtonEnabled.set(false)

@@ -1,7 +1,6 @@
 package com.topface.topface.utils;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -9,7 +8,6 @@ import android.content.res.XmlResourceParser;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.graphics.Paint;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Parcelable;
@@ -534,4 +532,12 @@ public class BindingsAdapters {
             view.setLayerType(layerType, paint);
         }
     }
+
+    @BindingAdapter("setRequestFocus")
+    public static void setRequestFocus(android.support.design.widget.TextInputEditText view, boolean needFocus) {
+        if (needFocus) {
+            view.requestFocus();
+        }
+    }
+
 }
