@@ -547,6 +547,4 @@ public class BindingsAdapters {
             view.clearFocus();
         }
     }
-
-
 }
