@@ -28,7 +28,6 @@
                 android:clickable="@{model.isDatingButtonsLocked}"
                 android:onClick="@{() -> model.showChat()}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
-
         </FrameLayout>
 
         <FrameLayout
@@ -44,7 +43,6 @@
                 android:clickable="@{model.isDatingButtonsLocked}"
                 android:onClick="@{() -> model.skip()}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
-
         </FrameLayout>
 
         <FrameLayout
@@ -87,8 +85,5 @@
                 android:onClick="@{() -> model.validateSendAdmiration(model.BUTTON_FROM_ANCHOR)}"
                 bind:fabVisibility="@{model.isDatingButtonsVisible}"/>
         </FrameLayout>
-
-
     </LinearLayout>
-
 </layout>
