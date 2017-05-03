@@ -55,18 +55,13 @@ class ChatModule(val chatActivity: ChatActivity) {
 
     @Provides
     @FragmentScope
-    fun provideLoaderStubComponent() = LoaderStubComponent()
-
-    @Provides
-    @FragmentScope
-    fun provideCompositeAdapter(typeProvider: ITypeProvider, loaderStubComponent: LoaderStubComponent,
-                                feedNavigator: FeedNavigator)
+    fun provideCompositeAdapter(typeProvider: ITypeProvider, feedNavigator: FeedNavigator)
             = CompositeAdapter(typeProvider = typeProvider, provideItemTypeStrategyType = CHAT) {
         Bundle().apply {
             //todo итем для подгрузки
         }
     }.apply {
-        addAdapterComponent(loaderStubComponent)
+        addAdapterComponent(LoaderStubComponent())
         addAdapterComponent(UserMessageComponent())
         addAdapterComponent(FriendMessageCompnent())
         addAdapterComponent(UserGiftComponent())

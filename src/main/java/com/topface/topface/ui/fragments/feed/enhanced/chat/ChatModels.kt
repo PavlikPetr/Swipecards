@@ -1,6 +1,9 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.HistoryItem.Companion.STUB_BUY_VIP
+import com.topface.topface.api.responses.HistoryItem.Companion.STUB_CHAT_LOADER
+import com.topface.topface.api.responses.HistoryItem.Companion.STUB_MUTUAL
 import com.topface.topface.data.FeedUser
 
 /**
@@ -10,7 +13,9 @@ import com.topface.topface.data.FeedUser
 /**
  * Лоадер на время отправки запроса
  */
-data class ChatLoader(var diffTemp: Int = 0)
+data class ChatLoader(var diffTemp: Int = 0): IChatItem {
+    override fun getItemType() = STUB_CHAT_LOADER
+}
 
 /**
  * Событие на удаление
@@ -50,12 +55,16 @@ class Divider: HistoryItem()
 /**
  * заглушка чата про взаимные симпатии
  */
-class MutualStub: FeedUser()
+class MutualStub: FeedUser(), IChatItem {
+    override fun getItemType() = STUB_MUTUAL
+}
 
 /**
  * заглушка чата про покупку вип
  */
-class BuyVipStub: FeedUser()
+class BuyVipStub: FeedUser(), IChatItem {
+    override fun getItemType() = STUB_BUY_VIP
+}
 
 /**
  * интерфейс макирующий итемы чата, в частности для разбора базового HistoryItem
