@@ -21,5 +21,7 @@ class CardType(val name: String, val numberMaxLength: Int, val cvvMaxLength: Int
         val JCB = CardType("jcb", MAX_LENGTH_CARD_NUMBER_DEFAULT, CVV_DEFAULT, R.drawable.ic_card_jcb)
         val MIR = CardType("mir", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_card_mir)
         val DEFAULT = CardType("default", MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, R.drawable.ic_card_default)
+
+        val NONVALIDCARD = CardType("non_valid",MAX_LENGTH_CARD_NUMBER_LONG, CVV_DEFAULT, 0 )
     }
 }
