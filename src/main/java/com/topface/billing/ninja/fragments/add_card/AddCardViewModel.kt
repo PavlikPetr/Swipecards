@@ -19,6 +19,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.data.Products
 import com.topface.topface.requests.PaymentNinjaPurchaseRequest
+import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.Utils
@@ -137,12 +138,16 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                     isFirstDescriptionVisible.set(true)
                     isSecondDescriptionVisible.set(true)
                     firstDescriptionText.set(R.string.ninja_text_trial_1.getString())
-                    val days = Utils.getQuantityString(R.plurals.ninja_trial_days, it.trialPeriod, it.trialPeriod)
-                    secondDescriptionText.set(String.format(R.string.ninja_text_trial_2.getString(), days, it.price, it.currencyCode))
-                } else {
-                    // vip
+                    secondDescriptionText.set(String.format(R.string.ninja_text_trial_2.getString(),
+                            Utils.getQuantityString(R.plurals.ninja_trial_days, it.trialPeriod, it.trialPeriod),
+                            it.price, it.currencyCode))
+                } else if (it.isSubscription) {
+                    // vip subscription
                     isFirstDescriptionVisible.set(true)
-                    firstDescriptionText.set(R.string.ninja_text_5.getString())
+                    firstDescriptionText.set(String.format(R.string.ninja_text_6.getString(),
+                            Utils.getQuantityString(R.plurals.ninja_trial_days, it.period, it.period)))
+                } else {
+                    isFirstDescriptionVisible.set(false)
                 }
             }
         }
@@ -337,7 +342,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
         return readyCheck[emailText] ?: false
     }
 
-    fun navigateToRules(): Unit? = mProduct?.subscriptionInfo?.let { Utils.goToUrl(App.getContext(), it.url) }
+    fun navigateToRules(): Unit? =
+            Utils.goToUrl(App.getContext(), mProduct?.subscriptionInfo?.url ?: PaymentNinjaMarketBuyingFragmentViewModel.AUTOREFILL_RULES_URL)
 
     private fun sendPurchaseRequest(productId: String, source: String, productType: String) {
         mPurchaseRequestSubscription = PaymentNinjaPurchaseRequest(App.getContext(), productId, source,

@@ -1011,7 +1011,6 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="ninja_text_2">Sicurezza 128-bit SSL</string>
   <string name="ninja_text_4">Pagando la somma stabilita, dichiari di accettare</string>
   <string name="ninja_text_link">le regole del servizio</string>
-  <string name="ninja_text_5">Fra 7 giorni il tuo profilo VIP verrà rinnovato. I dati della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento e rimuovere le informazioni sulla tua carta tramite le Impostazioni.</string>
   <string name="ninja_text_trial_1">Verrà addebitato e subito restituito 1€ per verificare la tua carta.</string>
   <string name="ninja_text_trial_2">Fra %1$s verrà processata una transazione per %2$d %3$s. Il tuo abbonamento verrà automaticamente rinnovato ogni mese e i dettagli della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento insieme alle informazioni sulla tua carta dalle Impostazioni.</string>
   <string name="ninja_settings_toolbar">Pagamenti</string>

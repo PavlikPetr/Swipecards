@@ -1007,7 +1007,6 @@
   <string name="ninja_text_2">Segurança 128-bit SSL</string>
   <string name="ninja_text_4">Incluindo o total dado, concordas em</string>
   <string name="ninja_text_link">as regras do serviço</string>
-  <string name="ninja_text_5">O estatuto VIP é automaticamente renovado dentro de 7 dias. O teu cartão será guardado para futuros pagamentos. Podes cancelar a subscrição e remover o teu cartão em Definições.</string>
   <string name="ninja_text_trial_1">1€ será retirado e imediatamente reposto para que o teu cartão seja verificado.</string>
   <string name="ninja_text_trial_2">Em %1$s uma transação será completada por %2$d %3$s. A tua subscrição será automaticamente renovada e o teu cartão será guardado para futuros pagamentos cada mês. Podes cancelar a subscrição e remover o teu cartão em Definições.</string>
   <string name="ninja_settings_toolbar">Pagamentos</string>
