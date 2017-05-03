@@ -37,8 +37,7 @@
                 android:layout_above="@+id/centerImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="24dp"
-                android:text="@string/purchase_successfull"
-                android:textAllCaps="false"/>
+                android:text="@string/purchase_successfull"/>
 
             <ImageView
                 android:id="@+id/centerImage"
