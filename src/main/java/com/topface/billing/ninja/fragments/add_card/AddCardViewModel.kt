@@ -209,7 +209,6 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
             cardIcon.set(CardType.NONVALIDCARD.cardIcon)
             numberError.set(R.string.ninja_card_number_error.getString())
             readyCheck.put(numberText, false)
-
         }
     }
 
