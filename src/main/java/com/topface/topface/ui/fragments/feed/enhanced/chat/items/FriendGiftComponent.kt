@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemChatD1FriendGiftBinding
+import com.topface.topface.ui.fragments.feed.enhanced.chat.FriendGift
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 class FriendGiftComponent: AdapterComponent<ItemChatD1FriendGiftBinding, FriendGift>() {

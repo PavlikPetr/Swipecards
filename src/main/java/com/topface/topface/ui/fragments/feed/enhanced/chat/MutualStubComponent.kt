@@ -2,7 +2,6 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import android.support.v7.widget.StaggeredGridLayoutManager
 import com.topface.topface.R
-import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.MutualStubChatBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import kotlin.properties.Delegates
@@ -10,7 +9,7 @@ import kotlin.properties.Delegates
 /**
  * Заглушка "взаимных симпатий" в чате
  */
-class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<MutualStubChatBinding, FeedUser>() {
+class MutualStubComponent : AdapterComponent<MutualStubChatBinding, MutualStub>() {
 
     override val itemLayout: Int
         get() = R.layout.mutual_stub_chat
@@ -19,10 +18,10 @@ class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<
 
     private var mViewModel by Delegates.notNull<MutualStubChatViewModel>()
 
-    override fun bind(binding: MutualStubChatBinding, data: FeedUser?, position: Int) =
+    override fun bind(binding: MutualStubChatBinding, data: MutualStub?, position: Int) =
             with(binding) {
                 data?.let { mViewModel = MutualStubChatViewModel(it) }
-                setViewModel(mViewModel)
+                viewModel = mViewModel
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
             }
