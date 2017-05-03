@@ -46,6 +46,7 @@ def getTimestamp() {
 buildscript {
     ext {
         retrofit_version = '2.1.0'
+        ampiri = '3.9.0'
         google_play_services_version = '9.4.0'
         kotlin_version = '1.1.2'
         anko_version = '0.9'
@@ -435,7 +436,7 @@ dependencies {
 
     compile "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
-   // provided 'org.glassfish:javax.annotation:10.0-b28'
+    // provided 'org.glassfish:javax.annotation:10.0-b28'
 
     //Social networks SDK
     compile('com.vk:androidsdk:1.6.8') {
@@ -490,49 +491,44 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.5'
     /*_______________________________________________________________*/
     /*________________________AMPIRI_________________________________*/
-    compile ('com.ampiri.sdk:ampiri-sdk:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-adcolony:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-adcolony:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-admob:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-admob:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-unityads:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-unityads:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-applovin:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-applovin:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-chartboost:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-chartboost:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-facebook:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-facebook:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-mopub:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-mopub:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'com.mopub'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-nativex:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-nativex:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-vungle:3.9.0') {
-        exclude group: 'com.google.android.gms'
-        exclude group: 'javax.inject'
-        exclude group: 'com.vungle'
-    }
-    compile ('com.ampiri.sdk:ampiri-sdk-mediation-baidu:3.9.0') {
+    compile("com.ampiri.sdk:ampiri-sdk-mediation-baidu:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }

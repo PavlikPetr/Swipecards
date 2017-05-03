@@ -21,7 +21,7 @@ import com.topface.topface.viewModels.BaseViewModel
 
 abstract class BaseToolbarViewModel(binding: ToolbarViewBinding,
                                     val mNavigation: IToolbarNavigation? = null) : BaseViewModel<ToolbarViewBinding>(binding) {
-    val title = RxFieldObservable<String>(R.string.app_name.getString())
+    val title = RxFieldObservable(R.string.app_name.getString())
     val background = ObservableInt(R.color.toolbar_background)
     val subTitle = RxFieldObservable<String>()
     val titleTextColor = ObservableInt(R.color.toolbar_title_color.getColor())

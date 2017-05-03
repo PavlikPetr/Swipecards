@@ -45,7 +45,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     fun setToolBarVisibility(isToolbarVisible: Boolean) {
-        toolbarBinding?.root?.visibility = if (isToolbarVisible) View.VISIBLE else View.GONE
+        mToolbarBaseViewModel?.visibility?.set(if (isToolbarVisible) View.VISIBLE else View.GONE)
     }
 
     fun isToolBarVisible() = toolbarBinding?.root?.visibility == View.VISIBLE
