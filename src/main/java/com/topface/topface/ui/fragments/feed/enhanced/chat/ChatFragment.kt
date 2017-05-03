@@ -85,6 +85,12 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
         ComponentManager.releaseComponent(ChatViewModelComponent::class.java)
     }
 
+    override fun onPause() {
+        super.onPause()
+        mBinding.root.setKeyboardListener(null)
+        Utils.hideSoftKeyboard(App.getContext(), mBinding.input)
+    }
+
     override fun onResume() {
         super.onResume()
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
