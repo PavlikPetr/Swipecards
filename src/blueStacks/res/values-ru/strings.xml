@@ -1091,7 +1091,7 @@
   <string name="ninja_cvv_error">Неверный код</string>
   <string name="ninja_trhu_error">Неверная дата</string>
   <string name="ninja_card_number_error">Неверный номер карты</string>
-  <string name="ninja_email_error">Неверный формат Email</string>
+  <string name="ninja_email_error">Неверный формат e-mail</string>
   <string name="use_card">Использовать карту **%s</string>
   <string name="ninja_no_card_title">Добавить карту</string>
   <string name="ninja_subscription_expiration">Активна до %s</string>
@@ -1103,6 +1103,7 @@
   <string name="ninja_product_by_price">%1$s за %2$s</string>
   <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
   <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
+  <string name="pn_email">E-mail</string>
   <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
   <string name="write_him_first">Напиши ему первой!</string>
   <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
