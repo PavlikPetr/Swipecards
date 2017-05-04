@@ -75,6 +75,8 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                     .subscribe({
                         // в случае успешного удаления карты необходимо обновить опции пользователя
                         App.getUserOptionsRequest().exec()
+                        sendCardListRequest()
+                        sendUserSubscriptionsRequest()
                     }, {
                         sendCardListRequest()
                         sendUserSubscriptionsRequest()
@@ -84,7 +86,7 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
 
     private fun cancelSubscriptionRequest(subscriptionInfo: SubscriptionInfo?) =
             subscriptionInfo?.let { subscription ->
-                if (subscriptionInfo.type == SubscriptionInfo.SUBSCRIPTION_TYPE_PREMIUM) {
+                if (subscriptionInfo.type == SubscriptionInfo.SUBSCRIPTION_TYPE_AUTO_REFILL) {
                     getData().remove(subscription)
                 }
                 mCancelSubscription = getCancelSubscriptionRequest(subscription.type)

@@ -1,5 +1,6 @@
 package com.topface.billing.ninja
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -31,6 +32,8 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
         const val EXTRA_SOURCE = "NinjaAddCardActivity.Extra.Source"
         const val REQUEST_CODE = 231
         const val CARD_SENDED_SUCCESFULL = "NinjaAddCardActivity.CardSendedSuccesfull"
+        const val PURCHASE_SUCCESFULL = "NinjaAddCardActivity.PurchaseSuccesfull"
+        const val PRODUCT = "NinjaAddCardActivity.Product"
         const val UNKNOWN_PLACE = "unknown_place"
         const val SHOW_ADD_CARD = 0
         const val SHOW_3DS = 1
@@ -75,7 +78,12 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
                         if (it.settings.errorCode == ErrorCodes.PAYMENT_NINJA_3DSECURE_ERROR) {
                             addFragment(get3DSecureFragment(it), ThreeDSecureFragment.TAG)
                         } else {
+                            // ошибка не 3ds, значит покажем тост и закроем активити с инфой о том,
+                            // что карта была добавлена успешно
                             Utils.showErrorMessage()
+                            setResult(Activity.RESULT_OK,
+                                    Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                            finish()
                         }
                     }
                 })
