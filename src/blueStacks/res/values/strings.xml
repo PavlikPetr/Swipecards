@@ -998,6 +998,7 @@
   <string name="ninja_text_2">128-bit SSL Secured</string>
   <string name="ninja_text_4">Including the given sum, you agree to</string>
   <string name="ninja_text_link">the service\'s rules</string>
+  <string name="ninja_text_6">In %s operation VIP-status will be automatically renewed. Your card will be saved for future payments. You can cancel your subscription and unlink your card in Settings.</string>
   <string name="ninja_text_trial_1">€1 will be charged and immediately returned to your account in order to verify your card.</string>
   <string name="ninja_text_trial_2">In %1$s a transaction will be completed for %2$d %3$s. Each month your subscription will be automatically renewed and your card saved for the upcoming payments. You can cancel your subscription and unlink your card in Settings.</string>
   <string name="ninja_settings_toolbar">Payments</string>
