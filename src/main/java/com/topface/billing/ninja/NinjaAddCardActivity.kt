@@ -3,7 +3,6 @@ package com.topface.billing.ninja
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.View
 import com.topface.billing.ninja.fragments.add_card.AddCardFragment
 import com.topface.billing.ninja.fragments.three_d_secure.ThreeDSecureFragment
 import com.topface.topface.App
@@ -13,7 +12,7 @@ import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.BaseFragmentActivity
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
-import com.topface.topface.ui.views.toolbar.view_models.EmptyToolbarViewModel
+import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.shortSubscription
@@ -61,9 +60,9 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
 
     private var m3DSecureSubscription: Subscription? = null
 
-    override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding): ToolbarViewBinding = binding.toolbarInclude.apply { root?.visibility = View.GONE }
+    override fun getToolbarBinding(binding: LayoutNinjaAddCardBinding): ToolbarViewBinding = binding.toolbarInclude
 
-    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) = EmptyToolbarViewModel(toolbar)
+    override fun generateToolbarViewModel(toolbar: ToolbarViewBinding) = InvisibleToolbarViewModel(toolbar)
 
     override fun getLayout(): Int = R.layout.layout_ninja_add_card
 

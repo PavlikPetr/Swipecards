@@ -1012,10 +1012,11 @@
     <string name="ninja_text_2">Protección de 128-bit SSL</string>
     <string name="ninja_text_4">Incluyendo el total, aceptas</string>
     <string name="ninja_text_link">las condiciones del servicio</string>
+    <string name="ninja_text_6">El %s tu estado VIP se renovará automáticamente. Tu tarjeta se quedará guardada para futuros pagos. Puedes cancelar tu suscripción y desvincular tu tarjeta en Configuración.</string>
     <string name="ninja_text_trial_1">Se te cobrará 1€ y será devuelto inmediatamente a tu cuenta para verificar tu tarjeta.</string>
     <string name="ninja_text_trial_2">En %1$s se completará una transacción para %2$d %3$s. Cada mes tu suscripción se renovará de forma automática y tu tarjeta se quedará guardada para los próximos pagos. Puedes cancelar la suscripción y desvincular tu tarjeta en Configuración.</string>
     <string name="ninja_settings_toolbar">Pagos</string>
-    <string name="ninja_vip_status_title">Subscripción al estado VIP</string>
+    <string name="ninja_vip_status_title">Suscripción al estado VIP</string>
     <string name="ninja_cancel_vip_status">Cancelar suscripción</string>
     <string name="ninja_use_another_card">Usar otra carta</string>
     <string name="ninja_delete_card">Borrar corta</string>
