@@ -82,6 +82,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val emailText = ObservableField<String>()
     val emailError = ObservableField<String>()
     val cardFieldsSubscription = CompositeSubscription()
+    var mAddCardRequestSubscription: Subscription? = null
     val productTitle = ObservableField<String>()
     val isAutoPayDescriptionVisible = ObservableBoolean(false)
     val isAutoPayEnabled = ObservableBoolean(true)
@@ -218,8 +219,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
         cardFieldsSubscription.clear()
         cvvText.removeOnPropertyChangedCallback(cvvChangedCallback)
         emailText.removeOnPropertyChangedCallback(emailChangedCallback)
-        mPurchaseRequestSubscription.safeUnsubscribe()
-        m3DSSwitchSubscription.safeUnsubscribe()
+        arrayOf(mAddCardRequestSubscription, m3DSSwitchSubscription, mPurchaseRequestSubscription).safeUnsubscribe()
     }
 
     fun onClick() {
@@ -241,7 +241,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
             )
             isInputEnabled.set(false)
             mIsProgressVisible = true
-            AddCardRequest().getRequestObservable(App.get(), cardModel)
+            mAddCardRequestSubscription = AddCardRequest().getRequestObservable(App.get(), cardModel)
                     .applySchedulers()
                     .subscribe({
                         mProduct?.let {
