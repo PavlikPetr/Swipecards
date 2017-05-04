@@ -3,7 +3,7 @@ package com.topface.topface.di.chat
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatFragment
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.ClickableChatItemViewModel
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import dagger.Subcomponent
 
 
@@ -12,5 +12,5 @@ import dagger.Subcomponent
 interface ChatComponent {
     fun inject(fragment: ChatActivity)
     fun inject(fragment: ChatFragment)
-    fun inject(chatItemViewModel: ClickableChatItemViewModel)
+    fun feedNavigator(): FeedNavigator
 }
