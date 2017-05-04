@@ -12,16 +12,17 @@ import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Emitter
 import rx.Observable
-import rx.Subscription
 import rx.lang.kotlin.withIndex
+import rx.subscriptions.CompositeSubscription
+import java.util.concurrent.TimeUnit
 
 /**
  * ProgressBar для отравки статистики
  * Created by ppavlik on 24.03.17.
  */
-class StatisticsProgressBar constructor(context: Context, attrs: AttributeSet?,
-                                        defStyleAttr: Int,
-                                        defStyleRes: Int) :
+open class StatisticsProgressBar constructor(context: Context, attrs: AttributeSet?,
+                                             defStyleAttr: Int,
+                                             defStyleRes: Int) :
         ProgressBar(context, attrs, defStyleAttr, defStyleRes) {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0) {
@@ -41,10 +42,10 @@ class StatisticsProgressBar constructor(context: Context, attrs: AttributeSet?,
 
     private var mPlc = PLC_UNDEFINED
     private var mEmitter: Emitter<Boolean>? = null
-    private var mSubscription: Subscription
+    private var mSubscription = CompositeSubscription()
 
     init {
-        mSubscription = Observable.fromEmitter<Boolean>({ emitter ->
+        mSubscription.add(Observable.fromEmitter<Boolean>({ emitter ->
             mEmitter = emitter
         }, Emitter.BackpressureMode.LATEST)
                 .distinctUntilChanged()
@@ -60,7 +61,10 @@ class StatisticsProgressBar constructor(context: Context, attrs: AttributeSet?,
                             sendHideEvent(it.intervalInMilliseconds)
                         }
                     }
-                })
+                }))
+        // костыль на случай если не сработал onVisibilityChanged
+        mSubscription.add(Observable.interval(100, TimeUnit.MILLISECONDS)
+                .subscribe(shortSubscription { mEmitter?.onNext(visibility == View.VISIBLE) }))
     }
 
     private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
@@ -90,8 +94,8 @@ class StatisticsProgressBar constructor(context: Context, attrs: AttributeSet?,
      * Задать название экрана, который отобразил лоадер
      * @param plc - место показа лоадера
      */
-    fun setPlc(plc: String) {
-        mPlc = plc
+    fun setPlc(plc: String?) {
+        mPlc = plc ?: PLC_UNDEFINED
     }
 
     private fun sendShowEvent() {

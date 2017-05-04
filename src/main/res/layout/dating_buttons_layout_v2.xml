@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -49,13 +50,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <ProgressBar
+            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
                 style="@style/Widget.AppCompat.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/loader_bg"
                 android:theme="@style/CircularProgress"
-                android:visibility="@{model.isDatingProgressBarVisible}"/>
+                android:visibility="@{model.isDatingProgressBarVisible}"
+                app:plc="@string/dating_fragment_loader_v2"/>
         </FrameLayout>
 
         <FrameLayout

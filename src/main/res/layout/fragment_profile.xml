@@ -16,6 +16,7 @@
         android:id="@+id/viewPagerLoader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:plc="profile_fragment_main_loader"
         android:layout_centerInParent="true" />
 
     <View
