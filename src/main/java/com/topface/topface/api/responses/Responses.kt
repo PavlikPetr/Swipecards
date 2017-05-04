@@ -1,5 +1,7 @@
 package com.topface.topface.api.responses
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
@@ -30,7 +32,7 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
-                       val unread: Boolean = false, val link: String? = null): IChatItem {
+                       val unread: Boolean = false, val link: String? = null): IChatItem, Parcelable {
 
     override fun getItemType() = if(target == FeedDialog.OUTPUT_USER_MESSAGE) {
             // owner items
@@ -60,7 +62,38 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
         const val STUB_CHAT_LOADER = 1002
         const val STUB_BUY_VIP = 1003
         const val STUB_MUTUAL = 1004
+
+        @JvmField val CREATOR: Parcelable.Creator<HistoryItem> = object : Parcelable.Creator<HistoryItem> {
+            override fun createFromParcel(source: Parcel): HistoryItem = HistoryItem(source)
+            override fun newArray(size: Int): Array<HistoryItem?> = arrayOfNulls(size)
+        }
     }
+    constructor(source: Parcel) : this(
+            source.readString(),
+            source.readFloat(),
+            source.readFloat(),
+            source.readInt(),
+            source.readInt(),
+            source.readLong(),
+            source.readInt(),
+            source.readByte().toInt() == 1,
+            source.readString()
+    )
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) =
+            dest?.let {
+                it.writeString(text)
+                it.writeFloat(latitude)
+                it.writeFloat(longitude)
+                it.writeInt(type)
+                it.writeInt(id)
+                it.writeLong(created)
+                it.writeInt(target)
+                it.writeByte(if (unread) 1 else 0)
+                it.writeString(link)
+            } ?: Unit
 }
 
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,

@@ -22,6 +22,7 @@
             style="@style/ChatImage.Gift.Holo"
             android:layout_gravity="right|top"
             android:background="@drawable/chat_item_d1_bg_user"
+            bind:onLongClickListener="@{() -> viewModel.longClickListener.invoke()}"
             bind:remoteSrcGlide="@{viewModel.link}"
             tools:src="@drawable/feed_banned_female_avatar" />
     </FrameLayout>

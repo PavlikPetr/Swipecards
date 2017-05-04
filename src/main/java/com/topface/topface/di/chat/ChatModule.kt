@@ -62,10 +62,10 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
         }
     }.apply {
         addAdapterComponent(LoaderStubComponent())
-        addAdapterComponent(UserMessageComponent())
-        addAdapterComponent(FriendMessageCompnent())
-        addAdapterComponent(UserGiftComponent())
-        addAdapterComponent(FriendGiftComponent())
+        addAdapterComponent(UserMessageComponent(feedNavigator))
+        addAdapterComponent(FriendMessageComponent(feedNavigator))
+        addAdapterComponent(UserGiftComponent(feedNavigator))
+        addAdapterComponent(FriendGiftComponent(feedNavigator))
         addAdapterComponent(DividerComponent())
         addAdapterComponent(MutualStubComponent(feedUser))
         addAdapterComponent(BuyVipStubComponent(feedNavigator, feedUser))
