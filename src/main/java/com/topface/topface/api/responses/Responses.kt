@@ -6,6 +6,8 @@ import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
 import com.topface.topface.utils.Utils.EMPTY
+import com.topface.topface.utils.extensions.readBoolean
+import com.topface.topface.utils.extensions.writeBoolean
 import java.util.*
 
 /**
@@ -76,7 +78,7 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
             source.readInt(),
             source.readLong(),
             source.readInt(),
-            source.readByte().toInt() == 1,
+            source.readBoolean(),
             source.readString()
     )
 
@@ -91,7 +93,7 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
                 it.writeInt(id)
                 it.writeLong(created)
                 it.writeInt(target)
-                it.writeByte(if (unread) 1 else 0)
+                it.writeBoolean(unread)
                 it.writeString(link)
             } ?: Unit
 }
