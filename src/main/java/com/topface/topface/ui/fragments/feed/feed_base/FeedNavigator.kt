@@ -14,6 +14,7 @@ import com.topface.billing.ninja.dialogs.ErrorDialogFactory
 import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.*
 import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
@@ -37,8 +38,8 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
-import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
+import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -255,7 +256,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
 
-    override fun showChatPopupMenu(item: History, position: Int) =
+    override fun showChatPopupMenu(item: HistoryItem, position: Int) =
             ChatPopupMenu.newInstance(item, position).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
 
     override fun openUrl(url: String) {

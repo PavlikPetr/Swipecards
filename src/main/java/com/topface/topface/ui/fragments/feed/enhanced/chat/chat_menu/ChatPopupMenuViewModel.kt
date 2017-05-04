@@ -5,7 +5,7 @@ import android.content.ClipboardManager
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
-import com.topface.topface.data.History
+import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatComplainEvent
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatDeleteEvent
@@ -15,7 +15,7 @@ import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.rx.shortSubscription
 import rx.subscriptions.CompositeSubscription
 
-class ChatPopupMenuViewModel(private val mItem: History, private val mItemPosition: Int,
+class ChatPopupMenuViewModel(private val mItem: HistoryItem, private val mItemPosition: Int,
                              private var mIDialogCloser: IDialogCloser?, private val mApi: Api,
                              private val mClipboardManager: ClipboardManager) : ILifeCycle {
 

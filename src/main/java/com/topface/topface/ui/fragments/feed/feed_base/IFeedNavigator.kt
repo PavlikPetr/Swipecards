@@ -6,6 +6,7 @@ import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.view.View
 import com.topface.billing.ninja.PurchaseError
+import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
@@ -52,6 +53,6 @@ interface IFeedNavigator {
     fun showPaymentNinja3DS(error:PurchaseError)
 
     fun openUrl(url: String)
-    fun showChatPopupMenu(item: History, position: Int)
+    fun showChatPopupMenu(item: HistoryItem, position: Int)
     fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
 }

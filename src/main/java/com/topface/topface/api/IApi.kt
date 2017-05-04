@@ -21,7 +21,7 @@ interface IApi {
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
-    fun deleteMessage(item: com.topface.topface.data.History): Observable<Completed>
+    fun deleteMessage(item: HistoryItem): Observable<Completed>
 
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Completed>
 
