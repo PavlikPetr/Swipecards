@@ -119,6 +119,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                         if (it.isCradAvailable()) {
                             cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigits))
                             isCheckBoxVisible.set(View.VISIBLE)
+                            initAutofillView(isChecked.get())
                         } else {
                             isCheckBoxVisible.set(View.GONE)
                         }
