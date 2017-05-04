@@ -63,7 +63,7 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
     }.apply {
         addAdapterComponent(LoaderStubComponent())
         addAdapterComponent(UserMessageComponent())
-        addAdapterComponent(FriendMessageCompnent())
+        addAdapterComponent(FriendMessageComponent())
         addAdapterComponent(UserGiftComponent())
         addAdapterComponent(FriendGiftComponent())
         addAdapterComponent(DividerComponent())

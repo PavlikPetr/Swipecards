@@ -259,8 +259,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                             trhuText.set("")
                             numberText.set("")
 
-                            clearFocus.set(true)
-                            needFocus.set(true)
+                            with(clearFocus) {
+                                set(true)
+                                notifyChange()
+                            }
+                            with(needFocus) {
+                                set(true)
+                                notifyChange()
+                            }
 
                             with(readyCheck) {
                                 put(numberText, false)
@@ -373,8 +379,13 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                 mIsTestPurchase, isAutoPayEnabled.get(), mIs3DSPurchase).getRequestSubscriber()
                 .applySchedulers()
                 .subscribe({
-                    mNavigator.showPurchaseSuccessfullFragment(productType, Bundle()
-                            .apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                    mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                            Intent().apply {
+                                putExtra(NinjaAddCardActivity.PURCHASE_SUCCESFULL, true)
+                                mProduct?.let {
+                                    putExtra(NinjaAddCardActivity.PRODUCT, it)
+                                }
+                            })
                     mIsProgressVisible = false
                     isInputEnabled.set(true)
                 },

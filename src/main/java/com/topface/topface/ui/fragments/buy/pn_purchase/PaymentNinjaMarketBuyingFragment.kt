@@ -14,6 +14,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -47,6 +49,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
 
     private val mViewModel by lazy {
         PaymentNinjaMarketBuyingFragmentViewModel(mFeedNavigator, mIsPremiumProducts, mFrom ?: Utils.EMPTY)
+                .apply { activity.registerLifeCycleDelegate(this) }
     }
 
     private val mPnBuyingTypeProvider by lazy {
@@ -93,6 +96,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity.unregisterLifeCycleDelegate(mViewModel)
         mViewModel.release()
     }
 }

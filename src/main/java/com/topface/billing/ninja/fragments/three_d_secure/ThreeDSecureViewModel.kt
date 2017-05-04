@@ -1,25 +1,24 @@
 package com.topface.billing.ninja.fragments.three_d_secure
 
 import android.app.Activity
+import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.graphics.Paint
-import android.os.Bundle
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import com.topface.billing.ninja.IFinishDelegate
 import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.PurchaseError
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 
 /**
  * Вью-модель для 3ds валидации
  * Created by ppavlik on 28.04.17.
  */
-class ThreeDSecureViewModel(private val mSettings: PurchaseError, private var mFinishCallback: IFinishDelegate?,
-                            private val mNavigator: IFeedNavigator) : IPaymentNinjaWebViewClient {
+class ThreeDSecureViewModel(private val mSettings: PurchaseError,
+                            private var mFinishCallback: IFinishDelegate?) : IPaymentNinjaWebViewClient {
 
     companion object {
         private const val POST_DATA_TEMPLATE = "PaReq=%s&MD=%s&TermUrl=%s"
@@ -53,12 +52,14 @@ class ThreeDSecureViewModel(private val mSettings: PurchaseError, private var mF
             }
 
     private fun finishWithFail() {
-        mFinishCallback?.finishWithResult(Activity.RESULT_CANCELED)
+        mFinishCallback?.finishWithResult(Activity.RESULT_OK, Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
     }
 
     private fun finishWithSuccess() {
-        mNavigator.showPurchaseSuccessfullFragment(mSettings.product.type, Bundle()
-                .apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+        mFinishCallback?.finishWithResult(Activity.RESULT_OK, Intent().apply {
+            putExtra(NinjaAddCardActivity.PURCHASE_SUCCESFULL, true)
+            putExtra(NinjaAddCardActivity.PRODUCT, mSettings.product)
+        })
     }
 
     fun release() {
