@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendMessageViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="56dp"
+        android:paddingTop="9dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="@dimen/chat_d1_friend_lefT_margin"
+            android:background="@drawable/chat_item_d1_bg_friend"
+            android:text="@{viewModel.text}"
+            android:textColor="@color/dark_primary_text"
+            android:textSize="16sp"
+            tools:text="Дратути, кагдила? Вы начинаете читать предложение, чтение которого уже заканчиваете." />
+    </FrameLayout>
+</layout>

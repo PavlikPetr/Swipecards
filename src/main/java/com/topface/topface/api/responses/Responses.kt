@@ -1,6 +1,9 @@
 package com.topface.topface.api.responses
 
+import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
+import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
+import com.topface.topface.utils.Utils.EMPTY
 import java.util.*
 
 /**
@@ -25,8 +28,40 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
                 val background: Int, val banned: Boolean, val deleted: Boolean, val inBlacklist: Boolean,
                 val photos: List<Photo>, val photosCount: Int, val status: String, val distance: Int)
 
-data class HistoryItem(val text: String, val latitude: Float, val longitude: Float, val type: Int,
-                       val id: Int, val created: Long, val target: Int, val unread: Boolean)
+open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
+                       val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
+                       val unread: Boolean = false, val link: String? = null): IChatItem {
+
+    override fun getItemType() = if(target == FeedDialog.OUTPUT_USER_MESSAGE) {
+            // owner items
+            when(type) {
+                FeedDialog.DIVIDER -> DIVIDER
+                FeedDialog.GIFT -> USER_GIFT
+                else -> USER_MESSAGE
+            }
+        } else {
+            // friend items
+            when(type) {
+                FeedDialog.DIVIDER -> DIVIDER
+                FeedDialog.GIFT -> FRIEND_GIFT
+                else -> FRIEND_MESSAGE
+            }
+        }
+
+    companion object {
+        // different messages in chat
+        const val USER_MESSAGE = 1
+        const val USER_GIFT = 2
+        const val FRIEND_MESSAGE = 3
+        const val FRIEND_GIFT = 4
+        const val DIVIDER = 5
+        // stubs for chat, better start numbers from 1000
+        const val STUB_FEED_USER = 1001
+        const val STUB_CHAT_LOADER = 1002
+        const val STUB_BUY_VIP = 1003
+        const val STUB_MUTUAL = 1004
+    }
+}
 
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
                    val items: ArrayList<HistoryItem>)
