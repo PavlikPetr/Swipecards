@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.base
 
 import android.databinding.ViewStubProxy
+import android.support.annotation.IntDef
 import android.support.annotation.LayoutRes
 import android.view.View
 import android.view.ViewStub
@@ -14,7 +15,20 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedLockerView
  * @param VM empty screen VM
  * @property mStub - view stub proxy from binding class (from base feed fragment layout)
  */
+typealias LockerStubState = BaseFeedLockerController.Companion.LockerState
+
 abstract class BaseFeedLockerController<VM : BaseViewModel>(private val mStub: ViewStubProxy) : ViewStub.OnInflateListener, IFeedLockerView {
+
+    companion object {
+        @IntDef(NONE, FILLED_FEED, EMPTY_FEED, LOCKED_FEED)
+        @Retention(AnnotationRetention.SOURCE)
+        annotation class LockerState
+
+        const val NONE = 0L
+        const val FILLED_FEED = 1L
+        const val EMPTY_FEED = 2L
+        const val LOCKED_FEED = 3L
+    }
 
     protected var mStubModel: VM? = null
     private var mViewStub: ViewStub? = null
@@ -58,9 +72,10 @@ abstract class BaseFeedLockerController<VM : BaseViewModel>(private val mStub: V
         }
     }
 
-    private fun setStubVisibility(visibility: Int) = (mStub.viewStub ?: mViewStub)?.let {
-        it.visibility = visibility
+    private fun setStubVisibility(visibility: Int) {
+        (mStub.viewStub ?: mViewStub)?.visibility = visibility
     }
+
 
     open fun release() {
         mStubModel?.release()
