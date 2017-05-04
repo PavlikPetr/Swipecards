@@ -14,9 +14,7 @@ import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
 import com.topface.billing.ninja.fragments.add_card.CardType.Companion.CVV_DEFAULT
-import com.topface.billing.ninja.fragments.add_card.CardType.Companion.MASTERCARD
 import com.topface.billing.ninja.fragments.add_card.CardType.Companion.NONVALIDCARD
-import com.topface.billing.ninja.fragments.add_card.CardType.Companion.VISA
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
@@ -198,17 +196,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
     private fun setTemplate(cardType: CardType) {
-        // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir", "default"
-        if (cardType in listOf<CardType>(VISA, MASTERCARD)) {
-            numberMaxLength.set(cardType.numberMaxLength)
-            cvvMaxLength.set(cardType.cvvMaxLength)
-            cardIcon.set(cardType.cardIcon)
-            numberError.set(Utils.EMPTY)  // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir","default"
-        } else {
-            numberMaxLength.set(CardType.NONVALIDCARD.numberMaxLength)
-            cardIcon.set(CardType.NONVALIDCARD.cardIcon)
+        numberMaxLength.set(cardType.numberMaxLength)
+        cvvMaxLength.set(cardType.cvvMaxLength)
+        cardIcon.set(cardType.cardIcon)
+        if (cardType == NONVALIDCARD) {
             numberError.set(R.string.ninja_card_number_error.getString())
             readyCheck.put(numberText, false)
+        } else {
+            numberError.set(Utils.EMPTY)
         }
     }
 
@@ -216,7 +211,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
         return cardBrands.keys
                 .find { cardNumber.matches(it) }
                 ?.let { cardBrands[it] }
-                ?: CardType.DEFAULT
+                ?: CardType.NONVALIDCARD
     }
 
     fun release() {
