@@ -23,7 +23,7 @@
             android:layout_gravity="left|top"
             android:layout_marginLeft="@dimen/chat_d1_friend_lefT_margin"
             android:background="@drawable/chat_item_d1_bg_friend"
-            bind:onLongClickListener="@{() -> viewModel.longClickListener.invoke()}"
+            bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
             bind:remoteSrcGlide="@{viewModel.link}"
             tools:src="@drawable/feed_banned_female_avatar" />
     </FrameLayout>

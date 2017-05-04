@@ -3,6 +3,6 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 import android.databinding.ObservableField
 import com.topface.topface.api.responses.HistoryItem
 
-open class BaseMessageViewModel(val item: HistoryItem, val longClickListener: () -> Boolean = { false }, val avatarClickListener: () -> Unit = {}) {
+open class BaseMessageViewModel(item: HistoryItem, itemPosition: Int) : ClickableChatItemViewModel(item, itemPosition) {
     val text = ObservableField(item.text)
 }
