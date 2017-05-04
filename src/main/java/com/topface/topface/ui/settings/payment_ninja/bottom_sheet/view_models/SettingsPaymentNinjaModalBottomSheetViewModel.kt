@@ -45,7 +45,7 @@ class SettingsPaymentNinjaModalBottomSheetViewModel(bottomSheetData: ModalBottom
             CANCEL_AUTOFILLING_BOTTOM_SHEET -> {
                 with(data.observableList) {
                     clear()
-                    add(BottomSheetTitle(R.string.ninja_vip_status_title.getString()))
+                    add(BottomSheetTitle(R.string.ninja_autofill_status_title.getString()))
                     add(BottomSheetData(BottomSheetItemText(CANCEL_SUBSCRIPTION), bottomSheetData.data))
                 }
             }

@@ -215,10 +215,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showPurchaseSuccessfullFragment(type: String, finishBundle: Bundle) {
+    override fun showPurchaseSuccessfullFragment(type: String) {
         mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
             it as PurchaseSuccessfullFragment
-        } ?: PurchaseSuccessfullFragment.getInstance(type, finishBundle).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+        } ?: PurchaseSuccessfullFragment.getInstance(type).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
     }
 
     override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String, isTestPurchase: Boolean, is3DSPurchase: Boolean) {
