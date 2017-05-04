@@ -86,15 +86,16 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        mBinding.viewModel = mViewModel.apply {
+        initScreenView(mBinding)
+        mBinding.viewModel = mViewModel as BaseFeedFragmentModel<FeedItem>
+        mViewModel.apply {
             navigator = mNavigator
             stubView = mLockerControllerBase
-        } as BaseFeedFragmentModel<FeedItem>
+        }
         mAdapter.apply {
             attachAdapterComponents(this)
             mViewModel.updateObservable = updateObservable
         }
-        initScreenView(mBinding)
         return mBinding.root
     }
 
