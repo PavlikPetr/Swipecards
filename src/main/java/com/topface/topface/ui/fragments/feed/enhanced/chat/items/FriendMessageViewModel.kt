@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 
-import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import com.topface.topface.R
 import com.topface.topface.api.responses.HistoryItem
@@ -11,7 +10,7 @@ import com.topface.topface.utils.extensions.getDimen
 
 class FriendMessageViewModel(item: HistoryItem, itemPosition: Int, feedUser: FeedUser?)
     : BaseMessageViewModel(item, itemPosition), IAvatarVisible {
-    override val isAvatarVisible = ObservableBoolean(false)
+    override val isAvatarVisible = item.isAvatarVisible
     val photo = ObservableField(feedUser?.photo)
     val placeholderResId = ObservableField(if (feedUser?.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val photoTransformType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
