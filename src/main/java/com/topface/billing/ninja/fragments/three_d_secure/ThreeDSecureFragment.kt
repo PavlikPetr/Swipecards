@@ -11,8 +11,6 @@ import com.topface.billing.ninja.PurchaseError
 import com.topface.topface.R
 import com.topface.topface.databinding.LayoutNinja3dSecureFragmentBinding
 import com.topface.topface.ui.fragments.BaseFragment
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.utils.IActivityDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -36,11 +34,7 @@ class ThreeDSecureFragment : BaseFragment(), IFinishDelegate {
     }
 
     private val mViewModel by lazy {
-        ThreeDSecureViewModel(arguments.getParcelable<PurchaseError>(EXTRA_SETTINGS), this, mFeedNavigator)
-    }
-
-    private val mFeedNavigator by lazy {
-        FeedNavigator(activity as IActivityDelegate)
+        ThreeDSecureViewModel(arguments.getParcelable<PurchaseError>(EXTRA_SETTINGS), this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =

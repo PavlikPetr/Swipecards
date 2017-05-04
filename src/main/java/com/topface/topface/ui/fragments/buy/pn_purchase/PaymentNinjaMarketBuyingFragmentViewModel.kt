@@ -1,9 +1,12 @@
 package com.topface.topface.ui.fragments.buy.pn_purchase
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.view.View
+import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.PurchaseError
 import com.topface.billing.ninja.ThreeDSecureParams
 import com.topface.framework.JsonUtils
@@ -15,6 +18,7 @@ import com.topface.topface.requests.PaymentNinjaPurchaseRequest
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.CacheProfile
+import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.*
@@ -31,7 +35,7 @@ import rx.subscriptions.CompositeSubscription
  */
 class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNavigator,
                                                 private val mIsVipPurchaseProducts: Boolean,
-                                                private val mFrom: String) {
+                                                private val mFrom: String) : ILifeCycle {
     companion object {
         const val AUTOREFILL_RULES_URL = "https://topface.com/en/autorefill/"
     }
@@ -177,6 +181,15 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                             }
                         }
                     })
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == NinjaAddCardActivity.REQUEST_CODE && resultCode == Activity.RESULT_OK &&
+                data != null && data.getBooleanExtra(NinjaAddCardActivity.PURCHASE_SUCCESFULL, false) &&
+                data.hasExtra(NinjaAddCardActivity.PRODUCT)) {
+            mNavigator.showPurchaseSuccessfullFragment(data.getParcelableExtra<PaymentNinjaProduct>(NinjaAddCardActivity.PRODUCT).type)
         }
     }
 

@@ -41,7 +41,7 @@ interface IFeedNavigator {
 
     fun showDialogpopupMenu(item: FeedDialog)
     fun showPurchaseProduct(skuId: String, from: String)
-    fun showPurchaseSuccessfullFragment(type: String, finishBundle: Bundle = Bundle())
+    fun showPurchaseSuccessfullFragment(type: String)
     fun showMutualPopup(mutualUser: FeedUser)
     fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct? = null, source: String, isTestPurchase: Boolean = false, is3DSPurchase: Boolean = false)
     fun showPaymentNinjaBottomSheet(data: ModalBottomSheetData)
@@ -50,7 +50,7 @@ interface IFeedNavigator {
     fun showFBInvitationPopup()
     fun showQuestionnaire(): Boolean
     fun showRateAppFragment()
-    fun showPaymentNinja3DS(error:PurchaseError)
+    fun showPaymentNinja3DS(error: PurchaseError)
 
     fun openUrl(url: String)
     fun showChatPopupMenu(item: HistoryItem, position: Int)
