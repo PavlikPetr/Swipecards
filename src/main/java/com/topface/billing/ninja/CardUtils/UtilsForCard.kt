@@ -30,7 +30,8 @@ object UtilsForCard {
 
     val cardBrands = hashMapOf(
             Regex("^[4]+.*") to CardType.VISA,
-            Regex("^5[1-5]+.*") to CardType.MASTERCARD
+            Regex("^(5[1-5]|5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)+.*") to CardType.MASTERCARD
+
     )
 
     fun isValidTrhu(trhu: String): Boolean {
