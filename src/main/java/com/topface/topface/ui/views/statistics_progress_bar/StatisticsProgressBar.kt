@@ -95,7 +95,9 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
      * @param plc - место показа лоадера
      */
     fun setPlc(plc: String?) {
-        mPlc = plc ?: PLC_UNDEFINED
+        if (mPlc.isNullOrEmpty() || mPlc == PLC_UNDEFINED) {
+            mPlc = plc ?: PLC_UNDEFINED
+        }
     }
 
     private fun sendShowEvent() {

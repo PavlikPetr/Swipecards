@@ -12,8 +12,4 @@ class LockerViewViewModel(plcName: String) {
 
     val plc = ObservableField(plcName)
     val visibility = ObservableInt(View.GONE)
-
-    fun release() {
-
-    }
 }

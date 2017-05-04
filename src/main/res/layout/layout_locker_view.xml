@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:documentation="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:documentation="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.views.locker_view.LockerViewViewModel" />
+            type="com.topface.topface.ui.views.locker_view.LockerViewViewModel"/>
     </data>
 
-    <RelativeLayout style="@style/LoadingLocker"
+    <RelativeLayout
+        style="@style/LoadingLocker"
         android:visibility="@{viewModel.visibility}">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="@{viewModel.visibility}"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.visibility}">
 
             <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
                 android:id="@+id/progress_bar"
@@ -27,12 +28,12 @@
                 android:layout_gravity="center"
                 android:visibility="@{viewModel.visibility}"
                 app:plc="@{viewModel.plc}"
-                documentation:info="приложение не использует этот id, но он нужен для ui тестов, не удалять!!!" />
+                documentation:info="приложение не использует этот id, но он нужен для ui тестов, не удалять!!!"/>
 
             <TextView
                 android:id="@+id/text"
-                android:visibility="@{viewModel.visibility}"
-                style="@style/LoadingLockerText" />
+                style="@style/LoadingLockerText"
+                android:visibility="@{viewModel.visibility}"/>
         </LinearLayout>
     </RelativeLayout>
 </layout>

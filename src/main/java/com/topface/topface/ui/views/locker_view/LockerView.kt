@@ -39,10 +39,6 @@ class LockerView constructor(context: Context, attrs: AttributeSet?,
 
     private var mPlc: String = StatisticsProgressBar.PLC_UNDEFINED
 
-    init {
-        mBinding.viewModel = mViewModel
-    }
-
     private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.StatisticsProgressBar, defStyleAttr, 0)
         setPlc(a.getString(R.styleable.StatisticsProgressBar_plc))
@@ -54,11 +50,6 @@ class LockerView constructor(context: Context, attrs: AttributeSet?,
         mViewModel.plc.set(plc)
     }
 
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        mViewModel.release()
-    }
-
     override fun onVisibilityChanged(changedView: View?, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
         mViewModel.visibility.set(visibility)
@@ -66,7 +57,8 @@ class LockerView constructor(context: Context, attrs: AttributeSet?,
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        mViewModel.visibility.set(visibility)
+        mBinding.viewModel = mViewModel.apply { visibility.set(this@LockerView.visibility) }
+        mBinding.executePendingBindings()
     }
 
     override fun onTouchEvent(event: MotionEvent) = true
