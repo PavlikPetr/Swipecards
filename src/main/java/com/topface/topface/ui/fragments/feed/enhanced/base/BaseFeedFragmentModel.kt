@@ -212,15 +212,9 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
                                      errorCode: Int = -666) = stubView?.let {
         lockerStubLastState = LockerStubLastState(state, errorCode)
         when (state) {
-            FILLED_FEED -> {
-                it.onFilledFeed()
-            }
-            EMPTY_FEED -> {
-                it.onEmptyFeed()
-            }
-            LOCKED_FEED -> {
-                it.onLockedFeed(errorCode)
-            }
+            FILLED_FEED -> it.onFilledFeed()
+            EMPTY_FEED -> it.onEmptyFeed()
+            LOCKED_FEED -> it.onLockedFeed(errorCode)
             else -> {
                 lockerStubLastState = LockerStubLastState(NONE, errorCode)
             }
