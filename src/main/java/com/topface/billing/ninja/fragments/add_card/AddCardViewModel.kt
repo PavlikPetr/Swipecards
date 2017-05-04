@@ -259,8 +259,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                             trhuText.set("")
                             numberText.set("")
 
-                            clearFocus.set(true)
-                            needFocus.set(true)
+                            with(clearFocus) {
+                                set(true)
+                                notifyChange()
+                            }
+                            with(needFocus) {
+                                set(true)
+                                notifyChange()
+                            }
 
                             with(readyCheck) {
                                 put(numberText, false)
