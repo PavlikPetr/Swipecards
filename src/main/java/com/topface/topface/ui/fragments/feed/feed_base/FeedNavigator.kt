@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.View
 import com.topface.billing.ninja.NinjaAddCardActivity
+import com.topface.billing.ninja.PurchaseError
 import com.topface.billing.ninja.dialogs.ErrorDialogFactory
 import com.topface.billing.ninja.dialogs.IErrorDialogResultReceiver
 import com.topface.topface.App
@@ -18,9 +19,12 @@ import com.topface.topface.data.leftMenu.FragmentIdData
 import com.topface.topface.data.leftMenu.LeftMenuSettingsData
 import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
+import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
 import com.topface.topface.ui.edit.EditContainerActivity
@@ -31,8 +35,10 @@ import com.topface.topface.ui.fragments.dating.DatingEmptyFragment
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupViewModel
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
-import com.topface.topface.ui.fragments.dating.dating_redesign.MutualPopupFragment
+import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -74,7 +80,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
-    override fun showProfile(item: SearchUser?, from: String) =
+    override fun showProfile(item: FeedUser?, from: String) =
             item?.let {
                 if (!it.isEmpty) {
                     mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, it.photo,
@@ -89,7 +95,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
             it.user?.let {
-                showChat(it) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, banned) }
+                //todo тут тож махнуть надо
+                showChat(it) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, inBlacklist, bookmarked, banned) }
             }
         }
     }
@@ -99,7 +106,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
      */
     override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
         user?.let {
-            showChat(user) { ChatActivity.createIntent(id, sex, nameAndAge, city.name, null, photo, false, answer, banned) }
+            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
         }
     }
 
@@ -180,15 +187,42 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
             mActivityDelegate.startActivityForResult(GpPurchaseActivity.getIntent(skuId, from),
                     GpPurchaseActivity.ACTIVITY_REQUEST_CODE)
 
-    override fun showPurchaseSuccessfullFragment(sku: String) {
-        mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
-            it as PurchaseSuccessfullFragment
-        } ?: PurchaseSuccessfullFragment.getInstance(sku).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+    override fun showFBInvitationPopup() =
+            with(mActivityDelegate.supportFragmentManager.findFragmentByTag(FBinvitationFragment.TAG)
+                    ?.let { it as? FBinvitationFragment } ?: FBinvitationFragment()) {
+                if (!isAdded) {
+                    show(mActivityDelegate.supportFragmentManager, FBinvitationFragment.TAG)
+                }
+            }
+
+    override fun showQuestionnaire(): Boolean {
+        val config = App.getAppConfig()
+        val startPosition = config.currentQuestionPosition
+        val data = config.questionnaireData
+        if (startPosition != Integer.MIN_VALUE && !data.isEmpty()) {
+            mActivityDelegate.startActivityForResult(QuestionnaireActivity.getIntent(data,
+                    startPosition), QuestionnaireActivity.ACTIVITY_REQUEST_CODE)
+            return true
+        }
+        return false
     }
 
-    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String) {
+    override fun showRateAppFragment() {
+        val mRateAppFragment = mActivityDelegate.fragmentManager.findFragmentByTag(RateAppFragment.TAG) as? RateAppFragment ?: RateAppFragment()
+        if (!mRateAppFragment.isAdded) {
+            mRateAppFragment.show(mActivityDelegate.fragmentManager, RateAppFragment.TAG)
+        }
+    }
+
+    override fun showPurchaseSuccessfullFragment(type: String, finishBundle: Bundle) {
+        mActivityDelegate.supportFragmentManager.findFragmentByTag(PurchaseSuccessfullFragment.TAG)?.let {
+            it as PurchaseSuccessfullFragment
+        } ?: PurchaseSuccessfullFragment.getInstance(type, finishBundle).show(mActivityDelegate.supportFragmentManager, PurchaseSuccessfullFragment.TAG)
+    }
+
+    override fun showPaymentNinjaAddCardScreen(product: PaymentNinjaProduct?, source: String, isTestPurchase: Boolean, is3DSPurchase: Boolean) {
         mActivityDelegate.startActivityForResult(NinjaAddCardActivity
-                .createIntent(fromInstantPurchase = false, product = product, source = source),
+                .createIntent(fromInstantPurchase = false, product = product, source = source, isTestPurchase = isTestPurchase, is3DSPurchase = is3DSPurchase),
                 NinjaAddCardActivity.REQUEST_CODE)
     }
 
@@ -211,7 +245,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mActivityDelegate.supportFragmentManager
                 .findFragmentByTag(SettingsPaymentNinjaModalBottomSheet.TAG)
                 ?.let { it as? SettingsPaymentNinjaModalBottomSheet } ?: SettingsPaymentNinjaModalBottomSheet.newInstance(data)
-                .show(mActivityDelegate.supportFragmentManager, MutualPopupFragment.TAG)
+                .show(mActivityDelegate.supportFragmentManager, SettingsPaymentNinjaModalBottomSheet.TAG)
     }
 
     override fun showPaymentNinjaHelp() {
@@ -220,4 +254,28 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
                 FeedbackMessageFragment.FeedbackType.PAYMENT_NINJA_MESSAGE
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
+
+    override fun showChatPopupMenu(item: History, position: Int) =
+            ChatPopupMenu.newInstance(item, position).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
+
+    override fun openUrl(url: String) {
+        Utils.goToUrl(mActivityDelegate, url)
+    }
+
+    override fun showPaymentNinja3DS(error: PurchaseError) {
+        mActivityDelegate.startActivityForResult(NinjaAddCardActivity
+                .createIntent(error),
+                NinjaAddCardActivity.REQUEST_CODE)
+    }
+
+    override fun showComplainScreen(userId: Int, feedId: String?, isNeedResult: Boolean?) {
+        val intent = when {
+            feedId != null && isNeedResult == null -> ComplainsActivity.createIntent(userId, feedId)
+            feedId == null && isNeedResult != null -> ComplainsActivity.createIntent(userId, isNeedResult)
+            else -> ComplainsActivity.createIntent(userId)
+        }
+        mActivityDelegate.startActivityForResult(intent, ComplainsActivity.REQUEST_CODE)
+    }
+
+
 }

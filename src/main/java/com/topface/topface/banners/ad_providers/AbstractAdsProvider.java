@@ -6,7 +6,7 @@ import com.topface.topface.banners.IPageWithAds;
  * Created by kirussell on 12/01/15.
  * Abstract over Ads provider interface with common injection logic
  */
-abstract class AbstractAdsProvider implements IAdsProvider {
+public abstract class AbstractAdsProvider implements IAdsProvider {
 
     abstract boolean injectBannerInner(IPageWithAds page, IAdProviderCallbacks callbacks);
 
@@ -17,5 +17,8 @@ abstract class AbstractAdsProvider implements IAdsProvider {
 
     public final boolean isAvailable(IPageWithAds page) {
         return page.getContainerForAd() != null;
+    }
+
+    public void clean(IPageWithAds page) {
     }
 }

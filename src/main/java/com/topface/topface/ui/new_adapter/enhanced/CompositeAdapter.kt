@@ -16,12 +16,15 @@ import rx.Subscriber
  * Адаптер - конструктор, реализуем компонент, подсовываем сюда и все работает
  * Created by tiberal on 28.11.16.
  */
-class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitObject: () -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
+class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyType:Int = ProvideItemTypeStrategyFactory.DEFAULT,
+                       private var updaterEmitObject: (CompositeAdapter) -> Bundle) : RecyclerView.Adapter<ViewHolder<ViewDataBinding>>() {
 
     val updateObservable: Observable<Bundle>
     private var mUpdateSubscriber: Subscriber<in Bundle>? = null
     private var mRecyclerView: RecyclerView? = null
+    private var doOnRelease: (() -> Unit)? = null
 
+    var provideItemTypeStrategy = ProvideItemTypeStrategyFactory(typeProvider).construct(provideItemTypeStrategyType)
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
@@ -39,10 +42,11 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
 
     override fun onViewRecycled(holder: ViewHolder<ViewDataBinding>?) {
         super.onViewRecycled(holder)
-        if (holder != null) {
-            val position = mRecyclerView?.layoutManager?.getPosition(holder.itemView)
-            if (position != null && ListUtils.isEntry(position, data)) {
-                components[typeProvider.getType(data[position].javaClass)]?.onViewRecycled(holder, data[position], position)
+        holder?.let {
+            mRecyclerView?.layoutManager?.getPosition(it.itemView)?.let {
+                if (ListUtils.isEntry(it, data)) {
+                    components[provideItemTypeStrategy.provide(data[it])]?.onViewRecycled(holder, data[it], it)
+                }
             }
         }
     }
@@ -66,7 +70,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
                                 if (firstVisibleItem != RecyclerView.NO_POSITION &&
                                         lastVisibleItem != RecyclerView.NO_POSITION && visibleItemCount != 0 &&
                                         firstVisibleItem + visibleItemCount >= data.size - 1) {
-                                    subscriber.onNext(updaterEmitObject())
+                                    subscriber.onNext(updaterEmitObject(this@CompositeAdapter))
                                 }
                             } else {
                                 subscriber.onNext(Bundle())
@@ -81,7 +85,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
     }
 
     override fun onBindViewHolder(holder: ViewHolder<ViewDataBinding>?, position: Int) {
-        components[typeProvider.getType(data[position].javaClass)]?.onBindViewHolder(holder, data[position], position)
+        components[provideItemTypeStrategy.provide(data[position])]?.onBindViewHolder(holder, data[position], position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<ViewDataBinding>? {
@@ -95,9 +99,21 @@ class CompositeAdapter(var typeProvider: ITypeProvider, private var updaterEmitO
         }
     }
 
-    override fun getItemViewType(position: Int) = typeProvider.getType(data[position].javaClass)
+    override fun getItemViewType(position: Int) = provideItemTypeStrategy.provide(data[position])
 
     override fun getItemCount() = data.count()
 
-    fun releaseComponents() = components.values.forEach(AdapterComponent<*, *>::release)
+
+    fun releaseComponents() {
+        doOnRelease?.invoke()
+        doOnRelease = null
+        components.values.forEach(AdapterComponent<*, *>::release)
+        mRecyclerView?.addOnScrollListener(null)
+        mUpdateSubscriber = null
+        mRecyclerView = null
+    }
+
+    fun doOnRelease(onRelease: () -> Unit) {
+        doOnRelease = onRelease
+    }
 }

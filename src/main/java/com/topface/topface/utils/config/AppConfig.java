@@ -12,6 +12,7 @@ import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.data.InstallReferrerData;
 import com.topface.topface.data.social.AppSocialAppsIds;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireResponse;
 import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.utils.Editor;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -76,6 +78,12 @@ public class AppConfig extends AbstractConfig {
     private static final String FIRST_VIEW_LOGIN_SCREEN = "client_mobile_auth_page_view";
     private static final String FB_APP_LINK = "fb_app_link";
     private static final String GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT = "geo_screen_with_granted_permissions_shows_count";
+    private static final String APP_START_EVENT_NUMBER = "app_start_event_number";
+    private static final String IS_FIRST_SESSION_AFTER_INSTALL = "is_first_session_after_install";
+    private static final String QUESTIONNAIRE_RESPONSE_DATA = "questionnaire_response_data";
+    private static final String QUESTIONNAIRE_CURRENT_POSITION = "questionnaire_current_position";
+    public static final String QUESTIONNAIRE_REQUEST_DATA = "questionnaire_request_data";
+    private static final String RESERVE_SOCIAL_APP_ID = "reserve_social_app_id";
 
     public AppConfig(Context context) {
         super(context);
@@ -145,6 +153,18 @@ public class AppConfig extends AbstractConfig {
         addField(settingsMap, FB_APP_LINK, "");
         // счетчик показов экрана "Люди рядом" с разблокированными пермишинами
         addField(settingsMap, GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, 0);
+        // счетчик запусков приложения
+        addField(settingsMap, APP_START_EVENT_NUMBER, 0);
+        // если true, значит эта сессия для юзера первая после установки приложения
+        addField(settingsMap, IS_FIRST_SESSION_AFTER_INSTALL, true);
+        // настройки для эксперимента с опросником
+        addField(settingsMap, QUESTIONNAIRE_RESPONSE_DATA, Utils.EMPTY);
+        // номер вопроса, на котором закончили показ опросника
+        addField(settingsMap, QUESTIONNAIRE_CURRENT_POSITION, 0);
+        // ответы пользователя на опросник
+        addField(settingsMap, QUESTIONNAIRE_REQUEST_DATA, Utils.EMPTY);
+        // флажок об использовании резервнs[ social app ids
+        addField(settingsMap, RESERVE_SOCIAL_APP_ID, false);
     }
 
     protected SharedPreferences getPreferences() {
@@ -600,5 +620,115 @@ public class AppConfig extends AbstractConfig {
      */
     public void incrGeoScreenShowCount() {
         setField(getSettingsMap(), GEO_SCREEN_WITH_GRANTED_PERMISSIONS_SHOWS_COUNT, getGeoScreenShowCount() + 1);
+    }
+
+    // номер запуска приложения
+    public int getAppStartEventNumber() {
+        return getIntegerField(getSettingsMap(), APP_START_EVENT_NUMBER);
+    }
+
+    // установка первой успешной авторизации для данной установки
+    public void incrAppStartEventNumber() {
+        int startNumber = getAppStartEventNumber();
+        setField(getSettingsMap(), APP_START_EVENT_NUMBER, startNumber == Integer.MAX_VALUE ? 0 : startNumber + 1);
+    }
+
+    /**
+     * Set first session after install attribute
+     *
+     * @param isFirst true if this session first after install app
+     */
+    public void setFirstSessionAfterInstallAttribute(boolean isFirst) {
+        setField(getSettingsMap(), IS_FIRST_SESSION_AFTER_INSTALL, isFirst);
+    }
+
+    /**
+     * Get attribute about first session after install
+     *
+     * @return true if this session first after install app
+     */
+    public boolean isFirstSessionAfterInstall() {
+        return getBooleanField(getSettingsMap(), IS_FIRST_SESSION_AFTER_INSTALL);
+    }
+
+    /**
+     * Set position of the last visible question
+     *
+     * @param position position of the last visible question
+     */
+    public void setCurrentQuestionPosition(int position) {
+        setField(getSettingsMap(), QUESTIONNAIRE_CURRENT_POSITION, position);
+    }
+
+    /**
+     * Get position of the last visible question
+     *
+     * @return position of the last visible question
+     */
+    public int getCurrentQuestionPosition() {
+        return getIntegerField(getSettingsMap(), QUESTIONNAIRE_CURRENT_POSITION);
+    }
+
+    /**
+     * Set questionnaire settings
+     *
+     * @param data questionnaire response data
+     */
+    public void setQuestionnaireData(QuestionnaireResponse data) {
+        setField(getSettingsMap(), QUESTIONNAIRE_RESPONSE_DATA, JsonUtils.toJson(data).toString());
+    }
+
+    /**
+     * Get questionnaire settings
+     *
+     * @return questionnaire response data
+     */
+    @NotNull
+    public QuestionnaireResponse getQuestionnaireData() {
+        QuestionnaireResponse res = JsonUtils.fromJson(getStringField(getSettingsMap(), QUESTIONNAIRE_RESPONSE_DATA), QuestionnaireResponse.class);
+        return res == null ? new QuestionnaireResponse() : res;
+    }
+
+    /**
+     * Set user answers
+     *
+     * @param data user answers
+     */
+    public void setQuestionnaireAnswers(JSONObject data) {
+        setField(getSettingsMap(), QUESTIONNAIRE_REQUEST_DATA, data.toString());
+    }
+
+    /**
+     * Get user answers
+     *
+     * @return user answers in Json format
+     */
+    public JSONObject getQuestionnaireAnswers() {
+        JSONObject res;
+        try {
+            res = new JSONObject(getStringField(getSettingsMap(), QUESTIONNAIRE_REQUEST_DATA));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            res = new JSONObject();
+        }
+        return res;
+    }
+
+    /**
+     * Выставляем статус для использования резервного набора social app ids
+     *
+     * @param isReserveAppIds true если необходимо использовать резервные значения
+     */
+    public void setReserveSocialAppIdState(boolean isReserveAppIds) {
+        setField(getSettingsMap(), RESERVE_SOCIAL_APP_ID, isReserveAppIds);
+    }
+
+    /**
+     * Cтатус использования резервного набора social app ids
+     *
+     * @return true если необходимо использовать резервные значения
+     */
+    public boolean isReserveSocialAppIdState() {
+        return getBooleanField(getSettingsMap(), RESERVE_SOCIAL_APP_ID);
     }
 }

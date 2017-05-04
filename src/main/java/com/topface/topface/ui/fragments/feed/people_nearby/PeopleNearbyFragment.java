@@ -65,7 +65,6 @@ import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
 import permissions.dispatcher.RuntimePermissions;
 import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.topface.topface.utils.FlurryManager.PEOPLE_NEARBY_UNLOCK;
 

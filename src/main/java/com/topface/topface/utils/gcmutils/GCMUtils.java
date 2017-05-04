@@ -26,8 +26,9 @@ import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
+import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment;
 import com.topface.topface.ui.fragments.feed.likes.LikesFragment;
-import com.topface.topface.ui.fragments.feed.visitors.VisitorsFragment;
 import com.topface.topface.ui.fragments.profile.UserFormFragment;
 import com.topface.topface.ui.fragments.profile.UserPhotoFragment;
 import com.topface.topface.utils.CacheProfile;
@@ -190,6 +191,9 @@ public class GCMUtils {
             return false;
         } else if (getType(data) == GCM_TYPE_HAS_FEED_AD) {
             LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
+            return false;
+        } else if (!App.getAppConfig().getQuestionnaireData().isEmpty()) {
+            Debug.log("GCM: we can not display a notification while the user answers questions in the questionnaire");
             return false;
         }
         try {
@@ -364,8 +368,8 @@ public class GCMUtils {
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                 } else {
-                    return ChatActivity.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
-                            null, null, true, null, false);
+                    return ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
+                            null, null, true, null, false, false, false);
                 }
                 return i;
             }
@@ -374,8 +378,7 @@ public class GCMUtils {
     }
 
     private static Intent getIntentByType(Context context, int type, User user, String updateUrl) {
-                Intent i = null;
-        String pageName;
+        Intent i = null;
         switch (type) {
             case GCM_TYPE_MESSAGE:
             case GCM_TYPE_GIFT:

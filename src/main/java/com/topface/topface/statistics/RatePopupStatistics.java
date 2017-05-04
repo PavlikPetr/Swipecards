@@ -11,10 +11,11 @@ public class RatePopupStatistics {
     private static final String RATE_POPUP_CLICK_BUTTON_LATER = "mobile_rate_popup_click_button_later";
     private static final String RATE_POPUP_CLICK_BUTTON_RATE = "mobile_rate_popup_click_button_rate";
     private static final String RATING = "val";
+    private static final String OLD_DIALOG = "old";
 
     private static void send(String action) {
         StatisticsTracker.getInstance()
-                .sendEvent(action, 1);
+                .sendEvent(action, 1, generateSlices());
     }
 
     public static void sendRatePopupShow() {
@@ -39,7 +40,13 @@ public class RatePopupStatistics {
 
     private static Slices generateSlices(long value) {
         return new Slices()
-                .putSlice(RATING, String.valueOf(value));
+                .putSlice(RATING, String.valueOf(value))
+                .putSlice(com.topface.topface.ui.dialogs.new_rate.RatePopupStatistics.DIALOG_TYPE, OLD_DIALOG);
+    }
+
+    private static Slices generateSlices() {
+        return new Slices()
+                .putSlice(com.topface.topface.ui.dialogs.new_rate.RatePopupStatistics.DIALOG_TYPE, OLD_DIALOG);
     }
 }
 

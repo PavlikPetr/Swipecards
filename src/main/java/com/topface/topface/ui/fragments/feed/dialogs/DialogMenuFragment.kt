@@ -10,7 +10,7 @@ import android.view.Window
 import com.topface.topface.R
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.databinding.DeleteOrBlacklistPopupBinding
-import com.topface.topface.ui.fragments.dating.IDialogCloser
+import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.utils.http.IRequestClient

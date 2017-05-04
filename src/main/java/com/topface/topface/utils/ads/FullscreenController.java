@@ -22,6 +22,7 @@ import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.PageInfo;
+import com.topface.topface.banners.ad_providers.AmpiriProvider;
 import com.topface.topface.banners.ad_providers.AppodealProvider;
 import com.topface.topface.data.AdsSettings;
 import com.topface.topface.data.Banner;
@@ -37,10 +38,10 @@ import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.dialogs.OwnFullscreenPopup;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.utils.CacheProfile;
+import com.topface.topface.utils.IStateSaverRegistratorKt;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
-import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.popups.PopupManager;
@@ -50,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
+import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_AMPIRI;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
 import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
 
@@ -64,6 +66,7 @@ public class FullscreenController {
     private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     public static final String ADMOB_NEW = "ADMOB";
     public static final String APPODEAL_NEW = "APPODEAL";
+    public static final String AMPIRI = "AMPIRI";
     private static final String FROM = "from";
     private static final String APPODEAL_IN_PROGRESS = "appodeal_in_progress";
 
@@ -73,6 +76,9 @@ public class FullscreenController {
 
     private static boolean isFullScreenBannerVisible = false;
     private boolean mIsAppodealInProgress = false;
+
+    private AmpiriProvider.AmpiriInterstitialLifeCycler mAmpiriInterstitialLifeCycler;
+
     private FullScreenBannerListener mFullScreenBannerListener = new FullScreenBannerListener() {
         @Override
         public void onLoaded() {
@@ -184,10 +190,14 @@ public class FullscreenController {
                 requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
                 break;
             case APPODEAL_NEW:
-                Debug.log("BANNER_SETTINGS : new segment " + settings.banner.adAppId);
+                Debug.log("BANNER_SETTINGS : new appodeal segment " + settings.banner.adAppId);
                 App.getAppComponent().weakStorage().setAppodealFullscreenSegmentName(settings.banner.adAppId);
                 AppodealProvider.setCustomSegment();
                 requestAppodealFullscreen();
+            case AMPIRI:
+                Debug.log("BANNER_SETTINGS : new ampiri segment " + settings.banner.adAppId);
+                App.getAppComponent().weakStorage().setAmpiriFullscreenSegmentName(settings.banner.adAppId);
+                requestAmpiriFullscreen();
         }
     }
 
@@ -277,6 +287,9 @@ public class FullscreenController {
                 case BANNER_TOPFACE:
                     requestTopfaceFullscreen();
                     break;
+                case BANNER_AMPIRI:
+                    requestAmpiriFullscreen();
+                    break;
                 default:
                     break;
             }
@@ -326,6 +339,49 @@ public class FullscreenController {
 
             public void onInterstitialClosed() {
                 mIsAppodealInProgress = false;
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onClose();
+                }
+            }
+        };
+    }
+
+    private void requestAmpiriFullscreen() {
+        if (mAmpiriInterstitialLifeCycler != null) {
+            IStateSaverRegistratorKt.unregisterLifeCycleDelegate(mActivity, mAmpiriInterstitialLifeCycler);
+        }
+        mAmpiriInterstitialLifeCycler = new AmpiriProvider.AmpiriInterstitialLifeCycler(
+                AmpiriProvider.Companion.createFullScreen(mActivity, createAmpiriInterstitialCallbacks())
+        );
+        IStateSaverRegistratorKt.registerLifeCycleDelegate(mActivity, mAmpiriInterstitialLifeCycler);
+        mAmpiriInterstitialLifeCycler.getAds().loadAndShow();
+    }
+
+    private InterstitialCallbacks createAmpiriInterstitialCallbacks() {
+        return new InterstitialCallbacks() {
+            public void onInterstitialLoaded(boolean isPrecache) {
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onLoaded();
+                }
+            }
+
+            public void onInterstitialFailedToLoad() {
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onFailedToLoad(null);
+                }
+            }
+
+            public void onInterstitialShown() {
+            }
+
+            public void onInterstitialClicked() {
+                mIsRedirected = true;
+                if (mFullScreenBannerListener != null) {
+                    mFullScreenBannerListener.onClick();
+                }
+            }
+
+            public void onInterstitialClosed() {
                 if (mFullScreenBannerListener != null) {
                     mFullScreenBannerListener.onClose();
                 }
@@ -504,6 +560,9 @@ public class FullscreenController {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             App.get().unregisterActivityLifecycleCallbacks(mActivityLifecycleCallbacks);
             mActivityLifecycleCallbacks = null;
+        }
+        if (mAmpiriInterstitialLifeCycler != null) {
+            IStateSaverRegistratorKt.unregisterLifeCycleDelegate(mActivity, mAmpiriInterstitialLifeCycler);
         }
         mActivity = null;
         mFullScreenBannerListener = null;

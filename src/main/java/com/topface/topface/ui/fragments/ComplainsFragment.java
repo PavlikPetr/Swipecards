@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.topface.topface.R;
 import com.topface.topface.requests.ComplainRequest;
+import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.ComplainsMessageActivity;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
@@ -21,8 +22,10 @@ public class ComplainsFragment extends BaseFragment {
 
     public static final String USERID = "USERID";
     public static final String FEEDID = "FEEDID";
+    public static final String NEED_RESULT = "NEED_RESULT";
     private int userId;
     private String feedId;
+    private boolean isNeedResult;
 
     @BindView(R.id.complains_scroll)
     ScrollView mScroll;
@@ -39,6 +42,7 @@ public class ComplainsFragment extends BaseFragment {
         }
         userId = args.getInt(USERID, -1);
         feedId = args.getString(FEEDID);
+        isNeedResult = args.getBoolean(NEED_RESULT, false);
         initViews(root);
         if (userId == -1) {
             getActivity().finish();
@@ -83,7 +87,14 @@ public class ComplainsFragment extends BaseFragment {
                 text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName));
+                        if (isNeedResult) {
+                            getActivity().startActivityForResult(
+                                    ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName)
+                                    , ComplainsActivity.REQUEST_CODE
+                            );
+                        } else {
+                            startActivity(ComplainsMessageActivity.createIntent(getActivity(), userId, feedId, className, typeName));
+                        }
                     }
                 });
             }

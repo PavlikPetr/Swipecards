@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appodeal.ads.Appodeal;
 import com.appsflyer.AppsFlyerLib;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.topface.framework.utils.Debug;
@@ -31,6 +32,10 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
+import com.topface.topface.di.ComponentManager;
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
+import com.topface.topface.di.navigation_activity.NavigationActivityModule;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -41,6 +46,7 @@ import com.topface.topface.ui.dialogs.SetAgeDialog;
 import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.DrawerLayoutManager;
 import com.topface.topface.ui.views.HackyDrawerLayout;
 import com.topface.topface.ui.views.toolbar.toolbar_custom_view.CustomToolbarViewModel;
@@ -79,6 +85,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import kotlin.jvm.functions.Function0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
@@ -87,7 +94,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
-    private static final int EXIT_TIMEOUT = 3000;
+    public static final int EXIT_TIMEOUT = 3000;
 
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
 
@@ -106,8 +113,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     DrawerLayoutState mDrawerLayoutState;
     @Inject
     WeakStorage mWeakStorage;
-    @Inject
-    KochavaManager mKochavaManager;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -128,7 +133,14 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        App.getAppComponent().inject(this);
+        NavigationActivityComponent component = ComponentManager.INSTANCE
+                .obtainComponent(NavigationActivityComponent.class, new Function0<NavigationActivityComponent>() {
+                    @Override
+                    public NavigationActivityComponent invoke() {
+                        return App.getAppComponent().add(new NavigationActivityModule(NavigationActivity.this));
+                    }
+                });
+        component.inject(this);
         if (savedInstanceState == null) {
             UserConfig config = App.getUserConfig();
             config.setStartPositionOfActions(0);
@@ -220,6 +232,9 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         // enable status bar tint
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setStatusBarAlpha(0.25f);
+        if (!AuthToken.getInstance().isEmpty()) {
+            new FeedNavigator(this).showQuestionnaire();
+        }
     }
 
     @Override
@@ -228,14 +243,14 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     }
 
     @Override
-    protected boolean isDatingRedesignEnabled() {
-        return mWeakStorage.getDatingRedesignEnabled();
+    protected boolean isTranslucentDating() {
+        return mWeakStorage.getIsTranslucentDating();
     }
 
     @NotNull
     @Override
     protected BaseToolbarViewModel generateToolbarViewModel(@NotNull ToolbarViewBinding toolbar) {
-        return mWeakStorage.getDatingRedesignEnabled() ?
+        return mWeakStorage.getIsTranslucentDating() ?
                 new DatingRedesignToolbarViewModel(toolbar, this) :
                 new NavigationToolbarViewModel(toolbar, this);
     }
@@ -265,7 +280,8 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     private void startPopupRush() {
         Debug.log("PopupMANAGER start rusgh");
-        if (hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
+        if (App.getAppConfig().getQuestionnaireData().isEmpty()
+                && hasNewOptionsOrProfile && !App.get().getProfile().isFromCache
                 && App.get().isUserOptionsObtainedFromServer()
                 && !CacheProfile.isEmpty() && !AuthToken.getInstance().isEmpty()) {
             initPopups();
@@ -399,6 +415,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         super.onResume();
         //Если активити создалась заново(переворот), то нужно контекст заменить на актульный
         PopupManager.INSTANCE.init(this);
+        Appodeal.onResume(this, Appodeal.INTERSTITIAL);
     }
 
     @Override
@@ -506,6 +523,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     protected void onDestroy() {
+        ComponentManager.INSTANCE.releaseComponent(NavigationActivityComponent.class);
         if (mFullscreenController != null) {
             mFullscreenController.onDestroy();
         }
@@ -529,6 +547,29 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getSupportFragmentManager(), requestCode, resultCode, data);
+        if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // если попали сюда, значит юзер произвел покупку, поэтому лучше запускать очередь
+                // попапов с обновленным профилем
+                App.sendProfileRequest(new ApiHandler() {
+                    @Override
+                    public void success(IApiResponse response) {
+                    }
+
+                    @Override
+                    public void fail(int codeError, IApiResponse response) {
+                    }
+
+                    @Override
+                    public void always(IApiResponse response) {
+                        super.always(response);
+                        startPopupRush();
+                    }
+                });
+            } else {
+                finish();
+            }
+        }
     }
 
     private void toggleDrawerLayout() {
@@ -573,13 +614,13 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     @NotNull
     @Override
     public ToolbarViewBinding getToolbarBinding(@NotNull ViewDataBinding binding) {
-        return mWeakStorage.getDatingRedesignEnabled() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
+        return mWeakStorage.getIsTranslucentDating() ? ((AcNewNavigationBinding) binding).navigationAppBar.toolbarInclude :
                 ((AcNavigationBinding) binding).navigationAppBar.toolbarInclude;
     }
 
     @Override
     public int getLayout() {
-        return mWeakStorage.getDatingRedesignEnabled() ? R.layout.ac_new_navigation : R.layout.ac_navigation;
+        return mWeakStorage.getIsTranslucentDating() ? R.layout.ac_new_navigation : R.layout.ac_navigation;
     }
 
     @Override

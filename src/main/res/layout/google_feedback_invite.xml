@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.dialogs.new_rate.GoogleFeedbackInviteViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_google_store" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:text="@string/we_are_glad_that_you_like"
+            android:textColor="@color/black"
+            android:textSize="22sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal"
+            android:text="@string/could_you_give_us_feedback"
+            android:textColor="@color/rate_text"
+            android:textSize="16sp" />
+
+        <Button
+            style="@style/Widget.Topface.Button.Big.Blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:onClick="@{()->viewModel.okButtonClick()}"
+            android:text="@string/send_rate_feedback" />
+
+        <Button
+            style="@style/PopupBorderlessButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="8dp"
+            android:onClick="@{()->viewModel.closeButtonClick()}"
+            android:text="@string/thanks_for_your_rate_close"
+            android:textColor="#b9b9b9" />
+    </LinearLayout>
+
+
+</layout>

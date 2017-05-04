@@ -343,9 +343,7 @@
     <string name="rate_popup_set_rate">Įvertinti</string>
     <string name="rate_popup_later">Paklausti vėliau</string>
     <string name="rate_popup_cancel">Ne, dėkuj</string>
-    <string name="rate_popup_error">Jūs turite nurodyti, kiek žvaigždučių suteikiate mūsų
-        programai
-    </string>
+    <string name="rate_popup_error">Jūs turite nurodyti, kiek žvaigždučių suteikiate mūsų programai</string>
     <string name="feedback_popup_title">Jūs prastai įvertinote. Papasakokite, kas jums nepatinka
         programoje. Padėkite mums tapti geresniais. Ačiū!
     </string>

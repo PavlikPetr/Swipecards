@@ -1,0 +1,3 @@
+ # AMPIRI
+-keep class com.ampiri** { *; }
+-dontwarn com.ampiri.**

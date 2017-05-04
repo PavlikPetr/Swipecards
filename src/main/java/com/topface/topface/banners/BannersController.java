@@ -1,5 +1,8 @@
 package com.topface.topface.banners;
 
+import android.support.v4.app.FragmentActivity;
+
+import com.appodeal.ads.Appodeal;
 import com.topface.topface.banners.ad_providers.AdProvidersFactory;
 import com.topface.topface.data.Options;
 
@@ -20,11 +23,15 @@ public class BannersController {
         getFeedBannerController(page).injectBanner(page);
     }
 
+    public void onResume(FragmentActivity activity) {
+        Appodeal.onResume(activity, Appodeal.BANNER_VIEW);
+    }
+
     public void onDestroy() {
         if (mFeedBannersInjector != null) mFeedBannersInjector.cleanUp();
     }
 
-    public IBannerInjector getFeedBannerController(IPageWithAds page) {
+    private IBannerInjector getFeedBannerController(IPageWithAds page) {
         if (mFeedBannersInjector == null) {
             mFeedBannersInjector = new BannerInjector(new AdProvidersFactory(), page.getActivity());
         }

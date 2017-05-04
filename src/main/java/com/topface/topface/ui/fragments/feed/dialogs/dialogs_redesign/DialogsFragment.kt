@@ -15,7 +15,10 @@ import com.topface.topface.banners.IPageWithAds
 import com.topface.topface.banners.PageInfo
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
 import com.topface.topface.statistics.FlurryOpenEvent
+import com.topface.topface.ui.ChatActivity
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.BaseFragment
+import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment.Companion.PAGE_NAME
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.dialog_adapter_components.*
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -121,8 +124,14 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         mViewModel.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ChatActivity.REQUEST_CHAT) {
+            data?.let {
+                if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
+                    mNavigator.showRateAppFragment()
+                }
+            }
+        }
     }
-
 
     private fun initList() = with(mBinding.dialogsList) {
         layoutManager = LinearLayoutManager(context)

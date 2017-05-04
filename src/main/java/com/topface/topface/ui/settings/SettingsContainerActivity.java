@@ -39,10 +39,10 @@ public class SettingsContainerActivity extends BaseFragmentActivity<AcFragmentFr
     }
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //we will create fragment once time only
-        if (bundle == null) {
+        if (savedInstanceState == null) {
             Fragment fragment = null;
             Intent intent = getIntent();
             mConfirmCode = getIntent().getStringExtra(CONFIRMATION_CODE);

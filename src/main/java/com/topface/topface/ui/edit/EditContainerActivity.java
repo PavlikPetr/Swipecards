@@ -27,8 +27,8 @@ public class EditContainerActivity extends BaseFragmentActivity<AcFragmentFrameB
     private Fragment mFragment;
 
     @Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         switch (intent.getIntExtra(App.INTENT_REQUEST_KEY, 0)) {
             case INTENT_EDIT_FILTER:

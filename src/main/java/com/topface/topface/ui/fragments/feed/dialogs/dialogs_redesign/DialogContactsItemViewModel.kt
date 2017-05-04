@@ -11,10 +11,12 @@ import com.topface.topface.App
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.ChatActivity
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.IOnListChangedCallbackBinded
@@ -30,7 +32,7 @@ import rx.Subscription
  * Моедь итема хедера
  * Created by tiberal on 01.12.16.
  */
-class DialogContactsItemViewModel(private val mContext: Context, private val mContactsStubItem: DialogContactsStubItem, private val mApi: FeedApi, updateObservable: Observable<Bundle>)
+class DialogContactsItemViewModel(private val mContext: Context, private val mContactsStubItem: DialogContactsStubItem, private val mApi: FeedApi, updateObservable: Observable<Bundle>, private val mFeedNavigator: IFeedNavigator)
     : ILifeCycle, IOnListChangedCallbackBinded, IFeedPushHandlerListener {
 
     val data = SingleObservableArrayList<Any>()

@@ -56,6 +56,7 @@
     <string name="editor_ban_unban_user">Убрать бан</string>
     <string name="editor_ban_unban_user_result">Разбанен</string>
     <string name="editor_transport">Transport:</string>
+    <string name="editor_social_app_ids_reserve">Резервный socialAppsIds</string>
 
     <string-array name="editor_debug_titles">
         <item>Только в debug режиме</item>
@@ -82,5 +83,6 @@
         <item>Эксперимент 5</item>
         <item>Эксперимент 6</item>
     </string-array>
+    <string name="editor_3ds_switch">Платеж с 3DS</string>
 
 </resources>

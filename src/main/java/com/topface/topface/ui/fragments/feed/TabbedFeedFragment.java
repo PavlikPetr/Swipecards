@@ -27,10 +27,15 @@ import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.TabLayoutCreator;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -125,7 +130,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
                 }
             }
         });
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         return root;
     }
 
@@ -204,7 +209,12 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onDestroyView() {
         super.onDestroyView();
         mCountersDataProvider.unsubscribe();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mHasFeedAdReceiver);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(mHasFeedAdReceiver);
+        mHasFeedAdReceiver = null;
+        if (mBannersController != null) {
+            mBannersController.onDestroy();
+            mBannersController = null;
+        }
     }
 
     @Override
@@ -216,12 +226,16 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mPager = null;
         if (mBannersController != null) {
             mBannersController.onDestroy();
+            mBannersController = null;
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if (mBannersController != null) {
+            mBannersController.onResume(getActivity());
+        }
         if (mRefresher != null) {
             mRefresher.refreshBanner();
         }
@@ -273,6 +287,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
+        if (requestCode == ChatActivity.REQUEST_CHAT && data != null && data.hasExtra(ChatFragment.MUTUAL)) {
+            if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.Companion.isApplicable(App.get().getOptions().ratePopupNewVersion)) {
+                (new FeedNavigator((IActivityDelegate) getActivity())).showRateAppFragment();
+            }
+        }
     }
 
     @Override

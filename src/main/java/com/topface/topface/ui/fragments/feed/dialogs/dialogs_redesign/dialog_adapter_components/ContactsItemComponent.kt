@@ -46,7 +46,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
                         .addAdapterComponent(UForeverAloneContactsListItemComponent(mNavigator))
                 adapter = mAdapter
             }
-            mModel = DialogContactsItemViewModel(mContext, it, mApi, mAdapter.updateObservable)
+            mModel = DialogContactsItemViewModel(mContext, it, mApi, mAdapter.updateObservable, mNavigator)
             binding.model = mModel
         }
     }

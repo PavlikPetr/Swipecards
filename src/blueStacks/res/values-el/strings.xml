@@ -289,8 +289,7 @@
   <string name="rate_popup_set_rate">Στείλτε την εκτίμηση</string>
   <string name="rate_popup_later">Ζητήστε αργότερα</string>
   <string name="rate_popup_cancel">\'Οχι, eυχαριστώ</string>
-  <string name="rate_popup_error">Θα πρέπει να καθορίσετε πόσα αστέρια έχετε βάλει γαι την
-        εφαρμογή μας</string>
+  <string name="rate_popup_error">Θα πρέπει να καθορίσετε πόσα αστέρια έχετε βάλει γαι την εφαρμογή μας</string>
   <string name="feedback_popup_title">Έχετε βάλει μια χαμηλή βαθμολογία. Πείτε μας τι δεν σας
         αρέσει στην εφαρμογή μας. Βοηθήστε μας να γίνουμε καλύτεροι. Σας ευχαριστώ!</string>
   <string name="settings_melody">Κοινοποίηση τον ήχο κλήσης</string>

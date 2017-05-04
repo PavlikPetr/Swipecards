@@ -30,7 +30,7 @@ class PhotoblogFragment : BaseFeedFragment<FeedPhotoBlog, LayoutEmptyPhotoblogBi
         val ADD_TO_PHOTO_BLOG_ACTIVITY_ID = 1
     }
 
-    private val mHeaderViewModel by  lazy {
+    private val mHeaderViewModel by lazy {
         HeaderPhotoBlogViewModel(mNavigator)
     }
 

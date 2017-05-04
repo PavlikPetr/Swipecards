@@ -25,7 +25,7 @@ import javax.inject.Singleton
  * Created by tiberal on 02.02.17.
  */
 
-@Module()
+@Module
 class AppModule(private val mContext: Context) {
 
     @Provides
@@ -137,11 +137,15 @@ class AppModule(private val mContext: Context) {
     @Provides
     @Singleton
     fun providesAuthState() = AuthState(object : CacheDataInterface {
-        override fun <T> saveDataToCache(data: T) {}
+        override fun <T : Any> saveDataToCache(data: T) {
+            if (data.javaClass == AuthTokenStateData::class.java) {
+                App.getAppComponent().weakStorage().authTokenState = data as AuthTokenStateData
+            }
+        }
 
         override fun <T> getDataFromCache(classType: Class<T>): T? {
             if (AuthTokenStateData::class.java == classType) {
-                return AuthTokenStateData() as T
+                return App.getAppComponent().weakStorage().authTokenState as T
             }
             return null
         }
@@ -154,6 +158,5 @@ class AppModule(private val mContext: Context) {
     @Provides
     @Singleton
     fun providesPresenterCache() = PresenterCache()
-
 
 }

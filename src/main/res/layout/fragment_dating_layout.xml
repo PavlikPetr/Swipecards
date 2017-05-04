@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:fab="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="model"
             type="com.topface.topface.ui.fragments.dating.DatingButtonsViewModel"/>
+        
+        <variable
+            name="dataModel"
+            type="com.topface.topface.ui.fragments.dating.DatingFragmentViewModel"/>
     </data>
 
     <FrameLayout
@@ -19,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fadeScrollbars="false"
-            android:fadingEdge="none"/>
+            android:fadingEdge="none"
+            app:bindDataToCompositeAdapterWithSmoothUpdate="@{dataModel.data}"/>
 
         <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/right_labels"
@@ -28,10 +33,10 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="4dp"
             android:layout_marginRight="7dp"
-            fab:fab_addButtonColorNormal="@color/dating_fab_like"
-            fab:fab_addButtonColorPressed="@color/dating_fab_like"
-            fab:fab_addButtonPlusIconColor="@color/dating_fab_small"
-            fab:fab_labelsPosition="left">
+            app:fab_addButtonColorNormal="@color/dating_fab_like"
+            app:fab_addButtonColorPressed="@color/dating_fab_like"
+            app:fab_addButtonPlusIconColor="@color/dating_fab_small"
+            app:fab_labelsPosition="left">
 
             <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
                 android:id="@+id/send_admiration"

@@ -20,6 +20,7 @@ import com.topface.topface.data.search.OnUsersListEventsListener
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.data.search.UsersList
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.view.FilterFragment
@@ -28,12 +29,11 @@ import com.topface.topface.ui.fragments.dating.form.GiftsModel
 import com.topface.topface.ui.fragments.dating.form.ParentModel
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
-import com.topface.topface.ui.new_adapter.CompositeAdapter
-import com.topface.topface.ui.new_adapter.IType
 import com.topface.topface.utils.FlurryManager
 import com.topface.topface.utils.FormItem
 import com.topface.topface.utils.PreloadManager
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -44,6 +44,7 @@ import rx.Observer
 import rx.Subscriber
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /** Бизнеслогика для дейтинга
@@ -65,6 +66,8 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     private val mPreloadManager by lazy {
         PreloadManager<SearchUser>()
     }
+    var data = MultiObservableArrayList<Any>()
+
     var currentUser: SearchUser? = null
     private var mUpdateInProcess = false
     private var mNewFilter = false
@@ -108,9 +111,27 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                         }
                     }
                 }))
+        mProfileSubscription.add(
+                mState.getObservable(Profile::class.java)
+                        .distinctUntilChanged { t1, t2 ->
+                            t1.dating == t2.dating
+                        }
+                        .skip(1)
+                        .subscribe(shortSubscription {
+                            it.dating?.let {
+                                updateSearchListWithFilter(FilterData(it))
+                            }
+                        })
+        )
         mUserSearchList.setOnEmptyListListener(this)
         mUserSearchList.updateSignatureAndUpdate()
         createAndRegisterBroadcasts()
+    }
+
+    private fun updateSearchListWithFilter(filterData: FilterData) {
+        sendFilterRequest(filterData)
+        mNewFilter = true
+        FlurryManager.getInstance().sendFilterChangedEvent()
     }
 
     private fun createAndRegisterBroadcasts() {
@@ -149,7 +170,14 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                     if (usersList != null && usersList.size != 0) {
                         val isNeedShowNext = if (isLastUser) false else mUserSearchList.isEnded
                         //Добавляем новых пользователей
-                        mUserSearchList.addAndUpdateSignature(usersList)
+                        // а вот иначе не работает, прости меня, Бог хорошего и логичного кода, я все исправлю, едва будет время.
+                        if (isNeedRefresh) {
+                            mUserSearchList.replace(usersList)
+                            mUserSearchList.updateSignature()
+                            currentUser = null
+                        } else {
+                            mUserSearchList.addAndUpdateSignature(usersList)
+                        }
                         mPreloadManager.preloadPhoto(mUserSearchList)
                         val user = if (isNeedShowNext) mUserSearchList.nextUser() else mUserSearchList.currentUser
                         if (user != null && currentUser !== user) {
@@ -175,17 +203,15 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) = with((binding.formsList
-            .adapter as CompositeAdapter<IType>).data) {
-        clear()
-        if (!user.city.name.isNullOrEmpty()) addExpandableItem(ParentModel(user.city.name, false, R.drawable.pin))
-        // перед отображением статуса пропускаем значение через "нормализатор"
+    fun prepareFormsData(user: SearchUser, ownProfile: Profile = App.get().profile) {
+        data.replaceData(ArrayList<Any>())
+        if (!user.city.name.isNullOrEmpty()) data.add(ParentModel(user.city.name, false, R.drawable.pin))
         val status = Profile.normilizeStatus(user.status)
-        if (!status.isNullOrEmpty()) addExpandableItem(ParentModel(status, false, R.drawable.status))
-        addExpandableItem(GiftsModel(user.gifts, user.id))
-        val forms: MutableList<IType>
-        // проверяем не только все поля анкеты, но и статус. Статус имеет проверку на корректность данных
-        forms = mutableListOf <IType>().apply {
+        if (!status.isNullOrEmpty()) {
+            data.add(ParentModel(status, false, R.drawable.status))
+        }
+        data.add(GiftsModel(user.gifts, user.id))
+        data.addAll(mutableListOf <FormModel>().apply {
             var hasEmptyItem = false
             user.forms.forEach {
                 if (it.isEmpty && !hasEmptyItem) {
@@ -197,8 +223,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 val iconId = if (it.standartRequestWasSended) R.drawable.ask_info_done else R.drawable.bt_question
                 add(FormModel(Pair(it.title, getFormValue(it)), user.id, it.dataType.type, isEmptyItem = it.isEmpty, iconRes = iconId) { it.standartRequestWasSended = true })
             }
-        }
-        addExpandableItem(ParentModel(R.string.about.getString(), true, R.drawable.about), forms)
+        })
     }
 
     private fun getFormValue(formItem: FormItem): String {
@@ -217,14 +242,15 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
         if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
             mDatingButtonsView.lockControls()
             mEmptySearchVisibility.hideEmptySearchDialog()
-            if (data != null && data.extras != null) {
-                sendFilterRequest(data.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
-                mNewFilter = true
-                FlurryManager.getInstance().sendFilterChangedEvent()
+            data?.let {
+                it.extras?.apply {
+                    updateSearchListWithFilter(it.getParcelableExtra<FilterData>(FilterFragment.INTENT_DATING_FILTER))
+                }
             }
         }
+
         /*Ушли в другую активити во время апдейта. Реквест на апдейт накрылся.
-        По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
+    По возвращении если нет юзеров в кэше, нужно дернуть апдейт.*/
         if (mUserSearchList.isEnded && !mUpdateInProcess) {
             if (resultCode == Activity.RESULT_CANCELED
                     && requestCode == EditContainerActivity.INTENT_EDIT_FILTER) {
@@ -235,7 +261,10 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 Debug.log("LOADER_INTEGRATION after album")
                 update(false, false)
             }
-
+            if (requestCode == QuestionnaireActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+                Debug.log("LOADER_INTEGRATION after questionnaire")
+                update(false, false)
+            }
         }
     }
 
@@ -246,7 +275,7 @@ class DatingFragmentViewModel(private val binding: FragmentDatingLayoutBinding, 
                 profile.dating = filter
                 mState.setData(profile)
                 mUserSearchList.updateSignatureAndUpdate()
-                update(false, false)
+                update(true, false)
                 mNewFilter = false
             }
 

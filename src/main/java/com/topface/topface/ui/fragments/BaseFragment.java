@@ -34,6 +34,7 @@ import com.topface.topface.utils.http.IRequestClient;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import butterknife.ButterKnife;
@@ -42,7 +43,6 @@ import butterknife.Unbinder;
 
 public abstract class BaseFragment extends TrackedFragment implements IRequestClient, IOnBackPressed, IFragmentDelegate {
 
-    private static final String STATE_NEED_TITLES = "STATE_NEED_TITLES";
     private LinkedList<ApiRequest> mRequests = new LinkedList<>();
 
     private ActionBar mSupportActionBar;
@@ -189,10 +189,10 @@ public abstract class BaseFragment extends TrackedFragment implements IRequestCl
 
     private void removeAllRequests() {
         if (mRequests != null && mRequests.size() > 0) {
-            for (ApiRequest request : mRequests) {
-                cancelRequest(request);
+            for (Iterator<ApiRequest> iter = mRequests.iterator(); iter.hasNext(); ) {
+                cancelRequest(iter.next());
+                iter.remove();
             }
-            mRequests.clear();
         }
     }
 

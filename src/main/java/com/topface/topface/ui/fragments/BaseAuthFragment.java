@@ -20,6 +20,7 @@ import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
+import com.topface.topface.data.Auth;
 import com.topface.topface.data.AuthTokenStateData;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiRequest;
@@ -146,6 +147,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                 App.sendReferrerTrack(appConfig.getReferrerTrackData());
                 mKochavaManager.registration();
                 mKochavaManager.sendReferralTrack();
+                mKochavaManager.authEvent(new Auth(response).userId);
                 //Отправляем статистику в AppsFlyer
                 try {
                     AppsFlyerLib.sendTrackingWithEvent(App.getContext(), App.getContext()

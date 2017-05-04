@@ -31,7 +31,6 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = DataBindingUtil.setContentView<T>(this, getLayout())
-        setContentView(viewBinding.root)
         toolbarBinding = getToolbarBinding(viewBinding)
         viewBinding.setVariable(BR.toolbarViewModel, getToolbarViewModel())
         setSupportActionBar(toolbarBinding?.toolbar)
@@ -45,9 +44,11 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
         ToolbarManager.registerSettingsListener(this)
     }
 
-    fun setToolBarVisibility(isVisible: Boolean) {
-        mToolbarBaseViewModel?.visibility?.set(if (isVisible) View.VISIBLE else View.GONE)
+    fun setToolBarVisibility(isToolbarVisible: Boolean) {
+        mToolbarBaseViewModel?.rootViewVisibility?.set(if (isToolbarVisible) View.VISIBLE else View.GONE)
     }
+
+    fun isToolBarVisible() = toolbarBinding?.root?.visibility == View.VISIBLE
 
     open fun setToolbarSettings(settings: ToolbarSettingsData) {
         with(getToolbarViewModel()) {

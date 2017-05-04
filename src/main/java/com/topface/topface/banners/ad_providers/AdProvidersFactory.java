@@ -19,19 +19,21 @@ public class AdProvidersFactory {
     public static final String BANNER_GAG = "GAG";
     public static final String BANNER_NONE = "NONE";
     public static final String BANNER_APPODEAL = "APPODEAL";
+    public static final String BANNER_AMPIRI = "AMPIRI";
     public static final String[] BANNERS = new String[]{
             BANNER_TOPFACE,
             BANNER_ADMOB,
             BANNER_ADMOB_MEDIATION,
             BANNER_GAG,
             BANNER_NONE,
+            BANNER_AMPIRI,
             BANNER_APPODEAL
     };
 
     /**
      * Creates provider for given banner name
      *
-     * @param banner name of banner system from serverа
+     * @param banner name of banner system from server
      * @return appropriate provider
      */
     public IAdsProvider createProvider(String banner, Options options) {
@@ -44,6 +46,8 @@ public class AdProvidersFactory {
                 return new AdMobMediationProvider();
             case BANNER_APPODEAL:
                 return new AppodealProvider();
+            case BANNER_AMPIRI:
+                return new AmpiriProvider();
             default:
                 return null;
         }
