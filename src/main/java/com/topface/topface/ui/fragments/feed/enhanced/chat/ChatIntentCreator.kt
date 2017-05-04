@@ -45,7 +45,7 @@ object ChatIntentCreator {
     @JvmStatic
     @JvmOverloads
     fun createIntent(id: Int, sex: Int, nameAndAge: String, city: String, feedItemId: String?,
-                     photo: Photo, fromGcm: Boolean, itemType: Int, isBanned: Boolean,
+                     photo: Photo?, fromGcm: Boolean, itemType: Int, isBanned: Boolean,
                      inBlacklist: Boolean, isBookmarked: Boolean, isOnline: Boolean = false): Intent {
         return createIntent(id, sex, nameAndAge, city, feedItemId, photo, fromGcm, null, isBanned,
                 inBlacklist, isBookmarked, isOnline).putExtra(USER_TYPE, itemType)
@@ -72,9 +72,7 @@ object ChatIntentCreator {
         if (fromGcm) {
             intent.putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
         }
-        if (photo != null) {
-            intent.putExtra(INTENT_AVATAR, photo)
-        }
+        photo?.let { intent.putExtra(INTENT_AVATAR, it) }
         return intent
     }
 

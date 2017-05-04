@@ -138,7 +138,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                 .subscribe(shortSubscription {
                     it?.let { mIs3DSAvailable = it.isChecked }
                 }))
-        initAutofillView(isChecked.get())
+        initAutofillView(isChecked.get() && isCheckBoxVisible.get() == View.VISIBLE)
     }
 
     private fun initAutofillView(isCardChecked: Boolean) =

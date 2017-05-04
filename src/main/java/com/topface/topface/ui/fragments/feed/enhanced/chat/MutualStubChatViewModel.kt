@@ -15,16 +15,16 @@ import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 
 
-class MutualStubChatViewModel(private val mMutualItem: FeedUser) {
+class MutualStubChatViewModel(mutualItem: FeedUser) {
 
     val userPhoto = ObservableField(App.get().profile.photo)
     val type = GlideTransformationType.CROP_CIRCLE_TYPE
     val userPlaceholderRes = ObservableInt((if (App.get().profile.sex == User.BOY) R.drawable.dialogues_av_man_big
     else R.drawable.dialogues_av_girl_small))
 
-    val mutualUserPhoto = ObservableField(mMutualItem.photo)
+    val mutualUserPhoto = ObservableField(mutualItem.photo)
     val mutualType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
-    val mutualPlaceholderRes = ObservableInt(if (mMutualItem.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
+    val mutualPlaceholderRes = ObservableInt(if (mutualItem.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
     val circleColor = R.color.ask_moar_item_background
 
