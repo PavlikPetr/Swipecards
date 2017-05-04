@@ -10,7 +10,7 @@ import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
 
 /**
- * Декоратор для создания разднлителей между итемами разных типов
+ * Декоратор для создания разделителей между итемами разных типов
  * Created by ppavlik on 13.03.17.
  */
 class PurchasesItemDecorator : RecyclerView.ItemDecoration() {
