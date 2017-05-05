@@ -1016,6 +1016,7 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="ninja_text_trial_2">Fra %1$s verrà processata una transazione per %2$d %3$s. Il tuo abbonamento verrà automaticamente rinnovato ogni mese e i dettagli della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento insieme alle informazioni sulla tua carta dalle Impostazioni.</string>
   <string name="ninja_settings_toolbar">Pagamenti</string>
   <string name="ninja_vip_status_title">Abbonamento allo status VIP</string>
+  <string name="ninja_autofill_status_title">Ricarica automatica</string>
   <string name="ninja_cancel_vip_status">Cancella l\'abbonamento</string>
   <string name="ninja_use_another_card">Usa un\'altra carta</string>
   <string name="ninja_delete_card">Elimina carta</string>

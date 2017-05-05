@@ -90,7 +90,7 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                     getData().remove(subscription)
                 } else {
                     getData().indexOf(subscription).takeIf { it != -1 }?.let {
-                        getData().set(it, subscription.apply { enabled = false })
+                        getData().set(it, subscription.copy().apply { enabled = false })
                     }
                 }
                 mCancelSubscription = getCancelSubscriptionRequest(subscription.type)

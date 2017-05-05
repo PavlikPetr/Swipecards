@@ -1338,6 +1338,7 @@
     <string name="ninja_text_trial_2">Через %1$s будет проведена транзакция на %2$d %3$s, каждый месяц подписка будет автоматически обновляться. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках</string>
     <string name="ninja_settings_toolbar">Платежи</string>
     <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
+    <string name="ninja_autofill_status_title">Автопополнение</string>
     <string name="ninja_cancel_vip_status">Отменить подписку</string>
     <string name="ninja_use_another_card">Использовать другую карту</string>
     <string name="ninja_delete_card">Удалить карту</string>
