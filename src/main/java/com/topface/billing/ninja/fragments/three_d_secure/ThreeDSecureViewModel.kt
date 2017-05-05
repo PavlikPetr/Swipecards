@@ -48,7 +48,7 @@ class ThreeDSecureViewModel(private val mSettings: PurchaseError,
     private fun checkLink(paymentSuccessUrl: String, paymentFailUrl: String, currentLink: String) =
             when (currentLink) {
                 paymentSuccessUrl -> finishWithSuccess()
-                paymentFailUrl -> finishWithSuccess()
+                paymentFailUrl -> finishWithFail()
                 else -> Unit
             }
 
