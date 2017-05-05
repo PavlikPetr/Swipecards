@@ -88,10 +88,14 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
             subscriptionInfo?.let { subscription ->
                 if (subscriptionInfo.type == SubscriptionInfo.SUBSCRIPTION_TYPE_AUTO_REFILL) {
                     getData().remove(subscription)
+                } else {
+                    getData().indexOf(subscription).takeIf { it != -1 }?.let {
+                        getData().set(it, subscription.copy().apply { enabled = false })
+                    }
                 }
                 mCancelSubscription = getCancelSubscriptionRequest(subscription.type)
                         .applySchedulers()
-                        .subscribe({ }, { sendUserSubscriptionsRequest() })
+                        .subscribe({ sendUserSubscriptionsRequest() }, { sendUserSubscriptionsRequest() })
             }
 
     private fun getSubscriptionsRequest() =

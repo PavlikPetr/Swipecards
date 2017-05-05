@@ -1017,6 +1017,7 @@
     <string name="ninja_text_trial_2">En %1$s se completará una transacción para %2$d %3$s. Cada mes tu suscripción se renovará de forma automática y tu tarjeta se quedará guardada para los próximos pagos. Puedes cancelar la suscripción y desvincular tu tarjeta en Configuración.</string>
     <string name="ninja_settings_toolbar">Pagos</string>
     <string name="ninja_vip_status_title">Suscripción al estado VIP</string>
+    <string name="ninja_autofill_status_title">Recargado automático</string>
     <string name="ninja_cancel_vip_status">Cancelar suscripción</string>
     <string name="ninja_use_another_card">Usar otra carta</string>
     <string name="ninja_delete_card">Borrar corta</string>
@@ -1051,6 +1052,6 @@
     <string name="write_to_her_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>
     <string name="write_to_him_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>
     <string name="get_vip">Ser VIP</string>
-    <string name="payment_ninja_autofill_title">Rellenar saldo automáticamente</string>
+    <string name="payment_ninja_autofill_title">Recargar saldo automáticamente</string>
     <string name="payment_ninja_autofill_link">Reglas del servicio</string>
 </resources>

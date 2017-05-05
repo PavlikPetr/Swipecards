@@ -22,7 +22,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     val userPhoto = ObservableField(item.user.photo)
     val type = ObservableField(if (item.user.online) GlideTransformationType.ONLINE_CIRCLE_TYPE else GlideTransformationType.CROP_CIRCLE_TYPE)
-    val placeholderRes = ObservableField(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
+    val placeholderRes = ObservableInt(if (item.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
     val onLineCircle = ObservableField(R.dimen.dialog_online_circle.getDimen())
     val strokeSize = ObservableField(R.dimen.dialog_stroke_size.getDimen())
     val counterVisibility = ObservableInt(if (item.unread) View.VISIBLE else View.GONE)
