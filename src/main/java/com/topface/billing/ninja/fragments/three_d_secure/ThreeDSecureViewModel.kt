@@ -12,6 +12,7 @@ import android.webkit.WebView
 import com.topface.billing.ninja.IFinishDelegate
 import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.PurchaseError
+import com.topface.topface.utils.Utils
 
 /**
  * Вью-модель для 3ds валидации
@@ -52,6 +53,7 @@ class ThreeDSecureViewModel(private val mSettings: PurchaseError,
             }
 
     private fun finishWithFail() {
+        Utils.showErrorMessage()
         mFinishCallback?.finishWithResult(Activity.RESULT_OK, Intent().apply { putExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
     }
 

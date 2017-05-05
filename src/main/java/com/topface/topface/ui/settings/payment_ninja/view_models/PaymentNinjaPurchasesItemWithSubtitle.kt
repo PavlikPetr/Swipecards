@@ -24,9 +24,12 @@ class PaymentNinjaPurchasesItemWithSubtitle(private val mSubscription: Subscript
 
     private fun getSubtitleText() =
             if (mSubscription.type == SubscriptionInfo.SUBSCRIPTION_TYPE_PREMIUM) {
+                val expire = Calendar.getInstance().apply { timeInMillis = mSubscription.expire * 1000 }
+                val currentDate = Calendar.getInstance()
+                val dateFormat = if (currentDate.get(Calendar.YEAR) != expire.get(Calendar.YEAR)) "d MMMM yyyy" else "d MMMM"
                 String.format(App.getCurrentLocale(),
                         if (mSubscription.enabled) R.string.ninja_subscription_expiration.getString() else R.string.ninja_subscription_cancelled.getString(),
-                        SimpleDateFormat("d MMMM", Locale(App.getLocaleConfig().applicationLocale)).format(mSubscription.expire * 1000).toLowerCase())
+                        SimpleDateFormat(dateFormat, Locale(App.getLocaleConfig().applicationLocale)).format(expire).toLowerCase())
             } else {
                 (if (mSubscription.enabled) R.string.ninja_autofilling_activated else R.string.ninja_autofilling_cancelled).getString()
             }
