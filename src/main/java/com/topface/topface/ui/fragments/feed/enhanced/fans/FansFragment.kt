@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.fans
 
 import android.os.Bundle
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
@@ -20,6 +21,9 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
     companion object {
         const val SCREEN_TYPE = "Fans"
     }
+
+    override val actionModeMenu: Int
+        get() = R.menu.feed_context_menu_fans
 
     override val mViewModel by lazy {
         ComponentManager.obtainComponent(FansViewModelsComponent::class.java) {

@@ -453,7 +453,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
             }
             if (data.isEmpty()) {
                 isListVisible.set(View.INVISIBLE)
-                stubView?.onEmptyFeed()
+                switchLockerStubView(EMPTY_FEED, stubView)
             }
             mCache.saveToCache(ArrayList<T>(data as List<T>))
         }

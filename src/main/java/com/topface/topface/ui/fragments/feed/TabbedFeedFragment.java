@@ -76,6 +76,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
         @Override
         public void onPageSelected(int position) {
+            setLastOpenedPage(position);
             if (mTabLayoutCreator != null) {
                 mTabLayoutCreator.setTabTitle(position);
             }
