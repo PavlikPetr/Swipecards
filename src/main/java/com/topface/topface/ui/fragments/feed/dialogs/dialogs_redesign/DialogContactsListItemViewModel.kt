@@ -30,7 +30,7 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
     }
     val userPhoto = ObservableField(mItem.user.photo)
     val type = ObservableField(getTransformType())
-    val placeholderRes = ObservableField(if (mItem.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
+    val placeholderRes = ObservableInt(if (mItem.user.sex == User.BOY) R.drawable.dialogues_av_man_small else R.drawable.dialogues_av_girl_small)
     val name = ObservableField(mItem.user.firstName)
     val nameTextColor = ObservableInt(getNameColor())
     val onLineCircle = ObservableField(R.dimen.dialog_online_circle.getDimen())

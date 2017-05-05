@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog
 
 import android.databinding.ObservableField
+import android.databinding.ObservableInt
 import android.os.Bundle
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
@@ -22,7 +23,7 @@ class ChatMessage36DialogViewModel(data: Bundle, val action:() -> Unit) {
             (if (mUser.sex == User.BOY) R.string.write_to_him_only_vip else R.string.write_to_her_only_vip).getString()
     )
     val photo = ObservableField(mUser.photo)
-    val placeholderResId = ObservableField(if (mUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
+    val placeholderResId = ObservableInt(if (mUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val photoTransformType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
     fun onButtonClick() = action()
