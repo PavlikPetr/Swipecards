@@ -1717,6 +1717,11 @@
     <!-- для единообразия именования, завел пустой стиль -->
     <style name="DatingSmall.V2"/>
 
+    <style name="DatingBig.V2">
+        <item name="android:layout_width">@dimen/dating_big_button_size</item>
+        <item name="android:layout_height">@dimen/dating_big_button_size</item>
+    </style>
+
     <style name="DatingSmall.V2.Message">
         <item name="android:background">@drawable/dating_send_message_selector_v2</item>
     </style>
