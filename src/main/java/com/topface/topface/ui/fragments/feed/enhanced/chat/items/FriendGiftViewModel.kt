@@ -9,8 +9,8 @@ import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
 import com.topface.topface.utils.extensions.getDimen
 
-class FriendMessageViewModel(item: HistoryItem, itemPosition: Int, feedUser: FeedUser?)
-    : BaseMessageViewModel(item, itemPosition), IAvatarVisible {
+class FriendGiftViewModel(item: HistoryItem, itemPosition: Int, feedUser: FeedUser?)
+    : GiftViewModel(item, itemPosition), IAvatarVisible {
     override val isAvatarVisible = item.isAvatarVisible
     val photo = ObservableField(feedUser?.photo)
     val placeholderResId = ObservableInt(if (feedUser?.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
