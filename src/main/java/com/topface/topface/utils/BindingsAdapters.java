@@ -518,7 +518,6 @@ public class BindingsAdapters {
         }
     }
 
-
     @BindingAdapter("setRequestFocus")
     public static void setRequestFocus(android.support.design.widget.TextInputEditText view, boolean needFocus) {
         if (needFocus) {
