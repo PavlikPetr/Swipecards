@@ -44,7 +44,7 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
             ChatLoader::class.java -> HistoryItem.STUB_CHAT_LOADER
             UserMessage::class.java -> HistoryItem.USER_MESSAGE
             FriendMessage::class.java -> HistoryItem.FRIEND_MESSAGE
-            UserGift::class.java -> HistoryItem.USER_MESSAGE
+            UserGift::class.java -> HistoryItem.USER_GIFT
             FriendGift::class.java -> HistoryItem.FRIEND_GIFT
             Divider::class.java -> HistoryItem.DIVIDER
             MutualStub::class.java -> HistoryItem.STUB_MUTUAL
@@ -63,9 +63,9 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
     }.apply {
         addAdapterComponent(LoaderStubComponent())
         addAdapterComponent(UserMessageComponent())
-        addAdapterComponent(FriendMessageComponent())
+        addAdapterComponent(FriendMessageComponent(feedUser))
         addAdapterComponent(UserGiftComponent())
-        addAdapterComponent(FriendGiftComponent())
+        addAdapterComponent(FriendGiftComponent(feedUser))
         addAdapterComponent(DividerComponent())
         addAdapterComponent(MutualStubComponent(feedUser))
         addAdapterComponent(BuyVipStubComponent(feedNavigator, feedUser))

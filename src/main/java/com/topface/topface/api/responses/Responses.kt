@@ -1,10 +1,12 @@
 package com.topface.topface.api.responses
 
+import android.databinding.ObservableBoolean
 import android.os.Parcel
 import android.os.Parcelable
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IAvatarVisible
 import com.topface.topface.utils.Utils.EMPTY
 import com.topface.topface.utils.extensions.readBoolean
 import com.topface.topface.utils.extensions.writeBoolean
@@ -34,7 +36,9 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
-                       val unread: Boolean = false, val link: String? = null): IChatItem, Parcelable {
+                       val unread: Boolean = false, val link: String? = null): IChatItem, Parcelable, IAvatarVisible {
+
+    override val isAvatarVisible = ObservableBoolean(false)
 
     override fun getItemType() = if(target == FeedDialog.OUTPUT_USER_MESSAGE) {
             // owner items
