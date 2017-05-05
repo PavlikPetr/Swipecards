@@ -48,10 +48,22 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
         mSubscription.add(Observable.fromEmitter<Boolean>({ emitter ->
             mEmitter = emitter
         }, Emitter.BackpressureMode.LATEST)
+//                .filter {
+////                    Debug.log("$TAG catch new value ui:$this isVisible:$it")
+//                    true
+//                }
+                .map {
+                    Debug.log("BeforeDistinct ui:$this state:$it")
+                    it
+                }
                 .distinctUntilChanged()
-                .withIndex()
-                .filter { it.index > 0 || it.value }
-                .map { it.value }
+                .map {
+                    Debug.log("AfterDistinct ui:$this state:$it")
+                    it
+                }
+//                .withIndex()
+//                .filter { it.index > 0 || it.value }
+//                .map { it.value }
                 .timeInterval()
                 .subscribe(shortSubscription {
                     it?.let {
@@ -63,7 +75,7 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
                     }
                 }))
         // костыль на случай если не сработал onVisibilityChanged
-        mSubscription.add(Observable.interval(100, TimeUnit.MILLISECONDS)
+        mSubscription.add(Observable.interval(1000, TimeUnit.MILLISECONDS)
                 .subscribe(shortSubscription { mEmitter?.onNext(visibility == View.VISIBLE && alpha > 0) }))
     }
 
