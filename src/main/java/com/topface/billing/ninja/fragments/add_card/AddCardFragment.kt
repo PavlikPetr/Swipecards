@@ -47,13 +47,14 @@ class AddCardFragment : BaseFragment(), IFinishDelegate {
             }.root
 
     override fun finishWithResult(resultCode: Int, data: Intent) {
-        activity?.let {
-            with(it) {
+        if (activity != null && isAdded) {
+            with(activity) {
                 setResult(resultCode, data)
                 finish()
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         mViewModel.release()
