@@ -42,4 +42,9 @@ public class OwnProfileActivity extends CheckAuthActivity<OwnProfileFragment, Ac
     public int getLayout() {
         return R.layout.ac_fragment_frame;
     }
+
+    @Override
+    public int getTabLayoutResId() {
+        return R.id.toolbarInternalTabs;
+    }
 }
