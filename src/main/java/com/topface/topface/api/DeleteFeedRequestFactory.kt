@@ -2,8 +2,10 @@ package com.topface.topface.api
 
 import android.os.Bundle
 import com.topface.topface.api.requests.BaseScruffyRequest
+import com.topface.topface.api.requests.DeleteBookmarksRequest
 import com.topface.topface.api.requests.DeleteVisitorsRequest
 import com.topface.topface.api.responses.Completed
+import com.topface.topface.utils.config.FeedsCache
 
 class DeleteFeedRequestFactory : IRequestFactory<Completed> {
 
@@ -14,12 +16,18 @@ class DeleteFeedRequestFactory : IRequestFactory<Completed> {
 
     override fun construct(arg: Bundle): BaseScruffyRequest<Completed> {
         val id = arg.getStringArrayList(USER_ID_FOR_DELETE)
-        return DeleteVisitorsRequest(id)
-        /*when (it.getSerializable(FEED_TYPE) as FeedsCache.FEEDS_TYPE) {
+        val request = when (arg.getSerializable(FEED_TYPE) as FeedsCache.FEEDS_TYPE) {
             FeedsCache.FEEDS_TYPE.DATA_VISITORS_FEEDS -> DeleteVisitorsRequest(id)
-            FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS, FeedsCache.FEEDS_TYPE.DATA_BLACK_LIST_FEEDS,
-            FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS, FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS,
-            FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS, FeedsCache.FEEDS_TYPE.DATA_MUTUALS_FEEDS -> null
-        }*/
+
+            FeedsCache.FEEDS_TYPE.DATA_FANS_FEEDS -> TODO()
+            FeedsCache.FEEDS_TYPE.UNKNOWN_TYPE -> TODO()
+            FeedsCache.FEEDS_TYPE.DATA_DIALOGS_FEEDS -> TODO()
+            FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS -> TODO()
+            FeedsCache.FEEDS_TYPE.DATA_MUTUALS_FEEDS -> TODO()
+            FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS -> TODO()
+            FeedsCache.FEEDS_TYPE.DATA_BOOKMARKS_FEEDS -> TODO()
+            FeedsCache.FEEDS_TYPE.DATA_BLACK_LIST_FEEDS -> TODO()
+        }
+        return request
     }
 }
