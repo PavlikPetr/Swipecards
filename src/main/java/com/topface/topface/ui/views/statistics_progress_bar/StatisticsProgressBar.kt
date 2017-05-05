@@ -64,13 +64,18 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
                 }))
         // костыль на случай если не сработал onVisibilityChanged
         mSubscription.add(Observable.interval(100, TimeUnit.MILLISECONDS)
-                .subscribe(shortSubscription { mEmitter?.onNext(visibility == View.VISIBLE) }))
+                .subscribe(shortSubscription { mEmitter?.onNext(visibility == View.VISIBLE && alpha > 0) }))
     }
 
     private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.StatisticsProgressBar, defStyleAttr, 0)
         setPlc(a.getString(R.styleable.StatisticsProgressBar_plc))
         a.recycle()
+    }
+
+    override fun setVisibility(visibility: Int) {
+        mEmitter?.onNext(visibility == View.VISIBLE)
+        super.setVisibility(visibility)
     }
 
     override fun onDetachedFromWindow() {
@@ -87,7 +92,12 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        mEmitter?.onNext(visibility == View.VISIBLE)
+        mEmitter?.onNext(visibility == View.VISIBLE && alpha > 0)
+    }
+
+    override fun onSetAlpha(alpha: Int): Boolean {
+        mEmitter?.onNext(alpha > 0)
+        return super.onSetAlpha(alpha)
     }
 
     /**
@@ -101,12 +111,12 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
     }
 
     private fun sendShowEvent() {
-        Debug.log("${TAG} sendShowEvent plc:$mPlc")
+        Debug.log("$TAG sendShowEvent plc:$mPlc")
         ProgressStatisticsGeneratedStatistics.sendNow_LOADER_SHOW(Slices().apply { putSlice("plc", mPlc) })
     }
 
     private fun sendHideEvent(interval: Long) {
-        Debug.log("${TAG} sendHideEvent plc:$mPlc timeout:$interval")
+        Debug.log("$TAG sendHideEvent plc:$mPlc timeout:$interval")
         ProgressStatisticsGeneratedStatistics.sendNow_LOADER_HIDE(Slices().apply {
             putSlice("plc", mPlc)
             putSlice("int", interval.toString())
