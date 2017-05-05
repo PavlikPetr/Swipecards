@@ -14,6 +14,6 @@ class FriendGiftViewModel(item: HistoryItem, itemPosition: Int, feedUser: FeedUs
     override val isAvatarVisible = item.isAvatarVisible
     val photo = ObservableField(feedUser?.photo)
     val placeholderResId = ObservableInt(if (feedUser?.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
-    val photoTransformType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
+    val photoTransformType = GlideTransformationType.CROP_CIRCLE_TYPE
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
 }
