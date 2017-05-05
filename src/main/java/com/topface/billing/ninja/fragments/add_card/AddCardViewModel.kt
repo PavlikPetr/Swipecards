@@ -14,8 +14,7 @@ import com.topface.billing.ninja.CardUtils.UtilsForCard
 import com.topface.billing.ninja.CardUtils.UtilsForCard.EMAIL_ADDRESS
 import com.topface.billing.ninja.CardUtils.UtilsForCard.INPUT_DELAY
 import com.topface.billing.ninja.fragments.add_card.CardType.Companion.CVV_DEFAULT
-import com.topface.billing.ninja.fragments.add_card.CardType.Companion.MASTERCARD
-import com.topface.billing.ninja.fragments.add_card.CardType.Companion.VISA
+import com.topface.billing.ninja.fragments.add_card.CardType.Companion.NONVALIDCARD
 import com.topface.framework.JsonUtils
 import com.topface.topface.App
 import com.topface.topface.R
@@ -83,6 +82,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val emailText = ObservableField<String>()
     val emailError = ObservableField<String>()
     val cardFieldsSubscription = CompositeSubscription()
+    var mAddCardRequestSubscription: Subscription? = null
     val productTitle = ObservableField<String>()
     val isAutoPayDescriptionVisible = ObservableBoolean(false)
     val isAutoPayEnabled = ObservableBoolean(true)
@@ -197,15 +197,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     private fun updateButton() = isButtonEnabled.set(!readyCheck.containsValue(false))
 
     private fun setTemplate(cardType: CardType) {
-        // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir", "default"
-        if (cardType in listOf<CardType>(VISA, MASTERCARD)) {
-            numberMaxLength.set(cardType.numberMaxLength)
-            cvvMaxLength.set(cardType.cvvMaxLength)
-            cardIcon.set(cardType.cardIcon)
-            numberError.set(Utils.EMPTY)  // костылим, ибо не будет "american_express", "diners", "discover", "jcb", "mir","default"
-        } else {
+        numberMaxLength.set(cardType.numberMaxLength)
+        cvvMaxLength.set(cardType.cvvMaxLength)
+        cardIcon.set(cardType.cardIcon)
+        if (cardType == NONVALIDCARD) {
             numberError.set(R.string.ninja_card_number_error.getString())
             readyCheck.put(numberText, false)
+        } else {
+            numberError.set(Utils.EMPTY)
         }
     }
 
@@ -213,15 +212,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
         return cardBrands.keys
                 .find { cardNumber.matches(it) }
                 ?.let { cardBrands[it] }
-                ?: CardType.DEFAULT
+                ?: CardType.NONVALIDCARD
     }
 
     fun release() {
         cardFieldsSubscription.clear()
         cvvText.removeOnPropertyChangedCallback(cvvChangedCallback)
         emailText.removeOnPropertyChangedCallback(emailChangedCallback)
-        mPurchaseRequestSubscription.safeUnsubscribe()
-        m3DSSwitchSubscription.safeUnsubscribe()
+        arrayOf(mAddCardRequestSubscription, m3DSSwitchSubscription, mPurchaseRequestSubscription).safeUnsubscribe()
     }
 
     fun onClick() {
@@ -243,7 +241,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
             )
             isInputEnabled.set(false)
             mIsProgressVisible = true
-            AddCardRequest().getRequestObservable(App.get(), cardModel)
+            mAddCardRequestSubscription = AddCardRequest().getRequestObservable(App.get(), cardModel)
                     .applySchedulers()
                     .subscribe({
                         mProduct?.let {
@@ -261,8 +259,14 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                             trhuText.set("")
                             numberText.set("")
 
-                            clearFocus.set(true)
-                            needFocus.set(true)
+                            with(clearFocus) {
+                                set(true)
+                                notifyChange()
+                            }
+                            with(needFocus) {
+                                set(true)
+                                notifyChange()
+                            }
 
                             with(readyCheck) {
                                 put(numberText, false)
@@ -302,7 +306,8 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     private fun validateNumber(): Boolean {
         if (!numberText.get().isNullOrEmpty() &&
                 UtilsForCard.isDigits(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, "")) &&
-                numberText.get().length <= numberMaxLength.get()) {
+                numberText.get().length <= numberMaxLength.get() &&
+                cardIcon.get() != NONVALIDCARD.cardIcon) {                      // еще один убогий костыль, чтобы не давать возможность сработать валидации при маклимальном кол-ве символов
             // валидация по алгоритму Луна
             if (!UtilsForCard.luhnsAlgorithm(numberText.get().replace(UtilsForCard.SPACE_DIVIDER, ""))) {
                 numberError.set(R.string.ninja_card_number_error.getString())
@@ -374,8 +379,13 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                 mIsTestPurchase, isAutoPayEnabled.get(), mIs3DSPurchase).getRequestSubscriber()
                 .applySchedulers()
                 .subscribe({
-                    mNavigator.showPurchaseSuccessfullFragment(productType, Bundle()
-                            .apply { putBoolean(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, true) })
+                    mFinishCallback.finishWithResult(Activity.RESULT_OK,
+                            Intent().apply {
+                                putExtra(NinjaAddCardActivity.PURCHASE_SUCCESFULL, true)
+                                mProduct?.let {
+                                    putExtra(NinjaAddCardActivity.PRODUCT, it)
+                                }
+                            })
                     mIsProgressVisible = false
                     isInputEnabled.set(true)
                 },

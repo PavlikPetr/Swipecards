@@ -5,8 +5,6 @@ import android.support.annotation.IntDef
 import android.view.InflateException
 import android.widget.Toast
 import com.topface.topface.App
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
 
 /**
  * Extension для рпоказа toast
@@ -15,7 +13,7 @@ import java.lang.annotation.RetentionPolicy
 /** @hide
  */
 @IntDef(DurationConst.LENGTH_SHORT, DurationConst.LENGTH_LONG)
-@Retention(RetentionPolicy.SOURCE)
+@Retention(AnnotationRetention.SOURCE)
 annotation class Duration
 
 object DurationConst {

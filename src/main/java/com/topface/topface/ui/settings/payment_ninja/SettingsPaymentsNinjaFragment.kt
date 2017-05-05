@@ -24,6 +24,8 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.isAvailable
+import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
 /**
@@ -44,6 +46,7 @@ class SettingsPaymentsNinjaFragment : BaseFragment(), IAlertDialog {
 
     private val mViewModel by lazy {
         SettingsPaymentNinjaViewModel(mFeedNavigator, this)
+                .apply { activity.registerLifeCycleDelegate(this) }
     }
 
     private val mTypeProvider by lazy {
@@ -91,6 +94,7 @@ class SettingsPaymentsNinjaFragment : BaseFragment(), IAlertDialog {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity.unregisterLifeCycleDelegate(mViewModel)
         mViewModel.release()
     }
 
@@ -101,10 +105,5 @@ class SettingsPaymentsNinjaFragment : BaseFragment(), IAlertDialog {
 
     override fun show(positive: () -> Unit) {
         AlertDialogFactory().constructDeleteCard(activity, positive)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 }

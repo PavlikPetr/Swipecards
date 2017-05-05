@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.data.History
+import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.databinding.ChatPopupMenuBinding
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.utils.registerLifeCycleDelegate
@@ -24,7 +24,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
         const val CHAT_ITEM = "chat_item"
         const val CHAT_ITEM_POSITION = "chat_item_position"
 
-        fun newInstance(item: History, position: Int) = ChatPopupMenu().apply {
+        fun newInstance(item: HistoryItem, position: Int) = ChatPopupMenu().apply {
             arguments = Bundle().apply {
                 putParcelable(CHAT_ITEM, item)
                 putInt(CHAT_ITEM_POSITION, position)
@@ -32,7 +32,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
         }
     }
 
-    private val mItem: History = arguments.getParcelable(CHAT_ITEM)
+    private val mItem: HistoryItem = arguments.getParcelable(CHAT_ITEM)
 
     private val mPosition = arguments.getInt(CHAT_ITEM_POSITION)
 

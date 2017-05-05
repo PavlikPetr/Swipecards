@@ -89,7 +89,7 @@ abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), ITo
     }
 
     fun getToolbarViewModel(): BaseToolbarViewModel {
-        if (mToolbarBaseViewModel == null && toolbarBinding != null) {
+        if (mToolbarBaseViewModel == null) {
             toolbarBinding?.let {
                 mToolbarBaseViewModel = generateToolbarViewModel(it)
             }

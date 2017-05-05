@@ -13,15 +13,21 @@
         android:layout_height="match_parent"
         android:background="@color/bg_white">
 
-        <ImageView
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="20dp"
-            android:onClick="@{() -> model.closePopup()}"
-            android:src="@drawable/skip"/>
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="10dp"
+            android:onClick="@{() -> model.closePopup()}">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/skip"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/popupTitle"
@@ -57,11 +63,11 @@
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@+id/icArrow"
             android:src="@drawable/girl_blur_6"
+            app:animationSrc="@{@anim/mutual_popup_right}"
             app:glideTransformationPhoto="@{model.userPhoto}"
-            app:placeholderRes="@{model.userPlaceholderRes}"
             app:outSideCircle="@{model.outsideCircle}"
-            app:typeTransformation="@{model.type}"
-            app:animationSrc="@{@anim/mutual_popup_right}"/>
+            app:placeholderRes="@{model.userPlaceholderRes}"
+            app:typeTransformation="@{model.type}"/>
 
         <!--Кто-то, кому ты не безразличен-->
         <ImageView
@@ -73,11 +79,11 @@
             android:layout_marginRight="14dp"
             android:layout_toLeftOf="@+id/icPen"
             android:src="@drawable/man_blur_5"
+            app:animationSrc="@{@anim/mutual_popup_left}"
             app:glideTransformationPhoto="@{model.mutualUserPhoto}"
             app:outSideCircle="@{model.outsideCircle}"
             app:placeholderRes="@{model.mutualPlaceholderRes}"
-            app:typeTransformation="@{model.type}"
-            app:animationSrc="@{@anim/mutual_popup_left}"/>
+            app:typeTransformation="@{model.type}"/>
 
         <ImageView
             android:id="@+id/icArrow"

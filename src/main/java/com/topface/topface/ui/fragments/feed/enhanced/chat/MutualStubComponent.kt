@@ -5,30 +5,29 @@ import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.MutualStubChatBinding
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
-import kotlin.properties.Delegates
 
 /**
  * Заглушка "взаимных симпатий" в чате
  */
-class MutualStubComponent(private val mMutualItem: FeedUser) : AdapterComponent<MutualStubChatBinding, FeedUser>() {
+class MutualStubComponent(private val mFeedUser: FeedUser?) : AdapterComponent<MutualStubChatBinding, MutualStub>() {
 
     override val itemLayout: Int
         get() = R.layout.mutual_stub_chat
     override val bindingClass: Class<MutualStubChatBinding>
         get() = MutualStubChatBinding::class.java
 
-    private var mViewModel by Delegates.notNull<MutualStubChatViewModel>()
+    private var mViewModel: MutualStubChatViewModel? = null
 
-    override fun bind(binding: MutualStubChatBinding, data: FeedUser?, position: Int) =
+    override fun bind(binding: MutualStubChatBinding, data: MutualStub?, position: Int) =
             with(binding) {
-                data?.let { mViewModel = MutualStubChatViewModel(it) }
-                setViewModel(mViewModel)
+                mFeedUser?.let { mViewModel = MutualStubChatViewModel(it) }
+                viewModel = mViewModel
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
             }
 
     override fun release() {
         super.release()
-        mViewModel.release()
+        mViewModel?.release()
     }
 }
