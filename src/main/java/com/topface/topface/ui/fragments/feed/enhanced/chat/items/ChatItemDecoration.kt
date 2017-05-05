@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.View
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -23,7 +24,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                     if (isFriendItem(currentItem)) {
                         when(position) {
                         // item not found
-                            -1 -> {}
+                            NO_POSITION -> {}
                         // first item
                             0 -> {
                                 currentItem.isAvatarVisible.set(true)
