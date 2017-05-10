@@ -500,21 +500,6 @@ public class BindingsAdapters {
             view.getLayoutManager().onRestoreInstanceState(state);
         }
     }
-
-    @BindingAdapter("setNumberSelection")
-    public static void setNumberSelection(EditText view, String string) {
-        if (string != null) {
-            view.setSelection(string.length());
-        }
-    }
-
-    @BindingAdapter("setFocusOnEditText")
-    public static void setNumberSelection(EditText view, Boolean isNeedfocus) {
-        if (isNeedfocus) {
-            view.requestFocus();
-        }
-    }
-
     @BindingAdapter("setJavaScriptEnabled")
     public static void setJavaScriptEnabled(WebView view, boolean isEnabled) {
         view.getSettings().setJavaScriptEnabled(isEnabled);
@@ -532,7 +517,6 @@ public class BindingsAdapters {
             view.setLayerType(layerType, paint);
         }
     }
-
 
     @BindingAdapter("setRequestFocus")
     public static void setRequestFocus(android.support.design.widget.TextInputEditText view, boolean needFocus) {
