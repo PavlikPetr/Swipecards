@@ -22,6 +22,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController
 import com.topface.topface.ui.fragments.feed.feed_base.MultiselectionController.IMultiSelectionListener
 import com.topface.topface.ui.fragments.feed.feed_utils.getFeedIdList
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
+import com.topface.topface.utils.extensions.executePendingBindingsBeforeApi
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
 
@@ -88,6 +89,8 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
         super.onCreateView(inflater, container, savedInstanceState)
         initScreenView(mBinding)
         mBinding.viewModel = mViewModel as BaseFeedFragmentModel<FeedItem>
+        //Хитрый хак, дабы зафорсить обновление данных через биндинг адаптре на прелолипопах
+        mBinding.executePendingBindingsBeforeApi()
         mViewModel.apply {
             navigator = mNavigator
             stubView = mLockerControllerBase
