@@ -173,22 +173,6 @@
         <item name="android:background">@drawable/forms_send_gift_selector_v21</item>
     </style>
 
-    <style name="NewDatingLike" parent="DatingBig">
-        <item name="android:background">@drawable/new_dating_like_selector_v21</item>
-    </style>
-
-    <style name="NewDatingSkip" parent="DatingBig">
-        <item name="android:background">@drawable/new_dating_skip_selector_v21</item>
-    </style>
-
-    <style name="NewDatingMessage" parent="DatingSmall">
-        <item name="android:background">@drawable/new_dating_send_message_selector_v21</item>
-    </style>
-
-    <style name="DatingProfile" parent="DatingSmall">
-        <item name="android:background">@drawable/dating_profile_selector_v21</item>
-    </style>
-
     <style name="DatingBig">
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
         <item name="android:layout_width">@dimen/dating_big_button_size</item>
@@ -209,7 +193,7 @@
     </style>
 
     <!-- для единообразия именования, завел пустой стиль -->
-    <style name="DatingSmall.V2" />
+    <style name="DatingSmall.V2"/>
 
     <style name="DatingBig.Like">
         <item name="android:background">@drawable/dating_like_selector_v21</item>
@@ -244,6 +228,10 @@
     </style>
 
     <style name="PopupGreenButton.Background">
+        <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
+    <style name="AddPaymentNinjaCardView" parent="AddPaymentNinjaCardViewBase">
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
 

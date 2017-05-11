@@ -979,6 +979,10 @@
   <string name="buy_likes_become_popular_male">Devenez populaire</string>
   <string name="you_are_not_shown">Vous apparaissez difficilement dans les \&quot;Rencontres\&quot;</string>
   <string name="you_are_not_shown_answer">Envoyez un J\'aime en réponse à plusieurs J\'aime reçus et apparaissez ainsi plus souvent.</string>
+  <string name="offers_free_title">Gratuit</string>
+  <string name="offers_free_vip">VIP gratuit</string>
+  <string name="offers_free_coins">Pièces gratuites</string>
+  <string name="offers_free_likes">J\'aime gratuits</string>
   <string name="fb_invitation_find_what_you_are_looking_for">Trouvez qui vous recherchez</string>
   <string name="fb_invitation_amoung_more_than_100_mln_people">Parmi plus de 100 millions de personnes</string>
   <string name="fb_invitation_intelligent_selection_filter">Filtre de sélection intelligente</string>
@@ -1006,7 +1010,6 @@
   <string name="ninja_text_2">Sécurisé SSL 128 bits</string>
   <string name="ninja_text_4">En incluant la somme donnée, vous acceptez</string>
   <string name="ninja_text_link">Les règles du service</string>
-  <string name="ninja_text_5">Dans 7 jours, le statut VIP sera automatiquement renouvelé. Votre carte sera enregistrée pour des paiements futurs. Vous pouvez annuler votre abonnement et supprimer les informations de votre carte dans les Paramètres.</string>
   <string name="ninja_text_trial_1">€ 1 sera facturé puis immédiatement retourné sur votre compte, afin de vérifier votre carte.</string>
   <string name="ninja_text_trial_2">Dans %1$s, une transaction sera terminée pour %2$d %3$s. Chaque mois, votre abonnement sera automatiquement renouvelé et votre carte sera enregistrée pour les paiements à venir. Vous pouvez annuler votre abonnement et supprimer votre carte dans les Paramètres.</string>
   <string name="ninja_settings_toolbar">Paiements</string>
@@ -1026,7 +1029,6 @@
   <string name="payment_ninja_card_number">La carte **%s sera utilisée pour le paiement</string>
   <string name="ninja_cvv_error">CVV / CVC incorrects</string>
   <string name="ninja_trhu_error">Date incorrecte</string>
-  <string name="ninja_number_error">Format de numéro de carte incorrect</string>
   <string name="ninja_email_error">Format d\'e-mail incorrect</string>
   <string name="use_card">Utiliser la carte **%s</string>
   <string name="ninja_no_card_title">Ajouter une carte</string>

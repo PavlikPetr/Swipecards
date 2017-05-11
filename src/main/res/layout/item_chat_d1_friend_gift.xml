@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendGiftViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="9dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="56dp"
+        android:paddingTop="9dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="left|top"
+            android:onClick="@{() -> viewModel.onAvatarClick()}"
+            android:visibility="@{viewModel.isAvatarVisible}"
+            bind:glideTransformationPhoto="@{viewModel.photo}"
+            bind:outSideCircle="@{viewModel.outsideCircle}"
+            bind:placeholderRes="@{viewModel.placeholderResId}"
+            bind:typeTransformation="@{viewModel.photoTransformType}" />
+
+        <ImageView
+            style="@style/ChatImage.Gift.Holo"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="@dimen/chat_d1_friend_lefT_margin"
+            android:background="@drawable/chat_item_d1_bg_friend"
+            bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
+            bind:remoteSrcGlide="@{viewModel.link}"
+            tools:src="@drawable/feed_banned_female_avatar" />
+    </FrameLayout>
+</layout>

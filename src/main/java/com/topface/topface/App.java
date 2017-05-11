@@ -106,6 +106,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import static com.topface.topface.utils.ads.FullscreenController.AMPIRI;
 import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
 public class App extends ApplicationBase implements IStateDataUpdater {
@@ -402,10 +403,18 @@ public class App extends ApplicationBase implements IStateDataUpdater {
             public void success(IApiResponse response) {
                 AdsSettings settings = JsonUtils.fromJson(response.toString(), AdsSettings.class);
                 Debug.log("BANNER_SETTINGS : Catched new banner settings");
-                if (settings != null && settings.banner != null && AdsSettings.SDK.equals(settings.banner.type) && APPODEAL_NEW.equals(settings.banner.name)) {
-                    App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
-                    mWeakStorage.setAppodealBannerSegmentName(settings.banner.adAppId);
-                    AppodealProvider.setCustomSegment();
+                if (settings != null && settings.banner != null && AdsSettings.SDK.equals(settings.banner.type)) {
+                    switch (settings.banner.name) {
+                        case APPODEAL_NEW:
+                            App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
+                            mWeakStorage.setAppodealBannerSegmentName(settings.banner.adAppId);
+                            AppodealProvider.setCustomSegment();
+                            break;
+                        case AMPIRI:
+                            App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
+                            mWeakStorage.setAmpiriBannerSegmentName(settings.banner.adAppId);
+                            break;
+                    }
                 }
             }
 

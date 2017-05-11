@@ -182,6 +182,7 @@
     <string name="general_settings">Definições</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Valor incorreto</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Tentar novamente</string>
@@ -394,6 +395,7 @@
         Por favor tente novamente mais tarde.
     </string>
     <string name="general_block">Bloquear</string>
+    <string name="general_block_v2">Bloquear</string>
     <string name="general_buying_disabled">De momento a compra está indisponível.</string>
     <string name="ban_flood_detected">Estás a fazer pedidos ao servidor com demasiada frequência.
         Por favor aguarda um momento antes de continuar.
@@ -1064,6 +1066,21 @@
     <string name="offers_free_vip">VIP grátis</string>
     <string name="offers_free_coins">Moedas grátis</string>
     <string name="offers_free_likes">Gostos grátis</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Encontra quem estás à procura</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Entre mais de 100 milhões de pessoas</string>
+    <string name="fb_invitation_intelligent_selection_filter">Filtro de seleção inteligente</string>
+    <string name="fb_invitation_personalized_approach">Abordagem personalizada</string>
+    <string name="fb_invitation_button_text">Entra com o Facebook</string>
+    <string name="onboarding_button_next">Próximo</string>
+    <string name="num_from_num">%1$s de %2$s</string>
+    <string name="onboarding_get_access">Obtém Acesso</string>
+    <string name="searching_couple_for_you">Procura de par baseada nos teus critérios</string>
+    <string name="rate">Classifica</string>
+    <string name="rate_our_app">Classifica a nossa app!</string>
+    <string name="what_we_can_improve">Por favor escreve o que é que podemos melhorar</string>
+    <string name="we_are_glad_that_you_like">Estamos felizes por gostares!</string>
+    <string name="could_you_give_us_feedback">Bondosamente, darias-nos feedback no Google Play?</string>
+    <string name="send_rate_feedback">Deixa feedback</string>
     <string name="permission_alert_button_allow">Ir para</string>
     <string name="permission_alert_button_disallow">Rejeitar</string>
     <string name="permission_alert_button_message">Para carregares fotos tens que permitir que a aplicação tenha acesso à memória do teu telemóvel em Definições</string>
@@ -1076,7 +1093,6 @@
     <string name="ninja_text_2">Segurança 128-bit SSL</string>
     <string name="ninja_text_4">Incluindo o total dado, concordas em</string>
     <string name="ninja_text_link">as regras do serviço</string>
-    <string name="ninja_text_5">O estatuto VIP é automaticamente renovado dentro de 7 dias. O teu cartão será guardado para futuros pagamentos. Podes cancelar a subscrição e remover o teu cartão em Definições.</string>
     <string name="ninja_text_trial_1">1€ será retirado e imediatamente reposto para que o teu cartão seja verificado.</string>
     <string name="ninja_text_trial_2">Em %1$s uma transação será completada por %2$d %3$s. A tua subscrição será automaticamente renovada e o teu cartão será guardado para futuros pagamentos cada mês. Podes cancelar a subscrição e remover o teu cartão em Definições.</string>
     <string name="ninja_settings_toolbar">Pagamentos</string>
@@ -1096,7 +1112,6 @@
     <string name="payment_ninja_card_number">O cartão **%s está a ser usado para pagamento</string>
     <string name="ninja_cvv_error">CVV/CVC incorreto</string>
     <string name="ninja_trhu_error">Data incorreta</string>
-    <string name="ninja_number_error">Formato do número do cartão incorreto</string>
     <string name="ninja_email_error">Formato de email incorreto</string>
     <string name="use_card">Usar o cartão **%s</string>
     <string name="ninja_no_card_title">Adicionar cartão</string>

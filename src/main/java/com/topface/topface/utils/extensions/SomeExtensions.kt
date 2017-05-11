@@ -58,7 +58,7 @@ fun String?.toByteSafe(): Byte {
  * Проверка карты
  */
 fun CardInfo.isAvailable() =
-        this.lastFour.isNotEmpty() && this.type.isNotEmpty()
+        this.lastFour.isNotEmpty()
 
 /**
  * Проверка карты

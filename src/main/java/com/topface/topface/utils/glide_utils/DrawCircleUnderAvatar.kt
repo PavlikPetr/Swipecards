@@ -10,13 +10,14 @@ import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
+import com.topface.framework.utils.Debug
 import jp.wasabeef.glide.transformations.CropCircleTransformation
 
 /**
  * Отрисовка кружка под аватаром
  * Created by garastard on 25.01.17.
  */
-open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: Float) : Transformation<Bitmap> {
+open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: Float, val color: Int) : Transformation<Bitmap> {
 
     protected val mBitmapPool: BitmapPool by lazy {
         Glide.get(mContext).bitmapPool
@@ -30,7 +31,7 @@ open class DrawCircleUnderAvatar(val mContext: Context, val outSideStrokeSize: F
         val canvFromRes = Canvas(bitmapForCircle)
         val radiusCircle = resWidth / 2.toFloat()
         canvFromRes.drawCircle(radiusCircle, radiusCircle, radiusCircle, Paint().apply {
-            color = Color.WHITE
+            color = if (this@DrawCircleUnderAvatar.color==0) Color.WHITE else this@DrawCircleUnderAvatar.color
             isAntiAlias = true
             style = Paint.Style.FILL
         })

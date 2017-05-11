@@ -178,6 +178,7 @@
     <string name="general_settings">Ustawienia</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Nieprawidłowa wartość</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Spróbuj ponownie</string>
@@ -390,6 +391,7 @@
         później.
     </string>
     <string name="general_block">Zablokuj</string>
+    <string name="general_block_v2">Zablokuj</string>
     <string name="general_buying_disabled">Teraz kupowanie jest niemożliwe</string>
     <string name="ban_flood_detected">Robisz żądania do serwera zbyt często. Poczekaj                                                                                                                                                                                                           
           kilka chwil zanim zaczniesz kontynuować.</string>
@@ -959,6 +961,12 @@
     <string name="buy_likes_become_first_in_searchlist_male">Bądź pierwszy na listach kobiet, które szukają faceta takiego jak ty!</string>
     <string name="buy_likes_become_popular_female">Stań się popularna</string>
     <string name="buy_likes_become_popular_male">Stań się popularny</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Przekonaj się, kogo szukasz</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Pośród 100 milionów innych użytkowników</string>
+    <string name="fb_invitation_intelligent_selection_filter">Inteligentne filtrowanie</string>
+    <string name="fb_invitation_personalized_approach">Spersonalizowane podejście</string>
+    <string name="fb_invitation_button_text">Zaloguj się przez Facebooka</string>
+    <string name="could_you_give_us_feedback">Czy chciałbyś wystawić nam opinię w sklepie Google Play?</string>
     <string name="ninja_hint_card_number">Numer karty</string>
     <string name="ninja_hint_card_expires">Ważna do dnia</string>
     <string name="ninja_hint_cvv">CVV/CVC</string>
@@ -976,7 +984,6 @@
     <string name="ninja_error_dialog_button_retry">Spróbuj użyć innej karty</string>
     <string name="ninja_error_dialog_button_change">Inna metoda płatności</string>
     <string name="ninja_cvv_error">Nieprawidłowy kod</string>
-    <string name="ninja_number_error">Nieprawidłowy format numeru karty</string>
     <string name="ninja_email_error">Nieprawidłowy format adresu e-mail</string>
     <string name="ninja_no_card_title">Dodaj kartę</string>
     <string name="ninja_subscription_expiration">Dostępna do %s</string>

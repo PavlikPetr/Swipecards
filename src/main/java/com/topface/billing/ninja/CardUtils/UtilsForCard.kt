@@ -1,9 +1,6 @@
 package com.topface.billing.ninja.CardUtils
 
-import android.text.Editable
-import android.text.SpannableStringBuilder
-import com.topface.billing.ninja.CardType
-import com.topface.framework.utils.Debug
+import com.topface.billing.ninja.fragments.add_card.CardType
 import java.util.*
 
 object UtilsForCard {
@@ -21,15 +18,21 @@ object UtilsForCard {
                     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
                     ")+"
 
+//    val cardBrands = hashMapOf(
+//            Regex("^[2]+.*") to CardType.MIR,
+//            Regex("^[4]+.*") to CardType.VISA,
+//            Regex("^5[1-5]+.*") to CardType.MASTERCARD,
+//            Regex("^3[47]+.*") to CardType.AMERICAN_EXPRESS,
+//            Regex("^30([0-5]|[68][0-9])+.*") to CardType.DINERS,
+//            Regex("^(6011|65\\d{2})+.*") to CardType.DISCOVER,
+//            Regex("^35([2-8][0-9])+.*") to CardType.JCB,
+//            Regex("") to CardType.DEFAULT)
+
     val cardBrands = hashMapOf(
-            Regex("^[2]+.*") to CardType.MIR,
             Regex("^[4]+.*") to CardType.VISA,
-            Regex("^5[1-5]+.*") to CardType.MASTERCARD,
-            Regex("^3[47]+.*") to CardType.AMERICAN_EXPRESS,
-            Regex("^30([0-5]|[68][0-9])+.*") to CardType.DINERS,
-            Regex("^(6011|65\\d{2})+.*") to CardType.DISCOVER,
-            Regex("^35([2-8][0-9])+.*") to CardType.JCB,
-            Regex("") to CardType.DEFAULT)
+            Regex("^(5[1-5]|5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)+.*") to CardType.MASTERCARD
+
+    )
 
     fun isValidTrhu(trhu: String): Boolean {
         val trhuText = trhu.replace(SLASH_DIVIDER, "")

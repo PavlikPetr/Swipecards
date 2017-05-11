@@ -24,6 +24,10 @@ import com.topface.topface.data.FeedItem
 import com.topface.topface.requests.handlers.ErrorCodes
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.AppDayStubItem
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController.Companion.EMPTY_FEED
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController.Companion.FILLED_FEED
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController.Companion.LOCKED_FEED
+import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedLockerController.Companion.NONE
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ImprovedObservableList
 import com.topface.topface.ui.fragments.feed.feed_base.FeedCacheManager
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedLockerView
@@ -45,7 +49,7 @@ import rx.Observable
 import rx.Observer
 import rx.Subscriber
 import rx.Subscription
-import java.util.ArrayList
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -53,11 +57,19 @@ import java.util.concurrent.atomic.AtomicReference
  * и релизить на unbind
  * Created by tiberal on 09.02.17.
  */
+typealias LockerStubLastState = Pair<Long, Int>
+
 abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context, private val mApi: IApi) :
         BaseViewModel(), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     var navigator: IFeedNavigator? = null
     var stubView: IFeedLockerView? = null
+        set(value) {
+            field = value
+            switchLockerStubView(lockerStubLastState.first, field, lockerStubLastState.second)
+        }
+
+    private var lockerStubLastState = LockerStubLastState(NONE, -666)
 
     private val mState by lazy {
         App.getAppComponent().appState()
@@ -143,9 +155,9 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
             mCache.restoreFromCache(itemClass)?.let {
                 if (data.isEmpty()) {
                     data.addAll(it)
-                    isDataFromCache = true
                 }
             }
+            isDataFromCache = true
         } else {
             isListVisible.set(View.INVISIBLE)
         }
@@ -196,6 +208,19 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         }
     }
 
+    private fun switchLockerStubView(@LockerStubState state: Long, stubView: IFeedLockerView?,
+                                     errorCode: Int = -666) = stubView?.let {
+        lockerStubLastState = LockerStubLastState(state, errorCode)
+        when (state) {
+            FILLED_FEED -> it.onFilledFeed()
+            EMPTY_FEED -> it.onEmptyFeed()
+            LOCKED_FEED -> it.onLockedFeed(errorCode)
+            else -> {
+                lockerStubLastState = LockerStubLastState(NONE, errorCode)
+            }
+        }
+    }
+
     open fun makeItemReadWithFeedId(id: String) {
         data.forEachIndexed { position, dataItem ->
             if (TextUtils.equals(dataItem.id, id) && dataItem.unread) {
@@ -221,7 +246,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
     }
 
     fun update(updateBundle: Bundle = Bundle(), force: Boolean = false) {
-        if (mAtomicUpdaterSubscription.get() == null && isDataFromCache ||
+        if (mAtomicUpdaterSubscription.get() == null && (!isNeedCacheItems || isDataFromCache) ||
                 mAtomicUpdaterSubscription.get()?.isUnsubscribed ?: false &&
                         updateBundle.getString(TO, Utils.EMPTY) != Utils.EMPTY || force) {
             isFeedProgressBarVisible.set(View.VISIBLE)
@@ -260,17 +285,16 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         handleUnreadState(newData, updateBundle.getBoolean(PULL_TO_REF_FLAG))
         if (data.isEmpty() && newData.isEmpty()) {
             isListVisible.set(View.INVISIBLE)
-            stubView?.onEmptyFeed()
+            switchLockerStubView(EMPTY_FEED, stubView)
         } else {
             isListVisible.set(View.VISIBLE)
             isLockViewVisible.set(View.GONE)
-            stubView?.onFilledFeed()
+            switchLockerStubView(FILLED_FEED, stubView)
         }
         (newData as? ArrayList<T>)?.let {
             data.addAll(it)
         }
     }
-
 
     fun getAppDayRequest(typeFeedFragment: String) {
         mAppDayRequestSubscription = mApi.callAppDayRequest(typeFeedFragment)
@@ -291,14 +315,14 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
                 , ErrorCodes.BLOCKED_PEOPLE_NEARBY -> {
                 isListVisible.set(View.INVISIBLE)
                 isFeedProgressBarVisible.set(View.INVISIBLE)
-                stubView?.onLockedFeed(codeError)
+                switchLockerStubView(LOCKED_FEED, stubView, codeError)
                 return@let
             }
             else -> {
                 if (data.isEmpty()) {
                     isFeedProgressBarVisible.set(View.VISIBLE)
                 }
-                stubView?.onFilledFeed()
+                switchLockerStubView(FILLED_FEED, stubView)
             }
         }
     }
@@ -355,7 +379,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
                     if (this@BaseFeedFragmentModel.data.count() == 0) {
                         isListVisible.set(View.VISIBLE)
                         isLockViewVisible.set(View.GONE)
-                        stubView?.onFilledFeed()
+                        switchLockerStubView(FILLED_FEED, stubView)
                     }
                     handleUnreadState(it, requestBundle.getBoolean(PULL_TO_REF_FLAG))
                     removeOldDuplicates(it)
@@ -429,7 +453,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
             }
             if (data.isEmpty()) {
                 isListVisible.set(View.INVISIBLE)
-                stubView?.onEmptyFeed()
+                switchLockerStubView(EMPTY_FEED, stubView)
             }
             mCache.saveToCache(ArrayList<T>(data as List<T>))
         }

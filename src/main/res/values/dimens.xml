@@ -249,6 +249,7 @@
     <dimen name="popup_menu_stroke_outside">1dp</dimen>
     <dimen name="mutual_popup_stroke_outside">9dp</dimen>
     <dimen name="mutual_popup_avatar">150dp</dimen>
+    <dimen name="mutual_stub__avatar">144dp</dimen>
 
     <!--Метрики для опросника-->
     <dimen name="questionnaire_counters_text_size">14sp</dimen>
@@ -286,6 +287,7 @@
     <dimen name="ninja_payments_screen_item_title_size">16sp</dimen>
     <dimen name="payment_ninja_payments_item_text_padding_right">10dp</dimen>
     <dimen name="ninja_payments_screen_item_subtitle_size">13sp</dimen>
+    <dimen name="empty_value">0dp</dimen>
 
     <!-- Material Elevation -->
     <!-- предлагаю здесь вбивать гайдлайновкие elevation из вот этой таблички -->
@@ -312,4 +314,14 @@
     <dimen name="buy_screen_products_coins_section_padding_top">10dp</dimen>
     <dimen name="buy_screen_products_coins_section_padding_bottom">2dp</dimen>
     <dimen name="buy_screen_products_list_padding">10dp</dimen>
+
+    <!-- ampiri -->
+    <dimen name="ampiri_banner_width">320dp</dimen>
+    <dimen name="ampiri_banner_height">50dp</dimen>
+
+    <!-- Chat design version 1 -->
+    <dimen name="chat_d1_bg_corner_radius">16dp</dimen>
+    <dimen name="chat_d1_bg_padding_left_right">16dp</dimen>
+    <dimen name="chat_d1_bg_padding_top_bottom">12dp</dimen>
+    <dimen name="chat_d1_friend_lefT_margin">48dp</dimen>
 </resources>

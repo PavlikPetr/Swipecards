@@ -18,6 +18,8 @@ import com.topface.topface.utils.Utils;
 public class WeakStorage extends AbstractConfig {
     private static final String APPODEAL_BANNER_SEGMENT_NAME = "appodeal_banner_segment_name";
     private static final String APPODEAL_FULLSCREEN_SEGMENT_NAME = "appodeal_fullscreen_segment_name";
+    private static final String AMPIRI_BANNER_SEGMENT_NAME = "ampiri_banner_segment_name";
+    private static final String AMPIRI_FULLSCREEN_SEGMENT_NAME = "ampiri_fullscreen_segment_name";
     private static final String PROFILE_DIALOG_REDESIGN_ENABLED = "profile_dialog_redesign_enabled";
     private static final String IS_TRANSLUCENT_DATING = "dating_redesign_enabled";
     private static final String IS_FIRST_SESSION = "is_first_session";
@@ -34,6 +36,10 @@ public class WeakStorage extends AbstractConfig {
         addField(settingsMap, APPODEAL_BANNER_SEGMENT_NAME, Utils.EMPTY);
         // текущее имя сегмента для фулскринов от аподил
         addField(settingsMap, APPODEAL_FULLSCREEN_SEGMENT_NAME, Utils.EMPTY);
+        // текущее имя сегмента для баннеров от ampiri
+        addField(settingsMap, AMPIRI_BANNER_SEGMENT_NAME, Utils.EMPTY);
+        // текущее имя сегмента для фулскринов от ampiri
+        addField(settingsMap, AMPIRI_FULLSCREEN_SEGMENT_NAME, Utils.EMPTY);
         // строковая обертка над boolean чтобы знать что значение было установлено
         addField(settingsMap, PROFILE_DIALOG_REDESIGN_ENABLED, Utils.EMPTY);
         // строковая обертка над boolean чтобы знать что значение было установлено
@@ -87,6 +93,38 @@ public class WeakStorage extends AbstractConfig {
      */
     public String getAppodealFullscreenSegmentName() {
         return getStringField(getSettingsMap(), APPODEAL_FULLSCREEN_SEGMENT_NAME);
+    }
+
+    /**
+     * Set name of ampiri banner segment
+     *
+     * @param name segment
+     */
+    public void setAmpiriBannerSegmentName(String name) {
+        setField(getSettingsMap(), AMPIRI_BANNER_SEGMENT_NAME, name);
+    }
+
+    /**
+     * @return segment
+     */
+    public String getAmpiriBannerSegmentName() {
+        return getStringField(getSettingsMap(), AMPIRI_BANNER_SEGMENT_NAME);
+    }
+
+    /**
+     * Set name of ampiri fullscreen segment
+     *
+     * @param name segment
+     */
+    public void setAmpiriFullscreenSegmentName(String name) {
+        setField(getSettingsMap(), AMPIRI_FULLSCREEN_SEGMENT_NAME, name);
+    }
+
+    /**
+     * @return segment
+     */
+    public String getAmpiriFullscreenSegmentName() {
+        return getStringField(getSettingsMap(), AMPIRI_FULLSCREEN_SEGMENT_NAME);
     }
 
     /**

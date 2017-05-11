@@ -1,5 +1,6 @@
 package com.topface.billing.ninja
 
+import com.topface.billing.ninja.fragments.add_card.AddCardRequest
 import retrofit2.http.GET
 import retrofit2.http.QueryMap
 import rx.Observable

@@ -21,6 +21,8 @@ interface IApi {
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
+    fun deleteMessage(item: HistoryItem): Observable<Completed>
+
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Completed>
 
     fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T>

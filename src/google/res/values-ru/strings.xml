@@ -1333,11 +1333,12 @@
     <string name="ninja_text_2">128-bit SSL Secured</string>
     <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
     <string name="ninja_text_link">правилами оказания услуги</string>
-    <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
+    <string name="ninja_text_6">Через %s действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
     <string name="ninja_text_trial_1">У вас спишется и сразу вернётся €1 для того, чтобы подтвердить действительность карты.</string>
     <string name="ninja_text_trial_2">Через %1$s будет проведена транзакция на %2$d %3$s, каждый месяц подписка будет автоматически обновляться. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках</string>
     <string name="ninja_settings_toolbar">Платежи</string>
     <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
+    <string name="ninja_autofill_status_title">Автопополнение</string>
     <string name="ninja_cancel_vip_status">Отменить подписку</string>
     <string name="ninja_use_another_card">Использовать другую карту</string>
     <string name="ninja_delete_card">Удалить карту</string>
@@ -1357,7 +1358,7 @@
     <string name="ninja_cvv_error">Неверный код</string>
     <string name="ninja_trhu_error">Неверная дата</string>
     <string name="ninja_card_number_error">Неверный номер карты</string>
-    <string name="ninja_email_error">Неверный формат Email</string>
+    <string name="ninja_email_error">Неверный формат e-mail</string>
     <string name="use_card">Использовать карту **%s</string>
     <string name="ninja_no_card_title">Добавить карту</string>
     <string name="ninja_subscription_expiration">Активна до %s</string>
@@ -1369,26 +1370,14 @@
     <string name="ninja_product_by_price">%1$s за %2$s</string>
     <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
     <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
-    
-    <string name="profile_card_online">Сейчас онлайн</string>
-    <plurals name="profile_card_photo">
-        <item quantity="one">%d фото</item>
-        <item quantity="few">%d фото</item>
-        <item quantity="many">%d фото</item>
-        <item quantity="other">%d фото</item>
-    </plurals>
-    <string name="serial_likes_empty_title">Симпатии закончились</string>
-    <string name="serial_likes_empty_desc">Используй знакомства, чтобы получить новые симпатии</string>
-    <string name="serial_likes_go_dating">Перейти в знакомства</string>
-    <string name="serial_likes_go_messages">Перейти в сообщения</string>
-    <string name="serial_likes_open_now">Открыть сейчас</string>
-    <plurals name="serial_likes_limit">
-        <item quantity="one">До открытия %d следующей симпатии</item>
-        <item quantity="few">До открытия %d следующих симпатий</item>
-        <item quantity="many">До открытия %d следующих симпатий</item>
-        <item quantity="other">До открытия %d следующих симпатий</item>
-    </plurals>
-    <string name="serial_likes_timer_hh">час</string>
-    <string name="serial_likes_timer_mm">мин</string>
-    <string name="serial_likes_timer_ss">сек</string>
+    <string name="pn_email">E-mail</string>
+
+    <!--mutual stub for chat-->
+    <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
+    <string name="write_him_first">Напиши ему первой!</string>
+    <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
+    <string name="write_to_him_only_vip">Вы можете написать ему, но только с VIP.</string>
+    <string name="get_vip">Получить VIP</string>
+    <string name="payment_ninja_autofill_title">Автопополнение счета</string>
+    <string name="payment_ninja_autofill_link">Правила оказания услуги</string>
 </resources>

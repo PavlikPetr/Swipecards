@@ -939,6 +939,10 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="mutual_write_them_first">Scrivi a loro</string>
     <string name="mutual_no_mutuals">In questo momento non hai Like reciproci</string>
     <string name="mutual_module_title">RECIPROCAMENTE</string>
+    <string name="you_can_write_wom">Ora le puoi scrivere!</string>
+    <string name="you_can_write_man">Ora gli puoi scrivere!</string>
+    <string name="see_next">Vai al prossimo</string>
+    <string name="go_to_messages">Vai ai Messaggi</string>
     <string name="buy_vip_dating_only">Solo appuntamento, puro e semplice.</string>
     <string name="buy_vip_message">Non aspettare i Like, inizia subito una conversazione!</string>
     <string name="buy_vip_write_tops">Scrivi ai profili Migliori senza restrizioni</string>
@@ -1065,6 +1069,10 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="buy_likes_become_popular_male">Diventa popolare</string>
     <string name="you_are_not_shown">Non ti si vede molto nella sezione \"Appuntamenti\"</string>
     <string name="you_are_not_shown_answer">Rispondi ad alcuni dei Like che hai ricevuto per apparire nella sezione.</string>
+    <string name="offers_free_title">Gratis</string>
+    <string name="offers_free_vip">Vip gratuito</string>
+    <string name="offers_free_coins">Monete gratuite</string>
+    <string name="offers_free_likes">Like gratuiti</string>
     <string name="fb_invitation_find_what_you_are_looking_for">Trova chi stai cercando</string>
     <string name="fb_invitation_amoung_more_than_100_mln_people">Fra più di 100 milioni di persone</string>
     <string name="fb_invitation_intelligent_selection_filter">Filtro di selezione intelligente</string>
@@ -1092,11 +1100,12 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="ninja_text_2">Sicurezza 128-bit SSL</string>
     <string name="ninja_text_4">Pagando la somma stabilita, dichiari di accettare</string>
     <string name="ninja_text_link">le regole del servizio</string>
-    <string name="ninja_text_5">Fra 7 giorni il tuo profilo VIP verrà rinnovato. I dati della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento e rimuovere le informazioni sulla tua carta tramite le Impostazioni.</string>
+    <string name="ninja_text_6">Fra %s giorni il tuo profilo VIP verrà rinnovato. I dati della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento e rimuovere le informazioni sulla tua carta tramite le Impostazioni.</string>
     <string name="ninja_text_trial_1">Verrà addebitato e subito restituito 1€ per verificare la tua carta.</string>
     <string name="ninja_text_trial_2">Fra %1$s verrà processata una transazione per %2$d %3$s. Il tuo abbonamento verrà automaticamente rinnovato ogni mese e i dettagli della tua carta verranno salvati per i pagamenti futuri. Puoi cancellare l\'abbonamento insieme alle informazioni sulla tua carta dalle Impostazioni.</string>
     <string name="ninja_settings_toolbar">Pagamenti</string>
     <string name="ninja_vip_status_title">Abbonamento allo status VIP</string>
+    <string name="ninja_autofill_status_title">Ricarica automatica</string>
     <string name="ninja_cancel_vip_status">Cancella l\'abbonamento</string>
     <string name="ninja_use_another_card">Usa un\'altra carta</string>
     <string name="ninja_delete_card">Elimina carta</string>
@@ -1112,7 +1121,7 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="payment_ninja_card_number">La carta **%s è in uso per il pagamento</string>
     <string name="ninja_cvv_error">CVV non valido</string>
     <string name="ninja_trhu_error">Data non corretta</string>
-    <string name="ninja_number_error">Formato del numero della carta non valido</string>
+    <string name="ninja_card_number_error">Il numero della carta non è valido</string>
     <string name="ninja_email_error">Formato email non valido</string>
     <string name="use_card">Usa carta **%s</string>
     <string name="ninja_no_card_title">Aggiungi carta</string>
@@ -1125,4 +1134,12 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="ninja_product_by_price">%1$s per %2$s</string>
     <string name="ninja_trial_vip_product">Status VIP di prova</string>
     <string name="ninja_vip_product_by_price">%1$s VIP per %2$s</string>
+    <string name="pn_email">E-mail</string>
+    <string name="write_her_something_first">Scrivile qualcosa per primo!</string>
+    <string name="write_him_first">Scrivigli qualcosa per prima!</string>
+    <string name="write_to_her_only_vip">Puoi scriverle soltanto se possiedi lo Status VIP.</string>
+    <string name="write_to_him_only_vip">Puoi scrivergli soltanto se possiedi lo Status VIP.</string>
+    <string name="get_vip">Diventa VIP</string>
+    <string name="payment_ninja_autofill_title">Ricarica automatica</string>
+    <string name="payment_ninja_autofill_link">Regole del Servizio</string>
 </resources>

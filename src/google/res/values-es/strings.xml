@@ -173,6 +173,7 @@
     <string name="general_settings">Ajustes</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Valor incorrecto</string>
     <string name="auth_btn_vk">VKontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Intentar de nuevo</string>
@@ -330,8 +331,7 @@
     <string name="rate_popup_set_rate">Dar una valoración</string>
     <string name="rate_popup_later">Preguntar más tarde</string>
     <string name="rate_popup_cancel">No, gracias</string>
-    <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra
-        aplicación.</string>
+    <string name="rate_popup_error">Tienes que indicar cuántas estrellas pones a nuestra aplicación.</string>
     <string name="feedback_popup_title">Has puesto una nota baja. Cuéntanos qué es lo que no te
         gusta en la aplicación. Ayúdanos a mejorar. ¡Gracias!</string>
     <string name="settings_melody">Melodía para notificaciones</string>
@@ -374,6 +374,7 @@
     <string name="general_reconnect_social">Imposible de conectar a la red social. Prueba de nuevo
         más tarde.</string>
     <string name="general_block">Bloquear</string>
+    <string name="general_block_v2">Bloquear</string>
     <string name="general_buying_disabled">En estos momentos, la compra es imposible</string>
     <string name="ban_flood_detected">Haces peticiones al servidor demasiado a menudo. Para seguir
         usando la aplicación
@@ -968,6 +969,10 @@
     <string name="basic_information">Datos básicos</string>
     <string name="purchase_successfull">El pago se ha realizado con éxito</string>
     <string name="now_you_have_VIP">Ahora tienes el estatus VIP</string>
+    <plurals name="you_have_some_coins">
+    </plurals>
+    <plurals name="you_have_some_sympathies">
+    </plurals>
     <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
     <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
     <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>
@@ -980,6 +985,21 @@
     <string name="offers_free_vip">VIP Gratis</string>
     <string name="offers_free_coins">Monedas Gratis</string>
     <string name="offers_free_likes">Simpatías Gratis</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Descubre a quien estás buscando</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Entre más de 100 millones de personas</string>
+    <string name="fb_invitation_intelligent_selection_filter">Filtro de selección inteligente</string>
+    <string name="fb_invitation_personalized_approach">Enfoque personalizado</string>
+    <string name="fb_invitation_button_text">Inicia sesión con Facebook</string>
+    <string name="onboarding_button_next">Siguiente</string>
+    <string name="num_from_num">%1$s de %2$s</string>
+    <string name="onboarding_get_access">Consigue acceso</string>
+    <string name="searching_couple_for_you">Búsqueda de pareja basada en tus criterios</string>
+    <string name="rate">Valoración</string>
+    <string name="rate_our_app">¡Valora nuestra app!</string>
+    <string name="what_we_can_improve">Por favor, escribe qué podemos mejorar</string>
+    <string name="we_are_glad_that_you_like">¡Nos alegramos de que te guste!</string>
+    <string name="could_you_give_us_feedback">¿Podrías dejarnos una opinión en Google Play?</string>
+    <string name="send_rate_feedback">Déjanos tu opinión</string>
     <string name="permission_alert_button_allow">Ir a</string>
     <string name="permission_alert_button_disallow">Rechazar</string>
     <string name="permission_alert_button_message">Para subir fotos necesitas darle a la app acceso a la memoria de tu teléfono a través de Configuración</string>
@@ -992,11 +1012,12 @@
     <string name="ninja_text_2">Protección de 128-bit SSL</string>
     <string name="ninja_text_4">Incluyendo el total, aceptas</string>
     <string name="ninja_text_link">las condiciones del servicio</string>
-    <string name="ninja_text_5">En 7 días tu estado VIP se renovará automáticamente. Tu tarjeta se guardará para futuros pagos. Puedes cancelar tu suscripción y desvincular tu tarjeta en Configuración.</string>
+    <string name="ninja_text_6">El %s tu estado VIP se renovará automáticamente. Tu tarjeta se quedará guardada para futuros pagos. Puedes cancelar tu suscripción y desvincular tu tarjeta en Configuración.</string>
     <string name="ninja_text_trial_1">Se te cobrará 1€ y será devuelto inmediatamente a tu cuenta para verificar tu tarjeta.</string>
     <string name="ninja_text_trial_2">En %1$s se completará una transacción para %2$d %3$s. Cada mes tu suscripción se renovará de forma automática y tu tarjeta se quedará guardada para los próximos pagos. Puedes cancelar la suscripción y desvincular tu tarjeta en Configuración.</string>
     <string name="ninja_settings_toolbar">Pagos</string>
-    <string name="ninja_vip_status_title">Subscripción al estado VIP</string>
+    <string name="ninja_vip_status_title">Suscripción al estado VIP</string>
+    <string name="ninja_autofill_status_title">Recargado automático</string>
     <string name="ninja_cancel_vip_status">Cancelar suscripción</string>
     <string name="ninja_use_another_card">Usar otra carta</string>
     <string name="ninja_delete_card">Borrar corta</string>
@@ -1012,7 +1033,7 @@
     <string name="payment_ninja_card_number">Se está usando para los pagos la tarjeta **%s</string>
     <string name="ninja_cvv_error">CVV/CVC incorrecto</string>
     <string name="ninja_trhu_error">Fecha incorrecta</string>
-    <string name="ninja_number_error">Formato del número de la tarjeta incorrecto</string>
+    <string name="ninja_card_number_error">Número de tarjeta no válido</string>
     <string name="ninja_email_error">Formato de email incorrecto</string>
     <string name="use_card">Utilizar tarjeta **%s</string>
     <string name="ninja_no_card_title">Añadir tarjeta</string>
@@ -1025,21 +1046,12 @@
     <string name="ninja_product_by_price">%1$s por %2$s</string>
     <string name="ninja_trial_vip_product">Estatus VIP de prueba</string>
     <string name="ninja_vip_product_by_price">%1$s VIP por %2$s</string>
-    <string name="profile_card_online">Conectado ahora</string>
-    <plurals name="profile_card_photo">
-        <item quantity="other">%d foto</item>
-        <item quantity="one">%d foto</item>
-    </plurals>
-    <string name="serial_likes_empty_title">No te quedan Simpatías</string>
-    <string name="serial_likes_empty_desc">Usa las Citas para conseguir Simpatías nuevas</string>
-    <string name="serial_likes_go_dating">Ir a Citas</string>
-    <string name="serial_likes_go_messages">Ir a Mensajes</string>
-    <string name="serial_likes_open_now">Abierto ahora</string>
-    <plurals name="serial_likes_limit">
-        <item quantity="other">Hasta las siguientes %d Simpatías</item>
-        <item quantity="one">Hasta las siguientes %d Simpatías</item>
-    </plurals>
-    <string name="serial_likes_timer_hh">h</string>
-    <string name="serial_likes_timer_mm">min</string>
-    <string name="serial_likes_timer_ss">s</string>
+    <string name="pn_email">E-mail</string>
+    <string name="write_her_something_first">¡Sé el primero en escribirle!</string>
+    <string name="write_him_first">¡Sé la primera en escribirle!</string>
+    <string name="write_to_her_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>
+    <string name="write_to_him_only_vip">Puedes escribirle algo pero solo con estatus VIP.</string>
+    <string name="get_vip">Ser VIP</string>
+    <string name="payment_ninja_autofill_title">Recargar saldo automáticamente</string>
+    <string name="payment_ninja_autofill_link">Reglas del servicio</string>
 </resources>

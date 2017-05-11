@@ -191,15 +191,7 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
-        mDatingAlbumViewModel.onActivityResult(requestCode, resultCode, data)
-        mDatingButtonsViewModel.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == EditContainerActivity.INTENT_EDIT_FILTER ||
-                resultCode == Activity.RESULT_OK && requestCode == GiftsActivity.INTENT_REQUEST_GIFT) {
-            mDatingFragmentViewModel.onActivityResult(requestCode, resultCode, data)
-        } else {
             mAddPhotoHelper.processActivityResult(requestCode, resultCode, data)
-        }
     }
 
     override fun onDataReceived(user: SearchUser) {
