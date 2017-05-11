@@ -11,25 +11,18 @@ import java.text.SimpleDateFormat
  * Utils for date formatting
  * PS оставил его здесь и не стал захламлять наши DateUtils ибо это эксперимент
  */
-internal class DateUtils {
-    companion object {
-        private val mDateFormatDayYear = SimpleDateFormat("dd.MM.yyyy", App.getCurrentLocale())
-        private val mDateFormatDay = SimpleDateFormat("dd.MM", App.getCurrentLocale())
+internal object DateUtils {
+    private val mDateFormatDayYear = SimpleDateFormat("dd.MM.yyyy", App.getCurrentLocale())
+    private val mDateFormatDay = SimpleDateFormat("dd.MM", App.getCurrentLocale())
 
-        /**
-         * Converts date in milliseconds to string representation
-         * PS partially copy/paste from global DateUtils
-         */
-        fun getRelativeDate(date: Long) =
-            if (date > DateUtils.midnight) { // сегодня
-                R.string.time_today.getString()
-            } else if (date > DateUtils.midnight - Utils.DAY) { //вчера
-                R.string.time_yesterday.getString()
-            } else if (date > DateUtils.current_year) { // неделю назад
-                mDateFormatDay.format(date)
-            } else {
-                mDateFormatDayYear.format(date)
-            }
+    /**
+     * Converts date in milliseconds to string representation
+     * PS partially copy/paste from global DateUtils
+     */
+    fun getRelativeDate(date: Long) = when {
+        date > DateUtils.midnight -> R.string.time_today.getString()
+        date > DateUtils.midnight - Utils.DAY -> R.string.time_yesterday.getString()
+        date > DateUtils.current_year -> mDateFormatDay.format(date)
+        else -> mDateFormatDayYear.format(date)
     }
-
 }

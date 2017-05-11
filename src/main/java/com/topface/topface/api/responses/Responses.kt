@@ -43,7 +43,7 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
         IAvatarVisible, IDivider {
 
     override val isAvatarVisible = ObservableBoolean(false)
-    override val dividerText = ObservableField<String>(Utils.EMPTY)
+    override val dividerText = ObservableField(Utils.EMPTY)
     override val isDividerVisible = ObservableBoolean(false)
 
     override fun getItemType() = if(target == FeedDialog.OUTPUT_USER_MESSAGE) {
