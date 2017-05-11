@@ -6,10 +6,10 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.chat.*
 import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.LoaderStubComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendGiftComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendMessageComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.UserGiftComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.UserMessageComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.FriendGiftComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.FriendMessageComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.UserGiftComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.UserMessageComponent
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
