@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
+import android.os.Build
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -45,4 +46,8 @@ class DataBindingLazyInflater<in T, out V : ViewDataBinding>(val res: Int, val i
 
 }
 
-
+@JvmOverloads fun <V : ViewDataBinding?> V.executePendingBindingsBeforeApi(apiLvl: Int = Build.VERSION_CODES.LOLLIPOP) {
+    if (this != null && Build.VERSION.SDK_INT <= apiLvl) {
+        executePendingBindings()
+    }
+}
