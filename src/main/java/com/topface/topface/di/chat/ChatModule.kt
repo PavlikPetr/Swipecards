@@ -6,7 +6,10 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.chat.*
 import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.LoaderStubComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.*
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendGiftComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendMessageComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.UserGiftComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.UserMessageComponent
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
@@ -46,7 +49,6 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
             FriendMessage::class.java -> HistoryItem.FRIEND_MESSAGE
             UserGift::class.java -> HistoryItem.USER_GIFT
             FriendGift::class.java -> HistoryItem.FRIEND_GIFT
-            Divider::class.java -> HistoryItem.DIVIDER
             MutualStub::class.java -> HistoryItem.STUB_MUTUAL
             BuyVipStub::class.java -> HistoryItem.STUB_BUY_VIP
             else -> 0
@@ -66,7 +68,6 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
         addAdapterComponent(FriendMessageComponent(feedUser))
         addAdapterComponent(UserGiftComponent())
         addAdapterComponent(FriendGiftComponent(feedUser))
-        addAdapterComponent(DividerComponent())
         addAdapterComponent(MutualStubComponent(feedUser))
         addAdapterComponent(BuyVipStubComponent(feedNavigator, feedUser))
     }

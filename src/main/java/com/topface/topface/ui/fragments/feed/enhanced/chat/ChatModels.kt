@@ -47,11 +47,6 @@ class UserMessage: HistoryItem()
 class FriendMessage: HistoryItem()
 
 /**
- * итем чата - разделитель с информацией о времени "сегодня завтра будет вчера"
- */
-class Divider: HistoryItem()
-
-/**
  * заглушка чата про взаимные симпатии
  */
 class MutualStub: IChatItem {
