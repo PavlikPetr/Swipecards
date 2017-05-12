@@ -7,7 +7,7 @@ import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
-import com.topface.topface.api.responses.History
+import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
@@ -17,15 +17,16 @@ import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import org.jetbrains.anko.collections.forEachReversedByIndex
 import rx.Observable
-import rx.Observer
 import rx.Subscription
 import java.util.concurrent.TimeUnit
 
 class ChatViewModel(private val mContext: Context, private val mApi: Api) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_CHAT_UPDATE_PERIOD = 5000//30
+        private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
+        private const val EMPTY = ""
     }
 
     internal var navigator: FeedNavigator? = null
@@ -42,15 +43,28 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     private val mVipBoughtBroabcastSubscription: Subscription? = null
     private var mUser: FeedUser? = null
 
+    /**
+     * Флаг говорящий о том, что етсть итемы с id = 0, и их нужно удалить и заменить на нормальные
+     * при следующем update
+     */
+    private var hasStubItems = false
+    private var mIsNeedShowAddPhoto = true
+
     override fun bind() {
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        val user = mUser
+        if (user != null && user.photo.isEmpty) {
+            takePhotoIfNeed()
+        }
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
-                createTimerUpdateObservable(),
-                createP2RObservable()).subscribe(shortSubscription {
-            // update(it)
-            Debug.log("FUCKING_CHAT some update from merge $it")
-        })
+                createTimerUpdateObservable()
+                /*,createP2RObservable()*/).
+                filter { it.first > 0 }.
+                subscribe(shortSubscription {
+                    Debug.log("FUCKING_CHAT some update from merge $it")
+                    update(it)
+                })
     }
 
     private fun createGCMUpdateObservable() =
@@ -69,25 +83,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                     }
                     .map {
                         GCMUtils.cancelNotification(mContext, it.second)
-                        it.first
+                        createUpdateObject(it.first)
                     }
 
     private fun createTimerUpdateObservable() = Observable.
             interval(0, DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
-            .map {
-                val user = mUser
-                if (user != null) {
-                    user.id
-                } else {
-                    Debug.log("CHAT incorrect user id")
-                    -1
-                }
-            }
+            .map { createUpdateObject(mUser?.id ?: -1) }
 
     //todo заменить при имплементацию птр
-    private fun createP2RObservable() = Observable.just(-1)
-
-    private var mIsNeedShowAddPhoto = true
+    //private fun createP2RObservable() = Observable.just(createUpdateObject(-1))
 
     private fun takePhotoIfNeed() {
         if (mIsNeedShowAddPhoto) {
@@ -102,28 +106,98 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
             App.get().profile.photo == null
 
 
-    /*
-    событие на обновление агрегировать с эмитов гцм, птр, таймера
+    private fun createUpdateObject(userId: Int, isBottom: Boolean = false) =
+            if (isBottom) {
+                val to = getLastCorrectItemId()
+                Triple<Int, String?, String?>(userId, null, to)
+            } else {
+                val from = getFirstCorrectItemId()
+                Triple<Int, String?, String?>(userId, from, null)
+            }
+
+    /**
+     * Ищем последний id итема чата не равный 0, чтоб от него запрсить новые итемы,
+     * которые были в очереди
      */
-    private fun update(userId: Int) {
-        mApi.callDialogGet(userId).subscribe(object : Observer<History> {
-            override fun onCompleted() {
-
-            }
-
-            override fun onNext(history: History?) {
-                if (history != null) {
-                    Debug.log("FUCKING_CHAT " + history.items.count())
+    private fun getLastCorrectItemId(): String? {
+        if (chatData.isNotEmpty()) {
+            chatData.forEachReversedByIndex {
+                if (it is HistoryItem && it.id != 0) {
+                    return it.id.toString()
                 }
             }
+        }
+        return null
+    }
 
-            override fun onError(e: Throwable?) {
-                if (e != null) {
-                    Debug.log("FUCKING_CHAT " + e.message)
+    /**
+     * Ищем первый id итема чата не равный 0, чтоб от него запрсить новые итемы,
+     * которые мало ли где были
+     */
+    private fun getFirstCorrectItemId(): String? {
+        if (chatData.isNotEmpty()) {
+            chatData.forEach {
+                if (it is HistoryItem && it.id != 0) {
+                    return it.id.toString()
                 }
             }
+        }
+        return null
+    }
 
-        })
+    /**
+     * Удаляем итемы с id = 0, т.к. на данный момент у нас есть нормальные итемы,
+     * которыми можно заменить заглушки(ну так серверные говрят по крайней мере)
+     */
+    private fun removeStubItems() {
+        if (hasStubItems) {
+            hasStubItems = false
+            val iterator = chatData.listIterator()
+            while (iterator.hasNext()) {
+                val item = iterator.next()
+                if (item is HistoryItem && item.id == 0) {
+                    iterator.remove()
+                }
+            }
+        }
+    }
+
+    /**
+     * Обновление по эмитам гцм, птр, таймера
+     */
+    private fun update(updateContainer: Triple<Int, String?, String?>) {
+        val addToStart = updateContainer.second != null
+        mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
+                .subscribe(shortSubscription({
+
+                }, {
+                    if (it != null && it.items.isNotEmpty()) {
+                        val items = ArrayList<HistoryItem>()
+                        it.items.forEach {
+                            items.add(wrapHistoryItem(it))
+                        }
+                        removeStubItems()
+                        if (addToStart) {
+                            chatData.addAll(0, items)
+                        } else {
+                            chatData.addAll(items)
+                        }
+                    }
+                    Debug.log("FUCKING_CHAT " + it.items.count())
+                }))
+    }
+
+    /**
+     * Запаковать итем в соответствующую модель чата, дабы работало приведение в базовом компоненте
+     */
+    private fun wrapHistoryItem(item: HistoryItem): HistoryItem {
+        if (item.getItemType() == HistoryItem.USER_MESSAGE) {
+            return UserMessage(item)
+        }
+        if (item.getItemType() == HistoryItem.FRIEND_MESSAGE) {
+            return FriendMessage(item)
+        }
+        return item
     }
 
     fun onComplain() {
@@ -143,8 +217,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         isComplainVisibile.set(View.GONE)
     }
 
+    /**
+     * В ответе приходит HistoryItem, id которого 0 так как там очередь сообщений
+     */
     fun onMessage() {
-
+        mApi.callSendMessage(mUser!!.id, message.get()).subscribe(shortSubscription({
+            Debug.log("FUCKING_CHAT send fail")
+        }, {
+            if (it != null) {
+                hasStubItems = true
+                chatData.add(0, wrapHistoryItem(it))
+                message.set(EMPTY)
+            }
+        }))
     }
 
     fun onGift() {
@@ -161,8 +246,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         navigator = null
     }
 
-    override fun release() {
-        arrayOf(mUpdateHistorySubscription, mDialogGetSubscription, mNewMessageBroabcastSubscription,
-                mVipBoughtBroabcastSubscription, pullToRefreshSubscription).safeUnsubscribe()
-    }
+    override fun release() = arrayOf(mUpdateHistorySubscription, mDialogGetSubscription,
+            mNewMessageBroabcastSubscription, mVipBoughtBroabcastSubscription,
+            pullToRefreshSubscription).safeUnsubscribe()
+
 }

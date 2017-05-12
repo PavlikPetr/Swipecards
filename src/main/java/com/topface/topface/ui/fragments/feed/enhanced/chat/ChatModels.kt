@@ -12,7 +12,7 @@ import com.topface.topface.api.responses.HistoryItem.Companion.STUB_MUTUAL
 /**
  * Лоадер на время отправки запроса
  */
-data class ChatLoader(var diffTemp: Int = 0): IChatItem {
+data class ChatLoader(var diffTemp: Int = 0) : IChatItem {
     override fun getItemType() = STUB_CHAT_LOADER
 }
 
@@ -29,34 +29,47 @@ data class ChatComplainEvent(var itemPosition: Int = 0)
 /**
  * итем чата - подарок от пользователя
  */
-class UserGift: HistoryItem()
+class UserGift(item: HistoryItem) :
+        HistoryItem(item.text, item.latitude, item.longitude, item.type,
+                item.id, item.created, item.target, item.unread, item.link)
 
 /**
  * итем чата - подарок от собеседника
  */
-class FriendGift: HistoryItem()
+class FriendGift(item: HistoryItem) :
+        HistoryItem(item.text, item.latitude, item.longitude, item.type,
+                item.id, item.created, item.target, item.unread, item.link)
 
 /**
  * итем чата - сообщение от пользователя
  */
-class UserMessage: HistoryItem()
+class UserMessage(item: HistoryItem) :
+        HistoryItem(item.text, item.latitude, item.longitude, item.type,
+                item.id, item.created, item.target, item.unread, item.link)
 
 /**
  * итем чата - сообщение от собеседника
  */
-class FriendMessage: HistoryItem()
+class FriendMessage(item: HistoryItem) :
+        HistoryItem(item.text, item.latitude, item.longitude, item.type,
+                item.id, item.created, item.target, item.unread, item.link)
+
+/**
+ * итем чата - разделитель с информацией о времени "сегодня завтра будет вчера"
+ */
+class Divider : HistoryItem()
 
 /**
  * заглушка чата про взаимные симпатии
  */
-class MutualStub: IChatItem {
+class MutualStub : IChatItem {
     override fun getItemType() = STUB_MUTUAL
 }
 
 /**
  * заглушка чата про покупку вип
  */
-class BuyVipStub: IChatItem {
+class BuyVipStub : IChatItem {
     override fun getItemType() = STUB_BUY_VIP
 }
 

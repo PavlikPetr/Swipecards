@@ -75,7 +75,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         return mBinding.apply {
-            chat.layoutManager = LinearLayoutManager(context.applicationContext)
+            chat.layoutManager = LinearLayoutManager(context.applicationContext, LinearLayoutManager.VERTICAL, true)
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
             setViewModel(BR.chatViewModel, mViewModel, arguments)
