@@ -573,7 +573,7 @@
     <string name="general_exit">Çıkış</string>
     <string name="likes_can_help_you">Beğeniler diğer insanlarla tanışmanıza yardımcı olur.</string>
     <string name="general_get_dating">Tanış</string>
-    <string name="settings_select_language">Uygulamanın dilini swçin</string>
+    <string name="settings_select_language">Uygulamanın dilini seçin</string>
     <string name="settings_select_preload_photo_type">Fotoğrafların önyüklemesi aktif 
         olduğunda seçin</string>
     <string name="restart_to_change_locale">Dilin değişmesi için uygulama yeniden başlamalıdır</string>
