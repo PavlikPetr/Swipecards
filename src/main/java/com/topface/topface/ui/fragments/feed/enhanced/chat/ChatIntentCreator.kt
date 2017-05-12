@@ -30,15 +30,23 @@ object ChatIntentCreator {
                 ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
                         user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
             } else {
-                createIntent(user, answer)
+                createIntent(user, answer, null)
+            }
+
+    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) =
+            if (isOldChat()) {
+                ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+            } else {
+                createIntent(user, null, itemType)
             }
 
 
     @JvmStatic
-    fun createIntent(user: FeedUser, answer: SendGiftAnswer?) = Intent(App.getContext(),
+    fun createIntent(user: FeedUser, answer: SendGiftAnswer?, itemType: Int?) = Intent(App.getContext(),
             com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java).apply {
         putExtra(WHOLE_USER, user)
-        putExtra(GIFT_DATA, answer)
+        answer?.let { putExtra(GIFT_DATA, it) }
+        itemType?.let { putExtra(USER_TYPE, it) }
     }
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
@@ -76,12 +84,12 @@ object ChatIntentCreator {
         return intent
     }
 
-    private fun getChatClass() = com.topface.topface.ui.ChatActivity::class.java
-//    private fun getChatClass() = if (isOldChat()) {
-//        com.topface.topface.ui.ChatActivity::class.java
-//    } else {
-//        com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
-//    }
+    private fun getChatClass() = com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java//com.topface.topface.ui.ChatActivity::class.java
+    /*private fun getChatClass() = if (isOldChat()) {
+        com.topface.topface.ui.ChatActivity::class.java
+    } else {
+        com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
+    }*/
 
     private fun isOldChat() = false
 

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Handler
-import com.topface.framework.utils.Debug
 import rx.Emitter
 import rx.Observable
 import rx.Subscriber
@@ -47,7 +46,12 @@ fun <T> Observable<T>.applySchedulers(): Observable<T> = compose<T> {
             .observeOn(AndroidSchedulers.mainThread())
 }
 
-fun <T> shortSubscription(next: (T) -> Unit) = object : Subscriber<T>() {
+val onErrorDefault: (Throwable) -> Unit = {
+    System.out.println("U must implement onError")
+    it.printStackTrace()
+}
+
+fun <T> shortSubscription(error: (Throwable) -> Unit = onErrorDefault, next: (T) -> Unit) = object : Subscriber<T>() {
 
     override fun onCompleted() {
         if (isUnsubscribed) {
@@ -55,15 +59,15 @@ fun <T> shortSubscription(next: (T) -> Unit) = object : Subscriber<T>() {
         }
     }
 
-    override fun onError(e: Throwable) {
-        Debug.log("ShortSubscription " + e.toString())
-        e.printStackTrace()
-    }
+    override fun onError(e: Throwable) = error(e)
 
     override fun onNext(type: T) = next(type)
 }
 
 inline fun <T> Observable<T>.shortSubscribe(crossinline next: (T) -> Unit): Subscription
         = subscribe(shortSubscription { next(it) })
+
+inline fun <T> Observable<T>.shortSubscribe(crossinline next: (T) -> Unit, crossinline error: (Throwable) -> Unit): Subscription
+        = subscribe(shortSubscription({ error(it) }, { next(it) }))
 
 

@@ -96,8 +96,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
             it.user?.let {
-                //todo тут тож махнуть надо
-                showChat(it) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, inBlacklist, bookmarked, banned) }
+                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type) }
             }
         }
     }
