@@ -13,59 +13,60 @@ import com.topface.topface.utils.extensions.getDimen
  * Item decoration for chat items
  */
 class ChatItemDecoration : RecyclerView.ItemDecoration() {
-    private val topMarginBig = R.dimen.chat_d1_item_top_margin_big.getDimen().toInt()
-    private val topMarginSmall = R.dimen.chat_d1_item_top_margin_small.getDimen().toInt()
+    private val marginBig = R.dimen.chat_d1_item_top_margin_big.getDimen().toInt()
+    private val marginSmall = R.dimen.chat_d1_item_top_margin_small.getDimen().toInt()
 
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
 
-        var topMargin: Int = 0
+        var topMargin = 0
         fun isFriendItem(item: HistoryItem) = item.getItemType() == HistoryItem.FRIEND_MESSAGE || item.getItemType() == HistoryItem.FRIEND_GIFT
 
         if (view != null && parent != null && state != null) {
-            val position = (view.layoutParams as RecyclerView.LayoutParams).viewAdapterPosition
-            (parent.adapter as? CompositeAdapter)?.data?.let {
-                // dividers text/visible calculation
-                prepareDividers(it.filterIsInstance<HistoryItem>())
+            val position = parent.getChildAdapterPosition(view)
+            if (position != NO_POSITION) {
+                (parent.adapter as? CompositeAdapter)?.data?.let {
+                    // dividers text/visible calculation
+                    prepareDividers(it.filterIsInstance<HistoryItem>())
 
-                // show/hide avatar of friend messages
-                // must show avatar only at first message in list
-                // list may be broken by divider
-                (it[position] as? HistoryItem)?.let { currentItem ->
-                    topMargin = topMarginBig
-                    if (isFriendItem(currentItem)) {
-                        if (currentItem.isDividerVisible.get()) {
-                            currentItem.isAvatarVisible.set(true)
-                        } else {
-                            when (position) {
-                            // item not found
-                                NO_POSITION -> {}
-                            // first item
-                                0 -> {
-                                    currentItem.isAvatarVisible.set(true)
-                                }
-                            // middle and last items
-                                else -> {
-                                    (it[position - 1] as? HistoryItem)?.let { prevItem ->
-                                        if (isFriendItem(prevItem)) {
-                                            topMargin = topMarginSmall
-                                            currentItem.isAvatarVisible.set(false)
-                                        } else {
-                                            currentItem.isAvatarVisible.set(true)
+                    // show/hide avatar of friend messages
+                    // must show avatar only at first message in list
+                    // list may be broken by divider
+                    (it[position] as? HistoryItem)?.let { currentItem ->
+                        topMargin = marginBig
+                        if (isFriendItem(currentItem)) {
+                            if (currentItem.isDividerVisible.get()) {
+                                currentItem.isAvatarVisible.set(true)
+                            } else {
+                                when (position) {
+                                // first item
+                                    0 -> {
+                                        currentItem.isAvatarVisible.set(true)
+                                    }
+                                // middle and last items
+                                    else -> {
+                                        (it[position - 1] as? HistoryItem)?.let { prevItem ->
+                                            if (isFriendItem(prevItem)) {
+                                                topMargin = marginSmall
+                                                currentItem.isAvatarVisible.set(false)
+                                            } else {
+                                                currentItem.isAvatarVisible.set(true)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    } else {
-                        if(position > 0) {
-                            (it[position - 1] as? HistoryItem)?.let { prevItem ->
-                                if (!isFriendItem(prevItem) && !currentItem.isDividerVisible.get()) {
-                                    // small top divider only if prev item is not from friend
-                                    // and current item does not have divider enabled
-                                    topMargin = topMarginSmall
+                        } else {
+                            if (position > 0) {
+                                (it[position - 1] as? HistoryItem)?.let { prevItem ->
+                                    if (!isFriendItem(prevItem) && !currentItem.isDividerVisible.get()) {
+                                        // small top divider only if prev item is not from friend
+                                        // and current item does not have divider enabled
+                                        topMargin = marginSmall
+                                    }
                                 }
+                            } else {
                             }
-                        } else {}
+                        }
                     }
                 }
             }
