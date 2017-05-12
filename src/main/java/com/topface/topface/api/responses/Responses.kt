@@ -1,12 +1,15 @@
 package com.topface.topface.api.responses
 
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
 import android.os.Parcel
 import android.os.Parcelable
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IAvatarVisible
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IDivider
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.Utils.EMPTY
 import com.topface.topface.utils.extensions.readBoolean
 import com.topface.topface.utils.extensions.writeBoolean
@@ -36,21 +39,22 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
-                       val unread: Boolean = false, val link: String? = null): IChatItem, Parcelable, IAvatarVisible {
+                       val unread: Boolean = false, val link: String? = null): IChatItem, Parcelable,
+        IAvatarVisible, IDivider {
 
     override val isAvatarVisible = ObservableBoolean(false)
+    override val dividerText = ObservableField(Utils.EMPTY)
+    override val isDividerVisible = ObservableBoolean(false)
 
     override fun getItemType() = if(target == FeedDialog.OUTPUT_USER_MESSAGE) {
             // owner items
             when(type) {
-                FeedDialog.DIVIDER -> DIVIDER
                 FeedDialog.GIFT -> USER_GIFT
                 else -> USER_MESSAGE
             }
         } else {
             // friend items
             when(type) {
-                FeedDialog.DIVIDER -> DIVIDER
                 FeedDialog.GIFT -> FRIEND_GIFT
                 else -> FRIEND_MESSAGE
             }
@@ -62,7 +66,6 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
         const val USER_GIFT = 2
         const val FRIEND_MESSAGE = 3
         const val FRIEND_GIFT = 4
-        const val DIVIDER = 5
         // stubs for chat, better start numbers from 1000
         const val STUB_FEED_USER = 1001
         const val STUB_CHAT_LOADER = 1002
