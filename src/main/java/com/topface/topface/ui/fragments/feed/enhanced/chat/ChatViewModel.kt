@@ -48,6 +48,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
      * при следующем update
      */
     private var hasStubItems = false
+    private var mIsNeedShowAddPhoto = true
 
     override fun bind() {
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
@@ -91,8 +92,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
 
     //todo заменить при имплементацию птр
     //private fun createP2RObservable() = Observable.just(createUpdateObject(-1))
-
-    private var mIsNeedShowAddPhoto = true
 
     private fun takePhotoIfNeed() {
         if (mIsNeedShowAddPhoto) {
@@ -152,6 +151,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
      */
     private fun removeStubItems() {
         if (hasStubItems) {
+            hasStubItems = false
             val iterator = chatData.listIterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
