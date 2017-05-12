@@ -16,7 +16,6 @@ class ChatProvideItemTypeStrategy(override val typeProvider: ITypeProvider): IPr
     override fun provide(item: Any): Int {
         if (item is IChatItem) {
             when(item.getItemType()) {
-                HistoryItem.DIVIDER -> return typeProvider.getType(Divider::class.java)
                 HistoryItem.USER_GIFT -> return typeProvider.getType(UserGift::class.java)
                 HistoryItem.USER_MESSAGE -> return typeProvider.getType(UserMessage::class.java)
                 HistoryItem.FRIEND_GIFT -> return typeProvider.getType(FriendGift::class.java)
