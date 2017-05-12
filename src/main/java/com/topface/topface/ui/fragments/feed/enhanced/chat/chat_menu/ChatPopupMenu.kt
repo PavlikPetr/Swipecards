@@ -32,10 +32,6 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
         }
     }
 
-    private val mItem: HistoryItem = arguments.getParcelable(CHAT_ITEM)
-
-    private val mPosition = arguments.getInt(CHAT_ITEM_POSITION)
-
     private val mClipboardManager by lazy {
         activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
@@ -49,7 +45,7 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
     }
 
     private val mViewModel by lazy{
-        ChatPopupMenuViewModel(mItem, mPosition, this, mApi, mClipboardManager).apply {
+        ChatPopupMenuViewModel(arguments, this, mApi, mClipboardManager).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }

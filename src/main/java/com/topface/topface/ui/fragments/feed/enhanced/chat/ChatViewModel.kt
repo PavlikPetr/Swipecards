@@ -7,6 +7,7 @@ import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
+import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
@@ -38,6 +39,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     private val pullToRefreshSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mDialogGetSubscription: Subscription? = null
+    private var mComplainSubscription: Subscription? = null
+    private var mDeleteSubscription: Subscription? = null
+
+    private val mEventBus by lazy { App.getAppComponent().eventBus() }
+    private val mScruffyManager by lazy { App.getAppComponent().scruffyManager() }
 
     private val mNewMessageBroabcastSubscription: Subscription? = null
     private val mVipBoughtBroabcastSubscription: Subscription? = null
@@ -65,6 +71,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                     Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
+        mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
+            onComplain()
+        })
+        mDeleteSubscription = mScruffyManager.mEventManager.observeEventInBackground("message.delete", Completed::class.java).subscribe(shortSubscription<Completed> {
+            Debug.error("                    ЧАТ ПРИНЯТО УДАЛЕНИЕ, ЩА ОБНОВИМ                             ")
+            mUser?.id?.let { it -> update(Triple(it, null, null)) }
+        })
     }
 
     private fun createGCMUpdateObservable() =
@@ -248,6 +261,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
 
     override fun release() = arrayOf(mUpdateHistorySubscription, mDialogGetSubscription,
             mNewMessageBroabcastSubscription, mVipBoughtBroabcastSubscription,
-            pullToRefreshSubscription).safeUnsubscribe()
+            pullToRefreshSubscription, mDeleteSubscription, mComplainSubscription).safeUnsubscribe()
 
 }
