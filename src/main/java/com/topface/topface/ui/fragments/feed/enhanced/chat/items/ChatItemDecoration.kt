@@ -19,12 +19,14 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
 
         var topMargin = 0
+        var bottomMargin = 0
         fun isFriendItem(item: HistoryItem) = item.getItemType() == HistoryItem.FRIEND_MESSAGE || item.getItemType() == HistoryItem.FRIEND_GIFT
 
         if (view != null && parent != null && state != null) {
             val position = parent.getChildAdapterPosition(view)
             if (position != NO_POSITION) {
                 (parent.adapter as? CompositeAdapter)?.data?.let {
+                    if (position == 0) bottomMargin = marginBig
                     // dividers text/visible calculation
                     prepareDividers(it.filterIsInstance<HistoryItem>())
 
@@ -71,7 +73,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                 }
             }
         }
-        outRect?.set(0, topMargin, 0, 0)
+        outRect?.set(0, topMargin, 0, bottomMargin)
     }
 
     private fun prepareDividers(items: List<HistoryItem>) {
