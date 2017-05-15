@@ -88,7 +88,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
             // "today", "yesterday", "day.month" (if current year), "day.month.year" for all other
             for (day in dividers.keys) {
                 dividers[day]?.forEach { it.isDividerVisible.set(false) }
-                dividers[day]?.last()?.apply {
+                dividers[day]?.first()?.apply {
                     isDividerVisible.set(true)
                     // don't forget about server timestamps, they use seconds, but we millis
                     dividerText.set(DateUtils.getRelativeDate(day * 1000L))
