@@ -9,7 +9,7 @@ class DeleteMessageRequest(private val mId: Int) : BaseScruffyRequest<Completed>
     override fun getMethod() = "message.delete"
 
     override fun createJson(json: JsonObject) = with(json) {
-        add("userIds", listOf(mId).intListToJsonArray())
+        add("items", listOf(mId).intListToJsonArray())
     }
 
     override fun getResponseClass(): Class<Completed> = Completed::class.java
