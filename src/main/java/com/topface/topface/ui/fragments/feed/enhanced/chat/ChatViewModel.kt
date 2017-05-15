@@ -183,18 +183,16 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
                 }, {
                     if (it != null && it.items.isNotEmpty()) {
-                        chatData.add(MutualStub())
-                        chatData.add(MutualStub())
-//                        val items = ArrayList<HistoryItem>()
-//                        it.items.forEach {
-//                            items.add(wrapHistoryItem(it))
-//                        }
-//                        removeStubItems()
-//                        if (addToStart) {
-//                            chatData.addAll(0, items)
-//                        } else {
-//                            chatData.addAll(items)
-//                        }
+                        val items = ArrayList<HistoryItem>()
+                        it.items.forEach {
+                            items.add(wrapHistoryItem(it))
+                        }
+                        removeStubItems()
+                        if (addToStart) {
+                            chatData.addAll(0, items)
+                        } else {
+                            chatData.addAll(items)
+                        }
                     }
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 }))
