@@ -7,6 +7,7 @@ import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
+import com.topface.topface.api.requests.DeleteMessageRequest.Companion.REQUEST_METHOD_NAME
 import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
@@ -74,8 +75,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             onComplain()
         })
-        mDeleteSubscription = mScruffyManager.mEventManager.observeEventInBackground("message.delete", Completed::class.java).subscribe(shortSubscription<Completed> {
-            Debug.error("                    ЧАТ ПРИНЯТО УДАЛЕНИЕ, ЩА ОБНОВИМ                             ")
+        mDeleteSubscription = mScruffyManager.mEventManager.observeEventInBackground(REQUEST_METHOD_NAME, Completed::class.java).subscribe(shortSubscription<Completed> {
             mUser?.id?.let { it -> update(Triple(it, null, null)) }
         })
     }
