@@ -13,8 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:colorBackground="@color/bg_white"
-        android:orientation="vertical"
         android:minWidth="200dp"
+        android:orientation="vertical"
         android:windowIsFloating="true"
         android:windowIsTranslucent="true">
 
@@ -28,7 +28,8 @@
             style="@style/ChatMenuPopup"
             android:background="@drawable/menu_popup_center"
             android:onClick="@{() -> viewModel.complain()}"
-            android:text="@string/general_complain"/>
+            android:text="@string/general_complain"
+            android:visibility="@{viewModel.complainItemVisibility}"/>
 
         <TextView
             style="@style/ChatMenuPopup"

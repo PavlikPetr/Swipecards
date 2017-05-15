@@ -21,6 +21,7 @@ import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.IChatResult
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -36,7 +37,7 @@ import rx.Subscription
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api) : BaseViewModel() {
+class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus) : BaseViewModel() {
 
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
@@ -56,6 +57,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
+    private var mComplainSubscription: Subscription? = null
+    private var mDeleteSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -88,7 +91,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
                 createVipBoughtObservable(),
-                adapterUpdateObservable
+                adapterUpdateObservable,
+                createDeleteObservable()
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
                 filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
@@ -96,7 +100,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                     Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
+        mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
+            onComplain()
+        })
     }
+
+    private fun createDeleteObservable() = mApi.observeDeleteMessage()
+            .filter { it.completed == false }
+            .map { createUpdateObject(mUser?.id ?: -1) }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
             .filter { it.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false) }
@@ -345,7 +356,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
 
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
-        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription).safeUnsubscribe()
+        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
+                mDeleteSubscription, mComplainSubscription).safeUnsubscribe()
     }
 
 }

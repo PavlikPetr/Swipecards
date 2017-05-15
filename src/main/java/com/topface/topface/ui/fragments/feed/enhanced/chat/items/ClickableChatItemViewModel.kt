@@ -8,7 +8,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 /**
  * Базовая модель для итемов чата, с поддержкой лонгтапов и тапов по аватарке
  */
-open class ClickableChatItemViewModel(val item:HistoryItem, val itemPosition:Int) : IDivider {
+open class ClickableChatItemViewModel(val item: HistoryItem, val itemPosition: Int) : IDivider {
     val feedNavigator: FeedNavigator by lazy { ComponentManager.obtainComponent(ChatComponent::class.java).feedNavigator() }
     override val dividerText = item.dividerText
     override val isDividerVisible = item.isDividerVisible

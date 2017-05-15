@@ -6,10 +6,14 @@ import com.topface.topface.api.responses.Completed
 
 class DeleteMessageRequest(private val mId: Int) : BaseScruffyRequest<Completed>() {
 
-    override fun getMethod() = "message.delete"
+    companion object {
+        const val REQUEST_METHOD_NAME = "message.delete"
+    }
+
+    override fun getMethod() = REQUEST_METHOD_NAME
 
     override fun createJson(json: JsonObject) = with(json) {
-        add("userIds", listOf(mId).intListToJsonArray())
+        add("items", listOf(mId).intListToJsonArray())
     }
 
     override fun getResponseClass(): Class<Completed> = Completed::class.java
