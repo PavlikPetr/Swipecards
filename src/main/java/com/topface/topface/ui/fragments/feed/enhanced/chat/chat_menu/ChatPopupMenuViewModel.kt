@@ -35,7 +35,7 @@ class ChatPopupMenuViewModel(private val mItem: HistoryItem, private val mItemPo
     }
 
     fun deleteMessage() {
-        mChatPopupSubscription.add(mApi.deleteMessage(mItem).subscribe(shortSubscription {
+        mChatPopupSubscription.add(mApi.callDeleteMessage(mItem).subscribe(shortSubscription {
             if (it.completed) {
                 mEventBus.setData(ChatDeleteEvent(mItemPosition))
             }

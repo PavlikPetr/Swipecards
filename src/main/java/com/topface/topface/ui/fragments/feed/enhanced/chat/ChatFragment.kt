@@ -1,5 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -18,6 +20,7 @@ import com.topface.topface.di.chat.ChatComponent
 import com.topface.topface.di.chat.ChatViewModelComponent
 import com.topface.topface.di.chat.DaggerChatViewModelComponent
 import com.topface.topface.ui.fragments.ToolbarActivity
+import com.topface.topface.ui.fragments.feed.enhanced.IChatResult
 import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
 import com.topface.topface.ui.fragments.feed.enhanced.base.setViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.ChatItemDecoration
@@ -33,7 +36,7 @@ import com.topface.topface.utils.actionbar.OverflowMenuUser
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
 
-class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
+class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, IChatResult {
 
     companion object {
         private const val SOFT_KEYBOARD_LOCK_STATE = "keyboard_state"
@@ -51,6 +54,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
             DaggerChatViewModelComponent.builder().appComponent(App.getAppComponent()).build()
         }.chatViewModel().apply {
             navigator = this@ChatFragment.navigator
+            chatResult = this@ChatFragment
         }
     }
     private var mOverflowMenu: OverflowMenu? = null
@@ -78,6 +82,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
             chat.layoutManager = LinearLayoutManager(context.applicationContext, LinearLayoutManager.VERTICAL, true)
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
+            mViewModel.updateObservable = adapter.updateObservable
             setViewModel(BR.chatViewModel, mViewModel, arguments)
             root.setKeyboardListener(this@ChatFragment)
         }.root
@@ -107,6 +112,10 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
     override fun onDestroy() {
         super.onDestroy()
         mOverflowMenu?.onReleaseOverflowMenu()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mViewModel.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun getOptionsMenuRes() = R.menu.toolbar_avatar_and_menu
@@ -151,6 +160,8 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
         mOverflowMenu?.onMenuClicked(item)
         return super.onOptionsItemSelected(item)
     }
+
+    override fun setResult(result: Intent) = activity.setResult(Activity.RESULT_OK, result)
 
     fun initOverflowMenuActions(overflowMenu: OverflowMenu) {
         if (overflowMenu.overflowMenuFieldsListener == null) {

@@ -290,7 +290,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
      */
     fun tryUpdatePreview(intent: Intent) {
         val history = intent.getParcelableExtra<History>(ChatActivity.LAST_MESSAGE)
-        val userId = intent.getIntExtra(ChatActivity.LAST_MESSAGE_USER_ID, -1)
+        val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
         if (history != null && userId > 0) {
             data.observableList.forEachIndexed { position, item ->
                 if (item.user != null && item.user.id == userId) {

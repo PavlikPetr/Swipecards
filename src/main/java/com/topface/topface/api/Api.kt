@@ -30,7 +30,7 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
                 putSerializable(DeleteFeedRequestFactory.FEED_TYPE, feedsType)
             }).subscribe()
 
-    override fun deleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).subscribe()
+    override fun callDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).subscribe()
 
     override fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T> =
             mFeedRequestFactory.construct(args, clazz).subscribe()
