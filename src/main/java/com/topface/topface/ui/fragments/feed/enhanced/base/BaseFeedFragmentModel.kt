@@ -393,7 +393,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
 
     @FuckingVoodooMagic(description = "Если нет новых фидов сервер присылает итем от которого проходила выборка(первый)")
     protected fun removeOldDuplicates(data: ArrayList<T>) = with(this@BaseFeedFragmentModel.data) {
-        val feedsIterator = iterator()
+        val feedsIterator = listIterator()
         while (feedsIterator.hasNext()) {
             val feed = feedsIterator.next()
             for (newFeed in data) {

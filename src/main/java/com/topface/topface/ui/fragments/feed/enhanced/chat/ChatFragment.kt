@@ -20,7 +20,6 @@ import com.topface.topface.di.chat.DaggerChatViewModelComponent
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
 import com.topface.topface.ui.fragments.feed.enhanced.base.setViewModel
-import com.topface.topface.ui.fragments.feed.enhanced.chat.items.ChatItemDecoration
 import com.topface.topface.ui.fragments.feed.enhanced.utils.DaggerFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -77,7 +76,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
         return mBinding.apply {
             chat.layoutManager = LinearLayoutManager(context.applicationContext, LinearLayoutManager.VERTICAL, true)
             chat.adapter = adapter
-//            chat.addItemDecoration(ChatItemDecoration())
+            //chat.addItemDecoration(ChatItemDecoration())
             setViewModel(BR.chatViewModel, mViewModel, arguments)
             root.setKeyboardListener(this@ChatFragment)
         }.root
