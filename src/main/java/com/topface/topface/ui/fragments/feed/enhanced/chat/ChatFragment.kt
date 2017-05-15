@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
+import android.widget.ImageView
 import com.topface.topface.App
 import com.topface.topface.BR
 import com.topface.topface.R
@@ -27,7 +28,6 @@ import com.topface.topface.ui.fragments.feed.enhanced.chat.items.ChatItemDecorat
 import com.topface.topface.ui.fragments.feed.enhanced.utils.DaggerFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
-import com.topface.topface.ui.views.ImageViewRemote
 import com.topface.topface.ui.views.KeyboardListenerLayout
 import com.topface.topface.utils.Device
 import com.topface.topface.utils.Utils
@@ -138,7 +138,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
 
     fun setActionBarAvatar(user: FeedUser) = mBarAvatar?.let {
-        if (user.isEmpty || user.banned || user.deleted || user.photo.isEmpty) {
+        if (user.isEmpty || user.banned || user.deleted || user.photo?.isEmpty ?: true) {
             showStubAvatar(it)
         } else {
             val view = MenuItemCompat.getActionView(it)
@@ -149,7 +149,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     fun showStubAvatar(menuItem: MenuItem) {
         (MenuItemCompat.getActionView(menuItem)
-                .findViewById(R.id.ivBarAvatar) as ImageViewRemote)
+                .findViewById(R.id.toolbar_avatar) as ImageView)
                 .setImageResource(if (mUser?.sex == Profile.GIRL)
                     R.drawable.rounded_avatar_female
                 else

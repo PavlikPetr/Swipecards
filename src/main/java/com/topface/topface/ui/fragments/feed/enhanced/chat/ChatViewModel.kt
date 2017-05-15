@@ -17,11 +17,11 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.History
 import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.IChatResult
-import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -79,7 +79,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun bind() {
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         val user = mUser
-        if (user != null && user.photo.isEmpty) {
+        if (user?.photo != null && user.photo.isEmpty) {
             takePhotoIfNeed()
         }
         val adapterUpdateObservable = updateObservable
@@ -106,7 +106,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun createDeleteObservable() = mApi.observeDeleteMessage()
-            .filter { it.completed == false }
+            .filter { it.completed }
             .map { createUpdateObject(mUser?.id ?: -1) }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
