@@ -88,8 +88,8 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
             // and enable divider only for last added, also, update divider text to correspond to
             // "today", "yesterday", "day.month" (if current year), "day.month.year" for all other
             for (day in dividers.keys) {
-                if (dividers.isNotEmpty()) {
-                    dividers[day]?.forEach { it.isDividerVisible.set(false) }
+                dividers[day]?.forEach { it.isDividerVisible.set(false) }
+                if (dividers[day]?.isNotEmpty() ?: false) {
                     dividers[day]?.first()?.apply {
                         isDividerVisible.set(true)
                         // don't forget about server timestamps, they use seconds, but we millis
