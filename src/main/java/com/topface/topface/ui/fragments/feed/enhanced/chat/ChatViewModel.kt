@@ -7,10 +7,9 @@ import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
-import com.topface.topface.api.requests.DeleteMessageRequest.Companion.REQUEST_METHOD_NAME
-import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -24,7 +23,7 @@ import rx.Observable
 import rx.Subscription
 import java.util.concurrent.TimeUnit
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api) : BaseViewModel() {
+class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus) : BaseViewModel() {
 
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
@@ -42,9 +41,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     private var mDialogGetSubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
-
-    private val mEventBus by lazy { App.getAppComponent().eventBus() }
-    private val mScruffyManager by lazy { App.getAppComponent().scruffyManager() }
 
     private val mNewMessageBroabcastSubscription: Subscription? = null
     private val mVipBoughtBroabcastSubscription: Subscription? = null
@@ -65,7 +61,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         }
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
-                createTimerUpdateObservable()
+                createTimerUpdateObservable(),
+                createDeleteObservable()
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
                 subscribe(shortSubscription {
@@ -75,10 +72,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             onComplain()
         })
-        mDeleteSubscription = mScruffyManager.mEventManager.observeEventInBackground(REQUEST_METHOD_NAME, Completed::class.java).subscribe(shortSubscription<Completed> {
-            mUser?.id?.let { it -> update(Triple(it, null, null)) }
-        })
     }
+
+    private fun createDeleteObservable() = mApi.observeChatComplain()
+            .filter { it.completed == false }
+            .map { createUpdateObject(mUser?.id ?: -1) }
 
     private fun createGCMUpdateObservable() =
             mContext.observeBroabcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))

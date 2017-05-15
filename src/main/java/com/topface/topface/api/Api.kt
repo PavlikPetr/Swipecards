@@ -1,6 +1,7 @@
 package com.topface.topface.api
 
 import android.os.Bundle
+import com.topface.topface.App
 import com.topface.topface.api.requests.*
 import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.HistoryItem
@@ -17,6 +18,10 @@ import java.util.*
  */
 class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
           private val mFeedRequestFactory: IFeedRequestFactory) : IApi {
+
+    private val mScruffyManager by lazy {
+        App.getAppComponent().scruffyManager()
+    }
 
     override fun callAppDayRequest(typeFeedFragment: String) =
             AppDayRequest(typeFeedFragment).subscribe()
@@ -38,5 +43,7 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
     override fun callDialogGet(userId: Int, from: String?, to: String?) = DialogGetRequest(userId, from, to).subscribe()
 
     override fun callSendMessage(userId: Int, message: String, isInstant: Boolean) = SendMessageRequest(userId, message, isInstant).subscribe()
+
+    override fun observeChatComplain() = mScruffyManager.mEventManager.observeEventInBackground(DeleteMessageRequest.REQUEST_METHOD_NAME, Completed::class.java)
 
 }
