@@ -2,7 +2,6 @@ package com.topface.topface.api
 
 import android.os.Bundle
 import com.topface.scruffy.ScruffyManager
-import com.topface.topface.App
 import com.topface.topface.api.requests.*
 import com.topface.topface.api.responses.Completed
 import com.topface.topface.api.responses.HistoryItem
