@@ -52,7 +52,7 @@ class ChatPopupMenuViewModel(private val arguments: Bundle,
     }
 
     fun deleteMessage() {
-        mChatPopupSubscription = mApi.deleteMessage(mItem).subscribe()
+        mChatPopupSubscription = mApi.callDeleteMessage(mItem).subscribe()
         mIDialogCloser?.closeIt()
     }
 
