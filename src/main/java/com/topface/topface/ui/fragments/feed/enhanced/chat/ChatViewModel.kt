@@ -74,7 +74,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         })
     }
 
-    private fun createDeleteObservable() = mApi.observeChatComplain()
+    private fun createDeleteObservable() = mApi.observeDeleteMessage()
             .filter { it.completed == false }
             .map { createUpdateObject(mUser?.id ?: -1) }
 
@@ -183,16 +183,18 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
                 }, {
                     if (it != null && it.items.isNotEmpty()) {
-                        val items = ArrayList<HistoryItem>()
-                        it.items.forEach {
-                            items.add(wrapHistoryItem(it))
-                        }
-                        removeStubItems()
-                        if (addToStart) {
-                            chatData.addAll(0, items)
-                        } else {
-                            chatData.addAll(items)
-                        }
+                        chatData.add(MutualStub())
+                        chatData.add(MutualStub())
+//                        val items = ArrayList<HistoryItem>()
+//                        it.items.forEach {
+//                            items.add(wrapHistoryItem(it))
+//                        }
+//                        removeStubItems()
+//                        if (addToStart) {
+//                            chatData.addAll(0, items)
+//                        } else {
+//                            chatData.addAll(items)
+//                        }
                     }
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 }))

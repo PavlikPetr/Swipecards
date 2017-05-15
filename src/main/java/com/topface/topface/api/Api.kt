@@ -39,8 +39,8 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun callSendMessage(userId: Int, message: String, isInstant: Boolean) = SendMessageRequest(userId, message, isInstant).subscribe()
 
-    override fun observeChatComplain() = mScruffyManager.mEventManager.observeEventInBackground(DeleteMessageRequest.REQUEST_METHOD_NAME, Completed::class.java)
+    override fun observeDeleteMessage() = mScruffyManager.mEventManager.observeEventInBackground(DeleteMessageRequest.REQUEST_METHOD_NAME, Completed::class.java)
 
-    override fun execDeleteMessage(item: HistoryItem) = mScruffyManager.sendRequest(DeleteMessageRequest(item.id))
+    override fun execDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).exec()
 
 }

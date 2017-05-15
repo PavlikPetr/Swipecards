@@ -23,7 +23,7 @@ interface IApi {
 
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Completed>
 
-    fun observeChatComplain(): Observable<Completed>
+    fun observeDeleteMessage(): Observable<Completed>
 
     fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T>
 
@@ -31,5 +31,5 @@ interface IApi {
 
     fun callSendMessage(userId: Int, message: String, isInstant: Boolean = false): Observable<HistoryItem>
 
-    fun execDeleteMessage(item: HistoryItem): Observable<Completed>
+    fun execDeleteMessage(item: HistoryItem)
 }
