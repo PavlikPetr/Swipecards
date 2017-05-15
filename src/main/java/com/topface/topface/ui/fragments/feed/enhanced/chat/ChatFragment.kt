@@ -77,7 +77,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
         return mBinding.apply {
             chat.layoutManager = LinearLayoutManager(context.applicationContext, LinearLayoutManager.VERTICAL, true)
             chat.adapter = adapter
-            chat.addItemDecoration(ChatItemDecoration())
+//            chat.addItemDecoration(ChatItemDecoration())
             setViewModel(BR.chatViewModel, mViewModel, arguments)
             root.setKeyboardListener(this@ChatFragment)
         }.root
