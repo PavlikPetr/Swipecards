@@ -91,6 +91,6 @@ object ChatIntentCreator {
         com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
     }*/
 
-    private fun isOldChat() = true
+    private fun isOldChat() = false
 
 }

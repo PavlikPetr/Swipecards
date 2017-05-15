@@ -9,6 +9,7 @@ import com.topface.topface.App
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -22,7 +23,7 @@ import rx.Observable
 import rx.Subscription
 import java.util.concurrent.TimeUnit
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api) : BaseViewModel() {
+class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus) : BaseViewModel() {
 
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
@@ -38,6 +39,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     private val pullToRefreshSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mDialogGetSubscription: Subscription? = null
+    private var mComplainSubscription: Subscription? = null
+    private var mDeleteSubscription: Subscription? = null
 
     private val mNewMessageBroabcastSubscription: Subscription? = null
     private val mVipBoughtBroabcastSubscription: Subscription? = null
@@ -58,14 +61,22 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         }
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
-                createTimerUpdateObservable()
+                createTimerUpdateObservable(),
+                createDeleteObservable()
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
                 subscribe(shortSubscription {
                     Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
+        mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
+            onComplain()
+        })
     }
+
+    private fun createDeleteObservable() = mApi.observeDeleteMessage()
+            .filter { it.completed == false }
+            .map { createUpdateObject(mUser?.id ?: -1) }
 
     private fun createGCMUpdateObservable() =
             mContext.observeBroabcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
@@ -248,6 +259,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
 
     override fun release() = arrayOf(mUpdateHistorySubscription, mDialogGetSubscription,
             mNewMessageBroabcastSubscription, mVipBoughtBroabcastSubscription,
-            pullToRefreshSubscription).safeUnsubscribe()
+            pullToRefreshSubscription, mDeleteSubscription, mComplainSubscription).safeUnsubscribe()
 
 }
