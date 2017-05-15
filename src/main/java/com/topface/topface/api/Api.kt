@@ -32,8 +32,6 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
                 putSerializable(DeleteFeedRequestFactory.FEED_TYPE, feedsType)
             }).subscribe()
 
-    override fun callDeleteMessage(item: HistoryItem) = mScruffyManager.sendRequest(DeleteMessageRequest(item.id))
-
     override fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T> =
             mFeedRequestFactory.construct(args, clazz).subscribe()
 
@@ -42,5 +40,7 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
     override fun callSendMessage(userId: Int, message: String, isInstant: Boolean) = SendMessageRequest(userId, message, isInstant).subscribe()
 
     override fun observeChatComplain() = mScruffyManager.mEventManager.observeEventInBackground(DeleteMessageRequest.REQUEST_METHOD_NAME, Completed::class.java)
+
+    override fun execDeleteMessage(item: HistoryItem) = mScruffyManager.sendRequest(DeleteMessageRequest(item.id))
 
 }

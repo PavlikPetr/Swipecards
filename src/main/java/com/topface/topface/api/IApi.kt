@@ -21,8 +21,6 @@ interface IApi {
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
-    fun callDeleteMessage(item: HistoryItem): Observable<Completed>
-
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Completed>
 
     fun observeChatComplain(): Observable<Completed>
@@ -33,4 +31,5 @@ interface IApi {
 
     fun callSendMessage(userId: Int, message: String, isInstant: Boolean = false): Observable<HistoryItem>
 
+    fun execDeleteMessage(item: HistoryItem): Observable<Completed>
 }
