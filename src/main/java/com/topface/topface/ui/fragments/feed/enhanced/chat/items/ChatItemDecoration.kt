@@ -29,6 +29,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                     if (position == 0) bottomMargin = marginBig
                     // dividers text/visible calculation
                     prepareDividers(it.filterIsInstance<HistoryItem>())
+                    val itemCount = it.size
 
                     // show/hide avatar of friend messages
                     // must show avatar only at first message in list
@@ -41,12 +42,12 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                             } else {
                                 when (position) {
                                 // first item
-                                    0 -> {
+                                    itemCount - 1 -> {
                                         currentItem.isAvatarVisible.set(true)
                                     }
                                 // middle and last items
                                     else -> {
-                                        (it[position - 1] as? HistoryItem)?.let { prevItem ->
+                                        (it[position + 1] as? HistoryItem)?.let { prevItem ->
                                             if (isFriendItem(prevItem)) {
                                                 topMargin = marginSmall
                                                 currentItem.isAvatarVisible.set(false)
@@ -58,8 +59,8 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                                 }
                             }
                         } else {
-                            if (position > 0) {
-                                (it[position - 1] as? HistoryItem)?.let { prevItem ->
+                            if (position < itemCount - 1) {
+                                (it[position + 1] as? HistoryItem)?.let { prevItem ->
                                     if (!isFriendItem(prevItem) && !currentItem.isDividerVisible.get()) {
                                         // small top divider only if prev item is not from friend
                                         // and current item does not have divider enabled
