@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.databinding.ChatPopupMenuBinding
@@ -35,12 +36,14 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
         activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 
+    private val mApi by lazy { App.getAppComponent().api() }
+
     private val mBinding by lazy {
         DataBindingUtil.inflate<ChatPopupMenuBinding>(activity.layoutInflater, R.layout.chat_popup_menu, null, false)
     }
 
     private val mViewModel by lazy {
-        ChatPopupMenuViewModel(arguments, this, mClipboardManager).apply {
+        ChatPopupMenuViewModel(arguments, this, mClipboardManager, mApi).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }

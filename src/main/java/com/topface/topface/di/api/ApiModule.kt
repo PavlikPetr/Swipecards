@@ -62,5 +62,5 @@ class ApiModule {
     @Provides
     @Singleton
     fun provideApi(deleteFeedRequestFactory: DeleteFeedRequestFactory,
-                   feedRequestFactory: FeedRequestFactory) = Api(deleteFeedRequestFactory, feedRequestFactory)
+                   feedRequestFactory: FeedRequestFactory,  mscruf: ScruffyManager) = Api(deleteFeedRequestFactory, feedRequestFactory, mscruf)
 }

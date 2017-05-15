@@ -1,6 +1,7 @@
 package com.topface.topface.api
 
 import android.os.Bundle
+import com.topface.scruffy.ScruffyManager
 import com.topface.topface.App
 import com.topface.topface.api.requests.*
 import com.topface.topface.api.responses.Completed
@@ -17,11 +18,8 @@ import java.util.*
  * Created by tiberal on 06.03.17.
  */
 class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
-          private val mFeedRequestFactory: IFeedRequestFactory) : IApi {
-
-    private val mScruffyManager by lazy {
-        App.getAppComponent().scruffyManager()
-    }
+          private val mFeedRequestFactory: IFeedRequestFactory,
+          private val mScruffyManager: ScruffyManager) : IApi {
 
     override fun callAppDayRequest(typeFeedFragment: String) =
             AppDayRequest(typeFeedFragment).subscribe()
@@ -35,7 +33,7 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
                 putSerializable(DeleteFeedRequestFactory.FEED_TYPE, feedsType)
             }).subscribe()
 
-    override fun deleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).subscribe()
+    override fun deleteMessage(item: HistoryItem) = mScruffyManager.sendRequest(DeleteMessageRequest(item.id))
 
     override fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T> =
             mFeedRequestFactory.construct(args, clazz).subscribe()

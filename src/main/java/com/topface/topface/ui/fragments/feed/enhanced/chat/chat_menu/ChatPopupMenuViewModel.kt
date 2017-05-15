@@ -8,7 +8,6 @@ import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
-import com.topface.topface.api.requests.DeleteMessageRequest
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.api.responses.HistoryItem.Companion.USER_GIFT
 import com.topface.topface.api.responses.HistoryItem.Companion.USER_MESSAGE
@@ -22,7 +21,8 @@ import rx.Subscription
 
 class ChatPopupMenuViewModel(private val arguments: Bundle,
                              private var mIDialogCloser: IDialogCloser?,
-                             private val mClipboardManager: ClipboardManager) : ILifeCycle {
+                             private val mClipboardManager: ClipboardManager,
+                             private val mApi: Api) : ILifeCycle {
 
     private var mChatPopupSubscription: Subscription? = null
 
@@ -33,8 +33,6 @@ class ChatPopupMenuViewModel(private val arguments: Bundle,
     val mItem: HistoryItem = arguments.getParcelable(ChatPopupMenu.CHAT_ITEM)
 
     val complainItemVisibility = ObservableInt(getTypeOfItem())
-
-    private val mScruffyManager by lazy { App.getAppComponent().scruffyManager() }
 
     private fun getTypeOfItem() =
             when (mItem.getItemType()) {
@@ -54,7 +52,7 @@ class ChatPopupMenuViewModel(private val arguments: Bundle,
     }
 
     fun deleteMessage() {
-        mChatPopupSubscription = mScruffyManager.sendRequest(DeleteMessageRequest(mItem.id)).subscribe()
+        mChatPopupSubscription = mApi.deleteMessage(mItem).subscribe()
         mIDialogCloser?.closeIt()
     }
 
