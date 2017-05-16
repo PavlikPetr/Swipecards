@@ -12,6 +12,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -27,6 +28,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
         private const val EMPTY = ""
+        val MUTUAL_SYMPATHY = 7
+        val LOCK_CHAT = 35
     }
 
     internal var navigator: FeedNavigator? = null
@@ -162,6 +165,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         }
     }
 
+
     /**
      * Обновление по эмитам гцм, птр, таймера
      */
@@ -169,7 +173,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         val addToStart = updateContainer.second != null
         mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
                 .subscribe(shortSubscription({
-
+                    "Тобi пiзда".showLongToast()
                 }, {
                     if (it != null && it.items.isNotEmpty()) {
                         val items = ArrayList<HistoryItem>()
@@ -183,9 +187,30 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                             chatData.addAll(items)
                         }
                     }
+
+                    if (it.items.isEmpty() && it.mutualTime != 0) {
+                        chatData.add(MutualStub())
+                    }
+
+                    if (!App.get().profile.premium) {
+                        for (item in it.items) {
+                            when (item.type) {
+                                MUTUAL_SYMPATHY -> MutualStub()
+                                LOCK_CHAT -> BuyVipStub()
+                            }
+                        }
+                    }
+//                    if (it.items.isEmpty() && it.items){
+//                        for (item in it.items)
+//                        when (item.type) {
+//                            MUTUAL_SYMPATHY -> MutualStub()
+//                            LOCK_CHAT -> BuyVipStub()
+//                        }
+//                    }
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 }))
     }
+
 
     /**
      * Запаковать итем в соответствующую модель чата, дабы работало приведение в базовом компоненте

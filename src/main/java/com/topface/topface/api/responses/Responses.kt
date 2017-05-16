@@ -106,7 +106,7 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
 }
 
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
-                   val items: ArrayList<HistoryItem>)
+                   val items: ArrayList<HistoryItem>, val mutualTime: Int)
 
 /**
  *   id String так как сервер может прислать "1487110175:110148795" и все упадет. Плохие они.
