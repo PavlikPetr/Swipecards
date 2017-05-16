@@ -26,7 +26,6 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
-import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -43,8 +42,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
         private const val EMPTY = ""
-        val MUTUAL_SYMPATHY = 7
-        val LOCK_CHAT = 35
+        private const val MUTUAL_SYMPATHY = 7
+        private const val LOCK_CHAT = 35
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
     }
@@ -224,6 +223,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+                    setStubsIfNeed(it)
                     if (it != null && it.items.isNotEmpty()) {
                         val items = ArrayList<HistoryItem>()
                         it.items.forEach {
@@ -236,7 +236,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.addAll(items)
                         }
                     }
-                    setStubsIfNeed(it)
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 })))
@@ -245,12 +244,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private fun setStubsIfNeed(history: History) {
         if (history.items.isEmpty() && history.mutualTime != 0) {
             chatData.add(MutualStub())
+            mHasStubItems = true
         }
         if (!App.get().profile.premium) {
             for (item in history.items) {
                 when (item.type) {
-                    MUTUAL_SYMPATHY -> MutualStub()
-                    LOCK_CHAT -> BuyVipStub()
+                    MUTUAL_SYMPATHY -> {
+                        MutualStub()
+                        mHasStubItems = true
+                    }
+                    LOCK_CHAT -> {
+                        BuyVipStub()
+                        mHasStubItems = true
+                    }
                 }
             }
         }
