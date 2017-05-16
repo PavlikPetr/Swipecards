@@ -222,7 +222,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         val addToStart = updateContainer.second != null
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
                 .subscribe(shortSubscription({
-                    "Тобi пiзда".showLongToast()
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
                     if (it != null && it.items.isNotEmpty()) {
