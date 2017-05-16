@@ -5,6 +5,7 @@ import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.chat.*
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel.Companion.LAST_ITEM_ID
 import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.*
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -63,7 +64,7 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
                     lastId = lastItem.id
                 }
             }
-            putInt("last id", lastId)
+            putInt(LAST_ITEM_ID, lastId)
         }
     }.apply {
         addAdapterComponent(LoaderStubComponent())

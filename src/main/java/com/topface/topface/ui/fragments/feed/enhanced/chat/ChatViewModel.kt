@@ -46,6 +46,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         private const val LOCK_CHAT = 35
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
+        const val LAST_ITEM_ID = "last id"
     }
 
     internal var navigator: FeedNavigator? = null
@@ -85,7 +86,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             takePhotoIfNeed()
         }
         val adapterUpdateObservable = updateObservable
-                ?.distinct { it.getInt("last id") }
+                ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
