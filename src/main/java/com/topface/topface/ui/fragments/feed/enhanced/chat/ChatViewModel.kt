@@ -247,8 +247,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             mHasStubItems = true
         }
         if (!App.get().profile.premium) {
-            for (item in history.items) {
-                when (item.type) {
+            history.items.forEach {
+                when (it.type) {
                     MUTUAL_SYMPATHY -> {
                         MutualStub()
                         mHasStubItems = true
