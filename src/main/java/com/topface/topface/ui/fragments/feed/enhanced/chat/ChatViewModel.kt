@@ -7,6 +7,7 @@ import android.view.View
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
+import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
@@ -186,29 +187,34 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                         } else {
                             chatData.addAll(items)
                         }
+                        setStubsIfNeed(it)
                     }
 
-                    if (it.items.isEmpty() && it.mutualTime != 0) {
-                        chatData.add(MutualStub())
-                    }
-
-                    if (!App.get().profile.premium) {
-                        for (item in it.items) {
-                            when (item.type) {
-                                MUTUAL_SYMPATHY -> MutualStub()
-                                LOCK_CHAT -> BuyVipStub()
-                            }
-                        }
-                    }
-//                    if (it.items.isEmpty() && it.items){
-//                        for (item in it.items)
-//                        when (item.type) {
-//                            MUTUAL_SYMPATHY -> MutualStub()
-//                            LOCK_CHAT -> BuyVipStub()
-//                        }
-//                    }
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 }))
+    }
+
+    private fun setStubsIfNeed( history: History){
+        if (history.items.isEmpty() && history.mutualTime != 0) {
+            Debug.error("             if (history.items.isEmpty() && history.mutualTime != 0)                           показ Взаимной заглушки")
+            chatData.add(MutualStub())
+        }
+        if (!App.get().profile.premium) {
+            Debug.error("             if (!App.get().profile.premium)                         ")
+            Debug.error("")
+            for (item in history.items) {
+                Debug.error("            и тип ${item.type}")
+                when (item.type) {
+                    MUTUAL_SYMPATHY -> {
+                        Debug.error("                показ Взаимной заглушки")
+                        MutualStub()
+                    }
+                    LOCK_CHAT -> {
+                        Debug.error("                показ покупка вип")
+                        BuyVipStub()}
+                }
+            }
+        }
     }
 
 
