@@ -12,10 +12,10 @@ import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
+import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
-import com.topface.topface.data.History
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ComplainsActivity
@@ -42,8 +42,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
         private const val EMPTY = ""
+        private const val MUTUAL_SYMPATHY = 7
+        private const val LOCK_CHAT = 35
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
+        const val LAST_ITEM_ID = "last id"
     }
 
     internal var navigator: FeedNavigator? = null
@@ -83,7 +86,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             takePhotoIfNeed()
         }
         val adapterUpdateObservable = updateObservable
-                ?.distinct { it.getInt("last id") }
+                ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
@@ -211,6 +214,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
+
     /**
      * Обновление по эмитам гцм, птр, таймера
      */
@@ -220,6 +224,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+                    setStubsIfNeed(it)
                     if (it != null && it.items.isNotEmpty()) {
                         val items = ArrayList<HistoryItem>()
                         it.items.forEach {
@@ -236,6 +241,28 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 })))
     }
+
+    private fun setStubsIfNeed(history: History) {
+        if (history.items.isEmpty() && history.mutualTime != 0) {
+            chatData.add(MutualStub())
+            mHasStubItems = true
+        }
+        if (!App.get().profile.premium) {
+            history.items.forEach {
+                when (it.type) {
+                    MUTUAL_SYMPATHY -> {
+                        MutualStub()
+                        mHasStubItems = true
+                    }
+                    LOCK_CHAT -> {
+                        BuyVipStub()
+                        mHasStubItems = true
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * Запаковать итем в соответствующую модель чата, дабы работало приведение в базовом компоненте
@@ -331,7 +358,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * Новые модели только на этом экране, чтоб работал старый код нужен этот костыль
      */
     private fun toOldHistoryItem(item: HistoryItem?) = item?.let {
-        History().apply {
+        com.topface.topface.data.History().apply {
             text = it.text
             type = it.type
             id = it.id.toString()

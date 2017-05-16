@@ -8,6 +8,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Profile
 import com.topface.topface.data.User
 import com.topface.topface.glide.tranformation.GlideTransformationType
+import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -26,7 +27,7 @@ class MutualStubChatViewModel(mutualItem: FeedUser) {
     val mutualType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val mutualPlaceholderRes = ObservableInt(if (mutualItem.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
-    val circleColor = R.color.ask_moar_item_background
+    val circleColor = R.color.bg_holo.getColor()
 
     val stubText = ObservableField((if (App.get().profile.sex == User.BOY) R.string.write_her_something_first.getString()
     else R.string.write_him_first.getString()))
