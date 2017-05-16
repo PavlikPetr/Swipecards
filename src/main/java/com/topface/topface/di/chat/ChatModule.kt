@@ -56,7 +56,7 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
     fun provideCompositeAdapter(typeProvider: ITypeProvider, feedNavigator: FeedNavigator)
             = CompositeAdapter(typeProvider = typeProvider, provideItemTypeStrategyType = CHAT) {
         Bundle().apply {
-            val lastId = if (it.data.isNotEmpty()) (it.data.last() as HistoryItem).id else -1
+            val lastId = if (it.data.isNotEmpty() && (it.data.last() is HistoryItem)) (it.data.last() as HistoryItem).id else -1
             putInt("last id", lastId)
         }
     }.apply {

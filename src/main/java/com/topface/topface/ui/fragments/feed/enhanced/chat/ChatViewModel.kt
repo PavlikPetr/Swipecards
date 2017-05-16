@@ -236,8 +236,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         } else {
                             chatData.addAll(items)
                         }
-                        setStubsIfNeed(it)
                     }
+                    setStubsIfNeed(it)
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 })))
@@ -245,23 +245,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun setStubsIfNeed(history: History) {
         if (history.items.isEmpty() && history.mutualTime != 0) {
-            Debug.error("             if (history.items.isEmpty() && history.mutualTime != 0)                           показ Взаимной заглушки")
             chatData.add(MutualStub())
         }
         if (!App.get().profile.premium) {
-            Debug.error("             if (!App.get().profile.premium)                         ")
-            Debug.error("")
             for (item in history.items) {
-                Debug.error("            и тип ${item.type}")
                 when (item.type) {
-                    MUTUAL_SYMPATHY -> {
-                        Debug.error("                показ Взаимной заглушки")
-                        MutualStub()
-                    }
-                    LOCK_CHAT -> {
-                        Debug.error("                показ покупка вип")
-                        BuyVipStub()
-                    }
+                    MUTUAL_SYMPATHY -> MutualStub()
+                    LOCK_CHAT -> BuyVipStub()
                 }
             }
         }
