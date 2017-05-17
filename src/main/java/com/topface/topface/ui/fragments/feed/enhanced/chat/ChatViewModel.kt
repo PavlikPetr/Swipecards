@@ -61,7 +61,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mSendMessageSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
-    private var mDeleteSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -243,24 +242,26 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun setStubsIfNeed(history: History) {
+        var stub: Any? = null
         if (history.items.isEmpty() && history.mutualTime != 0) {
-            chatData.add(MutualStub())
+            stub = MutualStub()
             mHasStubItems = true
         }
         if (!App.get().profile.premium) {
             history.items.forEach {
                 when (it.type) {
                     MUTUAL_SYMPATHY -> {
-                        MutualStub()
+                        stub = MutualStub()
                         mHasStubItems = true
                     }
                     LOCK_CHAT -> {
-                        BuyVipStub()
+                        stub = BuyVipStub()
                         mHasStubItems = true
                     }
                 }
             }
         }
+        stub?.let { chatData.add(stub) }
     }
 
 
@@ -384,7 +385,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
-                mDeleteSubscription, mComplainSubscription).safeUnsubscribe()
+                mComplainSubscription).safeUnsubscribe()
     }
 
 }
