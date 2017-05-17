@@ -242,26 +242,32 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun setStubsIfNeed(history: History) {
-        var stub: Any? = null
-        if (history.items.isEmpty() && history.mutualTime != 0) {
-            stub = MutualStub()
-            mHasStubItems = true
-        }
-        if (!App.get().profile.premium) {
-            history.items.forEach {
-                when (it.type) {
-                    MUTUAL_SYMPATHY -> {
-                        stub = MutualStub()
-                        mHasStubItems = true
-                    }
-                    LOCK_CHAT -> {
-                        stub = BuyVipStub()
-                        mHasStubItems = true
+        if (history.items.isEmpty()) {
+            var stub: Any? = null
+            if (history.mutualTime != 0) {
+                stub = MutualStub()
+                mHasStubItems = true
+            }
+            if (!App.get().profile.premium) {
+                history.items.forEach {
+                    stub = when (it.type) {
+                        MUTUAL_SYMPATHY -> {
+                            mHasStubItems = true
+                            MutualStub()
+                        }
+                        LOCK_CHAT -> {
+                            mHasStubItems = true
+                            BuyVipStub()
+                        }
+                        else -> {
+                            mHasStubItems = false
+                            null
+                        }
                     }
                 }
             }
+            stub?.let { chatData.add(stub) }
         }
-        stub?.let { chatData.add(stub) }
     }
 
 
