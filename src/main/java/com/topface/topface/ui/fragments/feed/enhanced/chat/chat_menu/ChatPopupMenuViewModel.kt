@@ -19,7 +19,7 @@ import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
 
-class ChatPopupMenuViewModel(private val arguments: Bundle,
+class ChatPopupMenuViewModel(arguments: Bundle,
                              private var mIDialogCloser: IDialogCloser?,
                              private val mClipboardManager: ClipboardManager,
                              private val mApi: Api) : ILifeCycle {
