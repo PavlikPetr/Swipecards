@@ -246,38 +246,41 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 *    Первоначально проверяем на наличие итемов в History, которые пришли с сервера и наличие итемов в уже существующем списке
 *      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
 *          1) У юзера взаимная симпатия и он начинает диалог
-*          2) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
-*      Заглушку "Юзер очень популярен, купиет VIP, чтобы написать ему" показываем когда:
+*    Если сообщения все-таки есть, то смотрим по типам сообщений, ктороые могу приходить
+*      Заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
 *          1)У юзера нет premium и ему приходит тип сообщения "LOCK_CHAT"
+*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
+*          1) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
+*
 */
 
     private fun setStubsIfNeed(history: History) {
+        var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
-            var stub: Any? = null
             if (history.mutualTime != 0) {
                 stub = MutualStub()
                 mHasStubItems = true
             }
-            if (!App.get().profile.premium) {
-                history.items.forEach {
-                    stub = when (it.type) {
-                        MUTUAL_SYMPATHY -> {
-                            mHasStubItems = true
-                            MutualStub()
-                        }
-                        LOCK_CHAT -> {
-                            mHasStubItems = true
-                            BuyVipStub()
-                        }
-                        else -> {
-                            mHasStubItems = false
-                            null
-                        }
+        }
+        if (history.items.isNotEmpty() && !App.get().profile.premium) {
+            history.items.forEach {
+                stub = when (it.type) {
+                    MUTUAL_SYMPATHY -> {
+                        mHasStubItems = true
+                        MutualStub()
+                    }
+                    LOCK_CHAT -> {
+                        mHasStubItems = true
+                        BuyVipStub()
+                    }
+                    else -> {
+                        mHasStubItems = false
+                        null
                     }
                 }
             }
-            stub?.let { chatData.add(stub) }
         }
+        stub?.let { chatData.add(stub) }
     }
 
 
