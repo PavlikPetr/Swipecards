@@ -63,7 +63,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mSendMessageSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
-    private var mDeleteSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -228,8 +227,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
-                    setStubsIfNeed(it)
-                    if (it != null && it.items.isNotEmpty()) {
+                    if (it?.items?.isNotEmpty() ?: false) {
                         val items = ArrayList<HistoryItem>()
                         it.items.forEach {
                             items.add(wrapHistoryItem(it))
@@ -240,31 +238,53 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         } else {
                             chatData.addAll(items)
                         }
+                    } else {
+                        setStubsIfNeed(it)
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 })))
     }
 
+/*                          Условия показов заглушек.
+*    Первоначально проверяем на наличие итемов в History, которые пришли с сервера и наличие итемов в уже существующем списке
+*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
+*          1) У юзера взаимная симпатия и он начинает диалог
+*    Если сообщения все-таки есть, то смотрим по типам сообщений, ктороые могу приходить
+*      Заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
+*          1)У юзера нет premium и ему приходит тип сообщения "LOCK_CHAT"
+*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
+*          1) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
+*
+*/
+
     private fun setStubsIfNeed(history: History) {
-        if (history.items.isEmpty() && history.mutualTime != 0) {
-            chatData.add(MutualStub())
-            mHasStubItems = true
+        var stub: Any? = null
+        if (history.items.isEmpty() && chatData.isEmpty()) {
+            if (history.mutualTime != 0) {
+                stub = MutualStub()
+                mHasStubItems = true
+            }
         }
-        if (!App.get().profile.premium) {
+        if (history.items.isNotEmpty() && !App.get().profile.premium) {
             history.items.forEach {
-                when (it.type) {
+                stub = when (it.type) {
                     MUTUAL_SYMPATHY -> {
-                        MutualStub()
                         mHasStubItems = true
+                        MutualStub()
                     }
                     LOCK_CHAT -> {
-                        BuyVipStub()
                         mHasStubItems = true
+                        BuyVipStub()
+                    }
+                    else -> {
+                        mHasStubItems = false
+                        null
                     }
                 }
             }
         }
+        stub?.let { chatData.add(stub) }
     }
 
     /**
@@ -389,7 +409,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
-                mDeleteSubscription, mComplainSubscription).safeUnsubscribe()
+                mComplainSubscription).safeUnsubscribe()
     }
 
 }
