@@ -226,6 +226,11 @@ public class Options extends AbstractData {
     public RatePopupNewVersion ratePopupNewVersion = new RatePopupNewVersion();
 
     /**
+     * {int} - номер версии чата, 0 - старая, 1 - новая и тд
+     */
+    public int chatRedesign;
+
+    /**
      * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
      */
     public PaymentInfo paymentNinjaInfo = new PaymentInfo();
@@ -404,6 +409,7 @@ public class Options extends AbstractData {
                 ratePopupNewVersion = JsonUtils.fromJson(rateAppSplitJsonObject.toString(), RatePopupNewVersion.class);
             }
 
+            chatRedesign = response.optInt("chatRedesign");
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
