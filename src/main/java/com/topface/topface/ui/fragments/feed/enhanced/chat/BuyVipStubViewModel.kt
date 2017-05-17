@@ -10,7 +10,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getDimen
 import com.topface.topface.utils.extensions.getString
 
-class BuyVipStubViewModel(private val mFeedUser: FeedUser, private val mFeedNavigator: FeedNavigator) {
+class BuyVipStubViewModel(private val mFeedUser: FeedUser, private val mFeedNavigator: FeedNavigator?) {
 
     private val mIsMan = mFeedUser.sex == User.BOY
     val title = ObservableField(getTitle())
@@ -26,6 +26,6 @@ class BuyVipStubViewModel(private val mFeedUser: FeedUser, private val mFeedNavi
 
     private fun getStubText() = if (mIsMan) R.string.write_to_her_only_vip.getString() else R.string.write_to_him_only_vip.getString()
 
-    fun buyVip() = mFeedNavigator.showPurchaseVip("chat_stub")
+    fun buyVip() = mFeedNavigator?.showPurchaseVip("chat_stub")
 
 }

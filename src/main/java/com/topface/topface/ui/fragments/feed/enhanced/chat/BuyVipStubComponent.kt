@@ -10,7 +10,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 /**
  * Компонент заглушки "купите Vip" в редизайне чата
  */
-class BuyVipStubComponent(private val mFeedNavigator: FeedNavigator, private val mFeedUser: FeedUser?) : AdapterComponent<BuyVipStubChatBinding, BuyVipStub>() {
+class BuyVipStubComponent(private var mFeedNavigator: FeedNavigator?, private val mFeedUser: FeedUser?) : AdapterComponent<BuyVipStubChatBinding, BuyVipStub>() {
 
     override val itemLayout: Int
         get() = R.layout.buy_vip_stub_chat
@@ -25,4 +25,8 @@ class BuyVipStubComponent(private val mFeedNavigator: FeedNavigator, private val
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
             }
+
+    override fun release() {
+        mFeedNavigator = null
+    }
 }
