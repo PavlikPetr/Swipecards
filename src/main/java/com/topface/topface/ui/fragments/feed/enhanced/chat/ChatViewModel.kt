@@ -223,8 +223,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
-                    setStubsIfNeed(it)
-                    if (it != null && it.items.isNotEmpty()) {
+                    if (it?.items?.isNotEmpty() ?: false) {
                         val items = ArrayList<HistoryItem>()
                         it.items.forEach {
                             items.add(wrapHistoryItem(it))
@@ -235,14 +234,25 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         } else {
                             chatData.addAll(items)
                         }
+                    } else {
+                        setStubsIfNeed(it)
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 })))
     }
 
+/*                          Условия показов заглушек.
+*    Первоначально проверяем на наличие итемов в History, которые пришли с сервера и наличие итемов в уже существующем списке
+*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
+*          1) У юзера взаимная симпатия и он начинает диалог
+*          2) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
+*      Заглушку "Юзер очень популярен, купиет VIP, чтобы написать ему" показываем когда:
+*          1)У юзера нет premium и ему приходит тип сообщения "LOCK_CHAT"
+*/
+
     private fun setStubsIfNeed(history: History) {
-        if (history.items.isEmpty()) {
+        if (history.items.isEmpty() && chatData.isEmpty()) {
             var stub: Any? = null
             if (history.mutualTime != 0) {
                 stub = MutualStub()
