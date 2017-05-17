@@ -63,6 +63,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mSendMessageSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mDeleteSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -409,7 +410,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
-                mComplainSubscription).safeUnsubscribe()
+                mDeleteSubscription, mComplainSubscription).safeUnsubscribe()
     }
 
 }
