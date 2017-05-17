@@ -4,11 +4,13 @@ import android.os.Bundle
 import com.topface.scruffy.ScruffyManager
 import com.topface.topface.api.requests.*
 import com.topface.topface.api.responses.Completed
+import com.topface.topface.api.responses.DeleteComplete
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.api.responses.IBaseFeedResponse
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.utils.config.FeedsCache
+import com.topface.topface.utils.rx.applySchedulers
 import rx.Observable
 import java.util.*
 
@@ -39,7 +41,9 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun callSendMessage(userId: Int, message: String, isInstant: Boolean) = SendMessageRequest(userId, message, isInstant).subscribe()
 
-    override fun observeDeleteMessage() = mScruffyManager.mEventManager.observeEventInBackground(DeleteMessageRequest.REQUEST_METHOD_NAME, Completed::class.java)
+    override fun observeDeleteMessage() = mScruffyManager.mEventManager
+            .observeEventInBackground(DeleteMessageRequest.REQUEST_METHOD_NAME, DeleteComplete::class.java)
+            .applySchedulers()
 
     override fun execDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).exec()
 
