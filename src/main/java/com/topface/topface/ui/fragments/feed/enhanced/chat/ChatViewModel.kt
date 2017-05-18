@@ -16,8 +16,10 @@ import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
+import com.topface.topface.data.Profile
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.state.EventBus
+import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
@@ -37,13 +39,14 @@ import rx.Subscription
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus) : BaseViewModel() {
+class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
         private const val EMPTY = ""
         private const val MUTUAL_SYMPATHY = 7
         private const val LOCK_CHAT = 35
+        private const val LOCK_MESSAGE_SEND = 36
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
         const val LAST_ITEM_ID = "last id"
@@ -61,6 +64,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mSendMessageSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mProfileSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -69,6 +73,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * при следующем update
      */
     private var mHasStubItems = false
+    private var isPremium = false
+    private var isNeedToShowToPopularPopup = false
     private var mIsNeedShowAddPhoto = true
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
@@ -105,6 +111,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             onComplain()
         })
+        mProfileSubscription = mState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
+                .subscribe(shortSubscription {
+                    isPremium = it.premium
+                    if (isPremium) {
+                        isNeedToShowToPopularPopup = false
+                    }
+                })
     }
 
     private fun createDeleteObservable() = mApi.observeDeleteMessage()
@@ -206,7 +220,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             val iterator = chatData.listIterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
-                if (item is HistoryItem && item.id == 0) {
+                if (item is HistoryItem && (item.id == 0 || item.type == 1003 || item.type == 1004)) {
                     iterator.remove()
                 }
             }
@@ -223,10 +237,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+                    setStubsIfNeed(it)
                     if (it?.items?.isNotEmpty() ?: false) {
                         val items = ArrayList<HistoryItem>()
                         it.items.forEach {
-                            items.add(wrapHistoryItem(it))
+                            if (it.type != LOCK_CHAT) {
+                                items.add(wrapHistoryItem(it))
+                            }
                         }
                         removeStubItems()
                         if (addToStart) {
@@ -234,8 +251,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         } else {
                             chatData.addAll(items)
                         }
-                    } else {
-                        setStubsIfNeed(it)
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
@@ -262,7 +277,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 mHasStubItems = true
             }
         }
-        if (history.items.isNotEmpty() && !App.get().profile.premium) {
+        if (history.items.isNotEmpty() && !isPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
                     MUTUAL_SYMPATHY -> {
@@ -272,6 +287,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     LOCK_CHAT -> {
                         mHasStubItems = true
                         BuyVipStub()
+                    }
+                    LOCK_MESSAGE_SEND -> {
+                        isNeedToShowToPopularPopup = true
+                        mHasStubItems = true
+                        null
                     }
                     else -> {
                         mHasStubItems = false
@@ -314,17 +334,23 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * В ответе приходит HistoryItem, id которого 0 так как на сервере очередь сообщений
      */
     fun onMessage() = mUser?.let {
-        mSendMessageSubscription = mApi.callSendMessage(it.id, message.get()).subscribe(shortSubscription({
-            Debug.log("FUCKING_CHAT send fail")
-        }, {
-            it?.let {
-                mHasStubItems = true
-                mIsSendMessage = true
-                chatData.add(0, wrapHistoryItem(it))
-                message.set(EMPTY)
-                chatResult?.setResult(createResultIntent())
+        if (!isNeedToShowToPopularPopup) {
+            mSendMessageSubscription = mApi.callSendMessage(it.id, message.get()).subscribe(shortSubscription({
+                Debug.log("FUCKING_CHAT send fail")
+            }, {
+                it?.let {
+                    mHasStubItems = true
+                    mIsSendMessage = true
+                    chatData.add(0, wrapHistoryItem(it))
+                    message.set(EMPTY)
+                    chatResult?.setResult(createResultIntent())
+                }
+            }))
+        } else if (!isPremium) {
+            mUser?.let {
+                navigator?.showUserIsTooPopularLock(it)
             }
-        }))
+        }
     }
 
     fun onGift() {
@@ -404,7 +430,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
-                mComplainSubscription).safeUnsubscribe()
+                mComplainSubscription,mProfileSubscription).safeUnsubscribe()
     }
 
 }
