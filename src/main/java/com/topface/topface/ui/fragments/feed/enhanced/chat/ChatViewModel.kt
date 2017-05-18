@@ -21,11 +21,11 @@ import com.topface.topface.state.EventBus
 import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
-import com.topface.topface.ui.fragments.feed.enhanced.IChatResult
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
+import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -51,8 +51,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     internal var navigator: FeedNavigator? = null
     internal var chatResult: IChatResult? = null
+    internal var overflowMenu: OverflowMenu? = null
+    internal var activityFinisher: IActivityFinisher? = null
 
-    val isComplainVisibile = ObservableInt(View.VISIBLE)
+    val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
     val message = RxObservableField<String>()
     val chatData = ChatData()
@@ -93,8 +95,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
                 createVipBoughtObservable(),
-                adapterUpdateObservable,
-                createDeleteObservable()
+                adapterUpdateObservable
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
                 filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
@@ -105,11 +106,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             onComplain()
         })
+        mDeleteSubscription = mApi.observeDeleteMessage().subscribe { deleteComplete ->
+            removeByPredicate { deleteComplete.items.contains(it.id) }
+        }
     }
-
-    private fun createDeleteObservable() = mApi.observeDeleteMessage()
-            .filter { it.completed }
-            .map { createUpdateObject(mUser?.id ?: -1) }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
             .filter { it.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false) }
@@ -155,7 +155,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isTakePhotoApplicable() = !App.getConfig().userConfig.isUserAvatarAvailable &&
             App.get().profile.photo == null
-
 
     private fun createUpdateObject(userId: Int, isBottom: Boolean = false) =
             if (isBottom) {
@@ -203,16 +202,21 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
+            removeByPredicate { it.id == 0 }
+        }
+    }
+
+    private inline fun removeByPredicate(predicate: (HistoryItem) -> Boolean) {
+        if (chatData.isNotEmpty()) {
             val iterator = chatData.listIterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
-                if (item is HistoryItem && item.id == 0) {
+                if (item is HistoryItem && predicate(item)) {
                     iterator.remove()
                 }
             }
         }
     }
-
 
     /**
      * Обновление по эмитам гцм, птр, таймера
@@ -283,7 +287,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         stub?.let { chatData.add(stub) }
     }
 
-
     /**
      * Запаковать итем в соответствующую модель чата, дабы работало приведение в базовом компоненте
      */
@@ -303,12 +306,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     fun onBlock() {
-        // getOverflowMenu().processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION)
-        isComplainVisibile.set(View.GONE)
-        // getActivity().finish()
+        overflowMenu?.processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION)
+        isComplainVisible.set(View.GONE)
+        activityFinisher?.finish()
     }
 
-    fun onClose() = isComplainVisibile.set(View.GONE)
+    fun onClose() = isComplainVisible.set(View.GONE)
 
     /**
      * В ответе приходит HistoryItem, id которого 0 так как на сервере очередь сообщений
@@ -349,7 +352,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 GiftsActivity.INTENT_REQUEST_GIFT -> {
-                    isComplainVisibile.set(View.INVISIBLE)
+                    isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
                         giftAnswerToHistoryItem(sendGiftAnswer)?.let {
@@ -366,7 +369,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                 }
                 ComplainsActivity.REQUEST_CODE -> {
-                    isComplainVisibile.set(View.INVISIBLE)
+                    isComplainVisible.set(View.INVISIBLE)
                     // after success complain sent - block user
                     onBlock()
                 }
@@ -399,6 +402,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun unbind() {
         chatResult = null
         navigator = null
+        overflowMenu = null
+        activityFinisher = null
     }
 
     override fun release() {
