@@ -78,14 +78,27 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        return mBinding.apply {
+        return mBinding.root
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        /**
+         * omg wtf
+         * навеяно вот этим
+         * http://stackoverflow.com/questions/27416834/app-crashing-when-trying-to-use-recyclerview-on-android-5-0
+         *
+         * суть - если провернуть инициализацию в onCreateView - периодически будет краш при заходе
+         * в чат из диалогов, если краш таки не уйдет, можно все вернуть в зад и ломать голову дальше %/
+         */
+        mBinding.apply {
             chat.layoutManager = LinearLayoutManager(context.applicationContext, LinearLayoutManager.VERTICAL, true)
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
             mViewModel.updateObservable = adapter.updateObservable
             setViewModel(BR.chatViewModel, mViewModel, arguments)
             root.setKeyboardListener(this@ChatFragment)
-        }.root
+        }
     }
 
     override fun terminateImmortalComponent() {
