@@ -36,13 +36,14 @@ import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.collections.forEachReversedByIndex
 import rx.Observable
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
 class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
+        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000
         private const val EMPTY = ""
         private const val MUTUAL_SYMPATHY = 7
         private const val LOCK_CHAT = 35
@@ -63,7 +64,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
-    private var mSendMessageSubscription: Subscription? = null
+    private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
@@ -334,18 +335,21 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * В ответе приходит HistoryItem, id которого 0 так как на сервере очередь сообщений
      */
     fun onMessage() = mUser?.let {
-        if (!mIsNeedToShowToPopularPopup) {
-            mSendMessageSubscription = mApi.callSendMessage(it.id, message.get()).subscribe(shortSubscription({
-                Debug.log("FUCKING_CHAT send fail")
-            }, {
-                it?.let {
-                    mHasStubItems = true
-                    mIsSendMessage = true
-                    chatData.add(0, wrapHistoryItem(it))
-                    message.set(EMPTY)
-                    chatResult?.setResult(createResultIntent())
-                }
-            }))
+        val message = message.get()
+        if (!mIsNeedToShowToPopularPopup && message.isNotBlank()) {
+            mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
+                    .doOnSubscribe {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
+                                created = System.currentTimeMillis())))
+                        this.message.set(EMPTY)
+                    }
+                    .subscribe(shortSubscription({
+                        Debug.log("FUCKING_CHAT send fail")
+                    }, {
+                        chatResult?.setResult(createResultIntent())
+                    })))
         } else if (!mIsPremium) {
             mUser?.let {
                 navigator?.showUserIsTooPopularLock(it)
