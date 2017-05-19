@@ -5,11 +5,8 @@ import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.chat.*
-import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.LoaderStubComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.FriendGiftComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.FriendMessageComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.UserGiftComponent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.UserMessageComponent
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel.Companion.LAST_ITEM_ID
+import com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components.*
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
@@ -60,7 +57,14 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
     fun provideCompositeAdapter(typeProvider: ITypeProvider, feedNavigator: FeedNavigator)
             = CompositeAdapter(typeProvider = typeProvider, provideItemTypeStrategyType = CHAT) {
         Bundle().apply {
-            //todo итем для подгрузки
+            var lastId = -1
+            if (it.data.isNotEmpty()) {
+                val lastItem = it.data.last()
+                if (lastItem is HistoryItem) {
+                    lastId = lastItem.id
+                }
+            }
+            putInt(LAST_ITEM_ID, lastId)
         }
     }.apply {
         addAdapterComponent(LoaderStubComponent())

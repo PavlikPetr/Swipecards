@@ -967,7 +967,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         intent.putExtra(SEND_MESSAGE, isSendMessage);
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
-        intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
         getActivity().setResult(Activity.RESULT_CANCELED, intent);
         getActivity().finish();
     }
@@ -1010,7 +1009,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         if (isAdded() && (mLastDispatchedHistoryItem != null || mDispatchedGifts != null)) {
             Intent intent = new Intent();
             intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
-            intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
             intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
             intent.putExtra(SEND_MESSAGE, isSendMessage);
             intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -1051,7 +1049,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
                     Intent intent = new Intent();
                     intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
-                    intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
                     intent.putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts);
                     intent.putExtra(SEND_MESSAGE, isSendMessage);
                     intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
@@ -1155,7 +1152,6 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                 intent.putExtra(ChatFragment.SEND_MESSAGE, isSendMessage);
                 intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
                 intent.putExtra(ChatActivity.LAST_MESSAGE, mLastDispatchedHistoryItem);
-                intent.putExtra(ChatActivity.LAST_MESSAGE_USER_ID, mUserId);
                 getActivity().setResult(Activity.RESULT_CANCELED, intent);
             }
 

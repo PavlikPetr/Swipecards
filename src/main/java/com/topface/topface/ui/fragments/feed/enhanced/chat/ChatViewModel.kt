@@ -1,17 +1,33 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.ObservableInt
+import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.view.View
+import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.api.Api
+import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
+import com.topface.topface.data.Gift
+import com.topface.topface.data.Profile
+import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.state.EventBus
+import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.ui.ComplainsActivity
+import com.topface.topface.ui.GiftsActivity
+import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.utils.CountersManager
+import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -20,52 +36,103 @@ import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.collections.forEachReversedByIndex
 import rx.Observable
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicReference
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api) : BaseViewModel() {
+class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_CHAT_UPDATE_PERIOD = 30000
+        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000
         private const val EMPTY = ""
+        private const val MUTUAL_SYMPATHY = 7
+        private const val LOCK_CHAT = 35
+        private const val LOCK_MESSAGE_SEND = 36
+        private const val SEND_MESSAGE = "send_message"
+        private const val INTENT_USER_ID = "user_id"
+        const val LAST_ITEM_ID = "last id"
     }
 
     internal var navigator: FeedNavigator? = null
+    internal var chatResult: IChatResult? = null
+    internal var overflowMenu: OverflowMenu? = null
+    internal var activityFinisher: IActivityFinisher? = null
 
-    val isComplainVisibile = ObservableInt(View.VISIBLE)
+    val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
     val message = RxObservableField<String>()
     val chatData = ChatData()
-    private val pullToRefreshSubscription: Subscription? = null
+    var updateObservable: Observable<Bundle>? = null
+    private var mDialogGetSubscription = AtomicReference<Subscription>()
+    private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mUpdateHistorySubscription: Subscription? = null
-    private var mDialogGetSubscription: Subscription? = null
+    private var mComplainSubscription: Subscription? = null
+    private var mHasPremiumSubscription: Subscription? = null
+    private var mDeleteSubscription: Subscription? = null
 
-    private val mNewMessageBroabcastSubscription: Subscription? = null
-    private val mVipBoughtBroabcastSubscription: Subscription? = null
     private var mUser: FeedUser? = null
 
     /**
      * Флаг говорящий о том, что етсть итемы с id = 0, и их нужно удалить и заменить на нормальные
      * при следующем update
      */
-    private var hasStubItems = false
+    private var mHasStubItems = false
+    private var mIsPremium = false
+    private var mIsNeedToShowToPopularPopup = false
     private var mIsNeedShowAddPhoto = true
+    /**
+     * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
+     * подарочков юзера в дейтинге. Как только дейтинг будет переделан на новый скраффи, там сразу
+     * можно будет лофить ивент об успешном отправлении подарочка, и сразу его добавлять
+     */
+    private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
+    private var mIsSendMessage = false
 
     override fun bind() {
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         val user = mUser
-        if (user != null && user.photo.isEmpty) {
+        if (user?.photo != null && user.photo.isEmpty) {
             takePhotoIfNeed()
         }
+        val adapterUpdateObservable = updateObservable
+                ?.distinct { it.getInt(LAST_ITEM_ID) }
+                ?.map { createUpdateObject(mUser?.id ?: -1) }
+                ?: Observable.empty()
+
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
-                createTimerUpdateObservable()
+                createTimerUpdateObservable(),
+                createVipBoughtObservable(),
+                adapterUpdateObservable
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
+                filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
                 subscribe(shortSubscription {
                     Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
+        mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
+            onComplain()
+        })
+        mHasPremiumSubscription = mState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
+                .subscribe(shortSubscription {
+                    mIsPremium = it.premium
+                    if (mIsPremium) {
+                        mIsNeedToShowToPopularPopup = false
+                    }
+                })
+        mDeleteSubscription = mApi.observeDeleteMessage().subscribe { deleteComplete ->
+            removeByPredicate { deleteComplete.items.contains(it.id) }
+        }
     }
+
+    private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
+            .filter { it.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false) }
+            .map {
+                chatData.clear()
+                createUpdateObject(mUser?.id ?: -1)
+            }
 
     private fun createGCMUpdateObservable() =
             mContext.observeBroabcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
@@ -87,7 +154,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                     }
 
     private fun createTimerUpdateObservable() = Observable.
-            interval(0, DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            interval(DEFAULT_CHAT_UPDATE_PERIOD.toLong(), DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
             .map { createUpdateObject(mUser?.id ?: -1) }
 
     //todo заменить при имплементацию птр
@@ -105,13 +172,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     private fun isTakePhotoApplicable() = !App.getConfig().userConfig.isUserAvatarAvailable &&
             App.get().profile.photo == null
 
-
     private fun createUpdateObject(userId: Int, isBottom: Boolean = false) =
             if (isBottom) {
-                val to = getLastCorrectItemId()
+                val to = getLastCorrectItemId()?.id.toString()
                 Triple<Int, String?, String?>(userId, null, to)
             } else {
-                val from = getFirstCorrectItemId()
+                val from = getFirstCorrectItemId()?.id.toString()
                 Triple<Int, String?, String?>(userId, from, null)
             }
 
@@ -119,11 +185,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
      * Ищем последний id итема чата не равный 0, чтоб от него запрсить новые итемы,
      * которые были в очереди
      */
-    private fun getLastCorrectItemId(): String? {
+    private fun getLastCorrectItemId(): HistoryItem? {
         if (chatData.isNotEmpty()) {
             chatData.forEachReversedByIndex {
                 if (it is HistoryItem && it.id != 0) {
-                    return it.id.toString()
+                    return it
                 }
             }
         }
@@ -134,11 +200,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
      * Ищем первый id итема чата не равный 0, чтоб от него запрсить новые итемы,
      * которые мало ли где были
      */
-    private fun getFirstCorrectItemId(): String? {
+    private fun getFirstCorrectItemId(): HistoryItem? {
         if (chatData.isNotEmpty()) {
             chatData.forEach {
                 if (it is HistoryItem && it.id != 0) {
-                    return it.id.toString()
+                    return it
                 }
             }
         }
@@ -150,12 +216,18 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
      * которыми можно заменить заглушки(ну так серверные говрят по крайней мере)
      */
     private fun removeStubItems() {
-        if (hasStubItems) {
-            hasStubItems = false
+        if (mHasStubItems) {
+            mHasStubItems = false
+            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+        }
+    }
+
+    private inline fun removeByPredicate(predicate: (HistoryItem) -> Boolean) {
+        if (chatData.isNotEmpty()) {
             val iterator = chatData.listIterator()
             while (iterator.hasNext()) {
                 val item = iterator.next()
-                if (item is HistoryItem && item.id == 0) {
+                if (item is HistoryItem && predicate(item)) {
                     iterator.remove()
                 }
             }
@@ -167,14 +239,20 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
      */
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
-        mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
                 .subscribe(shortSubscription({
-
+                    mDialogGetSubscription.get()?.unsubscribe()
                 }, {
-                    if (it != null && it.items.isNotEmpty()) {
+                    setStubsIfNeed(it)
+                    if (it?.items?.isNotEmpty() ?: false) {
                         val items = ArrayList<HistoryItem>()
                         it.items.forEach {
-                            items.add(wrapHistoryItem(it))
+                            when (it.type) {
+                                LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
+                            }
+                            if (it.type != LOCK_CHAT) {
+                                items.add(wrapHistoryItem(it))
+                            }
                         }
                         removeStubItems()
                         if (addToStart) {
@@ -183,21 +261,59 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
                             chatData.addAll(items)
                         }
                     }
+                    mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
-                }))
+                })))
+    }
+
+/*                          Условия показов заглушек и попапа-заглушки.
+*    Первоначально проверяем на наличие итемов в History, которые пришли с сервера и наличие итемов в уже существующем списке
+*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
+*          1) У юзера взаимная симпатия и он начинает диалог
+*    Если сообщения все-таки есть, то смотрим по типам сообщений, ктороые могу приходить
+*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
+*          1) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
+*
+*    Раз в сутки в рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя
+*      Заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
+*          1) У юзера нет premium и ему приходит тип сообщения "LOCK_CHAT"(оно не показывается в чате)
+*      Попап-заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
+*          1) У юзера нет premium и ему приходит тип сообщения "LOCK_MESSAGE_SEND"(Оно показыватся в чате). Далее, при попытке ответить на это сообщение мы показываем попап-заглушку
+*/
+
+    private fun setStubsIfNeed(history: History) {
+        var stub: Any? = null
+        if (history.items.isEmpty() && chatData.isEmpty()) {
+            if (history.mutualTime != 0) {
+                stub = MutualStub()
+            }
+        }
+        if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
+            history.items.forEach {
+                stub = when (it.type) {
+                    MUTUAL_SYMPATHY -> MutualStub()
+                    LOCK_CHAT -> BuyVipStub()
+                    LOCK_MESSAGE_SEND -> {
+                        mIsNeedToShowToPopularPopup = true
+                        mHasStubItems = true
+                        null
+                    }
+                    else -> null
+                }
+            }
+        }
+        stub?.let { chatData.add(stub) }
     }
 
     /**
      * Запаковать итем в соответствующую модель чата, дабы работало приведение в базовом компоненте
      */
-    private fun wrapHistoryItem(item: HistoryItem): HistoryItem {
-        if (item.getItemType() == HistoryItem.USER_MESSAGE) {
-            return UserMessage(item)
-        }
-        if (item.getItemType() == HistoryItem.FRIEND_MESSAGE) {
-            return FriendMessage(item)
-        }
-        return item
+    private fun wrapHistoryItem(item: HistoryItem) = when (item.getItemType()) {
+        HistoryItem.USER_MESSAGE -> UserMessage(item)
+        HistoryItem.FRIEND_MESSAGE -> FriendMessage(item)
+        HistoryItem.FRIEND_GIFT -> FriendGift(item)
+        HistoryItem.USER_GIFT -> UserGift(item)
+        else -> item
     }
 
     fun onComplain() {
@@ -208,28 +324,37 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
     }
 
     fun onBlock() {
-        // getOverflowMenu().processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION)
-        isComplainVisibile.set(View.GONE)
-        // getActivity().finish()
+        overflowMenu?.processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION)
+        isComplainVisible.set(View.GONE)
+        activityFinisher?.finish()
     }
 
-    fun onClose() {
-        isComplainVisibile.set(View.GONE)
-    }
+    fun onClose() = isComplainVisible.set(View.GONE)
 
     /**
-     * В ответе приходит HistoryItem, id которого 0 так как там очередь сообщений
+     * В ответе приходит HistoryItem, id которого 0 так как на сервере очередь сообщений
      */
-    fun onMessage() {
-        mApi.callSendMessage(mUser!!.id, message.get()).subscribe(shortSubscription({
-            Debug.log("FUCKING_CHAT send fail")
-        }, {
-            if (it != null) {
-                hasStubItems = true
-                chatData.add(0, wrapHistoryItem(it))
-                message.set(EMPTY)
+    fun onMessage() = mUser?.let {
+        val message = message.get()
+        if (!mIsNeedToShowToPopularPopup && message.isNotBlank()) {
+            mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
+                    .doOnSubscribe {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
+                                created = System.currentTimeMillis())))
+                        this.message.set(EMPTY)
+                    }
+                    .subscribe(shortSubscription({
+                        Debug.log("FUCKING_CHAT send fail")
+                    }, {
+                        chatResult?.setResult(createResultIntent())
+                    })))
+        } else if (!mIsPremium) {
+            mUser?.let {
+                navigator?.showUserIsTooPopularLock(it)
             }
-        }))
+        }
     }
 
     fun onGift() {
@@ -242,12 +367,76 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api) : Base
         }
     }
 
-    override fun unbind() {
-        navigator = null
+    private fun giftAnswerToHistoryItem(answer: SendGiftAnswer): UserGift? {
+        return answer.history?.let {
+            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created,
+                    it.target, it.unread, it.link))
+        }
     }
 
-    override fun release() = arrayOf(mUpdateHistorySubscription, mDialogGetSubscription,
-            mNewMessageBroabcastSubscription, mVipBoughtBroabcastSubscription,
-            pullToRefreshSubscription).safeUnsubscribe()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                GiftsActivity.INTENT_REQUEST_GIFT -> {
+                    isComplainVisible.set(View.INVISIBLE)
+                    data?.extras?.let {
+                        val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
+                        giftAnswerToHistoryItem(sendGiftAnswer)?.let {
+                            mHasStubItems = true
+                            mIsSendMessage = true
+                            chatData.add(0, it)
+                            chatResult?.setResult(createResultIntent())
+                        }
+                        if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
+                            mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift::class.java))
+                        }
+                        LocalBroadcastManager.getInstance(mContext)
+                                .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
+                    }
+                }
+                ComplainsActivity.REQUEST_CODE -> {
+                    isComplainVisible.set(View.INVISIBLE)
+                    // after success complain sent - block user
+                    onBlock()
+                }
+            }
+        }
+    }
+
+    /**
+     * Новые модели только на этом экране, чтоб работал старый код нужен этот костыль
+     */
+    private fun toOldHistoryItem(item: HistoryItem?) = item?.let {
+        com.topface.topface.data.History().apply {
+            text = it.text
+            type = it.type
+            id = it.id.toString()
+            created = it.created
+            target = it.target
+            unread = it.unread
+            link = it.link
+        }
+    }
+
+    internal fun createResultIntent() = Intent().apply {
+        putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(getLastCorrectItemId()))
+        putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
+        putExtra(SEND_MESSAGE, mIsSendMessage)
+        putExtra(INTENT_USER_ID, mUser?.id ?: -1)
+    }
+
+    override fun unbind() {
+        chatResult = null
+        navigator = null
+        overflowMenu = null
+        activityFinisher = null
+    }
+
+    override fun release() {
+        mDialogGetSubscription.get().safeUnsubscribe()
+        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
+                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
+    }
 
 }

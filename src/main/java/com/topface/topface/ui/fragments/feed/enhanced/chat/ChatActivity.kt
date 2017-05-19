@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,7 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.delegated_properties.objectArg
 import com.topface.topface.utils.extensions.finishWithResult
 import com.topface.topface.utils.extensions.goneIfEmpty
@@ -49,15 +51,15 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     override fun getLayout() = R.layout.ac_fragment_frame
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
+        ComponentManager.obtainComponent(ChatComponent::class.java) {
+            App.getAppComponent().add(ChatModule(this, user))
+        }.inject(this)
+        super.onCreate(savedInstanceState)
         user?.let {
             onToolbarSettings(ToolbarSettingsData(it.nameAndAge,
                     it.city.name, isOnline = it.online))
         }
-        ComponentManager.obtainComponent(ChatComponent::class.java) {
-            App.getAppComponent().add(ChatModule(this, user))
-        }.inject(this)
         addPhotoHelper.setOnResultHandler(object : Handler() {
             override fun handleMessage(msg: Message) {
                 AddPhotoHelper.handlePhotoMessage(msg)
@@ -70,7 +72,12 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        addPhotoHelper.processActivityResult(requestCode, resultCode, data)
+        Utils.activityResultToNestedFragments(supportFragmentManager, requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_CANCELED) {
+            finish()
+        } else {
+            addPhotoHelper.processActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun onDestroy() {

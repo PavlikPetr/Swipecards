@@ -1,11 +1,14 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
+import android.widget.ImageView
 import com.topface.topface.App
 import com.topface.topface.BR
 import com.topface.topface.R
@@ -24,7 +27,6 @@ import com.topface.topface.ui.fragments.feed.enhanced.chat.items.ChatItemDecorat
 import com.topface.topface.ui.fragments.feed.enhanced.utils.DaggerFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
-import com.topface.topface.ui.views.ImageViewRemote
 import com.topface.topface.ui.views.KeyboardListenerLayout
 import com.topface.topface.utils.Device
 import com.topface.topface.utils.Utils
@@ -33,7 +35,7 @@ import com.topface.topface.utils.actionbar.OverflowMenuUser
 import org.jetbrains.anko.layoutInflater
 import javax.inject.Inject
 
-class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
+class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, IChatResult, IActivityFinisher {
 
     companion object {
         private const val SOFT_KEYBOARD_LOCK_STATE = "keyboard_state"
@@ -51,6 +53,8 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
             DaggerChatViewModelComponent.builder().appComponent(App.getAppComponent()).build()
         }.chatViewModel().apply {
             navigator = this@ChatFragment.navigator
+            chatResult = this@ChatFragment
+            activityFinisher = this@ChatFragment
         }
     }
     private var mOverflowMenu: OverflowMenu? = null
@@ -78,7 +82,11 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
             chat.layoutManager = LinearLayoutManager(context.applicationContext, LinearLayoutManager.VERTICAL, true)
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
-            setViewModel(BR.chatViewModel, mViewModel, arguments)
+            mViewModel.run {
+                updateObservable = adapter.updateObservable
+                overflowMenu = mOverflowMenu
+                setViewModel(BR.chatViewModel, this, arguments)
+            }
             root.setKeyboardListener(this@ChatFragment)
         }.root
     }
@@ -109,6 +117,10 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
         mOverflowMenu?.onReleaseOverflowMenu()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mViewModel.onActivityResult(requestCode, resultCode, data)
+    }
+
     override fun getOptionsMenuRes() = R.menu.toolbar_avatar_and_menu
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -129,7 +141,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
 
 
     fun setActionBarAvatar(user: FeedUser) = mBarAvatar?.let {
-        if (user.isEmpty || user.banned || user.deleted || user.photo.isEmpty) {
+        if (user.isEmpty || user.banned || user.deleted || user.photo?.isEmpty ?: true) {
             showStubAvatar(it)
         } else {
             val view = MenuItemCompat.getActionView(it)
@@ -140,7 +152,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
 
     fun showStubAvatar(menuItem: MenuItem) {
         (MenuItemCompat.getActionView(menuItem)
-                .findViewById(R.id.ivBarAvatar) as ImageViewRemote)
+                .findViewById(R.id.toolbar_avatar) as ImageView)
                 .setImageResource(if (mUser?.sex == Profile.GIRL)
                     R.drawable.rounded_avatar_female
                 else
@@ -150,6 +162,14 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         mOverflowMenu?.onMenuClicked(item)
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun setResult(result: Intent) = activity.setResult(Activity.RESULT_OK, result)
+
+    override fun finish() {
+        if (isAdded) {
+            activity.finish()
+        }
     }
 
     fun initOverflowMenuActions(overflowMenu: OverflowMenu) {
