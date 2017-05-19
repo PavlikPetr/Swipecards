@@ -287,7 +287,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 stub = MutualStub()
             }
         }
-        if (history.items.isNotEmpty() && !mIsPremium && !mHasStubItems) {
+        if (history.items.isNotEmpty()&& chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
                     MUTUAL_SYMPATHY -> MutualStub()
