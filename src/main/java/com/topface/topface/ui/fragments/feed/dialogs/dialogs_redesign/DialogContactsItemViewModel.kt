@@ -7,11 +7,11 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
+import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.ChatActivity
-import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener
@@ -185,8 +185,11 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         data?.let {
             if (requestCode == ChatActivity.REQUEST_CHAT) {
+
+                Debug.error("    onActivityResult    in Хуйня сверху в Диалогах     ++++ INTENT_USER_ID    ${data.getIntExtra(ChatFragment.INTENT_USER_ID, 9999)}                 ")
+                Debug.error("    onActivityResult    in Хуйня сверху в Диалогах     ++++ SEND_MESSAGE    ${data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)}                 ")
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
-                if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
+                if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {                                       // todo тут возвращается fasle, т.е. отправленного сообщения нет(при удалении)
                     removeItemByUserId(userId)?.let {
                         if (it.unread) {
                             sendReadRequest(it).subscribe(shortSubscription {

@@ -288,7 +288,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
      * Пытаемся обновить инфу в итеме диалога
      * @param intent данные из onActivityResult
      */
-    fun tryUpdatePreview(intent: Intent) {
+    fun tryUpdatePreview(intent: Intent) {      // todo СЮДА ПРИХОДИТ НААААААААААААААААААААЛЛЛЛ!
         val history = intent.getParcelableExtra<History>(ChatActivity.LAST_MESSAGE)
         val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
         if (history != null && userId > 0) {

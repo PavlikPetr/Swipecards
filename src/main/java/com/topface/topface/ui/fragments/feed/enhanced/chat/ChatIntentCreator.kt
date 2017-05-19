@@ -83,8 +83,10 @@ object ChatIntentCreator {
         return intent
     }
 
-    private fun getChatClass() = when(App.get().options.chatRedesign) {
-        DESIGN_V1 -> com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
-        else -> com.topface.topface.ui.ChatActivity::class.java
-    }
+    private fun getChatClass() =
+            //            when(App.get().options.chatRedesign) {
+//        DESIGN_V1 ->
+            com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
+//        else -> com.topface.topface.ui.ChatActivity::class.java
+//    }
 }
