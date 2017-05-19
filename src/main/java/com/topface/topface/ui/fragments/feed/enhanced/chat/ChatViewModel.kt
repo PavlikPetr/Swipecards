@@ -123,6 +123,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 })
         mDeleteSubscription = mApi.observeDeleteMessage().subscribe { deleteComplete ->
             removeByPredicate { deleteComplete.items.contains(it.id) }
+            chatResult?.setResult(createResultIntent())
         }
     }
 
