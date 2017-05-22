@@ -7,7 +7,6 @@ import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.view.View
-import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
@@ -186,7 +185,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
         data?.let {
             if (requestCode == ChatActivity.REQUEST_CHAT) {
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
-                if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {                                       // todo тут возвращается fasle, т.е. отправленного сообщения нет(при удалении)
+                if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {
                     removeItemByUserId(userId)?.let {
                         if (it.unread) {
                             sendReadRequest(it).subscribe(shortSubscription {

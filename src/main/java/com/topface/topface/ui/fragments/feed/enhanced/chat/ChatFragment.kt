@@ -177,9 +177,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         return super.onOptionsItemSelected(item)
     }
 
-    override fun setResult(result: Intent) {
-        activity.setResult(Activity.RESULT_OK, result)
-    }
+    override fun setResult(result: Intent) = activity.setResult(Activity.RESULT_OK, result)
 
     override fun finish() {
         if (isAdded) {
