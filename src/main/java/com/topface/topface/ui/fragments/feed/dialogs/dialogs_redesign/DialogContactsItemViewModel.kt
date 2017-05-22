@@ -185,9 +185,6 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         data?.let {
             if (requestCode == ChatActivity.REQUEST_CHAT) {
-
-                Debug.error("    onActivityResult    in Хуйня сверху в Диалогах     ++++ INTENT_USER_ID    ${data.getIntExtra(ChatFragment.INTENT_USER_ID, 9999)}                 ")
-                Debug.error("    onActivityResult    in Хуйня сверху в Диалогах     ++++ SEND_MESSAGE    ${data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)}                 ")
                 val userId = data.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
                 if (data.getBooleanExtra(ChatFragment.SEND_MESSAGE, false)) {                                       // todo тут возвращается fasle, т.е. отправленного сообщения нет(при удалении)
                     removeItemByUserId(userId)?.let {

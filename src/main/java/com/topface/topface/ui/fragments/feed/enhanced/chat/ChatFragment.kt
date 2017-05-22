@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Debug
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
@@ -14,7 +13,6 @@ import com.topface.topface.App
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
-import com.topface.topface.data.History
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.databinding.NewChatToolbarAvatarBinding
@@ -22,7 +20,6 @@ import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
 import com.topface.topface.di.chat.ChatViewModelComponent
 import com.topface.topface.di.chat.DaggerChatViewModelComponent
-import com.topface.topface.ui.ChatActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
 import com.topface.topface.ui.fragments.feed.enhanced.base.setViewModel
@@ -180,9 +177,9 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         return super.onOptionsItemSelected(item)
     }
 
-    override fun setResult(result: Intent){
-        com.topface.framework.utils.Debug.error("      ChatFragment метод интерфейса SETRESULT  .LAST_MESSAGE ${result.getParcelableExtra<History>(ChatActivity.LAST_MESSAGE).text}                                   ")
-        activity.setResult(Activity.RESULT_OK, result)}
+    override fun setResult(result: Intent) {
+        activity.setResult(Activity.RESULT_OK, result)
+    }
 
     override fun finish() {
         if (isAdded) {

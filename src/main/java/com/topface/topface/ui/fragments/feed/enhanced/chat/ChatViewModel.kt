@@ -10,14 +10,12 @@ import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
+import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Gift
-import com.topface.topface.data.Profile
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.ComplainsActivity
@@ -34,6 +32,7 @@ import com.topface.topface.utils.rx.observeBroabcast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.collections.forEachReversedByIndex
+import org.json.JSONObject
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
@@ -125,7 +124,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mDeleteSubscription = mApi.observeDeleteMessage().subscribe { deleteComplete ->
             removeByPredicate { deleteComplete.items.contains(it.id) }
             chatResult?.setResult(createResultIntent())
-            Debug.error("            )()()))()()     ${createResultIntent().getParcelableExtra<com.topface.topface.data.History>(com.topface.topface.ui.ChatActivity.LAST_MESSAGE).text}                           ")
         }
     }
 
@@ -410,19 +408,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * Новые модели только на этом экране, чтоб работал старый код нужен этот костыль
      */
     private fun toOldHistoryItem(item: HistoryItem?) = item?.let {
-        com.topface.topface.data.History().apply {
-            text = it.text
-            type = it.type
-            id = it.id.toString()
-            created = it.created
-            target = it.target
-            unread = it.unread
-            link = it.link
-        }
+        com.topface.topface.data.History(JSONObject(it.toJson()))
     }
 
     internal fun createResultIntent() = Intent().apply {
-        putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(getLastCorrectItemId()))
+        putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(getFirstCorrectItemId()))
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
         putExtra(SEND_MESSAGE, mIsSendMessage)
         putExtra(INTENT_USER_ID, mUser?.id ?: -1)
