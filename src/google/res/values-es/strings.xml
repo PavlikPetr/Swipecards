@@ -970,8 +970,12 @@
     <string name="purchase_successfull">El pago se ha realizado con éxito</string>
     <string name="now_you_have_VIP">Ahora tienes el estatus VIP</string>
     <plurals name="you_have_some_coins">
+        <item quantity="other">Ahora tienes %d Monedas</item>
+        <item quantity="one">Ahora tienes %d Moneda</item>
     </plurals>
     <plurals name="you_have_some_sympathies">
+        <item quantity="other">Ahora tienes %d Simpatías</item>
+        <item quantity="one">Ahora tienes %d Simpatía</item>
     </plurals>
     <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
     <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
