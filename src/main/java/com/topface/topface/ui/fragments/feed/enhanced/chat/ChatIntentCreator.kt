@@ -29,13 +29,13 @@ object ChatIntentCreator {
     const val DESIGN_V0 = 0
     const val DESIGN_V1 = 1
 
-    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?) = when(App.get().options.chatRedesign) {
+    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?) = when (App.get().options.chatRedesign) {
         DESIGN_V1 -> createIntent(user, answer, null)
         else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
                 user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
     }
 
-    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when(App.get().options.chatRedesign) {
+    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when (App.get().options.chatRedesign) {
         DESIGN_V1 -> createIntent(user, null, itemType)
         else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
     }
@@ -83,10 +83,12 @@ object ChatIntentCreator {
         return intent
     }
 
+
     private fun getChatClass() =
             //            when(App.get().options.chatRedesign) {
 //        DESIGN_V1 ->
             com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
 //        else -> com.topface.topface.ui.ChatActivity::class.java
 //    }
+
 }
