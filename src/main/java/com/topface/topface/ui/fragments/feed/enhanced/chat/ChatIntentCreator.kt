@@ -7,6 +7,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Photo
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.Companion.REQUEST_CHAT
+import com.topface.topface.utils.Utils.getChatClass
 
 
 object ChatIntentCreator {
@@ -82,13 +83,5 @@ object ChatIntentCreator {
         photo?.let { intent.putExtra(INTENT_AVATAR, it) }
         return intent
     }
-
-
-    private fun getChatClass() =
-            //            when(App.get().options.chatRedesign) {
-//        DESIGN_V1 ->
-            com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
-//        else -> com.topface.topface.ui.ChatActivity::class.java
-//    }
 
 }
