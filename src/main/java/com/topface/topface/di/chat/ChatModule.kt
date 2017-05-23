@@ -47,6 +47,7 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
             UserGift::class.java -> HistoryItem.USER_GIFT
             FriendGift::class.java -> HistoryItem.FRIEND_GIFT
             MutualStub::class.java -> HistoryItem.STUB_MUTUAL
+            NotMutualBuyVipStub::class.java -> HistoryItem.NOT_MUTUAL_BUY_VIP_STUB_MUTUAL
             BuyVipStub::class.java -> HistoryItem.STUB_BUY_VIP
             else -> 0
         }
@@ -74,5 +75,6 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
         addAdapterComponent(FriendGiftComponent(feedUser))
         addAdapterComponent(MutualStubComponent(feedUser))
         addAdapterComponent(BuyVipStubComponent(feedNavigator, feedUser))
+        addAdapterComponent(NotMutualAndBuyVipStubComponent(feedNavigator, feedUser))
     }
 }

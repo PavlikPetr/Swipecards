@@ -73,6 +73,7 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
         const val STUB_CHAT_LOADER = 1002
         const val STUB_BUY_VIP = 1003
         const val STUB_MUTUAL = 1004
+        const val NOT_MUTUAL_BUY_VIP_STUB_MUTUAL = 1005
 
         @JvmField val CREATOR: Parcelable.Creator<HistoryItem> = object : Parcelable.Creator<HistoryItem> {
             override fun createFromParcel(source: Parcel): HistoryItem = HistoryItem(source)

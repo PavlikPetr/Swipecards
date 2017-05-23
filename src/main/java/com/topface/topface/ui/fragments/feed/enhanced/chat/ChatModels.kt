@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.HistoryItem.Companion.NOT_MUTUAL_BUY_VIP_STUB_MUTUAL
 import com.topface.topface.api.responses.HistoryItem.Companion.STUB_BUY_VIP
 import com.topface.topface.api.responses.HistoryItem.Companion.STUB_CHAT_LOADER
 import com.topface.topface.api.responses.HistoryItem.Companion.STUB_MUTUAL
@@ -60,6 +61,14 @@ class FriendMessage(item: HistoryItem) :
 class MutualStub : IChatItem {
     override fun getItemType() = STUB_MUTUAL
 }
+
+/**
+ * заглушка чата "Нет випа, нет взаимного, но хочешь написать, подлец"
+ */
+class NotMutualBuyVipStub : IChatItem {
+    override fun getItemType() = NOT_MUTUAL_BUY_VIP_STUB_MUTUAL
+}
+
 
 /**
  * заглушка чата про покупку вип
