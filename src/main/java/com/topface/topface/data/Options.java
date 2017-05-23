@@ -232,8 +232,8 @@ public class Options extends AbstractData {
     public int getChatRedesign() {
         //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
         // todo убрать насильную инициализацию когда не нужен чат версии 1
-        chatRedesign = 1;
-        return chatRedesign;
+        chatRedesign = 0;
+        return 0;
     }
 
     /**
