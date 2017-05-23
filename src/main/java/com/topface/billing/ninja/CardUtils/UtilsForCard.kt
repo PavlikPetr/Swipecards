@@ -30,8 +30,12 @@ object UtilsForCard {
 
     val cardBrands = hashMapOf(
             Regex("^[4]+.*") to CardType.VISA,
-            Regex("^(5[1-5]|5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)+.*") to CardType.MASTERCARD
-
+            Regex("^(6759[0-9]{2})[0-9]+.*") to CardType.MASTERCARD,
+            Regex("^(50[0-9]{4})[0-9]+.*") to CardType.MASTERCARD,
+            Regex("^5[6-9][0-9]+.*") to CardType.MASTERCARD,
+            Regex("^6[0-9]+.*") to CardType.MASTERCARD,
+            Regex("^5[1-5][0-9]+.*") to CardType.MASTERCARD,
+            Regex("^2(22[1-9]|2[3-9]|[3-6]|7[0-1]|720+.*)") to CardType.MASTERCARD
     )
 
     fun isValidTrhu(trhu: String): Boolean {
@@ -72,7 +76,6 @@ object UtilsForCard {
 
     }
 
-    // todo дополнительная проверка "а не текст ли ты часом?"
     fun isDigits(string: String) = string.matches(Regex("\\d+"))
 
     fun getCardType(type: String): CardType? =
