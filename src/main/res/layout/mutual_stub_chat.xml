@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.chat.MutualStubChatViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.MutualStubChatViewModel"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView

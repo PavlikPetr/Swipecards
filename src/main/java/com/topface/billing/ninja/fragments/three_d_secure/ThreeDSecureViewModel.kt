@@ -13,6 +13,7 @@ import com.topface.billing.ninja.IFinishDelegate
 import com.topface.billing.ninja.NinjaAddCardActivity
 import com.topface.billing.ninja.PurchaseError
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.extensions.encodeUTF8
 
 /**
  * Вью-модель для 3ds валидации
@@ -30,7 +31,11 @@ class ThreeDSecureViewModel(private val mSettings: PurchaseError,
     val isJavaScriptEnabled = ObservableBoolean(true)
     val isVerticalFadingEdgeEnabled = ObservableBoolean(true)
     val postUrl = ObservableField(mSettings.settings.acsUrl)
-    val postData = ObservableField(String.format(POST_DATA_TEMPLATE, mSettings.settings.PaReq, mSettings.settings.MD, mSettings.settings.termUrl))
+    val postData = ObservableField(String.format(POST_DATA_TEMPLATE,
+            mSettings.settings.PaReq.encodeUTF8(),
+            mSettings.settings.MD.encodeUTF8(),
+            mSettings.settings.termUrl.encodeUTF8())
+    )
     val client = PaymentNinjaWebViewClient(this)
 
     override fun onPageStarted(url: String) {
