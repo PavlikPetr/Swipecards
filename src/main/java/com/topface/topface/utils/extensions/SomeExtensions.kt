@@ -7,6 +7,7 @@ import android.view.View
 
 import com.topface.topface.ui.settings.payment_ninja.CardInfo
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo
+import java.net.URLEncoder
 
 /**
  * Помойка расширений
@@ -69,3 +70,5 @@ fun PaymentInfo.isCradAvailable() =
 fun Parcel.writeBoolean(bool: Boolean) = writeByte((if (bool) 1 else 0).toByte())
 
 fun Parcel.readBoolean() = readByte().toInt() == 1
+
+fun String.encodeUTF8() = URLEncoder.encode(this, "UTF-8")

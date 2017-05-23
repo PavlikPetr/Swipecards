@@ -94,8 +94,15 @@ class NinjaAddCardActivity : BaseFragmentActivity<LayoutNinjaAddCardBinding>() {
     }
 
     private fun addFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_content, fragment, tag).commit()
+        // для редкого кейса, когда мы поворачиваем телефон из портретноого режима в лендскейп
+        // и почти сразу нажимаем покупку продукта
+        // получалась такая фигня - данная активити успевала создаться в лендскейпе, но,
+        // так как она у нас прописана в манифесте как портретная, она сразу начинала переворот
+        // и это вело к попытке добавить фрагмент еще раз, и был краш
+        if (!fragment.isAdded) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_content, fragment, tag).commit()
+        }
     }
 
     private fun get3DSecureFragment() =

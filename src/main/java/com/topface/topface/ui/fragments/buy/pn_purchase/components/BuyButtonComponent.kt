@@ -7,7 +7,6 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 import com.topface.topface.ui.views.BuyButtonVer1
 import com.topface.topface.utils.extensions.appContext
 import com.topface.topface.utils.extensions.getTag
-import com.topface.topface.utils.extensions.getTitle
 
 /**
  * Buy Paymnet Ninja product component
