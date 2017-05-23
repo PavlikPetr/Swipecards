@@ -286,6 +286,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
                 stub = MutualStub()
+            } else if (!mIsPremium){
+                stub = NotMutualBuyVipStub()
             }
         }
         if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
