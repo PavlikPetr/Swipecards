@@ -34,6 +34,11 @@ object UtilsForCard {
 
     )
 
+    private val visaRegex = arrayListOf<Regex>(
+
+
+    )
+
     fun isValidTrhu(trhu: String): Boolean {
         val trhuText = trhu.replace(SLASH_DIVIDER, "")
 
