@@ -138,7 +138,6 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
 
     fun showChat() = mNavigator.showChat(currentUser, null)
 
-
     fun skip() = currentUser?.let {
         if (!it.skipped && !it.rated) {
             showNextUser()

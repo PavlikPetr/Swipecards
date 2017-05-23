@@ -69,7 +69,6 @@ class NotMutualBuyVipStub : IChatItem {
     override fun getItemType() = NOT_MUTUAL_BUY_VIP_STUB_MUTUAL
 }
 
-
 /**
  * заглушка чата про покупку вип
  */
