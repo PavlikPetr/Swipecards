@@ -50,6 +50,11 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
     val needFocus = ObservableBoolean()
     val clearFocus = ObservableBoolean(false)
 
+    companion object {
+        // server tells us price in cents, we need show it in dollars
+        private const val PRICE_MODIFIER = 100
+    }
+
     private var mPurchaseRequestSubscription: Subscription? = null
 
     val cvvChangedCallback = object : Observable.OnPropertyChangedCallback() {
@@ -144,7 +149,7 @@ class AddCardViewModel(private val data: Bundle, private val mNavigator: IFeedNa
                     firstDescriptionText.set(R.string.ninja_text_trial_1.getString())
                     secondDescriptionText.set(String.format(R.string.ninja_text_trial_2.getString(),
                             Utils.getQuantityString(R.plurals.ninja_trial_days, it.trialPeriod, it.trialPeriod),
-                            it.price, it.currencyCode))
+                            it.price / PRICE_MODIFIER, it.currencyCode))
                 } else if (it.isSubscription) {
                     // vip subscription
                     isFirstDescriptionVisible.set(true)
