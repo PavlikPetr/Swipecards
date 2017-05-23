@@ -1,9 +1,11 @@
-package com.topface.topface.ui.fragments.feed.enhanced.chat
+package com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components
 
 import android.support.v7.widget.StaggeredGridLayoutManager
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.BuyVipStubChatBinding
+import com.topface.topface.ui.fragments.feed.enhanced.chat.BuyVipStub
+import com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.BuyVipStubViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
