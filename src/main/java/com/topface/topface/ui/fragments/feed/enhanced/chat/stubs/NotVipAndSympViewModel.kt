@@ -6,7 +6,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.extensions.getString
 
-class NotVipAndSympViewModel(feedUser: FeedUser, private val mFeedNavigator: FeedNavigator?) : BaseBuyVipViewModel(feedUser) {
+class NotVipAndSympViewModel(feedUser: FeedUser, private var mFeedNavigator: FeedNavigator?) : BaseBuyVipViewModel(feedUser) {
 
     companion object{
         private const val TAG = "not_vip_and_symp_chat_stub"
@@ -21,4 +21,7 @@ class NotVipAndSympViewModel(feedUser: FeedUser, private val mFeedNavigator: Fee
 
     override fun buttonAction() = mFeedNavigator?.showPurchaseVip(TAG)
 
+    override fun unbind() {
+        mFeedNavigator = null
+    }
 }

@@ -19,10 +19,13 @@ class NotMutualAndBuyVipStubComponent(private var mFeedNavigator: FeedNavigator?
     override val bindingClass: Class<BuyVipStubChatBinding>
         get() = BuyVipStubChatBinding::class.java
 
+    private var mViewModel: NotVipAndSympViewModel? = null
+
     override fun bind(binding: BuyVipStubChatBinding, data: NotMutualBuyVipStub?, position: Int) =
             with(binding) {
                 mFeedUser?.let {
-                    viewModel = NotVipAndSympViewModel(it, mFeedNavigator)
+                    mViewModel = NotVipAndSympViewModel(it, mFeedNavigator)
+                    viewModel = mViewModel
                 }
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
@@ -30,5 +33,6 @@ class NotMutualAndBuyVipStubComponent(private var mFeedNavigator: FeedNavigator?
 
     override fun release() {
         mFeedNavigator = null
+        mViewModel?.unbind()
     }
 }

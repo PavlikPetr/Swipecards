@@ -19,10 +19,13 @@ class BuyVipStubComponent(private var mFeedNavigator: FeedNavigator?, private va
     override val bindingClass: Class<BuyVipStubChatBinding>
         get() = BuyVipStubChatBinding::class.java
 
+    private var mViewModel: BuyVipStubViewModel? = null
+
     override fun bind(binding: BuyVipStubChatBinding, data: BuyVipStub?, position: Int) =
             with(binding) {
                 mFeedUser?.let {
-                    viewModel = BuyVipStubViewModel(it, mFeedNavigator)
+                    mViewModel = BuyVipStubViewModel(it, mFeedNavigator)
+                    viewModel = mViewModel
                 }
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
@@ -30,5 +33,6 @@ class BuyVipStubComponent(private var mFeedNavigator: FeedNavigator?, private va
 
     override fun release() {
         mFeedNavigator = null
+        mViewModel?.unbind()
     }
 }
