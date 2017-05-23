@@ -412,6 +412,7 @@ public class BindingsAdapters {
     */
     @BindingAdapter("uiTestTag")
     public static void setTag(View view, String tag) {
+        //если ты собрался юзать эту хуйню, то посмотри в реализацию setUiTestTag
         UiTestsExtensionKt.setUiTestTag(view, tag);
     }
 
