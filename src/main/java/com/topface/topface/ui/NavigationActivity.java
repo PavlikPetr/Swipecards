@@ -32,10 +32,12 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.AcNavigationBinding;
 import com.topface.topface.databinding.AcNewNavigationBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
-import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
 import com.topface.topface.di.ComponentManager;
+import com.topface.topface.di.feed.fans.FansViewModelsComponent;
+import com.topface.topface.di.feed.visitors.VisitorsModelsComponent;
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent;
 import com.topface.topface.di.navigation_activity.NavigationActivityModule;
+import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.SettingsRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
@@ -43,7 +45,6 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
@@ -92,6 +93,8 @@ import rx.subscriptions.CompositeSubscription;
 
 public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding> {
     public static final String INTENT_EXIT = "com.topface.topface.is_user_banned";
+    // временное решение, чтобы не всегда чистить компоненты в даггере, пока не решим траблы с двойным инстансом активити
+    public static final String INTENT_CLEAN_COMPONENTS = "com.topface.topface.clean_components";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
     public static final int EXIT_TIMEOUT = 3000;
@@ -133,6 +136,12 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        if (intent != null && intent.getBooleanExtra(INTENT_CLEAN_COMPONENTS, false)) {
+            ComponentManager.INSTANCE.releaseComponent(VisitorsModelsComponent.class);
+            ComponentManager.INSTANCE.releaseComponent(FansViewModelsComponent.class);
+            ComponentManager.INSTANCE.releaseComponent(NavigationActivityComponent.class);
+        }
         NavigationActivityComponent component = ComponentManager.INSTANCE
                 .obtainComponent(NavigationActivityComponent.class, new Function0<NavigationActivityComponent>() {
                     @Override
@@ -146,7 +155,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             config.setStartPositionOfActions(0);
             config.saveConfig();
         }
-        Intent intent = getIntent();
         try {
             if (intent.getBooleanExtra(INTENT_EXIT, false)) {
                 finish();
