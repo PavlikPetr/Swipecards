@@ -193,6 +193,7 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     open fun getDeleteItemsList(mSelected: MutableList<T>) = mSelected.getFeedIdList()
 
     override fun onDestroyView() {
+        mBinding.feedList.stopScroll()
         (mBinding.bannerContainerForFeeds as ViewGroup).removeViewInLayout(g.v)
         super.onDestroyView()
         //пока пусть будет так, похоже что это лишнее, на дестрое вьюхи не надо релизить модель.
