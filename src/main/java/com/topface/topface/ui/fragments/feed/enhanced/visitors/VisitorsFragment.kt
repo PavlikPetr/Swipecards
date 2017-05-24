@@ -31,12 +31,11 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ComponentManager.releaseComponent(VisitorsComponent::class.java)
         ComponentManager.obtainComponent(VisitorsComponent::class.java) {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
-                    .add(VisitorsModule(this@VisitorsFragment), BaseFeedModule(this@VisitorsFragment)).apply {
-                inject(this@VisitorsFragment)
-            }
-        }
+                    .add(VisitorsModule(this@VisitorsFragment), BaseFeedModule(this@VisitorsFragment))
+        }.inject(this@VisitorsFragment)
     }
 
     override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
