@@ -37,12 +37,12 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         ComponentManager.releaseComponent(FansComponent::class.java)
         ComponentManager.obtainComponent(FansComponent::class.java) {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
                     .add(FansModule(this@FansFragment), BaseFeedModule(this@FansFragment))
         }.inject(this@FansFragment)
+        super.onCreate(savedInstanceState)
     }
 
     override fun terminateImmortalComponent() {
