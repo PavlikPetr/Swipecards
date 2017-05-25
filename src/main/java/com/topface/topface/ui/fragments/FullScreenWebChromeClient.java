@@ -1,14 +1,13 @@
 package com.topface.topface.ui.fragments;
 
-/**
- * класс для взаимодействия с загруженной в вэбвью страницей
- */
-
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
+/**
+ * класс для взаимодействия с загруженной в вэбвью страницей
+ */
 public class FullScreenWebChromeClient extends WebChromeClient {
 
     private WebChromeClient.CustomViewCallback mFullscreenViewCallback;

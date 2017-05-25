@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,7 +31,7 @@ abstract public class WebViewFragment extends BaseFragment {
 
     protected View getView(LayoutInflater inflater) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.web_view_fragment, null, false);
-        mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding.fullscreenContainer , mBinding.wvWebFrame);
+        mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding.fullscreenContainer, mBinding.wvWebFrame);
         WebView webView = mBinding.wvWebFrame;
         webView.setWebChromeClient(mFullScreenWebChromeClient);
         prepareWebView(webView, new LoaderClient(webView));
