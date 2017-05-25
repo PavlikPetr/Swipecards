@@ -36,7 +36,7 @@
     <string name="buying_store_purchase">Processing purchase in the iTunes Store</string>
     <string name="buying_tf_ack_sending">Sending purchase info to Topface</string>
     <string name="ok_label">Odnoklassniki</string>
-    <string name="autorefill">Auto refill</string>
+    <string name="autorefill">Auto-refill</string>
     <string name="coins">Coins</string>
     <string name="photo_info_deleted">Deleted</string>
     <string name="settings_block_main">Main</string>
@@ -178,6 +178,7 @@
     <string name="general_settings">Settings</string>
     <string name="general_vk_profile">VK</string>
     <string name="general_ok_profile">OK</string>
+    <string name="general_wrong_field_value">Incorrect value</string>
     <string name="auth_btn_vk">Vkontakte</string>
     <string name="auth_btn_fb">Facebook</string>
     <string name="auth_retry">Retry</string>
@@ -223,8 +224,8 @@
         <item quantity="one">To send an adoration, get %d more coin</item>
     </plurals>
     <plurals name="buying_unlock_likes_you_need_coins">
-        <item quantity="other">To be able to see who likes you, get %d more coins</item>
-        <item quantity="one">To be able to see who likes you, get %d more coin</item>
+        <item quantity="other">To be able to see who Likes you, get %d more coins</item>
+        <item quantity="one">To be able to see who Likes you, get %d more coin</item>
     </plurals>
     <plurals name="buying_leaders_you_need_coins">
         <item quantity="other">To be able to be seen by everyone, get %d more coins</item>
@@ -382,11 +383,12 @@
     <string name="settings_invalid_email">Invalid email</string>
     <string name="chat_write_message">Write a message</string>
     <string name="dating_message">Message…</string>
-    <string name="buying_sympathies">Purchase likes</string>
+    <string name="buying_sympathies">Purchase Likes</string>
     <string name="general_reconnect_social">Cannot connect to the social network. Please try again
         later.
     </string>
     <string name="general_block">Lock</string>
+    <string name="general_block_v2">Block</string>
     <string name="general_buying_disabled">At the moment this purchase is unavailable.</string>
     <string name="ban_flood_detected">You are making requests to the server too often. Please wait a
         few moments before continuing.
@@ -490,7 +492,7 @@
         stand out!</string>
     <string name="status_is_empty">You status is empty</string>
     <string name="you_dont_have_gifts_yet">You do not have any gifts yet</string>
-    <string name="buy_sympathies">Purchase likes</string>
+    <string name="buy_sympathies">Purchase Likes</string>
     <string name="upload_photos">Upload photos</string>
     <string name="user_baned">User has been banned.</string>
     <string name="general_choose_city">Select your city</string>
@@ -638,7 +640,7 @@
         <item quantity="zero">%d Likes</item>
         <item quantity="many">%d sympathies</item>
         <item quantity="other">%d Likes</item>
-        <item quantity="one">%d Likes</item>
+        <item quantity="one">%d Like</item>
     </plurals>
     <plurals name="popup_vip_messages">
         <item quantity="other">You have %d new Express-Delivery Messages</item>
@@ -756,7 +758,7 @@
     <string name="enter_text">Enter text</string>
     <string name="send_feedback">Send message</string>
     <string name="get_vip_free">Get free VIP-status</string>
-    <string name="buy_more_sympathies">Get more likes, become more popular</string>
+    <string name="buy_more_sympathies">Get more Likes, become more popular</string>
     <string name="transaction_code_help">If you send us a transaction code, this will help us
         complete your request by speeding up the processing time. Further information about an order
         can be found through %s.
@@ -907,6 +909,10 @@
     <string name="mutual_write_them_first">Write to them</string>
     <string name="mutual_no_mutuals">You do not have any mutual Likes yet</string>
     <string name="mutual_module_title">MUTUAL</string>
+    <string name="you_can_write_wom">Now you can write to her!</string>
+    <string name="you_can_write_man">Now you can write to him!</string>
+    <string name="see_next">See next</string>
+    <string name="go_to_messages">Go to Messages</string>
     <string name="buy_vip_dating_only">Just dating, pure and simple.</string>
     <string name="buy_vip_message">Don\'t wait for your Likes to come in, start a conversation!</string>
     <string name="buy_vip_write_tops">Write to Top profiles without restriction</string>
@@ -947,7 +953,7 @@
     <string name="seven_days_free">7 days free</string>
     <string name="free_vip">Free VIP-status!</string>
     <string name="no_more_ad">No in-app ads</string>
-    <string name="i_see_u_face">Find out who visited your page</string>
+    <string name="i_see_u_face">See and find out the faces of your fans and page visitors</string>
     <string name="buy_vip_write_anyone">Write to any girl even without a mutual Like</string>
     <string name="buy_vip_write_anyone_boy">Write to any guy even without a mutual Like</string>
     <string name="buy_vip_write_anyone_without_mutual">Write to anyone, even without a mutual Like</string>
@@ -1037,6 +1043,21 @@
     <string name="offers_free_vip">Free VIP</string>
     <string name="offers_free_coins">Free Coins</string>
     <string name="offers_free_likes">Free Likes</string>
+    <string name="fb_invitation_find_what_you_are_looking_for">Find who you\'re searching for</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Among more than 100 million people</string>
+    <string name="fb_invitation_intelligent_selection_filter">Smart selection filter</string>
+    <string name="fb_invitation_personalized_approach">Personalized approach</string>
+    <string name="fb_invitation_button_text">Login with Facebook</string>
+    <string name="onboarding_button_next">Next</string>
+    <string name="num_from_num">%1$s from %2$s</string>
+    <string name="onboarding_get_access">Get Access</string>
+    <string name="searching_couple_for_you">Pair searching based on your criteria</string>
+    <string name="rate">Rate</string>
+    <string name="rate_our_app">Rate our app!</string>
+    <string name="what_we_can_improve">Please write what we can improve</string>
+    <string name="we_are_glad_that_you_like">We\'re glad you like it!</string>
+    <string name="could_you_give_us_feedback">Would you kindly give us feedback on Google Play?</string>
+    <string name="send_rate_feedback">Leave feedback</string>
     <string name="permission_alert_button_allow">Go to</string>
     <string name="permission_alert_button_disallow">Decline</string>
     <string name="permission_alert_button_message">To upload photos you need to give the app access to your phone\'s memory via Settings</string>
@@ -1049,11 +1070,12 @@
     <string name="ninja_text_2">128-bit SSL Secured</string>
     <string name="ninja_text_4">Including the given sum, you agree to</string>
     <string name="ninja_text_link">the service\'s rules</string>
-    <string name="ninja_text_5">In 7 days VIP-status will automatically renew. Your card will be saved for future payments. You can cancel your subscription and unlink your card in Settings.</string>
+    <string name="ninja_text_6">In %s operation VIP-status will be automatically renewed. Your card will be saved for future payments. You can cancel your subscription and unlink your card in Settings.</string>
     <string name="ninja_text_trial_1">€1 will be charged and immediately returned to your account in order to verify your card.</string>
     <string name="ninja_text_trial_2">In %1$s a transaction will be completed for %2$d %3$s. Each month your subscription will be automatically renewed and your card saved for the upcoming payments. You can cancel your subscription and unlink your card in Settings.</string>
     <string name="ninja_settings_toolbar">Payments</string>
     <string name="ninja_vip_status_title">Subscription to VIP-status</string>
+    <string name="ninja_autofill_status_title">Autofill</string>
     <string name="ninja_cancel_vip_status">Cancel subscription</string>
     <string name="ninja_use_another_card">Use another card</string>
     <string name="ninja_delete_card">Delete card</string>
@@ -1069,8 +1091,8 @@
     <string name="payment_ninja_card_number">Card **%s is being used for payment</string>
     <string name="ninja_cvv_error">Incorrect CVV/CVC</string>
     <string name="ninja_trhu_error">Incorrect date</string>
-    <string name="ninja_number_error">Incorrect card number format</string>
-    <string name="ninja_email_error">Incorrect email format</string>
+    <string name="ninja_card_number_error">Invalid card number</string>
+    <string name="ninja_email_error">Incorrect e-mail format</string>
     <string name="use_card">Use card **%s</string>
     <string name="ninja_no_card_title">Add card</string>
     <string name="ninja_subscription_expiration">Active until %s</string>
@@ -1079,4 +1101,15 @@
     <string name="ninja_autofilling_activated">Active</string>
     <string name="ninja_support">Support</string>
     <string name="ninja_ask_to_delete_card_message">Are you sure?</string>
+    <string name="ninja_product_by_price">%1$s for %2$s</string>
+    <string name="ninja_trial_vip_product">Trial VIP-status</string>
+    <string name="ninja_vip_product_by_price">%1$s VIP for %2$s</string>
+    <string name="pn_email">E-mail</string>
+    <string name="write_her_something_first">Write her something first!</string>
+    <string name="write_him_first">Write to him first!</string>
+    <string name="write_to_her_only_vip">You can write to her but only with VIP status.</string>
+    <string name="write_to_him_only_vip">You can write to him but only with VIP status.</string>
+    <string name="get_vip">Get VIP</string>
+    <string name="payment_ninja_autofill_title">Autofill balance</string>
+    <string name="payment_ninja_autofill_link">Service Rules</string>
 </resources>

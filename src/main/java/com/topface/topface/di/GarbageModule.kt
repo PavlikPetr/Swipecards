@@ -1,5 +1,6 @@
 package com.topface.topface.di
 
+import com.topface.topface.chat.SuspiciousUserCache
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.RunningStateManager
 import dagger.Module
@@ -12,6 +13,10 @@ import javax.inject.Singleton
  */
 @Module
 class GarbageModule {
+
+    @Provides
+    @Singleton
+    fun providesSuspiciousUserCache() = SuspiciousUserCache()
 
     @Provides
     @Singleton

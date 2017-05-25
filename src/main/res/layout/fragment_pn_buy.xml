@@ -1,41 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel" />
+            type="com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragmentViewModel"/>
     </data>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/buttonsRecyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fadingEdge="none"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:paddingEnd="@dimen/buy_screen_products_list_padding"
             android:paddingLeft="@dimen/buy_screen_products_list_padding"
             android:paddingRight="@dimen/buy_screen_products_list_padding"
-            android:paddingStart="@dimen/buy_screen_products_list_padding"
-            android:requiresFadingEdge="none"
-            app:bindDataToCompositeAdapter="@{viewModel.data}"
-            tools:targetApi="ice_cream_sandwich" />
+            android:paddingStart="@dimen/buy_screen_products_list_padding">
 
-        <CheckBox
-            android:id="@+id/online_only"
-            style="@style/DatingFilterSwitch"
-            android:checked="@={viewModel.isChecked}"
-            android:enabled="true"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/buttonsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fadingEdge="none"
+                android:requiresFadingEdge="none"
+                app:bindDataToCompositeAdapterWithSmoothUpdate="@{viewModel.data}"
+                tools:targetApi="ice_cream_sandwich"/>
+
+            <CheckBox
+                style="@style/PaymentNinjaCardSwitch"
+                android:checked="@={viewModel.isChecked}"
+                android:clickable="true"
+                android:enabled="true"
+                android:text="@{viewModel.cardInfo}"
+                android:visibility="@{viewModel.isCheckBoxVisible}"/>
+
+            <LinearLayout
+                style="@style/PaymentNinjaAutoFillRoot"
+                android:visibility="@{viewModel.autofillVisibility}">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/payment_ninja_autofill_title"
+                        android:textColor="#737373"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onLinkClick()}"
+                        android:text="@string/payment_ninja_autofill_link"
+                        android:textColor="@color/ninja_color_accent"
+                        android:textSize="13sp"/>
+                </LinearLayout>
+                <!-- auto pay options and description -->
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:button="@null"
+                    android:checked="@={viewModel.isAutoFillEnabled}"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/green_checkbox_selector"
+                    android:drawableLeft="@null"
+                    android:drawableRight="@drawable/green_checkbox_selector"
+                    android:drawableStart="@null"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
-            android:text="@{viewModel.cardInfo}"
-            android:visibility="@{viewModel.isCheckBoxVisible}" />
-    </LinearLayout>
+            android:visibility="@{viewModel.progressVisibility}">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+
+    </FrameLayout>
 </layout>

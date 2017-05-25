@@ -41,7 +41,6 @@ public class FeedDialog extends FeedLike implements Parcelable {
     public static final int MESSAGE_POPULAR_STAGE_2 = 36; // Второй этап блокировки сообщений от популярного пользователя
     public static final int MESSAGE_AUTO_REPLY = 43; // Сообщение-автоответ на симпатию
 
-
     public static final int OUTPUT_USER_MESSAGE = 0;
     public static final int INPUT_FRIEND_MESSAGE = 1;
 

@@ -16,7 +16,7 @@ import com.topface.topface.ui.views.RangeSeekBar.OnRangeSeekBarChangeListener
 import com.topface.topface.utils.IActivityDelegate
 import java.util.*
 
-class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) : OnRangeSeekBarChangeListener<Int>{
+class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, filter: FilterData) : OnRangeSeekBarChangeListener<Int> {
 
     companion object {
         const val MIN_AGE = 16

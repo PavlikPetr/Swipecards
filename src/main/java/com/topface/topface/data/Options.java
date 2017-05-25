@@ -21,6 +21,7 @@ import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
 import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;
 import com.topface.topface.utils.Utils;
@@ -68,7 +69,6 @@ public class Options extends AbstractData {
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
-
     private String paymentwall;
 
     public String maxVersion = "2147483647";
@@ -199,14 +199,42 @@ public class Options extends AbstractData {
     public boolean peopleNearbyRedesignEnabled;
 
     /**
-     * {Boolean} datingRedesignEnabled - флаг определяющий показ нового экрана "Знакомства"
+     * {int} datingRedesign - версия дизайна экрана "Знакомства"
+     * 0 - дейтинг со скролящейся анкетой
+     * 1 - дейтинг без анкеты, с полупрозрачным тулбаром
+     * 2 - скролящаяся анкета с увеличенными кнопками и без fab (см тикет #55472)
      */
-    public Boolean datingRedesignEnabled = false;
+    public int datingRedesign = 0;
+
+    /**
+     * Some dating designs has translucent status bar
+     *
+     * @return true if current design has translucent status bar
+     */
+    public boolean isTranslucentDating() {
+        return datingRedesign == DatingFragmentFactory.V1_DESIGN;
+    }
 
     /**
      * {FBInviteSettings} - настройки для приглашения в приложение друзей из FB
      */
     public FBInviteSettings fbInviteSettings = new FBInviteSettings();
+
+    /**
+     * {RatePopupNewVersion}  - настройки для редизайна попапа оценки приложения
+     */
+    public RatePopupNewVersion ratePopupNewVersion = new RatePopupNewVersion();
+
+    /**
+     * {int} - номер версии чата, 0 - старая, 1 - новая и тд
+     */
+    private int chatRedesign;
+    public int getChatRedesign() {
+        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+        // todo убрать насильную инициализацию когда не нужен чат версии 1
+        chatRedesign = 0;
+        return 0;
+    }
 
     /**
      * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
@@ -354,7 +382,7 @@ public class Options extends AbstractData {
             // experiments init
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
-            datingRedesignEnabled = response.optBoolean("datingRedesignEnabled");
+            datingRedesign = response.optInt("datingRedesign");
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
@@ -382,7 +410,12 @@ public class Options extends AbstractData {
             if (appOfTheDayJsonObject != null) {
                 appOfTheDay = JsonUtils.optFromJson(appOfTheDayJsonObject.toString(), AppOfTheDay.class, new AppOfTheDay());
             }
+            JSONObject rateAppSplitJsonObject = response.optJSONObject("rateAppSplitPopup");
+            if (rateAppSplitJsonObject != null) {
+                ratePopupNewVersion = JsonUtils.fromJson(rateAppSplitJsonObject.toString(), RatePopupNewVersion.class);
+            }
 
+            chatRedesign = response.optInt("chatRedesign");
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");

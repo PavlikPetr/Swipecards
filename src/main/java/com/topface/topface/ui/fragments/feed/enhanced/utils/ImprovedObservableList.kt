@@ -11,6 +11,8 @@ import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import java.lang.ref.WeakReference
 import java.util.*
 
+typealias ChatData = ImprovedObservableList<Any>
+
 class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = ObservableArrayList())
     : ObservableList<T> by observableList {
 
@@ -44,7 +46,7 @@ class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = Obs
 }
 
 @BindingAdapter("bindDataToChatRecycler")
-fun bindDataToChatRecycler(recyclerView: RecyclerView, data: ImprovedObservableList<Any>) {
+fun bindDataToChatRecycler(recyclerView: RecyclerView, data: ChatData) {
     data.canAddListener = true
     if (!data.isListenerAdded()) {
         attachListener(recyclerView, data)
@@ -85,9 +87,9 @@ private fun <T : Any> attachListener(recyclerView: RecyclerView, data: ImprovedO
                 Debug.log("EPTA onItemRangeInserted " + " sublist size " + insertedData.size)
                 adapter.data.addAll(positionStart, insertedData)
                 adapter.notifyItemRangeInserted(positionStart, itemCount)
-                if (positionStart == 0) {
-                    recyclerView.layoutManager.scrollToPosition(0)
-                }
+            }
+            if (positionStart == 0) {
+                recyclerView.layoutManager.scrollToPosition(0)
             }
         }
 

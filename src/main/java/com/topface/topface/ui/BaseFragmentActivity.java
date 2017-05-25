@@ -170,7 +170,7 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         }
     }
 
-    protected boolean isDatingRedesignEnabled() {
+    protected boolean isTranslucentDating() {
         return false;
     }
 
@@ -192,8 +192,8 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
             overridePendingTransition(0, 0);
         }
 
-        if (!isDatingRedesignEnabled()) {
-            if (Utils.isKitKatWithNoTranslucent(isDatingRedesignEnabled())) {
+        if (!isTranslucentDating()) {
+            if (Utils.isKitKatWithNoTranslucent(isTranslucentDating())) {
                 // для kitkat с отключенной прозрачностью статус бара особые условия
                 // отключаем прозрачность насильно ибо она задана в теме
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -391,13 +391,6 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends Tr
         if (resultCode == Activity.RESULT_OK && !isBillingRequestProcessed) {
             if (requestCode == GoogleMarketApiManager.GOOGLE_AUTH_CODE) {
                 mGoogleAuthStarted = true;
-            }
-            //Вот такая херня сделана для того, чтобы result фэйсбуковского приложение обрабатывал
-            //AuthFragment. Потому что фб приложение обязательно должно стартовать из активити
-            //и ответ возвращать тоже в активити.
-            Fragment authFragment = getSupportFragmentManager().findFragmentByTag(AUTH_TAG);
-            if (authFragment != null) {
-                authFragment.onActivityResult(requestCode, resultCode, data);
             }
             super.onActivityResult(requestCode, resultCode, data);
         }

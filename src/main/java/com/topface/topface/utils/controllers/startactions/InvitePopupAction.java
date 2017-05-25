@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 
 import com.topface.topface.App;
-import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.dialogs.InvitesPopup;
 import com.topface.topface.utils.ContactsProvider;
 import com.topface.topface.utils.EasyTracker;

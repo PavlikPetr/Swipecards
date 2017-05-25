@@ -72,25 +72,30 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
             }
             mDeleteCardSubscription = getDeleteCardRequest()
                     .applySchedulers()
-                    .subscribe({ }, { sendCardListRequest() })
+                    .subscribe({
+                        // в случае успешного удаления карты необходимо обновить опции пользователя
+                        App.getUserOptionsRequest().exec()
+                        sendCardListRequest()
+                        sendUserSubscriptionsRequest()
+                    }, {
+                        sendCardListRequest()
+                        sendUserSubscriptionsRequest()
+                    })
         }
     }
 
     private fun cancelSubscriptionRequest(subscriptionInfo: SubscriptionInfo?) =
             subscriptionInfo?.let { subscription ->
-                if (subscription.type == 0) {
-                    // т.к. это подписка, то меняем статус, чтобы у юзера она была как отмененная
-                    getData().indexOf(subscription).takeIf { it != -1 }?.let {
-                        getData().set(it, subscription.apply { enabled = false })
-                    }
-
-                } else {
-                    // если это не подписка, то удаляем итем и забываем о нем
+                if (subscriptionInfo.type == SubscriptionInfo.SUBSCRIPTION_TYPE_AUTO_REFILL) {
                     getData().remove(subscription)
+                } else {
+                    getData().indexOf(subscription).takeIf { it != -1 }?.let {
+                        getData().set(it, subscription.copy().apply { enabled = false })
+                    }
                 }
-                mCancelSubscription = getCancelSubscriptionRequest()
+                mCancelSubscription = getCancelSubscriptionRequest(subscription.type)
                         .applySchedulers()
-                        .subscribe({ }, { sendUserSubscriptionsRequest() })
+                        .subscribe({ sendUserSubscriptionsRequest() }, { sendUserSubscriptionsRequest() })
             }
 
     private fun getSubscriptionsRequest() =
@@ -112,7 +117,7 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
 
     private fun getDefaultCardRequest() =
             Observable.fromEmitter<CardInfo>({ emitter ->
-                val sendRequest = DefaultCardRequest(App.getContext())
+                val sendRequest = PaymentNinjaGetCardRequest(App.getContext())
                 sendRequest.callback(object : DataApiHandler<CardInfo>(Looper.getMainLooper()) {
                     override fun success(data: CardInfo?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), CardInfo::class.java)
@@ -127,9 +132,9 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                 }).exec()
             }, Emitter.BackpressureMode.LATEST)
 
-    private fun getCancelSubscriptionRequest() =
+    private fun getCancelSubscriptionRequest(type: String) =
             Observable.fromEmitter<SimpleResponse>({ emitter ->
-                val sendRequest = CancelSubscriptionRequest(App.getContext())
+                val sendRequest = CancelSubscriptionRequest(App.getContext(), type)
                 sendRequest.callback(object : DataApiHandler<SimpleResponse>(Looper.getMainLooper()) {
                     override fun success(data: SimpleResponse?, response: IApiResponse?) = emitter.onNext(data)
                     override fun parseResponse(response: ApiResponse?) = JsonUtils.fromJson(response.toString(), SimpleResponse::class.java)
@@ -168,6 +173,8 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                         removeLoader()
                         replaceCardData(it)
                         addHelpItem()
+                        // отправляем запрос новых опций, т.к. успешно была добавлена карта
+                        App.getUserOptionsRequest().exec()
                     }
                 })
     }
@@ -228,6 +235,7 @@ class SettingsPaymentNinjaViewModel(private val mNavigator: FeedNavigator,
                 resultCode == Activity.RESULT_OK &&
                 data?.getBooleanExtra(NinjaAddCardActivity.CARD_SENDED_SUCCESFULL, false) ?: false) {
             sendCardListRequest()
+            sendUserSubscriptionsRequest()
         }
     }
 }

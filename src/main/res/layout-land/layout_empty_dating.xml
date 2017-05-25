@@ -54,7 +54,7 @@
 
                 <Button
                     android:id="@+id/btnClearFilterDating"
-                    style="@style/PopupBorderlessdButton"
+                    style="@style/PopupBorderlessButton"
                     android:onClick="@{() -> viewModel.onCleanDatingFilter()}"
                     android:text="@string/dating_empty_reset"/>
 

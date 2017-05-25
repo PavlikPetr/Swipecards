@@ -215,6 +215,7 @@
     <string name="general_settings">Настройки</string>
     <string name="general_vk_profile">ВК</string>
     <string name="general_ok_profile">ОК</string>
+    <string name="general_wrong_field_value">Неверный формат</string>
 
     <!-- Auth -->
     <string name="auth_btn_vk">ВКонтакте</string>
@@ -434,8 +435,7 @@
     <string name="rate_popup_set_rate">Поставить оценку</string>
     <string name="rate_popup_later">Спросить позже</string>
     <string name="rate_popup_cancel">Нет, спасибо</string>
-    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению
-    </string>
+    <string name="rate_popup_error">Вы должны указать сколько звезд вы ставите нашему приложению</string>
     <string name="feedback_popup_title">Вы поставили низкую оценку. Расскажите, что вам не нравится
         в приложении. Помогите нам стать лучше. Спасибо!
     </string>
@@ -498,6 +498,7 @@
         позже.
     </string>
     <string name="general_block">Блокировать</string>
+    <string name="general_block_v2">Заблокировать</string>
     <string name="general_buying_disabled">В данный момент покупка невозможна</string>
 
     <string name="ban_flood_detected">Вы слишком часто совершаете запросы к серверу. Для дальнейшего
@@ -1129,7 +1130,7 @@
     <string name="mutual_write_them_first">Напишите им</string>
     <string name="mutual_no_mutuals">У вас пока нет взаимных симпатий</string>
     <string name="mutual_module_title">ВЗАИМНО</string>
-    
+
     <string name="you_can_write_wom">Теперь вы можете написать ей!</string>
     <string name="you_can_write_man">Теперь вы можете написать ему!</string>
     <string name="see_next">Смотреть дальше</string>
@@ -1150,6 +1151,7 @@
     <string name="chat_activate_vip">Активировать VIP</string>
     <string name="chat_no_mutual_symphaty">Сейчас нет взаимной симпатии!</string>
     <string name="chat_with_no_mutual_buy_vip">Вы можете начать общение без взаимной симпатии, для этого активируйте VIP-статус</string>
+    <string name="buy_vip_to_chat">Начните общение без симпатии, для этого активируйте VIP.</string>
 
     <string name="about">О себе</string>
     <string name="moar_info">Вы можете узнать недостающую информацию!</string>
@@ -1299,6 +1301,26 @@
     <string name="offers_free_coins">Бесплатные монеты</string>
     <string name="offers_free_likes">Бесплатные симпатии</string>
 
+    <string name="fb_invitation_find_what_you_are_looking_for">Найдёте то, что ищете</string>
+    <string name="fb_invitation_amoung_more_than_100_mln_people">Среди более 100 миллионов людей</string>
+    <string name="fb_invitation_intelligent_selection_filter">Интеллектуальный механизм подбора</string>
+    <string name="fb_invitation_personalized_approach">Персонализированный подход</string>
+    <string name="fb_invitation_button_text">Войти через Facebook</string>
+
+    <!-- Onboarding experiment -->
+    <string name="onboarding_button_next">Далее</string>
+    <string name="num_from_num">%1$s из %2$s</string>
+    <string name="onboarding_get_access">Получи доступ</string>
+    <string name="searching_couple_for_you">Идет поиск пары по вашим критериям</string>
+
+    <!--ОЦенка приложения-->
+    <string name="rate">Оценить</string>
+    <string name="rate_our_app">Оцените наше приложение!</string>
+    <string name="what_we_can_improve">Напишите, пожалуйста, что нам улучшить</string>
+    <string name="we_are_glad_that_you_like">Мы рады, что вам нравится!</string>
+    <string name="could_you_give_us_feedback">Не могли бы вы оставить отзыв в Google Play?</string>
+    <string name="send_rate_feedback">Оставить отзыв</string>
+
     <string name="permission_alert_button_allow">Перейти</string>
     <string name="permission_alert_button_disallow">Отклонить</string>
     <string name="permission_alert_button_message">Для загрузки фото необходимо предоставить приложению доступ к памяти телефона через настройки</string>
@@ -1312,11 +1334,12 @@
     <string name="ninja_text_2">128-bit SSL Secured</string>
     <string name="ninja_text_4">Включая данную услугу, вы соглашаетесь с</string>
     <string name="ninja_text_link">правилами оказания услуги</string>
-    <string name="ninja_text_5">Через 7 дней действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
+    <string name="ninja_text_6">Через %s действие VIP-статуса будет автоматически продлено. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках.</string>
     <string name="ninja_text_trial_1">У вас спишется и сразу вернётся €1 для того, чтобы подтвердить действительность карты.</string>
     <string name="ninja_text_trial_2">Через %1$s будет проведена транзакция на %2$d %3$s, каждый месяц подписка будет автоматически обновляться. Карта будет сохранена для последующих платежей. Отменить подписку и отвязать карту можно в настройках</string>
     <string name="ninja_settings_toolbar">Платежи</string>
     <string name="ninja_vip_status_title">Подписка на VIP-статус</string>
+    <string name="ninja_autofill_status_title">Автопополнение</string>
     <string name="ninja_cancel_vip_status">Отменить подписку</string>
     <string name="ninja_use_another_card">Использовать другую карту</string>
     <string name="ninja_delete_card">Удалить карту</string>
@@ -1335,8 +1358,8 @@
     <string name="payment_ninja_card_number">Для оплаты используется карта **%s</string>
     <string name="ninja_cvv_error">Неверный код</string>
     <string name="ninja_trhu_error">Неверная дата</string>
-    <string name="ninja_number_error">Неверный формат номера карты</string>
-    <string name="ninja_email_error">Неверный формат email</string>
+    <string name="ninja_card_number_error">Неверный номер карты</string>
+    <string name="ninja_email_error">Неверный формат e-mail</string>
     <string name="use_card">Использовать карту **%s</string>
     <string name="ninja_no_card_title">Добавить карту</string>
     <string name="ninja_subscription_expiration">Активна до %s</string>
@@ -1348,4 +1371,14 @@
     <string name="ninja_product_by_price">%1$s за %2$s</string>
     <string name="ninja_trial_vip_product">Триальный VIP-статус</string>
     <string name="ninja_vip_product_by_price">%1$s VIP за %2$s</string>
+    <string name="pn_email">E-mail</string>
+
+    <!--mutual stub for chat-->
+    <string name="write_her_something_first">Напиши ей что-нибудь первый!</string>
+    <string name="write_him_first">Напиши ему первой!</string>
+    <string name="write_to_her_only_vip">Вы можете написать ей, но только с VIP.</string>
+    <string name="write_to_him_only_vip">Вы можете написать ему, но только с VIP.</string>
+    <string name="get_vip">Получить VIP</string>
+    <string name="payment_ninja_autofill_title">Автопополнение счета</string>
+    <string name="payment_ninja_autofill_link">Правила оказания услуги</string>
 </resources>

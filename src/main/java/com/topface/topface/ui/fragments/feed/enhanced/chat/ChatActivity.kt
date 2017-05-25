@@ -1,22 +1,35 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import com.topface.framework.utils.Debug
 import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.data.FeedUser
 import com.topface.topface.data.experiments.FeedScreensIntent
 import com.topface.topface.databinding.AcFragmentFrameBinding
 import com.topface.topface.databinding.ToolbarViewBinding
+import com.topface.topface.di.ComponentManager
+import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.di.chat.ChatModule
+import com.topface.topface.state.EventBus
 import com.topface.topface.ui.CheckAuthActivity
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoActionHolder
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
 import com.topface.topface.ui.views.toolbar.view_models.CustomTitleSubTitleToolbarViewModel
+import com.topface.topface.utils.AddPhotoHelper
+import com.topface.topface.utils.Utils
+import com.topface.topface.utils.delegated_properties.objectArg
 import com.topface.topface.utils.extensions.finishWithResult
 import com.topface.topface.utils.extensions.goneIfEmpty
 import com.topface.topface.utils.rx.safeUnsubscribe
 import rx.Subscription
+import javax.inject.Inject
 
 class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
 
@@ -27,6 +40,10 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
         const val DISPATCHED_GIFTS = "com.topface.topface.ui.ChatActivity_dispatched_gifts"
     }
 
+    @Inject lateinit var eventBus: EventBus
+    @Inject lateinit var addPhotoHelper: AddPhotoHelper
+
+
     private var mTakePhotoSubscription: Subscription? = null
 
     override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarViewBinding = binding.toolbarInclude
@@ -34,22 +51,47 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     override fun getLayout() = R.layout.ac_fragment_frame
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
+        ComponentManager.obtainComponent(ChatComponent::class.java) {
+            App.getAppComponent().add(ChatModule(this, user))
+        }.inject(this)
         super.onCreate(savedInstanceState)
-        App.getAppComponent().eventBus().apply {
-            mTakePhotoSubscription = getObservable(TakePhotoActionHolder::class.java)
-                    .filter { it != null && it.action == TakePhotoPopup.ACTION_CANCEL }
-                    .subscribe({ finishWithResult(RESULT_CANCELED) }, { Debug.error("Take photo popup actions subscription catch error", it) })
+        user?.let {
+            onToolbarSettings(ToolbarSettingsData(it.nameAndAge,
+                    it.city.name, isOnline = it.online))
+        }
+        addPhotoHelper.setOnResultHandler(object : Handler() {
+            override fun handleMessage(msg: Message) {
+                AddPhotoHelper.handlePhotoMessage(msg)
+            }
+        })
+        mTakePhotoSubscription = eventBus.getObservable(TakePhotoActionHolder::class.java)
+                .filter { it != null && it.action == TakePhotoPopup.ACTION_CANCEL }
+                .subscribe({ finishWithResult(RESULT_CANCELED) }, { Debug.error("Take photo popup actions subscription catch error", it) })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Utils.activityResultToNestedFragments(supportFragmentManager, requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_CANCELED) {
+            finish()
+        } else {
+            addPhotoHelper.processActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun onDestroy() {
+        ComponentManager.releaseComponent(ChatComponent::class.java)
+        addPhotoHelper.releaseHelper()
         mTakePhotoSubscription.safeUnsubscribe()
         super.onDestroy()
     }
 
     override fun getFragmentTag(): String = ChatFragment::class.java.simpleName
 
-    override fun createFragment() = ChatFragment()
+    override fun createFragment() = ChatFragment().apply {
+        arguments = intent.extras
+    }
 
     override fun generateToolbarViewModel(toolbar: ToolbarViewBinding): BaseToolbarViewModel {
         return CustomTitleSubTitleToolbarViewModel(toolbar, this)

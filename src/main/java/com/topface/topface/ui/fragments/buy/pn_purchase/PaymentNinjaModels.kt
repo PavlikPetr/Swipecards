@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.buy.pn_purchase
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.topface.topface.utils.Utils
 import java.util.*
 
 /**
@@ -21,6 +22,20 @@ class BuyScreenCoinsSection
 class BuyScreenProductUnavailable
 
 /**
+ * Test purchase settings item
+ *
+ * @param - test purchases switch current state
+ */
+data class TestPurchaseSwitch(var isChecked: Boolean)
+
+/**
+ * 3DSecure purchase settings item
+ *
+ * @param - 3ds purchases switch current state
+ */
+data class ThreeDSecurePurchaseSwitch(var isChecked: Boolean)
+
+/**
  * Модель продукта Payment Ninja
  *
  * @param id - id мобильного продукта
@@ -38,13 +53,16 @@ class BuyScreenProductUnavailable
  * @param divider - Возвращает делитель для подсчета суммы, к примеру неделя- 7/30 месяца = 0.23
  * @param typeOfSubscription - 0- не подписка 1- автопополнение (когда кончится) 2- подписка (раз в месяц)
  * @param currencyCode - строковый код валюты
- * @param infoOfSubscription - Инфо о подписке
+ * @param subscriptionInfo - Инфо о подписке
+ * @param title - текст для кнопки покупки
  */
-data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTemplate: String, var totalPriceTemplate: String,
-                               var isSubscription: Boolean, var period: Int, var price: Int, var type: String,
-                               var value: Int, var trialPeriod: Int, var displayOnBuyScreen: Boolean,
-                               var durationTitle: String, var divider: Float, var typeOfSubscription: Int,
-                               val currencyCode: String, var subscriptionInfo: PaymentNinjaSubscriptionInfo) : Parcelable {
+data class PaymentNinjaProduct(var id: String = Utils.EMPTY, var showType: Int = 0, var titleTemplate: String = Utils.EMPTY,
+                               var totalPriceTemplate: String = Utils.EMPTY, var isSubscription: Boolean = false, var period: Int = 0,
+                               var price: Int = 0, var type: String = Utils.EMPTY, var value: Int = 0, var trialPeriod: Int = 0,
+                               var displayOnBuyScreen: Boolean = false, var durationTitle: String = Utils.EMPTY,
+                               var divider: Float = 0f, var typeOfSubscription: Int = 0, val currencyCode: String = Utils.EMPTY,
+                               var subscriptionInfo: PaymentNinjaSubscriptionInfo = PaymentNinjaSubscriptionInfo(),
+                               var isAutoRefilled: Boolean = false, val title: String = Utils.EMPTY) : Parcelable {
 
     constructor(source: Parcel) : this(
             source.readString(),
@@ -62,7 +80,9 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
             source.readFloat(),
             source.readInt(),
             source.readString(),
-            source.readParcelable(PaymentNinjaSubscriptionInfo::class.java.classLoader)
+            source.readParcelable(PaymentNinjaSubscriptionInfo::class.java.classLoader),
+            source.readByte().toInt() == 1,
+            source.readString()
     )
 
     override fun writeToParcel(dest: Parcel?, flags: Int) =
@@ -83,6 +103,8 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
                 it.writeInt(typeOfSubscription)
                 it.writeString(currencyCode)
                 it.writeParcelable(subscriptionInfo, flags)
+                it.writeByte((if (isAutoRefilled) 1 else 0).toByte())
+                it.writeString(title)
             } ?: Unit
 
     override fun describeContents() = 0
@@ -101,7 +123,7 @@ data class PaymentNinjaProduct(var id: String, var showType: Int, var titleTempl
  * @param text - Текст с опяснением услуги автопополнения
  * @param url - Ссылка на документацию о правилах по оказанию услуги
  */
-data class PaymentNinjaSubscriptionInfo(var text: String, var url: String) : Parcelable {
+data class PaymentNinjaSubscriptionInfo(var text: String = Utils.EMPTY, var url: String = Utils.EMPTY) : Parcelable {
 
     constructor(source: Parcel) : this(source.readString(), source.readString())
 
@@ -126,7 +148,7 @@ data class PaymentNinjaSubscriptionInfo(var text: String, var url: String) : Par
  *
  * @param products - Список продуктов
  */
-data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct>) {
+data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct> = arrayOf()) {
     override fun equals(other: Any?) =
             other?.let { (it as? PaymentNinjaProductsList)?.let { Arrays.equals(it.products, products) } ?: false } ?: false
 

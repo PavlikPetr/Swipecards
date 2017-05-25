@@ -730,7 +730,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         if (!item.user.isEmpty()) {
             FeedUser user = item.user;
             Intent intent = ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city.name
-                    , null, user.photo, false, item.type, user.banned);
+                    , null, user.photo, false, item.type, user.inBlacklist, user.bookmarked, user.banned);
             startActivityForResult(intent, ChatActivity.REQUEST_CHAT);
         }
     }
@@ -1166,9 +1166,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ChatActivity.REQUEST_CHAT) {
-            onChatActivityResult(resultCode, data);
-        }
+        onChatActivityResult(resultCode, data);
     }
 
     protected void onChatActivityResult(int resultCode, Intent data) {

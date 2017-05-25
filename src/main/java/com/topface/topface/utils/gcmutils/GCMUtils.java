@@ -192,6 +192,9 @@ public class GCMUtils {
         } else if (getType(data) == GCM_TYPE_HAS_FEED_AD) {
             LocalBroadcastManager.getInstance(App.getContext()).sendBroadcast(new Intent(TabbedFeedFragment.HAS_FEED_AD));
             return false;
+        } else if (!App.getAppConfig().getQuestionnaireData().isEmpty()) {
+            Debug.log("GCM: we can not display a notification while the user answers questions in the questionnaire");
+            return false;
         }
         try {
             return showNotification(data, context, updateUrl);
@@ -364,9 +367,10 @@ public class GCMUtils {
                     i = new Intent(context, NavigationActivity.class);
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                 } else {
                     return ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
-                            null, null, true, null, false);
+                            null, null, true, null, false, false, false);
                 }
                 return i;
             }
@@ -407,6 +411,7 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NavigationActivity.INTENT_CLEAN_COMPONENTS, true);
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
                     i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_VISITORS));
                 }

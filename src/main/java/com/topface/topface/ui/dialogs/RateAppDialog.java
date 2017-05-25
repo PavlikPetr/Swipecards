@@ -180,15 +180,15 @@ public class RateAppDialog extends AbstractDialogFragment implements View.OnClic
                 App.PREFERENCES_TAG_SHARED,
                 Context.MODE_PRIVATE
         );
-        long date_start = preferences.getLong(RATING_POPUP, -1);
+        long dateStart = preferences.getLong(RATING_POPUP, -1);
         // first time do not show rate popup
-        if (date_start == -1) {
+        if (dateStart == -1) {
             saveRatingPopupStatus(System.currentTimeMillis());
             return false;
         }
-        long date_now = System.currentTimeMillis();
-        return (date_start != 0
-                && (date_now - date_start > ratePopupTimeout)
+        long dateNow = System.currentTimeMillis();
+        return (dateStart != 0
+                && (dateNow - dateStart > ratePopupTimeout)
                 && ratePopupEnabled);
     }
 }

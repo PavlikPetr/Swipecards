@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenuViewModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:colorBackground="@color/bg_white"
+        android:minWidth="200dp"
+        android:orientation="vertical"
+        android:windowIsFloating="true"
+        android:windowIsTranslucent="true">
+
+        <TextView
+            style="@style/ChatMenuPopup"
+            android:background="@drawable/menu_popup_top"
+            android:onClick="@{() -> viewModel.copyMessage()}"
+            android:text="@string/general_copy_title"/>
+
+        <TextView
+            style="@style/ChatMenuPopup"
+            android:background="@drawable/menu_popup_center"
+            android:onClick="@{() -> viewModel.complain()}"
+            android:text="@string/general_complain"
+            android:visibility="@{viewModel.complainItemVisibility}"/>
+
+        <TextView
+            style="@style/ChatMenuPopup"
+            android:background="@drawable/menu_popup_bottom"
+            android:onClick="@{() -> viewModel.deleteMessage()}"
+            android:text="@string/general_delete_title"/>
+
+    </LinearLayout>
+</layout>

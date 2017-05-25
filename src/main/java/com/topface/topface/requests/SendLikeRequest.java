@@ -3,6 +3,8 @@ package com.topface.topface.requests;
 import android.content.Context;
 import android.support.annotation.IntDef;
 
+import com.topface.topface.App;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,6 +42,9 @@ public class SendLikeRequest extends ConfirmedApiRequest {
 
     public SendLikeRequest(Context context, int userId, int mutualId, @Place int place, boolean blockUnconfirmed) {
         super(context, blockUnconfirmed);
+        // в случае отправки любого лайка/восхищения перестаем считать этого пользователя "подозрительным"
+        App.getAppComponent().suspiciousUserCache().setUserIsSuspicious(userId, false);
+
         this.mutualid = mutualId;
         this.userid = userId;
         this.place = place;

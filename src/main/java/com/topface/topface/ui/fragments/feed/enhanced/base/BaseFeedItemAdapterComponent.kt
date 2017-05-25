@@ -22,6 +22,7 @@ abstract class BaseFeedItemAdapterComponent<T : ViewDataBinding, D : FeedItem>(v
     override fun bind(binding: T, data: D?, position: Int) {
         data?.let {
             attachViewModel(binding, it)
+            binding.executePendingBindings()
             handleHighlight(binding, data)
             with(binding.root) {
                 setOnClickListener {

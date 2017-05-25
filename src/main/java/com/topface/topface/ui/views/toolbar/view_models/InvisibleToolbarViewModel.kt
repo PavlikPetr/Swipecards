@@ -9,6 +9,6 @@ import com.topface.topface.databinding.ToolbarViewBinding
  */
 class InvisibleToolbarViewModel(binding: ToolbarViewBinding) : BaseToolbarViewModel(binding) {
     init {
-        visibility.set(View.GONE)
+        rootViewVisibility.set(View.GONE)
     }
 }

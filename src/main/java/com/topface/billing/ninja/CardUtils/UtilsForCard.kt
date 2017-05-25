@@ -1,6 +1,6 @@
 package com.topface.billing.ninja.CardUtils
 
-import com.topface.billing.ninja.CardType
+import com.topface.billing.ninja.fragments.add_card.CardType
 import java.util.*
 
 object UtilsForCard {
@@ -18,67 +18,25 @@ object UtilsForCard {
                     "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
                     ")+"
 
+//    val cardBrands = hashMapOf(
+//            Regex("^[2]+.*") to CardType.MIR,
+//            Regex("^[4]+.*") to CardType.VISA,
+//            Regex("^5[1-5]+.*") to CardType.MASTERCARD,
+//            Regex("^3[47]+.*") to CardType.AMERICAN_EXPRESS,
+//            Regex("^30([0-5]|[68][0-9])+.*") to CardType.DINERS,
+//            Regex("^(6011|65\\d{2})+.*") to CardType.DISCOVER,
+//            Regex("^35([2-8][0-9])+.*") to CardType.JCB,
+//            Regex("") to CardType.DEFAULT)
+
     val cardBrands = hashMapOf(
-            Regex("^[2]+.*") to CardType.MIR,
             Regex("^[4]+.*") to CardType.VISA,
-            Regex("^5[1-5]+.*") to CardType.MASTERCARD,
-            Regex("^3[47]+.*") to CardType.AMERICAN_EXPRESS,
-            Regex("^3(?:0[0-5]|[68][0-9])+.*") to CardType.DINERS,
-            Regex("^(6011|65\\d{2})+.*") to CardType.DISCOVER,
-            Regex("^35([2-8][0-9])+.*") to CardType.JCB,
-            Regex("") to CardType.DEFAULT)
-
-    fun formattingForCardNumber(inputCardNumber: String): String {
-        var text: String
-        val formattingText = inputCardNumber.replace(SPACE_DIVIDER, "")
-        if (formattingText.length >= 4) {
-
-            text = formattingText.substring(0, 4)
-
-            if (formattingText.length >= 8) {
-                text += SPACE_DIVIDER + formattingText.substring(4, 8)
-            } else if (formattingText.length > 4) {
-                text += SPACE_DIVIDER + formattingText.substring(4)
-            }
-
-            if (formattingText.length >= 12) {
-                text += SPACE_DIVIDER + formattingText.substring(8, 12)
-            } else if (formattingText.length > 8) {
-                text += SPACE_DIVIDER + formattingText.substring(8)
-            }
-
-            if (formattingText.length >= 16) {
-                text += SPACE_DIVIDER + formattingText.substring(12)
-            } else if (formattingText.length > 12) {
-                text += SPACE_DIVIDER + formattingText.substring(12)
-            }
-
-            return text
-
-        } else {
-            text = formattingText.trim { it <= ' ' }
-        }
-
-        return text
-    }
-
-    fun setTrhuDivider(stre: String): String {
-
-        val expiryString = stre.replace(UtilsForCard.SLASH_DIVIDER, "")
-        var str = ""
-        if (expiryString.length >= 2) {
-            val mm = expiryString.substring(0, 2)
-            str = mm
-
-            if (expiryString.length > 2) {
-                val yy = expiryString.substring(2)
-                str = mm + UtilsForCard.SLASH_DIVIDER + yy
-            }
-        } else {
-            str = expiryString
-        }
-        return str
-    }
+            Regex("^(6759[0-9]{2})[0-9]+.*") to CardType.MASTERCARD,
+            Regex("^(50[0-9]{4})[0-9]+.*") to CardType.MASTERCARD,
+            Regex("^5[6-9][0-9]+.*") to CardType.MASTERCARD,
+            Regex("^6[0-9]+.*") to CardType.MASTERCARD,
+            Regex("^5[1-5][0-9]+.*") to CardType.MASTERCARD,
+            Regex("^2(22[1-9]|2[3-9]|[3-6]|7[0-1]|720+.*)") to CardType.MASTERCARD
+    )
 
     fun isValidTrhu(trhu: String): Boolean {
         val trhuText = trhu.replace(SLASH_DIVIDER, "")
@@ -90,7 +48,7 @@ object UtilsForCard {
         val currentYear = calendar.get(Calendar.YEAR)
         val millenium = currentYear / 1000 * 1000
 
-        val currentYearValid = if (yearInt + millenium > currentYear) true else (yearInt + millenium == currentYear) && (mounthInt > calendar.get(Calendar.MONTH) + 1)
+        val currentYearValid = if (yearInt + millenium > currentYear) true else (yearInt + millenium == currentYear) && (mounthInt > calendar.get(Calendar.MONTH))
 
         return isDigits(trhuText) && (mounthInt in 1..12) && currentYearValid
     }
@@ -118,7 +76,6 @@ object UtilsForCard {
 
     }
 
-    // todo дополнительная проверка "а не текст ли ты часом?"
     fun isDigits(string: String) = string.matches(Regex("\\d+"))
 
     fun getCardType(type: String): CardType? =

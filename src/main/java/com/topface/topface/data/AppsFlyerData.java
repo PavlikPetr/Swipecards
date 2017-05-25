@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.appsflyer.AppsFlyerConversionListener;
 import com.appsflyer.AppsFlyerLib;
+import com.topface.topface.App;
+import com.topface.topface.requests.ReferrerLogRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,6 +67,7 @@ public class AppsFlyerData implements SerializableToJson {
         @Override
         public void onInstallConversionDataLoaded(Map<String, String> stringStringMap) {
             holder.putAll(stringStringMap);
+            sendReferrerLog(App.getContext());
         }
 
         @Override
@@ -73,6 +76,16 @@ public class AppsFlyerData implements SerializableToJson {
 
         @Override
         public void onAppOpenAttribution(Map<String, String> stringStringMap) {
+        }
+
+        private void sendReferrerLog(Context context) {
+            String referralData = null;
+            try {
+                referralData = new AppsFlyerData(context).toJsonWithConversions(holder).toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            new ReferrerLogRequest(context, null, referralData).exec();
         }
     }
 

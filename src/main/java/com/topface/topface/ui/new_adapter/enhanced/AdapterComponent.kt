@@ -2,6 +2,7 @@ package com.topface.topface.ui.new_adapter.enhanced
 
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
+import com.topface.framework.utils.Debug
 
 /** Интерфейс компонента для адаптера
  * @param T item binding
@@ -21,7 +22,7 @@ abstract class AdapterComponent<T : ViewDataBinding, in D> {
         try {
             bind(bindingClass.cast(holder?.binding), data as? D, position)
         } catch (ex: ClassCastException) {
-
+            Debug.log("FUCKING_CHAT " + ex.message)
         }
     }
 
@@ -32,7 +33,7 @@ abstract class AdapterComponent<T : ViewDataBinding, in D> {
         try {
             recycle(bindingClass.cast(holder?.binding), data as? D, position)
         } catch (ex: ClassCastException) {
-
+            Debug.log("FUCKING_CHAT " + ex.message)
         }
     }
 

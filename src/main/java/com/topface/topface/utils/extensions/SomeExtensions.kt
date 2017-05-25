@@ -7,6 +7,7 @@ import android.view.View
 
 import com.topface.topface.ui.settings.payment_ninja.CardInfo
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo
+import java.net.URLEncoder
 
 /**
  * Помойка расширений
@@ -15,7 +16,7 @@ import com.topface.topface.ui.settings.payment_ninja.PaymentInfo
 
 fun CharSequence?.goneIfEmpty() = if (TextUtils.isEmpty(this)) View.GONE else View.VISIBLE
 
-fun Activity?.finishWithResult(resultCode: Int) = this?.let{
+fun Activity?.finishWithResult(resultCode: Int) = this?.let {
     setResult(resultCode)
     finish()
 }
@@ -57,15 +58,17 @@ fun String?.toByteSafe(): Byte {
 /**
  * Проверка карты
  */
-fun CardInfo.isAvailable() =
-        this.lastDigit.isNotEmpty() && this.type.isNotEmpty()
+fun CardInfo?.isAvailable() =
+        this?.lastFour?.isNotEmpty() ?: false
 
 /**
  * Проверка карты
  */
 fun PaymentInfo.isCradAvailable() =
-        CardInfo(this.lastDigits, this.type).isAvailable()
+        CardInfo(lastFour = this.lastDigits, type = this.type).isAvailable()
 
 fun Parcel.writeBoolean(bool: Boolean) = writeByte((if (bool) 1 else 0).toByte())
 
 fun Parcel.readBoolean() = readByte().toInt() == 1
+
+fun String.encodeUTF8() = URLEncoder.encode(this, "UTF-8")

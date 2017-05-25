@@ -130,16 +130,13 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
         }
         LocalBroadcastManager.getInstance(context)
                 .registerReceiver(mUpdateActionsReceiver, IntentFilter(RetryRequestReceiver.RETRY_INTENT))
+
     }
 
     private fun isNeedTakePhoto() = !App.getConfig().userConfig.isUserAvatarAvailable
             && App.get().profile.photo == null
 
-    fun showChat() = if (App.get().profile.premium) {
-        mNavigator.showChat(currentUser, null)
-    } else {
-        mNavigator.showPurchaseVip("Dating")
-    }
+    fun showChat() = mNavigator.showChat(currentUser, null)
 
     fun skip() = currentUser?.let {
         if (!it.skipped && !it.rated) {
@@ -294,12 +291,14 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     }
 
     private fun showProgress() {
+        mDatingButtonsEvents.onShowProgress()
         isDatingProgressBarVisible.set(View.VISIBLE)
         isDatingButtonsVisible.set(View.INVISIBLE)
         mLockDatingButtonsVisibility = true
     }
 
     private fun hideProgress() {
+        mDatingButtonsEvents.onHideProgress()
         mLockDatingButtonsVisibility = false
         isDatingProgressBarVisible.set(View.GONE)
         isDatingButtonsVisible.set(View.VISIBLE)

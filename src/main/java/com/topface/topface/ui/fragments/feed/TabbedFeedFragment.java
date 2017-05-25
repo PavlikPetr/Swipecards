@@ -27,10 +27,15 @@ import com.topface.topface.banners.ad_providers.IRefresher;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.TabbedFeedPageAdapter;
+import com.topface.topface.ui.dialogs.new_rate.RateAppFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
+import com.topface.topface.ui.fragments.ChatFragment;
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.TabLayoutCreator;
+import com.topface.topface.utils.IActivityDelegate;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -71,6 +76,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
 
         @Override
         public void onPageSelected(int position) {
+            setLastOpenedPage(position);
             if (mTabLayoutCreator != null) {
                 mTabLayoutCreator.setTabTitle(position);
             }
@@ -282,6 +288,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Utils.activityResultToNestedFragments(getChildFragmentManager(), requestCode, resultCode, data);
+        if (requestCode == ChatActivity.REQUEST_CHAT && data != null && data.hasExtra(ChatFragment.MUTUAL)) {
+            if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.Companion.isApplicable(App.get().getOptions().ratePopupNewVersion)) {
+                (new FeedNavigator((IActivityDelegate) getActivity())).showRateAppFragment();
+            }
+        }
     }
 
     @Override

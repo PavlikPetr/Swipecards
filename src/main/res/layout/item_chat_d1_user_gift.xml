@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.items.GiftViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/item_chat_d1_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bind:dividerText="@{viewModel.dividerText}"
+            bind:isDividerVisible="@{viewModel.isDividerVisible}" />
+
+        <ImageView
+            style="@style/ChatImage.Gift.Holo"
+            android:layout_gravity="right|top"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/chat_item_d1_bg_user"
+            bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
+            bind:remoteSrcGlide="@{viewModel.link}"
+            tools:src="@drawable/feed_banned_female_avatar" />
+    </LinearLayout>
+</layout>

@@ -20,7 +20,6 @@ import com.topface.topface.ui.edit.filter.viewModel.FilterViewModel;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.IActivityDelegate;
-import com.topface.topface.utils.extensions.ResourceExtensionKt;
 
 public class FilterFragment extends AbstractEditFragment {
 

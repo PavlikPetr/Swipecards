@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.fans
 
 import android.os.Bundle
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.api.responses.FeedBookmark
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.feed.base.BaseFeedModule
@@ -21,6 +22,9 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
         const val SCREEN_TYPE = "Fans"
     }
 
+    override val actionModeMenu: Int
+        get() = R.menu.feed_context_menu_fans
+
     override val mViewModel by lazy {
         ComponentManager.obtainComponent(FansViewModelsComponent::class.java) {
             DaggerFansViewModelsComponent.builder().appComponent(App.getAppComponent()).build()
@@ -33,13 +37,12 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        ComponentManager.releaseComponent(FansComponent::class.java)
         ComponentManager.obtainComponent(FansComponent::class.java) {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
-                    .add(FansModule(this@FansFragment), BaseFeedModule(this@FansFragment)).apply {
-                inject(this@FansFragment)
-            }
-        }
+                    .add(FansModule(this@FansFragment), BaseFeedModule(this@FansFragment))
+        }.inject(this@FansFragment)
+        super.onCreate(savedInstanceState)
     }
 
     override fun terminateImmortalComponent() {
