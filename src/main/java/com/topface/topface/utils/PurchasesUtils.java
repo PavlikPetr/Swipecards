@@ -10,7 +10,6 @@ import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.requests.PurchaseRequest;
 import com.topface.topface.utils.extensions.ProductExtensionKt;
-import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.FbAuthorizer;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
@@ -37,7 +36,7 @@ public class PurchasesUtils {
         if (!isTestPurchase && !isTrial) {
             new PurchasesEvents().purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
         }
-        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK) && !isTestPurchase && !isTrial) {
+        if (!isTestPurchase && !isTrial) {
             FbAuthorizer.initFB();
             AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
             Bundle bundle = new Bundle();
