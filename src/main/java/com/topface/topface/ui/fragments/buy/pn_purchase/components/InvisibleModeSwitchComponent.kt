@@ -3,10 +3,8 @@ package com.topface.topface.ui.fragments.buy.pn_purchase.components
 import com.topface.topface.R
 import com.topface.topface.api.IApi
 import com.topface.topface.databinding.EditorSwitchBinding
-import com.topface.topface.ui.fragments.buy.pn_purchase.TestPurchaseSwitch
-import com.topface.topface.ui.fragments.buy.pn_purchase.EditorViewModel
 import com.topface.topface.ui.fragments.buy.pn_purchase.InvisibleModeSwitch
-import com.topface.topface.ui.fragments.buy.pn_purchase.IvisibleModeViewModel
+import com.topface.topface.ui.fragments.buy.pn_purchase.InvisibleModeViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 /**
@@ -19,10 +17,10 @@ class InvisibleModeSwitchComponent(private var mApi: IApi) : AdapterComponent<Ed
     override val bindingClass: Class<EditorSwitchBinding>
         get() = EditorSwitchBinding::class.java
 
-    private var mViewModel: IvisibleModeViewModel? = null
+    private var mViewModel: InvisibleModeViewModel? = null
 
     override fun bind(binding: EditorSwitchBinding, data: InvisibleModeSwitch?, position: Int) {
-        mViewModel = IvisibleModeViewModel(data?.isChecked ?: false, mApi)
+        mViewModel = InvisibleModeViewModel(mApi)
         binding.viewModel = mViewModel?.viewModel
     }
 

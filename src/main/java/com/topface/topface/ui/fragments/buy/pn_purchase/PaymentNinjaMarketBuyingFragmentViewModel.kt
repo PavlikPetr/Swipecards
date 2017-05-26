@@ -137,7 +137,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
 
     // генерим итемы для заглушки когда юзер уже имеет Вип
     private fun initStub() {
-        data.replaceData(arrayListOf(InvisibleModeSwitch(false), BlackListItem()))
+        data.replaceData(arrayListOf(InvisibleModeSwitch(), BlackListItem()))
     }
 
     private fun initProducts() {

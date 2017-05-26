@@ -157,10 +157,8 @@ data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct> = a
 
 /**
  * Invisible mode item
- *
- * @param - invisible mode switch current state
  */
-data class InvisibleModeSwitch(var isChecked: Boolean)
+class InvisibleModeSwitch
 
 // Black list item on Payment Ninja purchase screen
 class BlackListItem
