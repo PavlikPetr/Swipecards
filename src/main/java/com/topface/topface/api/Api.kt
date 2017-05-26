@@ -1,5 +1,6 @@
 package com.topface.topface.api
 
+import android.location.Location
 import android.os.Bundle
 import com.topface.scruffy.ScruffyManager
 import com.topface.topface.api.requests.*
@@ -47,4 +48,8 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
 
     override fun execDeleteMessage(item: HistoryItem) = DeleteMessageRequest(item.id).exec()
 
+    override fun callSetProfile(name: String, age: Int, sex: Int, location: Location?, cityid: Int,
+                                status: String, background: Int, invisible: Boolean?, xstatus: Int,
+                                isAutoReplyAllowed: Boolean?): Observable<Completed> =
+            SettingsRequest(name, age, sex, location, cityid, status, background, invisible, xstatus, isAutoReplyAllowed).subscribe()
 }
