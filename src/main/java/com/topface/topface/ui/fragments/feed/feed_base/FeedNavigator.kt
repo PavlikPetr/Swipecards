@@ -22,6 +22,7 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
+import com.topface.topface.statistics.FBStatistics
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
@@ -65,11 +66,17 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         mActivityDelegate.supportFragmentManager.findFragmentByTag(DatingEmptyFragment.TAG)?.let { it as DatingEmptyFragment } ?: DatingEmptyFragment.newInstance()
     }
 
-    override fun showPurchaseCoins(from: String, itemType: Int, price: Int) = mActivityDelegate.startActivity(PurchasesActivity
-            .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
+    override fun showPurchaseCoins(from: String, itemType: Int, price: Int) {
+        mActivityDelegate.startActivity(PurchasesActivity
+                .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
+        FBStatistics.onContentViewed(FBStatistics.PLACE_PURCHASE_COINS)
+    }
 
-    override fun showPurchaseVip(from: String) = mActivityDelegate.startActivityForResult(PurchasesActivity
-            .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
+    override fun showPurchaseVip(from: String) {
+        mActivityDelegate.startActivityForResult(PurchasesActivity
+                .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
+        FBStatistics.onContentViewed(FBStatistics.PLACE_PURCHASE_VIP)
+    }
 
     override fun <T : FeedItem> showProfile(item: T?, from: String) {
         item?.let {
