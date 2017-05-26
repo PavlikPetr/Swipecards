@@ -279,7 +279,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     }
 
     override fun showUserIsTooPopularLock(user: FeedUser) =
-        ChatMessage36DialogFragment.Companion.newInstance(user).show(mActivityDelegate.supportFragmentManager, ChatMessage36DialogFragment.TAG)
+            ChatMessage36DialogFragment.Companion.newInstance(user).show(mActivityDelegate.supportFragmentManager, ChatMessage36DialogFragment.TAG)
 
-
+    override fun showBlackList() {
+        mActivityDelegate.startActivity(Intent(mActivityDelegate.applicationContext, BlackListActivity::class.java))
+    }
 }

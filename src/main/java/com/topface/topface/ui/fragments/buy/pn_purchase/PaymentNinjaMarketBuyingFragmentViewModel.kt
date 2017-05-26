@@ -26,7 +26,6 @@ import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
-import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 
 /**
@@ -46,52 +45,25 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     val autofillVisibility = ObservableInt(View.GONE)
     val isAutoFillEnabled = ObservableBoolean(true)
     val progressVisibility = ObservableBoolean(false)
-    val data = MultiObservableArrayList<Any>().apply {
-        if (mIsVipPurchaseProducts) {
-            with(CacheProfile.getPaymentNinjaProductsList().getVipProducts().filter { it.displayOnBuyScreen }) {
-                if (size > 0) {
-                    this@apply.add(BuyScreenTitle())
-                    this@apply.addAll(this)
-                } else {
-                    this@apply.add(BuyScreenProductUnavailable())
-                }
-            }
-
-        } else {
-            with(Pair(CacheProfile.getPaymentNinjaProductsList().getLikesProducts().filter { it.displayOnBuyScreen },
-                    CacheProfile.getPaymentNinjaProductsList().getCoinsProducts().filter { it.displayOnBuyScreen })) {
-                if (first.isNotEmpty() || second.isNotEmpty()) {
-                    this@apply.add(BuyScreenTitle())
-                    if (this@with.first.isNotEmpty()) {
-                        this@apply.add(BuyScreenLikesSection())
-                        this@apply.addAll(this.first)
-                    } else Unit
-                    if (this@with.second.isNotEmpty()) {
-                        this@apply.add(BuyScreenCoinsSection())
-                        this@apply.addAll(this.second)
-                    } else Unit
-                } else {
-                    this@apply.add(BuyScreenProductUnavailable())
-                }
-            }
-        }
-    }
-
+    val data = MultiObservableArrayList<Any>()
     private val mEventBus by lazy {
         App.getAppComponent().eventBus()
+    }
+
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
     }
 
     private var mIsTestPurchase = false
     private var mIs3DSAvailable = false
     private var mAutoFillUrl: String? = null
+    private var mIsPremiumUser = App.get().profile.premium
+    private var mPaymentNinjaInfo = App.get().options.paymentNinjaInfo
 
-    private var mOptionsSubscription: Subscription? = null
-    private var mProfileSubscription: Subscription? = null
-    private var mSwitchSubscription = CompositeSubscription()
-    private var mPurchaseSubscription: Subscription? = null
+    private var mSubscriptions = CompositeSubscription()
 
     init {
-        mProfileSubscription = App.getAppComponent().appState().getObservable(Profile::class.java)
+        mSubscriptions.add(App.getAppComponent().appState().getObservable(Profile::class.java)
                 .map { it.isEditor }
                 .distinctUntilChanged()
                 .applySchedulers()
@@ -113,37 +85,93 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                             data.remove(data.find { it is TestPurchaseSwitch })
                         }
                     }
-                })
-        mOptionsSubscription = App.getAppComponent().appState().getObservable(Options::class.java)
+                }))
+        mSubscriptions.addAll(App.getAppComponent().appState().getObservable(Options::class.java)
                 .map { it.paymentNinjaInfo }
                 .distinctUntilChanged { t1, t2 -> t1 == t2 }
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     it?.let {
-                        if (it.isCradAvailable()) {
-                            cardInfo.set(String.format(R.string.use_card.getString(), it.lastDigits))
-                            isCheckBoxVisible.set(View.VISIBLE)
-                            initAutofillView(isChecked.get())
-                        } else {
-                            isCheckBoxVisible.set(View.GONE)
-                        }
+                        mPaymentNinjaInfo = it
+                        showCardInfoIfPosible()
                     }
-                })
-        mSwitchSubscription.add(isChecked.asRx.distinctUntilChanged()
+                }))
+        mSubscriptions.add(isChecked.asRx.distinctUntilChanged()
                 .subscribe(shortSubscription { it?.let { initAutofillView(it) } }))
-        mSwitchSubscription.add(mEventBus
+        mSubscriptions.add(mEventBus
                 .getObservable(TestPurchaseSwitch::class.java)
                 .distinctUntilChanged { (isChecked1), (isChecked2) -> isChecked1 == isChecked2 }
                 .subscribe(shortSubscription {
                     it?.let { mIsTestPurchase = it.isChecked }
                 }))
-        mSwitchSubscription.add(mEventBus
+        mSubscriptions.add(mEventBus
                 .getObservable(ThreeDSecurePurchaseSwitch::class.java)
                 .distinctUntilChanged { (isChecked1), (isChecked2) -> isChecked1 == isChecked2 }
                 .subscribe(shortSubscription {
                     it?.let { mIs3DSAvailable = it.isChecked }
                 }))
+        mSubscriptions.add(mAppState.getObservable(Profile::class.java)
+                .map { it.premium }
+                .distinctUntilChanged()
+                .subscribe(shortSubscription {
+                    mIsPremiumUser = it
+                    showCardInfoIfPosible()
+                    if (it && mIsVipPurchaseProducts) {
+                        initStub()
+                    } else {
+                        initProducts()
+                    }
+                }))
         initAutofillView(isChecked.get() && isCheckBoxVisible.get() == View.VISIBLE)
+    }
+
+    private fun showCardInfoIfPosible() {
+        if (!mPaymentNinjaInfo.isCradAvailable() || (mIsVipPurchaseProducts && mIsPremiumUser)) {
+            isCheckBoxVisible.set(View.GONE)
+        } else {
+            cardInfo.set(String.format(R.string.use_card.getString(), mPaymentNinjaInfo.lastDigits))
+            isCheckBoxVisible.set(View.VISIBLE)
+            initAutofillView(isChecked.get())
+        }
+    }
+
+    // генерим итемы для заглушки когда юзер уже имеет Вип
+    private fun initStub() {
+        data.replaceData(arrayListOf(InvisibleModeSwitch(false), BlackListItem()))
+    }
+
+    private fun initProducts() {
+        data.replaceData(arrayListOf<Any>().apply {
+            if (mIsVipPurchaseProducts) {
+                with(CacheProfile.getPaymentNinjaProductsList().getVipProducts().filter { it.displayOnBuyScreen }) {
+                    if (size > 0) {
+                        this@apply.add(BuyScreenTitle())
+                        this@apply.addAll(this)
+                    } else {
+                        this@apply.add(BuyScreenProductUnavailable())
+                    }
+                }
+
+            } else {
+                with(Pair(CacheProfile.getPaymentNinjaProductsList().getLikesProducts().filter { it.displayOnBuyScreen },
+                        CacheProfile.getPaymentNinjaProductsList().getCoinsProducts().filter { it.displayOnBuyScreen })) {
+                    if (first.isNotEmpty() || second.isNotEmpty()) {
+                        this@apply.add(BuyScreenTitle())
+                        if (this@with.first.isNotEmpty()) {
+                            this@apply.add(BuyScreenLikesSection())
+                            this@apply.addAll(this.first)
+                        } else Unit
+                        if (this@with.second.isNotEmpty()) {
+                            this@apply.add(BuyScreenCoinsSection())
+                            this@apply.addAll(this.second)
+                        } else Unit
+                    } else {
+                        this@apply.add(BuyScreenProductUnavailable())
+                    }
+                }
+            }
+        }
+        )
     }
 
     private fun initAutofillView(isCardChecked: Boolean) =
@@ -163,7 +191,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
             mNavigator.showPaymentNinjaAddCardScreen(product, mFrom, mIsTestPurchase, mIs3DSAvailable)
         } else {
             progressVisibility.set(true)
-            mPurchaseSubscription = PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom,
+            mSubscriptions.add(PaymentNinjaPurchaseRequest(App.getContext(), product.id, mFrom,
                     mIsTestPurchase, isAutoFillEnabled.get(), mIs3DSAvailable)
                     .getRequestSubscriber()
                     .applySchedulers()
@@ -180,7 +208,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                                 Utils.showErrorMessage()
                             }
                         }
-                    })
+                    }))
         }
     }
 
@@ -196,6 +224,6 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
     fun onLinkClick() = mNavigator.openUrl(mAutoFillUrl?.takeIf(String::isNotEmpty) ?: AUTOREFILL_RULES_URL)
 
     fun release() {
-        arrayOf(mOptionsSubscription, mProfileSubscription, mPurchaseSubscription, mSwitchSubscription).safeUnsubscribe()
+        mSubscriptions.safeUnsubscribe()
     }
 }
