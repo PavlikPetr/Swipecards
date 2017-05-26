@@ -71,9 +71,9 @@ class AmpiriProvider: AbstractAdsProvider() {
                     activity.registerLifeCycleDelegate(it)
                     it.ads.loadAd()
                 }
-                true
+                return@with true
             }
-            false
+            return@with false
         }
 
     override fun clean(page: IPageWithAds?) {

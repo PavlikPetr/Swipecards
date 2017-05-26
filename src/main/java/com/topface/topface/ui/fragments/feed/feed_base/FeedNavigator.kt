@@ -40,6 +40,7 @@ import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
+import com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -96,8 +97,7 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun <T : FeedItem> showChat(item: T?) {
         item?.let {
             it.user?.let {
-                //todo тут тож махнуть надо
-                showChat(it) { ChatIntentCreator.createIntent(id, sex, nameAndAge, city.name, null, photo, false, item.type, inBlacklist, bookmarked, banned) }
+                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type) }
             }
         }
     }
@@ -277,6 +277,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
         mActivityDelegate.startActivityForResult(intent, ComplainsActivity.REQUEST_CODE)
     }
+
+    override fun showUserIsTooPopularLock(user: FeedUser) =
+        ChatMessage36DialogFragment.Companion.newInstance(user).show(mActivityDelegate.supportFragmentManager, ChatMessage36DialogFragment.TAG)
 
 
 }

@@ -73,13 +73,13 @@ abstract class DaggerFragment : BaseFragment() {
          * и был вызов onStart после сохранения в стейт. Следовательно приложение было свернуто и развернуто
          * 2) !onSaveInstanceStateWasCalled - сохранения в стейт не было, следовательно мы уходи из фрагмента
          */
+        mViewModelLifeCycle?.unbind()
         if (isAdded && ((onSaveInstanceStateWasCalled && onStartAfterSavedStateWasCalled) || !onSaveInstanceStateWasCalled)) {
             terminateImmortalComponent()
             mViewModelLifeCycle?.release()
             mViewModelLifeCycle = null
         }
         super.onDetach()
-        mViewModelLifeCycle?.unbind()
     }
 
     protected open fun terminateImmortalComponent() {

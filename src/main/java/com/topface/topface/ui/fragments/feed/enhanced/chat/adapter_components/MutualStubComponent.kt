@@ -1,9 +1,10 @@
-package com.topface.topface.ui.fragments.feed.enhanced.chat
+package com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components
 
 import android.support.v7.widget.StaggeredGridLayoutManager
-import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.MutualStubChatBinding
+import com.topface.topface.ui.fragments.feed.enhanced.chat.MutualStub
+import com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.MutualStubChatViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 /**
@@ -12,7 +13,7 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 class MutualStubComponent(private val mFeedUser: FeedUser?) : AdapterComponent<MutualStubChatBinding, MutualStub>() {
 
     override val itemLayout: Int
-        get() = R.layout.mutual_stub_chat
+        get() = com.topface.topface.R.layout.mutual_stub_chat
     override val bindingClass: Class<MutualStubChatBinding>
         get() = MutualStubChatBinding::class.java
 
@@ -22,7 +23,7 @@ class MutualStubComponent(private val mFeedUser: FeedUser?) : AdapterComponent<M
             with(binding) {
                 mFeedUser?.let { mViewModel = MutualStubChatViewModel(it) }
                 viewModel = mViewModel
-                root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
+                root.layoutParams = android.support.v7.widget.StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                         StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
             }
 

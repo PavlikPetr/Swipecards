@@ -2,26 +2,43 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.databinding.ObservableInt
+import android.os.Bundle
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.HistoryItem.Companion.USER_GIFT
+import com.topface.topface.api.responses.HistoryItem.Companion.USER_MESSAGE
 import com.topface.topface.ui.dialogs.IDialogCloser
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatComplainEvent
-import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatDeleteEvent
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.extensions.showLongToast
-import com.topface.topface.utils.rx.shortSubscription
-import rx.subscriptions.CompositeSubscription
+import com.topface.topface.utils.rx.safeUnsubscribe
+import rx.Subscription
 
-class ChatPopupMenuViewModel(private val mItem: HistoryItem, private val mItemPosition: Int,
-                             private var mIDialogCloser: IDialogCloser?, private val mApi: Api,
-                             private val mClipboardManager: ClipboardManager) : ILifeCycle {
+class ChatPopupMenuViewModel(arguments: Bundle,
+                             private var mIDialogCloser: IDialogCloser?,
+                             private val mClipboardManager: ClipboardManager,
+                             private val mApi: Api) : ILifeCycle {
 
-    private val mChatPopupSubscription = CompositeSubscription()
+    private var mChatPopupSubscription: Subscription? = null
 
     private val mEventBus by lazy { App.getAppComponent().eventBus() }
+
+    val mItemPosition = arguments.getInt(ChatPopupMenu.CHAT_ITEM_POSITION)
+
+    val mItem: HistoryItem = arguments.getParcelable(ChatPopupMenu.CHAT_ITEM)
+
+    val complainItemVisibility = ObservableInt(getTypeOfItem())
+
+    private fun getTypeOfItem() =
+            when (mItem.getItemType()) {
+                USER_MESSAGE, USER_GIFT -> View.GONE
+                else -> View.VISIBLE
+            }
 
     fun copyMessage() {
         mClipboardManager.primaryClip = ClipData.newPlainText(Utils.EMPTY, mItem.text)
@@ -35,17 +52,12 @@ class ChatPopupMenuViewModel(private val mItem: HistoryItem, private val mItemPo
     }
 
     fun deleteMessage() {
-        mChatPopupSubscription.add(mApi.deleteMessage(mItem).subscribe(shortSubscription {
-            if (it.completed) {
-                mEventBus.setData(ChatDeleteEvent(mItemPosition))
-            }
-        }
-        ))
+        mApi.execDeleteMessage(mItem)
         mIDialogCloser?.closeIt()
     }
 
     fun release() {
-        mChatPopupSubscription.clear()
+        mChatPopupSubscription.safeUnsubscribe()
         mIDialogCloser = null
     }
 }

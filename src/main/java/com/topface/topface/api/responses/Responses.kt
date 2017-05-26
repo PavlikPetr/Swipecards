@@ -1,12 +1,15 @@
 package com.topface.topface.api.responses
 
 import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
 import android.os.Parcel
 import android.os.Parcelable
 import com.topface.topface.data.FeedDialog
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IAvatarVisible
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IDivider
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.Utils.EMPTY
 import com.topface.topface.utils.extensions.readBoolean
 import com.topface.topface.utils.extensions.writeBoolean
@@ -19,6 +22,8 @@ import java.util.*
 data class DevTestDataResponse(val version: Int)
 
 data class Completed(val completed: Boolean)
+
+data class DeleteComplete(val completed: Boolean, val items: ArrayList<Int>)
 
 data class Balance(val premium: Boolean, val likes: Int, val money: Int)
 
@@ -36,25 +41,26 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
-                       val unread: Boolean = false, val link: String? = null): IChatItem, Parcelable, IAvatarVisible {
+                       val unread: Boolean = false, val link: String? = null) : IChatItem, Parcelable,
+        IAvatarVisible, IDivider {
 
     override val isAvatarVisible = ObservableBoolean(false)
+    override val dividerText = ObservableField(Utils.EMPTY)
+    override val isDividerVisible = ObservableBoolean(false)
 
-    override fun getItemType() = if(target == FeedDialog.OUTPUT_USER_MESSAGE) {
-            // owner items
-            when(type) {
-                FeedDialog.DIVIDER -> DIVIDER
-                FeedDialog.GIFT -> USER_GIFT
-                else -> USER_MESSAGE
-            }
-        } else {
-            // friend items
-            when(type) {
-                FeedDialog.DIVIDER -> DIVIDER
-                FeedDialog.GIFT -> FRIEND_GIFT
-                else -> FRIEND_MESSAGE
-            }
+    override fun getItemType() = if (target == FeedDialog.OUTPUT_USER_MESSAGE) {
+        // owner items
+        when (type) {
+            FeedDialog.GIFT -> USER_GIFT
+            else -> USER_MESSAGE
         }
+    } else {
+        // friend items
+        when (type) {
+            FeedDialog.GIFT -> FRIEND_GIFT
+            else -> FRIEND_MESSAGE
+        }
+    }
 
     companion object {
         // different messages in chat
@@ -62,18 +68,19 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
         const val USER_GIFT = 2
         const val FRIEND_MESSAGE = 3
         const val FRIEND_GIFT = 4
-        const val DIVIDER = 5
         // stubs for chat, better start numbers from 1000
         const val STUB_FEED_USER = 1001
         const val STUB_CHAT_LOADER = 1002
         const val STUB_BUY_VIP = 1003
         const val STUB_MUTUAL = 1004
+        const val NOT_MUTUAL_BUY_VIP_STUB_MUTUAL = 1005
 
         @JvmField val CREATOR: Parcelable.Creator<HistoryItem> = object : Parcelable.Creator<HistoryItem> {
             override fun createFromParcel(source: Parcel): HistoryItem = HistoryItem(source)
             override fun newArray(size: Int): Array<HistoryItem?> = arrayOfNulls(size)
         }
     }
+
     constructor(source: Parcel) : this(
             source.readString(),
             source.readFloat(),
@@ -103,7 +110,7 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
 }
 
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
-                   val items: ArrayList<HistoryItem>)
+                   val items: ArrayList<HistoryItem>, val mutualTime: Int)
 
 /**
  *   id String так как сервер может прислать "1487110175:110148795" и все упадет. Плохие они.

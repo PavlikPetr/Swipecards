@@ -367,6 +367,7 @@ public class GCMUtils {
                     i = new Intent(context, NavigationActivity.class);
                     // add the same request code like Chat intent
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
+                    i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                 } else {
                     return ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
                             null, null, true, null, false, false, false);
@@ -410,6 +411,7 @@ public class GCMUtils {
                 if (showVisitors) {
                     lastNotificationType = GCM_TYPE_GUESTS;
                     i = new Intent(context, NavigationActivity.class);
+                    i.putExtra(NavigationActivity.INTENT_CLEAN_COMPONENTS, true);
                     i.putExtra(TabbedFeedFragment.EXTRA_OPEN_PAGE, VisitorsFragment.class.getName());
                     i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_VISITORS));
                 }

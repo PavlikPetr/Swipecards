@@ -87,9 +87,9 @@ private fun <T : Any> attachListener(recyclerView: RecyclerView, data: ImprovedO
                 Debug.log("EPTA onItemRangeInserted " + " sublist size " + insertedData.size)
                 adapter.data.addAll(positionStart, insertedData)
                 adapter.notifyItemRangeInserted(positionStart, itemCount)
-                if (positionStart == 0) {
-                    recyclerView.layoutManager.scrollToPosition(0)
-                }
+            }
+            if (positionStart == 0) {
+                recyclerView.layoutManager.scrollToPosition(0)
             }
         }
 

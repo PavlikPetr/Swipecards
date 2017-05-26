@@ -32,24 +32,18 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
         }
     }
 
-    private val mItem: HistoryItem = arguments.getParcelable(CHAT_ITEM)
-
-    private val mPosition = arguments.getInt(CHAT_ITEM_POSITION)
-
     private val mClipboardManager by lazy {
         activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
+
+    private val mApi by lazy { App.getAppComponent().api() }
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<ChatPopupMenuBinding>(activity.layoutInflater, R.layout.chat_popup_menu, null, false)
     }
 
-    private val mApi by lazy {
-       App.getAppComponent().api()
-    }
-
-    private val mViewModel by lazy{
-        ChatPopupMenuViewModel(mItem, mPosition, this, mApi, mClipboardManager).apply {
+    private val mViewModel by lazy {
+        ChatPopupMenuViewModel(arguments, this, mClipboardManager, mApi).apply {
             activity.registerLifeCycleDelegate(this)
         }
     }

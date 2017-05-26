@@ -1,8 +1,9 @@
-package com.topface.topface.ui.fragments.feed.enhanced.chat.items
+package com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components
 
 import com.topface.topface.R
 import com.topface.topface.databinding.ItemChatD1UserGiftBinding
 import com.topface.topface.ui.fragments.feed.enhanced.chat.UserGift
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.GiftViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 class UserGiftComponent : AdapterComponent<ItemChatD1UserGiftBinding, UserGift>() {

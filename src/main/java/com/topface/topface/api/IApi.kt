@@ -1,10 +1,7 @@
 package com.topface.topface.api
 
 import android.os.Bundle
-import com.topface.topface.api.responses.Completed
-import com.topface.topface.api.responses.History
-import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.api.responses.IBaseFeedResponse
+import com.topface.topface.api.responses.*
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
 import com.topface.topface.utils.config.FeedsCache
@@ -21,8 +18,6 @@ interface IApi {
 
     fun callAddToBlackList(items: List<FeedItem>): Observable<Completed>
 
-    fun deleteMessage(item: HistoryItem): Observable<Completed>
-
     fun callDelete(feedsType: FeedsCache.FEEDS_TYPE, ids: ArrayList<String>): Observable<Completed>
 
     fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T>
@@ -30,5 +25,9 @@ interface IApi {
     fun callDialogGet(userId: Int, from: String? = null, to: String? = null): Observable<History>
 
     fun callSendMessage(userId: Int, message: String, isInstant: Boolean = false): Observable<HistoryItem>
+
+    fun execDeleteMessage(item: HistoryItem)
+
+    fun observeDeleteMessage(): Observable<DeleteComplete>
 
 }

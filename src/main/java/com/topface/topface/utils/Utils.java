@@ -55,6 +55,7 @@ import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -112,6 +113,18 @@ public class Utils {
 
     public static String getUniqueKeyStatistic(String postfix) {
         return String.format(App.getCurrentLocale(), "%d_%s", App.get().getProfile().uid, postfix);
+    }
+
+    /**
+     * Это было вынесено из ChatIntentCreator потому что похоже ломалась очередность генерации биндингов и жавки из котлина
+     * и сложно(нереально) было собрать проект
+     * @return class of chat based on server option
+     */
+    public static Class getChatClass() {
+        switch (App.get().getOptions().getChatRedesign()) {
+            case ChatIntentCreator.DESIGN_V1: return com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.class;
+            default: return com.topface.topface.ui.ChatActivity.class;
+        }
     }
 
     public static String getQuantityString(int id, int quantity, Object... formatArgs) {

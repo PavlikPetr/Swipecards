@@ -59,6 +59,9 @@ fun Gift.getGiftTag() = String.format(GIFT_TEMPLATE, id)
 
 /**
  * Set tag for qa/debug build and for editors in release build
+ * Здравстуй маленький друг. Если ты  хочешь использовать говнище ниже, то обязательно проверь не
+ * в рутовую ли вьюху лейаута ты это пихаешь. И если это так и этот лейаут еще и data binding,
+ * то спешу тебя огорчить, все упадет в релизе. Так как data binding юзает тег внутри и нельзя его менять
  */
 fun View.setUiTestTag(tag: Any) = apply {
     if (Debug.isDebugLogsEnabled()) {

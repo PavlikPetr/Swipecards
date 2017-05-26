@@ -25,8 +25,7 @@
         android:layout_height="wrap_content"
         android:onClick="@{clickListener::onClick}"
         android:orientation="horizontal"
-        app:onLongItemClick="@{longClickListener}"
-        app:uiTestTag="@{model.getTag()}">
+        app:onLongItemClick="@{longClickListener}">
 
         <FrameLayout
             android:id="@+id/frame_avatar"
