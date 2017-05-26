@@ -11,7 +11,6 @@ import com.topface.topface.App
 import com.topface.topface.requests.response.DialogContacts
 import com.topface.topface.requests.response.DialogContactsItem
 import com.topface.topface.ui.ChatActivity
-import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.dialogs.FeedPushHandler
 import com.topface.topface.ui.fragments.feed.dialogs.IFeedPushHandlerListener

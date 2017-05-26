@@ -107,6 +107,7 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
     }
 
     override fun onDestroyView() {
+        mBinding.dialogsList.stopScroll()
         super.onDestroyView()
         /**
          * https://code.google.com/p/android/issues/detail?id=78062

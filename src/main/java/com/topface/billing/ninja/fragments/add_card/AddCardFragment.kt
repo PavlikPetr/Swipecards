@@ -47,7 +47,7 @@ class AddCardFragment : BaseFragment(), IFinishDelegate {
             }.root
 
     override fun finishWithResult(resultCode: Int, data: Intent) {
-        if (activity != null && isAdded) {
+        if (isAdded) {
             with(activity) {
                 setResult(resultCode, data)
                 finish()

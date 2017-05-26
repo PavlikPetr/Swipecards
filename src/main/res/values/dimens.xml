@@ -324,4 +324,6 @@
     <dimen name="chat_d1_bg_padding_left_right">16dp</dimen>
     <dimen name="chat_d1_bg_padding_top_bottom">12dp</dimen>
     <dimen name="chat_d1_friend_lefT_margin">48dp</dimen>
+    <dimen name="chat_d1_item_top_margin_big">18dp</dimen>
+    <dimen name="chat_d1_item_top_margin_small">6dp</dimen>
 </resources>

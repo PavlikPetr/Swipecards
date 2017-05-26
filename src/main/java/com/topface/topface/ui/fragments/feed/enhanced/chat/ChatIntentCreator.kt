@@ -7,6 +7,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Photo
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.Companion.REQUEST_CHAT
+import com.topface.topface.utils.Utils.getChatClass
 
 
 object ChatIntentCreator {
@@ -25,20 +26,27 @@ object ChatIntentCreator {
     const val USER_TYPE = "type"
     const val WHOLE_USER = "whole_user"
 
-    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?) =
-            if (isOldChat()) {
-                ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
-                        user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
-            } else {
-                createIntent(user, answer)
-            }
+    // Design versions
+    const val DESIGN_V0 = 0
+    const val DESIGN_V1 = 1
 
+    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?) = when (App.get().options.chatRedesign) {
+        DESIGN_V1 -> createIntent(user, answer, null)
+        else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
+                user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
+    }
+
+    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when (App.get().options.chatRedesign) {
+        DESIGN_V1 -> createIntent(user, null, itemType)
+        else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+    }
 
     @JvmStatic
-    fun createIntent(user: FeedUser, answer: SendGiftAnswer?) = Intent(App.getContext(),
-            com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java).apply {
+    fun createIntent(user: FeedUser, answer: SendGiftAnswer?, itemType: Int?) = Intent(App.getContext(),
+            getChatClass()).apply {
         putExtra(WHOLE_USER, user)
-        putExtra(GIFT_DATA, answer)
+        answer?.let { putExtra(GIFT_DATA, it) }
+        itemType?.let { putExtra(USER_TYPE, it) }
     }
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
@@ -75,14 +83,5 @@ object ChatIntentCreator {
         photo?.let { intent.putExtra(INTENT_AVATAR, it) }
         return intent
     }
-
-    private fun getChatClass() = com.topface.topface.ui.ChatActivity::class.java
-//    private fun getChatClass() = if (isOldChat()) {
-//        com.topface.topface.ui.ChatActivity::class.java
-//    } else {
-//        com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity::class.java
-//    }
-
-    private fun isOldChat() = false
 
 }

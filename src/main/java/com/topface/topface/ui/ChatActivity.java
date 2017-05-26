@@ -30,7 +30,6 @@ public class ChatActivity extends CheckAuthActivity<ChatFragment, AcFragmentFram
 
     public static final int REQUEST_CHAT = 3;
     public static final String LAST_MESSAGE = "com.topface.topface.ui.ChatActivity_last_message";
-    public static final String LAST_MESSAGE_USER_ID = "com.topface.topface.ui.ChatActivity_last_message_user_id";
     public static final String DISPATCHED_GIFTS = "com.topface.topface.ui.ChatActivity_dispatched_gifts";
 
     private EventBus mEventBus;

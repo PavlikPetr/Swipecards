@@ -24,6 +24,8 @@ import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
+import com.topface.topface.utils.gcmutils.GCMUtils
+import com.topface.topface.utils.gcmutils.GCMUtils.*
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
@@ -36,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * VM for new and improved dialogs
  * Created by tiberal on 30.11.16.
  */
-class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
+class DialogsFragmentViewModel(private val mContext: Context, private val mApi: FeedApi,
                                private val updater: () -> Observable<Bundle>)
     : SwipeRefreshLayout.OnRefreshListener, ILifeCycle, IFeedPushHandlerListener {
 
@@ -46,7 +48,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     private var mLoadTopSubscription: Subscription? = null
     private var mIsAllDataLoaded: Boolean = false
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
-    private val mPushHandler = FeedPushHandler(this, context)
+    private val mPushHandler = FeedPushHandler(this, mContext)
     private var isTopFeedsLoading = AtomicBoolean(false)
 
     private val mEventBus by lazy {
@@ -63,8 +65,8 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
     init {
         bindUpdater()
         mContentAvailableSubscription = Observable.combineLatest(mEventBus.getObservable(DialogContactsEvent::class.java),
-                mEventBus.getObservable(DialogItemsEvent::class.java)) { item1, item2 ->
-            if (!item2.hasDialogItems) {
+                mEventBus.getObservable(DialogItemsEvent::class.java)) { (hasContacts), (hasDialogItems) ->
+            if (!hasDialogItems) {
                 // add empty dialogs stub if need
                 var found = false
                 val stub = EmptyDialogsStubItem()
@@ -76,7 +78,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                 }
                 if (!found) data.observableList.add(stub)
             }
-            item1.hasContacts || item2.hasDialogItems
+            hasContacts || hasDialogItems
         }
                 .filter { !it }
                 .subscribe(shortSubscription {
@@ -93,7 +95,16 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
                         deleteDialogItemFromList(it.feedForDelete.user.id)
                     }
                 })
+        clearNotifications()
+    }
 
+    /**
+     * Если диалоги открыли по пушу,то чисти нотификации
+     */
+    private fun clearNotifications() {
+        arrayOf(GCM_TYPE_GIFT, GCM_TYPE_MESSAGE, GCM_TYPE_DIALOGS).forEach {
+            GCMUtils.cancelNotification(mContext, it)
+        }
     }
 
 
@@ -290,7 +301,7 @@ class DialogsFragmentViewModel(context: Context, private val mApi: FeedApi,
      */
     fun tryUpdatePreview(intent: Intent) {
         val history = intent.getParcelableExtra<History>(ChatActivity.LAST_MESSAGE)
-        val userId = intent.getIntExtra(ChatActivity.LAST_MESSAGE_USER_ID, -1)
+        val userId = intent.getIntExtra(ChatFragment.INTENT_USER_ID, -1)
         if (history != null && userId > 0) {
             data.observableList.forEachIndexed { position, item ->
                 if (item.user != null && item.user.id == userId) {

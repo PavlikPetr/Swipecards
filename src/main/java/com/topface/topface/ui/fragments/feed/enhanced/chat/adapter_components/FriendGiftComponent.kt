@@ -1,9 +1,10 @@
-package com.topface.topface.ui.fragments.feed.enhanced.chat.items
+package com.topface.topface.ui.fragments.feed.enhanced.chat.adapter_components
 
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.ItemChatD1FriendGiftBinding
 import com.topface.topface.ui.fragments.feed.enhanced.chat.FriendGift
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.FriendGiftViewModel
 import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
 
 class FriendGiftComponent(val feedUser: FeedUser?) : AdapterComponent<ItemChatD1FriendGiftBinding, FriendGift>() {
