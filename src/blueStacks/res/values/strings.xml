@@ -854,6 +854,7 @@
   <string name="chat_activate_vip">Activate VIP</string>
   <string name="chat_no_mutual_symphaty">No mutual Like at the moment!</string>
   <string name="chat_with_no_mutual_buy_vip">You can start chatting without a mutual Like, but to do so, you need to activate VIP-status</string>
+  <string name="buy_vip_to_chat">To start chatting without a Like, activate VIP-status.</string>
   <string name="about">About you</string>
   <string name="moar_info">Find out more information!</string>
   <string name="geo_switched_off_explanation">To see who\'s nearby, enable geolocation services</string>
@@ -881,7 +882,7 @@
   <string name="seven_days_free">7 days free</string>
   <string name="free_vip">Free VIP-status!</string>
   <string name="no_more_ad">No in-app ads</string>
-  <string name="i_see_u_face">Find out who visited your page</string>
+  <string name="i_see_u_face">See and find out the faces of your fans and page visitors</string>
   <string name="buy_vip_write_anyone">Write to any girl even without a mutual Like</string>
   <string name="buy_vip_write_anyone_boy">Write to any guy even without a mutual Like</string>
   <string name="buy_vip_write_anyone_without_mutual">Write to anyone, even without a mutual Like</string>

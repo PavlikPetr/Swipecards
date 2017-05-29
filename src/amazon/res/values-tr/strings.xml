@@ -573,7 +573,7 @@
     <string name="general_exit">Çıkış</string>
     <string name="likes_can_help_you">Beğeniler diğer insanlarla tanışmanıza yardımcı olur.</string>
     <string name="general_get_dating">Tanış</string>
-    <string name="settings_select_language">Uygulamanın dilini swçin</string>
+    <string name="settings_select_language">Uygulamanın dilini seçin</string>
     <string name="settings_select_preload_photo_type">Fotoğrafların önyüklemesi aktif 
         olduğunda seçin</string>
     <string name="restart_to_change_locale">Dilin değişmesi için uygulama yeniden başlamalıdır</string>
@@ -870,6 +870,7 @@
     <string name="chat_activate_vip">VIP ol</string>
     <string name="chat_no_mutual_symphaty">Henüz karşılıklı beğeniniz yok</string>
     <string name="chat_with_no_mutual_buy_vip">Karşılıklı beğeni olmadan sohbete başlamak için VIP olmalısınız</string>
+    <string name="buy_vip_to_chat">Beğeni olmadan sohbete başlamak için VIP statüsünü aktive edin.</string>
     <string name="about">Hakkınızda</string>
     <string name="moar_info">Daha fazla bilgi edin!</string>
     <string name="geo_switched_off_explanation">Yakınlardaki kişileri görebilmek için konum servisini açın</string>

@@ -870,6 +870,7 @@
   <string name="chat_activate_vip">Activar VIP</string>
   <string name="chat_no_mutual_symphaty">¡No hay simpatía mutua por ahora!</string>
   <string name="chat_with_no_mutual_buy_vip">Puedes empezar a chatear sin simpatía mutua, pero para hacerlo, necesitas activar tu estado VIP</string>
+  <string name="buy_vip_to_chat">Para empezar a chatear sin Simpatía activa el estatus VIP.</string>
   <string name="about">Sobre ti</string>
   <string name="moar_info">¡Descubre más información!</string>
   <string name="geo_switched_off_explanation">Para ver quién está cerca, activa los servicios de geolocalización</string>
@@ -967,8 +968,14 @@
   <string name="basic_information">Datos básicos</string>
   <string name="purchase_successfull">El pago se ha realizado con éxito</string>
   <string name="now_you_have_VIP">Ahora tienes el estatus VIP</string>
-  <plurals name="you_have_some_coins"/>
-  <plurals name="you_have_some_sympathies"/>
+  <plurals name="you_have_some_coins">
+    <item quantity="other">Ahora tienes %d Monedas</item>
+    <item quantity="one">Ahora tienes %d Moneda</item>
+  </plurals>
+  <plurals name="you_have_some_sympathies">
+    <item quantity="other">Ahora tienes %d Simpatías</item>
+    <item quantity="one">Ahora tienes %d Simpatía</item>
+  </plurals>
   <string name="photo_feed_add_photo">¡Aparece en el feed de fotos!\nTe verán miles de personas.</string>
   <string name="buy_likes_get_more_likes">¡Consigue más Simpatías!</string>
   <string name="buy_likes_become_first_in_searchlist_female">¡Aparece antes para los chicos que buscan a chicas como tú!</string>

@@ -872,6 +872,7 @@
     <string name="chat_activate_vip">Activar VIP</string>
     <string name="chat_no_mutual_symphaty">¡No hay simpatía mutua por ahora!</string>
     <string name="chat_with_no_mutual_buy_vip">Puedes empezar a chatear sin simpatía mutua, pero para hacerlo, necesitas activar tu estado VIP</string>
+    <string name="buy_vip_to_chat">Para empezar a chatear sin Simpatía activa el estatus VIP.</string>
     <string name="about">Sobre ti</string>
     <string name="moar_info">¡Descubre más información!</string>
     <string name="geo_switched_off_explanation">Para ver quién está cerca, activa los servicios de geolocalización</string>

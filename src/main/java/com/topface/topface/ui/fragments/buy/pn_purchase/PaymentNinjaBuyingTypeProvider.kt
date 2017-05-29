@@ -15,6 +15,7 @@ class PaymentNinjaBuyingTypeProvider : ITypeProvider {
         BuyScreenProductUnavailable::class.java -> 5
         TestPurchaseSwitch::class.java -> 6
         ThreeDSecurePurchaseSwitch::class.java -> 7
+        InvisibleModeSwitch::class.java -> 8
         else -> 0
     }
 }

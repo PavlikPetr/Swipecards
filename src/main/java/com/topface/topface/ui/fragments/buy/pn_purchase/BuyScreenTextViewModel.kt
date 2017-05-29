@@ -93,5 +93,17 @@ class BuyScreenTextViewModel(mText: String = "", val textColor: Int = R.color.bl
                 isAllCaps = true,
                 onClickListener = onClickListener
         )
+
+        // Настройки viewModel для итема "Черный список"
+        fun PaymentNinjaBlackListItem(onClickListener: () -> Unit) = BuyScreenTextViewModel(
+                mText = R.string.vip_black_list.getString(),
+                textColor = R.color.text_color_gray.getColor(),
+                textSize = R.dimen.buy_screen_title_text_size.getDimen().toInt(),
+                mTextVisibility = View.VISIBLE,
+                paddingTop = R.dimen.buy_screen_products_coins_section_padding_top.getDimen(),
+                paddingBottom = R.dimen.buy_screen_products_coins_section_padding_bottom.getDimen(),
+                paddingLeft = R.dimen.item_side_padding.getDimen(),
+                paddingRight = R.dimen.item_side_padding.getDimen(),
+                onClickListener = onClickListener)
     }
 }

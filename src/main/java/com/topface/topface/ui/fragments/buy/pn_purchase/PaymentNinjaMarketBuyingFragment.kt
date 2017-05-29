@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.databinding.FragmentPnBuyBinding
 import com.topface.topface.ui.fragments.BaseFragment
@@ -60,6 +61,10 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
         FeedNavigator(activity as IActivityDelegate)
     }
 
+    private val mApi by lazy {
+        App.getAppComponent().api()
+    }
+
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mPnBuyingTypeProvider) { Bundle() }
                 .addAdapterComponent(BuyButtonComponent {
@@ -71,6 +76,8 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
                 .addAdapterComponent(BuyScreenUnavailableComponent())
                 .addAdapterComponent(TestPurchaseComponent())
                 .addAdapterComponent(ThreeDSecureComponent())
+                .addAdapterComponent(InvisibleModeSwitchComponent(mApi))
+                .addAdapterComponent(BlackListItemComponent(mFeedNavigator))
     }
 
     private fun initList() = with(mBinding.buttonsRecyclerView) {
