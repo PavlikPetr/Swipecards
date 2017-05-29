@@ -15,6 +15,7 @@ import com.topface.topface.R
 import com.topface.topface.data.Profile
 import com.topface.topface.databinding.ExperimentBoilerplateLayoutBinding
 import com.topface.topface.state.TopfaceAppState
+import com.topface.topface.statistics.FBStatistics
 import com.topface.topface.ui.DialogFragmentWithSafeTransaction
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IRunner
@@ -90,6 +91,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NewProductsKeysGeneratedStatistics.sendNow_TRIAL_VIP_POPUP_SHOW(activity.applicationContext)
+        FBStatistics.onContentViewed(FBStatistics.PLACE_POPUP_VIP_TRIAL)
         if (savedInstanceState == null) {
             with(App.getUserConfig()) {
                 val showCounter = trialVipShowCounter + 1
@@ -108,6 +110,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
                 .applySchedulers()
                 .subscribe(shortSubscription {
                     dismiss()
+                    FBStatistics.onVipTrialStarted()
                 })
     }
 

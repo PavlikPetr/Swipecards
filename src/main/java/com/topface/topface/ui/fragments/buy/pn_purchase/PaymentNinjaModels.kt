@@ -154,3 +154,11 @@ data class PaymentNinjaProductsList(var products: Array<PaymentNinjaProduct> = a
 
     override fun hashCode() = products.hashCode()
 }
+
+/**
+ * Invisible mode item
+ */
+class InvisibleModeSwitch
+
+// Black list item on Payment Ninja purchase screen
+class BlackListItem

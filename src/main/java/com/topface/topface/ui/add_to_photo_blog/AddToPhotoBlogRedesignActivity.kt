@@ -79,6 +79,7 @@ class AddToPhotoBlogRedesignActivity : BaseFragmentActivity<AddToPhotoBlogRedesi
                 adapter = mAdapter
                 post {
                     mAdapter.data = mutableListOf(HeaderItem(), PhotoListItem(), PlaceButtonItem(price))
+                    mAdapter.notifyDataSetChanged()
                 }
             }
 
