@@ -1,11 +1,13 @@
-package com.topface.topface.ui.fragments;
+package com.topface.topface.ui.fragments.editor;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,14 +24,17 @@ import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.Options;
 import com.topface.topface.data.Profile;
+import com.topface.topface.databinding.EditorFullscreenBinding;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
 import com.topface.topface.ui.EditorBannersActivity;
+import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
 import com.topface.topface.utils.Editor;
@@ -42,6 +47,9 @@ import com.topface.topface.utils.notifications.UserNotification;
 import com.topface.topface.utils.notifications.UserNotificationManager;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_CANCEL_TEST_NETWORK_ERRORS;
 import static com.topface.topface.receivers.TestNotificationsReceiver.ACTION_TEST_NETWORK_ERRORS_OFF;
@@ -71,6 +79,15 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     private Spinner mConnectionTypeChoose;
     private CheckBox mConnectionCheckbox;
 
+    private EditorStubFullscreenViewModel mFullscreenStubVM = new EditorStubFullscreenViewModel(
+            new Function0<Unit>() {
+                @Override
+                public Unit invoke() {
+                    ((NavigationActivity)getActivity()).getFullscreenController().requestFullscreen();
+                    return null;
+                }
+            }
+    );
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,10 +141,23 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         initUserInfo(root);
         initConnections(root);
         initReserveSocialAppIds(root);
+        initFullscreenStub(root);
         //После инита всех элементов заполняем их значениями по умолчанию
         setConfigValues();
         mConfigInited = true;
         return root;
+    }
+
+    private void initFullscreenStub(View root) {
+        ViewStub stub = (ViewStub) root.findViewById(R.id.editor_fullscreen_stub);
+        stub.setOnInflateListener(new ViewStub.OnInflateListener() {
+            @Override
+            public void onInflate(ViewStub stub, View inflated) {
+                EditorFullscreenBinding binding = DataBindingUtil.bind(inflated);
+                binding.setViewModel(mFullscreenStubVM);
+            }
+        });
+        stub.inflate();
     }
 
     private void initReserveSocialAppIds(View root) {
@@ -452,6 +482,13 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
+        App.getUserConfig().registerOnChangeListener(mFullscreenStubVM.getConfigChangeListener());
         ToolbarManager.INSTANCE.setToolbarSettings(new ToolbarSettingsData(getString(R.string.editor_menu_admin)));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        App.getUserConfig().unregisterOnChangeListener(mFullscreenStubVM.getConfigChangeListener());
     }
 }

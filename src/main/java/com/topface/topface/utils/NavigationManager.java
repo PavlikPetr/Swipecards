@@ -24,7 +24,7 @@ import com.topface.topface.statistics.FBInvitesStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.view.BonusFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.EditorFragment;
+import com.topface.topface.ui.fragments.editor.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
