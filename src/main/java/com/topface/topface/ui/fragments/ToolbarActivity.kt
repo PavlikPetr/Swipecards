@@ -10,6 +10,7 @@ import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.CrashReportActivity
+import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.ui.views.toolbar.IToolbarNavigation
 import com.topface.topface.ui.views.toolbar.utils.IToolbarSettings
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
@@ -22,7 +23,7 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
  * Base activity for a whole project, cause it hold a toolbar_view
  */
 
-abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), IToolbarNavigation, IToolbarSettings {
+abstract class ToolbarActivity<T : ViewDataBinding> : TrackedFragmentActivity(), IToolbarNavigation, IToolbarSettings {
 
     lateinit var viewBinding: T
     var toolbarBinding: ToolbarViewBinding? = null
