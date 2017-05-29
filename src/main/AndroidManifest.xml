@@ -89,7 +89,7 @@
 
         <!-- activity -->
         <activity
-            android:name=".ui.splash_screen.SplashScreenActivity"
+            android:name=".ui.NavigationActivity"
             android:theme="@style/Theme.Topface.Navigation"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -98,12 +98,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.NavigationActivity"
-            android:parentActivityName=".ui.splash_screen.SplashScreenActivity">
-        </activity>
-
         <activity
             android:name=".ui.ExternalLinkActivity"
             android:parentActivityName=".ui.NavigationActivity">

@@ -7,7 +7,6 @@ import com.topface.topface.R
 import com.topface.topface.databinding.AdmirationPurchasePopupBinding
 import com.topface.topface.databinding.ToolbarViewBinding
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
-import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.view_models.InvisibleToolbarViewModel
 import com.topface.topface.utils.Utils
@@ -18,9 +17,9 @@ import rx.Subscription
  * Это активити попата восхищения. Такие дела.
  * Created by siberia87 on 01.11.16.
  */
-class AdmirationPurchasePopupActivity : ToolbarActivity<AdmirationPurchasePopupBinding>(), IAdmirationPurchasePopupHide {
+class AdmirationPurchasePopupActivity : TrackedFragmentActivity<AdmirationPurchasePopupBinding>(), IAdmirationPurchasePopupHide {
 
-    override fun getToolbarBinding(binding: AdmirationPurchasePopupBinding): ToolbarViewBinding = binding.toolbarInclude
+    override fun getToolbarBinding(binding: AdmirationPurchasePopupBinding) = binding.toolbarInclude
 
     override fun getLayout() = R.layout.admiration_purchase_popup
 
