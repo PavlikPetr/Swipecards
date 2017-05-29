@@ -12,7 +12,6 @@ import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.BanFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.utils.Utils;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-public class BanActivity extends ToolbarActivity<BanActivityBinding> {
+public class BanActivity extends TrackedFragmentActivity<BanActivityBinding> {
 
     public static final int TYPE_UNKNOWN = 0;
     public static final int TYPE_BAN = 1;

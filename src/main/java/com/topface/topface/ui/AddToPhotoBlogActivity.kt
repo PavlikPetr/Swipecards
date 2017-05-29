@@ -21,7 +21,6 @@ import com.topface.topface.ui.adapters.LeadersRecyclerViewAdapter
 import com.topface.topface.ui.adapters.LoadingListAdapter
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.fragments.PurchasesFragment
-import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.TrackedLifeCycleActivity
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel
 import com.topface.topface.utils.AddPhotoHelper
@@ -35,7 +34,7 @@ import com.topface.topface.viewModels.AddToPhotoBlogViewModel
  * Created by tiberal on 25.07.16.
  */
 
-class AddToPhotoBlogActivity : ToolbarActivity<AddToPhotoBlogLayoutBinding>(), AddToPhotoBlogHeaderViewModel.ILockerVisualisator
+class AddToPhotoBlogActivity : TrackedLifeCycleActivity<AddToPhotoBlogLayoutBinding>(), AddToPhotoBlogHeaderViewModel.ILockerVisualisator
         , AddToPhotoBlogHeaderViewModel.IPurchasesFragmentVisualisator
         , AddToPhotoBlogHeaderViewModel.IPhotoHelperVisualisator, AddToPhotoBlogHeaderViewModel.IAdapterInteractor {
 
