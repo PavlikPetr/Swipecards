@@ -85,4 +85,7 @@
     </string-array>
     <string name="editor_3ds_switch">Платеж с 3DS</string>
 
+    <string name="editor_fullscreen_now">Счетчик фулскринов %s</string>
+    <string name="editor_fullscreen_reset">Сбросить</string>
+    <string name="editor_fullscreen_show">Показать</string>
 </resources>

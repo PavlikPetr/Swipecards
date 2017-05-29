@@ -251,6 +251,10 @@ public class UserConfig extends AbstractConfig {
         );
     }
 
+    public void resetFullscreenInterval() {
+        resetSettingsMap(FULLSCREEN_SETTINGS);
+    }
+
     public void setFullscreenInterval(long interval) {
         mConfigExtension.setDailyConfigField(FULLSCREEN_SETTINGS, interval);
     }
