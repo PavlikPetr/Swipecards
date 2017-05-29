@@ -956,6 +956,7 @@ Allow the system to automatically start a conversation with a greeting when you 
     <string name="chat_activate_vip">Attiva VIP</string>
     <string name="chat_no_mutual_symphaty">Al momento no avete un Like reciproco!</string>
     <string name="chat_with_no_mutual_buy_vip">Puoi iniziare a chattare senza un Like reciproco, ma per farlo devi attivare lo stato di VIP</string>
+    <string name="buy_vip_to_chat">Per chattare senza prima ricevere un Like, ottieni lo status VIP.</string>
     <string name="about">A proposito di te</string>
     <string name="moar_info">Scopri maggiori informazioni!</string>
     <string name="geo_switched_off_explanation">Per vedere chi c\'è nelle vicinanze, abilita i servizi di geolocalizzazione</string>

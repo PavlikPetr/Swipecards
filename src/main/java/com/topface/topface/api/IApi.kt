@@ -1,9 +1,11 @@
 package com.topface.topface.api
 
+import android.location.Location
 import android.os.Bundle
 import com.topface.topface.api.responses.*
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.app_day.AppDay
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.config.FeedsCache
 import rx.Observable
 import java.util.*
@@ -30,4 +32,7 @@ interface IApi {
 
     fun observeDeleteMessage(): Observable<DeleteComplete>
 
+    fun callSetProfile(name: String = Utils.EMPTY, age: Int = -1, sex: Int = -1, location: Location? = null,
+                       cityid: Int = -1, status: String = Utils.EMPTY, background: Int = -1, invisible: Boolean? = null,
+                       xstatus: Int = -1, isAutoReplyAllowed: Boolean? = null): Observable<Completed>
 }

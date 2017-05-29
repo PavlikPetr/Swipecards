@@ -56,4 +56,5 @@ interface IFeedNavigator {
     fun showChatPopupMenu(item: HistoryItem, position: Int)
     fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
     fun showUserIsTooPopularLock(user: FeedUser)
+    fun showBlackList()
 }

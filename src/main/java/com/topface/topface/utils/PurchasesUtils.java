@@ -3,15 +3,12 @@ package com.topface.topface.utils;
 import android.os.Bundle;
 
 import com.facebook.appevents.AppEventsConstants;
-import com.facebook.appevents.AppEventsLogger;
 import com.topface.billing.OpenIabFragment;
-import com.topface.topface.App;
 import com.topface.topface.data.BuyButtonData;
 import com.topface.topface.data.ProductsDetails;
 import com.topface.topface.requests.PurchaseRequest;
+import com.topface.topface.statistics.FBStatistics;
 import com.topface.topface.utils.extensions.ProductExtensionKt;
-import com.topface.topface.utils.social.AuthToken;
-import com.topface.topface.utils.social.FbAuthorizer;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -37,15 +34,12 @@ public class PurchasesUtils {
         if (!isTestPurchase && !isTrial) {
             new PurchasesEvents().purchaseSuccess(productsCount, productType, productId, currencyCode, price, transactionId);
         }
-        if (AuthToken.getInstance().getSocialNet().equals(AuthToken.SN_FACEBOOK) && !isTestPurchase && !isTrial) {
-            FbAuthorizer.initFB();
-            AppEventsLogger logger = AppEventsLogger.newLogger(App.getContext());
+        if (!isTestPurchase && !isTrial) {
             Bundle bundle = new Bundle();
             bundle.putString(AppEventsConstants.EVENT_PARAM_NUM_ITEMS, String.valueOf(productsCount));
             bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_TYPE, productType);
             bundle.putString(AppEventsConstants.EVENT_PARAM_CONTENT_ID, productId);
-            bundle.putString(AppEventsConstants.EVENT_PARAM_CURRENCY, currencyCode);
-            logger.logEvent(AppEventsConstants.EVENT_NAME_PURCHASED, price, bundle);
+            FBStatistics.INSTANCE.onPurchase(price, currencyCode, bundle);
         }
     }
 
