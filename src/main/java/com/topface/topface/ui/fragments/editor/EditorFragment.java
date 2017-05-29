@@ -150,14 +150,16 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
 
     private void initFullscreenStub(View root) {
         ViewStub stub = (ViewStub) root.findViewById(R.id.editor_fullscreen_stub);
-        stub.setOnInflateListener(new ViewStub.OnInflateListener() {
-            @Override
-            public void onInflate(ViewStub stub, View inflated) {
-                EditorFullscreenBinding binding = DataBindingUtil.bind(inflated);
-                binding.setViewModel(mFullscreenStubVM);
-            }
-        });
-        stub.inflate();
+        if (stub != null) {
+            stub.setOnInflateListener(new ViewStub.OnInflateListener() {
+                @Override
+                public void onInflate(ViewStub stub, View inflated) {
+                    EditorFullscreenBinding binding = DataBindingUtil.bind(inflated);
+                    binding.setViewModel(mFullscreenStubVM);
+                }
+            });
+            stub.inflate();
+        }
     }
 
     private void initReserveSocialAppIds(View root) {
