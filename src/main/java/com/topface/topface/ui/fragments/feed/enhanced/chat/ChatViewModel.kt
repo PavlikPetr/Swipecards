@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
@@ -15,7 +16,10 @@ import com.topface.topface.App
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.data.*
+import com.topface.topface.data.FeedUser
+import com.topface.topface.data.Gift
+import com.topface.topface.data.Profile
+import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.ComplainsActivity
@@ -59,11 +63,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
+    val isButtonsEnable = ObservableBoolean(false)
     val message = RxObservableField<String>()
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
+    private var mMessageChangeSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
@@ -78,6 +84,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mHasStubItems = false
     private var mIsPremium = false
     private var mIsNeedToShowToPopularPopup = false
+    private var mIsNeedToBlockChat = false
     private var mIsNeedShowAddPhoto = true
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
@@ -98,6 +105,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
+        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
+            isButtonsEnable.set(it.isNotBlank() && !mHasStubItems && !mIsNeedToBlockChat)
+        })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
@@ -286,15 +296,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
                 stub = MutualStub()
-            } else if (!mIsPremium){
+            } else if (!mIsPremium) {
+                mIsNeedToBlockChat = true
                 stub = NotMutualBuyVipStub()
             }
         }
         if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
-                    MUTUAL_SYMPATHY -> MutualStub()
-                    LOCK_CHAT -> BuyVipStub()
+                    MUTUAL_SYMPATHY ->MutualStub()
+                    LOCK_CHAT -> {
+                        mIsNeedToBlockChat = true
+                        BuyVipStub()
+                    }
                     LOCK_MESSAGE_SEND -> {
                         mIsNeedToShowToPopularPopup = true
                         mHasStubItems = true
@@ -429,7 +443,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
-        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
+        arrayOf(mSendMessageSubscription, mMessageChangeSubscription, mUpdateHistorySubscription,
                 mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
     }
 
