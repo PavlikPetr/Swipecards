@@ -15,7 +15,10 @@ import com.topface.topface.App
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.data.*
+import com.topface.topface.data.FeedUser
+import com.topface.topface.data.Gift
+import com.topface.topface.data.Profile
+import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.ComplainsActivity
@@ -112,7 +115,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             val itemPosition = it.itemPosition
-            mUser?.id?.let { id -> navigator?.showComplainScreen(id,itemPosition.toString()) }
+            mUser?.id?.let { id -> navigator?.showComplainScreen(id, itemPosition.toString()) }
         })
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
@@ -287,7 +290,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
                 stub = MutualStub()
-            } else if (!mIsPremium){
+            } else if (!mIsPremium) {
                 stub = NotMutualBuyVipStub()
             }
         }
@@ -378,10 +381,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                GiftsActivity.INTENT_REQUEST_GIFT -> {
+//        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            GiftsActivity.INTENT_REQUEST_GIFT -> {
+                if (resultCode == Activity.RESULT_OK) {
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
@@ -398,10 +401,17 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
                     }
                 }
-                ComplainsActivity.REQUEST_CODE -> {
+            }
+            ComplainsActivity.REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
                     isComplainVisible.set(View.INVISIBLE)
                     // after success complain sent - block user
                     onBlock()
+                }
+            }
+            else -> {
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    activityFinisher?.finish()
                 }
             }
         }
