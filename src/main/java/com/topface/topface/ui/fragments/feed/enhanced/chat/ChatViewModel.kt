@@ -13,6 +13,7 @@ import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
@@ -32,6 +33,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
+import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -125,7 +128,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     update(it)
                 })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
-            mUser?.id?.let { id -> navigator?.showComplainScreen(id,it.itemPosition.toString()) }
+            mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
@@ -135,10 +138,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         mIsNeedToShowToPopularPopup = false
                     }
                 })
-        mDeleteSubscription = mApi.observeDeleteMessage().subscribe { deleteComplete ->
-            removeByPredicate { deleteComplete.items.contains(it.id) }
-            chatResult?.setResult(createResultIntent())
-        }
+        mDeleteSubscription = mApi.observeDeleteMessage()
+                .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
+                .retry()
+                .subscribe(shortSubscription {
+                    deleteComplete ->
+                    removeByPredicate { deleteComplete.items.contains(it.id) }
+                    chatResult?.setResult(createResultIntent())
+                })
     }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
@@ -249,11 +256,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
-    private fun updateNearAvatarBeforeDelete(position:Int) {
+    private fun updateNearAvatarBeforeDelete(position: Int) {
         if (position > 0) {
             (chatData[position] as? HistoryItem)?.let { currentItem ->
                 if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
-                    (chatData[position - 1] as? HistoryItem)?.let { prevItem->
+                    (chatData[position - 1] as? HistoryItem)?.let { prevItem ->
                         if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
                     }
                 }
@@ -417,9 +424,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                GiftsActivity.INTENT_REQUEST_GIFT -> {
+        when (requestCode) {
+            GiftsActivity.INTENT_REQUEST_GIFT -> {
+                if (resultCode == Activity.RESULT_OK) {
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
@@ -436,10 +443,17 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
                     }
                 }
-                ComplainsActivity.REQUEST_CODE -> {
+            }
+            ComplainsActivity.REQUEST_CODE -> {
+                if (resultCode == Activity.RESULT_OK) {
                     isComplainVisible.set(View.INVISIBLE)
                     // after success complain sent - block user
                     onBlock()
+                }
+            }
+            else -> {
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    activityFinisher?.finish()
                 }
             }
         }
