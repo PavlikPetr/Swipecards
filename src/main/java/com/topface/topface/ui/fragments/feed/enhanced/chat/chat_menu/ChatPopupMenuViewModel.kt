@@ -28,7 +28,7 @@ class ChatPopupMenuViewModel(arguments: Bundle,
 
     private val mEventBus by lazy { App.getAppComponent().eventBus() }
 
-    val mItemPosition = arguments.getInt(ChatPopupMenu.CHAT_ITEM_POSITION)
+    val mItemId = arguments.getInt(ChatPopupMenu.CHAT_ITEM_ID)
 
     val mItem: HistoryItem = arguments.getParcelable(ChatPopupMenu.CHAT_ITEM)
 
@@ -47,7 +47,7 @@ class ChatPopupMenuViewModel(arguments: Bundle,
     }
 
     fun complain() {
-        mEventBus.setData(ChatComplainEvent(mItemPosition))
+        mEventBus.setData(ChatComplainEvent(mItemId))
         mIDialogCloser?.closeIt()
     }
 

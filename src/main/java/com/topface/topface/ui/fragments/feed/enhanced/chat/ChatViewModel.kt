@@ -111,7 +111,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     update(it)
                 })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
-            onComplain()
+            val itemPosition = it.itemPosition
+            mUser?.id?.let { id -> navigator?.showComplainScreen(id,itemPosition.toString()) }
         })
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
