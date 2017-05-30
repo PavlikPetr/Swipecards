@@ -21,6 +21,7 @@
         <TextView
             style="@style/ChatMenuPopup"
             android:background="@drawable/menu_popup_top"
+            android:visibility="@{viewModel.copyItemVisibility}"
             android:onClick="@{() -> viewModel.copyMessage()}"
             android:text="@string/general_copy_title"/>
 

@@ -33,7 +33,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="left|top"
                 android:onClick="@{() -> viewModel.onAvatarClick()}"
-                android:visibility="@{viewModel.isAvatarVisible}"
+                android:visibility="@{viewModel.isAvatarVisible, default=gone}"
                 bind:glideTransformationPhoto="@{viewModel.photo}"
                 bind:outSideCircle="@{viewModel.outsideCircle}"
                 bind:placeholderRes="@{viewModel.placeholderResId}"
