@@ -462,6 +462,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override
             public void onAppForeground(long timeOnStart) {
+                mScruffyManager.startConnection();
                 AppStateStatistics.sendAppForegroundState();
                 FlurryManager.getInstance().sendAppInForegroundEvent();
                 if (!AuthToken.getInstance().isEmpty()) {
@@ -471,6 +472,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
 
             @Override
             public void onAppBackground(long timeOnStop, long timeOnStart) {
+                mScruffyManager.stopConnection();
                 AppStateStatistics.sendAppBackgroundState();
                 FlurryManager.getInstance().sendAppInBackgroundEvent();
             }
