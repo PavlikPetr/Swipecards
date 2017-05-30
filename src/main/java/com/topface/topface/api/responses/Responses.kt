@@ -109,6 +109,8 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
             } ?: Unit
 }
 
+fun HistoryItem?.isFriendItem() = this != null && (this.getItemType() == HistoryItem.FRIEND_MESSAGE || this.getItemType() == HistoryItem.FRIEND_GIFT)
+
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
                    val items: ArrayList<HistoryItem>, val mutualTime: Int)
 

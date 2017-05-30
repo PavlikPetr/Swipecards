@@ -16,6 +16,7 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -42,6 +43,7 @@ import org.json.JSONObject
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
@@ -239,7 +241,20 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             while (iterator.hasNext()) {
                 val item = iterator.next()
                 if (item is HistoryItem && predicate(item)) {
+                    updateNearAvatarBeforeDelete(chatData.indexOf(item))
                     iterator.remove()
+                }
+            }
+        }
+    }
+
+    private fun updateNearAvatarBeforeDelete(position:Int) {
+        if (position > 0) {
+            (chatData[position] as? HistoryItem)?.let { currentItem ->
+                if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
+                    (chatData[position - 1] as? HistoryItem)?.let { prevItem->
+                        if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
+                    }
                 }
             }
         }
@@ -355,7 +370,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         mHasStubItems = true
                         mIsSendMessage = true
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis())))
+                                created = System.currentTimeMillis() / 1000L)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({

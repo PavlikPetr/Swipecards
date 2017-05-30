@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView.NO_POSITION
 import android.view.View
 import com.topface.topface.R
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.getDimen
 
@@ -20,7 +21,6 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
 
         var topMargin = 0
         var bottomMargin = 0
-        fun isFriendItem(item: HistoryItem) = item.getItemType() == HistoryItem.FRIEND_MESSAGE || item.getItemType() == HistoryItem.FRIEND_GIFT
 
         if (view != null && parent != null && state != null) {
             val position = parent.getChildAdapterPosition(view)
@@ -36,7 +36,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                     // list may be broken by divider
                     (it[position] as? HistoryItem)?.let { currentItem ->
                         topMargin = marginBig
-                        if (isFriendItem(currentItem)) {
+                        if (currentItem.isFriendItem()) {
                             if (currentItem.isDividerVisible.get()) {
                                 currentItem.isAvatarVisible.set(true)
                             } else {
@@ -48,7 +48,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                                 // middle and last items
                                     else -> {
                                         (it[position + 1] as? HistoryItem)?.let { prevItem ->
-                                            if (isFriendItem(prevItem)) {
+                                            if (prevItem.isFriendItem()) {
                                                 topMargin = marginSmall
                                                 currentItem.isAvatarVisible.set(false)
                                             } else {
@@ -61,7 +61,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                         } else {
                             if (position < itemCount - 1) {
                                 (it[position + 1] as? HistoryItem)?.let { prevItem ->
-                                    if (!isFriendItem(prevItem) && !currentItem.isDividerVisible.get()) {
+                                    if (!prevItem.isFriendItem() && !currentItem.isDividerVisible.get()) {
                                         // small top divider only if prev item is not from friend
                                         // and current item does not have divider enabled
                                         topMargin = marginSmall
