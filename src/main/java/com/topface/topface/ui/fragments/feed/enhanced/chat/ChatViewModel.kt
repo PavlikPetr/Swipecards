@@ -12,6 +12,7 @@ import com.topface.framework.JsonUtils
 import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
+import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
@@ -29,6 +30,8 @@ import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
 import com.topface.topface.utils.actionbar.OverflowMenu
+import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -125,10 +128,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         mIsNeedToShowToPopularPopup = false
                     }
                 })
-        mDeleteSubscription = mApi.observeDeleteMessage().subscribe { deleteComplete ->
-            removeByPredicate { deleteComplete.items.contains(it.id) }
-            chatResult?.setResult(createResultIntent())
-        }
+        mDeleteSubscription = mApi.observeDeleteMessage()
+                .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
+                .retry()
+                .subscribe(shortSubscription {
+                    deleteComplete ->
+                    removeByPredicate { deleteComplete.items.contains(it.id) }
+                    chatResult?.setResult(createResultIntent())
+                })
     }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
