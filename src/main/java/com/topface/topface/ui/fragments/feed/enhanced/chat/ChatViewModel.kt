@@ -107,7 +107,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?: Observable.empty()
 
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isButtonsEnable.set(it.isNotBlank() && !mHasStubItems && !mIsNeedToBlockChat)
+            isButtonsEnable.set(it.isNotBlank() && !mIsNeedToBlockChat)
         })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
