@@ -85,6 +85,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mIsPremium = false
     private var mIsNeedToShowToPopularPopup = false
     private var mIsNeedToBlockChat = false
+    private var mIsNeedToDeleteMutualStub = false
     private var mIsNeedShowAddPhoto = true
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
@@ -228,7 +229,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate {it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -273,7 +274,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
-                })))
+                }
+                )))
     }
 
 /*                          Условия показов заглушек и попапа-заглушки.
@@ -295,6 +297,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
+                mIsNeedToDeleteMutualStub = true
                 stub = MutualStub()
             } else if (!mIsPremium) {
                 mIsNeedToBlockChat = true
@@ -304,7 +307,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
-                    MUTUAL_SYMPATHY ->MutualStub()
+                    MUTUAL_SYMPATHY -> {
+                        mIsNeedToDeleteMutualStub = true
+                        MutualStub()
+                    }
                     LOCK_CHAT -> {
                         mIsNeedToBlockChat = true
                         BuyVipStub()
@@ -352,11 +358,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     fun onMessage() = mUser?.let {
         val message = message.get()
-        if (!mIsNeedToShowToPopularPopup && message.isNotBlank()) {
+        if (!mIsNeedToShowToPopularPopup) {
             mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
                     .doOnSubscribe {
                         mHasStubItems = true
                         mIsSendMessage = true
+                        if (mIsNeedToDeleteMutualStub){
+                            chatData.clear()
+                        }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis())))
                         this.message.set(EMPTY)
