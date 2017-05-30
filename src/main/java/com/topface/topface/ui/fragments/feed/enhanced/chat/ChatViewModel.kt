@@ -119,8 +119,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     update(it)
                 })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
-            val itemPosition = it.itemPosition
-            mUser?.id?.let { id -> navigator?.showComplainScreen(id, itemPosition.toString()) }
+            mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
@@ -248,11 +247,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
-    private fun updateNearAvatarBeforeDelete(position:Int) {
+    private fun updateNearAvatarBeforeDelete(position: Int) {
         if (position > 0) {
             (chatData[position] as? HistoryItem)?.let { currentItem ->
                 if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
-                    (chatData[position - 1] as? HistoryItem)?.let { prevItem->
+                    (chatData[position - 1] as? HistoryItem)?.let { prevItem ->
                         if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
                     }
                 }
