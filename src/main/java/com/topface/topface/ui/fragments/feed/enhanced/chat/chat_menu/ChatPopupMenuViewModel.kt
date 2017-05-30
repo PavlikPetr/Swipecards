@@ -9,6 +9,7 @@ import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_GIFT
 import com.topface.topface.api.responses.HistoryItem.Companion.USER_GIFT
 import com.topface.topface.api.responses.HistoryItem.Companion.USER_MESSAGE
 import com.topface.topface.ui.dialogs.IDialogCloser
@@ -32,13 +33,11 @@ class ChatPopupMenuViewModel(arguments: Bundle,
 
     val mItem: HistoryItem = arguments.getParcelable(ChatPopupMenu.CHAT_ITEM)
 
-    val complainItemVisibility = ObservableInt(getTypeOfItem())
+    val itemType = mItem.getItemType()
 
-    private fun getTypeOfItem() =
-            when (mItem.getItemType()) {
-                USER_MESSAGE, USER_GIFT -> View.GONE
-                else -> View.VISIBLE
-            }
+    val complainItemVisibility = ObservableInt(if (itemType == USER_MESSAGE || itemType == USER_GIFT) View.GONE else View.VISIBLE)
+
+    val copyItemVisibility = ObservableInt(if (itemType == USER_GIFT || itemType == FRIEND_GIFT) View.GONE else View.VISIBLE)
 
     fun copyMessage() {
         mClipboardManager.primaryClip = ClipData.newPlainText(Utils.EMPTY, mItem.text)
