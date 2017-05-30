@@ -15,6 +15,7 @@ import com.topface.topface.App
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -232,7 +233,20 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             while (iterator.hasNext()) {
                 val item = iterator.next()
                 if (item is HistoryItem && predicate(item)) {
+                    updateNearAvatarBeforeDelete(chatData.indexOf(item))
                     iterator.remove()
+                }
+            }
+        }
+    }
+
+    private fun updateNearAvatarBeforeDelete(position:Int) {
+        if (position > 0) {
+            (chatData[position] as? HistoryItem)?.let { currentItem ->
+                if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
+                    (chatData[position - 1] as? HistoryItem)?.let { prevItem->
+                        if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
+                    }
                 }
             }
         }
