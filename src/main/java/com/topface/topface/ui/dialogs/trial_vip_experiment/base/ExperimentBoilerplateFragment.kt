@@ -164,6 +164,7 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == GpPurchaseActivity.ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             TrialVipExperimentStatistics.sendPurchaseCompleted()
+            FBStatistics.onVipTrialStarted()
             dismiss()
         }
     }
