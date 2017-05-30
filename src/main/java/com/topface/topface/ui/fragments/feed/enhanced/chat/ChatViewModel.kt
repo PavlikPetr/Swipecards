@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableInt
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
@@ -30,6 +31,7 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
+import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.showLongToast
@@ -67,11 +69,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
-    val message = RxObservableField<String>()
+    val isButtonsEnable = ObservableBoolean(false)
+    val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
+    private var mMessageChangeSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
@@ -86,6 +90,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mHasStubItems = false
     private var mIsPremium = false
     private var mIsNeedToShowToPopularPopup = false
+    private var mIsNeedToBlockChat = false
+    private var mIsNeedToDeleteMutualStub = false
     private var mIsNeedShowAddPhoto = true
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
@@ -106,6 +112,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
+        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
+            isButtonsEnable.set(it.isNotBlank() && !mIsNeedToBlockChat)
+        })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
@@ -230,7 +239,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate {it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -288,7 +297,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
-                })))
+                }
+                )))
     }
 
 /*                          Условия показов заглушек и попапа-заглушки.
@@ -310,16 +320,24 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
+                mIsNeedToDeleteMutualStub = true
                 stub = MutualStub()
             } else if (!mIsPremium) {
+                mIsNeedToBlockChat = true
                 stub = NotMutualBuyVipStub()
             }
         }
         if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
-                    MUTUAL_SYMPATHY -> MutualStub()
-                    LOCK_CHAT -> BuyVipStub()
+                    MUTUAL_SYMPATHY -> {
+                        mIsNeedToDeleteMutualStub = true
+                        MutualStub()
+                    }
+                    LOCK_CHAT -> {
+                        mIsNeedToBlockChat = true
+                        BuyVipStub()
+                    }
                     LOCK_MESSAGE_SEND -> {
                         mIsNeedToShowToPopularPopup = true
                         mHasStubItems = true
@@ -363,11 +381,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     fun onMessage() = mUser?.let {
         val message = message.get()
-        if (!mIsNeedToShowToPopularPopup && message.isNotBlank()) {
+        if (!mIsNeedToShowToPopularPopup) {
             mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
                     .doOnSubscribe {
                         mHasStubItems = true
                         mIsSendMessage = true
+                        if (mIsNeedToDeleteMutualStub){
+                            chatData.clear()
+                        }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis() / 1000L)))
                         this.message.set(EMPTY)
@@ -461,7 +482,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
-        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
+        arrayOf(mSendMessageSubscription, mMessageChangeSubscription, mUpdateHistorySubscription,
                 mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
     }
 
