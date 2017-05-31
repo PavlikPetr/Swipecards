@@ -26,6 +26,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.state.TopfaceAppState;
+import com.topface.topface.statistics.FBStatistics;
 import com.topface.topface.statistics.FlurryUtils;
 import com.topface.topface.ui.ITabLayoutHolder;
 import com.topface.topface.ui.adapters.PurchasesFragmentsAdapter;
@@ -217,6 +218,8 @@ public class PurchasesFragment extends BaseFragment {
         Bundle args = getArguments();
         final Options options = App.get().getOptions();
         mIsVip = args.getBoolean(IS_VIP_PRODUCTS, false);
+        FBStatistics.INSTANCE.onContentViewed(mIsVip ? FBStatistics.PLACE_PURCHASE_VIP : FBStatistics.PLACE_PURCHASE_COINS);
+
         args.putString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, mResourceInfoText == null ? getInfoText() : mResourceInfoText);
         Options.TabsList tabs;
         //Для того, что бы при изменении текста плавно менялся лейаут, без скачков

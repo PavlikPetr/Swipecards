@@ -22,7 +22,6 @@ import com.topface.topface.data.leftMenu.WrappedNavigationData
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.experiments.fb_invitation.FBinvitationFragment
 import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
-import com.topface.topface.statistics.FBStatistics
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
@@ -39,9 +38,9 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.Admirat
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTransform
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogFragment
-import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity
 import com.topface.topface.ui.settings.FeedbackMessageFragment
@@ -69,13 +68,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showPurchaseCoins(from: String, itemType: Int, price: Int) {
         mActivityDelegate.startActivity(PurchasesActivity
                 .createBuyingIntent(from, itemType, price, App.get().options.topfaceOfferwallRedirect))
-        FBStatistics.onContentViewed(FBStatistics.PLACE_PURCHASE_COINS)
     }
 
     override fun showPurchaseVip(from: String) {
         mActivityDelegate.startActivityForResult(PurchasesActivity
                 .createVipBuyIntent(null, from), PurchasesActivity.INTENT_BUY_VIP)
-        FBStatistics.onContentViewed(FBStatistics.PLACE_PURCHASE_VIP)
     }
 
     override fun <T : FeedItem> showProfile(item: T?, from: String) {
@@ -263,8 +260,8 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         ), SettingsContainerActivity.INTENT_SEND_FEEDBACK)
     }
 
-    override fun showChatPopupMenu(item: HistoryItem, position: Int) =
-            ChatPopupMenu.newInstance(item, position).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
+    override fun showChatPopupMenu(item: HistoryItem, itemId: Int) =
+            ChatPopupMenu.newInstance(item, itemId).show(mActivityDelegate.supportFragmentManager, ChatPopupMenu.TAG)
 
     override fun openUrl(url: String) {
         Utils.goToUrl(mActivityDelegate, url)
