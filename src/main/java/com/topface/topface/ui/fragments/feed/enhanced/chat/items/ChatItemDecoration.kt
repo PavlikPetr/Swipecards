@@ -29,7 +29,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                 (parent.adapter as? CompositeAdapter)?.data?.let {
                     if (position == 0) bottomMargin = marginBig
                     // dividers text/visible calculation
-                    it.filterIsInstance<HistoryItem>().prepareDividers()
+                    it.filterIsInstance<HistoryItem>().prepareDividers().prepareAvatar(position)
                     val itemCount = it.size
 
                     // show/hide avatar of friend messages
@@ -39,21 +39,15 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                         topMargin = marginBig
                         if (currentItem.isFriendItem()) {
                             if (currentItem.isDividerVisible.get()) {
-                                currentItem.isAvatarVisible.set(true)
                             } else {
                                 when (position) {
                                 // first item
-                                    itemCount - 1 -> {
-                                        currentItem.isAvatarVisible.set(true)
-                                    }
+                                    itemCount - 1 -> {}
                                 // middle and last items
                                     else -> {
                                         (it[position + 1] as? HistoryItem)?.let { prevItem ->
                                             if (prevItem.isFriendItem()) {
                                                 topMargin = marginSmall
-                                                currentItem.isAvatarVisible.set(false)
-                                            } else {
-                                                currentItem.isAvatarVisible.set(true)
                                             }
                                         }
                                     }
@@ -79,24 +73,53 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
     }
 }
 
-fun List<HistoryItem>?.prepareDividers() =
-        if (this != null && this.isNotEmpty()) {
-            // group HistoryItems in our list by "round" day
-            val dividers : MutableMap<Long, MutableList<HistoryItem>> =
-                    this.reversed().groupByTo(mutableMapOf()) {
-                        it.created - it.created % 86400
+fun List<HistoryItem>?.prepareAvatars() = this?.apply { forEach { prepareAvatar(indexOf(it)) } }
+
+fun List<HistoryItem>?.prepareAvatar(position: Int) = this?.apply {
+    if (isNotEmpty() && position in 0..this.size - 1) {
+        val currentItem = this[position]
+        if (currentItem.isFriendItem()) {
+            if (currentItem.isDividerVisible.get()) {
+                currentItem.isAvatarVisible.set(true)
+            } else {
+                when (position) {
+                // first item
+                    this.size - 1 -> {
+                        currentItem.isAvatarVisible.set(true)
                     }
-            // for each stored day, mark all items have no divider
-            // and enable divider only for last added, also, update divider text to correspond to
-            // "today", "yesterday", "day.month" (if current year), "day.month.year" for all other
-            for (day in dividers.keys) {
-                dividers[day]?.forEach { it.isDividerVisible.set(false) }
-                if (dividers[day]?.isNotEmpty() ?: false) {
-                    dividers[day]?.first()?.apply {
-                        isDividerVisible.set(true)
-                        // don't forget about server timestamps, they use seconds, but we millis
-                        dividerText.set(DateUtils.getRelativeDate(day * ChatViewModel.SERVER_TIME_CORRECTION))
+                // middle and last items
+                    else -> {
+                        if (this[position + 1].isFriendItem()) {
+                            currentItem.isAvatarVisible.set(false)
+                        } else {
+                            currentItem.isAvatarVisible.set(true)
+                        }
                     }
                 }
             }
-        } else Unit
+        }
+    }
+}
+
+fun List<HistoryItem>?.prepareDividers() = this?.apply {
+    if (isNotEmpty()) {
+        // group HistoryItems in our list by "round" day
+        val dividers : MutableMap<Long, MutableList<HistoryItem>> =
+                reversed().groupByTo(mutableMapOf()) {
+                    it.created - it.created % 86400
+                }
+        // for each stored day, mark all items have no divider
+        // and enable divider only for last added, also, update divider text to correspond to
+        // "today", "yesterday", "day.month" (if current year), "day.month.year" for all other
+        for (day in dividers.keys) {
+            dividers[day]?.forEach { it.isDividerVisible.set(false) }
+            if (dividers[day]?.isNotEmpty() ?: false) {
+                dividers[day]?.first()?.apply {
+                    isDividerVisible.set(true)
+                    // don't forget about server timestamps, they use seconds, but we millis
+                    dividerText.set(DateUtils.getRelativeDate(day * ChatViewModel.SERVER_TIME_CORRECTION))
+                }
+            }
+        }
+    }
+}
