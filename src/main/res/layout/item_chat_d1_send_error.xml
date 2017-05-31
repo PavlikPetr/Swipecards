@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="isErrorVisible"
+            type="boolean"/>
+    </data>
+<!-- usage -->
+    <!--<include-->
+        <!--bind:isErrorVisible="@{viewModel.isErrorVisible}"-->
+        <!--layout="@layout/item_chat_d1_send_error"/>-->
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="6dp"
+        android:visibility="@{isErrorVisible, default=gone}"
+        android:drawableLeft="@drawable/ic_chat_error"
+        android:drawablePadding="4dp"
+        android:text="@string/general_error_normal"
+        android:textColor="@color/dark_secondary_text"
+        android:textSize="12sp"/>
+</layout>
