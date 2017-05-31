@@ -95,6 +95,7 @@
             <ImageButton
                 android:id="@+id/send_gift_button"
                 style="@style/InputGiftButton"
+                app:enable="@{chatViewModel.isButtonsEnable}"
                 android:onClick="@{() -> chatViewModel.onGift()}"/>
 
             <EditText
@@ -124,7 +125,8 @@
             <ImageButton
                 android:id="@+id/send"
                 style="@style/InputSendButton"
-                android:onClick="@{() -> chatViewModel.onMessage()}"/>
+                android:onClick="@{() -> chatViewModel.onMessage()}"
+                app:enable="@{chatViewModel.isButtonsEnable}"/>
         </LinearLayout>
     </com.topface.topface.ui.views.KeyboardListenerLayout>
 
