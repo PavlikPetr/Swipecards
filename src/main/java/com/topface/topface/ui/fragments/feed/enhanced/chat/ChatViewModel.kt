@@ -466,7 +466,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     internal fun createResultIntent() = Intent().apply {
-        putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(getFirstCorrectItemId()))
+        if (chatData.isNotEmpty()) {
+            putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(chatData.first() as HistoryItem))
+        }
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
         putExtra(SEND_MESSAGE, mIsSendMessage)
         putExtra(INTENT_USER_ID, mUser?.id ?: -1)
