@@ -7,6 +7,7 @@ import android.view.View
 import com.topface.topface.R
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.api.responses.isFriendItem
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.getDimen
 
@@ -28,7 +29,7 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                 (parent.adapter as? CompositeAdapter)?.data?.let {
                     if (position == 0) bottomMargin = marginBig
                     // dividers text/visible calculation
-                    prepareDividers(it.filterIsInstance<HistoryItem>())
+                    it.filterIsInstance<HistoryItem>().prepareDividers()
                     val itemCount = it.size
 
                     // show/hide avatar of friend messages
@@ -76,12 +77,13 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
         }
         outRect?.set(0, topMargin, 0, bottomMargin)
     }
+}
 
-    private fun prepareDividers(items: List<HistoryItem>) {
-        if (items.isNotEmpty()) {
+fun List<HistoryItem>?.prepareDividers() =
+        if (this != null && this.isNotEmpty()) {
             // group HistoryItems in our list by "round" day
             val dividers : MutableMap<Long, MutableList<HistoryItem>> =
-                    items.reversed().groupByTo(mutableMapOf()) {
+                    this.reversed().groupByTo(mutableMapOf()) {
                         it.created - it.created % 86400
                     }
             // for each stored day, mark all items have no divider
@@ -93,10 +95,8 @@ class ChatItemDecoration : RecyclerView.ItemDecoration() {
                     dividers[day]?.first()?.apply {
                         isDividerVisible.set(true)
                         // don't forget about server timestamps, they use seconds, but we millis
-                        dividerText.set(DateUtils.getRelativeDate(day * 1000L))
+                        dividerText.set(DateUtils.getRelativeDate(day * ChatViewModel.SERVER_TIME_CORRECTION))
                     }
                 }
             }
-        }
-    }
-}
+        } else Unit

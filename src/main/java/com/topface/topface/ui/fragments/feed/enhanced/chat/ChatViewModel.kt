@@ -28,6 +28,7 @@ import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
@@ -254,6 +255,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     iterator.remove()
                 }
             }
+            // recalculate dividers like "today", cause ItemDecoration may not be called
+            chatData.filterIsInstance<HistoryItem>().prepareDividers()
         }
     }
 
