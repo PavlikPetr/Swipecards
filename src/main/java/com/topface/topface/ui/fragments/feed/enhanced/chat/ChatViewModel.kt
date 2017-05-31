@@ -59,6 +59,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         private const val LOCK_MESSAGE_SEND = 36
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
+        const val SERVER_TIME_CORRECTION = 1000L
         const val LAST_ITEM_ID = "last id"
     }
 
@@ -390,7 +391,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.clear()
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / 1000L)))
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
@@ -417,7 +418,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun giftAnswerToHistoryItem(answer: SendGiftAnswer): UserGift? {
         return answer.history?.let {
-            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created,
+            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created / SERVER_TIME_CORRECTION,
                     it.target, it.unread, it.link))
         }
     }
