@@ -388,20 +388,16 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         chatResult?.setResult(createResultIntent())
                     })))
         } else if (!mIsPremium) {
-            mUser?.let {
-                navigator?.showUserIsTooPopularLock(it)
-            }
+            navigator?.showUserIsTooPopularLock(it)
         }
     }
 
-    fun onGift() {
-        val immutableNavigator = navigator
-        val immutableUserId = mUser?.id
-        if (immutableNavigator != null && immutableUserId != null) {
-            immutableNavigator.showGiftsActivity(immutableUserId, "chat")
-        } else {
-            Unit
-        }
+    fun onGift() = mUser?.let {
+        if (!mIsNeedToShowToPopularPopup) {
+            navigator?.showGiftsActivity(it.id, "chat")
+        } else if (!mIsPremium) {
+            navigator?.showUserIsTooPopularLock(it)
+        } else Unit
     }
 
     private fun giftAnswerToHistoryItem(answer: SendGiftAnswer): UserGift? {
