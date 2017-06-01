@@ -25,6 +25,7 @@ import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
+import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
@@ -434,6 +435,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
                     }
                 }
+            }
+
+            PurchasesActivity.INTENT_BUY_VIP-> {
+                chatData.clear()
+                isEditTextEnable.set(true)
             }
             ComplainsActivity.REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
