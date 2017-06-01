@@ -95,7 +95,6 @@
             <ImageButton
                 android:id="@+id/send_gift_button"
                 style="@style/InputGiftButton"
-                app:enable="@{chatViewModel.isButtonsEnable}"
                 android:onClick="@{() -> chatViewModel.onGift()}"/>
 
             <EditText
