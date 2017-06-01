@@ -433,6 +433,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         mIsSendMessage = true
                         if (blockChatType == MUTUAL_SYMPATHY_STUB) {
                             chatData.clear()
+                            blockChatType == NO_BLOCK
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
@@ -448,13 +449,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
-    fun onGift() {
-        val immutableNavigator = navigator
-        val immutableUserId = mUser?.id
-        if (immutableNavigator != null && immutableUserId != null) {
-            immutableNavigator.showGiftsActivity(immutableUserId, "chat")
+    fun onGift() = mUser?.let {
+        if (blockChatType != LOCK_MESSAGE_FOR_SEND) {
+            navigator?.showGiftsActivity(it.id, "chat")
         } else {
-            Unit
+            navigator?.showUserIsTooPopularLock(it)
         }
     }
 

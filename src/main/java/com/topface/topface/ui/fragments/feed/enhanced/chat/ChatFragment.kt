@@ -8,12 +8,10 @@ import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
-import android.widget.ImageView
 import com.topface.topface.App
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Profile
 import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.databinding.NewChatToolbarAvatarBinding
 import com.topface.topface.di.ComponentManager
@@ -58,7 +56,6 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         }
     }
     private var mOverflowMenu: OverflowMenu? = null
-    private var mBarAvatar: MenuItem? = null
     private var mUser: FeedUser? = null
     private var mKeyboardWasShown = false // по умолчанию клава в чате закрыта
 
@@ -139,37 +136,19 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         val item = menu?.findItem(R.id.action_profile)
-        if (item != null && mBarAvatar != null) {
-            item.isChecked = mBarAvatar!!.isChecked
+        if (item != null) {
+            item.isChecked = item.isChecked
         }
-        mBarAvatar = item
         mOverflowMenu = OverflowMenu(this, menu).apply {
             initOverflowMenuActions(this)
         }
         val user = mUser
-        if (user != null && !user.banned) {
-            setActionBarAvatar(user)
-        }
-    }
-
-
-    fun setActionBarAvatar(user: FeedUser) = mBarAvatar?.let {
-        if (user.isEmpty || user.banned || user.deleted || user.photo?.isEmpty ?: true) {
-            showStubAvatar(it)
-        } else {
-            val view = MenuItemCompat.getActionView(it)
+        if (user != null) {
+            val view = MenuItemCompat.getActionView(item)
                     .findViewById(R.id.toolbar_avatar_root)
-            DataBindingUtil.bind<NewChatToolbarAvatarBinding>(view).viewModel = chatToolbarAvatarModel
+            val binding = DataBindingUtil.bind<NewChatToolbarAvatarBinding>(view)
+            binding.viewModel = chatToolbarAvatarModel
         }
-    }
-
-    fun showStubAvatar(menuItem: MenuItem) {
-        (MenuItemCompat.getActionView(menuItem)
-                .findViewById(R.id.toolbar_avatar) as ImageView)
-                .setImageResource(if (mUser?.sex == Profile.GIRL)
-                    R.drawable.rounded_avatar_female
-                else
-                    R.drawable.rounded_avatar_male)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
