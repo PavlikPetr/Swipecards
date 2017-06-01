@@ -1,18 +1,12 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.items
 
-import android.databinding.BindingAdapter
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.NO_POSITION
-import android.text.Html
-import android.text.util.Linkify
 import android.view.View
-import android.widget.TextView
 import com.topface.topface.R
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.api.responses.isFriendItem
-import com.topface.topface.di.ComponentManager
-import com.topface.topface.di.chat.ChatComponent
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.getDimen
@@ -128,16 +122,4 @@ fun List<HistoryItem>?.prepareDividers() = this?.apply {
             }
         }
     }
-}
-
-@BindingAdapter("autoLinkText")
-fun setAutoLinkText(textView: TextView, text: String) {
-    textView.text = Html.fromHtml(text.replace("\n", "<br />"))
-    // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
-    // Если нашли, то добавим им кликабельность
-    if (Linkify.addLinks(textView, Linkify.ALL)) {
-        textView.movementMethod = ComponentManager.obtainComponent(ChatComponent::class.java).customMovementMethod()
-        textView.isFocusable = false
-    }
-
 }
