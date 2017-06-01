@@ -433,7 +433,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         mIsSendMessage = true
                         if (blockChatType == MUTUAL_SYMPATHY_STUB) {
                             chatData.clear()
-                            blockChatType == NO_BLOCK
+                            blockChatType = NO_BLOCK
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
