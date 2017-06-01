@@ -12,6 +12,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
+import com.topface.topface.api.responses.OfferwallWithPlaces;
 import com.topface.topface.banners.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
@@ -227,6 +228,14 @@ public class Options extends AbstractData {
         return chatRedesign;
     }
 
+    private OfferwallWithPlaces offerwallWithPlaces;
+    public OfferwallWithPlaces getOfferwallWithPlaces() {
+        if (offerwallWithPlaces == null) {
+            offerwallWithPlaces = new OfferwallWithPlaces();
+        }
+        return offerwallWithPlaces;
+    }
+
     /**
      * {PaymentInfo} - информация/настройки по платежной системе Payment Ninja
      */
@@ -402,6 +411,8 @@ public class Options extends AbstractData {
             }
 
             chatRedesign = response.optInt("chatRedesign");
+
+            offerwallWithPlaces = JsonUtils.fromJson(response.optString("offerwallWithPlaces"), OfferwallWithPlaces.class);
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
