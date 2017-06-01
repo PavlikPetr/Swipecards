@@ -16,14 +16,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.banners.BannersController;
-import com.topface.topface.banners.PageInfo;
-import com.topface.topface.banners.RefreshablePageWithAds;
-import com.topface.topface.banners.ad_providers.IRefresher;
+import com.topface.topface.banners.IBannerAds;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.state.CountersDataProvider;
 import com.topface.topface.statistics.FlurryUtils;
@@ -36,6 +33,8 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.TabLayoutCreator;
 import com.topface.topface.utils.IActivityDelegate;
+import com.topface.topface.utils.IStateSaverRegistrator;
+import com.topface.topface.utils.IStateSaverRegistratorKt;
 import com.topface.topface.utils.Utils;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ import java.util.Locale;
 /**
  * base class for feeds with tabs
  */
-public abstract class TabbedFeedFragment extends BaseFragment implements RefreshablePageWithAds {
+public abstract class TabbedFeedFragment extends BaseFragment implements IBannerAds {
     public static final String HAS_FEED_AD = "com.topface.topface.has_feed_ad";
     public static final String EXTRA_OPEN_PAGE = "openTabbedFeedAt";
     private static final String LAST_OPENED_PAGE = "last_opened_page";
@@ -132,6 +131,11 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
             }
         });
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
+        mBannersController = new BannersController(this);
+        Activity stateSaverRegistrator = getActivity();
+        if (stateSaverRegistrator != null && stateSaverRegistrator instanceof IStateSaverRegistrator) {
+            ((IStateSaverRegistrator) stateSaverRegistrator).registerLifeCycleDelegate(mBannersController);
+        }
         return root;
     }
 
@@ -182,16 +186,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         }
         mPager.setCurrentItem(lastPage);
         mPageChangeListener.onPageSelected(lastPage);
-        initFloatBlock();
-    }
-
-    protected void initFloatBlock() {
-        Utils.addOnGlobalLayoutListener(mPager, new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                mBannersController = new BannersController(TabbedFeedFragment.this, App.get().getOptions());
-            }
-        });
     }
 
     protected abstract void addPages();
@@ -212,10 +206,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
         mCountersDataProvider.unsubscribe();
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(mHasFeedAdReceiver);
         mHasFeedAdReceiver = null;
-        if (mBannersController != null) {
-            mBannersController.onDestroy();
-            mBannersController = null;
-        }
+        IStateSaverRegistratorKt.unregisterLifeCycleDelegate(getActivity(), mBannersController);
     }
 
     @Override
@@ -225,21 +216,6 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
             setLastOpenedPage(mPager.getCurrentItem());
         }
         mPager = null;
-        if (mBannersController != null) {
-            mBannersController.onDestroy();
-            mBannersController = null;
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mBannersController != null) {
-            mBannersController.onResume(getActivity());
-        }
-        if (mRefresher != null) {
-            mRefresher.refreshBanner();
-        }
     }
 
     @Override
@@ -264,24 +240,12 @@ public abstract class TabbedFeedFragment extends BaseFragment implements Refresh
     protected abstract void setLastOpenedPage(int lastOpenedPage);
 
     @Override
-    public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.UNKNOWN_PAGE;
-    }
-
-    @Override
     public ViewGroup getContainerForAd() {
         View view = getView();
         if (view != null) {
             return (ViewGroup) getView().findViewById(R.id.banner_container_for_tabbed_feeds);
         }
         return null;
-    }
-
-    private IRefresher mRefresher;
-
-    @Override
-    public void setRefresher(IRefresher refresher) {
-        mRefresher = refresher;
     }
 
     @Override

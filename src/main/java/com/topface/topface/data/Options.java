@@ -12,8 +12,7 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.banners.PageInfo;
-import com.topface.topface.banners.ad_providers.AdProvidersFactory;
+import com.topface.topface.banners.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
@@ -34,7 +33,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import static com.topface.topface.data.leftMenu.FragmentIdData.DATING;
@@ -61,11 +59,6 @@ public class Options extends AbstractData {
     protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
     private final static int TRIAL_VIP_MAX_SHOW_COUNT = 10;
-
-    /**
-     * Настройки для каждого типа страниц
-     */
-    private HashMap<String, PageInfo> pages = new HashMap<>();
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
@@ -152,7 +145,7 @@ public class Options extends AbstractData {
      */
     public PromoPopupEntity premiumAdmirations;
     public GetJar getJar;
-    public String fallbackTypeBanner = AdProvidersFactory.BANNER_ADMOB;
+    public String fallbackTypeBanner = AdProvidersFactory.BANNER_APPODEAL;
     public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
@@ -229,6 +222,7 @@ public class Options extends AbstractData {
      * {int} - номер версии чата, 0 - старая, 1 - новая и тд
      */
     private int chatRedesign;
+
     public int getChatRedesign() {
         return chatRedesign;
     }
@@ -265,11 +259,6 @@ public class Options extends AbstractData {
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
-            // Pages initialization
-            PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
-            for (PageInfo pageInfo : pagesArr) {
-                pages.put(pageInfo.name, pageInfo);
-            }
             fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             updateUrl = response.optString("updateUrl", App.getContext().getString(R.string.app_update_url));
@@ -350,7 +339,7 @@ public class Options extends AbstractData {
             }
             isHideAdmirations = response.optBoolean("hideAdmirations", false);
 
-            fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
+            fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_APPODEAL);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             scruffy = response.optBoolean("scruffy", false);
             App.isScruffyEnabled = scruffy;
@@ -474,14 +463,6 @@ public class Options extends AbstractData {
         return Integer.toString(type) + INNER_SEPARATOR + ((isMail) ? INNER_MAIL_CONST : INNER_APNS_CONST);
     }
 
-    public Map<String, PageInfo> getPagesInfo() {
-        return pages;
-    }
-
-    public void setPagesInfo(Map<String, PageInfo> pages) {
-        this.pages = new HashMap<>(pages);
-    }
-
     public static void sendUpdateOptionsBroadcast() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(UserGetAppOptionsRequest.OPTIONS_UPDATE_ACTION));
@@ -489,15 +470,6 @@ public class Options extends AbstractData {
 
     public String getPaymentwallLink() {
         return paymentwall;
-    }
-
-    public boolean containsBannerType(String bannerType) {
-        for (PageInfo page : pages.values()) {
-            if (page.getBanner().equals(bannerType)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static class AboutApp {

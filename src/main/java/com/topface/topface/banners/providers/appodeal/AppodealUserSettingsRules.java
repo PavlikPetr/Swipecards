@@ -1,4 +1,4 @@
-package com.topface.topface.banners;
+package com.topface.topface.banners.providers.appodeal;
 
 import android.support.annotation.StringRes;
 
