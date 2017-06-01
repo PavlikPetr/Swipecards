@@ -14,7 +14,7 @@ open class ClickableChatItemViewModel(val item: HistoryItem, val itemPosition: I
     override val isDividerVisible = item.isDividerVisible
 
     fun onLongClick(): Boolean {
-        feedNavigator.showChatPopupMenu(item, itemPosition)
+        feedNavigator.showChatPopupMenu(item, item.id)
         return true
     }
 
