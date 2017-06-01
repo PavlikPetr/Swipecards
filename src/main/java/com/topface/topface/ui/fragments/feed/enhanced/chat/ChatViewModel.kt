@@ -17,7 +17,6 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -28,6 +27,8 @@ import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
@@ -59,6 +60,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         private const val LOCK_MESSAGE_SEND = 36
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
+        const val SERVER_TIME_CORRECTION = 1000L
         const val LAST_ITEM_ID = "last id"
     }
 
@@ -249,20 +251,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             while (iterator.hasNext()) {
                 val item = iterator.next()
                 if (item is HistoryItem && predicate(item)) {
-                    updateNearAvatarBeforeDelete(chatData.indexOf(item))
                     iterator.remove()
-                }
-            }
-        }
-    }
-
-    private fun updateNearAvatarBeforeDelete(position: Int) {
-        if (position > 0) {
-            (chatData[position] as? HistoryItem)?.let { currentItem ->
-                if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
-                    (chatData[position - 1] as? HistoryItem)?.let { prevItem ->
-                        if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
-                    }
+                    chatData.filterIsInstance<HistoryItem>().prepareDividers().prepareAvatars()
                 }
             }
         }
@@ -390,7 +380,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.clear()
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / 1000L)))
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
@@ -417,7 +407,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun giftAnswerToHistoryItem(answer: SendGiftAnswer): UserGift? {
         return answer.history?.let {
-            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created,
+            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created / SERVER_TIME_CORRECTION,
                     it.target, it.unread, it.link))
         }
     }
