@@ -73,8 +73,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
-    val isEnable = ObservableBoolean(false)
-    val isEditTextEnable = ObservableBoolean(false)
+    val isSendButtonEnable = ObservableBoolean(false)
+    val isSendGiftEnable = ObservableBoolean(true)
+    val isEditTextEnable = ObservableBoolean(true)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
@@ -114,7 +115,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?: Observable.empty()
 
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isEnable.set(it.isNotBlank())
+            isSendButtonEnable.set(it.isNotBlank())
         })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
@@ -312,13 +313,16 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
+                mIsNeedToDeleteMutualStub = true
                 isEditTextEnable.set(true)
                 stub = MutualStub()
             } else if (!mIsPremium) {
                 isEditTextEnable.set(false)
+                isSendGiftEnable.set(false)
                 stub = NotMutualBuyVipStub()
             }
-        }
+        } else isEditTextEnable.set(true)
+
         if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
@@ -329,6 +333,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                     LOCK_CHAT -> {
                         isEditTextEnable.set(false)
+                        isSendGiftEnable.set(false)
                         BuyVipStub()
                     }
                     LOCK_MESSAGE_SEND -> {
