@@ -114,11 +114,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         const val LAST_ITEM_ID = "last id"
 
         const val NO_BLOCK = 0
-        const val MUTUAL_SYMPATHY_LOCK = 7
+        const val MUTUAL_SYMPATHY_LOCK = MUTUAL_SYMPATHY
         const val MUTUAL_SYMPATHY_STUB = 8
         const val NO_MUTUAL_NO_VIP_STUB = 9
-        const val LOCK_CHAT_STUB = 35
-        const val LOCK_MESSAGE_FOR_SEND = 36
+        const val LOCK_CHAT_STUB = LOCK_CHAT
+        const val LOCK_MESSAGE_FOR_SEND = LOCK_MESSAGE_SEND
     }
 
     internal var navigator: FeedNavigator? = null
