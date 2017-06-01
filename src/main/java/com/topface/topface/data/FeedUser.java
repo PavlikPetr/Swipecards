@@ -84,6 +84,18 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         return feedUser;
     }
 
+    public static FeedUser createFeedUserFromUser(User user) {
+        FeedUser feedUser = new FeedUser();
+        if (user != null) {
+            feedUser.id = user.uid;
+            feedUser.sex = user.sex;
+            feedUser.firstName = user.firstName;
+            feedUser.age = user.age;
+            feedUser.photo = user.photo;
+            feedUser.city = user.city;
+        }
+        return feedUser;
+    }
 
     public void setFeedItemId(String feedItemId) {
         this.feedItemId = feedItemId;

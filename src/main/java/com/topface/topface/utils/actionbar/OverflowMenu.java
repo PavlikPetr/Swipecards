@@ -32,6 +32,7 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -43,7 +44,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION;
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.ADD_TO_BOOKMARK_ACTION;
@@ -100,6 +100,7 @@ public class OverflowMenu {
     };
 
     private IFragmentDelegate mFragmentDelegate;
+    private UserProfileFragment.IChatOpener mChatOpener;
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions) {
         mBarActions = barActions;
@@ -109,8 +110,9 @@ public class OverflowMenu {
         mFragmentDelegate = iFragmentDelegate;
     }
 
-    public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
+    public OverflowMenu(IFragmentDelegate iFragmentDelegate, UserProfileFragment.IChatOpener chatOpener, Menu barActions, RateController rateController, ApiResponse savedResponse) {
         this(iFragmentDelegate, barActions);
+        mChatOpener = chatOpener;
         mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
             public void onNext(BalanceData balanceData) {
@@ -279,7 +281,11 @@ public class OverflowMenu {
                 onClickSendAdmirationAction();
                 break;
             case OPEN_CHAT_ACTION:
-                onClickOpenChatAction();
+                if (mChatOpener != null) {
+                    mChatOpener.onOpenChat();
+                } else {
+                    onClickOpenChatAction();
+                }
                 break;
             case SEND_GIFT_ACTION:
                 onClickSendGiftAction();
@@ -649,6 +655,7 @@ public class OverflowMenu {
     }
 
     public void onReleaseOverflowMenu() {
+        mChatOpener = null;
         if (mBalanceSubscription != null) {
             mBalanceSubscription.unsubscribe();
         }
