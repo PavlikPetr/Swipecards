@@ -46,7 +46,7 @@
                 android:layout_marginLeft="@dimen/chat_d1_friend_lefT_margin"
                 android:autoLink="all"
                 android:background="@drawable/chat_item_d1_bg_friend"
-                android:text="@{viewModel.text}"
+                bind:autoLinkText="@{viewModel.text}"
                 android:textColor="@color/dark_primary_text"
                 android:textSize="16sp"
                 bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
