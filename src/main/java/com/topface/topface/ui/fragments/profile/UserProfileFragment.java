@@ -22,6 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
@@ -39,6 +40,7 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
@@ -189,7 +191,17 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu(this, barActions, mRateController, mSavedResponse);
+        return new OverflowMenu(this, new IChatOpener() {
+            @Override
+            public void onOpenChat() {
+                Intent chatIntent = ChatIntentCreator.createIntent(FeedUser.createFeedUserFromUser(mRequestedUser), null, null);
+                startActivityForResult(chatIntent, ChatActivity.REQUEST_CHAT);
+            }
+        }, barActions, mRateController, mSavedResponse);
+    }
+
+    public interface IChatOpener {
+        void onOpenChat();
     }
 
     @Override

@@ -17,7 +17,6 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -28,6 +27,8 @@ import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
@@ -59,6 +60,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         private const val LOCK_MESSAGE_SEND = 36
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
+        const val SERVER_TIME_CORRECTION = 1000L
         const val LAST_ITEM_ID = "last id"
     }
 
@@ -103,10 +105,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     override fun bind() {
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
-        val user = mUser
-        if (user?.photo != null && user.photo.isEmpty) {
-            takePhotoIfNeed()
-        }
+        takePhotoIfNeed()
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
@@ -182,7 +181,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     //private fun createP2RObservable() = Observable.just(createUpdateObject(-1))
 
     private fun takePhotoIfNeed() {
-        if (mIsNeedShowAddPhoto) {
+        val photo = App.get().profile.photo
+        if (mIsNeedShowAddPhoto && (photo == null || photo.isEmpty)) {
             mIsNeedShowAddPhoto = false
             if (isTakePhotoApplicable()) {
                 navigator?.showTakePhotoPopup()
@@ -239,7 +239,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate {it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -249,20 +249,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             while (iterator.hasNext()) {
                 val item = iterator.next()
                 if (item is HistoryItem && predicate(item)) {
-                    updateNearAvatarBeforeDelete(chatData.indexOf(item))
                     iterator.remove()
-                }
-            }
-        }
-    }
-
-    private fun updateNearAvatarBeforeDelete(position: Int) {
-        if (position > 0) {
-            (chatData[position] as? HistoryItem)?.let { currentItem ->
-                if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
-                    (chatData[position - 1] as? HistoryItem)?.let { prevItem ->
-                        if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
-                    }
+                    chatData.filterIsInstance<HistoryItem>().prepareDividers().prepareAvatars()
                 }
             }
         }
@@ -277,6 +265,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+                    chatResult?.setResult(createResultIntent())
                     setStubsIfNeed(it)
                     if (it?.items?.isNotEmpty() ?: false) {
                         val items = ArrayList<HistoryItem>()
@@ -386,11 +375,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     .doOnSubscribe {
                         mHasStubItems = true
                         mIsSendMessage = true
-                        if (mIsNeedToDeleteMutualStub){
+                        if (mIsNeedToDeleteMutualStub) {
                             chatData.clear()
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / 1000L)))
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
@@ -417,7 +406,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun giftAnswerToHistoryItem(answer: SendGiftAnswer): UserGift? {
         return answer.history?.let {
-            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created,
+            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created / SERVER_TIME_CORRECTION,
                     it.target, it.unread, it.link))
         }
     }
@@ -463,11 +452,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * Новые модели только на этом экране, чтоб работал старый код нужен этот костыль
      */
     private fun toOldHistoryItem(item: HistoryItem?) = item?.let {
-        com.topface.topface.data.History(JSONObject(it.toJson()))
+        com.topface.topface.data.History(JSONObject(it.toJson())).apply { user = mUser }
     }
 
     internal fun createResultIntent() = Intent().apply {
-        putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(getFirstCorrectItemId()))
+        if (chatData.isNotEmpty()) {
+            putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(chatData.first() as HistoryItem))
+        }
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
         putExtra(SEND_MESSAGE, mIsSendMessage)
         putExtra(INTENT_USER_ID, mUser?.id ?: -1)
