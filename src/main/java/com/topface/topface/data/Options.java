@@ -230,7 +230,7 @@ public class Options extends AbstractData {
      */
     private int chatRedesign;
     public int getChatRedesign() {
-        return chatRedesign;
+        return 1;
     }
 
     /**

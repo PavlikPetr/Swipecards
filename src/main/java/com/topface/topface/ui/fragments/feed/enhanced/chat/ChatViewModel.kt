@@ -37,7 +37,6 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.showLongToast
-import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -51,6 +50,56 @@ import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
+
+/**                         Условия показа и типы блокировок. Инфа актуальна с 31.05.2017
+ *
+ *                  Блокировка "сообщением о взаимной симпатии"
+ *
+ * Условия: В истории сообщений приходит сообщение с типом(historyItem.type) MUTUAL_SYMPATHY. Вне зависимости вип или Невип
+ * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.MutualStubChatViewModel
+ * Блокиировка экрана чата: Пользователь может отправить сообщение или подарок, после отправки заглушку убираем
+ *
+ *                  Блокировка "У вас есть взаимная симпатия, напишите первым"
+ *
+ * Условия: История сообщений пуста. Пользователь заходит в чат с юзером, с которым у него ЕСТЬ взаимная симпатия.
+ *          Вне зависимости вип или НЕвип. Переход в чат может быть с любого экрана(симпатии, гости , знакомства и пр.)
+ * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.MutualStubChatViewModel
+ * Блокиировка экрана чата: Пользователь может отправить сообщение или подарок, после отправки заглушку убираем
+ *
+ *                  Блокировка "У вас нет взаимной симпатии. купите вип, чтобы писать без взаимной симпатии"
+ *
+ * Условия: История сообщений пуста. Пользователь заходит в чат с юзером, с которым у него НЕТ взаимной симпатии.
+ *          Пользователь НЕвип. Переход в чат может быть с любого экрана(симпатии, гости , знакомства и пр.)
+ * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.NotVipAndSympViewModel
+ * Блокировки экрана чата: Пользователь НЕ может отправить сообщение или подарок(кнопки disable, поле ввода текста также НЕактивно).
+ *                          Единственное действие переход по кнопке для покупки випа. В случае покупки випа удаляем заглушку.
+ *
+ *                  Блокировка LOCK_CHAT_STUB (В рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя)
+ *
+ * Условия: В истории сообщений приходит сообщение с типом(historyItem.type) LOCK_CHAT. Пользователь НЕвип.
+ *          В диалогах это выглядит как пустое сообщение, при переходе показываем.
+ * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.BuyVipStubViewModel
+ * Блокировка экрана чата: Пользователь НЕ может отправить сообщение или подарок(кнопки disable, поле ввода текста также НЕактивно).
+ *                          Единственное действие переход по кнопке для покупки випа. В случае покупки випа удаляем заглушку.
+ *
+ *                  Блокировка LOCK_MESSAGE_SEND (В рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя)
+ *
+ * Условия: В истории сообщений приходит сообщение с типом(historyItem.type) LOCK_MESSAGE_SEND. Пользователь НЕвип.
+ *          Показываем пользователю при нажатии на отправку сообщения.
+ * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.СhatMessage36DialogViewModel
+ * Блокировка экрана чата: При попытке отправить сообщение показываем попап. Единственное действие - переход на покупку вип. Купил - убираем блокировку
+ *
+ *                  Отсутствие блокировоk
+ *
+ *  Пользователь может кому-то написать первым только в случае:
+ *   - не выполняются условия для показа блокировок
+ *   - у него есть вип
+ *   - у него есть взаимная симпатия с юзером, которому он пишет
+ *  Пользователь может ответить в случае:
+ *   - не выполняются условия для показа блокировok
+ *   - если ему пришло сообщение
+ *
+ */
 
 class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
@@ -294,21 +343,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 )))
     }
 
-/*                          Условия показов заглушек и попапа-заглушки.
-*    Первоначально проверяем на наличие итемов в History, которые пришли с сервера и наличие итемов в уже существующем списке
-*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
-*          1) У юзера взаимная симпатия и он начинает диалог
-*    Если сообщения все-таки есть, то смотрим по типам сообщений, ктороые могу приходить
-*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
-*          1) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
-*
-*    Раз в сутки в рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя
-*      Заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
-*          1) У юзера нет premium и ему приходит тип сообщения "LOCK_CHAT"(оно не показывается в чате)
-*      Попап-заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
-*          1) У юзера нет premium и ему приходит тип сообщения "LOCK_MESSAGE_SEND"(Оно показыватся в чате). Далее, при попытке ответить на это сообщение мы показываем попап-заглушку
-*/
 
+    private var stubType: Int = NO_STUB
     private fun setStubsIfNeed(history: History) {
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
@@ -347,6 +383,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             }
         }
         stub?.let { chatData.add(stub) }
+    }
+
+    private fun setBlockSettings(){
+
     }
 
     /**
