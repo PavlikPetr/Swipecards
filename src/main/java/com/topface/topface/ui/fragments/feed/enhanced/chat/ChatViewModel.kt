@@ -37,6 +37,7 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.showLongToast
+import com.topface.topface.utils.extensions.showShortToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
 import com.topface.topface.utils.rx.observeBroabcast
@@ -113,7 +114,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?: Observable.empty()
 
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-                        isEnable.set(it.isNotBlank())
+            isEnable.set(it.isNotBlank())
         })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
@@ -261,6 +262,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * Обновление по эмитам гцм, птр, таймера
      */
     private fun update(updateContainer: Triple<Int, String?, String?>) {
+
         val addToStart = updateContainer.second != null
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
                 .subscribe(shortSubscription({
@@ -436,10 +438,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                 }
             }
-
-            PurchasesActivity.INTENT_BUY_VIP-> {
+            PurchasesActivity.INTENT_BUY_VIP -> {
                 chatData.clear()
-                isEditTextEnable.set(true)
+                update(createUpdateObject(mUser?.id ?: -1))
             }
             ComplainsActivity.REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
