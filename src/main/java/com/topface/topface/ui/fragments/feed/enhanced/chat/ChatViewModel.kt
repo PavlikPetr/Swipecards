@@ -71,7 +71,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
-    val isButtonsEnable = ObservableBoolean(false)
+    val isEnable = ObservableBoolean(false)
+    val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
@@ -92,7 +93,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mHasStubItems = false
     private var mIsPremium = false
     private var mIsNeedToShowToPopularPopup = false
-    private var mIsNeedToBlockChat = false
     private var mIsNeedToDeleteMutualStub = false
     private var mIsNeedShowAddPhoto = true
     /**
@@ -112,7 +112,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?: Observable.empty()
 
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isButtonsEnable.set(it.isNotBlank() && !mIsNeedToBlockChat)
+                        isEnable.set(it.isNotBlank())
         })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
@@ -309,10 +309,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
-                mIsNeedToDeleteMutualStub = true
+                isEditTextEnable.set(true)
                 stub = MutualStub()
             } else if (!mIsPremium) {
-                mIsNeedToBlockChat = true
+                isEditTextEnable.set(false)
                 stub = NotMutualBuyVipStub()
             }
         }
@@ -321,13 +321,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 stub = when (it.type) {
                     MUTUAL_SYMPATHY -> {
                         mIsNeedToDeleteMutualStub = true
+                        isEditTextEnable.set(true)
                         MutualStub()
                     }
                     LOCK_CHAT -> {
-                        mIsNeedToBlockChat = true
+                        isEditTextEnable.set(false)
                         BuyVipStub()
                     }
                     LOCK_MESSAGE_SEND -> {
+                        isEditTextEnable.set(true)
                         mIsNeedToShowToPopularPopup = true
                         mHasStubItems = true
                         null
