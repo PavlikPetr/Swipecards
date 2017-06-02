@@ -26,7 +26,10 @@ class ChatToolbarAvatarModel(private val user: FeedUser?, private val navigator:
             Toast.makeText(App.getContext(), R.string.user_deleted_or_banned,
                     Toast.LENGTH_LONG).show()
         } else {
-            navigator.showProfile(it, "chat_fragment")
+            // костыль, чтоб блокировать показ чата в оверфлоу меню профиля, если мы переходим в профиль
+            // из чата с дизайном версии 1
+            // по хорошему здесь должен быть вызов navigator.showProfile(it, "chat_fragment")
+            navigator.showProfileNoChat(it, "chat_fragment")
         }
     }
 }

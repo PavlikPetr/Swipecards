@@ -455,7 +455,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         chatResult?.setResult(createResultIntent())
                     })))
         } else {
-            mUser?.let { navigator?.showUserIsTooPopularLock(it) }
+            navigator?.showUserIsTooPopularLock(it)
         }
     }
 
