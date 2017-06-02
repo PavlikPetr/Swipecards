@@ -27,42 +27,42 @@ class IronSourceManager {
 
     val offerwallObservable: Observable<IronSourceOfferwallEvent>
     private var mInitSuccessSubscription: Subscription? = null
+    var mEmitter: Emitter<IronSourceOfferwallEvent>? = null
 
     init {
-        var emitter: Emitter<IronSourceOfferwallEvent>? = null
         offerwallObservable = Observable.fromEmitter<IronSourceOfferwallEvent>({
-            emitter = it
+            mEmitter = it
         }, Emitter.BackpressureMode.LATEST).share()
         IronSource.setOfferwallListener(object : OfferwallListener {
             override fun onOfferwallAvailable(isAvailable: Boolean) {
                 Debug.log("$TAG onOfferwallAvailable = $isAvailable")
-                emitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallAvailable(isAvailable))
+                mEmitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallAvailable(isAvailable))
             }
 
             override fun onOfferwallShowFailed(error: IronSourceError?) {
                 Debug.log("$TAG onOfferwallShowFailed error $error")
-                emitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallShowFailed(error))
+                mEmitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallShowFailed(error))
             }
 
             override fun onOfferwallClosed() {
                 Debug.log("$TAG onOfferwallClosed")
-                emitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallClosed())
+                mEmitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallClosed())
             }
 
             override fun onOfferwallAdCredited(credits: Int, totalCredits: Int, totalCreditsFlag: Boolean): Boolean {
                 Debug.log("$TAG onOfferwallAdCredited $credits $totalCredits $totalCreditsFlag")
-                emitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallAdCredited(credits, totalCredits, totalCreditsFlag))
+                mEmitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallAdCredited(credits, totalCredits, totalCreditsFlag))
                 return false
             }
 
             override fun onOfferwallOpened() {
                 Debug.log("$TAG onOfferwallOpened")
-                emitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallOpened())
+                mEmitter?.onNext(IronSourceOfferwallEvent.getOnOfferwallOpened())
             }
 
             override fun onGetOfferwallCreditsFailed(error: IronSourceError?) {
                 Debug.log("$TAG onGetOfferwallCreditsFailed error $error")
-                emitter?.onNext(IronSourceOfferwallEvent.getOnGetOfferwallCreditsFailed(error))
+                mEmitter?.onNext(IronSourceOfferwallEvent.getOnGetOfferwallCreditsFailed(error))
             }
         })
         IronSource.setLogListener { ironSourceTag, s, i -> Debug.log("$TAG IronSourceTag:$ironSourceTag $s $i") }
@@ -72,7 +72,7 @@ class IronSourceManager {
         IronSource.init(activity, APP_KEY, IronSource.AD_UNIT.OFFERWALL)
     }
 
-    fun showOfferwall(plc: String, activity: Activity) {
+    fun showOfferwall(plc: String) {
         if (IronSource.isOfferwallAvailable()) {
             IronSource.showOfferwall(plc)
         } else {
@@ -80,25 +80,16 @@ class IronSourceManager {
                     .filter { it.type == IronSourceOfferwallEvent.OFFERWALL_AVAILABLE }
                     .first()
                     .subscribe(shortSubscription { IronSource.showOfferwall(plc) })
-            initSdk(activity)
         }
     }
 
-    fun showOfferwallByType(type: String, activity: Activity) {
+    fun showOfferwallByType(type: String) {
         type.getIronSourcePlc()?.let {
-            showOfferwall(it, activity)
+            showOfferwall(it)
         }
     }
 
-    fun showLikesOfferwall(activity: Activity) {
-        showOfferwallByType(SYMPATHIES_OFFERWALL, activity)
-    }
-
-    fun showCoinsOfferwall(activity: Activity) {
-        showOfferwallByType(COINS_OFFERWALL, activity)
-    }
-
-    fun showVipOfferwall(activity: Activity) {
-        showOfferwallByType(VIP_OFFERWALL, activity)
+    fun emmitNewState(event: IronSourceOfferwallEvent) {
+        mEmitter?.onNext(event)
     }
 }

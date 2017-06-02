@@ -26,10 +26,9 @@ import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.bonus.view.BonusActivity;
-import com.topface.topface.ui.bonus.view.BonusFragment;
+import com.topface.topface.ui.bonus.BonusFragment;
+import com.topface.topface.ui.bonus.BonusActivity;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
-import com.topface.topface.ui.external_libs.offers.OffersModels;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
@@ -122,19 +121,20 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setCompletedByIntent(getIntent());
         }
-        mEventBusSubscriber = mEventBus.getObservable(OffersModels.OfferOpened.class).subscribe(new Action1<OffersModels.OfferOpened>() {
-            @Override
-            public void call(OffersModels.OfferOpened offerOpened) {
-                if (mTopfaceOfferwallRedirect != null) {
-                    mTopfaceOfferwallRedirect.setCompletedByBroadcast();
-                }
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Debug.error(throwable);
-            }
-        });
+        //TODO  надо запилить подписку на новые оферы
+//        mEventBusSubscriber = mEventBus.getObservable(OffersModels.OfferOpened.class).subscribe(new Action1<OffersModels.OfferOpened>() {
+//            @Override
+//            public void call(OffersModels.OfferOpened offerOpened) {
+//                if (mTopfaceOfferwallRedirect != null) {
+//                    mTopfaceOfferwallRedirect.setCompletedByBroadcast();
+//                }
+//            }
+//        }, new Action1<Throwable>() {
+//            @Override
+//            public void call(Throwable throwable) {
+//                Debug.error(throwable);
+//            }
+//        });
     }
 
     @Override
@@ -145,7 +145,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         RxUtils.safeUnsubscribe(mEventBusSubscriber);
 
         if (isFinishing()) {
-            mPresenterCache.removePresenter(BonusFragment.TAG);
+            mPresenterCache.removePresenter(BonusFragment.Companion.getTAG());
         }
         super.onDestroy();
     }

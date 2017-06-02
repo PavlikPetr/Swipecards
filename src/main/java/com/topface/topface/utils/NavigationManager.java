@@ -22,12 +22,12 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.statistics.FBInvitesStatistics;
 import com.topface.topface.ui.PurchasesActivity;
-import com.topface.topface.ui.bonus.view.BonusFragment;
+import com.topface.topface.ui.bonus.BonusFragment;
 import com.topface.topface.ui.fragments.BaseFragment;
-import com.topface.topface.ui.fragments.editor.EditorFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
 import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
+import com.topface.topface.ui.fragments.editor.EditorFragment;
 import com.topface.topface.ui.fragments.feed.TabbedLikesFragment;
 import com.topface.topface.ui.fragments.feed.TabbedVisitorsFragment;
 import com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign.DialogsFragment;
@@ -187,7 +187,7 @@ public class NavigationManager {
                         new PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
-                fragment = BonusFragment.newInstance(true);
+                fragment = BonusFragment.Companion.newInstance(true);
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;

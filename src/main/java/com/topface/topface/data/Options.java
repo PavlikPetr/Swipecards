@@ -21,7 +21,7 @@ import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
-import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.bonus.OfferwallsSettings;
 import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;

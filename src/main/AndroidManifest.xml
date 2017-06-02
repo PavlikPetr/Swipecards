@@ -240,7 +240,7 @@
             android:name=".ui.RestoreAccountActivity"
             android:theme="@style/Theme.Topface.RestoreAccountActivity"/>
         <activity android:name=".ui.BlackListActivity"/>
-        <activity android:name=".ui.bonus.view.BonusActivity"/>
+        <activity android:name=".ui.bonus.BonusActivity"/>
         <activity
                 android:name=".ui.ChatActivity"
                 android:parentActivityName=".ui.NavigationActivity"
