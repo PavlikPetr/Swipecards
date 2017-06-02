@@ -101,6 +101,7 @@
                 android:layout_below="@+id/mutualIC"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
+                android:gravity="center"
                 android:text="@string/mutual_popup_you_get_mutual"
                 android:textColor="@color/dark_primary_text"
                 android:textSize="20sp"/>
@@ -111,6 +112,7 @@
                 android:layout_below="@+id/stub_title"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
+                android:gravity="center"
                 android:text="@{viewModel.stubText}"
                 android:textColor="@color/google_grey_500"
                 android:textSize="16sp"/>

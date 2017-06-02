@@ -179,6 +179,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                     }
                 }
 
+                override fun isChatHidden() = false
                 override fun getBlackListValue() = mUser?.inBlacklist
                 override fun getBookmarkValue() = mUser?.bookmarked
                 override fun isOpenChatAvailable() = true

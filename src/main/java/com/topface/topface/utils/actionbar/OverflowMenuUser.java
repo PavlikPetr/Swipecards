@@ -23,6 +23,8 @@ public interface OverflowMenuUser {
 
     boolean isAddToFavoritsAvailable();
 
+    boolean isChatHidden();
+
     Boolean isMutual();
 
     void clickSendGift();
