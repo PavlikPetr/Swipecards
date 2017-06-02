@@ -150,7 +150,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mHasStubItems = false
     private var mIsPremium = false
     private var mIsNeedShowAddPhoto = true
-    var blockChatType: Int = NO_BLOCK
+    private var mBlockChatType: Int = NO_BLOCK
 
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
@@ -163,9 +163,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun bind() {
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         takePhotoIfNeed()
+
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1) }
+                ?.map {
+                    chatData.add(ChatLoader())
+                    createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
@@ -315,6 +318,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+                    chatData.remove(ChatLoader())
                     chatResult?.setResult(createResultIntent())
                     setStubsIfNeed(it)
                     setBlockSettings()
@@ -324,7 +328,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             when (it.type) {
                                 LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
                             }
-                            if (blockChatType == NO_BLOCK || blockChatType == LOCK_MESSAGE_FOR_SEND) {
+                            if (mBlockChatType == NO_BLOCK || mBlockChatType == LOCK_MESSAGE_FOR_SEND) {
                                 items.add(wrapHistoryItem(it))
                             }
                         }
@@ -345,10 +349,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
-                blockChatType = MUTUAL_SYMPATHY_STUB
+                mBlockChatType = MUTUAL_SYMPATHY_STUB
                 stub = MutualStub()
             } else if (!mIsPremium) {
-                blockChatType = NO_MUTUAL_NO_VIP_STUB
+                mBlockChatType = NO_MUTUAL_NO_VIP_STUB
                 stub = NotMutualBuyVipStub()
             }
         } else isEditTextEnable.set(true)
@@ -357,19 +361,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             history.items.forEach {
                 stub = when (it.type) {
                     MUTUAL_SYMPATHY -> {
-                        blockChatType = MUTUAL_SYMPATHY_STUB
+                        mBlockChatType = MUTUAL_SYMPATHY_STUB
                         MutualStub()
                     }
                     LOCK_CHAT -> {
-                        blockChatType = LOCK_CHAT_STUB
+                        mBlockChatType = LOCK_CHAT_STUB
                         BuyVipStub()
                     }
                     LOCK_MESSAGE_SEND -> {
-                        blockChatType = LOCK_MESSAGE_FOR_SEND
+                        mBlockChatType = LOCK_MESSAGE_FOR_SEND
                         null
                     }
                     else -> {
-                        blockChatType = NO_BLOCK
+                        mBlockChatType = NO_BLOCK
                         null
                     }
                 }
@@ -379,7 +383,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun setBlockSettings() {
-        when (blockChatType) {
+        when (mBlockChatType) {
             MUTUAL_SYMPATHY_STUB, LOCK_MESSAGE_FOR_SEND, NO_BLOCK -> {
                 isSendGiftEnable.set(true)
                 isEditTextEnable.set(true)
@@ -426,14 +430,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     fun onMessage() = mUser?.let {
         val message = message.get()
-        if (blockChatType != LOCK_MESSAGE_FOR_SEND) {
+        if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
                     .doOnSubscribe {
                         mHasStubItems = true
                         mIsSendMessage = true
-                        if (blockChatType == MUTUAL_SYMPATHY_STUB) {
+                        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
                             chatData.clear()
-                            blockChatType = NO_BLOCK
+                            mBlockChatType = NO_BLOCK
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
@@ -450,7 +454,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     fun onGift() = mUser?.let {
-        if (blockChatType != LOCK_MESSAGE_FOR_SEND) {
+        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+            chatData.clear()
+            mBlockChatType = NO_BLOCK
+        }
+        if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             navigator?.showGiftsActivity(it.id, "chat")
         } else {
             navigator?.showUserIsTooPopularLock(it)
