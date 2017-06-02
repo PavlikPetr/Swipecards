@@ -124,7 +124,7 @@ public class MenuFragment extends Fragment {
 
             // Добавление "Бонусного итема"
             data = getBonusItem();
-            if (options.offerwallsSettings.isEnable()) {
+            if (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty()) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data,
                             lastOfIntegrationItemsKey,
@@ -392,7 +392,7 @@ public class MenuFragment extends Fragment {
             arrayList.add(getFbInvitation());
         }
         //  Item "Бонус"
-        if (options.offerwallsSettings.isEnable()) {
+        if (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty()) {
             arrayList.add(getBonusItem());
         }
         // Item "Баланс"
