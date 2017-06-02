@@ -88,7 +88,8 @@ public class BonusPresenter implements IBonusPresenter {
 
     @Override
     public void loadOfferwalls() {
-        if (App.get().getOptions().offerwallsSettings.isEnable()) {
+        // показывать при условии, что с сервера приходят настройки, необходимости показывать в левом меню
+        if (!App.get().getOptions().getOfferwallWithPlaces().getLeftMenu().isEmpty()) {
             if (mOffers.isEmpty()) {
                 showLoader();
                 getOfferwalls();
