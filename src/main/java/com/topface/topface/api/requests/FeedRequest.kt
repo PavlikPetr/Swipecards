@@ -1,6 +1,7 @@
 package com.topface.topface.api.requests
 
 import com.google.gson.JsonObject
+import com.topface.topface.App
 import com.topface.topface.api.UnreadStatePair
 import com.topface.topface.utils.loadcontollers.FeedLoadController
 
@@ -23,7 +24,6 @@ class FeedRequest<T : Any>(val service: String, val previousUnreadState: UnreadS
             addProperty("fromUnread", previousUnreadState.from)
             addProperty("toUnread", previousUnreadState.to)
         }
-        //todo запилить синглтоном не дело каждый раз инстансы создавать
-        addProperty("limit", FeedLoadController().itemsLimitByConnectionType)
+        addProperty("limit", App.getAppComponent().feedLoadController().itemsLimitByConnectionType)
     }
 }
