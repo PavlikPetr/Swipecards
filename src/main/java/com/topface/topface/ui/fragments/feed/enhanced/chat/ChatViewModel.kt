@@ -19,6 +19,7 @@ import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
+import com.topface.topface.data.Profile
 import com.topface.topface.data.SendGiftAnswer
 import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
@@ -113,6 +114,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         const val SERVER_TIME_CORRECTION = 1000L
         const val LAST_ITEM_ID = "last id"
 
+        const val UNDEFINED = -1
         const val NO_BLOCK = 0
         const val MUTUAL_SYMPATHY_LOCK = MUTUAL_SYMPATHY
         const val MUTUAL_SYMPATHY_STUB = 8
@@ -139,6 +141,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mMessageChangeSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mHasPremiumSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
@@ -150,7 +153,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mHasStubItems = false
     private var mIsPremium = false
     private var mIsNeedShowAddPhoto = true
-    var blockChatType: Int = NO_BLOCK
+    private var mBlockChatType: Int = UNDEFINED
 
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
@@ -161,6 +164,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mIsSendMessage = false
 
     override fun bind() {
+        chatData.add(ChatLoader())
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         takePhotoIfNeed()
         val adapterUpdateObservable = updateObservable
@@ -186,6 +190,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
+        mHasPremiumSubscription = mState.getObservable(Profile::class.java)
+                .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
+                .subscribe(shortSubscription { mIsPremium = it.premium })
+
         mDeleteSubscription = mApi.observeDeleteMessage()
                 .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
                 .retry()
@@ -309,12 +317,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * Обновление по эмитам гцм, птр, таймера
      */
     private fun update(updateContainer: Triple<Int, String?, String?>) {
-
         val addToStart = updateContainer.second != null
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+                    if (mBlockChatType == UNDEFINED) {
+                        chatData.clear()
+                    }
                     chatResult?.setResult(createResultIntent())
                     setStubsIfNeed(it)
                     setBlockSettings()
@@ -324,7 +334,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             when (it.type) {
                                 LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
                             }
-                            if (blockChatType == NO_BLOCK || blockChatType == LOCK_MESSAGE_FOR_SEND) {
+                            if (mBlockChatType == NO_BLOCK || mBlockChatType == LOCK_MESSAGE_FOR_SEND) {
                                 items.add(wrapHistoryItem(it))
                             }
                         }
@@ -342,34 +352,34 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun setStubsIfNeed(history: History) {
+        mBlockChatType = NO_BLOCK
         var stub: Any? = null
         if (history.items.isEmpty() && chatData.isEmpty()) {
             if (history.mutualTime != 0) {
-                blockChatType = MUTUAL_SYMPATHY_STUB
+                mBlockChatType = MUTUAL_SYMPATHY_STUB
                 stub = MutualStub()
             } else if (!mIsPremium) {
-                blockChatType = NO_MUTUAL_NO_VIP_STUB
+                mBlockChatType = NO_MUTUAL_NO_VIP_STUB
                 stub = NotMutualBuyVipStub()
             }
         } else isEditTextEnable.set(true)
-
         if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
             history.items.forEach {
                 stub = when (it.type) {
                     MUTUAL_SYMPATHY -> {
-                        blockChatType = MUTUAL_SYMPATHY_STUB
+                        mBlockChatType = MUTUAL_SYMPATHY_STUB
                         MutualStub()
                     }
                     LOCK_CHAT -> {
-                        blockChatType = LOCK_CHAT_STUB
+                        mBlockChatType = LOCK_CHAT_STUB
                         BuyVipStub()
                     }
                     LOCK_MESSAGE_SEND -> {
-                        blockChatType = LOCK_MESSAGE_FOR_SEND
+                        mBlockChatType = LOCK_MESSAGE_FOR_SEND
                         null
                     }
                     else -> {
-                        blockChatType = NO_BLOCK
+                        mBlockChatType = NO_BLOCK
                         null
                     }
                 }
@@ -379,7 +389,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun setBlockSettings() {
-        when (blockChatType) {
+        when (mBlockChatType) {
             MUTUAL_SYMPATHY_STUB, LOCK_MESSAGE_FOR_SEND, NO_BLOCK -> {
                 isSendGiftEnable.set(true)
                 isEditTextEnable.set(true)
@@ -426,14 +436,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     fun onMessage() = mUser?.let {
         val message = message.get()
-        if (blockChatType != LOCK_MESSAGE_FOR_SEND) {
+        if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
                     .doOnSubscribe {
                         mHasStubItems = true
                         mIsSendMessage = true
-                        if (blockChatType == MUTUAL_SYMPATHY_STUB) {
+                        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
                             chatData.clear()
-                            blockChatType = NO_BLOCK
+                            mBlockChatType = NO_BLOCK
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
@@ -450,7 +460,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     fun onGift() = mUser?.let {
-        if (blockChatType != LOCK_MESSAGE_FOR_SEND) {
+        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+            chatData.clear()
+            mBlockChatType = NO_BLOCK
+        }
+        if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             navigator?.showGiftsActivity(it.id, "chat")
         } else {
             navigator?.showUserIsTooPopularLock(it)
@@ -531,7 +545,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mMessageChangeSubscription, mUpdateHistorySubscription,
-                mComplainSubscription, mDeleteSubscription).safeUnsubscribe()
+                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
     }
 
 }
