@@ -140,7 +140,10 @@ public class OverflowMenu {
             if (!App.get().getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
-            result.add(OPEN_CHAT_ACTION);
+            OverflowMenuUser menuUser = getOverflowMenuFieldsListener();
+            if (!(menuUser != null && menuUser.isChatHidden())) {
+                result.add(OPEN_CHAT_ACTION);
+            }
             result.add(SEND_GIFT_ACTION);
             result.add(ADD_TO_BLACK_LIST_ACTION);
             result.add(ADD_TO_BOOKMARK_ACTION);

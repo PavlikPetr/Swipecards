@@ -1244,6 +1244,11 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
                     }
 
                     @Override
+                    public boolean isChatHidden() {
+                        return false;
+                    }
+
+                    @Override
                     public Boolean getBlackListValue() {
                         return mUser != null ? mUser.inBlacklist : null;
                     }

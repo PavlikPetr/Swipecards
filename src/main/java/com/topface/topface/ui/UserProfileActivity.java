@@ -28,6 +28,7 @@ public class UserProfileActivity extends CheckAuthActivity<UserProfileFragment, 
 
     public static final int INTENT_USER_PROFILE = 6;
     public static final String FROM = "from";
+    public static final String INTENT_HIDE_CHAT_IN_OVERFLOw_MENU = "HiDeChAtInOvErFlOw";
 
     public static Intent createIntent(ApiResponse response, Photo photo, int userId, String itemId,
                                       boolean isChatAvailable, boolean isAddToFavoritesAvailable,
