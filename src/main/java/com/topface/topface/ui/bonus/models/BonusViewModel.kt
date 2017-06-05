@@ -9,6 +9,7 @@ import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
 import com.topface.topface.utils.databinding.MultiObservableArrayList
 import com.topface.topface.utils.extensions.getString
+import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Subscription
 
@@ -35,6 +36,7 @@ class BonusViewModel : BaseViewModel() {
                             it.type == IronSourceOfferwallEvent.OFFERWALL_CLOSED ||
                             it.type == IronSourceOfferwallEvent.OFFERWALL_OPENED
                 }
+                .applySchedulers()
                 .subscribe(shortSubscription {
                     when (it.type) {
                         IronSourceOfferwallEvent.CALL_OFFERWALL -> showLoader()
