@@ -11,9 +11,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
@@ -142,6 +144,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private void initViews(View root) {
         initBuyVipViews(root);
         initEditVipViews(root);
+        initOfferwallButon(root);
         switchLayouts();
     }
 
@@ -193,6 +196,25 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
                 buy(id, btnData);
             }
         });
+    }
+
+    private void initOfferwallButon(View root) {
+        // todo завменть стринг на константу после одобрения
+        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().toUpperCase().equals("IRONSRC")) {
+            LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
+            TextView offerWallTitle = new TextView(App.getContext());
+            offerWallTitle.setText("Купи vip, блеать!!!");
+            btnContainer.addView(offerWallTitle);
+            Button btnOfferwall = new Button(App.getContext());
+            btnOfferwall.setText("Купи вип, не будь лохом!");
+            btnOfferwall.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(App.getContext(), "Купил вип", Toast.LENGTH_SHORT).show();
+                }
+            });
+            btnContainer.addView(btnOfferwall);
+        }
     }
 
     @Override

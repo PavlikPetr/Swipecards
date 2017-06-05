@@ -12,8 +12,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
@@ -118,6 +120,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         }));
         // coins buttons
         initCoinsButtons(root, products);
+        // offerwall button
+        initOfferwallButton(root);
     }
 
     private void initCoinsButtons(View root, Products products) {
@@ -147,6 +151,28 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             }
         }));
         coinsButtonsContainer.requestLayout();
+    }
+
+    private void initOfferwallButton(View root) {
+        TextView offerwallTitle = (TextView) root.findViewById(R.id.offerwall_title);
+        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().toUpperCase().equals("IRONSRC")) {
+            LinearLayout offerwallButtonContainer = (LinearLayout) root.findViewById(R.id.fbOfferwall);
+            offerwallTitle.setVisibility(View.VISIBLE);
+            if (offerwallButtonContainer.getChildCount() > 0) {
+                offerwallButtonContainer.removeAllViews();
+            }
+            Button offerwallButton = new Button(App.getContext());
+            offerwallButton.setText("Почеши манту! Намочи манту!");
+            offerwallButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(App.getContext(), "Почесал, намочил.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            offerwallButtonContainer.addView(offerwallButton);
+        } else {
+            offerwallTitle.setVisibility(View.GONE);
+        }
     }
 
     public String getFrom() {

@@ -69,6 +69,23 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:orientation="vertical" />
+
+                <!-- offerwall button -->
+                <TextView
+                    android:id="@+id/offerwall_title"
+                    style="@style/GrayText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/buy_screen_products_coins_section_padding_bottom"
+                    android:layout_marginTop="@dimen/buy_screen_products_coins_section_padding_top"
+                    android:text="ОФФЕРВОЛЛЛ, ЕПТА" />
+
+                <LinearLayout
+                    android:id="@+id/fbOfferwall"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
