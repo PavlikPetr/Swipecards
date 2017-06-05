@@ -164,7 +164,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mIsSendMessage = false
 
     override fun bind() {
-        chatData.add(ChatLoader())
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         takePhotoIfNeed()
         val adapterUpdateObservable = updateObservable
