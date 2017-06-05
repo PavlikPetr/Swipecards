@@ -386,6 +386,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                 }
             }
+        } else if (!mIsPremium){
+            // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
+            chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
+                mBlockChatType = LOCK_MESSAGE_FOR_SEND
+            }
         }
         stub?.let { chatData.add(stub) }
     }
