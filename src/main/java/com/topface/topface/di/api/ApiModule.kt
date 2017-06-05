@@ -14,6 +14,7 @@ import com.topface.topface.data.BalanceData
 import com.topface.topface.data.CountersData
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.utils.http.HttpUtils
+import com.topface.topface.utils.loadcontollers.FeedLoadController
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -63,4 +64,8 @@ class ApiModule {
     @Singleton
     fun provideApi(deleteFeedRequestFactory: DeleteFeedRequestFactory,
                    feedRequestFactory: FeedRequestFactory, mScruffyManager: ScruffyManager) = Api(deleteFeedRequestFactory, feedRequestFactory, mScruffyManager)
+
+    @Provides
+    @Singleton
+    fun providesFeedLoadController() = FeedLoadController()
 }
