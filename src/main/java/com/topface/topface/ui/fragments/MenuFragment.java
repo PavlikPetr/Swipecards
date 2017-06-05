@@ -55,6 +55,7 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
+import static com.topface.topface.api.responses.OfferwallWithPlaces.NAME_IRONSRC;
 import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_POS;
 
 /**
@@ -124,7 +125,7 @@ public class MenuFragment extends Fragment {
 
             // Добавление "Бонусного итема"
             data = getBonusItem();
-            if (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty()) {
+            if (isBonusAvialable(options)) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data,
                             lastOfIntegrationItemsKey,
@@ -160,6 +161,11 @@ public class MenuFragment extends Fragment {
             updateBecomeVipItem(profile.premium);
         }
     };
+
+    private Boolean isBonusAvialable(Options options) {
+        return (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty() && options.getOfferwallWithPlaces().getName().toUpperCase().equals(NAME_IRONSRC));
+    }
+
     private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {
         @Override
         public void onClick(View v, LeftMenuHeaderViewData data) {
@@ -392,7 +398,7 @@ public class MenuFragment extends Fragment {
             arrayList.add(getFbInvitation());
         }
         //  Item "Бонус"
-        if (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty()) {
+        if (isBonusAvialable(options)) {
             arrayList.add(getBonusItem());
         }
         // Item "Баланс"
