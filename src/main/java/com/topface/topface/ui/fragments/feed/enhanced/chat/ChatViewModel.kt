@@ -164,7 +164,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mIsSendMessage = false
 
     override fun bind() {
-        chatData.add(ChatLoader())
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         takePhotoIfNeed()
         val adapterUpdateObservable = updateObservable
@@ -383,6 +385,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         null
                     }
                 }
+            }
+        } else if (!mIsPremium){
+            // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
+            chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
+                mBlockChatType = LOCK_MESSAGE_FOR_SEND
             }
         }
         stub?.let { chatData.add(stub) }
