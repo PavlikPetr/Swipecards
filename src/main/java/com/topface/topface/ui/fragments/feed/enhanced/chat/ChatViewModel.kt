@@ -327,7 +327,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     if (mBlockChatType == UNDEFINED) {
                         chatData.clear()
                     }
-                    chatResult?.setResult(createResultIntent())
                     setStubsIfNeed(it)
                     setBlockSettings()
                     if (it?.items?.isNotEmpty() ?: false) {
@@ -347,6 +346,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.addAll(items)
                         }
                     }
+                    chatResult?.setResult(createResultIntent())
                     mDialogGetSubscription.get()?.unsubscribe()
                     Debug.log("FUCKING_CHAT " + it.items.count())
                 }
