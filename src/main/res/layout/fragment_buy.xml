@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/buy_screen_products_coins_section_padding_bottom"
                     android:layout_marginTop="@dimen/buy_screen_products_coins_section_padding_top"
-                    android:text="ОФФЕРВОЛЛЛ, ЕПТА" />
+                    android:text="Текст тайтла оффервола" />
 
                 <LinearLayout
                     android:id="@+id/fbOfferwall"

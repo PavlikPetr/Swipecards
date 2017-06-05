@@ -162,11 +162,11 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
                 offerwallButtonContainer.removeAllViews();
             }
             Button offerwallButton = new Button(App.getContext());
-            offerwallButton.setText("Почеши манту! Намочи манту!");
+            offerwallButton.setText("текст кнопки оффервола");
             offerwallButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(App.getContext(), "Почесал, намочил.", Toast.LENGTH_SHORT).show();
+                    // todo обработка нажатия на кнопку оффервола
                 }
             });
             offerwallButtonContainer.addView(offerwallButton);

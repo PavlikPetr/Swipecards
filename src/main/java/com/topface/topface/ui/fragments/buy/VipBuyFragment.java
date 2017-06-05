@@ -203,14 +203,14 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().toUpperCase().equals("IRONSRC")) {
             LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
             TextView offerWallTitle = new TextView(App.getContext());
-            offerWallTitle.setText("Купи vip, блеать!!!");
+            offerWallTitle.setText("текст для тайтла оффервола");
             btnContainer.addView(offerWallTitle);
             Button btnOfferwall = new Button(App.getContext());
-            btnOfferwall.setText("Купи вип, не будь лохом!");
+            btnOfferwall.setText("текст для кнопки оффервола");
             btnOfferwall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(App.getContext(), "Купил вип", Toast.LENGTH_SHORT).show();
+                    // todo обработать нажатие на кнопку оффервола
                 }
             });
             btnContainer.addView(btnOfferwall);
