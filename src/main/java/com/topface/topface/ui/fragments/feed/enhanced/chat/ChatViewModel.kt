@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
 import com.topface.topface.R
@@ -186,7 +185,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 filter { it.first > 0 }.
                 filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
                 subscribe(shortSubscription {
-                    Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
@@ -341,16 +339,25 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         }
                         removeStubItems()
                         if (addToStart) {
-                            chatData.addAll(0, items)
+                            //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+                            // сорян за это говно, но это единственный вариант без переписывания ChatData
+                            // зафиксить баг с *задваиванием*, т.к. при добавлении более одного итема в начало
+                            // происходит дублирование целого блока итемов
+                            items.forEachReversedByIndex { chatData.add(0, it) }
                         } else {
                             chatData.addAll(items)
                         }
                     }
                     chatResult?.setResult(createResultIntent())
                     mDialogGetSubscription.get()?.unsubscribe()
-                    Debug.log("FUCKING_CHAT " + it.items.count())
                 }
                 )))
+    }
+
+    private fun getHistoryText(items: ArrayList<HistoryItem>): String {
+        var text = ""
+        items.forEach { text = text + it.text + "/// " }
+        return text
     }
 
     private fun setStubsIfNeed(history: History) {
@@ -386,13 +393,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                 }
             }
-        } else if (!mIsPremium){
+        } else if (!mIsPremium) {
             // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
             chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
                 mBlockChatType = LOCK_MESSAGE_FOR_SEND
             }
         }
-        stub?.let { chatData.add(stub) }
+        stub?.let {
+            chatData.add(stub)
+        }
     }
 
     private fun setBlockSettings() {
@@ -457,7 +466,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
-                        Debug.log("FUCKING_CHAT send fail")
                     }, {
                         chatResult?.setResult(createResultIntent())
                     })))
