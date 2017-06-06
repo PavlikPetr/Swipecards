@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
 import com.topface.topface.R
@@ -195,6 +194,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     chatResult?.setResult(createResultIntent())
                 })
     }
+
     override fun bind() {
         if (mBlockChatType == UNDEFINED) {
             chatData.add(ChatLoader())
@@ -232,11 +232,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         createUpdateObject(it.first)
                     }
 
-    private fun createTimerUpdateObservable():Observable<Triple<Int, String?, String?>>{
-        Debug.log("FUCKING_CHAT createTimerUpdateObservable")
-        return Observable.
+    private fun createTimerUpdateObservable() = Observable.
             interval(DEFAULT_CHAT_UPDATE_PERIOD.toLong(), DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
-            .map { createUpdateObject(mUser?.id ?: -1) }}
+            .map { createUpdateObject(mUser?.id ?: -1) }
 
     //todo заменить при имплементацию птр
     //private fun createP2RObservable() = Observable.just(createUpdateObject(-1))
@@ -356,12 +354,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     mDialogGetSubscription.get()?.unsubscribe()
                 }
                 )))
-    }
-
-    private fun getHistoryText(items: ArrayList<HistoryItem>): String {
-        var text = ""
-        items.forEach { text = text + it.text + "/// " }
-        return text
     }
 
     private fun setStubsIfNeed(history: History) {
