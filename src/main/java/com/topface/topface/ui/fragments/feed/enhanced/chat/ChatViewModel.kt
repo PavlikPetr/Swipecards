@@ -115,12 +115,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         const val LAST_ITEM_ID = "last id"
 
         const val UNDEFINED = -1
+        const val SOMETHING_WRONG = -2
         const val NO_BLOCK = 0
         const val MUTUAL_SYMPATHY_LOCK = MUTUAL_SYMPATHY
         const val MUTUAL_SYMPATHY_STUB = 8
         const val NO_MUTUAL_NO_VIP_STUB = 9
         const val LOCK_CHAT_STUB = LOCK_CHAT
         const val LOCK_MESSAGE_FOR_SEND = LOCK_MESSAGE_SEND
+
+
+        const val ADD_STUBS = 111
+        const val ADD_LOCK_MESSAGES = 222
+        const val ADD_MESSAGES = 333
+        const val CLEAR_AND_ADD = 444
     }
 
     internal var navigator: FeedNavigator? = null
@@ -318,10 +325,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     /**
      * Обновление по эмитам гцм, птр, таймера
      */
+
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
+                .map { it }
                 .subscribe(shortSubscription({
+                    Debug.error("   ошибка    ${it?.localizedMessage}      ")
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
                     if (mBlockChatType == UNDEFINED) {
@@ -336,6 +346,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             when (it.type) {
                                 LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
                             }
+
                             if (mBlockChatType == NO_BLOCK || mBlockChatType == LOCK_MESSAGE_FOR_SEND) {
                                 items.add(wrapHistoryItem(it))
                             }
@@ -352,6 +363,65 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 }
                 )))
     }
+
+
+    private fun chooseUpdateStrategy(newData: History, currentData: ChatData) {
+        if (currentData.isEmpty()) {
+            if (newData.items.isEmpty()) {
+                ADD_STUBS
+                getStubs(newData)
+            } else if (!mIsPremium && !mHasStubItems) {
+                ADD_LOCK_MESSAGES
+                getStubMessages(newData)
+            }
+        } else {
+            if (newData.items.find { !it.isStubItem() } != null) {
+                if ((currentData.find { (it as IChatItem).isStubItem() } == true)) {
+                    CLEAR_AND_ADD
+                } else {
+                    ADD_MESSAGES
+                }
+            }
+        }
+    }
+
+    private fun getStubs(newData: History): IChatItem? {
+        var stub: IChatItem? = null
+        if (newData.mutualTime != 0) {
+            mBlockChatType = MUTUAL_SYMPATHY_STUB
+            stub = MutualStub()
+        } else if (!mIsPremium) {
+            mBlockChatType = NO_MUTUAL_NO_VIP_STUB
+            stub = NotMutualBuyVipStub()
+        }
+        return stub
+    }
+
+    private fun getStubMessages(newData: History): IChatItem? {
+        var stub: IChatItem? = null
+        newData.items.forEach {
+            stub = when (it.type) {
+                MUTUAL_SYMPATHY -> {
+                    mBlockChatType = MUTUAL_SYMPATHY_STUB
+                    MutualStub()
+                }
+                LOCK_CHAT -> {
+                    mBlockChatType = LOCK_CHAT_STUB
+                    BuyVipStub()
+                }
+                LOCK_MESSAGE_SEND -> {
+                    mBlockChatType = LOCK_MESSAGE_FOR_SEND
+                    null
+                }
+                else -> {
+                    mBlockChatType = SOMETHING_WRONG
+                    null
+                }
+            }
+        }
+        return stub
+    }
+
 
     private fun setStubsIfNeed(history: History) {
         mBlockChatType = NO_BLOCK
@@ -386,7 +456,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                 }
             }
-        } else if (!mIsPremium){
+        } else if (!mIsPremium) {
             // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
             chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
                 mBlockChatType = LOCK_MESSAGE_FOR_SEND
@@ -534,7 +604,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     internal fun createResultIntent() = Intent().apply {
-        if (chatData.isNotEmpty()) {
+        if (chatData.isNotEmpty() && !(chatData.first() as IChatItem)?.isStubItem()) {
             putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(chatData.first() as HistoryItem))
         }
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
