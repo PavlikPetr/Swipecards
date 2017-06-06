@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
+import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
 import com.topface.topface.R
@@ -162,20 +163,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    override fun bind() {
-        if (mBlockChatType == UNDEFINED) {
-            chatData.add(ChatLoader())
-        }
-        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
-        takePhotoIfNeed()
+    init {
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
-        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isSendButtonEnable.set(it.isNotBlank())
-        })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
@@ -193,7 +186,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
                 .subscribe(shortSubscription { mIsPremium = it.premium })
-
         mDeleteSubscription = mApi.observeDeleteMessage()
                 .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
                 .retry()
@@ -202,6 +194,16 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     removeByPredicate { deleteComplete.items.contains(it.id) }
                     chatResult?.setResult(createResultIntent())
                 })
+    }
+    override fun bind() {
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
+        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        takePhotoIfNeed()
+        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
+            isSendButtonEnable.set(it.isNotBlank())
+        })
     }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
@@ -230,9 +232,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         createUpdateObject(it.first)
                     }
 
-    private fun createTimerUpdateObservable() = Observable.
+    private fun createTimerUpdateObservable():Observable<Triple<Int, String?, String?>>{
+        Debug.log("FUCKING_CHAT createTimerUpdateObservable")
+        return Observable.
             interval(DEFAULT_CHAT_UPDATE_PERIOD.toLong(), DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
-            .map { createUpdateObject(mUser?.id ?: -1) }
+            .map { createUpdateObject(mUser?.id ?: -1) }}
 
     //todo заменить при имплементацию птр
     //private fun createP2RObservable() = Observable.just(createUpdateObject(-1))
