@@ -320,7 +320,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second,
+                updateContainer.third, isNeedLeave())
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
@@ -350,11 +351,16 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.addAll(items)
                         }
                     }
-                    chatResult?.setResult(createResultIntent())
+                    // обновим превью только если запрос ушел с прочтением истории
+                    if (!isNeedLeave()) {
+                        chatResult?.setResult(createResultIntent())
+                    }
                     mDialogGetSubscription.get()?.unsubscribe()
                 }
                 )))
     }
+
+    private fun isNeedLeave() = isTakePhotoApplicable()
 
     private fun setStubsIfNeed(history: History) {
         mBlockChatType = NO_BLOCK
