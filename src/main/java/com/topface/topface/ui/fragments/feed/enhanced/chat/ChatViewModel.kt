@@ -17,6 +17,10 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_GIFT
+import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_MESSAGE
+import com.topface.topface.api.responses.HistoryItem.Companion.USER_GIFT
+import com.topface.topface.api.responses.HistoryItem.Companion.USER_MESSAGE
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -123,11 +127,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         const val LOCK_CHAT_STUB = LOCK_CHAT
         const val LOCK_MESSAGE_FOR_SEND = LOCK_MESSAGE_SEND
 
-
-        const val ADD_STUBS = 111
-        const val ADD_LOCK_MESSAGES = 222
-        const val ADD_MESSAGES = 333
-        const val CLEAR_AND_ADD = 444
     }
 
     internal var navigator: FeedNavigator? = null
@@ -322,70 +321,97 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
+
+    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !(it as IChatItem).isStubItem() } != null)
+
+    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { (it as IChatItem).isStubItem() } != null)
+
+    private fun isEmptyState(currentData: ChatData) = currentData.isEmpty()
+
+    // новое сообщение
+    private fun newMessage(newData: History): Boolean {
+        var isNewMessage = false
+        newData.items.forEach {
+            when (it.type) {
+                USER_MESSAGE, USER_GIFT, FRIEND_MESSAGE, FRIEND_GIFT -> isNewMessage = true
+                else -> isNewMessage = false
+            }
+        }
+        return isNewMessage
+    }
+
+    // установка стабов
+    private fun isNeedStubs(newData: History): Boolean = newData.items.isEmpty()
+
+    // установка stubMessage
+    private fun isNeedMessageStub(newData: History): Boolean = newData.items.isNotEmpty() && !mIsPremium && !mHasStubItems
+
     /**
      * Обновление по эмитам гцм, птр, таймера
      */
 
     private fun update(updateContainer: Triple<Int, String?, String?>) {
+        if (mBlockChatType == UNDEFINED) {
+            chatData.clear()
+        }
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
-                .map { it }
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third).distinctUntilChanged()
+                .map {
+                    when {
+                        isMessage(chatData) -> {
+                            mBlockChatType = NO_BLOCK
+                            when {
+                                newMessage(it) -> addMessages(it)
+                                else -> null
+                            }
+                        }
+                        isStubs(chatData) -> {
+                            when {
+                                newMessage(it) -> {
+                                    chatData.clear()
+                                    addMessages(it)
+                                }
+                                else -> null
+                            }
+                        }
+                        isEmptyState(chatData) -> {
+                            mBlockChatType = NO_BLOCK
+                            when {
+                                newMessage(it) -> addMessages(it)
+                                isNeedStubs(it) -> getStubs(it)
+                                isNeedMessageStub(it) -> getStubMessages(it)
+                                else -> null
+                            }
+                        }
+                        else -> null
+                    }
+                }
+                .filter { it != null }
                 .subscribe(shortSubscription({
-                    Debug.error("   ошибка    ${it?.localizedMessage}      ")
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
-                    if (mBlockChatType == UNDEFINED) {
-                        chatData.clear()
-                    }
                     chatResult?.setResult(createResultIntent())
-                    setStubsIfNeed(it)
                     setBlockSettings()
-                    if (it?.items?.isNotEmpty() ?: false) {
-                        val items = ArrayList<HistoryItem>()
-                        it.items.forEach {
-                            when (it.type) {
-                                LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
-                            }
-
-                            if (mBlockChatType == NO_BLOCK || mBlockChatType == LOCK_MESSAGE_FOR_SEND) {
-                                items.add(wrapHistoryItem(it))
-                            }
-                        }
-                        removeStubItems()
+                    if (it != null) {
                         if (addToStart) {
-                            chatData.addAll(0, items)
+                            chatData.addAll(0, it)
                         } else {
-                            chatData.addAll(items)
+                            chatData.addAll(it)
                         }
+                        mDialogGetSubscription.get()?.unsubscribe()
                     }
-                    mDialogGetSubscription.get()?.unsubscribe()
-                    Debug.log("FUCKING_CHAT " + it.items.count())
                 }
                 )))
     }
 
-
-    private fun chooseUpdateStrategy(newData: History, currentData: ChatData) {
-        if (currentData.isEmpty()) {
-            if (newData.items.isEmpty()) {
-                ADD_STUBS
-                getStubs(newData)
-            } else if (!mIsPremium && !mHasStubItems) {
-                ADD_LOCK_MESSAGES
-                getStubMessages(newData)
-            }
-        } else {
-            if (newData.items.find { !it.isStubItem() } != null) {
-                if ((currentData.find { (it as IChatItem).isStubItem() } == true)) {
-                    CLEAR_AND_ADD
-                } else {
-                    ADD_MESSAGES
-                }
-            }
-        }
+    private fun addMessages(newData: History): ArrayList<HistoryItem> {
+        val items = ArrayList<HistoryItem>()
+        newData.items.forEach { items.add(wrapHistoryItem(it)) }
+        removeStubItems()
+        return items
     }
 
-    private fun getStubs(newData: History): IChatItem? {
+    private fun getStubs(newData: History): ArrayList<IChatItem>? {
         var stub: IChatItem? = null
         if (newData.mutualTime != 0) {
             mBlockChatType = MUTUAL_SYMPATHY_STUB
@@ -394,10 +420,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             mBlockChatType = NO_MUTUAL_NO_VIP_STUB
             stub = NotMutualBuyVipStub()
         }
-        return stub
+        return stub?.let { arrayListOf<IChatItem>(it) }
     }
 
-    private fun getStubMessages(newData: History): IChatItem? {
+    private fun getStubMessages(newData: History): ArrayList<IChatItem>? {
         var stub: IChatItem? = null
         newData.items.forEach {
             stub = when (it.type) {
@@ -411,7 +437,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 }
                 LOCK_MESSAGE_SEND -> {
                     mBlockChatType = LOCK_MESSAGE_FOR_SEND
-                    null
+                    FriendMessage(it)
                 }
                 else -> {
                     mBlockChatType = SOMETHING_WRONG
@@ -419,50 +445,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 }
             }
         }
-        return stub
-    }
-
-
-    private fun setStubsIfNeed(history: History) {
-        mBlockChatType = NO_BLOCK
-        var stub: Any? = null
-        if (history.items.isEmpty() && chatData.isEmpty()) {
-            if (history.mutualTime != 0) {
-                mBlockChatType = MUTUAL_SYMPATHY_STUB
-                stub = MutualStub()
-            } else if (!mIsPremium) {
-                mBlockChatType = NO_MUTUAL_NO_VIP_STUB
-                stub = NotMutualBuyVipStub()
-            }
-        } else isEditTextEnable.set(true)
-        if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
-            history.items.forEach {
-                stub = when (it.type) {
-                    MUTUAL_SYMPATHY -> {
-                        mBlockChatType = MUTUAL_SYMPATHY_STUB
-                        MutualStub()
-                    }
-                    LOCK_CHAT -> {
-                        mBlockChatType = LOCK_CHAT_STUB
-                        BuyVipStub()
-                    }
-                    LOCK_MESSAGE_SEND -> {
-                        mBlockChatType = LOCK_MESSAGE_FOR_SEND
-                        null
-                    }
-                    else -> {
-                        mBlockChatType = NO_BLOCK
-                        null
-                    }
-                }
-            }
-        } else if (!mIsPremium) {
-            // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
-            chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
-                mBlockChatType = LOCK_MESSAGE_FOR_SEND
-            }
-        }
-        stub?.let { chatData.add(stub) }
+        return stub?.let { arrayListOf<IChatItem>(it) }
     }
 
     private fun setBlockSettings() {
