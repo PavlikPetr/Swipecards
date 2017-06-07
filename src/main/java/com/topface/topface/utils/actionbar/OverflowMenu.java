@@ -100,7 +100,6 @@ public class OverflowMenu {
     };
 
     private IFragmentDelegate mFragmentDelegate;
-    private UserProfileFragment.IChatOpener mChatOpener;
 
     public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions) {
         mBarActions = barActions;
@@ -110,9 +109,8 @@ public class OverflowMenu {
         mFragmentDelegate = iFragmentDelegate;
     }
 
-    public OverflowMenu(IFragmentDelegate iFragmentDelegate, UserProfileFragment.IChatOpener chatOpener, Menu barActions, RateController rateController, ApiResponse savedResponse) {
+    public OverflowMenu(IFragmentDelegate iFragmentDelegate, Menu barActions, RateController rateController, ApiResponse savedResponse) {
         this(iFragmentDelegate, barActions);
-        mChatOpener = chatOpener;
         mBalanceSubscription = App.getAppComponent().appState().getObservable(BalanceData.class).subscribe(new RxUtils.ShortSubscription<BalanceData>() {
             @Override
             public void onNext(BalanceData balanceData) {
@@ -284,11 +282,7 @@ public class OverflowMenu {
                 onClickSendAdmirationAction();
                 break;
             case OPEN_CHAT_ACTION:
-                if (mChatOpener != null) {
-                    mChatOpener.onOpenChat();
-                } else {
-                    onClickOpenChatAction();
-                }
+                onClickOpenChatAction();
                 break;
             case SEND_GIFT_ACTION:
                 onClickSendGiftAction();
@@ -658,7 +652,6 @@ public class OverflowMenu {
     }
 
     public void onReleaseOverflowMenu() {
-        mChatOpener = null;
         if (mBalanceSubscription != null) {
             mBalanceSubscription.unsubscribe();
         }
