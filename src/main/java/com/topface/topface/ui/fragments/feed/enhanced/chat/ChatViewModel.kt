@@ -103,7 +103,8 @@ import java.util.concurrent.atomic.AtomicReference
 class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000
+        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000L
+        private const val DEFAULT_CHAT_INIT_PERIOD = 300L
         private const val EMPTY = ""
         private const val MUTUAL_SYMPATHY = 7
         private const val LOCK_CHAT = 35
@@ -167,7 +168,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
-
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
@@ -176,9 +176,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
                 filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
-                subscribe(shortSubscription {
-                    update(it)
-                })
+                subscribe(shortSubscription { update(it) })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
@@ -233,7 +231,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
 
     private fun createTimerUpdateObservable() = Observable.
-            interval(DEFAULT_CHAT_UPDATE_PERIOD.toLong(), DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            interval(DEFAULT_CHAT_INIT_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD, TimeUnit.MILLISECONDS)
             .map { createUpdateObject(mUser?.id ?: -1) }
 
     //todo заменить при имплементацию птр
