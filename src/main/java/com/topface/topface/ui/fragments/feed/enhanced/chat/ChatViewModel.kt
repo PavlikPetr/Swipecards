@@ -352,7 +352,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         }
                     }
                     // обновим превью только если запрос ушел с прочтением истории
-                    if (!isNeedLeave()) {
+                    if (isNeedReadFeed()) {
                         chatResult?.setResult(createResultIntent())
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
@@ -361,6 +361,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     private fun isNeedLeave() = isTakePhotoApplicable()
+
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setStubsIfNeed(history: History) {
         mBlockChatType = NO_BLOCK
@@ -503,14 +505,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
-                        giftAnswerToHistoryItem(sendGiftAnswer)?.let {
+                        if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
+                            mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift::class.java))
+                        }
+                        giftAnswerToHistoryItem(sendGiftAnswer.apply { history.unread = false })?.let {
                             mHasStubItems = true
                             mIsSendMessage = true
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
-                        }
-                        if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
-                            mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift::class.java))
                         }
                         LocalBroadcastManager.getInstance(mContext)
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
