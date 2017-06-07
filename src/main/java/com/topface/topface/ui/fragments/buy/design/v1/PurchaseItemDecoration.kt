@@ -18,7 +18,7 @@ class PurchaseItemDecoration: RecyclerView.ItemDecoration() {
             if (position != RecyclerView.NO_POSITION) {
                 (parent.adapter as? CompositeAdapter)?.data?.let {
                     when(it[position]) {
-                        is LikeItem -> {
+                        is LikeItem, is TestPurchaseSwitchItem -> {
                             outRect?.set(
                                     R.dimen.base_indent_double.getDimen().toInt(),
                                     R.dimen.base_indent_double.getDimen().toInt(),
