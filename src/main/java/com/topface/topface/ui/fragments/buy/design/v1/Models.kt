@@ -6,3 +6,5 @@ class LikeItem
 class CoinItem
 // итем списка итемов покупки монеток
 class CoinListItem
+// итем переключающий тестовые покупки
+class TestPurchaseSwitchItem

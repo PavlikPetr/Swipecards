@@ -10,6 +10,7 @@ class TypeProvider: ITypeProvider {
         LikeItem::class.java -> 1
         CoinItem::class.java -> 2
         CoinListItem::class.java -> 3
+        TestPurchaseSwitchItem::class.java -> 4
         else -> 0
     }
 }
