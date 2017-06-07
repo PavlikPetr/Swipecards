@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
 import com.topface.topface.R
@@ -163,20 +162,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    override fun bind() {
-        if (mBlockChatType == UNDEFINED) {
-            chatData.add(ChatLoader())
-        }
-        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
-        takePhotoIfNeed()
+    init {
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
 
-        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isSendButtonEnable.set(it.isNotBlank())
-        })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
@@ -186,7 +177,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 filter { it.first > 0 }.
                 filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
                 subscribe(shortSubscription {
-                    Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
@@ -195,7 +185,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
                 .subscribe(shortSubscription { mIsPremium = it.premium })
-
         mDeleteSubscription = mApi.observeDeleteMessage()
                 .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
                 .retry()
@@ -204,6 +193,17 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     removeByPredicate { deleteComplete.items.contains(it.id) }
                     chatResult?.setResult(createResultIntent())
                 })
+    }
+
+    override fun bind() {
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
+        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        takePhotoIfNeed()
+        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
+            isSendButtonEnable.set(it.isNotBlank())
+        })
     }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
@@ -320,7 +320,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second,
+                updateContainer.third, isNeedLeave())
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
@@ -341,17 +342,25 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         }
                         removeStubItems()
                         if (addToStart) {
-                            chatData.addAll(0, items)
+                            //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+                            // сорян за это говно, но это единственный вариант без переписывания ChatData
+                            // зафиксить баг с *задваиванием*, т.к. при добавлении более одного итема в начало
+                            // происходит дублирование целого блока итемов
+                            items.forEachReversedByIndex { chatData.add(0, it) }
                         } else {
                             chatData.addAll(items)
                         }
                     }
-                    chatResult?.setResult(createResultIntent())
+                    // обновим превью только если запрос ушел с прочтением истории
+                    if (!isNeedLeave()) {
+                        chatResult?.setResult(createResultIntent())
+                    }
                     mDialogGetSubscription.get()?.unsubscribe()
-                    Debug.log("FUCKING_CHAT " + it.items.count())
                 }
                 )))
     }
+
+    private fun isNeedLeave() = isTakePhotoApplicable()
 
     private fun setStubsIfNeed(history: History) {
         mBlockChatType = NO_BLOCK
@@ -386,13 +395,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
                 }
             }
-        } else if (!mIsPremium){
+        } else if (!mIsPremium) {
             // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
             chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
                 mBlockChatType = LOCK_MESSAGE_FOR_SEND
             }
         }
-        stub?.let { chatData.add(stub) }
+        stub?.let {
+            chatData.add(stub)
+        }
     }
 
     private fun setBlockSettings() {
@@ -457,7 +468,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
-                        Debug.log("FUCKING_CHAT send fail")
                     }, {
                         chatResult?.setResult(createResultIntent())
                     })))
