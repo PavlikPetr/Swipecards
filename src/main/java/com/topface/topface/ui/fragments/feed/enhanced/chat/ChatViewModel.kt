@@ -505,8 +505,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
-                        if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
-                            mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift::class.java))
+                        sendGiftAnswer.history.mJsonForParse?.let {
+                            mDispatchedGifts.add(0, JsonUtils.fromJson(it, Gift::class.java))
                         }
                         giftAnswerToHistoryItem(sendGiftAnswer.apply { history.unread = false })?.let {
                             mHasStubItems = true
