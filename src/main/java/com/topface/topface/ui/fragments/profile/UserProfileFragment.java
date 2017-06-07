@@ -195,17 +195,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
 
     @Override
     protected OverflowMenu createOverflowMenu(Menu barActions) {
-        return new OverflowMenu(this, new IChatOpener() {
-            @Override
-            public void onOpenChat() {
-                Intent chatIntent = ChatIntentCreator.createIntent(FeedUser.createFeedUserFromUser(mRequestedUser), null, null);
-                startActivityForResult(chatIntent, ChatActivity.REQUEST_CHAT);
-            }
-        }, barActions, mRateController, mSavedResponse);
-    }
-
-    public interface IChatOpener {
-        void onOpenChat();
+        return new OverflowMenu(this, barActions, mRateController, mSavedResponse);
     }
 
     @Override
