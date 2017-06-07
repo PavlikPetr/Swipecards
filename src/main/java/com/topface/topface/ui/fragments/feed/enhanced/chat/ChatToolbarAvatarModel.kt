@@ -9,6 +9,7 @@ import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Photo
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getPlaceholderRes
+import com.topface.topface.utils.extensions.showLongToast
 
 class ChatToolbarAvatarModel(private val user: FeedUser?, private val navigator: IFeedNavigator) {
 
@@ -23,8 +24,7 @@ class ChatToolbarAvatarModel(private val user: FeedUser?, private val navigator:
 
     fun goToProfile() = user?.let {
         if (it.deleted || it.banned) {
-            Toast.makeText(App.getContext(), R.string.user_deleted_or_banned,
-                    Toast.LENGTH_LONG).show()
+            R.string.user_deleted_or_banned.showLongToast()
         } else {
             // костыль, чтоб блокировать показ чата в оверфлоу меню профиля, если мы переходим в профиль
             // из чата с дизайном версии 1

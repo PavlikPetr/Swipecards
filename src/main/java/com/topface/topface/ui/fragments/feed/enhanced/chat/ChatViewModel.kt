@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
 import com.topface.topface.App
 import com.topface.topface.R
@@ -108,7 +107,8 @@ import java.util.concurrent.atomic.AtomicReference
 class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000
+        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000L
+        private const val DEFAULT_CHAT_INIT_PERIOD = 300L
         private const val EMPTY = ""
         private const val MUTUAL_SYMPATHY = 7
         private const val LOCK_CHAT = 35
@@ -169,20 +169,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    override fun bind() {
+    init {
         if (mBlockChatType == UNDEFINED) {
             chatData.add(ChatLoader())
         }
-        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
-        takePhotoIfNeed()
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
                 ?: Observable.empty()
-
-        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isSendButtonEnable.set(it.isNotBlank())
-        })
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
@@ -191,17 +185,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 /*,createP2RObservable()*/).
                 filter { it.first > 0 }.
                 filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
-                subscribe(shortSubscription {
-                    Debug.log("FUCKING_CHAT some update from merge $it")
-                    update(it)
-                })
+                subscribe(shortSubscription { update(it) })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
                 .subscribe(shortSubscription { mIsPremium = it.premium })
-
         mDeleteSubscription = mApi.observeDeleteMessage()
                 .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
                 .retry()
@@ -210,6 +200,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     removeByPredicate { deleteComplete.items.contains(it.id) }
                     chatResult?.setResult(createResultIntent())
                 })
+    }
+
+    override fun bind() {
+        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        takePhotoIfNeed()
+        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
+            isSendButtonEnable.set(it.isNotBlank())
+        })
     }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
@@ -239,7 +237,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
 
     private fun createTimerUpdateObservable() = Observable.
-            interval(DEFAULT_CHAT_UPDATE_PERIOD.toLong(), DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            interval(DEFAULT_CHAT_INIT_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD, TimeUnit.MILLISECONDS)
             .map { createUpdateObject(mUser?.id ?: -1) }
 
     //todo заменить при имплементацию птр
@@ -321,7 +319,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
-
     private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !(it as IChatItem).isStubItem() } != null)
 
     private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { (it as IChatItem).isStubItem() } != null)
@@ -351,12 +348,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
 
     private fun update(updateContainer: Triple<Int, String?, String?>) {
-        if (mBlockChatType == UNDEFINED) {
-            chatData.clear()
-        }
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third).distinctUntilChanged()
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave()).distinctUntilChanged()
                 .map {
+                    if (mBlockChatType == UNDEFINED) {
+                        chatData.clear()
+                    }
                     when {
                         isMessage(chatData) -> {
                             mBlockChatType = NO_BLOCK
@@ -390,19 +387,29 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
+
                     chatResult?.setResult(createResultIntent())
                     setBlockSettings()
-                    if (it != null) {
-                        if (addToStart) {
-                            chatData.addAll(0, it)
-                        } else {
-                            chatData.addAll(it)
-                        }
-                        mDialogGetSubscription.get()?.unsubscribe()
+                    if (addToStart) {
+                        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+                        // сорян за это говно, но это единственный вариант без переписывания ChatData
+                        // зафиксить баг с *задваиванием*, т.к. при добавлении более одного итема в начало
+                        // происходит дублирование целого блока итемов
+                        it?.forEachReversedByIndex { chatData.add(0, it) }
+
+                    } else {
+                        it?.let { it1 -> chatData.addAll(it1) }
                     }
+                    mDialogGetSubscription.get()?.unsubscribe()
+                    // обновим превью только если запрос ушел с прочтением истории
+                    if (isNeedReadFeed()) {
+                        chatResult?.setResult(createResultIntent())
+                    }
+                    mDialogGetSubscription.get()?.unsubscribe()
                 }
                 )))
     }
+
 
     private fun addMessages(newData: History): ArrayList<HistoryItem> {
         val items = ArrayList<HistoryItem>()
@@ -447,6 +454,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
         return stub?.let { arrayListOf<IChatItem>(it) }
     }
+
+    private fun isNeedLeave() = isTakePhotoApplicable()
+
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
@@ -510,7 +521,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
-                        Debug.log("FUCKING_CHAT send fail")
                     }, {
                         chatResult?.setResult(createResultIntent())
                     })))
@@ -546,14 +556,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
-                        giftAnswerToHistoryItem(sendGiftAnswer)?.let {
+                        sendGiftAnswer.history.mJsonForParse?.let {
+                            mDispatchedGifts.add(0, JsonUtils.fromJson(it, Gift::class.java))
+                        }
+                        giftAnswerToHistoryItem(sendGiftAnswer.apply { history.unread = false })?.let {
                             mHasStubItems = true
                             mIsSendMessage = true
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
-                        }
-                        if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
-                            mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift::class.java))
                         }
                         LocalBroadcastManager.getInstance(mContext)
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
