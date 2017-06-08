@@ -59,7 +59,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
@@ -526,7 +525,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             }
             Debug.log("Current User ID:" + profile.uid);
         }
-        AdmobInterstitialUtils.preloadInterstitials(this, App.from(this).getOptions().interstitial);
     }
 
     @Override
@@ -543,7 +541,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         PopupManager.INSTANCE.release();
         super.onDestroy();
-        AdmobInterstitialUtils.releaseInterstitials();
     }
 
     @Override

@@ -251,14 +251,6 @@
             android:text="@string/editor_clear_air_messages"/>
 
         <Button
-            android:id="@+id/EditorConfigureBanners"
-            style="@style/Widget.Topface.Button.Big.Gray"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/editor_configure_banners"/>
-
-        <Button
             android:id="@+id/EditorSendGCMToken"
             style="@style/Widget.Topface.Button.Big.Gray"
             android:layout_width="match_parent"

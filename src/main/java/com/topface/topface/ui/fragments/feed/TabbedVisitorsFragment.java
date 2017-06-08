@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed;
 
 import com.topface.topface.R;
-import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.ui.fragments.feed.enhanced.fans.FansFragment;
 import com.topface.topface.ui.fragments.feed.enhanced.visitors.VisitorsFragment;
@@ -36,10 +35,5 @@ public class TabbedVisitorsFragment extends TabbedFeedFragment {
     @Override
     protected void setLastOpenedPage(int lastOpenedPage) {
         mVisitorsLastOpenedPage = lastOpenedPage;
-    }
-
-    @Override
-    public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.VISITORS_TABS;
     }
 }

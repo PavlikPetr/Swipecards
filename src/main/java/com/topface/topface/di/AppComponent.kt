@@ -13,10 +13,12 @@ import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.state.*
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.NavigationManager
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.config.WeakStorage
+import com.topface.topface.utils.loadcontollers.FeedLoadController
 import dagger.Component
 import javax.inject.Singleton
 
@@ -38,11 +40,13 @@ interface AppComponent {
     fun drawerLayoutState(): DrawerLayoutState
     fun weakStorage(): WeakStorage
     fun lifeCycleState(): LifeCycleState
+    fun feedLoadController(): FeedLoadController
     fun authState(): AuthState
     fun presenterCache(): PresenterCache
     fun runningStateManager(): RunningStateManager
 
     fun kochavaManager(): KochavaManager
+    fun ironSourceManager(): IronSourceManager
     fun suspiciousUserCache(): SuspiciousUserCache
 
     fun inject(app: App)

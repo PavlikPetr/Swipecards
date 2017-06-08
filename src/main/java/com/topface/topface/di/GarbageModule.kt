@@ -1,6 +1,7 @@
 package com.topface.topface.di
 
 import com.topface.topface.chat.SuspiciousUserCache
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.RunningStateManager
 import dagger.Module
@@ -21,4 +22,8 @@ class GarbageModule {
     @Provides
     @Singleton
     fun providesKochavaManager(runningStateManager: RunningStateManager) = KochavaManager(runningStateManager)
+
+    @Provides
+    @Singleton
+    fun providesIronSourceManager() = IronSourceManager()
 }

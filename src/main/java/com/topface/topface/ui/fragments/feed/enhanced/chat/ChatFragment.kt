@@ -8,12 +8,10 @@ import android.os.Bundle
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.*
-import android.widget.ImageView
 import com.topface.topface.App
 import com.topface.topface.BR
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Profile
 import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.databinding.NewChatToolbarAvatarBinding
 import com.topface.topface.di.ComponentManager
@@ -32,7 +30,10 @@ import com.topface.topface.utils.Device
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.actionbar.OverflowMenuUser
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
 import javax.inject.Inject
 
 class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, IChatResult, IActivityFinisher {
@@ -58,14 +59,20 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         }
     }
     private var mOverflowMenu: OverflowMenu? = null
-    private var mBarAvatar: MenuItem? = null
     private var mUser: FeedUser? = null
     private var mKeyboardWasShown = false // по умолчанию клава в чате закрыта
+    private var mReleaseSubscription: Subscription? = null
 
     override fun getViewModel(): IViewModelLifeCycle = mViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // подписка на требование зарелизить все что только можно
+        mReleaseSubscription = App.getAppComponent().eventBus().getObservable(NeedRelease::class.java)
+                .first()
+                .subscribe(shortSubscription {
+                    release()
+                })
         mKeyboardWasShown = savedInstanceState?.getBoolean(SOFT_KEYBOARD_LOCK_STATE) ?: false
         mUser = arguments?.getParcelable(ChatIntentCreator.WHOLE_USER)
         ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
@@ -128,6 +135,14 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
     override fun onDestroy() {
         super.onDestroy()
         mOverflowMenu?.onReleaseOverflowMenu()
+        mReleaseSubscription.safeUnsubscribe()
+    }
+
+    private fun release() {
+        mOverflowMenu?.onReleaseOverflowMenu()
+        adapter.releaseComponents()
+        terminateImmortalComponent()
+        mViewModel.release()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -139,37 +154,19 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         val item = menu?.findItem(R.id.action_profile)
-        if (item != null && mBarAvatar != null) {
-            item.isChecked = mBarAvatar!!.isChecked
+        if (item != null) {
+            item.isChecked = item.isChecked
         }
-        mBarAvatar = item
         mOverflowMenu = OverflowMenu(this, menu).apply {
             initOverflowMenuActions(this)
         }
         val user = mUser
-        if (user != null && !user.banned) {
-            setActionBarAvatar(user)
-        }
-    }
-
-
-    fun setActionBarAvatar(user: FeedUser) = mBarAvatar?.let {
-        if (user.isEmpty || user.banned || user.deleted || user.photo?.isEmpty ?: true) {
-            showStubAvatar(it)
-        } else {
-            val view = MenuItemCompat.getActionView(it)
+        if (user != null) {
+            val view = MenuItemCompat.getActionView(item)
                     .findViewById(R.id.toolbar_avatar_root)
-            DataBindingUtil.bind<NewChatToolbarAvatarBinding>(view).viewModel = chatToolbarAvatarModel
+            val binding = DataBindingUtil.bind<NewChatToolbarAvatarBinding>(view)
+            binding.viewModel = chatToolbarAvatarModel
         }
-    }
-
-    fun showStubAvatar(menuItem: MenuItem) {
-        (MenuItemCompat.getActionView(menuItem)
-                .findViewById(R.id.toolbar_avatar) as ImageView)
-                .setImageResource(if (mUser?.sex == Profile.GIRL)
-                    R.drawable.rounded_avatar_female
-                else
-                    R.drawable.rounded_avatar_male)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -200,6 +197,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                     }
                 }
 
+                override fun isChatHidden() = false
                 override fun getBlackListValue() = mUser?.inBlacklist
                 override fun getBookmarkValue() = mUser?.bookmarked
                 override fun isOpenChatAvailable() = true

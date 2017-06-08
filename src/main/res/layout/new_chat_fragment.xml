@@ -95,7 +95,8 @@
             <ImageButton
                 android:id="@+id/send_gift_button"
                 style="@style/InputGiftButton"
-                android:onClick="@{() -> chatViewModel.onGift()}"/>
+                android:onClick="@{() -> chatViewModel.onGift()}"
+                app:enable="@{chatViewModel.isSendGiftEnable}"/>
 
             <EditText
                 android:id="@+id/input"
@@ -106,6 +107,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_weight="1"
                 android:background="@color/transparent"
+                android:clickable="@{chatViewModel.isEditTextEnable}"
                 android:gravity="center_vertical"
                 android:hint="@string/chat_write_message"
                 android:imeOptions="actionSend|flagNoExtractUi"
@@ -117,14 +119,17 @@
                 android:text="@={chatViewModel.message}"
                 android:textColor="@color/black"
                 android:textColorHint="@color/chat_input_hint_color"
-                android:textSize="16sp">
+                android:textSize="16sp"
+                app:enable="@{chatViewModel.isEditTextEnable}">
+
                 <requestFocus/>
             </EditText>
 
             <ImageButton
                 android:id="@+id/send"
                 style="@style/InputSendButton"
-                android:onClick="@{() -> chatViewModel.onMessage()}"/>
+                android:onClick="@{() -> chatViewModel.onMessage()}"
+                app:enable="@{chatViewModel.isSendButtonEnable}"/>
         </LinearLayout>
     </com.topface.topface.ui.views.KeyboardListenerLayout>
 
