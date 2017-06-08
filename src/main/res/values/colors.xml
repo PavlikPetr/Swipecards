@@ -176,6 +176,9 @@
     <color name="button_green_bg_pressed_color">#16e170</color>
     <color name="button_green_bg_released_color">#00c055</color>
     <color name="button_green_bg_disable_color">#a7faba</color>
+    <!-- purchase gp design version 1 -->
+    <color name="purchase_v1_card_background_normal">#FFFFFF</color>
+    <color name="purchase_v1_card_background_pressed">#F9F9F9</color>
 
     <!--Vip liberty info-->
     <color name="main_title_text_color">#212121</color>
