@@ -22,6 +22,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.BalanceData;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.FeedListData;
+import com.topface.topface.data.FeedUser;
 import com.topface.topface.data.Gift;
 import com.topface.topface.data.IUniversalUser;
 import com.topface.topface.data.Photo;
@@ -39,7 +40,9 @@ import com.topface.topface.requests.SendLikeRequest;
 import com.topface.topface.requests.UserRequest;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.handlers.ErrorCodes;
+import com.topface.topface.ui.ChatActivity;
 import com.topface.topface.ui.GiftsActivity;
+import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
@@ -83,6 +86,8 @@ public class UserProfileFragment extends AbstractProfileFragment {
     private String mUserNameAndAge;
     private String mUserCity;
     private Photo mPhoto;
+    // костыльный флаг
+    private boolean mIsChatHiddenInOverFlow;
     Subscription mBalanceSubscription;
 
     @Override
@@ -94,6 +99,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
         mUserNameAndAge = args.getString(ChatFragment.INTENT_USER_NAME_AND_AGE);
         mUserCity = args.getString(ChatFragment.INTENT_USER_CITY);
         mPhoto = args.getParcelable(ChatFragment.INTENT_AVATAR);
+        mIsChatHiddenInOverFlow = args.getBoolean(UserProfileActivity.INTENT_HIDE_CHAT_IN_OVERFLOw_MENU, false);
         String s = args.getString(EditorProfileActionsFragment.PROFILE_RESPONSE);
         if (!TextUtils.isEmpty(s)) {
             mSavedResponse = new ApiResponse(s);
@@ -395,6 +401,11 @@ public class UserProfileFragment extends AbstractProfileFragment {
                         if (profile != null) {
                             profile.inBlackList = value != null ? value : !profile.inBlackList;
                         }
+                    }
+
+                    @Override
+                    public boolean isChatHidden() {
+                        return mIsChatHiddenInOverFlow;
                     }
 
                     @Override

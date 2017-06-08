@@ -22,12 +22,12 @@ class ChatPopupMenu : DialogFragment(), IDialogCloser {
     companion object {
         const val TAG = "ChatPopupMenu"
         const val CHAT_ITEM = "chat_item"
-        const val CHAT_ITEM_POSITION = "chat_item_position"
+        const val CHAT_ITEM_ID = "chat_item_position"
 
-        fun newInstance(item: HistoryItem, position: Int) = ChatPopupMenu().apply {
+        fun newInstance(item: HistoryItem, itemId: Int) = ChatPopupMenu().apply {
             arguments = Bundle().apply {
                 putParcelable(CHAT_ITEM, item)
-                putInt(CHAT_ITEM_POSITION, position)
+                putInt(CHAT_ITEM_ID, itemId)
             }
         }
     }

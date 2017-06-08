@@ -28,7 +28,7 @@ class BuyVipStubViewModel(private var mFeedUser: FeedUser?, private var mFeedNav
             String.format(if (mIsMan) R.string.chat_buy_vip_popular_male.getString()
                                 else R.string.chat_buy_vip_popular_female.getString(), mFeedUser?.firstName)
 
-    private fun getStubText() = if (mIsMan) R.string.write_to_her_only_vip.getString() else R.string.write_to_him_only_vip.getString()
+    private fun getStubText() = if (mIsMan) R.string.write_to_him_only_vip.getString() else R.string.write_to_her_only_vip.getString()
 
     override fun unbind(){
         mFeedNavigator = null

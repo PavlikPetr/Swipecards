@@ -28,7 +28,7 @@ class BuyVipStubComponent(private var mFeedNavigator: FeedNavigator?, private va
                     viewModel = mViewModel
                 }
                 root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
-                        StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
+                        StaggeredGridLayoutManager.LayoutParams.WRAP_CONTENT).apply { isFullSpan = true }
             }
 
     override fun release() {

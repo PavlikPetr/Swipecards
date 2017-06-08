@@ -97,7 +97,7 @@ public abstract class FeedAdapter<T extends FeedItem> extends LoadingListAdapter
 
 	@Override
 	protected LoadController initLoadController() {
-		return new FeedLoadController();
+		return App.getAppComponent().feedLoadController();
 	}
 
 	@Override

@@ -124,7 +124,6 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mViewModel.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             data?.let {
                 if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
