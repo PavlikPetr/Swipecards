@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -155,14 +153,15 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
 
     private void initOfferwallButton(View root) {
         TextView offerwallTitle = (TextView) root.findViewById(R.id.offerwall_title);
-        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().toUpperCase().equals("IRONSRC")) {
+        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase("")) {
             LinearLayout offerwallButtonContainer = (LinearLayout) root.findViewById(R.id.fbOfferwall);
             offerwallTitle.setVisibility(View.VISIBLE);
             if (offerwallButtonContainer.getChildCount() > 0) {
                 offerwallButtonContainer.removeAllViews();
             }
             Button offerwallButton = new Button(App.getContext());
-            offerwallButton.setText("текст кнопки оффервола");
+            offerwallButton.setText(R.string.get_free);
+            offerwallButton.setBackgroundResource(R.drawable.green_button_selector);
             offerwallButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

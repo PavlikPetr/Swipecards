@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
@@ -203,10 +202,10 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().toUpperCase().equals("IRONSRC")) {
             LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
             TextView offerWallTitle = new TextView(App.getContext());
-            offerWallTitle.setText("текст для тайтла оффервола");
+            offerWallTitle.setText(R.string.coins_or_symp);
             btnContainer.addView(offerWallTitle);
             Button btnOfferwall = new Button(App.getContext());
-            btnOfferwall.setText("текст для кнопки оффервола");
+            btnOfferwall.setText(R.string.get_free);
             btnOfferwall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
