@@ -1,4 +1,4 @@
-package com.topface.topface.ui.bonus.view;
+package com.topface.topface.ui.bonus;
 
 import android.content.Intent;
 
@@ -19,7 +19,7 @@ public class BonusActivity extends SingleFragmentActivity<BonusFragment, AcFragm
 
     @Override
     protected BonusFragment createFragment() {
-        return new BonusFragment().newInstance(true);
+        return BonusFragment.Companion.newInstance(true);
     }
 
     public static Intent createIntent() {

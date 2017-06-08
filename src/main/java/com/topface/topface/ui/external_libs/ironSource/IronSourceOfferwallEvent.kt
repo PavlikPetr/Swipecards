@@ -11,7 +11,7 @@ import com.ironsource.mediationsdk.logger.IronSourceError
 data class IronSourceOfferwallEvent(@OfferwallState var type: Long = IronSourceOfferwallEvent.UNDEFINED, var extra: Bundle = Bundle()) {
     companion object {
         @IntDef(UNDEFINED, OFFERWALL_AVAILABLE, OFFERWALL_SHOW_FAILED, OFFERWALL_CLOSED,
-                OFFERWALL_AD_CREDITED, OFFERWALL_OPENED, GET_OFFERWALL_CREDITS_FAILED)
+                OFFERWALL_AD_CREDITED, OFFERWALL_OPENED, GET_OFFERWALL_CREDITS_FAILED, CALL_OFFERWALL)
         @Retention(AnnotationRetention.SOURCE)
         annotation class OfferwallState
 
@@ -22,6 +22,7 @@ data class IronSourceOfferwallEvent(@OfferwallState var type: Long = IronSourceO
         const val OFFERWALL_AD_CREDITED = 4L
         const val OFFERWALL_OPENED = 5L
         const val GET_OFFERWALL_CREDITS_FAILED = 6L
+        const val CALL_OFFERWALL = 7L
 
         const val IS_AVAILABLE = "IronSourceOfferwallEvent.Extra.IsAvailable"
         const val ERROR_CODE = "IronSourceOfferwallEvent.Extra.ErrorCode"
@@ -61,5 +62,8 @@ data class IronSourceOfferwallEvent(@OfferwallState var type: Long = IronSourceO
                         putString(ERROR_MESSAGE, it.errorMessage)
                     }
                 })
+
+        fun getOnOfferwallCall() =
+                IronSourceOfferwallEvent(CALL_OFFERWALL)
     }
 }
