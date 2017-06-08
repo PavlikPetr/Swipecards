@@ -22,7 +22,7 @@ class IronSourceManager {
         const val VIP_OFFERWALL = "vip"
 
         private const val APP_KEY = "2cf0ad4d"
-        private const val TAG = "IronSource"
+        const val TAG = "IronSource"
     }
 
     val offerwallObservable: Observable<IronSourceOfferwallEvent>
