@@ -41,6 +41,7 @@ import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.rx.RxUtils;
@@ -55,7 +56,6 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
-import static com.topface.topface.api.responses.OfferwallWithPlaces.NAME_IRONSRC;
 import static com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter.EMPTY_POS;
 
 /**
@@ -163,7 +163,7 @@ public class MenuFragment extends Fragment {
     };
 
     private Boolean isBonusAvialable(Options options) {
-        return (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty() && options.getOfferwallWithPlaces().getName().toUpperCase().equals(NAME_IRONSRC));
+        return (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty() && options.getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.TAG));
     }
 
     private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {
