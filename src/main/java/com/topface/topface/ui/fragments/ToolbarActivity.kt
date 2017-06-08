@@ -22,7 +22,7 @@ import com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel
  * Base activity for a whole project, cause it hold a toolbar_view
  */
 
-abstract class ToolbarActivity<T : ViewDataBinding> : CrashReportActivity(), IToolbarNavigation, IToolbarSettings {
+abstract class ToolbarActivity<T : ViewDataBinding> : IronSrcIntegrationActivity(), IToolbarNavigation, IToolbarSettings {
 
     lateinit var viewBinding: T
     var toolbarBinding: ToolbarViewBinding? = null

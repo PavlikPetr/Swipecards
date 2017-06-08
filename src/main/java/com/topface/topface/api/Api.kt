@@ -52,4 +52,6 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
                                 status: String, background: Int, invisible: Boolean?, xstatus: Int,
                                 isAutoReplyAllowed: Boolean?): Observable<Completed> =
             SettingsRequest(name, age, sex, location, cityid, status, background, invisible, xstatus, isAutoReplyAllowed).subscribe()
+
+    override fun callBannerGetCommon(startNumber: Long) = BannerSettingsRequest(startNumber).subscribe()
 }

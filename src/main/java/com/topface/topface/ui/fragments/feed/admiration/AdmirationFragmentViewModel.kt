@@ -1,18 +1,14 @@
 package com.topface.topface.ui.fragments.feed.admiration
 
 import android.view.View
-import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike
-import com.topface.topface.data.Visitor
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.requests.FeedRequest
 import com.topface.topface.requests.ReadAdmirationRequest
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
-import com.topface.topface.utils.ads.AdmobInterstitialUtils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
@@ -52,7 +48,5 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
         data?.id?.toInt()?.let {
             ReadAdmirationRequest(context, listOf(it)).exec()
         }
-        AdmobInterstitialUtils.
-                requestPreloadedInterstitial(context, App.get().options.interstitial)
     }
 }
