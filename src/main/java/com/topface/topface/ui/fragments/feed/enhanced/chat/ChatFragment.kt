@@ -30,7 +30,10 @@ import com.topface.topface.utils.Device
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.actionbar.OverflowMenuUser
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Subscription
 import javax.inject.Inject
 
 class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, IChatResult, IActivityFinisher {
@@ -58,11 +61,18 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
     private var mOverflowMenu: OverflowMenu? = null
     private var mUser: FeedUser? = null
     private var mKeyboardWasShown = false // по умолчанию клава в чате закрыта
+    private var mReleaseSubscription: Subscription? = null
 
     override fun getViewModel(): IViewModelLifeCycle = mViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // подписка на требование зарелизить все что только можно
+        mReleaseSubscription = App.getAppComponent().eventBus().getObservable(NeedRelease::class.java)
+                .first()
+                .subscribe(shortSubscription {
+                    release()
+                })
         mKeyboardWasShown = savedInstanceState?.getBoolean(SOFT_KEYBOARD_LOCK_STATE) ?: false
         mUser = arguments?.getParcelable(ChatIntentCreator.WHOLE_USER)
         ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
@@ -125,6 +135,14 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
     override fun onDestroy() {
         super.onDestroy()
         mOverflowMenu?.onReleaseOverflowMenu()
+        mReleaseSubscription.safeUnsubscribe()
+    }
+
+    private fun release() {
+        mOverflowMenu?.onReleaseOverflowMenu()
+        adapter.releaseComponents()
+        terminateImmortalComponent()
+        mViewModel.release()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

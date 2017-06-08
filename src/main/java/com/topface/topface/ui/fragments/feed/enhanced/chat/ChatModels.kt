@@ -82,3 +82,8 @@ class BuyVipStub : IChatItem {
 interface IChatItem {
     fun getItemType(): Int
 }
+
+/**
+ * Класс для ивента с требованием зарелизить компонент, вью модель и прочее
+ */
+class NeedRelease
