@@ -144,6 +144,7 @@ data class OfferwallWithPlaces(val name: String? = "", private val places: List<
                                private val leftMenu: List<String>? = listOf(),
                                private val purchaseScreen: List<String>? = listOf(),
                                private val purchaseScreenVip: List<String>? = listOf()) {
+
     fun getPlaces(): List<OfferwallPlace> = places ?: listOf()
     fun getLeftMenu(): List<String> = leftMenu ?: listOf()
     fun getPurchaseScreen(): List<String> = purchaseScreen ?: listOf()

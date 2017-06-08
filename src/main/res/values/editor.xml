@@ -21,7 +21,6 @@
     <string name="editor_title_social_id">ID в соцсети:</string>
     <string name="editor_title_banned">Забанен:</string>
     <string name="editor_title_show_full_info">Cкрыть/показать всю информацию</string>
-    <string name="editor_configure_banners">Настройка баннеров</string>
     <string name="editor_save_banners_settings">Сохранить в SharedPreferences</string>
     <string name="editor_reset_banners_settings">Сбросить к серверным</string>
     <string name="editor_on_start_banners_settings">Применять на старте</string>

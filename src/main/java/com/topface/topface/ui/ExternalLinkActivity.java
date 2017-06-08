@@ -7,7 +7,7 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
-import com.topface.topface.ui.bonus.view.BonusActivity;
+import com.topface.topface.ui.bonus.BonusActivity;
 import com.topface.topface.ui.settings.SettingsChangeAuthDataFragment;
 import com.topface.topface.ui.settings.SettingsContainerActivity;
 import com.topface.topface.utils.ExternalLinkExecuter;

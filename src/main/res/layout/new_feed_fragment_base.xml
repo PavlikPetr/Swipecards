@@ -14,58 +14,45 @@
             type="BaseFeedFragmentModel&lt;FeedItem>"/>
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_white"
-        android:orientation="vertical">
+        android:background="@color/bg_white">
 
-        <RelativeLayout
-            android:id="@+id/feed_container"
+        <ProgressBar
+            android:id="@+id/background_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.isFeedProgressBarVisible}"/>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            app:OnSwipeRefreshListener="@{viewModel}"
+            app:setRefresh="@{viewModel.isRefreshing}">
 
-            <ProgressBar
-                android:id="@+id/background_progress"
-                android:layout_width="wrap_content"
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/feed_list"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="@{viewModel.isFeedProgressBarVisible}"/>
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:paddingLeft="@dimen/add_to_leader_spacing_value"
+                android:visibility="@{viewModel.isListVisible}"
+                app:bindDataToFeedRecycler="@{viewModel.data}"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/refresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:OnSwipeRefreshListener="@{viewModel}"
-                app:setRefresh="@{viewModel.isRefreshing}">
+        <com.topface.topface.ui.views.LockerView
+            android:id="@+id/loading_feed_locker"
+            style="@style/LoadingLocker"
+            android:visibility="@{viewModel.isLockViewVisible}"/>
 
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/feed_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fadeScrollbars="true"
-                    android:fadingEdge="none"
-                    android:paddingLeft="@dimen/add_to_leader_spacing_value"
-                    android:visibility="@{viewModel.isListVisible}"
-                    app:bindDataToFeedRecycler="@{viewModel.data}"/>
-            </android.support.v4.widget.SwipeRefreshLayout>
-
-            <com.topface.topface.ui.views.LockerView
-                android:id="@+id/loading_feed_locker"
-                style="@style/LoadingLocker"
-                android:visibility="@{viewModel.isLockViewVisible}"/>
-
-            <ViewStub
-                android:id="@+id/empty_feed_stub"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </RelativeLayout>
-
-        <include
-            android:id="@+id/banner_container_for_feeds"
-            layout="@layout/banner"/>
-    </LinearLayout>
-
+        <ViewStub
+            android:id="@+id/empty_feed_stub"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
 </layout>
