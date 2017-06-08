@@ -9,7 +9,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBar;
 
 import com.topface.billing.OpenIabFragment;
-import com.topface.framework.utils.Debug;
 import com.topface.offerwall.common.OfferwallPayload;
 import com.topface.offerwall.common.TFCredentials;
 import com.topface.offerwall.publisher.TFOfferwallActivity;
@@ -24,12 +23,11 @@ import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.mvp.PresenterCache;
 import com.topface.topface.requests.ProfileRequest;
-import com.topface.topface.state.EventBus;
 import com.topface.topface.state.TopfaceAppState;
-import com.topface.topface.ui.bonus.view.BonusActivity;
-import com.topface.topface.ui.bonus.view.BonusFragment;
+import com.topface.topface.ui.bonus.BonusActivity;
+import com.topface.topface.ui.bonus.BonusFragment;
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment;
-import com.topface.topface.ui.external_libs.offers.OffersModels;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
 import com.topface.topface.ui.fragments.PurchasesFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.feed.TabbedFeedFragment;
@@ -47,7 +45,7 @@ import java.util.List;
 import java.util.Random;
 
 import rx.Subscription;
-import rx.functions.Action1;
+import rx.functions.Func1;
 
 import static com.topface.topface.ui.PaymentwallActivity.PW_CURRENCY;
 import static com.topface.topface.ui.PaymentwallActivity.PW_PRICE;
@@ -95,7 +93,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
 
 
     private static TopfaceAppState mAppState;
-    private EventBus mEventBus;
     private PresenterCache mPresenterCache;
     public static final int INTENT_BUY_VIP = 1;
     public static final int INTENT_BUY = 2;
@@ -103,7 +100,7 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
     private ForceOfferwallRedirect mBonusRedirect;
     private static TopfaceOfferwallRedirect mTopfaceOfferwallRedirect;
     private boolean mIsOfferwallsReady;
-    private Subscription mEventBusSubscriber;
+    private Subscription mOfferwallsSubscription;
 
     private ExperimentBoilerplateFragment mTrialVipPopup;
 
@@ -112,7 +109,6 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         super.onCreate(savedInstanceState);
 
         mAppState = App.getAppComponent().appState();
-        mEventBus = App.getAppComponent().eventBus();
         mPresenterCache = App.getAppComponent().presenterCache();
 
         mTopfaceOfferwallRedirect = App.from(this).getOptions().topfaceOfferwallRedirect;
@@ -122,19 +118,22 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setCompletedByIntent(getIntent());
         }
-        mEventBusSubscriber = mEventBus.getObservable(OffersModels.OfferOpened.class).subscribe(new Action1<OffersModels.OfferOpened>() {
-            @Override
-            public void call(OffersModels.OfferOpened offerOpened) {
-                if (mTopfaceOfferwallRedirect != null) {
-                    mTopfaceOfferwallRedirect.setCompletedByBroadcast();
-                }
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Debug.error(throwable);
-            }
-        });
+        mOfferwallsSubscription = App.getAppComponent().ironSourceManager().getOfferwallObservable()
+                .filter(new Func1<IronSourceOfferwallEvent, Boolean>() {
+                    @Override
+                    public Boolean call(IronSourceOfferwallEvent ironSourceOfferwallEvent) {
+                        return ironSourceOfferwallEvent.getType() == IronSourceOfferwallEvent.OFFERWALL_OPENED;
+                    }
+                })
+                .subscribe(new RxUtils.ShortSubscription<IronSourceOfferwallEvent>() {
+                    @Override
+                    public void onNext(IronSourceOfferwallEvent type) {
+                        super.onNext(type);
+                        if (mTopfaceOfferwallRedirect != null) {
+                            mTopfaceOfferwallRedirect.setCompletedByBroadcast();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -142,10 +141,10 @@ public class PurchasesActivity extends CheckAuthActivity<PurchasesFragment, AcFr
         if (mTopfaceOfferwallRedirect != null) {
             mTopfaceOfferwallRedirect.setComplited(false);
         }
-        RxUtils.safeUnsubscribe(mEventBusSubscriber);
+        RxUtils.safeUnsubscribe(mOfferwallsSubscription);
 
         if (isFinishing()) {
-            mPresenterCache.removePresenter(BonusFragment.TAG);
+            mPresenterCache.removePresenter(BonusFragment.Companion.getTAG());
         }
         super.onDestroy();
     }

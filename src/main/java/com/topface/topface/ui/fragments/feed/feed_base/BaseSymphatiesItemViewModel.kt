@@ -17,7 +17,6 @@ import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
 import com.topface.topface.utils.Utils
-import com.topface.topface.utils.ads.AdmobInterstitialUtils
 import com.topface.topface.utils.cache.SearchCacheManager
 import com.topface.topface.utils.rx.RxUtils
 import rx.Subscriber
@@ -92,8 +91,6 @@ abstract class BaseSymphatiesItemViewModel
     override fun onAvatarClickActionModeDisabled() {
         super.onAvatarClickActionModeDisabled()
         getReadItemRequest().exec()
-        AdmobInterstitialUtils.
-                requestPreloadedInterstitial(context, App.get().options.interstitial)
     }
 
     override fun release() {
