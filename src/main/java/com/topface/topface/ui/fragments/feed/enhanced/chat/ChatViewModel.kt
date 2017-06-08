@@ -397,7 +397,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         it?.forEachReversedByIndex { chatData.add(0, it) }
 
                     } else {
-                        it?.let { it1 -> chatData.addAll(it1) }
+                        it?.let { it -> chatData.addAll(it) }
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
                     // обновим превью только если запрос ушел с прочтением истории
@@ -431,24 +431,24 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun getStubMessages(newData: History): ArrayList<IChatItem>? {
         var stub: IChatItem? = null
-        val lastItem = newData.items.last()
-        stub = when(lastItem.type) {
-                MUTUAL_SYMPATHY -> {
-                    mBlockChatType = MUTUAL_SYMPATHY_STUB
-                    MutualStub()
-                }
-                LOCK_CHAT -> {
-                    mBlockChatType = LOCK_CHAT_STUB
-                    BuyVipStub()
-                }
-                LOCK_MESSAGE_SEND -> {
-                    mBlockChatType = LOCK_MESSAGE_FOR_SEND
-                    FriendMessage(lastItem)
-                }
-                else -> {
-                    mBlockChatType = SOMETHING_WRONG
-                    null
-                }
+        val lastItem = newData.items.lastOrNull()
+        stub = when (lastItem?.type) {
+            MUTUAL_SYMPATHY -> {
+                mBlockChatType = MUTUAL_SYMPATHY_STUB
+                MutualStub()
+            }
+            LOCK_CHAT -> {
+                mBlockChatType = LOCK_CHAT_STUB
+                BuyVipStub()
+            }
+            LOCK_MESSAGE_SEND -> {
+                mBlockChatType = LOCK_MESSAGE_FOR_SEND
+                FriendMessage(lastItem)
+            }
+            else -> {
+                mBlockChatType = SOMETHING_WRONG
+                null
+            }
         }
         return stub?.let { arrayListOf<IChatItem>(it) }
     }
@@ -595,7 +595,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     internal fun createResultIntent() = Intent().apply {
-        if (chatData.isNotEmpty() && !(chatData.first() as IChatItem)?.isStubItem()) {
+        if (chatData.isNotEmpty() && !chatData.first().isStubItem()) {
             putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(chatData.first() as HistoryItem))
         }
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
