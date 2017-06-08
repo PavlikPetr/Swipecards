@@ -1,8 +1,6 @@
 package com.topface.topface.di.feed.base
 
 import android.os.Bundle
-import com.topface.topface.App
-import com.topface.topface.banners.BannersController
 import com.topface.topface.data.FeedItem
 import com.topface.topface.di.scope.FragmentScope
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
@@ -21,10 +19,6 @@ class BaseFeedModule(private val mFragment: BaseFeedFragment<*>) {
     fun provideActionModeController() =
             ActionModeController(mFragment.activity.menuInflater, mFragment.actionModeMenu,
                     mActionModeEventsListener = mFragment)
-
-    @Provides
-    @FragmentScope
-    fun provideBannersController() = BannersController(mFragment, App.get().options)
 
     @Provides
     @FragmentScope

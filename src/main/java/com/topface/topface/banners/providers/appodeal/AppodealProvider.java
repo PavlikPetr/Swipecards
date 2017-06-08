@@ -1,4 +1,4 @@
-package com.topface.topface.banners.ad_providers;
+package com.topface.topface.banners.providers.appodeal;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -13,11 +13,11 @@ import com.appodeal.ads.utils.Log;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.banners.AppodealUserSettingsRules;
-import com.topface.topface.banners.IPageWithAds;
+import com.topface.topface.banners.AbstractAdsProvider;
+import com.topface.topface.banners.AdProvidersFactory;
+import com.topface.topface.banners.IBannerAds;
 import com.topface.topface.data.Profile;
 import com.topface.topface.utils.FormItem;
-import com.topface.topface.utils.config.WeakStorage;
 
 public class AppodealProvider extends AbstractAdsProvider {
 
@@ -26,7 +26,7 @@ public class AppodealProvider extends AbstractAdsProvider {
     public static final String CHEETAH_NETWORK = "cheetah";
 
     @Override
-    boolean injectBannerInner(final IPageWithAds page, final IAdProviderCallbacks callbacks) {
+    public boolean injectBannerInner(final IBannerAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setTesting(false);
         Appodeal.setLogLevel(Log.LogLevel.verbose);
@@ -81,7 +81,7 @@ public class AppodealProvider extends AbstractAdsProvider {
         return AdProvidersFactory.BANNER_APPODEAL;
     }
 
-    private void bannerLoaded(IPageWithAds page, IAdProviderCallbacks callbacks, BannerView adView) {
+    private void bannerLoaded(IBannerAds page, IAdProviderCallbacks callbacks, BannerView adView) {
         Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
         if (callbacks != null) {
             callbacks.onAdLoadSuccess(adView);

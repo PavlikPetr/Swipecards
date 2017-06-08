@@ -30,7 +30,6 @@ import com.topface.topface.requests.AuthRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.requests.transport.scruffy.ScruffyRequestManager;
-import com.topface.topface.ui.EditorBannersActivity;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.UserProfileActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
@@ -107,7 +106,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         root.findViewById(R.id.ReconnectWebSocket).setOnClickListener(this);
         root.findViewById(R.id.EditorRefreshProfile).setOnClickListener(this);
         root.findViewById(R.id.EditorClearSearchCache).setOnClickListener(this);
-        root.findViewById(R.id.EditorConfigureBanners).setOnClickListener(this);
         root.findViewById(R.id.EditorResetSettings).setOnClickListener(this);
         root.findViewById(R.id.EditorSaveSettings).setOnClickListener(this);
         root.findViewById(R.id.EditorClearAirMessages).setOnClickListener(this);
@@ -379,9 +377,6 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
             case R.id.EditorClearSearchCache:
                 new SearchCacheManager().clearCache();
                 showCompleteMessage();
-                break;
-            case R.id.EditorConfigureBanners:
-                getActivity().startActivity(EditorBannersActivity.getEditorBannersIntent());
                 break;
             case R.id.EditorResetSettings:
                 mConfigInited = false;
