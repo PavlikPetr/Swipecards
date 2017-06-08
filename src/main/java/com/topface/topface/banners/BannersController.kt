@@ -47,13 +47,10 @@ class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStat
         sendSettingsRequest()
     }
 
-    override fun onAppForeground(timeOnStart: Long) {
-        sendSettingsRequest()
-    }
+    override fun onAppForeground(timeOnStart: Long) = sendSettingsRequest()
 
-    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) {
-        mBannerSubscription?.safeUnsubscribe()
-    }
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) =
+            mBannerSubscription?.safeUnsubscribe() ?: Unit
 
     override fun onResume() {
         super.onResume()
@@ -67,11 +64,11 @@ class BannersController(private val mPage: IBannerAds) : ILifeCycle, RunningStat
                         if (response.banner.type == AdsSettings.SDK) {
                             mUserConfig.setBannerInterval(response.nextRequestNoEarlierThen)
                             when (response.banner.name) {
-                                AdProvidersFactory.Companion.BANNER_APPODEAL -> {
+                                AdProvidersFactory.BANNER_APPODEAL -> {
                                     mWeakStorage.appodealBannerSegmentName = response.banner.adAppId
                                     AppodealProvider.setCustomSegment()
                                 }
-                                AdProvidersFactory.Companion.BANNER_AMPIRI -> {
+                                AdProvidersFactory.BANNER_AMPIRI -> {
                                     mWeakStorage.ampiriBannerSegmentName = response.banner.adAppId
                                 }
                             }

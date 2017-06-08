@@ -1,5 +1,6 @@
 package com.topface.topface.banners
 
+import android.view.View
 import com.topface.topface.App
 import com.topface.topface.statistics.AdStatistics
 
@@ -30,11 +31,10 @@ class BannerInjector : IBannerInjector {
     }
 
     private fun showAd(page: IBannerAds, provider: IAdsProvider?, isFallbackAd: Boolean) {
-        if (provider != null) {
-            val injectInitiated = provider.injectBanner(page,
+        provider?.let {
+            val injectInitiated = it.injectBanner(page,
                     object : IAdsProvider.IAdProviderCallbacks {
-                        override fun onAdLoadSuccess(adView: android.view.View) {
-                        }
+                        override fun onAdLoadSuccess(adView: View) {}
 
                         override fun onFailedToLoadAd(codeError: Int?) {
                             AdStatistics.sendBannerFailedToLoad(mBannerName, codeError)
@@ -44,13 +44,9 @@ class BannerInjector : IBannerInjector {
                             }
                         }
 
-                        override fun onAdClick() {
-                            AdStatistics.sendBannerClicked(mBannerName)
-                        }
+                        override fun onAdClick() = AdStatistics.sendBannerClicked(mBannerName)
 
-                        override fun onAdShow() {
-                            AdStatistics.sendBannerShown(mBannerName)
-                        }
+                        override fun onAdShow() = AdStatistics.sendBannerShown(mBannerName)
                     })
             if (!injectInitiated && !isFallbackAd) {
                 injectGag(page)
@@ -64,17 +60,14 @@ class BannerInjector : IBannerInjector {
     }
 
     private fun cleanUp(page: IBannerAds) {
-        val container = page.getContainerForAd()
-        if (container != null) {
-            if (mCurrentAdsProvider != null) {
-                mCurrentAdsProvider!!.clean(page)
-            }
-            unbindDrawables(container)
-            container.removeAllViews()
+        page.getContainerForAd()?.let {
+            mCurrentAdsProvider?.clean(page)
+            unbindDrawables(it)
+            it.removeAllViews()
         }
     }
 
-    private fun unbindDrawables(view: android.view.View?) {
+    private fun unbindDrawables(view: View?) {
         view?.background?.callback = null
         if (view is android.view.ViewGroup) {
             for (i in 0..view.childCount - 1) {

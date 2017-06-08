@@ -132,10 +132,7 @@ public abstract class TabbedFeedFragment extends BaseFragment implements IBanner
         });
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mHasFeedAdReceiver, new IntentFilter(HAS_FEED_AD));
         mBannersController = new BannersController(this);
-        Activity stateSaverRegistrator = getActivity();
-        if (stateSaverRegistrator != null && stateSaverRegistrator instanceof IStateSaverRegistrator) {
-            ((IStateSaverRegistrator) stateSaverRegistrator).registerLifeCycleDelegate(mBannersController);
-        }
+        IStateSaverRegistratorKt.registerLifeCycleDelegate(getActivity(), mBannersController);
         return root;
     }
 
