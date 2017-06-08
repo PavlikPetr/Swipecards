@@ -26,9 +26,7 @@ class BannerInjector : IBannerInjector {
     override fun cleanUp() {
     }
 
-    private fun showAd(page: IBannerAds, provider: IAdsProvider) {
-        showAd(page, provider, false)
-    }
+    private fun showAd(page: IBannerAds, provider: IAdsProvider) = showAd(page, provider, false)
 
     private fun showAd(page: IBannerAds, provider: IAdsProvider?, isFallbackAd: Boolean) {
         provider?.let {
@@ -59,13 +57,12 @@ class BannerInjector : IBannerInjector {
         showAd(page, mCurrentAdsProvider, true)
     }
 
-    private fun cleanUp(page: IBannerAds) {
-        page.getContainerForAd()?.let {
-            mCurrentAdsProvider?.clean(page)
-            unbindDrawables(it)
-            it.removeAllViews()
-        }
-    }
+    private fun cleanUp(page: IBannerAds) =
+            page.getContainerForAd()?.let {
+                mCurrentAdsProvider?.clean(page)
+                unbindDrawables(it)
+                it.removeAllViews()
+            }
 
     private fun unbindDrawables(view: View?) {
         view?.background?.callback = null
