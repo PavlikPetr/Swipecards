@@ -16,6 +16,10 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_GIFT
+import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_MESSAGE
+import com.topface.topface.api.responses.HistoryItem.Companion.USER_GIFT
+import com.topface.topface.api.responses.HistoryItem.Companion.USER_MESSAGE
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -115,12 +119,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         const val LAST_ITEM_ID = "last id"
 
         const val UNDEFINED = -1
+        const val SOMETHING_WRONG = -2
         const val NO_BLOCK = 0
         const val MUTUAL_SYMPATHY_LOCK = MUTUAL_SYMPATHY
         const val MUTUAL_SYMPATHY_STUB = 8
         const val NO_MUTUAL_NO_VIP_STUB = 9
         const val LOCK_CHAT_STUB = LOCK_CHAT
         const val LOCK_MESSAGE_FOR_SEND = LOCK_MESSAGE_SEND
+
     }
 
     internal var navigator: FeedNavigator? = null
@@ -131,8 +137,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
     val isSendButtonEnable = ObservableBoolean(false)
-    val isSendGiftEnable = ObservableBoolean(true)
-    val isEditTextEnable = ObservableBoolean(true)
+    val isSendGiftEnable = ObservableBoolean(false)
+    val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
@@ -164,6 +170,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mIsSendMessage = false
 
     init {
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
@@ -194,9 +203,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     override fun bind() {
-        if (mBlockChatType == UNDEFINED) {
-            chatData.add(ChatLoader())
-        }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         takePhotoIfNeed()
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
@@ -313,42 +319,87 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
+    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !it.isStubItem() } != null)
+
+    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { it.isStubItem() } != null)
+
+    private fun isEmptyState(currentData: ChatData) = currentData.isEmpty()
+
+    // новое сообщение
+    private fun isNewMessage(newData: History): Boolean {
+        var isNewMessage = false
+        newData.items.forEach {
+            when (it.type) {
+                USER_MESSAGE, USER_GIFT, FRIEND_MESSAGE, FRIEND_GIFT -> isNewMessage = true
+            }
+        }
+        return isNewMessage
+    }
+
+    // установка стабов
+    private fun isNeedStubs(newData: History): Boolean = newData.items.isEmpty()
+
+    // установка stubMessage
+    private fun isNeedMessageStub(newData: History): Boolean = newData.items.isNotEmpty() && !mIsPremium && !mHasStubItems
+
     /**
      * Обновление по эмитам гцм, птр, таймера
      */
+
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second,
-                updateContainer.third, isNeedLeave())
-                .subscribe(shortSubscription({
-                    mDialogGetSubscription.get()?.unsubscribe()
-                }, {
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave()).distinctUntilChanged()
+                .map {
                     if (mBlockChatType == UNDEFINED) {
                         chatData.clear()
                     }
-                    setStubsIfNeed(it)
-                    setBlockSettings()
-                    if (it?.items?.isNotEmpty() ?: false) {
-                        val items = ArrayList<HistoryItem>()
-                        it.items.forEach {
-                            when (it.type) {
-                                LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
-                            }
-                            if (mBlockChatType == NO_BLOCK || mBlockChatType == LOCK_MESSAGE_FOR_SEND) {
-                                items.add(wrapHistoryItem(it))
+                    when {
+                        isMessage(chatData) -> {
+                            mBlockChatType = NO_BLOCK
+                            when {
+                                isNewMessage(it) -> addMessages(it)
+                                else -> null
                             }
                         }
-                        removeStubItems()
-                        if (addToStart) {
-                            //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
-                            // сорян за это говно, но это единственный вариант без переписывания ChatData
-                            // зафиксить баг с *задваиванием*, т.к. при добавлении более одного итема в начало
-                            // происходит дублирование целого блока итемов
-                            items.forEachReversedByIndex { chatData.add(0, it) }
-                        } else {
-                            chatData.addAll(items)
+                        isStubs(chatData) -> {
+                            when {
+                                isNewMessage(it) -> {
+                                    chatData.clear()
+                                    addMessages(it)
+                                }
+                                else -> null
+                            }
                         }
+                        isEmptyState(chatData) -> {
+                            mBlockChatType = NO_BLOCK
+                            when {
+                                isNewMessage(it) -> addMessages(it)
+                                isNeedStubs(it) -> getStubs(it)
+                                isNeedMessageStub(it) -> getStubMessages(it)
+                                else -> null
+                            }
+                        }
+                        else -> null
                     }
+                }
+                .filter { it != null }
+                .subscribe(shortSubscription({
+                    mDialogGetSubscription.get()?.unsubscribe()
+                }, {
+
+                    chatResult?.setResult(createResultIntent())
+                    setBlockSettings()
+                    if (addToStart) {
+                        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+                        // сорян за это говно, но это единственный вариант без переписывания ChatData
+                        // зафиксить баг с *задваиванием*, т.к. при добавлении более одного итема в начало
+                        // происходит дублирование целого блока итемов
+                        it?.forEachReversedByIndex { chatData.add(0, it) }
+
+                    } else {
+                        it?.let { it -> chatData.addAll(it) }
+                    }
+                    mDialogGetSubscription.get()?.unsubscribe()
                     // обновим превью только если запрос ушел с прочтением истории
                     if (isNeedReadFeed()) {
                         chatResult?.setResult(createResultIntent())
@@ -358,53 +409,53 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 )))
     }
 
+
+    private fun addMessages(newData: History): ArrayList<HistoryItem> {
+        val items = ArrayList<HistoryItem>()
+        newData.items.forEach { items.add(wrapHistoryItem(it)) }
+        removeStubItems()
+        return items
+    }
+
+    private fun getStubs(newData: History): ArrayList<IChatItem>? {
+        var stub: IChatItem? = null
+        if (newData.mutualTime != 0) {
+            mBlockChatType = MUTUAL_SYMPATHY_STUB
+            stub = MutualStub()
+        } else if (!mIsPremium) {
+            mBlockChatType = NO_MUTUAL_NO_VIP_STUB
+            stub = NotMutualBuyVipStub()
+        }
+        return stub?.let { arrayListOf<IChatItem>(it) }
+    }
+
+    private fun getStubMessages(newData: History): ArrayList<IChatItem>? {
+        var stub: IChatItem? = null
+        val lastItem = newData.items.lastOrNull()
+        stub = when (lastItem?.type) {
+            MUTUAL_SYMPATHY -> {
+                mBlockChatType = MUTUAL_SYMPATHY_STUB
+                MutualStub()
+            }
+            LOCK_CHAT -> {
+                mBlockChatType = LOCK_CHAT_STUB
+                BuyVipStub()
+            }
+            LOCK_MESSAGE_SEND -> {
+                mBlockChatType = LOCK_MESSAGE_FOR_SEND
+                FriendMessage(lastItem)
+            }
+            else -> {
+                mBlockChatType = SOMETHING_WRONG
+                null
+            }
+        }
+        return stub?.let { arrayListOf<IChatItem>(it) }
+    }
+
     private fun isNeedLeave() = isTakePhotoApplicable()
 
     private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_CHAT } == null
-
-    private fun setStubsIfNeed(history: History) {
-        mBlockChatType = NO_BLOCK
-        var stub: Any? = null
-        if (history.items.isEmpty() && chatData.isEmpty()) {
-            if (history.mutualTime != 0) {
-                mBlockChatType = MUTUAL_SYMPATHY_STUB
-                stub = MutualStub()
-            } else if (!mIsPremium) {
-                mBlockChatType = NO_MUTUAL_NO_VIP_STUB
-                stub = NotMutualBuyVipStub()
-            }
-        } else isEditTextEnable.set(true)
-        if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
-            history.items.forEach {
-                stub = when (it.type) {
-                    MUTUAL_SYMPATHY -> {
-                        mBlockChatType = MUTUAL_SYMPATHY_STUB
-                        MutualStub()
-                    }
-                    LOCK_CHAT -> {
-                        mBlockChatType = LOCK_CHAT_STUB
-                        BuyVipStub()
-                    }
-                    LOCK_MESSAGE_SEND -> {
-                        mBlockChatType = LOCK_MESSAGE_FOR_SEND
-                        null
-                    }
-                    else -> {
-                        mBlockChatType = NO_BLOCK
-                        null
-                    }
-                }
-            }
-        } else if (!mIsPremium) {
-            // дополнительно проверим, есть ли блокирующие итемы _уже_ в истории
-            chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND }?.let {
-                mBlockChatType = LOCK_MESSAGE_FOR_SEND
-            }
-        }
-        stub?.let {
-            chatData.add(stub)
-        }
-    }
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
@@ -544,7 +595,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     internal fun createResultIntent() = Intent().apply {
-        if (chatData.isNotEmpty()) {
+        if (chatData.isNotEmpty() && !chatData.first().isStubItem()) {
             putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(chatData.first() as HistoryItem))
         }
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
