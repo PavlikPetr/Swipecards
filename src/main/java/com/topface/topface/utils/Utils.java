@@ -58,6 +58,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -125,6 +126,7 @@ public class Utils {
      */
     public static Class getChatClass() {
         // TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+        App.getAppComponent().eventBus().setData(new NeedRelease());
         ComponentManager.INSTANCE.releaseComponent(ChatComponent.class);
         switch (App.get().getOptions().getChatRedesign()) {
             case ChatIntentCreator.DESIGN_V1:
