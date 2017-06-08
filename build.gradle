@@ -75,6 +75,7 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url "https://dl.bintray.com/ironsource-mobile/android-sdk" }
         maven { url 'https://raw.githubusercontent.com/onepf/OPF-mvn-repo/master/' }
         maven { url 'https://bitbucket.org/atm13/artifacts/raw/master/' }
         maven { url "https://dl.bintray.com/topface/libs" }
@@ -552,6 +553,9 @@ dependencies {
     }
     //наша статистика
     kapt files("libs/processor.jar")
+
+    // ironsrc sdk
+    compile 'com.ironsource.sdk:mediationsdk:6.6.1@jar'
 }
 
 task processorTask(type: Exec) {

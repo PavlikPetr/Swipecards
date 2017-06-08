@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.bonus.models.OfferwallButtonViewModel"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/offerwall_button_height"
+        android:onClick="@{()->viewModel.showOffer()}">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/offerwall_button_text_padding_left"
+            android:layout_marginStart="@dimen/offerwall_button_text_padding_left"
+            android:text="@{viewModel.text}"
+            android:textColor="@color/offerwall_button_text_color"
+            android:textSize="@dimen/offerwall_button_text_size"
+            tools:text="Получить оффер"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/offerwall_button_image_padding_left"
+            android:layout_marginStart="@dimen/offerwall_button_image_padding_left"
+            android:src="@{viewModel.image}"
+            tools:src="@drawable/offer_sympaties"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/offerwall_divider_height"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/offerwall_button_text_padding_left"
+            android:layout_marginStart="@dimen/offerwall_button_text_padding_left"
+            android:background="@color/offerwall_divider_color"/>
+    </RelativeLayout>
+</layout>

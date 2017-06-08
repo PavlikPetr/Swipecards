@@ -342,4 +342,8 @@
     <color name="borderless_button_release">#FFFFFF</color>
     <color name="chat_input_hint_color">#61000000</color>
     <color name="chat_background">#f5f5f5</color>
+
+    <!--Offerwalls-->
+    <color name="offerwall_button_text_color">#1e1e1e</color>
+    <color name="offerwall_divider_color">#dbdbdb</color>
 </resources>

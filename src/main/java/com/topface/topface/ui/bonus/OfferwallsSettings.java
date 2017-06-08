@@ -1,4 +1,4 @@
-package com.topface.topface.ui.bonus.models;
+package com.topface.topface.ui.bonus;
 
 import com.google.gson.annotations.SerializedName;
 
