@@ -13,10 +13,8 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  */
 
 class OfferwallButtonComponent : AdapterComponent<OfferwallButtonBinding, OfferwallButton>() {
-    override val itemLayout: Int
-        get() = R.layout.offerwall_button
-    override val bindingClass: Class<OfferwallButtonBinding>
-        get() = OfferwallButtonBinding::class.java
+    override val itemLayout = R.layout.offerwall_button
+    override val bindingClass = OfferwallButtonBinding::class.java
 
     override fun bind(binding: OfferwallButtonBinding, data: OfferwallButton?, position: Int) {
         data?.let { binding.viewModel = OfferwallButtonViewModel(it) }
