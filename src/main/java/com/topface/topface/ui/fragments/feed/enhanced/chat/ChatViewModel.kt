@@ -137,8 +137,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
     val isSendButtonEnable = ObservableBoolean(false)
-    val isSendGiftEnable = ObservableBoolean(true)
-    val isEditTextEnable = ObservableBoolean(true)
+    val isSendGiftEnable = ObservableBoolean(false)
+    val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
     var updateObservable: Observable<Bundle>? = null
@@ -319,19 +319,18 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
-    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !(it as IChatItem).isStubItem() } != null)
+    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !it.isStubItem() } != null)
 
-    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { (it as IChatItem).isStubItem() } != null)
+    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { it.isStubItem() } != null)
 
     private fun isEmptyState(currentData: ChatData) = currentData.isEmpty()
 
     // новое сообщение
-    private fun newMessage(newData: History): Boolean {
+    private fun isNewMessage(newData: History): Boolean {
         var isNewMessage = false
         newData.items.forEach {
             when (it.type) {
                 USER_MESSAGE, USER_GIFT, FRIEND_MESSAGE, FRIEND_GIFT -> isNewMessage = true
-                else -> isNewMessage = false
             }
         }
         return isNewMessage
@@ -358,13 +357,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         isMessage(chatData) -> {
                             mBlockChatType = NO_BLOCK
                             when {
-                                newMessage(it) -> addMessages(it)
+                                isNewMessage(it) -> addMessages(it)
                                 else -> null
                             }
                         }
                         isStubs(chatData) -> {
                             when {
-                                newMessage(it) -> {
+                                isNewMessage(it) -> {
                                     chatData.clear()
                                     addMessages(it)
                                 }
@@ -374,7 +373,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         isEmptyState(chatData) -> {
                             mBlockChatType = NO_BLOCK
                             when {
-                                newMessage(it) -> addMessages(it)
+                                isNewMessage(it) -> addMessages(it)
                                 isNeedStubs(it) -> getStubs(it)
                                 isNeedMessageStub(it) -> getStubMessages(it)
                                 else -> null
@@ -432,8 +431,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun getStubMessages(newData: History): ArrayList<IChatItem>? {
         var stub: IChatItem? = null
-        newData.items.forEach {
-            stub = when (it.type) {
+        val lastItem = newData.items.last()
+        stub = when(lastItem.type) {
                 MUTUAL_SYMPATHY -> {
                     mBlockChatType = MUTUAL_SYMPATHY_STUB
                     MutualStub()
@@ -444,13 +443,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 }
                 LOCK_MESSAGE_SEND -> {
                     mBlockChatType = LOCK_MESSAGE_FOR_SEND
-                    FriendMessage(it)
+                    FriendMessage(lastItem)
                 }
                 else -> {
                     mBlockChatType = SOMETHING_WRONG
                     null
                 }
-            }
         }
         return stub?.let { arrayListOf<IChatItem>(it) }
     }
