@@ -86,3 +86,8 @@ interface IChatItem {
     fun getItemType(): Int
     fun isStubItem() : Boolean  = false
 }
+
+/**
+ * Класс для ивента с требованием зарелизить компонент, вью модель и прочее
+ */
+class NeedRelease
