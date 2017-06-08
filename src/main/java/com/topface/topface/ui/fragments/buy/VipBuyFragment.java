@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
+import com.topface.framework.utils.Debug;
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
 import com.topface.statistics.processor.utils.RxUtils;
 import com.topface.topface.App;
@@ -33,6 +34,8 @@ import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
@@ -64,6 +67,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     };
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
+    private IronSourceManager mIronSourceManager;
     private TextView mResourceInfo;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -198,18 +202,22 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     }
 
     private void initOfferwallButon(View root) {
-        // todo завменть стринг на константу после одобрения
-        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().toUpperCase().equals("IRONSRC")) {
+        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME)) {
+            mIronSourceManager = App.getAppComponent().ironSourceManager();
             LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
             TextView offerWallTitle = new TextView(App.getContext());
-            offerWallTitle.setText(R.string.coins_or_symp);
+            offerWallTitle.setText("fsadfsdfasdfsdrrafsdf");
             btnContainer.addView(offerWallTitle);
             Button btnOfferwall = new Button(App.getContext());
             btnOfferwall.setText(R.string.get_free);
+            btnOfferwall.setHeight(150);
+            btnOfferwall.setBackgroundResource(R.drawable.green_button_selector);
             btnOfferwall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // todo обработать нажатие на кнопку оффервола
+                    Debug.error("нажата кнопка");
+                    mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
+                    mIronSourceManager.showOfferwallByType(IronSourceManager.VIP_OFFERWALL);
                 }
             });
             btnContainer.addView(btnOfferwall);

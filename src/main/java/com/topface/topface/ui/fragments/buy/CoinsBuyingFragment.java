@@ -24,6 +24,7 @@ import com.topface.topface.data.Products;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -153,7 +154,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
 
     private void initOfferwallButton(View root) {
         TextView offerwallTitle = (TextView) root.findViewById(R.id.offerwall_title);
-        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase("")) {
+        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME)) {
             LinearLayout offerwallButtonContainer = (LinearLayout) root.findViewById(R.id.fbOfferwall);
             offerwallTitle.setVisibility(View.VISIBLE);
             if (offerwallButtonContainer.getChildCount() > 0) {
