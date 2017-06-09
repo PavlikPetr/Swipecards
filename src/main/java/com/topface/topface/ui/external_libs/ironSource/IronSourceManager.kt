@@ -76,23 +76,19 @@ class IronSourceManager {
     fun showOfferwall(plc: String) {
         if (IronSource.isOfferwallAvailable()) {
             IronSource.showOfferwall(plc)
-            Debug.error("                                        IronSource.isOfferwallAvailable()                 ")
         } else {
-            Debug.error("                                  prosti no net                                             ")
             mInitSuccessSubscription = offerwallObservable
                     .filter { it.type == IronSourceOfferwallEvent.OFFERWALL_AVAILABLE }
                     .first()
-                    .subscribe(shortSubscription( {
-                        Debug.error("         попадаем в онЭРРОР сабскрайб При     !IronSource.isOfferwallAvailable()     ")
-                    },{
-                        Debug.error("         попадаем в онНекст сабскрайб При     !IronSource.isOfferwallAvailable()     ")
-                        IronSource.showOfferwall(plc) }))
+                    .subscribe(shortSubscription({
+                    }, {
+                        IronSource.showOfferwall(plc)
+                    }))
         }
     }
 
     fun showOfferwallByType(type: String) {
         type.getIronSourcePlc()?.let {
-            Debug.error("         попадаем в type.getIronSourcePlc()?    ")
             showOfferwall(it)
         }
     }

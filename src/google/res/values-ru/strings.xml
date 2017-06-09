@@ -1382,6 +1382,5 @@
     <string name="payment_ninja_autofill_title">Автопополнение счета</string>
     <string name="payment_ninja_autofill_link">Правила оказания услуги</string>
 
-    <string name="coins_or_symp">Монеты или симпатии</string>
     <string name="get_free">Получить бесплатно</string>
 </resources>
