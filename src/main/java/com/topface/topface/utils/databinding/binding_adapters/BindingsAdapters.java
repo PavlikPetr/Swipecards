@@ -417,10 +417,24 @@ public class BindingsAdapters {
         UiTestsExtensionKt.setUiTestTag(view, tag);
     }
 
-    @BindingAdapter("animateLoader")
-    public static void setLoaderAnimation(View view, boolean animate) {
+    /**
+     * Запускает/останавливает выбранную анимацию на вьюшке
+     * анимация "as is" приоритетнее
+     * @param view              вьха, которая будет анимирована
+     * @param animate           флаг - анимировать или нет
+     * @param animationResId    опциональный интовый идентификатор анимации в ресурсах - проще передавать из вьюмоделей
+     * @param animation         опциональная анимация "as is" - проще передавать из xml
+     */
+    @BindingAdapter(value = {"animateLoader", "animationResourceId", "animationResource"}, requireAll = false)
+    public static void setLoaderAnimation(View view, boolean animate, Integer animationResId, Animation animation) {
         if (animate) {
-            setAnimationSrc(view, ResourceExtensionKt.getAnimation(R.anim.loader_rotate));
+            Animation anim;
+            if (animation != null) {
+                anim = animation;
+            } else {
+                anim = ResourceExtensionKt.getAnimation(animationResId != null ? animationResId : R.anim.loader_rotate);
+            }
+            setAnimationSrc(view, anim);
         } else {
             view.clearAnimation();
         }

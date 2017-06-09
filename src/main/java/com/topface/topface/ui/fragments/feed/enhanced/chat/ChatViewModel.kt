@@ -522,7 +522,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         val message = message.get()
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             val item = wrapHistoryItem(HistoryItem(text = message,
-                    created = System.currentTimeMillis()))
+                    created = System.currentTimeMillis() / SERVER_TIME_CORRECTION))
             mEventBus.setData(SendHistoryItemEvent(item))
             this.message.set(EMPTY)
             if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
