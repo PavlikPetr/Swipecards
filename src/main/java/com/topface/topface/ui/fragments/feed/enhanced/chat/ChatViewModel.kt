@@ -310,13 +310,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     /**
-     * Удаляем итемы с id = 0, т.к. на данный момент у нас есть нормальные итемы,
+     * Удаляем итемы с id = 0 (и только если они не отсылаются в данный момент),
+     * т.к. на данный момент у нас есть нормальные итемы,
      * которыми можно заменить заглушки(ну так серверные говрят по крайней мере)
      */
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate { (it.id == 0 && !it.isSending.get()) || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -529,7 +530,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 mBlockChatType = NO_BLOCK
             }
             chatData.add(0, item)
-            } else {
+        } else {
             navigator?.showUserIsTooPopularLock(it)
         }
     }
