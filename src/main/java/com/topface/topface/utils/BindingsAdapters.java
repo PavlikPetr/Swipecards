@@ -416,6 +416,15 @@ public class BindingsAdapters {
         UiTestsExtensionKt.setUiTestTag(view, tag);
     }
 
+    @BindingAdapter("animateLoader")
+    public static void setLoaderAnimation(View view, boolean animate) {
+        if (animate) {
+            setAnimationSrc(view, ResourceExtensionKt.getAnimation(R.anim.loader_rotate));
+        } else {
+            view.clearAnimation();
+        }
+    }
+
     @BindingAdapter("animationSrc")
     public static void setAnimationSrc(View view, Animation resource) {
         setAnimationSrc(view, resource, 0L);

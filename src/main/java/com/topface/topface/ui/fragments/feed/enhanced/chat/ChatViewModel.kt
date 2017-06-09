@@ -66,6 +66,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mResendSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
 
@@ -110,9 +111,23 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     Debug.log("FUCKING_CHAT some update from merge $it")
                     update(it)
                 })
+
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             onComplain()
         })
+
+        mResendSubscription = mEventBus.getObservable(SendHistoryItemEvent::class.java).subscribe(shortSubscription {
+            HistoryItemSender.send(mSendMessageSubscription, mApi, it.item, mUser?.id ?: 0,
+                    {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                    },
+                    {
+                        chatResult?.setResult(createResultIntent())
+                    }
+            )
+        })
+
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
                 .subscribe(shortSubscription {
@@ -339,19 +354,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     fun onMessage() = mUser?.let {
         val message = message.get()
         if (!mIsNeedToShowToPopularPopup && message.isNotBlank()) {
-            mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
-                    .doOnSubscribe {
-                        mHasStubItems = true
-                        mIsSendMessage = true
-                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis())))
-                        this.message.set(EMPTY)
-                    }
-                    .subscribe(shortSubscription({
-                        Debug.log("FUCKING_CHAT send fail")
-                    }, {
-                        chatResult?.setResult(createResultIntent())
-                    })))
+            val item = wrapHistoryItem(HistoryItem(text = message,
+                    created = System.currentTimeMillis()))
+            chatData.add(0, item)
+            this.message.set(EMPTY)
+            mEventBus.setData(SendHistoryItemEvent(item))
         } else if (!mIsPremium) {
             mUser?.let {
                 navigator?.showUserIsTooPopularLock(it)
@@ -429,7 +436,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
-        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription,
+        arrayOf(mSendMessageSubscription, mUpdateHistorySubscription, mResendSubscription,
                 mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
     }
 
