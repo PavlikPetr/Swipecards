@@ -7,6 +7,7 @@ import com.topface.framework.utils.Debug
 import com.topface.topface.R
 import com.topface.topface.data.BuyButtonData
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.utils.extensions.getFormatedPrice
 import com.topface.topface.utils.extensions.getString
 
 class CoinItemViewModel(private val data: BuyButtonData, private val mFrom: String, private val mNavigator: IFeedNavigator) {
@@ -24,7 +25,7 @@ class CoinItemViewModel(private val data: BuyButtonData, private val mFrom: Stri
      */
     val coinsDrawable = ObservableInt(R.drawable.ic_purchase_coins_2)
     val titleText = ObservableField<String>(data.title)
-    val priceText = ObservableField<String>(String.format(R.string.product_coast.getString(), data.price))
+    val priceText = ObservableField<String>(String.format(R.string.product_coast.getString(), data.getFormatedPrice()))
     /**
      * Бейджик "популярное" рисуется у тех продуктов, у которых пришел флаг SpecialPrice
      */
