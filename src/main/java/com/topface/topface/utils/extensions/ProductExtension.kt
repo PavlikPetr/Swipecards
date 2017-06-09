@@ -21,6 +21,10 @@ fun Products.getAllProductButtons() = linkedSetOf<BuyButtonData>().apply {
     }
 }
 
+fun Products.getLikesProducts() = linkedSetOf<BuyButtonData>().apply { addAll(likes) }
+
+fun Products.getCoinsProducts() = linkedSetOf<BuyButtonData>().apply { addAll(coins) }
+
 fun String.isSubscription() = getProduct()?.type?.isSubscription
 
 fun PaymentNinjaProductsList.getVipProducts() = this.products.filter { it.type == Constants.PREMIUM }

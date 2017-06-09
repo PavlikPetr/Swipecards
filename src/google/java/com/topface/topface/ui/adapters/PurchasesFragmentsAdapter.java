@@ -16,6 +16,7 @@ import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
+import com.topface.topface.ui.fragments.buy.design.v1.CoinsBuyingFragment;
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragment;
 
 import org.jetbrains.annotations.Nullable;
@@ -67,7 +68,8 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         String text = mArguments.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
         switch (mTabs.get(position).type) {
             case PurchasesTabData.GPLAY:
-                fragment = !mIsVip ? MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
+                fragment = !mIsVip ? CoinsBuyingFragment.Companion.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
+//                fragment = !mIsVip ? MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.AMAZON:
                 fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
