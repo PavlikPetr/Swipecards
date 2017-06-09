@@ -15,32 +15,22 @@ import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.InterstitialCallbacks;
 import com.appodeal.ads.utils.Log;
 import com.google.android.gms.ads.AdActivity;
-import com.google.android.gms.ads.AdListener;
 import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.Debug;
 import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.App;
-import com.topface.topface.R;
-import com.topface.topface.banners.PageInfo;
-import com.topface.topface.banners.ad_providers.AmpiriProvider;
-import com.topface.topface.banners.ad_providers.AppodealProvider;
+import com.topface.topface.banners.AdProvidersFactory;
+import com.topface.topface.banners.providers.AmpiriProvider;
+import com.topface.topface.banners.providers.appodeal.AppodealProvider;
 import com.topface.topface.data.AdsSettings;
-import com.topface.topface.data.Banner;
 import com.topface.topface.requests.ApiRequest;
-import com.topface.topface.requests.ApiResponse;
-import com.topface.topface.requests.BannerRequest;
-import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.FullscreenSettingsRequest;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.AdStatistics;
-import com.topface.topface.statistics.TopfaceAdStatistics;
 import com.topface.topface.ui.dialogs.OwnFullscreenPopup;
-import com.topface.topface.ui.views.ImageViewRemote;
-import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.IStateSaverRegistratorKt;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.controllers.startactions.IStartAction;
 import com.topface.topface.utils.http.IRequestClient;
@@ -48,21 +38,11 @@ import com.topface.topface.utils.popups.PopupManager;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_FULLSCREEN_START_APP;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_ADMOB_MEDIATION;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_AMPIRI;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_NONE;
-import static com.topface.topface.banners.ad_providers.AdProvidersFactory.BANNER_TOPFACE;
-
 /**
  */
 public class FullscreenController {
 
     private static final String TAG = "FullscreenController";
-    private static final String ADMOB_INTERSTITIAL_ID = "ca-app-pub-9530442067223936/9732921207";
-    private static final String ADMOB_INTERSTITIAL_MEDIATION_ID = "ca-app-pub-9530442067223936/9498586400";
-    private static final String ADMOB_INTERSTITIAL_START_APP_ID = "ca-app-pub-9530442067223936/3776010801";
     private static final String BANNER_APPODEAL_FULLSCREEN = "APPODEAL_FULLSCREEN";
     public static final String ADMOB_NEW = "ADMOB";
     public static final String APPODEAL_NEW = "APPODEAL";
@@ -106,23 +86,16 @@ public class FullscreenController {
     };
 
     private class FullscreenStartAction implements IStartAction {
-        private PageInfo startPageInfo;
         private int priority;
 
         public FullscreenStartAction(int priority, Activity activity, String from) {
             this.priority = priority;
             mActivity = activity;
             mFrom = from;
-            if (!CacheProfile.isEmpty()) {
-                startPageInfo = App.get().getOptions().getPagesInfo().get(PageInfo.PageName.START.getName());
-            }
         }
 
         @Override
         public void callInBackground() {
-            if (startPageInfo != null) {
-                Debug.log(TAG, startPageInfo.getBanner());
-            }
         }
 
         @Override
@@ -186,9 +159,6 @@ public class FullscreenController {
 
     private void requestFullscreenByServerSettings(AdsSettings settings) {
         switch (settings.banner.name) {
-            case ADMOB_NEW:
-                requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
-                break;
             case APPODEAL_NEW:
                 Debug.log("BANNER_SETTINGS : new appodeal segment " + settings.banner.adAppId);
                 App.getAppComponent().weakStorage().setAppodealFullscreenSegmentName(settings.banner.adAppId);
@@ -270,24 +240,12 @@ public class FullscreenController {
         try {
             mCurrentBannerType = type;
             switch (type) {
-                case BANNER_NONE:
+                case AdProvidersFactory.BANNER_NONE:
                     return;
-                case BANNER_ADMOB:
-                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_ID);
-                    break;
-                case BANNER_ADMOB_MEDIATION:
-                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_MEDIATION_ID);
-                    break;
-                case BANNER_ADMOB_FULLSCREEN_START_APP:
-                    requestAdmobFullscreen(ADMOB_INTERSTITIAL_START_APP_ID);
-                    break;
                 case BANNER_APPODEAL_FULLSCREEN:
                     requestAppodealFullscreen();
                     break;
-                case BANNER_TOPFACE:
-                    requestTopfaceFullscreen();
-                    break;
-                case BANNER_AMPIRI:
+                case AdProvidersFactory.BANNER_AMPIRI:
                     requestAmpiriFullscreen();
                     break;
                 default:
@@ -399,112 +357,6 @@ public class FullscreenController {
         mIsAppodealInProgress = savedInstanceState.getBoolean(APPODEAL_IN_PROGRESS);
     }
 
-    public void requestAdmobFullscreen(String id) {
-        AdmobInterstitialUtils.requestAdmobFullscreen(mActivity, id, new AdListener() {
-            @Override
-            public void onAdClosed() {
-                if (mFullScreenBannerListener != null) {
-                    mFullScreenBannerListener.onClose();
-                }
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                if (mFullScreenBannerListener != null) {
-                    mFullScreenBannerListener.onFailedToLoad(errorCode);
-                }
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                mIsRedirected = true;
-                if (mFullScreenBannerListener != null) {
-                    mFullScreenBannerListener.onClick();
-                }
-            }
-
-            @Override
-            public void onAdOpened() {
-            }
-
-            @Override
-            public void onAdLoaded() {
-                if (mFullScreenBannerListener != null) {
-                    mFullScreenBannerListener.onLoaded();
-                }
-            }
-        });
-    }
-
-    private void requestTopfaceFullscreen() {
-        BannerRequest request = new BannerRequest(App.getContext());
-        request.place = PageInfo.PageName.START.getName();
-        request.callback(new DataApiHandler<Banner>() {
-            @Override
-            public void success(final Banner data, IApiResponse response) {
-                if (data.action.equals(Banner.ACTION_URL)) {
-                    if (!App.getAppConfig().getFullscreenUrlsSet().contains(data.parameter)) {
-                        TopfaceAdStatistics.sendFullscreenShown(data);
-                        if (mFullScreenBannerListener != null) {
-                            mFullScreenBannerListener.onLoaded();
-                        }
-                        final View fullscreenViewGroup = mActivity.getLayoutInflater().inflate(R.layout.fullscreen_topface, null);
-                        final ViewGroup bannerContainer = getFullscreenBannerContainer();
-                        bannerContainer.addView(fullscreenViewGroup);
-                        bannerContainer.setVisibility(View.VISIBLE);
-                        final ImageViewRemote fullscreenImage = (ImageViewRemote) fullscreenViewGroup.findViewById(R.id.ivFullScreen);
-                        fullscreenImage.setRemoteSrc(data.url);
-                        fullscreenImage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (mFullScreenBannerListener != null) {
-                                    mFullScreenBannerListener.onClick();
-                                }
-                                TopfaceAdStatistics.sendFullscreenClicked(data);
-                                AppConfig config = App.getAppConfig();
-                                config.addFullscreenUrl(data.parameter);
-                                config.saveConfig();
-                                hideFullscreenBanner(bannerContainer);
-                                Utils.goToUrl(mActivity, data.parameter);
-                            }
-                        });
-
-                        fullscreenViewGroup.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                hideFullscreenBanner(bannerContainer);
-                                TopfaceAdStatistics.sendFullscreenClosed(data);
-                                if (mFullScreenBannerListener != null) {
-                                    mFullScreenBannerListener.onClose();
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            protected Banner parseResponse(ApiResponse response) {
-                return new Banner(response);
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                if (mFullScreenBannerListener != null) {
-                    mFullScreenBannerListener.onFailedToLoad(codeError);
-                }
-            }
-
-            @Override
-            public void always(IApiResponse response) {
-                super.always(response);
-                if (!isFullScreenBannerVisible) {
-                    PopupManager.INSTANCE.informManager(mFrom);
-                }
-            }
-        }).exec();
-    }
-
     public void hideFullscreenBanner(final ViewGroup bannerContainer) {
         if (bannerContainer != null) {
             Animation animation = AnimationUtils.loadAnimation(App.getContext(), android.R.anim.fade_out);
@@ -535,15 +387,6 @@ public class FullscreenController {
 
     public boolean isFullScreenBannerVisible() {
         return isFullScreenBannerVisible;
-    }
-
-    public ViewGroup getFullscreenBannerContainer() {
-        ViewGroup fullscreenContainer = (ViewGroup) mActivity.findViewById(R.id.loBannerContainer);
-        if (fullscreenContainer == null) {
-            fullscreenContainer = (ViewGroup) mActivity.getLayoutInflater().inflate(R.layout.layout_fullscreen, null);
-            ((ViewGroup) mActivity.findViewById(android.R.id.content)).addView(fullscreenContainer);
-        }
-        return fullscreenContainer;
     }
 
     public void onResume() {

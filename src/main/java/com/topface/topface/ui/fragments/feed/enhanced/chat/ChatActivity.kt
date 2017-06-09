@@ -73,10 +73,8 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Utils.activityResultToNestedFragments(supportFragmentManager, requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_CANCELED) {
-            finish()
-        } else {
-            addPhotoHelper.processActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_CANCELED) {
+           addPhotoHelper.processActivityResult(requestCode, resultCode, data)
         }
     }
 

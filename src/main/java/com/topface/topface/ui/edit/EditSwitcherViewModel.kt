@@ -11,7 +11,7 @@ import com.topface.topface.utils.rx.RxFieldObservable
  * Created by ppavlik on 21.04.17.
  */
 class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBLE,
-                            private val switcVisibilityDefault: Int = View.VISIBLE,
+                            private val switchVisibilityDefault: Int = View.VISIBLE,
                             private val progressVisibilityDefault: Int = View.GONE,
                             val rootPaddingLeft: Int = 0,
                             val rootPaddingRight: Int = 0,
@@ -21,7 +21,7 @@ class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBL
                             textDefault: String) {
 
     val textVisibility = ObservableInt(textVisibilityDefault)
-    val switchVisibility = ObservableInt(switcVisibilityDefault)
+    val switchVisibility = ObservableInt(switchVisibilityDefault)
     val progressVisibility = ObservableInt(progressVisibilityDefault)
     val text = ObservableField<String>(textDefault)
     val isChecked = RxFieldObservable(isCheckedDefault)
@@ -29,7 +29,7 @@ class EditSwitcherViewModel(private val textVisibilityDefault: Int = View.VISIBL
 
     fun setViewVisible(isVisible: Boolean) {
         textVisibility.set(if (isVisible) textVisibilityDefault else View.GONE)
-        switchVisibility.set(if (isVisible) switcVisibilityDefault else View.GONE)
+        switchVisibility.set(if (isVisible) switchVisibilityDefault else View.GONE)
         progressVisibility.set(if (isVisible) progressVisibilityDefault else View.GONE)
     }
 

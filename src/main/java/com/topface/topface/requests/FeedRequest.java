@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.topface.topface.App;
 import com.topface.topface.utils.loadcontollers.FeedLoadController;
 import com.topface.topface.utils.loadcontollers.LoadController;
 
@@ -104,7 +105,7 @@ public class FeedRequest extends LimitedApiRequest {
 
     @Override
     protected LoadController getLoadController() {
-        return new FeedLoadController();
+        return App.getAppComponent().feedLoadController();
     }
 
     public int getLimit() {

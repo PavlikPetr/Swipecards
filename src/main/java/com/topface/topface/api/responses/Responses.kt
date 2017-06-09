@@ -113,6 +113,8 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
             } ?: Unit
 }
 
+fun HistoryItem?.isFriendItem() = this != null && (this.getItemType() == HistoryItem.FRIEND_MESSAGE || this.getItemType() == HistoryItem.FRIEND_GIFT)
+
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
                    val items: ArrayList<HistoryItem>, val mutualTime: Int)
 
@@ -141,4 +143,14 @@ data class GetFeedBookmarkListResponse(val items: ArrayList<FeedBookmark> = Arra
     override fun getItemsList() = items
 }
 
+data class OfferwallPlace(val type: String, val name: String)
+data class OfferwallWithPlaces(val name: String? = "", private val places: List<OfferwallPlace>? = listOf(),
+                               private val leftMenu: List<String>? = listOf(),
+                               private val purchaseScreen: List<String>? = listOf(),
+                               private val purchaseScreenVip: List<String>? = listOf()) {
 
+    fun getPlaces(): List<OfferwallPlace> = places ?: listOf()
+    fun getLeftMenu(): List<String> = leftMenu ?: listOf()
+    fun getPurchaseScreen(): List<String> = purchaseScreen ?: listOf()
+    fun getPurchaseScreenVip(): List<String> = purchaseScreenVip ?: listOf()
+}
