@@ -1472,6 +1472,10 @@
         <item name="android:background">@drawable/green_button_selector</item>
     </style>
 
+    <style name="PopupGreenButtonBackground">
+        <item name="android:background">@drawable/green_button_selector</item>
+    </style>
+
     <style name="PopupGreenButton.Purchase">
         <item name="android:background">@drawable/green_button_selector</item>
     </style>

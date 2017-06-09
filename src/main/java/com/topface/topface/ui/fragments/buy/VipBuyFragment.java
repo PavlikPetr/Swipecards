@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.topface.billing.OpenIabFragment;
-import com.topface.framework.utils.Debug;
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
 import com.topface.statistics.processor.utils.RxUtils;
 import com.topface.topface.App;
@@ -70,6 +70,8 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private IronSourceManager mIronSourceManager;
     private TextView mResourceInfo;
     private String mResourceInfoText;
+    private Boolean mIsNeedOfferwall = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty()
+            && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME);
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -114,6 +116,10 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataFromIntent(getArguments());
+        if (mIsNeedOfferwall) {
+            mIronSourceManager = App.getAppComponent().ironSourceManager();
+            mIronSourceManager.initSdk(getActivity());
+        }
     }
 
     @Override
@@ -202,20 +208,20 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     }
 
     private void initOfferwallButon(View root) {
-        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME)) {
-            mIronSourceManager = App.getAppComponent().ironSourceManager();
+        if (mIsNeedOfferwall) {
             LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-            TextView offerWallTitle = new TextView(App.getContext());
-            offerWallTitle.setText("fsadfsdfasdfsdrrafsdf");
-            btnContainer.addView(offerWallTitle);
             Button btnOfferwall = new Button(App.getContext());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.height = getResources().getDimensionPixelSize(R.dimen.offerwall_button_get_fee);
+            params.topMargin = getResources().getDimensionPixelSize(R.dimen.offerwall_button_get_fee_margin_top);
+            btnOfferwall.setLayoutParams(params);
             btnOfferwall.setText(R.string.get_free);
-            btnOfferwall.setHeight(150);
             btnOfferwall.setBackgroundResource(R.drawable.green_button_selector);
+            btnOfferwall.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.offerwall_button_text_size));
+            btnOfferwall.setAllCaps(false);
             btnOfferwall.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Debug.error("нажата кнопка");
                     mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
                     mIronSourceManager.showOfferwallByType(IronSourceManager.VIP_OFFERWALL);
                 }

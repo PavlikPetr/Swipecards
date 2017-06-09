@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -25,6 +26,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -34,6 +36,9 @@ import java.util.List;
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private TextView mResourceInfo;
+    private Boolean mIsNeedOfferwalls = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty()
+            && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME);
+    private IronSourceManager mIronSourceManager;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -60,6 +65,10 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataFromIntent(getArguments());
+        if (mIsNeedOfferwalls) {
+            mIronSourceManager = App.getAppComponent().ironSourceManager();
+            mIronSourceManager.initSdk(getActivity());
+        }
     }
 
     private void setResourceInfoText() {
@@ -120,7 +129,9 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
         // coins buttons
         initCoinsButtons(root, products);
         // offerwall button
-        initOfferwallButton(root);
+        if (mIsNeedOfferwalls) {
+            initOfferwallButton(root);
+        }
     }
 
     private void initCoinsButtons(View root, Products products) {
@@ -153,25 +164,28 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     }
 
     private void initOfferwallButton(View root) {
-        TextView offerwallTitle = (TextView) root.findViewById(R.id.offerwall_title);
-        if (!App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty() && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME)) {
-            LinearLayout offerwallButtonContainer = (LinearLayout) root.findViewById(R.id.fbOfferwall);
-            offerwallTitle.setVisibility(View.VISIBLE);
-            if (offerwallButtonContainer.getChildCount() > 0) {
-                offerwallButtonContainer.removeAllViews();
-            }
-            Button offerwallButton = new Button(App.getContext());
-            offerwallButton.setText(R.string.get_free);
-            offerwallButton.setBackgroundResource(R.drawable.green_button_selector);
-            offerwallButton.setOnClickListener(new View.OnClickListener() {
+        Button sympathyOfferwallButton = (Button) root.findViewById(R.id.get_symp_free);
+        Button coinsOfferwallButton = (Button) root.findViewById(R.id.get_coins_free);
+        if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.SYMPATHIES_OFFERWALL)) {
+            sympathyOfferwallButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // todo обработка нажатия на кнопку оффервола
+                    mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
+                    mIronSourceManager.showOfferwallByType(IronSourceManager.SYMPATHIES_OFFERWALL);
                 }
             });
-            offerwallButtonContainer.addView(offerwallButton);
-        } else {
-            offerwallTitle.setVisibility(View.GONE);
+            sympathyOfferwallButton.setVisibility(View.VISIBLE);
+        }
+        if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.COINS_OFFERWALL)) {
+
+            coinsOfferwallButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
+                    mIronSourceManager.showOfferwallByType(IronSourceManager.COINS_OFFERWALL);
+                }
+            });
+            coinsOfferwallButton.setVisibility(View.VISIBLE);
         }
     }
 
