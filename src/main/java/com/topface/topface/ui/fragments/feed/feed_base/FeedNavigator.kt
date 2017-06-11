@@ -109,9 +109,18 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from dating
      */
-    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
-        user?.let {
-            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
+        when (App.get().options.chatRedesign) {
+            ChatIntentCreator.DESIGN_V1 -> user?.let {
+                showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+            }
+            else -> if (App.get().profile.premium) {
+                user?.let {
+                    showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+                }
+            } else {
+                showPurchaseVip(from)
+            }
         }
     }
 
