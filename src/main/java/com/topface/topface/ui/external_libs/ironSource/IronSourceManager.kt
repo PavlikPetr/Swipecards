@@ -5,6 +5,8 @@ import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.logger.IronSourceError
 import com.ironsource.mediationsdk.sdk.OfferwallListener
 import com.topface.framework.utils.Debug
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.IronSourceStatisticsGeneratedStatistics
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Emitter
 import rx.Observable
@@ -73,7 +75,11 @@ class IronSourceManager {
         IronSource.init(activity, APP_KEY, IronSource.AD_UNIT.OFFERWALL)
     }
 
-    fun showOfferwall(plc: String) {
+    fun showOfferwall(plc: String, from: String) {
+        IronSourceStatisticsGeneratedStatistics.sendNow_IRON_SOURCE_SHOW_OFFERS(Slices().apply {
+            putSlice("ref", plc.getIronSourceType())
+            putSlice("plc", from)
+        })
         if (IronSource.isOfferwallAvailable()) {
             IronSource.showOfferwall(plc)
         } else {
@@ -87,9 +93,9 @@ class IronSourceManager {
         }
     }
 
-    fun showOfferwallByType(type: String) {
+    fun showOfferwallByType(type: String, from: String) {
         type.getIronSourcePlc()?.let {
-            showOfferwall(it)
+            showOfferwall(it, from)
         }
     }
 

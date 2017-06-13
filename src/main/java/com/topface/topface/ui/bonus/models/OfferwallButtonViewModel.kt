@@ -11,7 +11,7 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
  * Created by ppavlik on 02.06.17.
  * Вьюмодель для кнопки офервола на "разводящем" экране
  */
-class OfferwallButtonViewModel(private val settings: OfferwallButton) : BaseViewModel() {
+class OfferwallButtonViewModel(private val settings: OfferwallButton, private val from: String) : BaseViewModel() {
 
     val text = ObservableField(settings.text)
     val image = ObservableInt(settings.imgRes)
@@ -22,6 +22,6 @@ class OfferwallButtonViewModel(private val settings: OfferwallButton) : BaseView
 
     fun showOffer() {
         mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.getOnOfferwallCall())
-        mIronSourceManager.showOfferwallByType(settings.type)
+        mIronSourceManager.showOfferwallByType(settings.type, from)
     }
 }
