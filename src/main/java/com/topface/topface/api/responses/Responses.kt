@@ -9,6 +9,7 @@ import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IAvatarVisible
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IDivider
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IResendableItem
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.Utils.EMPTY
 import com.topface.topface.utils.extensions.readBoolean
@@ -42,7 +43,10 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
                        val unread: Boolean = false, val link: String? = null) : IChatItem, Parcelable,
-        IAvatarVisible, IDivider {
+        IAvatarVisible, IDivider, IResendableItem {
+    override val isErrorVisible = ObservableBoolean(false)
+    override val isSending = ObservableBoolean(false)
+    override val isRetrierVisible = ObservableBoolean(false)
 
     override val isAvatarVisible = ObservableBoolean(false)
     override val dividerText = ObservableField(Utils.EMPTY)

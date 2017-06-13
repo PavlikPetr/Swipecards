@@ -22,18 +22,34 @@
             bind:dividerText="@{viewModel.dividerText}"
             bind:isDividerVisible="@{viewModel.isDividerVisible}" />
 
-        <TextView
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|top"
-            android:layout_marginLeft="56dp"
-            android:layout_marginRight="16dp"
-            android:autoLink="all"
-            android:background="@drawable/chat_item_d1_bg_user"
-            bind:autoLinkText="@{viewModel.text}"
-            android:textColor="@color/white_primary_text"
-            android:textSize="16sp"
-            bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
-            tools:text="Дратути, кагдила? Вы начинаете читать предложение, чтение которого уже заканчиваете." />
+            android:layout_marginLeft="24dp">
+
+            <include
+                layout="@layout/item_chat_d1_retrier"
+                bind:viewModel="@{viewModel}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="16dp"
+                android:autoLink="all"
+                android:background="@drawable/chat_item_d1_bg_user"
+                android:text="@{viewModel.text}"
+                android:textColor="@color/white_primary_text"
+                android:textSize="16sp"
+                bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
+                tools:text="Дратути, кагдила? Вы начинаете читать предложение, чтение которого уже заканчиваете." />
+        </FrameLayout>
+
+        <include
+            layout="@layout/item_chat_d1_send_error"
+            bind:viewModel="@{viewModel}" />
+
     </LinearLayout>
 </layout>

@@ -165,6 +165,7 @@
     <!--/ строки iOS -->
 
     <string name="general_error">ОШИБКА</string>
+    <string name="general_error_normal">Ошибка</string>
     <string name="general_yes">Да</string>
     <string name="general_no">Нет</string>
     <string name="general_cancel">Отмена</string>

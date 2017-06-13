@@ -147,6 +147,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mMessageChangeSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mResendSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
 
@@ -189,6 +190,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
+
+        mResendSubscription = mEventBus.getObservable(SendHistoryItemEvent::class.java).subscribe(shortSubscription {
+            HistoryItemSender.send(mSendMessageSubscription, mApi, it.item, mUser?.id ?: 0,
+                    {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                    },
+                    {
+                        chatResult?.setResult(createResultIntent())
+                    }
+            )
+        })
+
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
                 .subscribe(shortSubscription { mIsPremium = it.premium })
@@ -296,13 +310,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     /**
-     * Удаляем итемы с id = 0, т.к. на данный момент у нас есть нормальные итемы,
+     * Удаляем итемы с id = 0 (и только если они не отсылаются в данный момент),
+     * т.к. на данный момент у нас есть нормальные итемы,
      * которыми можно заменить заглушки(ну так серверные говрят по крайней мере)
      */
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate { (it.id == 0 && !it.isSending.get()) || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -506,22 +521,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     fun onMessage() = mUser?.let {
         val message = message.get()
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
-            mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
-                    .doOnSubscribe {
-                        mHasStubItems = true
-                        mIsSendMessage = true
-                        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-                            chatData.clear()
-                            mBlockChatType = NO_BLOCK
-                        }
-                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
-                        this.message.set(EMPTY)
-                    }
-                    .subscribe(shortSubscription({
-                    }, {
-                        chatResult?.setResult(createResultIntent())
-                    })))
+            val item = wrapHistoryItem(HistoryItem(text = message,
+                    created = System.currentTimeMillis() / SERVER_TIME_CORRECTION))
+            mEventBus.setData(SendHistoryItemEvent(item))
+            this.message.set(EMPTY)
+            if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                chatData.clear()
+                mBlockChatType = NO_BLOCK
+            }
+            chatData.add(0, item)
         } else {
             navigator?.showUserIsTooPopularLock(it)
         }
@@ -613,7 +621,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mMessageChangeSubscription, mUpdateHistorySubscription,
-                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
+                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription,
+                mResendSubscription).safeUnsubscribe()
     }
 
 }
