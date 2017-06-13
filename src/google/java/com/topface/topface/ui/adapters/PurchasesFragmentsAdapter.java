@@ -69,7 +69,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         String text = mArguments.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
         switch (mTabs.get(position).type) {
             case PurchasesTabData.GPLAY:
-                fragment = !mIsVip ? App.get().getOptions().getGPBuyCoinsScreenVersion() == 1 ? CoinsBuyingFragment.Companion.newInstance(from, text) : MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
+                fragment = !mIsVip ? App.get().getOptions().isCoinPurchaseScreenRedesignEnabled() ? CoinsBuyingFragment.Companion.newInstance(from, text) : MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.AMAZON:
                 fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);

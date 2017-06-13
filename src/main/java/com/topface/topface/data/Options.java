@@ -229,15 +229,12 @@ public class Options extends AbstractData {
     }
 
     /**
-     * {int} - номер версии экрана покупки монет/лайков в GP, 0 - старая, 1 - новая и тд
+     * {boolean} - номер версии экрана покупки монет/лайков в GP, 0 - старая, 1 - новая и тд
      */
-    private int gpBuyCoinsScreenVersion;
+    private boolean coinPurchaseScreenRedesignEnabled;
 
-    public int getGPBuyCoinsScreenVersion() {
-        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
-        // надо вернуть  return gpBuyCoinsScreenVersion;
-        // временный таргетинг для демо-дня
-        return App.get().getProfile().uid == 87474093 ? 1 : 0;
+    public boolean isCoinPurchaseScreenRedesignEnabled() {
+        return coinPurchaseScreenRedesignEnabled;
     }
 
     private OfferwallWithPlaces offerwallWithPlaces;
@@ -424,7 +421,7 @@ public class Options extends AbstractData {
             }
 
             chatRedesign = response.optInt("chatRedesign");
-            gpBuyCoinsScreenVersion = response.optInt("gpBuyCoinsScreenVersion");
+            coinPurchaseScreenRedesignEnabled = response.optBoolean("coinPurchaseScreenRedesignEnabled");
 
             offerwallWithPlaces = JsonUtils.fromJson(response.optString("offerwallWithPlaces"), OfferwallWithPlaces.class);
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
