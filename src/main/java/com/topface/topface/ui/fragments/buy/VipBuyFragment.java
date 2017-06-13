@@ -136,7 +136,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        if (IronSource.isOfferwallAvailable()) {
+        if (IronSource.isOfferwallAvailable() && mOfferwallBtn != null) {
             mOfferwallBtn.stopWaiting();
         }
         RxUtils.safeUnsubscribe(mVipOpenSubscription);
