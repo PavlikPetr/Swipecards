@@ -90,8 +90,12 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     public void onPause() {
         super.onPause();
         if (IronSource.isOfferwallAvailable()) {
-            sympOfferwallBtn.stopWaiting();
-            coinsOfferwallBtn.stopWaiting();
+            if (sympOfferwallBtn != null) {
+                sympOfferwallBtn.stopWaiting();
+            }
+            if (coinsOfferwallBtn != null) {
+                coinsOfferwallBtn.stopWaiting();
+            }
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
