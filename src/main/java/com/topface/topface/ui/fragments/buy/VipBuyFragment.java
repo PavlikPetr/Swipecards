@@ -8,15 +8,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ironsource.mediationsdk.IronSource;
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
 import com.topface.statistics.processor.utils.RxUtils;
@@ -36,6 +35,7 @@ import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
+import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
@@ -68,6 +68,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
     private IronSourceManager mIronSourceManager;
+    private BuyButtonVer1 mOfferwallBtn;
     private TextView mResourceInfo;
     private String mResourceInfoText;
     private Boolean mIsNeedOfferwall = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty()
@@ -135,6 +136,9 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
+        if (IronSource.isOfferwallAvailable()) {
+            mOfferwallBtn.stopWaiting();
+        }
         RxUtils.safeUnsubscribe(mVipOpenSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
@@ -153,7 +157,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private void initViews(View root) {
         initBuyVipViews(root);
         initEditVipViews(root);
-        initOfferwallButon(root);
+        initOfferwallButton(root);
         switchLayouts();
     }
 
@@ -207,26 +211,23 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
         });
     }
 
-    private void initOfferwallButon(View root) {
+    private void initOfferwallButton(View root) {
         if (mIsNeedOfferwall) {
-            LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
-            Button btnOfferwall = new Button(App.getContext());
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.height = getResources().getDimensionPixelSize(R.dimen.offerwall_button_get_fee);
-            params.topMargin = getResources().getDimensionPixelSize(R.dimen.offerwall_button_get_fee_margin_top);
-            btnOfferwall.setLayoutParams(params);
-            btnOfferwall.setText(R.string.get_free);
-            btnOfferwall.setBackgroundResource(R.drawable.green_button_selector);
-            btnOfferwall.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.offerwall_button_text_size));
-            btnOfferwall.setAllCaps(false);
-            btnOfferwall.setOnClickListener(new OnClickListener() {
+            final LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
+
+            mOfferwallBtn = new BuyButtonVer1.BuyButtonBuilder().discount(false)
+                    .tag("offerWall_button_tag")
+                    .showType(3).title(getResources().getString(R.string.get_free))
+                    .onClick(null).build(getContext());
+            mOfferwallBtn.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
                     mIronSourceManager.showOfferwallByType(IronSourceManager.VIP_OFFERWALL);
+                    mOfferwallBtn.startWaiting();
                 }
             });
-            btnContainer.addView(btnOfferwall);
+            btnContainer.addView(mOfferwallBtn);
         }
     }
 

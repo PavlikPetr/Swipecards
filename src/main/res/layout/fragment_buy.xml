@@ -52,18 +52,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"/>
-
-                <Button
-                    android:id="@+id/get_symp_free"
-                    style="@style/PopupGreenButtonBackground"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/offerwall_button_get_fee"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/get_free"
-                    android:textColor="@color/popup_green_button_text"
-                    android:textSize="18sp"
-                    android:visibility="gone"/>
-
                 <!-- Money -->
                 <TextView
                     android:id="@+id/coins_title"
@@ -80,17 +68,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:orientation="vertical"/>
-
-                <Button
-                    android:id="@+id/get_coins_free"
-                    style="@style/PopupGreenButtonBackground"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/offerwall_button_get_fee"
-                    android:text="@string/get_free"
-                    android:textAllCaps="false"
-                    android:textColor="@color/popup_green_button_text"
-                    android:textSize="18sp"
-                    android:visibility="gone"/>
 
             </LinearLayout>
         </LinearLayout>

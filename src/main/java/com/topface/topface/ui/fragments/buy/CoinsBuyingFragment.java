@@ -12,10 +12,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ironsource.mediationsdk.IronSource;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -27,6 +27,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
+import com.topface.topface.ui.views.BuyButtonVer1;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -39,6 +40,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private Boolean mIsNeedOfferwalls = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty()
             && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME);
     private IronSourceManager mIronSourceManager;
+    private BuyButtonVer1 coinsOfferwallBtn, sympOfferwallBtn;
     private String mResourceInfoText;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -87,6 +89,10 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (IronSource.isOfferwallAvailable()) {
+            sympOfferwallBtn.stopWaiting();
+            coinsOfferwallBtn.stopWaiting();
+        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
     }
 
@@ -164,29 +170,33 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     }
 
     private void initOfferwallButton(View root) {
-        Button sympathyOfferwallButton = (Button) root.findViewById(R.id.get_symp_free);
-        Button coinsOfferwallButton = (Button) root.findViewById(R.id.get_coins_free);
         if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.SYMPATHIES_OFFERWALL)) {
-            sympathyOfferwallButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
-                    mIronSourceManager.showOfferwallByType(IronSourceManager.SYMPATHIES_OFFERWALL);
-                }
-            });
-            sympathyOfferwallButton.setVisibility(View.VISIBLE);
+            final LinearLayout sympContainer = (LinearLayout) root.findViewById(R.id.fbLikes);
+            sympOfferwallBtn = initbutton(IronSourceManager.SYMPATHIES_OFFERWALL);
+            sympContainer.addView(sympOfferwallBtn);
         }
         if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.COINS_OFFERWALL)) {
-
-            coinsOfferwallButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
-                    mIronSourceManager.showOfferwallByType(IronSourceManager.COINS_OFFERWALL);
-                }
-            });
-            coinsOfferwallButton.setVisibility(View.VISIBLE);
+            final LinearLayout coinsContainer = (LinearLayout) root.findViewById(R.id.fbCoins);
+            coinsOfferwallBtn = initbutton(IronSourceManager.COINS_OFFERWALL);
+            coinsContainer.addView(coinsOfferwallBtn);
         }
+    }
+
+    private BuyButtonVer1 initbutton(final String ironSrcType) {
+        final BuyButtonVer1 offerwallBtn;
+        offerwallBtn = new BuyButtonVer1.BuyButtonBuilder().discount(false)
+                .tag("offerWall_button_tag")
+                .showType(3).title(getResources().getString(R.string.get_free))
+                .onClick(null).build(getContext());
+        offerwallBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
+                mIronSourceManager.showOfferwallByType(ironSrcType);
+                offerwallBtn.startWaiting();
+            }
+        });
+        return offerwallBtn;
     }
 
     public String getFrom() {
