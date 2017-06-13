@@ -142,6 +142,8 @@ public abstract class OpenIabFragment extends AbstractBillingFragment implements
     @Override
     public void onConsumeFinished(Purchase purchase, IabResult iabResult) {
         Debug.log("BillingFragment: onConsumeFinished " + iabResult + purchase);
+        // покупка успешно израсходована, поэтому можно сбросить флаг, дабы подготовить хелпер к новой покупке
+        App.getOpenIabHelperManager().setInventoryChecked(false);
         if (isAdded()) {
             //Запрашиваем список покупок с небольшой задержкой,
             //что бы успели обновится данные в Google Play

@@ -5,12 +5,12 @@ import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 /**
  * общий провайдер типов как для корневого recycler так и для списка монеток
  */
-class TypeProvider: ITypeProvider {
+class TypeProvider : ITypeProvider {
     override fun getType(java: Class<*>) = when (java) {
         LikeItem::class.java -> 1
         CoinItem::class.java -> 2
-        CoinListItem::class.java -> 3
-        TestPurchaseSwitchItem::class.java -> 4
+        TestPurchaseSwitchItem::class.java -> 3
+        InAppBillingUnsupported::class.java -> 4
         else -> 0
     }
 }

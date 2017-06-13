@@ -228,7 +228,20 @@ public class Options extends AbstractData {
         return chatRedesign;
     }
 
+    /**
+     * {int} - номер версии экрана покупки монет/лайков в GP, 0 - старая, 1 - новая и тд
+     */
+    private int gpBuyCoinsScreenVersion;
+
+    public int getGPBuyCoinsScreenVersion() {
+        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+        // надо вернуть  return gpBuyCoinsScreenVersion;
+        // временный таргетинг для демо-дня
+        return App.get().getProfile().uid == 87474093 ? 1 : 0;
+    }
+
     private OfferwallWithPlaces offerwallWithPlaces;
+
     public OfferwallWithPlaces getOfferwallWithPlaces() {
         if (offerwallWithPlaces == null) {
             offerwallWithPlaces = new OfferwallWithPlaces();
@@ -411,6 +424,7 @@ public class Options extends AbstractData {
             }
 
             chatRedesign = response.optInt("chatRedesign");
+            gpBuyCoinsScreenVersion = response.optInt("gpBuyCoinsScreenVersion");
 
             offerwallWithPlaces = JsonUtils.fromJson(response.optString("offerwallWithPlaces"), OfferwallWithPlaces.class);
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");

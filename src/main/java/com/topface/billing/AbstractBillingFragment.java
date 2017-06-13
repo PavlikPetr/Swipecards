@@ -4,12 +4,10 @@ import com.topface.topface.App;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.utils.CacheProfile;
 
-import org.onepf.oms.appstore.googleUtils.Purchase;
-
 /**
  * Абстрактный фрагмент без реализации платежей
  */
-public abstract class AbstractBillingFragment extends BaseFragment {
+public abstract class AbstractBillingFragment extends BaseFragment implements IBilling {
     protected static final String IS_TEST_PURCHASES_AVAILABLE = "IS_TEST_PURCHASES_AVAILABLE";
     protected static final String IS_TEST_PURCHASES_ENABLED = "IS_TEST_PURCHASES_ENABLED";
     protected static boolean mIsTestPayments = false;
@@ -33,17 +31,6 @@ public abstract class AbstractBillingFragment extends BaseFragment {
         //На всякий случай проверяем, что доступны тестовые платежи
         return isTestPurchasesAvailable() && mIsTestPayments;
     }
-
-    @SuppressWarnings("UnusedDeclaration")
-    abstract public void onPurchased(final Purchase product);
-
-    abstract public void onSubscriptionSupported();
-
-    abstract public void onSubscriptionUnsupported();
-
-    abstract public void onInAppBillingSupported();
-
-    abstract public void onInAppBillingUnsupported();
 
     @Override
     public boolean isTrackable() {

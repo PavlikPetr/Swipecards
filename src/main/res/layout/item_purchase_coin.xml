@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.buy.design.v1.CoinItemViewModel" />
+            type="com.topface.topface.ui.fragments.buy.design.v1.view_models.CoinItemViewModel" />
     </data>
 
     <android.support.v7.widget.CardView
