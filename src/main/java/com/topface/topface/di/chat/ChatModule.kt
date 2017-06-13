@@ -11,6 +11,7 @@ import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.ui.new_adapter.enhanced.ITypeProvider
 import com.topface.topface.ui.new_adapter.enhanced.ProvideItemTypeStrategyFactory.Companion.CHAT
+import com.topface.topface.ui.views.CustomMovementMethod
 import com.topface.topface.utils.AddPhotoHelper
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.delegated_properties.objectArg
@@ -35,6 +36,10 @@ class ChatModule(val chatActivity: ChatActivity, val feedUser: FeedUser?) {
         val user by chatActivity.objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
         return ChatToolbarAvatarModel(user, navigator)
     }
+
+    @Provides
+    @FragmentScope
+    fun provideCustomMovementMethod() = CustomMovementMethod(chatActivity as IActivityDelegate)
 
     @Provides
     @FragmentScope

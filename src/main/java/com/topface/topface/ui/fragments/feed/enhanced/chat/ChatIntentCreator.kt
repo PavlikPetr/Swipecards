@@ -6,8 +6,10 @@ import com.topface.topface.App
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Photo
 import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.Companion.REQUEST_CHAT
 import com.topface.topface.utils.Utils.getChatClass
+import com.topface.topface.utils.gcmutils.GCMUtils
 
 
 object ChatIntentCreator {
@@ -39,6 +41,21 @@ object ChatIntentCreator {
     fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when (App.get().options.chatRedesign) {
         DESIGN_V1 -> createIntent(user, null, itemType)
         else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+    }
+
+    @JvmStatic
+    fun createIntentForChatFromGCMUtils(user: GCMUtils.User?, itemType: Int) = when (App.get().options.chatRedesign) {
+        DESIGN_V1 -> {
+            createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType).apply {
+                putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
+            }
+        }
+        else -> if (user != null) {
+            createIntent(user.id, user.sex, user.nameAndAge, user.city,
+                    null, null, true, null, false, false, false, user.isOnline)
+        } else {
+            Intent(App.getContext(), NavigationActivity::class.java)
+        }
     }
 
     @JvmStatic

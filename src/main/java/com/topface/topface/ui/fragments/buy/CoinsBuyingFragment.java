@@ -27,6 +27,7 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceStatistics;
 import com.topface.topface.ui.views.BuyButtonVer1;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
@@ -221,7 +222,7 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             @Override
             public void onClick(View v) {
                 mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
-                mIronSourceManager.showOfferwallByType(String.valueOf(offerwallBtn.getTag()));
+                mIronSourceManager.showOfferwallByType(String.valueOf(offerwallBtn.getTag()), IronSourceStatistics.BUY_LIKES_COINS_PLC);
                 offerwallBtn.startWaiting();
             }
         });

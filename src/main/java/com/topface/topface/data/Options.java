@@ -228,7 +228,17 @@ public class Options extends AbstractData {
         return chatRedesign;
     }
 
+    /**
+     * {boolean} - номер версии экрана покупки монет/лайков в GP, 0 - старая, 1 - новая и тд
+     */
+    private boolean coinPurchaseScreenRedesignEnabled;
+
+    public boolean isCoinPurchaseScreenRedesignEnabled() {
+        return coinPurchaseScreenRedesignEnabled;
+    }
+
     private OfferwallWithPlaces offerwallWithPlaces;
+
     public OfferwallWithPlaces getOfferwallWithPlaces() {
         if (offerwallWithPlaces == null) {
             offerwallWithPlaces = new OfferwallWithPlaces();
@@ -411,6 +421,7 @@ public class Options extends AbstractData {
             }
 
             chatRedesign = response.optInt("chatRedesign");
+            coinPurchaseScreenRedesignEnabled = response.optBoolean("coinPurchaseScreenRedesignEnabled");
 
             offerwallWithPlaces = JsonUtils.fromJson(response.optString("offerwallWithPlaces"), OfferwallWithPlaces.class);
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");

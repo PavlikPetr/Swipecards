@@ -60,6 +60,7 @@ class FriendMessage(item: HistoryItem) :
  */
 class MutualStub : IChatItem {
     override fun getItemType() = STUB_MUTUAL
+    override fun isStubItem() = true
 }
 
 /**
@@ -67,6 +68,7 @@ class MutualStub : IChatItem {
  */
 class NotMutualBuyVipStub : IChatItem {
     override fun getItemType() = NOT_MUTUAL_BUY_VIP_STUB_MUTUAL
+    override fun isStubItem() = true
 }
 
 /**
@@ -74,6 +76,7 @@ class NotMutualBuyVipStub : IChatItem {
  */
 class BuyVipStub : IChatItem {
     override fun getItemType() = STUB_BUY_VIP
+    override fun isStubItem() = true
 }
 
 /**
@@ -81,4 +84,10 @@ class BuyVipStub : IChatItem {
  */
 interface IChatItem {
     fun getItemType(): Int
+    fun isStubItem() : Boolean  = false
 }
+
+/**
+ * Класс для ивента с требованием зарелизить компонент, вью модель и прочее
+ */
+class NeedRelease

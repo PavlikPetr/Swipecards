@@ -32,6 +32,7 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
+import com.topface.topface.ui.fragments.profile.UserProfileFragment;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -43,7 +44,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION;
 import static com.topface.topface.utils.actionbar.OverflowMenu.OverflowMenuItem.ADD_TO_BOOKMARK_ACTION;
@@ -138,7 +138,10 @@ public class OverflowMenu {
             if (!App.get().getOptions().isHideAdmirations) {
                 result.add(SEND_ADMIRATION_ACTION);
             }
-            result.add(OPEN_CHAT_ACTION);
+            OverflowMenuUser menuUser = getOverflowMenuFieldsListener();
+            if (!(menuUser != null && menuUser.isChatHidden())) {
+                result.add(OPEN_CHAT_ACTION);
+            }
             result.add(SEND_GIFT_ACTION);
             result.add(ADD_TO_BLACK_LIST_ACTION);
             result.add(ADD_TO_BOOKMARK_ACTION);

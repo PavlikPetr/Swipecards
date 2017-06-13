@@ -18,6 +18,7 @@ import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.NavigationManager
 import com.topface.topface.utils.RunningStateManager
 import com.topface.topface.utils.config.WeakStorage
+import com.topface.topface.utils.loadcontollers.FeedLoadController
 import dagger.Component
 import javax.inject.Singleton
 
@@ -39,6 +40,7 @@ interface AppComponent {
     fun drawerLayoutState(): DrawerLayoutState
     fun weakStorage(): WeakStorage
     fun lifeCycleState(): LifeCycleState
+    fun feedLoadController(): FeedLoadController
     fun authState(): AuthState
     fun presenterCache(): PresenterCache
     fun runningStateManager(): RunningStateManager

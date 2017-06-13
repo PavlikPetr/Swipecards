@@ -1,10 +1,14 @@
 package com.topface.topface.utils.extensions
 
+import android.text.TextUtils
+import com.topface.topface.App
 import com.topface.topface.data.BuyButtonData
 import com.topface.topface.data.Products
+import com.topface.topface.data.ProductsDetails
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProductsList
 import com.topface.topface.utils.CacheProfile
 import java.text.NumberFormat
+import java.util.*
 
 fun String.getProduct() = CacheProfile.getMarketProducts()
         .getAllProductButtons()
@@ -21,7 +25,35 @@ fun Products.getAllProductButtons() = linkedSetOf<BuyButtonData>().apply {
     }
 }
 
+fun Products.getLikesProducts() = linkedSetOf<BuyButtonData>().apply { addAll(likes) }
+
+fun Products.getCoinsProducts() = linkedSetOf<BuyButtonData>().apply { addAll(coins) }
+
 fun String.isSubscription() = getProduct()?.type?.isSubscription
+
+fun BuyButtonData.getFormatedPrice(): String {
+    val productsDetails = CacheProfile.getMarketProductsDetails()
+    var currency: Currency
+    var currencyFormatter: NumberFormat
+    currency = Currency.getInstance(Products.USD)
+    currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US)
+    currencyFormatter.currency = currency
+    var price = price.toDouble() / 100
+    if (productsDetails != null && !TextUtils.isEmpty(totalTemplate)) {
+        productsDetails.getProductDetail(id)?.let { detail ->
+            if (detail.currency != null) {
+                price = detail.price / ProductsDetails.MICRO_AMOUNT
+                currency = Currency.getInstance(detail.currency)
+                currencyFormatter = if (detail.currency.equals(Products.USD, ignoreCase = true))
+                    NumberFormat.getCurrencyInstance(Locale.US)
+                else
+                    NumberFormat.getCurrencyInstance(Locale(App.getLocaleConfig().applicationLocale))
+                currencyFormatter.currency = currency
+            }
+        }
+    }
+    return currencyFormatter.getFormattedPrice(price)
+}
 
 fun PaymentNinjaProductsList.getVipProducts() = this.products.filter { it.type == Constants.PREMIUM }
 

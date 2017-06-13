@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.IntDef;
 
 import com.topface.topface.utils.Utils;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
@@ -66,6 +67,34 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
     public transient String feedItemId;
 
     public FeedUser() {
+    }
+
+    public static FeedUser createFeedUserFromGCMUser(@Nullable GCMUtils.User user) {
+        FeedUser feedUser = new FeedUser();
+        if (user != null) {
+            feedUser.id = user.id;
+            feedUser.sex = user.sex;
+            feedUser.firstName = user.name;
+            feedUser.age = user.age;
+            feedUser.photo = Photo.createPhotoFromGCMUser(user);
+            City city = new City();
+            city.name = user.city;
+            feedUser.city = city;
+        }
+        return feedUser;
+    }
+
+    public static FeedUser createFeedUserFromUser(User user) {
+        FeedUser feedUser = new FeedUser();
+        if (user != null) {
+            feedUser.id = user.uid;
+            feedUser.sex = user.sex;
+            feedUser.firstName = user.firstName;
+            feedUser.age = user.age;
+            feedUser.photo = user.photo;
+            feedUser.city = user.city;
+        }
+        return feedUser;
     }
 
     public void setFeedItemId(String feedItemId) {
@@ -147,7 +176,7 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         dest.writeByte((byte) (online ? 1 : 0));
         dest.writeParcelable(city, flags);
         dest.writeParcelable(photo, flags);
-        dest.writeParcelableArray(photos.toArray(new Photo[photos.size()]), flags);
+        dest.writeParcelableArray(photos != null ? photos.toArray(new Photo[photos.size()]) : new Photo[0], flags);
         dest.writeInt(photosCount);
         dest.writeByte((byte) (premium ? 1 : 0));
         dest.writeByte((byte) (banned ? 1 : 0));

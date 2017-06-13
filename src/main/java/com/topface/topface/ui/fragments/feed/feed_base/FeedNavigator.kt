@@ -86,6 +86,18 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    // костыльный метод, позволяющий скрыть пункт "чат" на экране профиля,
+    // если он был открыт из чата версии 1
+    override fun showProfileNoChat(item: FeedUser?, from: String) =
+            item?.let {
+                if (!it.isEmpty) {
+                    mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, it.photo,
+                            it.id, null, false, true, Utils.getNameAndAge(it.firstName, it.age),
+                            it.city.getName(), from)
+                            .putExtra(UserProfileActivity.INTENT_HIDE_CHAT_IN_OVERFLOw_MENU, true))
+                }
+            } ?: Unit
+
     override fun showProfile(item: FeedUser?, from: String) =
             item?.let {
                 if (!it.isEmpty) {

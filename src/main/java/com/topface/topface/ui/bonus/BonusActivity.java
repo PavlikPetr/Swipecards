@@ -7,6 +7,7 @@ import com.topface.topface.R;
 import com.topface.topface.databinding.AcFragmentFrameBinding;
 import com.topface.topface.databinding.ToolbarViewBinding;
 import com.topface.topface.ui.SingleFragmentActivity;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceStatistics;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ public class BonusActivity extends SingleFragmentActivity<BonusFragment, AcFragm
 
     @Override
     protected BonusFragment createFragment() {
-        return BonusFragment.Companion.newInstance(true);
+        return BonusFragment.Companion.newInstance(true, IronSourceStatistics.EXTRA_ACTIVITY_PLC);
     }
 
     public static Intent createIntent() {

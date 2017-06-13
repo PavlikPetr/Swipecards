@@ -313,7 +313,7 @@ public class UserNotification {
 
 	private void putTopLevelFragment(Intent parentIntent, Intent targetIntent) {
 		String componentName = targetIntent.getComponent().getClassName();
-		if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())) {
+		if (TextUtils.equals(componentName, ChatActivity.class.getCanonicalName())||TextUtils.equals(componentName, com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.class.getCanonicalName())) {
 			FeedScreensIntent.equipNotificationIntent(parentIntent);
 		}
 		if (TextUtils.equals(componentName, UserProfileActivity.class.getCanonicalName())) {

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.buy.design.v1.view_models.LikeItemViewModel" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:onClick="@{() -> viewModel.buy()}"
+        app:cardCornerRadius="@dimen/purchase_v1_card_corner_radius"
+        app:cardElevation="@dimen/purchase_v1_card_elevation"
+        app:cardMaxElevation="@dimen/purchase_v1_card_max_elevation"
+        app:cardBackgroundColor="@color/purchase_v1_card_background_selector"
+        app:cardPreventCornerOverlap="false">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="81dp"
+                android:layout_height="70dp"
+                android:background="@drawable/ic_purchase_sympathy_1" />
+
+            <View
+                android:layout_width="55dp"
+                android:layout_height="1dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="left"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.titleText}"
+                    android:textColor="@color/dark_primary_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="192 лайка" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.priceText}"
+                    android:textColor="@color/dark_secondary_text"
+                    android:textSize="16sp"
+                    tools:text="за 99 RUB" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</layout>
