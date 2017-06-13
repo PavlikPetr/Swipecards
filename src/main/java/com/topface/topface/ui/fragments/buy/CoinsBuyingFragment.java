@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ironsource.mediationsdk.IronSource;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
+import com.topface.statistics.processor.utils.RxUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
@@ -34,14 +34,24 @@ import org.onepf.oms.appstore.googleUtils.Purchase;
 import java.util.LinkedList;
 import java.util.List;
 
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private TextView mResourceInfo;
-    private Boolean mIsNeedOfferwalls = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty()
-            && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME);
-    private IronSourceManager mIronSourceManager;
+    private Boolean mIsNeedOfferwalls = !App.get().getOptions()
+            .getOfferwallWithPlaces().getPurchaseScreen().isEmpty()
+            && App.get().getOptions().getOfferwallWithPlaces()
+            .getName().equalsIgnoreCase(IronSourceManager.NAME);
+
+    private IronSourceManager mIronSourceManager = App.getAppComponent().ironSourceManager();
+    private Boolean mIronSrcAvailable = false;
     private BuyButtonVer1 coinsOfferwallBtn, sympOfferwallBtn;
     private String mResourceInfoText;
+    private Subscription mIronsrcSubscription;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -66,9 +76,26 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mIronsrcSubscription = mIronSourceManager.getOfferwallObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new com.topface.topface.utils.rx.RxUtils.ShortSubscription<IronSourceOfferwallEvent>() {
+                    @Override
+                    public void onNext(IronSourceOfferwallEvent type) {
+                        super.onNext(type);
+                        long OfferwallType = type.getType();
+                        if (OfferwallType == IronSourceOfferwallEvent.OFFERWALL_CLOSED || OfferwallType == IronSourceOfferwallEvent.OFFERWALL_OPENED) {
+                            if (sympOfferwallBtn != null) {
+                                sympOfferwallBtn.stopWaiting();
+                            }
+                            if (coinsOfferwallBtn != null) {
+                                coinsOfferwallBtn.stopWaiting();
+                            }
+                        }
+                    }
+                });
         getDataFromIntent(getArguments());
         if (mIsNeedOfferwalls) {
-            mIronSourceManager = App.getAppComponent().ironSourceManager();
             mIronSourceManager.initSdk(getActivity());
         }
     }
@@ -89,15 +116,13 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (IronSource.isOfferwallAvailable()) {
-            if (sympOfferwallBtn != null) {
-                sympOfferwallBtn.stopWaiting();
-            }
-            if (coinsOfferwallBtn != null) {
-                coinsOfferwallBtn.stopWaiting();
-            }
-        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxUtils.safeUnsubscribe(mIronsrcSubscription);
     }
 
     @Override
