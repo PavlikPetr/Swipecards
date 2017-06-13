@@ -9,8 +9,8 @@ class TypeProvider : ITypeProvider {
     override fun getType(java: Class<*>) = when (java) {
         LikeItem::class.java -> 1
         CoinItem::class.java -> 2
-        TestPurchaseSwitchItem::class.java -> 4
-        InAppBillingUnsupported::class.java -> 5
+        TestPurchaseSwitchItem::class.java -> 3
+        InAppBillingUnsupported::class.java -> 4
         else -> 0
     }
 }

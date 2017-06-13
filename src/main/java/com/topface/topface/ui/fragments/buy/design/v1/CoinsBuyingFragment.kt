@@ -93,7 +93,6 @@ class CoinsBuyingFragment : OpenIabFragment() {
     override fun onPurchased(product: Purchase) {
         super.onPurchased(product)
         mViewModel.onPurchased(product)
-
     }
 
     override fun getProducts(): Products = CacheProfile.getMarketProducts()
