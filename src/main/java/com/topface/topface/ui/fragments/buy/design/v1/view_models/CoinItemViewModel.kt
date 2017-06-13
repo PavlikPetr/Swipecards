@@ -10,7 +10,8 @@ import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.utils.extensions.getFormatedPrice
 import com.topface.topface.utils.extensions.getString
 
-class CoinItemViewModel(private val data: BuyButtonData, private val mFrom: String, private val mNavigator: IFeedNavigator) {
+class CoinItemViewModel(private val data: BuyButtonData, private val mFrom: String,
+                        img: Int, private val mNavigator: IFeedNavigator) {
     /**
      * иконка на итеме покупки монет, может принимать такие значения
      * ic_purchase_coins_1
@@ -23,7 +24,7 @@ class CoinItemViewModel(private val data: BuyButtonData, private val mFrom: Stri
      * которые он продает в порядке возрастания. Если с сервера пришло более 4 продуктов,
      * то у 4 и далее (по числу монет) отображается 4-е максимальное состояние монет
      */
-    val coinsDrawable = ObservableInt(R.drawable.ic_purchase_coins_2)
+    val coinsDrawable = ObservableInt(img)
     val titleText = ObservableField<String>(data.title)
     val priceText = ObservableField<String>(String.format(R.string.product_coast.getString(), data.getFormatedPrice()))
     /**

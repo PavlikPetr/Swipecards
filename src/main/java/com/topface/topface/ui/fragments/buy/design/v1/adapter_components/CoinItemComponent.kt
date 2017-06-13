@@ -13,7 +13,7 @@ class CoinItemComponent(private val mNavigator: IFeedNavigator) : AdapterCompone
 
     override fun bind(binding: ItemPurchaseCoinBinding, data: CoinItem?, position: Int) {
         data?.let {
-            binding.viewModel = CoinItemViewModel(it.data, it.from, mNavigator)
+            binding.viewModel = CoinItemViewModel(it.data, it.from,it.img, mNavigator)
         }
     }
 }

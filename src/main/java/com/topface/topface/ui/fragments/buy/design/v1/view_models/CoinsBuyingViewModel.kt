@@ -3,6 +3,8 @@ package com.topface.topface.ui.fragments.buy.design.v1.view_models
 import android.os.Bundle
 import com.topface.billing.IBilling
 import com.topface.topface.App
+import com.topface.topface.R
+import com.topface.topface.data.BuyButtonData
 import com.topface.topface.data.Products
 import com.topface.topface.data.Profile
 import com.topface.topface.ui.fragments.buy.design.v1.*
@@ -31,11 +33,6 @@ class CoinsBuyingViewModel(private val mBundle: Bundle, private val mProducts: P
         mBundle.getString(CoinsBuyingFragment.FROM)
     }
 
-    // Текст в дизайне не заюзали, но такое чувство, что перерисуют с использованием
-    private val mText by lazy {
-        mBundle.getString(CoinsBuyingFragment.TEXT)
-    }
-
     private val mAppState by lazy {
         App.getAppComponent().appState()
     }
@@ -48,7 +45,7 @@ class CoinsBuyingViewModel(private val mBundle: Bundle, private val mProducts: P
 
     val data = MultiObservableArrayList<Any>()
     var mIsEditor = App.get().profile.isEditor
-    var mCurrentItemsType = CoinsBuyingViewModel.Companion.UNDEFINED
+    var mCurrentItemsType = CoinsBuyingViewModel.UNDEFINED
 
     init {
         mEditorSubscription = mAppState.getObservable(Profile::class.java)
@@ -79,19 +76,22 @@ class CoinsBuyingViewModel(private val mBundle: Bundle, private val mProducts: P
     }
 
     private fun showInAppBillingUnsupported() {
-        mCurrentItemsType = CoinsBuyingViewModel.Companion.IN_APP_BILLING_UNSUPPORTED
+        mCurrentItemsType = CoinsBuyingViewModel.IN_APP_BILLING_UNSUPPORTED
         data.replaceData(arrayListOf<Any>(InAppBillingUnsupported()))
     }
 
     private fun showInAppBillingSupported() {
-        mCurrentItemsType = CoinsBuyingViewModel.Companion.IN_APP_BILLING_SUPPORTED
+        mCurrentItemsType = CoinsBuyingViewModel.IN_APP_BILLING_SUPPORTED
         arrayListOf<Any>().apply {
             mProducts.getLikesProducts()
                     .filter { it.displayOnBuyScreen }
                     .forEach { add(LikeItem(it, mFrom)) }
             mProducts.getCoinsProducts()
                     .filter { it.displayOnBuyScreen }
-                    .forEach { add(CoinItem(it, mFrom)) }
+                    .run {
+                        val sorted = this.sortedBy { it.amount }
+                        forEach { add(CoinItem(it, mFrom, it.getCoinsImg(sorted))) }
+                    }
         }.run {
             if (size > 0) {
                 data.replaceData(this.apply {
@@ -106,6 +106,13 @@ class CoinsBuyingViewModel(private val mBundle: Bundle, private val mProducts: P
 
     }
 
+    private fun BuyButtonData.getCoinsImg(sortedList: List<BuyButtonData>) =
+            when (sortedList.indexOfFirst { it == this }) {
+                0 -> R.drawable.ic_purchase_coins_1
+                1 -> R.drawable.ic_purchase_coins_2
+                2 -> R.drawable.ic_purchase_coins_3
+                else -> R.drawable.ic_purchase_coins_4
+            }
 
     override fun onPurchased(product: Purchase) {
     }

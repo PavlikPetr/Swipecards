@@ -40,15 +40,16 @@ fun BuyButtonData.getFormatedPrice(): String {
     currencyFormatter.currency = currency
     var price = price.toDouble() / 100
     if (productsDetails != null && !TextUtils.isEmpty(totalTemplate)) {
-        val detail = productsDetails.getProductDetail(id)
-        if (detail != null && detail.currency != null) {
-            price = detail.price / ProductsDetails.MICRO_AMOUNT
-            currency = Currency.getInstance(detail.currency)
-            currencyFormatter = if (detail.currency.equals(Products.USD, ignoreCase = true))
-                NumberFormat.getCurrencyInstance(Locale.US)
-            else
-                NumberFormat.getCurrencyInstance(Locale(App.getLocaleConfig().applicationLocale))
-            currencyFormatter.currency = currency
+        productsDetails.getProductDetail(id)?.let { detail ->
+            if (detail.currency != null) {
+                price = detail.price / ProductsDetails.MICRO_AMOUNT
+                currency = Currency.getInstance(detail.currency)
+                currencyFormatter = if (detail.currency.equals(Products.USD, ignoreCase = true))
+                    NumberFormat.getCurrencyInstance(Locale.US)
+                else
+                    NumberFormat.getCurrencyInstance(Locale(App.getLocaleConfig().applicationLocale))
+                currencyFormatter.currency = currency
+            }
         }
     }
     return currencyFormatter.getFormattedPrice(price)
