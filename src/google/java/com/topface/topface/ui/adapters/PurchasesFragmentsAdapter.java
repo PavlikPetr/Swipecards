@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.HackyFragmentStatePagerAdapter;
 
 import com.topface.framework.utils.Debug;
+import com.topface.topface.App;
 import com.topface.topface.data.PaymentWallProducts;
 import com.topface.topface.data.PurchasesTabData;
 import com.topface.topface.ui.bonus.BonusFragment;
@@ -16,6 +17,7 @@ import com.topface.topface.ui.fragments.buy.PaymentWallBuyingFragment;
 import com.topface.topface.ui.fragments.buy.PurchasesConstants;
 import com.topface.topface.ui.fragments.buy.VipBuyFragment;
 import com.topface.topface.ui.fragments.buy.VipPaymentWallBuyFragment;
+import com.topface.topface.ui.fragments.buy.design.v1.CoinsBuyingFragment;
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaMarketBuyingFragment;
 
 import org.jetbrains.annotations.Nullable;
@@ -67,7 +69,7 @@ public class PurchasesFragmentsAdapter extends HackyFragmentStatePagerAdapter {
         String text = mArguments.getString(PurchasesConstants.ARG_RESOURCE_INFO_TEXT);
         switch (mTabs.get(position).type) {
             case PurchasesTabData.GPLAY:
-                fragment = !mIsVip ? MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
+                fragment = !mIsVip ? App.get().getOptions().getGPBuyCoinsScreenVersion() == 1 ? CoinsBuyingFragment.Companion.newInstance(from, text) : MarketBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);
                 break;
             case PurchasesTabData.AMAZON:
                 fragment = !mIsVip ? AmazonBuyingFragment.newInstance(from, text) : VipBuyFragment.newInstance(true, from, text);

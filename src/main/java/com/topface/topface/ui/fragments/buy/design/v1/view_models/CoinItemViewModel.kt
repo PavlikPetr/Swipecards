@@ -1,12 +1,17 @@
-package com.topface.topface.ui.fragments.buy.design.v1
+package com.topface.topface.ui.fragments.buy.design.v1.view_models
 
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import com.topface.framework.utils.Debug
 import com.topface.topface.R
+import com.topface.topface.data.BuyButtonData
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
+import com.topface.topface.utils.extensions.getFormatedPrice
+import com.topface.topface.utils.extensions.getString
 
-class CoinItemViewModel {
+class CoinItemViewModel(private val data: BuyButtonData, private val mFrom: String,
+                        img: Int, private val mNavigator: IFeedNavigator) {
     /**
      * иконка на итеме покупки монет, может принимать такие значения
      * ic_purchase_coins_1
@@ -19,17 +24,15 @@ class CoinItemViewModel {
      * которые он продает в порядке возрастания. Если с сервера пришло более 4 продуктов,
      * то у 4 и далее (по числу монет) отображается 4-е максимальное состояние монет
      */
-    val coinsDrawable = ObservableInt(R.drawable.ic_purchase_coins_2)
-    //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
-    // тестовая инициализация полей
-    val titleText = ObservableField<String>("13 monet")
-    val priceText = ObservableField<String>("za 99 rub")
+    val coinsDrawable = ObservableInt(img)
+    val titleText = ObservableField<String>(data.title)
+    val priceText = ObservableField<String>(String.format(R.string.product_coast.getString(), data.getFormatedPrice()))
     /**
      * Бейджик "популярное" рисуется у тех продуктов, у которых пришел флаг SpecialPrice
      */
-    val isSpecial = ObservableBoolean(Math.random() > 0.5)
+    val isSpecial = ObservableBoolean(data.showType in 1..2)
 
     fun buy() {
-        Debug.log("--- buy coins")
+        mNavigator.showPurchaseProduct(data.id, mFrom)
     }
 }
