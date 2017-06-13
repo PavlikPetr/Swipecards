@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.items.IResendableItem" />
+    </data>
+
+    <View
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="bottom|left"
+        android:background="@drawable/ic_chat_retry"
+        android:onClick="@{() -> viewModel.onRetryClick()}"
+        android:visibility="@{viewModel.isRetrierVisible}"
+        bind:animateLoader="@{viewModel.isSending}" />
+
+</layout>
