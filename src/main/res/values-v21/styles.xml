@@ -231,6 +231,10 @@
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
 
+    <style name="PopupGreenButtonBackground">
+        <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
     <style name="AddPaymentNinjaCardView" parent="AddPaymentNinjaCardViewBase">
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>

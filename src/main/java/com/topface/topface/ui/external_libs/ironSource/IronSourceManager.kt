@@ -22,7 +22,8 @@ class IronSourceManager {
         const val VIP_OFFERWALL = "vip"
 
         private const val APP_KEY = "2cf0ad4d"
-        const val TAG = "IronSource"
+        private const val TAG = "IronSource"
+        const val NAME = "IRONSRC"
     }
 
     val offerwallObservable: Observable<IronSourceOfferwallEvent>
@@ -79,7 +80,10 @@ class IronSourceManager {
             mInitSuccessSubscription = offerwallObservable
                     .filter { it.type == IronSourceOfferwallEvent.OFFERWALL_AVAILABLE }
                     .first()
-                    .subscribe(shortSubscription { IronSource.showOfferwall(plc) })
+                    .subscribe(shortSubscription({
+                    }, {
+                        IronSource.showOfferwall(plc)
+                    }))
         }
     }
 

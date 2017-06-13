@@ -163,7 +163,7 @@ public class MenuFragment extends Fragment {
     };
 
     private Boolean isBonusAvialable(Options options) {
-        return (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty() && options.getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.TAG));
+        return (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty() && options.getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME));
     }
 
     private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {

@@ -108,6 +108,5 @@
                 android:textAllCaps="true"
                 android:textSize="18sp"/>
 
-
         </RelativeLayout>
 </layout>
