@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ironsource.mediationsdk.IronSource;
 import com.topface.billing.OpenIabFragment;
 import com.topface.statistics.generated.NewProductsKeysGeneratedStatistics;
 import com.topface.statistics.processor.utils.RxUtils;
@@ -32,6 +33,9 @@ import com.topface.topface.statistics.PushButtonVipStatistics;
 import com.topface.topface.statistics.PushButtonVipUniqueStatistics;
 import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
+import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
 
@@ -63,8 +67,12 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     };
     private LinearLayout mBuyVipViewsContainer;
     private LinearLayout mEditPremiumContainer;
+    private IronSourceManager mIronSourceManager;
+    private BuyButtonVer1 mOfferwallBtn;
     private TextView mResourceInfo;
     private String mResourceInfoText;
+    private Boolean mIsNeedOfferwall = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreenVip().isEmpty()
+            && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME);
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -109,6 +117,10 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getDataFromIntent(getArguments());
+        if (mIsNeedOfferwall) {
+            mIronSourceManager = App.getAppComponent().ironSourceManager();
+            mIronSourceManager.initSdk(getActivity());
+        }
     }
 
     @Override
@@ -124,6 +136,9 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
+        if (IronSource.isOfferwallAvailable() && mOfferwallBtn != null) {
+            mOfferwallBtn.stopWaiting();
+        }
         RxUtils.safeUnsubscribe(mVipOpenSubscription);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
@@ -142,6 +157,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
     private void initViews(View root) {
         initBuyVipViews(root);
         initEditVipViews(root);
+        initOfferwallButton(root);
         switchLayouts();
     }
 
@@ -193,6 +209,26 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
                 buy(id, btnData);
             }
         });
+    }
+
+    private void initOfferwallButton(View root) {
+        if (mIsNeedOfferwall) {
+            final LinearLayout btnContainer = (LinearLayout) root.findViewById(R.id.fbpBtnContainer);
+
+            mOfferwallBtn = new BuyButtonVer1.BuyButtonBuilder().discount(false)
+                    .tag("offerWall_button_tag")
+                    .showType(3).title(getResources().getString(R.string.get_free))
+                    .onClick(null).build(getContext());
+            mOfferwallBtn.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
+                    mIronSourceManager.showOfferwallByType(IronSourceManager.VIP_OFFERWALL);
+                    mOfferwallBtn.startWaiting();
+                }
+            });
+            btnContainer.addView(mOfferwallBtn);
+        }
     }
 
     @Override

@@ -332,5 +332,7 @@
     <dimen name="offerwall_button_text_padding_left">104dp</dimen>
     <dimen name="offerwall_button_text_size">17sp</dimen>
     <dimen name="offerwall_button_image_padding_left">16dp</dimen>
+    <dimen name="offerwall_button_get_fee">56dp</dimen>
+    <dimen name="offerwall_button_get_fee_margin_top">10dp</dimen>
     <dimen name="offerwall_divider_height">1dp</dimen>
 </resources>
