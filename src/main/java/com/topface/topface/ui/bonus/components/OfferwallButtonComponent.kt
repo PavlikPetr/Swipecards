@@ -12,11 +12,11 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  * Created by petrp on 02.06.2017.
  */
 
-class OfferwallButtonComponent : AdapterComponent<OfferwallButtonBinding, OfferwallButton>() {
+class OfferwallButtonComponent(private val from: String) : AdapterComponent<OfferwallButtonBinding, OfferwallButton>() {
     override val itemLayout = R.layout.offerwall_button
     override val bindingClass = OfferwallButtonBinding::class.java
 
     override fun bind(binding: OfferwallButtonBinding, data: OfferwallButton?, position: Int) {
-        data?.let { binding.viewModel = OfferwallButtonViewModel(it) }
+        data?.let { binding.viewModel = OfferwallButtonViewModel(it, from) }
     }
 }

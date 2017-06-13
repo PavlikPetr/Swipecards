@@ -19,3 +19,15 @@ fun String.getIronSourcePlc(array: List<OfferwallPlace>) = array.find { it.type 
  * Get IronSource plc by product type. Places array from userGetAppOptions
  */
 fun String.getIronSourcePlc() = getIronSourcePlc(App.get().options.offerwallWithPlaces.getPlaces())
+
+/**
+ * Get IronSource type by offers place
+ *
+ * @param array - list of places
+ */
+fun String.getIronSourceType(array: List<OfferwallPlace>) = array.find { it.name == this }?.type
+
+/**
+ * Get IronSource type by offers place. Places array from userGetAppOptions
+ */
+fun String.getIronSourceType() = getIronSourcePlc(App.get().options.offerwallWithPlaces.getPlaces())

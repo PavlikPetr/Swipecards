@@ -28,11 +28,13 @@ class BonusFragment : BaseFragment() {
     companion object {
         const val PAGE_NAME = "bonus"
         const val NEED_SHOW_TITLE = "need_show_title"
+        const val FROM = "from"
         val TAG = BonusFragment::class.java.simpleName
 
-        fun newInstance(isNeedTitle: Boolean) = BonusFragment().apply {
+        fun newInstance(isNeedTitle: Boolean, from: String) = BonusFragment().apply {
             arguments = Bundle().apply {
                 putBoolean(NEED_SHOW_TITLE, isNeedTitle)
+                putString(FROM, from)
             }
         }
     }
@@ -57,7 +59,7 @@ class BonusFragment : BaseFragment() {
     private val mAdapter: CompositeAdapter by lazy {
         CompositeAdapter(mProvider) { Bundle() }
                 .addAdapterComponent(LoaderComponent())
-                .addAdapterComponent(OfferwallButtonComponent())
+                .addAdapterComponent(OfferwallButtonComponent(arguments.getString(FROM)))
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

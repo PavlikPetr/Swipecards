@@ -35,6 +35,7 @@ import com.topface.topface.ui.BlackListActivity;
 import com.topface.topface.ui.edit.EditSwitcher;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceStatistics;
 import com.topface.topface.ui.views.BuyButtonVer1;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
@@ -223,7 +224,7 @@ public class VipBuyFragment extends OpenIabFragment implements OnClickListener {
                 @Override
                 public void onClick(View v) {
                     mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
-                    mIronSourceManager.showOfferwallByType(IronSourceManager.VIP_OFFERWALL);
+                    mIronSourceManager.showOfferwallByType(IronSourceManager.VIP_OFFERWALL, IronSourceStatistics.BUY_VIP_PLC);
                     mOfferwallBtn.startWaiting();
                 }
             });
