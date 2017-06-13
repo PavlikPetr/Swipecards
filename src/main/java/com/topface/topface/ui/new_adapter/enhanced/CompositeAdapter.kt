@@ -28,6 +28,29 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
     var data: MutableList<Any> = mutableListOf()
     val components: MutableMap<Int, AdapterComponent<*, *>> = mutableMapOf()
 
+    private val mOnScrollListener by lazy {
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                (recyclerView?.layoutManager as? LinearLayoutManager)?.let {
+                    mUpdateSubscriber?.let { subscriber ->
+                        if (!data.isEmpty()) {
+                            val firstVisibleItem = it.findFirstCompletelyVisibleItemPosition()
+                            val lastVisibleItem = it.findLastVisibleItemPosition()
+                            val visibleItemCount = lastVisibleItem - firstVisibleItem + 1
+                            if (firstVisibleItem != RecyclerView.NO_POSITION &&
+                                    lastVisibleItem != RecyclerView.NO_POSITION && visibleItemCount != 0 &&
+                                    firstVisibleItem + visibleItemCount >= data.size - 1) {
+                                subscriber.onNext(updaterEmitObject(this@CompositeAdapter))
+                            }
+                        } else {
+                            subscriber.onNext(Bundle())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     init {
         updateObservable = Observable.create { subscriber ->
             mUpdateSubscriber = subscriber
@@ -59,25 +82,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
         }
         recyclerView?.layoutManager?.let {
             if (it is LinearLayoutManager) {
-                recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                        val subscriber = mUpdateSubscriber
-                        if (subscriber != null) {
-                            if (!data.isEmpty()) {
-                                val firstVisibleItem = it.findFirstCompletelyVisibleItemPosition()
-                                val lastVisibleItem = it.findLastVisibleItemPosition()
-                                val visibleItemCount = lastVisibleItem - firstVisibleItem + 1
-                                if (firstVisibleItem != RecyclerView.NO_POSITION &&
-                                        lastVisibleItem != RecyclerView.NO_POSITION && visibleItemCount != 0 &&
-                                        firstVisibleItem + visibleItemCount >= data.size - 1) {
-                                    subscriber.onNext(updaterEmitObject(this@CompositeAdapter))
-                                }
-                            } else {
-                                subscriber.onNext(Bundle())
-                            }
-                        }
-                    }
-                })
+                recyclerView.addOnScrollListener(mOnScrollListener)
             } else {
                 Debug.debug(this, "Wrong layout manager")
             }
@@ -108,7 +113,7 @@ class CompositeAdapter(var typeProvider: ITypeProvider, provideItemTypeStrategyT
         doOnRelease?.invoke()
         doOnRelease = null
         components.values.forEach(AdapterComponent<*, *>::release)
-        mRecyclerView?.addOnScrollListener(null)
+        mRecyclerView?.removeOnScrollListener(mOnScrollListener)
         mUpdateSubscriber = null
         mRecyclerView = null
     }
