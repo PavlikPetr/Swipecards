@@ -86,7 +86,7 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
                 mBtnHandler.containerBackgroundRes.set(discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled);
                 return;
             case 3:
-                mBtnHandler.containerBackgroundRes.set(R.drawable.green_button_selector);
+                mBtnHandler.containerBackgroundRes.set(R.drawable.btn_green_selector);
                 return;
             default:
                 mBtnHandler.containerBackgroundRes.set(discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector);

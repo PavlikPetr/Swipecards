@@ -36,7 +36,6 @@ import java.util.List;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
@@ -201,27 +200,28 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private void initOfferwallButton(View root) {
         if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.SYMPATHIES_OFFERWALL)) {
             final LinearLayout sympContainer = (LinearLayout) root.findViewById(R.id.fbLikes);
-            sympOfferwallBtn = initbutton(IronSourceManager.SYMPATHIES_OFFERWALL);
+            sympOfferwallBtn = initButton(IronSourceManager.SYMPATHIES_OFFERWALL);
             sympContainer.addView(sympOfferwallBtn);
         }
         if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.COINS_OFFERWALL)) {
             final LinearLayout coinsContainer = (LinearLayout) root.findViewById(R.id.fbCoins);
-            coinsOfferwallBtn = initbutton(IronSourceManager.COINS_OFFERWALL);
+            coinsOfferwallBtn = initButton(IronSourceManager.COINS_OFFERWALL);
             coinsContainer.addView(coinsOfferwallBtn);
         }
     }
 
-    private BuyButtonVer1 initbutton(final String ironSrcType) {
+    private BuyButtonVer1 initButton(String ironSrcType) {
         final BuyButtonVer1 offerwallBtn;
         offerwallBtn = new BuyButtonVer1.BuyButtonBuilder().discount(false)
-                .tag("offerWall_button_tag")
+                .tag(ironSrcType)
                 .showType(3).title(getResources().getString(R.string.get_free))
                 .onClick(null).build(getContext());
+        offerwallBtn.setTag(ironSrcType);
         offerwallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
-                mIronSourceManager.showOfferwallByType(ironSrcType);
+                mIronSourceManager.showOfferwallByType(String.valueOf(offerwallBtn.getTag()));
                 offerwallBtn.startWaiting();
             }
         });
