@@ -177,7 +177,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     fun initUpdateSubscriptions(updateObservable: Observable<Bundle>?) {
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1) }
+                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
                 ?: Observable.empty()
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
