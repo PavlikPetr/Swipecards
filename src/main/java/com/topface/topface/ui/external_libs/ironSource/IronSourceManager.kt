@@ -5,7 +5,6 @@ import com.ironsource.adapters.supersonicads.SupersonicConfig
 import com.ironsource.mediationsdk.IronSource
 import com.ironsource.mediationsdk.integration.IntegrationHelper
 import com.ironsource.mediationsdk.logger.IronSourceError
-import com.ironsource.mediationsdk.sdk.ConfigValidator
 import com.ironsource.mediationsdk.sdk.OfferwallListener
 import com.topface.framework.utils.Debug
 import com.topface.statistics.android.Slices

@@ -11,6 +11,7 @@
     </data>
 
     <RelativeLayout
+        style="@style/BonusButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/offerwall_button_height"
         android:onClick="@{()->viewModel.showOffer()}">
