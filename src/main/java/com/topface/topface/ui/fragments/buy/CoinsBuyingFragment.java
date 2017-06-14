@@ -14,10 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.processor.utils.RxUtils;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.BuyButtonData;
@@ -29,6 +27,7 @@ import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceStatistics;
 import com.topface.topface.ui.views.BuyButtonVer1;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
@@ -36,8 +35,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
@@ -48,7 +45,6 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
             .getName().equalsIgnoreCase(IronSourceManager.NAME);
 
     private IronSourceManager mIronSourceManager = App.getAppComponent().ironSourceManager();
-    private Boolean mIronSrcAvailable = false;
     private BuyButtonVer1 coinsOfferwallBtn, sympOfferwallBtn;
     private String mResourceInfoText;
     private Subscription mIronsrcSubscription;
@@ -77,9 +73,8 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIronsrcSubscription = mIronSourceManager.getOfferwallObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new com.topface.topface.utils.rx.RxUtils.ShortSubscription<IronSourceOfferwallEvent>() {
+                .compose(RxUtils.<IronSourceOfferwallEvent>applySchedulers())
+                .subscribe(new RxUtils.ShortSubscription<IronSourceOfferwallEvent>() {
                     @Override
                     public void onNext(IronSourceOfferwallEvent type) {
                         super.onNext(type);
