@@ -103,7 +103,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
             mViewModel.run {
-                updateObservable = adapter.updateObservable
+                initUpdateSubscriptions(adapter.updateObservable)
                 overflowMenu = mOverflowMenu
                 setViewModel(BR.chatViewModel, this, arguments)
             }
