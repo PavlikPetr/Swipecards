@@ -289,6 +289,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave())
                 .map {
                     if (mBlockChatType == UNDEFINED) {
+                        isSendGiftEnable.set(true)
+                        isEditTextEnable.set(true)
                         chatData.clear()
                     }
                     when {
@@ -314,7 +316,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 isNewMessage(it) -> addMessages(it)
                                 isNeedStubs(it) -> getStubs(it)
                                 isNeedMessageStub(it) -> getStubMessages(it)
-                                else -> null
+                                else ->{
+
+                                    null
+                                }
                             }
                         }
                         else -> null
@@ -392,7 +397,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find {(it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
