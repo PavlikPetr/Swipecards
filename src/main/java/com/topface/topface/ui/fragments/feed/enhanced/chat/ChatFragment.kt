@@ -67,14 +67,12 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        Debug.error("CHAT onCreate")
 //        // подписка на требование зарелизить все что только можно
-//        mReleaseSubscription = App.getAppComponent().eventBus().getObservable(NeedRelease::class.java)
-//                .first()
-//                .subscribe(shortSubscription {
-//                    Debug.error("МЫ ВСЕ УМРЕМ")
-//                    release()
-//                })
+        mReleaseSubscription = App.getAppComponent().eventBus().getObservable(NeedRelease::class.java)
+                .first()
+                .subscribe(shortSubscription {
+                    release()
+                })
         mKeyboardWasShown = savedInstanceState?.getBoolean(SOFT_KEYBOARD_LOCK_STATE) ?: false
         mUser = arguments?.getParcelable(ChatIntentCreator.WHOLE_USER)
         ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
