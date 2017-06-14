@@ -90,10 +90,9 @@ class IronSourceManager {
             mInitSuccessSubscription = offerwallObservable
                     .filter { it.type == IronSourceOfferwallEvent.OFFERWALL_AVAILABLE }
                     .first()
-                    .subscribe(shortSubscription({
-                    }, {
+                    .subscribe(shortSubscription {
                         IronSource.showOfferwall(plc)
-                    }))
+                    })
         }
     }
 
