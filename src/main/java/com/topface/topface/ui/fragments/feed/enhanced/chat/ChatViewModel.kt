@@ -87,7 +87,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
-    var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mMessageChangeSubscription: Subscription? = null
@@ -115,10 +114,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    init {
+    fun initUpdateSubscriptions(updateObservable: Observable<Bundle>?) {
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1) }
+                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
                 ?: Observable.empty()
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
@@ -393,7 +392,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
@@ -485,7 +484,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             GiftsActivity.INTENT_REQUEST_GIFT -> {
                 if (resultCode == Activity.RESULT_OK) {
