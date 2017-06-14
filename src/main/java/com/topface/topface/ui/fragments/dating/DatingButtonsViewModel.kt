@@ -136,7 +136,7 @@ class DatingButtonsViewModel(binding: DatingButtonsLayoutBinding,
     private fun isNeedTakePhoto() = !App.getConfig().userConfig.isUserAvatarAvailable
             && App.get().profile.photo == null
 
-    fun showChat() = mNavigator.showChat(currentUser, null, "Dating")
+    fun showChat() = mNavigator.showChatIfPossible(currentUser, null, "Dating")
 
     fun skip() = currentUser?.let {
         if (!it.skipped && !it.rated) {

@@ -23,7 +23,7 @@ class PopupMutualViewModel(val navigator: FeedNavigator, val mutualUser: FeedUse
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
 
     fun startDialog() {
-        navigator.showChat(mutualUser, null, "PopupMutual")
+        navigator.showChat(mutualUser, null)
         iDialogCloser.closeIt()
     }
 
