@@ -42,8 +42,8 @@ data class User(val id: Long, val firstName: String, val age: Int, val sex: Int,
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
-                       val unread: Boolean = false, val link: String? = null) : IChatItem, Parcelable,
-        IAvatarVisible, IDivider, IResendableItem {
+                       val unread: Boolean = false, val link: String? = null, var isMutual: Boolean = false)
+    : IChatItem, Parcelable, IAvatarVisible, IDivider, IResendableItem {
     override val isErrorVisible = ObservableBoolean(false)
     override val isSending = ObservableBoolean(false)
     override val isRetrierVisible = ObservableBoolean(false)

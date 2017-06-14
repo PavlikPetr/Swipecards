@@ -163,6 +163,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mBlockChatType: Int = UNDEFINED
 
     /**
+     * Флаг запоминающий надо или нет показывать в обрамлении самого старого элемента чата
+     * текст "Взаимная симпатия"
+     */
+    private var mIsNeedShowMutualDivider = false
+
+    /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
      * подарочков юзера в дейтинге. Как только дейтинг будет переделан на новый скраффи, там сразу
      * можно будет лофить ивент об успешном отправлении подарочка, и сразу его добавлять
@@ -368,6 +374,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     if (mBlockChatType == UNDEFINED) {
                         chatData.clear()
                     }
+                    mIsNeedShowMutualDivider = !it.more && (it.mutualTime != 0)
                     when {
                         isMessage(chatData) -> {
                             mBlockChatType = NO_BLOCK
@@ -427,7 +434,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun addMessages(newData: History): ArrayList<HistoryItem> {
         val items = ArrayList<HistoryItem>()
-        newData.items.forEach { items.add(wrapHistoryItem(it)) }
+        newData.items.forEach {
+            it.isMutual = mIsNeedShowMutualDivider
+            items.add(wrapHistoryItem(it))
+        }
         removeStubItems()
         return items
     }
@@ -522,7 +532,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         val message = message.get()
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             val item = wrapHistoryItem(HistoryItem(text = message,
-                    created = System.currentTimeMillis() / SERVER_TIME_CORRECTION))
+                    created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
+                    isMutual = mIsNeedShowMutualDivider))
             mEventBus.setData(SendHistoryItemEvent(item))
             this.message.set(EMPTY)
             if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
