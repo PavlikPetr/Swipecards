@@ -127,6 +127,29 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    /**
+     * Показываем чат только если, это версия с редизайном или пользователь уже VIP
+     * в остальных случаях отправим его на покупку статуса
+     *
+     * @param user - профиль пользователя с которым необходимо показать чат
+     * @param answer - объект подарка
+     * @param from  - место запуска, чтобы покупка содержала plc
+     */
+    override fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
+        when (App.get().options.chatRedesign) {
+            ChatIntentCreator.DESIGN_V1 -> user?.let {
+                showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+            }
+            else -> if (App.get().profile.premium) {
+                user?.let {
+                    showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+                }
+            } else {
+                showPurchaseVip(from)
+            }
+        }
+    }
+
     private inline fun <T : FeedUser> showChat(user: T, func: T.() -> Intent?) {
         if (!user.isEmpty) {
             user.func()?.let {
