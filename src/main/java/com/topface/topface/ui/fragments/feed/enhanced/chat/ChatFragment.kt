@@ -67,7 +67,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // подписка на требование зарелизить все что только можно
+//        // подписка на требование зарелизить все что только можно
         mReleaseSubscription = App.getAppComponent().eventBus().getObservable(NeedRelease::class.java)
                 .first()
                 .subscribe(shortSubscription {
