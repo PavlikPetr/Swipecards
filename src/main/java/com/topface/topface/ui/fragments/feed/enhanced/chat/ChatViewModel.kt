@@ -16,10 +16,6 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_GIFT
-import com.topface.topface.api.responses.HistoryItem.Companion.FRIEND_MESSAGE
-import com.topface.topface.api.responses.HistoryItem.Companion.USER_GIFT
-import com.topface.topface.api.responses.HistoryItem.Companion.USER_MESSAGE
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -53,56 +49,6 @@ import rx.subscriptions.CompositeSubscription
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
-
-/**                         Условия показа и типы блокировок. Инфа актуальна с 31.05.2017
- *
- *                  Блокировка "сообщением о взаимной симпатии"
- *
- * Условия: В истории сообщений приходит сообщение с типом(historyItem.type) MUTUAL_SYMPATHY. Вне зависимости вип или Невип
- * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.MutualStubChatViewModel
- * Блокиировка экрана чата: Пользователь может отправить сообщение или подарок, после отправки заглушку убираем
- *
- *                  Блокировка "У вас есть взаимная симпатия, напишите первым"
- *
- * Условия: История сообщений пуста. Пользователь заходит в чат с юзером, с которым у него ЕСТЬ взаимная симпатия.
- *          Вне зависимости вип или НЕвип. Переход в чат может быть с любого экрана(симпатии, гости , знакомства и пр.)
- * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.MutualStubChatViewModel
- * Блокиировка экрана чата: Пользователь может отправить сообщение или подарок, после отправки заглушку убираем
- *
- *                  Блокировка "У вас нет взаимной симпатии. купите вип, чтобы писать без взаимной симпатии"
- *
- * Условия: История сообщений пуста. Пользователь заходит в чат с юзером, с которым у него НЕТ взаимной симпатии.
- *          Пользователь НЕвип. Переход в чат может быть с любого экрана(симпатии, гости , знакомства и пр.)
- * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.NotVipAndSympViewModel
- * Блокировки экрана чата: Пользователь НЕ может отправить сообщение или подарок(кнопки disable, поле ввода текста также НЕактивно).
- *                          Единственное действие переход по кнопке для покупки випа. В случае покупки випа удаляем заглушку.
- *
- *                  Блокировка LOCK_CHAT_STUB (В рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя)
- *
- * Условия: В истории сообщений приходит сообщение с типом(historyItem.type) LOCK_CHAT. Пользователь НЕвип.
- *          В диалогах это выглядит как пустое сообщение, при переходе показываем.
- * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.stubs.BuyVipStubViewModel
- * Блокировка экрана чата: Пользователь НЕ может отправить сообщение или подарок(кнопки disable, поле ввода текста также НЕактивно).
- *                          Единственное действие переход по кнопке для покупки випа. В случае покупки випа удаляем заглушку.
- *
- *                  Блокировка LOCK_MESSAGE_SEND (В рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя)
- *
- * Условия: В истории сообщений приходит сообщение с типом(historyItem.type) LOCK_MESSAGE_SEND. Пользователь НЕвип.
- *          Показываем пользователю при нажатии на отправку сообщения.
- * Что показываем: com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.СhatMessage36DialogViewModel
- * Блокировка экрана чата: При попытке отправить сообщение показываем попап. Единственное действие - переход на покупку вип. Купил - убираем блокировку
- *
- *                  Отсутствие блокировоk
- *
- *  Пользователь может кому-то написать первым только в случае:
- *   - не выполняются условия для показа блокировок
- *   - у него есть вип
- *   - у него есть взаимная симпатия с юзером, которому он пишет
- *  Пользователь может ответить в случае:
- *   - не выполняются условия для показа блокировok
- *   - если ему пришло сообщение
- *
- */
 
 class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
@@ -141,7 +87,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
-    var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mMessageChangeSubscription: Subscription? = null
@@ -169,13 +114,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    init {
-        if (mBlockChatType == UNDEFINED) {
-            chatData.add(ChatLoader())
-        }
+    fun initUpdateSubscriptions(updateObservable: Observable<Bundle>?) {
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1) }
+                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
                 ?: Observable.empty()
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
@@ -203,6 +145,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     override fun bind() {
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         takePhotoIfNeed()
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
@@ -319,22 +264,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
     }
 
-    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !it.isStubItem() } != null)
+    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !it.isStubItem() } != null && mBlockChatType != LOCK_MESSAGE_FOR_SEND)
 
-    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { it.isStubItem() } != null)
+    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && ((currentData.find { it.isStubItem() } != null))
 
     private fun isEmptyState(currentData: ChatData) = currentData.isEmpty()
 
     // новое сообщение
-    private fun isNewMessage(newData: History): Boolean {
-        var isNewMessage = false
-        newData.items.forEach {
-            when (it.type) {
-                USER_MESSAGE, USER_GIFT, FRIEND_MESSAGE, FRIEND_GIFT -> isNewMessage = true
-            }
-        }
-        return isNewMessage
-    }
+    private fun isNewMessage(newData: History) =
+            newData.items.isNotEmpty() && newData.items.find { it.type == LOCK_MESSAGE_FOR_SEND || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT || it.type == LOCK_MESSAGE_SEND } == null
 
     // установка стабов
     private fun isNeedStubs(newData: History): Boolean = newData.items.isEmpty()
@@ -348,7 +286,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave()).distinctUntilChanged()
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave())
                 .map {
                     if (mBlockChatType == UNDEFINED) {
                         chatData.clear()
@@ -386,7 +324,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
-
                     chatResult?.setResult(createResultIntent())
                     setBlockSettings()
                     if (addToStart) {
@@ -455,7 +392,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
@@ -547,7 +484,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             GiftsActivity.INTENT_REQUEST_GIFT -> {
                 if (resultCode == Activity.RESULT_OK) {
