@@ -141,7 +141,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
-    var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mMessageChangeSubscription: Subscription? = null
@@ -173,6 +172,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         if (mBlockChatType == UNDEFINED) {
             chatData.add(ChatLoader())
         }
+    }
+
+    fun initUpdateSubscriptions(updateObservable: Observable<Bundle>?) {
         val adapterUpdateObservable = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1) }
