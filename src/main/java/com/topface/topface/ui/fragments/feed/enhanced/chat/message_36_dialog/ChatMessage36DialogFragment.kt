@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.DialogChatMessage36Binding
-import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.analytics.TrackedDialogFragment
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.IActivityDelegate
