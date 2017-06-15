@@ -508,6 +508,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             }
             PurchasesActivity.INTENT_BUY_VIP -> {
                 chatData.clear()
+                isSendGiftEnable.set(true)
+                isEditTextEnable.set(true)
                 update(createUpdateObject(mUser?.id ?: -1))
             }
             ComplainsActivity.REQUEST_CODE -> {
