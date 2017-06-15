@@ -124,10 +124,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 createTimerUpdateObservable(),
                 createVipBoughtObservable(),
                 adapterUpdateObservable
-                /*,createP2RObservable()*/).
-                filter { it.first > 0 }.
-                filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
-                subscribe(shortSubscription { update(it) })
+                /*,createP2RObservable()*/)
+                .filter { it.first == mUser?.id }
+                .filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
+                .subscribe(shortSubscription { update(it) })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
@@ -316,10 +316,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 isNewMessage(it) -> addMessages(it)
                                 isNeedStubs(it) -> getStubs(it)
                                 isNeedMessageStub(it) -> getStubMessages(it)
-                                else ->{
-
-                                    null
-                                }
+                                else -> null
                             }
                         }
                         else -> null
@@ -397,7 +394,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find {(it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
