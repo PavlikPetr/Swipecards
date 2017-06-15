@@ -304,6 +304,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         isStubs(chatData) -> {
                             when {
                                 isNewMessage(it) -> {
+                                    mBlockChatType = NO_BLOCK
                                     chatData.clear()
                                     addMessages(it)
                                 }
