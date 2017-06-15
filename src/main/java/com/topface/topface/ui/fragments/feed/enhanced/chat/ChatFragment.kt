@@ -67,7 +67,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // подписка на требование зарелизить все что только можно
+//        // подписка на требование зарелизить все что только можно
         mReleaseSubscription = App.getAppComponent().eventBus().getObservable(NeedRelease::class.java)
                 .first()
                 .subscribe(shortSubscription {
@@ -103,7 +103,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
             mViewModel.run {
-                updateObservable = adapter.updateObservable
+                initUpdateSubscriptions(adapter.updateObservable)
                 overflowMenu = mOverflowMenu
                 setViewModel(BR.chatViewModel, this, arguments)
             }
