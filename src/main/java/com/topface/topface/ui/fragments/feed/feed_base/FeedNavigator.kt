@@ -39,6 +39,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTran
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
+import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease
 import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
@@ -127,9 +128,35 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    /**
+     * Показываем чат только если, это версия с редизайном или пользователь уже VIP
+     * в остальных случаях отправим его на покупку статуса
+     *
+     * @param user - профиль пользователя с которым необходимо показать чат
+     * @param answer - объект подарка
+     * @param from  - место запуска, чтобы покупка содержала plc
+     */
+    override fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
+        when (App.get().options.chatRedesign) {
+            ChatIntentCreator.DESIGN_V1 -> user?.let {
+                showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+            }
+            else -> if (App.get().profile.premium) {
+                user?.let {
+                    showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+                }
+            } else {
+                showPurchaseVip(from)
+            }
+        }
+    }
+
     private inline fun <T : FeedUser> showChat(user: T, func: T.() -> Intent?) {
         if (!user.isEmpty) {
             user.func()?.let {
+                // пока не придумал кейс при котором возможна ситуация с запуском второго инстанса чата,
+                // но все же пусть будет, если нет запущенного чата, то это событие обработано не будет
+                App.getAppComponent().eventBus().setData(NeedRelease())
                 mActivityDelegate.startActivityForResult(it, ChatActivity.REQUEST_CHAT)
             }
         }

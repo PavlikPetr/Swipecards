@@ -26,6 +26,7 @@ interface IFeedNavigator {
     fun showProfileNoChat(item: FeedUser?, from: String)
     fun <T : FeedItem> showChat(item: T?)
     fun showChat(user: FeedUser?, answer: SendGiftAnswer?)
+    fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String)
     fun showDating()
     fun showAddToLeader()
     fun showOwnProfile()

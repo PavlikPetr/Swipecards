@@ -125,9 +125,6 @@ public class Utils {
      * @return class of chat based on server option
      */
     public static Class getChatClass() {
-        // TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
-        App.getAppComponent().eventBus().setData(new NeedRelease());
-        ComponentManager.INSTANCE.releaseComponent(ChatComponent.class);
         switch (App.get().getOptions().getChatRedesign()) {
             case ChatIntentCreator.DESIGN_V1:
                 return com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.class;
