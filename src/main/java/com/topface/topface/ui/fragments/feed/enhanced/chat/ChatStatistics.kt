@@ -10,43 +10,45 @@ import com.topface.statistics.processor.annotations.SendNow
 @GenerateStatistics
 object ChatStatistics {
 
-    /**
-     * Первое отравленное сообщение или подарок
-     *
-     */
-@SendNow(withSlices = true)
-        const val RATE_POPUP_SHOW = "mobile_rate_popup_show"
-
-
-}
-/**
- * Ключи для отправки статистики оценки приложения
- *
- */
-@GenerateStatistics
-object RatePopupStatistics {
-
+//  названия для срезов
     const val NEW_DIALOG = "new"
     const val DIALOG_TYPE = "plc"
 
-
+    /**
+     *  нажатие на кнопку покупки випа из чата с популярным пользователем где 35
+     */
+    @SendNow(withSlices = false)
+    const val CHAT_BLOCK_STUB_BUY_VIP_BTN = "mobile_rate_popup_show"
 
     /**
-     *  закрытие попапа оценки приложения
+     *  нажатие на кнопку покупки випа из чата с популярным пользователем где заблочен чат 36
      */
-    @SendNow(withSlices = true)
-    const val RATE_POPUP_CLOSE = "mobile_rate_popup_close"
+    @SendNow(withSlices = false)
+    const val CHAT_BLOCK_STUB_POPUP_VIP_BTN = "mobile_rate_popup_show"
 
     /**
-     * Клик по кнопке закрытия попапа оценки приложения
+     * Первое отравленное сообщение или подарок
+     * срезы - с какого экрана пришли
      */
     @SendNow(withSlices = true)
-    const val RATE_POPUP_CLICK_BUTTON_CLOSE = "mobile_rate_popup_click_button_close"
+    const val CHAT_FIRST_MESSAGE_SEND = "mobile_rate_popup_show"
 
     /**
-     * Клик по кнопке отправить отзыв
+     * Открытие чатика
+     * срезы - откуда пришел
      */
     @SendNow(withSlices = true)
-    const val RATE_POPUP_CLICK_BUTTON_RATE = "mobile_rate_popup_click_button_rate"
+    const val CHAT_SHOW = "mobile_rate_popup_show"
 
+    /**
+     *  заход в залоченный чат где есть эксперимент с популярным пользователем (35,36)
+     */
+    @SendNow(withSlices = false)
+    const val CHAT_BLOCK_SHOW = "mobile_rate_popup_show"
+
+    /**
+     *  это вход в залоченый диалог если собеседник не вип, в диалоге не было переписки, и не было входящей симпатии (No_MUTUAL_NO_VIP_STUB)
+     */
+    @SendNow(withSlices = false)
+    const val CHAT_BLOCK_SHOW_NO_VIP_NO_MUTUAL = "mobile_rate_popup_show"
 }
