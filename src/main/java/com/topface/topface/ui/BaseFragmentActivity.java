@@ -30,6 +30,7 @@ import com.topface.topface.statistics.NotificationStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
 import com.topface.topface.ui.fragments.AuthFragment;
 import com.topface.topface.ui.fragments.ToolbarActivity;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease;
 import com.topface.topface.ui.fragments.profile.OwnProfileFragment;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.FBInvitesUtils;
@@ -278,6 +279,12 @@ public abstract class BaseFragmentActivity<T extends ViewDataBinding> extends To
         Intent intent = getIntent();
         if (!intent.getBooleanExtra(IGNORE_NOTIFICATION_INTENT, false) &&
                 intent.getBooleanExtra(GCMUtils.NOTIFICATION_INTENT, false)) {
+            // TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+            // если пытаемся запустить чат по Gcm, то отправляем событие для релиза компонента
+            if (intent.getClass() == Utils.getChatClass()) {
+                App.getAppComponent().eventBus().setData(new NeedRelease());
+
+            }
             NotificationStatistics.sendOpened(intent.getIntExtra(GCMUtils.GCM_TYPE, -1),
                     intent.getStringExtra(GCMUtils.GCM_LABEL));
             intent.putExtra(IGNORE_NOTIFICATION_INTENT, true);
