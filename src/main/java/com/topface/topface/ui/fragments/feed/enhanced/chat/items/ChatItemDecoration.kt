@@ -10,6 +10,7 @@ import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.extensions.getString
 
 /**
  * Item decoration for chat items
@@ -120,6 +121,9 @@ fun List<HistoryItem>?.prepareDividers() = this?.apply {
                     dividerText.set(DateUtils.getRelativeDate(day * ChatViewModel.SERVER_TIME_CORRECTION))
                 }
             }
+        }
+        lastOrNull()?.let {
+            if (it.isMutual) it.dividerText.set(R.string.mutual_sympathy.getString())
         }
     }
 }
