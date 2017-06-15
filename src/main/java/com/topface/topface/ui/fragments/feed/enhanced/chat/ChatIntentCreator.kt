@@ -3,9 +3,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat
 import android.content.Intent
 import android.text.TextUtils
 import com.topface.topface.App
-import com.topface.topface.data.FeedUser
-import com.topface.topface.data.Photo
-import com.topface.topface.data.SendGiftAnswer
+import com.topface.topface.data.*
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.Companion.REQUEST_CHAT
 import com.topface.topface.utils.Utils.getChatClass
@@ -41,6 +39,12 @@ object ChatIntentCreator {
     fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when (App.get().options.chatRedesign) {
         DESIGN_V1 -> createIntent(user, null, itemType)
         else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+    }
+
+    @JvmStatic
+    fun createIntentForChatFromProfile(profile: Profile, user: User) = when (App.get().options.chatRedesign) {
+        DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null)
+        else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name, null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
     }
 
     @JvmStatic
