@@ -155,9 +155,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
         mStartChatFrom = args?.getString(FROM, "undefined")
-        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().apply {
-            putSlice(START_CHAT_FROM, mStartChatFrom)
-        })
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
         takePhotoIfNeed()
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
             isSendButtonEnable.set(it.isNotBlank())
@@ -467,9 +465,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
                         this.message.set(EMPTY)
                         if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-                            ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().apply {
-                                putSlice(START_CHAT_FROM, mStartChatFrom)
-                            })
+                            ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                         }
                     }
                     .subscribe(shortSubscription({
@@ -483,9 +479,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     fun onGift() = mUser?.let {
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
-            ChatStatisticsGeneratedStatistics.sendNow_CHAT_GIFT_ACTIVITY_OPEN(Slices().apply {
-                putSlice(START_CHAT_FROM, "chat")
-            })
+            ChatStatisticsGeneratedStatistics.sendNow_CHAT_GIFT_ACTIVITY_OPEN(Slices().putSlice(START_CHAT_FROM, "chat"))
             navigator?.showGiftsActivity(it.id, "chat")
         } else {
             navigator?.showUserIsTooPopularLock(it)
@@ -508,9 +502,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         mBlockChatType = NO_BLOCK
                     }
                     if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-                        ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().apply {
-                            putSlice(START_CHAT_FROM, mStartChatFrom)
-                        })
+                        ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                     }
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {

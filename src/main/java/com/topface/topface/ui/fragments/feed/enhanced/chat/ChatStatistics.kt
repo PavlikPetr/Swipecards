@@ -16,13 +16,13 @@ object ChatStatistics {
     /**
      *  нажатие на кнопку покупки випа из чата с популярным пользователем где 35
      */
-    @SendNow(withSlices = false)
+    @SendNow
     const val CHAT_BLOCK_STUB_BUY_VIP_BTN = "chat_block_stub_buy_vip_btn"
 
     /**
      *  нажатие на кнопку покупки випа из чата с популярным пользователем где заблочен чат 36
      */
-    @SendNow(withSlices = false)
+    @SendNow
     const val CHAT_BLOCK_STUB_POPUP_VIP_BTN = "chat_block_popup_buy_vip_btn"
 
     /**
@@ -49,12 +49,12 @@ object ChatStatistics {
     /**
      *  заход в залоченный чат где есть эксперимент с популярным пользователем (35,36)
      */
-    @SendNow(withSlices = false)
+    @SendNow
     const val CHAT_BLOCK_SHOW = "mobile_dialogs_block_messages_without_mutual"
 
     /**
      *  это вход в залоченый диалог если собеседник не вип, в диалоге не было переписки, и не было входящей симпатии (No_MUTUAL_NO_VIP_STUB)
      */
-    @SendNow(withSlices = false)
+    @SendNow
     const val CHAT_BLOCK_SHOW_NO_VIP_NO_MUTUAL = "mobile_dialogs_block_messages_without_mutual"
 }
