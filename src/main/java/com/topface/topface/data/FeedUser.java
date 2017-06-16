@@ -97,6 +97,25 @@ public class FeedUser extends AbstractData implements SerializableToJson, Parcel
         return feedUser;
     }
 
+    public static FeedUser createFeedUserFromUser(com.topface.topface.api.responses.User user) {
+        FeedUser feedUser = new FeedUser();
+        if (user != null) {
+            feedUser.id = (int) user.getId();
+            feedUser.sex = user.getSex();
+            feedUser.firstName = user.getFirstName();
+            feedUser.age = user.getAge();
+            feedUser.photo = Photo.createPhotoFromResponsePhoto(user.getPhoto());
+            feedUser.city = City.createCity(user.getCity().getId(), user.getCity().getName(), user.getCity().getFull());
+            feedUser.bookmarked = user.getBookmarked();
+            feedUser.online = user.getOnline();
+            feedUser.premium = user.getPremium();
+            feedUser.banned = user.getBanned();
+            feedUser.deleted = user.getDeleted();
+            feedUser.inBlacklist = user.getInBlacklist();
+        }
+        return feedUser;
+    }
+
     public void setFeedItemId(String feedItemId) {
         this.feedItemId = feedItemId;
     }

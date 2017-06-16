@@ -9,7 +9,11 @@ class DialogGetRequest(private val userId: Int, private var from: String?,
                        private var to: String?, private val leave: Boolean = false) :
         BaseScruffyRequest<History>() {
 
-    override fun getMethod() = "dialog.get"
+    companion object{
+        const val REQUEST_METHOD_NAME = "dialog.get"
+    }
+
+    override fun getMethod() = REQUEST_METHOD_NAME
 
     override fun getResponseClass() = History::class.java
 
