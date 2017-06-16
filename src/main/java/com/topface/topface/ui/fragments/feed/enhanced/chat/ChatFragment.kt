@@ -191,7 +191,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                 // отфильтровываем сообщения другим юзерам
                 .filter { it.user.id.toInt() == mUser?.id }
                 // обновляем объект mUser
-                .map { it.apply { mUser = FeedUser.createFeedUserFromUser(it.user) } }
+                .map { it.apply { mUser = FeedUser.createFeedUserFromUser(user) } }
                 .distinctUntilChanged { t1, t2 ->
                     // ждем только тех изменений, которые влияют на overflow menu
                     t1.user.bookmarked == t2.user.bookmarked
