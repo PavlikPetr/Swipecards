@@ -462,12 +462,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.clear()
                             mBlockChatType = NO_BLOCK
                         }
-                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
-                        this.message.set(EMPTY)
                         if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
                             ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                         }
+                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
+                        this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
                     }, {
