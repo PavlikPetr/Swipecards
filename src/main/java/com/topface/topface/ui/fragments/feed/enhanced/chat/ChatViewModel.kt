@@ -288,6 +288,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         val addToStart = updateContainer.second != null
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave())
                 .map {
+                    mUser = FeedUser.createFeedUserFromUser(it.user)
                     if (mBlockChatType == UNDEFINED) {
                         isSendGiftEnable.set(true)
                         isEditTextEnable.set(true)

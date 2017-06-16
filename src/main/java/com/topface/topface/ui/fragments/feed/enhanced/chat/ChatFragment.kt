@@ -62,6 +62,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
     private var mUser: FeedUser? = null
     private var mKeyboardWasShown = false // по умолчанию клава в чате закрыта
     private var mReleaseSubscription: Subscription? = null
+    private var mSendRequestSubscription: Subscription? = null
 
     override fun getViewModel(): IViewModelLifeCycle = mViewModel
 
@@ -106,6 +107,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                 initUpdateSubscriptions(adapter.updateObservable)
                 overflowMenu = mOverflowMenu
                 setViewModel(BR.chatViewModel, this, arguments)
+                subscribeDialogRequest()
             }
             root.setKeyboardListener(this@ChatFragment)
         }
@@ -113,6 +115,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     override fun terminateImmortalComponent() {
         ComponentManager.releaseComponent(ChatViewModelComponent::class.java)
+        mSendRequestSubscription.safeUnsubscribe()
     }
 
     override fun onPause() {
@@ -180,6 +183,26 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         if (isAdded) {
             activity.finish()
         }
+    }
+
+    private fun subscribeDialogRequest() {
+        mSendRequestSubscription = App.getAppComponent().api().observeSendMessage()
+                .retry()
+                // отфильтровываем сообщения другим юзерам
+                .filter { it.user.id.toInt() == mUser?.id }
+                // обновляем объект mUser
+                .map { it.apply { mUser = FeedUser.createFeedUserFromUser(it.user) } }
+                .distinctUntilChanged { t1, t2 ->
+                    // ждем только тех изменений, которые влияют на overflow menu
+                    t1.user.bookmarked == t2.user.bookmarked
+                            && t1.user.inBlacklist == t2.user.inBlacklist
+                            && t1.user.id == t2.user.id
+                }
+                .subscribe(shortSubscription {
+                    mOverflowMenu?.let {
+                        initOverflowMenuActions(it)
+                    }
+                })
     }
 
     fun initOverflowMenuActions(overflowMenu: OverflowMenu) {
