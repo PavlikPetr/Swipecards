@@ -309,7 +309,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
     }
 
-    open fun itemClick(view: View?, itemPosition: Int, data: T?) = mNavigator.showChat(data)
+    open fun itemClick(view: View?, itemPosition: Int, data: T?, from: String) = mNavigator.showChat(data, from)
 
     override fun onRefresh() {
         isRefreshing.set(true)

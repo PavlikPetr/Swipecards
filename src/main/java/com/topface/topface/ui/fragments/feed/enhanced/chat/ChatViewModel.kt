@@ -11,6 +11,8 @@ import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
 import com.topface.scruffy.utils.toJson
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
@@ -27,6 +29,8 @@ import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.FROM
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatStatistics.START_CHAT_FROM
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
@@ -79,6 +83,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     internal var chatResult: IChatResult? = null
     internal var overflowMenu: OverflowMenu? = null
     internal var activityFinisher: IActivityFinisher? = null
+    private var mStartChatFrom: String? = null
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
@@ -149,6 +154,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             chatData.add(ChatLoader())
         }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        mStartChatFrom = args?.getString(FROM, "undefined")
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
         takePhotoIfNeed()
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
             isSendButtonEnable.set(it.isNotBlank())
@@ -458,6 +465,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
                                 created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
                         this.message.set(EMPTY)
+                        if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                            ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+                        }
                     }
                     .subscribe(shortSubscription({
                     }, {
@@ -469,11 +479,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     fun onGift() = mUser?.let {
-        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-            chatData.clear()
-            mBlockChatType = NO_BLOCK
-        }
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
+            ChatStatisticsGeneratedStatistics.sendNow_CHAT_GIFT_ACTIVITY_OPEN(Slices().putSlice(START_CHAT_FROM, "chat"))
             navigator?.showGiftsActivity(it.id, "chat")
         } else {
             navigator?.showUserIsTooPopularLock(it)
@@ -491,6 +498,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         when (requestCode) {
             GiftsActivity.INTENT_REQUEST_GIFT -> {
                 if (resultCode == Activity.RESULT_OK) {
+                    if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                        chatData.clear()
+                        mBlockChatType = NO_BLOCK
+                    }
+                    if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                        ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+                    }
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)

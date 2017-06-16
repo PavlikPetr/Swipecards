@@ -111,10 +111,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from feed
      */
-    override fun <T : FeedItem> showChat(item: T?) {
+    override fun <T : FeedItem> showChat(item: T?, from: String) {
         item?.let {
             it.user?.let {
-                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type) }
+                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type, from) }
             }
         }
     }
