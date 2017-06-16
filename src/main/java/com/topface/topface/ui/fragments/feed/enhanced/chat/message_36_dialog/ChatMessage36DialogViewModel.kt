@@ -15,7 +15,7 @@ import com.topface.topface.utils.extensions.getString
 class ChatMessage36DialogViewModel(data: Bundle, val action:() -> Unit) {
 
     init {
-//        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_SHOW()
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_SHOW()
     }
     private val mUser: FeedUser = data.getParcelable(ARG_USER)
 

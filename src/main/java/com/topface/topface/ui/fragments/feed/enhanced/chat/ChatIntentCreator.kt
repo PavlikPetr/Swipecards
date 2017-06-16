@@ -2,13 +2,10 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import android.content.Intent
 import android.text.TextUtils
-import com.topface.statistics.android.Slices
-import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.Companion.REQUEST_CHAT
-import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatStatistics.SOME_SLICE_WHERE_DID_YOU_COME_IN_MY_CHAT
 import com.topface.topface.utils.Utils.getChatClass
 import com.topface.topface.utils.gcmutils.GCMUtils
 
@@ -28,43 +25,42 @@ object ChatIntentCreator {
     const val ONLINE = "online"
     const val USER_TYPE = "type"
     const val WHOLE_USER = "whole_user"
+    const val FROM = "from"
 
     // Design versions
     const val DESIGN_V0 = 0
     const val DESIGN_V1 = 1
 
     fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?): Intent {
-        sendStatistic("dating")
+
         return when (App.get().options.chatRedesign) {
-            DESIGN_V1 -> createIntent(user, answer, null)
+            DESIGN_V1 -> createIntent(user, answer, null, "dating")
             else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
                     user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
         }
     }
 
     fun createIntentForChatFromFeed(user: FeedUser, itemType: Int, from: String): Intent {
-        sendStatistic(from)
         return when (App.get().options.chatRedesign) {
-            DESIGN_V1 -> createIntent(user, null, itemType)
+            DESIGN_V1 -> createIntent(user, null, itemType, from)
             else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
         }
     }
 
     @JvmStatic
     fun createIntentForChatFromProfile(profile: Profile, user: User): Intent {
-        sendStatistic("profile")
         return when (App.get().options.chatRedesign) {
-            DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null)
-            else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name, null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
+            DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null, "profile")
+            else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name,
+                                    null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
         }
     }
 
     @JvmStatic
     fun createIntentForChatFromGCMUtils(user: GCMUtils.User?, itemType: Int): Intent {
-        sendStatistic("FromGCM")
         return when (App.get().options.chatRedesign) {
             DESIGN_V1 -> {
-                createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType).apply {
+                createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType, "FromGCM").apply {
                     putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
                 }
             }
@@ -78,11 +74,12 @@ object ChatIntentCreator {
     }
 
     @JvmStatic
-    fun createIntent(user: FeedUser, answer: SendGiftAnswer?, itemType: Int?) = Intent(App.getContext(),
+    fun createIntent(user: FeedUser, answer: SendGiftAnswer?, itemType: Int?, from: String) = Intent(App.getContext(),
             getChatClass()).apply {
         putExtra(WHOLE_USER, user)
         answer?.let { putExtra(GIFT_DATA, it) }
         itemType?.let { putExtra(USER_TYPE, it) }
+        putExtra(FROM, from)
     }
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
@@ -118,11 +115,5 @@ object ChatIntentCreator {
         }
         photo?.let { intent.putExtra(INTENT_AVATAR, it) }
         return intent
-    }
-
-    private fun sendStatistic(tag: String) {
-        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().apply {
-            put(SOME_SLICE_WHERE_DID_YOU_COME_IN_MY_CHAT, tag)
-        })
     }
 }

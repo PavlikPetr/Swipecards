@@ -31,7 +31,7 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
     private var mRefreshIntervalSubscription: Subscription
 
     companion object {
-
+        private const val PHOTOBLOG_TAG = "photoblog_fragment"
         private val UPDATE_DELAY = 20L
     }
 
@@ -64,7 +64,7 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
             if (App.get().profile.uid == data?.user?.id) {
                 mNavigator.showOwnProfile()
             } else {
-                super.itemClick(view, itemPosition, data, "photoblog_fragment")
+                super.itemClick(view, itemPosition, data, PHOTOBLOG_TAG)
             }
 
     override fun release() {

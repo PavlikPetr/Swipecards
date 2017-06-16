@@ -10,12 +10,8 @@ import com.topface.statistics.processor.annotations.SendNow
 @GenerateStatistics
 object ChatStatistics {
 
-
-//    todo ПРОВЕРИТЬ СТРОКИ, КОТОРЫЕ ОТПРАВЛЯЕМ, ИБО НАСТЯ ХУЙНЮ В ТАСКЕ НАПИСАЛА
-
     //  названия для срезов
-    const val SOME_SLICE_KEY_FOR_GIFTS = "some_slice_key_for_gift"
-    const val SOME_SLICE_WHERE_DID_YOU_COME_IN_MY_CHAT = "where_did_you_come_in_my_chat"
+    const val START_CHAT_FROM = "plc"
 
     /**
      *  нажатие на кнопку покупки випа из чата с популярным пользователем где 35
@@ -37,14 +33,15 @@ object ChatStatistics {
     const val CHAT_FIRST_MESSAGE_SEND = "dialog_first_messages_sent"
 
     /**
-     * Открытие чатика
-     * срезы - откуда пришел
+     * Открытие чатика. Строка действительно такая кривая. В Вики все указано
+     * срезы - с какого экрана пришли
      */
     @SendNow(withSlices = true)
-    const val CHAT_SHOW = "chat_show_from"
+    const val CHAT_SHOW = "mobile_profile_open"
 
     /**
      * Открытие экрана с подарками из чатика
+     * срез - из чатика
      */
     @SendNow(withSlices = true)
     const val CHAT_GIFT_ACTIVITY_OPEN = "mobile_gifts_open"
@@ -59,5 +56,5 @@ object ChatStatistics {
      *  это вход в залоченый диалог если собеседник не вип, в диалоге не было переписки, и не было входящей симпатии (No_MUTUAL_NO_VIP_STUB)
      */
     @SendNow(withSlices = false)
-    const val CHAT_BLOCK_SHOW_NO_VIP_NO_MUTUAL = "mobile_dialogs_block_messages_without_mutual_without_vip"
+    const val CHAT_BLOCK_SHOW_NO_VIP_NO_MUTUAL = "mobile_dialogs_block_messages_without_mutual"
 }
