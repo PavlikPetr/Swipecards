@@ -11,6 +11,8 @@ import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
 import com.topface.scruffy.utils.toJson
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
@@ -27,6 +29,7 @@ import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatStatistics.SOME_SLICE_KEY_FOR_GIFTS
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
@@ -473,6 +476,9 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             mBlockChatType = NO_BLOCK
         }
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
+            ChatStatisticsGeneratedStatistics.sendNow_CHAT_GIFT_ACTIVITY_OPEN(Slices().apply {
+                putSlice(SOME_SLICE_KEY_FOR_GIFTS, "КАКОЕ-ТО ЗНАЧЕНИЕ")
+            })
             navigator?.showGiftsActivity(it.id, "chat")
         } else {
             navigator?.showUserIsTooPopularLock(it)

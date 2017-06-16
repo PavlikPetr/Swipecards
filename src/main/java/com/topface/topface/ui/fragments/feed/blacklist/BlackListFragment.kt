@@ -14,6 +14,7 @@ import java.util.*
 
 @FlurryOpenEvent(name = BlackListFragment.PAGE_NAME)
 class BlackListFragment : BaseFeedFragment<BlackListItem, LayoutEmptyBlacklistBinding>() {
+
     override fun getDeleteItemsList(mSelected: MutableList<BlackListItem>): ArrayList<String> {
         return mSelected.getUserIdList().convertFeedIdList()
     }
@@ -21,6 +22,8 @@ class BlackListFragment : BaseFeedFragment<BlackListItem, LayoutEmptyBlacklistBi
     companion object {
         const val PAGE_NAME = "blacklist"
     }
+
+    override val feedName = PAGE_NAME
 
     override val mViewModel by lazy {
         BlackListFragmentViewModel(mBinding, mNavigator, mApi)

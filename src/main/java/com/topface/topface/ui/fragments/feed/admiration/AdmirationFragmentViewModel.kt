@@ -47,8 +47,8 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS
 
-    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
-        super.itemClick(view, itemPosition, data)
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?, from: String) {
+        super.itemClick(view, itemPosition, data, "admiration_feeds" )
         data?.id?.toInt()?.let {
             ReadAdmirationRequest(context, listOf(it)).exec()
         }

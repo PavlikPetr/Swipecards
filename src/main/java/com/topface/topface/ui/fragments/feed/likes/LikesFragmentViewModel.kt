@@ -52,8 +52,8 @@ class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedN
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_LIKES_FEEDS
 
-    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
-        super.itemClick(view, itemPosition, data)
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?, from: String) {
+        super.itemClick(view, itemPosition, data, TYPE_FEED_FRAGMENT)
         ReadLikeRequest(context, data.getUserId()).exec()
         AdmobInterstitialUtils.
                 requestPreloadedInterstitial(context, App.get().options.interstitial)

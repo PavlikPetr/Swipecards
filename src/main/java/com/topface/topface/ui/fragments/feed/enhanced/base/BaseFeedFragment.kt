@@ -74,14 +74,14 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun itemClick(view: View?) {
+    protected fun itemClick(view: View?, from: String) {
         val itemPosition = mBinding.feedList.layoutManager.getPosition(view)
         val data = mAdapter.data[itemPosition] as T
         if (mActionModeController.isActionModeEnabled() && view != null) {
             mMultiselectionController.handleSelected(data, view, itemPosition)
             mAdapter.notifyItemChanged(itemPosition)
         } else {
-            mViewModel.itemClick(view, itemPosition, data)
+            mViewModel.itemClick(view, itemPosition, data, from)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.stubs
 
 import android.databinding.ObservableField
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
@@ -13,6 +14,10 @@ class BuyVipStubViewModel(private var mFeedUser: FeedUser?, private var mFeedNav
         private const val TAG = "buy_vip_chat_stub"
     }
 
+    init {
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_SHOW()
+    }
+
     private val mIsMan = mFeedUser?.sex == User.BOY
 
     override val title: ObservableField<String>
@@ -22,15 +27,18 @@ class BuyVipStubViewModel(private var mFeedUser: FeedUser?, private var mFeedNav
     override val buttonText: ObservableField<String>
         get() = ObservableField(R.string.get_vip.getString())
 
-    override fun buttonAction() = mFeedNavigator?.showPurchaseVip(TAG)
+    override fun buttonAction() {
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_STUB_BUY_VIP_BTN()
+        mFeedNavigator?.showPurchaseVip(TAG)
+    }
 
     private fun getTitle() =
             String.format(if (mIsMan) R.string.chat_buy_vip_popular_male.getString()
-                                else R.string.chat_buy_vip_popular_female.getString(), mFeedUser?.firstName)
+            else R.string.chat_buy_vip_popular_female.getString(), mFeedUser?.firstName)
 
     private fun getStubText() = if (mIsMan) R.string.write_to_him_only_vip.getString() else R.string.write_to_her_only_vip.getString()
 
-    override fun unbind(){
+    override fun unbind() {
         mFeedNavigator = null
     }
 

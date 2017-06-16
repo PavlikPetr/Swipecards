@@ -2,10 +2,13 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import android.content.Intent
 import android.text.TextUtils
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.data.*
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.Companion.REQUEST_CHAT
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatStatistics.SOME_SLICE_WHERE_DID_YOU_COME_IN_MY_CHAT
 import com.topface.topface.utils.Utils.getChatClass
 import com.topface.topface.utils.gcmutils.GCMUtils
 
@@ -30,35 +33,47 @@ object ChatIntentCreator {
     const val DESIGN_V0 = 0
     const val DESIGN_V1 = 1
 
-    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> createIntent(user, answer, null)
-        else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
-                user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
-    }
-
-    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> createIntent(user, null, itemType)
-        else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
-    }
-
-    @JvmStatic
-    fun createIntentForChatFromProfile(profile: Profile, user: User) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null)
-        else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name, null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
-    }
-
-    @JvmStatic
-    fun createIntentForChatFromGCMUtils(user: GCMUtils.User?, itemType: Int) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> {
-            createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType).apply {
-                putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
-            }
+    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?): Intent {
+        sendStatistic("dating")
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> createIntent(user, answer, null)
+            else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
+                    user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
         }
-        else -> if (user != null) {
-            createIntent(user.id, user.sex, user.nameAndAge, user.city,
-                    null, null, true, null, false, false, false, user.isOnline)
-        } else {
-            Intent(App.getContext(), NavigationActivity::class.java)
+    }
+
+    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int, from: String): Intent {
+        sendStatistic(from)
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> createIntent(user, null, itemType)
+            else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+        }
+    }
+
+    @JvmStatic
+    fun createIntentForChatFromProfile(profile: Profile, user: User): Intent {
+        sendStatistic("profile")
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null)
+            else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name, null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
+        }
+    }
+
+    @JvmStatic
+    fun createIntentForChatFromGCMUtils(user: GCMUtils.User?, itemType: Int): Intent {
+        sendStatistic("FromGCM")
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> {
+                createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType).apply {
+                    putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
+                }
+            }
+            else -> if (user != null) {
+                createIntent(user.id, user.sex, user.nameAndAge, user.city,
+                        null, null, true, null, false, false, false, user.isOnline)
+            } else {
+                Intent(App.getContext(), NavigationActivity::class.java)
+            }
         }
     }
 
@@ -105,4 +120,9 @@ object ChatIntentCreator {
         return intent
     }
 
+    private fun sendStatistic(tag: String) {
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().apply {
+            put(SOME_SLICE_WHERE_DID_YOU_COME_IN_MY_CHAT, tag)
+        })
+    }
 }

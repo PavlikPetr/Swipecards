@@ -60,11 +60,11 @@ class PhotoblogFragmentViewModel(binding: FragmentFeedBaseBinding, private val m
     override val isNeedCacheItems: Boolean
         get() = false
 
-    override fun itemClick(view: View?, itemPosition: Int, data: FeedPhotoBlog?) =
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedPhotoBlog?, from: String) =
             if (App.get().profile.uid == data?.user?.id) {
                 mNavigator.showOwnProfile()
             } else {
-                super.itemClick(view, itemPosition, data)
+                super.itemClick(view, itemPosition, data, "photoblog_fragment")
             }
 
     override fun release() {

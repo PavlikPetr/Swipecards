@@ -3,6 +3,7 @@ package com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
 import android.os.Bundle
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.User
@@ -13,6 +14,9 @@ import com.topface.topface.utils.extensions.getString
 
 class ChatMessage36DialogViewModel(data: Bundle, val action:() -> Unit) {
 
+    init {
+//        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_SHOW()
+    }
     private val mUser: FeedUser = data.getParcelable(ARG_USER)
 
     val userMessage = ObservableField(String.format(
@@ -26,5 +30,8 @@ class ChatMessage36DialogViewModel(data: Bundle, val action:() -> Unit) {
     val placeholderResId = ObservableInt(if (mUser.sex == User.BOY) R.drawable.dialogues_av_man_big else R.drawable.dialogues_av_girl_big)
     val photoTransformType = GlideTransformationType.CIRCLE_AVATAR_WITH_STROKE_AROUND
     val outsideCircle = R.dimen.mutual_popup_stroke_outside.getDimen()
-    fun onButtonClick() = action()
+    fun onButtonClick() {
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_STUB_POPUP_VIP_BTN()
+        action()
+    }
 }
