@@ -51,6 +51,7 @@ public class FilterData implements Cloneable, Parcelable {
         if (model != null) {
             city = model.getCity().get();
             isOnlineOnly = model.getOnlineOnly().get();
+            isPrettyOnly = model.isPrettyOnly().get();
             ageStart = model.getAgeStart().get();
             ageEnd = model.getAgeEnd().get();
             sex = model.isMaleSelected().get() ? Profile.BOY : Profile.GIRL;
