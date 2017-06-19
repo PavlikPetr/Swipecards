@@ -31,10 +31,10 @@ object ChatIntentCreator {
     const val DESIGN_V0 = 0
     const val DESIGN_V1 = 1
 
-    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?): Intent {
+    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?, from: String): Intent {
 
         return when (App.get().options.chatRedesign) {
-            DESIGN_V1 -> createIntent(user, answer, null, "dating")
+            DESIGN_V1 -> createIntent(user, answer, null, from)
             else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
                     user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
         }
