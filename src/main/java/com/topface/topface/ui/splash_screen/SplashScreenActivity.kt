@@ -26,41 +26,71 @@ class SplashScreenActivity : TrackedFragmentActivity() {
     private lateinit var binding: AcSplashBinding
     private var mAnimator: ViewPropertyAnimator? = null
     private val mHandler = Handler()
-    private val mRunnable = { startActivity(createMainActivityIntent(NavigationActivity::class.java)) }
-    private var startTime = 0L
+    private val mRunnable = { splashFinished() }
+    private var startTime = 0L          // время запуска сплеша
+    private var mTimeLeft = 0L          // оставшееся время для работы сплеша
+    private var mNeedFinish = false     // флаг, который дает нам понять, что сплеш отработал и можно дестроить активити на onStop
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<AcSplashBinding>(this, R.layout.ac_splash)
-        if (savedInstanceState == null) {
+        mTimeLeft = savedInstanceState?.getLong(PASSED_TIME) ?: ANIMATION_DURATION
+    }
+
+    private fun splashFinished() {
+        mNeedFinish = true
+        startActivity(createMainActivityIntent(NavigationActivity::class.java))
+    }
+
+    // оверайдим onBackPressed и не вызываем super, чтобы лишить юзера возможности закрыть сплеш
+    override fun onBackPressed() {
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putLong(PASSED_TIME, calculateTimeLeft())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (mTimeLeft == ANIMATION_DURATION) {
             binding.logo.post {
-                binding.logo.alpha = 0f
                 mAnimator = binding.logo.animate().apply {
                     duration = ANIMATION_DURATION
-                    alpha(1f)
                     translationY(-(binding.logo.top - R.dimen.tf_logo_top.getDimen()) + getStatusBarHeight())
                     setListener(object : AnimatorListenerAdapter() {
                         override fun onAnimationEnd(animation: Animator?) {
-                            startActivity(createMainActivityIntent(NavigationActivity::class.java))
+                            splashFinished()
                         }
                     })
                     startTime = System.currentTimeMillis()
                 }
             }
         } else {
-            mHandler.postDelayed(mRunnable, savedInstanceState.getLong(PASSED_TIME))
+            mHandler.postDelayed(mRunnable, mTimeLeft)
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putLong(PASSED_TIME, System.currentTimeMillis() - startTime)
+    override fun onPause() {
+        super.onPause()
+        mTimeLeft = calculateTimeLeft()
+        mHandler.removeCallbacks(mRunnable)
+        binding.logo.animate().setListener(null)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mHandler.removeCallbacks(mRunnable)
     }
+
+    override fun onStop() {
+        super.onStop()
+        if (mNeedFinish) {
+            finish()
+        }
+    }
+
+    private fun calculateTimeLeft() = System.currentTimeMillis() - startTime
 
     fun getStatusBarHeight(): Int {
         val rectangle = Rect().apply {
