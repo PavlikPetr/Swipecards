@@ -20,7 +20,7 @@ class SplashScreenActivity : TrackedFragmentActivity() {
 
     companion object {
         private const val PASSED_TIME = "passed_time"
-        private const val ANIMATION_DURATION = 3000L
+        private const val ANIMATION_DURATION = 1500L
     }
 
     private lateinit var binding: AcSplashBinding
