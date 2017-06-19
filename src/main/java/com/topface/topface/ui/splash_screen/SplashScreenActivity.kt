@@ -27,7 +27,7 @@ class SplashScreenActivity : TrackedFragmentActivity() {
     private var mAnimator: ViewPropertyAnimator? = null
     private val mHandler = Handler()
     private val mRunnable = { splashFinished() }
-    private var startTime = 0L          // время запуска сплеша
+    private var mStartTime = 0L          // время запуска сплеша
     private var mTimeLeft = 0L          // оставшееся время для работы сплеша
     private var mNeedFinish = false     // флаг, который дает нам понять, что сплеш отработал и можно дестроить активити на onStop
 
@@ -63,7 +63,7 @@ class SplashScreenActivity : TrackedFragmentActivity() {
                             splashFinished()
                         }
                     })
-                    startTime = System.currentTimeMillis()
+                    mStartTime = System.currentTimeMillis()
                 }
             }
         } else {
@@ -90,7 +90,7 @@ class SplashScreenActivity : TrackedFragmentActivity() {
         }
     }
 
-    private fun calculateTimeLeft() = System.currentTimeMillis() - startTime
+    private fun calculateTimeLeft() = System.currentTimeMillis() - mStartTime
 
     fun getStatusBarHeight(): Int {
         val rectangle = Rect().apply {
