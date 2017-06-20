@@ -3,7 +3,10 @@ package com.topface.topface.utils.databinding.binding_adapters
 import android.databinding.BindingAdapter
 import android.text.Html
 import android.text.util.Linkify
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
 
@@ -20,5 +23,13 @@ fun setAutoLinkText(textView: TextView, text: String) {
         textView.movementMethod = ComponentManager.obtainComponent(ChatComponent::class.java).customMovementMethod()
         textView.isFocusable = false
     }
-
 }
+
+@BindingAdapter("backgroundColor")
+fun setViewBackgroundColor(view: View, backgroundColor: Int) =
+    view.setBackgroundColor(0xFF000000.toInt() or backgroundColor)
+
+@BindingAdapter("glideFitCenter")
+fun setImageByGlideWithFitCenter(view: ImageView, res: String) =
+    Glide.with(view.context.applicationContext).load(res).fitCenter().into(view)
+
