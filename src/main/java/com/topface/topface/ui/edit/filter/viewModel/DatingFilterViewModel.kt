@@ -12,18 +12,14 @@ import com.topface.topface.data.City
 import com.topface.topface.data.Profile
 import com.topface.topface.experiments.AttractionExperiment
 import com.topface.topface.ui.PurchasesActivity
-import com.topface.topface.ui.dialogs.CitySearchPopup
 import com.topface.topface.ui.edit.filter.model.FilterData
-import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
+import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.views.RangeSeekBar
 import com.topface.topface.ui.views.RangeSeekBar.OnRangeSeekBarChangeListener
-import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.ILifeCycle
-import com.topface.topface.utils.registerLifeCycleDelegate
-import com.topface.topface.utils.unregisterLifeCycleDelegate
 import java.util.*
 
-class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, filter: FilterData)
+class DatingFilterViewModel(private val mFeedNavigator: IFeedNavigator, filter: FilterData)
     : OnRangeSeekBarChangeListener<Int>, ILifeCycle {
 
     companion object {
@@ -42,11 +38,9 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
     val defaultCities = ObservableField<MutableList<City>>(prepareDefaultCityList())
     val isPrettyVisible = ObservableBoolean(AttractionExperiment.isSwitchPrettyControlVisible())
     val isPrettyOnly = ObservableBoolean()
-    private val mFeedNavigator = mIActivityDelegate?.let { FeedNavigator(it) }
 
     init {
         setStartingValue(filter)
-        mIActivityDelegate?.registerLifeCycleDelegate(this)
     }
 
     private fun setStartingValue(filter: FilterData) {
@@ -87,11 +81,8 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
                 notifyChange()
             }
 
-    fun onSelectCityClick() = mIActivityDelegate?.let {
-        with(CitySearchPopup.newInstance(null, defaultCities.get() as ArrayList<City>)) {
-            setOnCitySelected { city -> this@DatingFilterViewModel.city.set(city) }
-            show(mIActivityDelegate?.supportFragmentManager, CitySearchPopup.TAG)
-        }
+    fun onSelectCityClick() = mFeedNavigator.showSelectCityPopup(defaultCities.get() as ArrayList<City>) {
+        this@DatingFilterViewModel.city.set(it)
     }
 
     fun onOnlineOnlyClick(view: View) = onlineOnly.set((view as CheckBox).isChecked)
@@ -107,7 +98,7 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
                 },
                 {
                     // this user must buy vip
-                    mFeedNavigator?.showPurchaseVip("Dating Filter")
+                    mFeedNavigator.showPurchaseVip("Dating Filter")
                 }
         )
     }
@@ -124,10 +115,5 @@ class DatingFilterViewModel(private var mIActivityDelegate: IActivityDelegate?, 
                 isPrettyOnly.set(true)
             }
         }
-    }
-
-    fun release() {
-        mIActivityDelegate?.unregisterLifeCycleDelegate(this)
-        mIActivityDelegate = null
     }
 }
