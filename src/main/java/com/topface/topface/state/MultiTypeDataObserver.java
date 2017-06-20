@@ -57,8 +57,27 @@ public abstract class MultiTypeDataObserver<ObserveDataType extends DataAndObser
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Get observable by data class with first emmit from cache (if it possible)
+     *
+     * @param dataClass - observed class of data
+     * @param <T>       - type of data
+     * @return - observable for the selected data type
+     */
     public <T> Observable<T> getObservable(Class<T> dataClass) {
+        return getObservable(dataClass, true);
+    }
+
+    /**
+     * Get observable by data class
+     *
+     * @param dataClass           - observed class of data
+     * @param isNeedDataFromCache - true if you need to know about previous value of data
+     * @param <T>                 - type of data
+     * @return - observable for the selected data type
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Observable<T> getObservable(Class<T> dataClass, boolean isNeedDataFromCache) {
         synchronized (getCachableData()) {
             if (!getCachableData().containsKey(dataClass)) {
                 T data = null;

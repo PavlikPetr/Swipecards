@@ -9,11 +9,18 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.ViewPropertyAnimator
 import android.view.Window
+import com.topface.topface.App
 import com.topface.topface.R
+import com.topface.topface.data.Options
+import com.topface.topface.data.Profile
 import com.topface.topface.databinding.AcSplashBinding
 import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.analytics.TrackedFragmentActivity
 import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
+import rx.Observable
+import rx.Subscription
 
 
 class SplashScreenActivity : TrackedFragmentActivity() {
@@ -27,14 +34,26 @@ class SplashScreenActivity : TrackedFragmentActivity() {
     private var mAnimator: ViewPropertyAnimator? = null
     private val mHandler = Handler()
     private val mRunnable = { splashFinished() }
+    private var mUpdatesSubscription: Subscription? = null
     private var mStartTime = 0L          // время запуска сплеша
     private var mTimeLeft = 0L          // оставшееся время для работы сплеша
     private var mNeedFinish = false     // флаг, который дает нам понять, что сплеш отработал и можно дестроить активити на onStop
+    private var mProfileOrOptionsUpdated = false
+
+    private val mAppState by lazy {
+        App.getAppComponent().appState()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView<AcSplashBinding>(this, R.layout.ac_splash)
         mTimeLeft = savedInstanceState?.getLong(PASSED_TIME) ?: ANIMATION_DURATION
+        mUpdatesSubscription = Observable.merge(
+                mAppState.getObservable(Profile::class.java, false),
+                mAppState.getObservable(Options::class.java, false)
+        )
+                .first()
+                .subscribe(shortSubscription { mProfileOrOptionsUpdated = true })
     }
 
     private fun splashFinished() {
@@ -81,6 +100,7 @@ class SplashScreenActivity : TrackedFragmentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mHandler.removeCallbacks(mRunnable)
+        mUpdatesSubscription.safeUnsubscribe()
     }
 
     override fun onStop() {
@@ -101,4 +121,5 @@ class SplashScreenActivity : TrackedFragmentActivity() {
     }
 
     private fun <T> createMainActivityIntent(clazz: Class<T>) = Intent(applicationContext, clazz)
+            .apply { putExtra(NavigationActivity.PROFILE_OR_OPTIONS_UPDATED, mProfileOrOptionsUpdated) }
 }

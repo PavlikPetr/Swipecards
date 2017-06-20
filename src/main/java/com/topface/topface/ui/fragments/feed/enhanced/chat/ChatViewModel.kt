@@ -403,7 +403,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
