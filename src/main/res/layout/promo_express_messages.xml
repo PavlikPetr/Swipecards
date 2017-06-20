@@ -45,7 +45,7 @@
                         android:layout_height="200dp"
                         android:layout_marginBottom="32dp"
                         android:layout_marginTop="72dp"
-                        android:visibility="@{viewModel.isCustomDesign, default=visible}"
+                        android:visibility="@{viewModel.isCustomDesign, default=gone}"
                         bind:glideFitCenter="@{viewModel.titleImageUrl}"
                         bind:src="@drawable/fake_boy1" />
 
