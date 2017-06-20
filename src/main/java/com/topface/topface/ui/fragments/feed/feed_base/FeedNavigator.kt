@@ -111,10 +111,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from feed
      */
-    override fun <T : FeedItem> showChat(item: T?) {
+    override fun <T : FeedItem> showChat(item: T?, from: String) {
         item?.let {
             it.user?.let {
-                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type) }
+                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type, from) }
             }
         }
     }
@@ -122,9 +122,9 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from dating
      */
-    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
         user?.let {
-            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer, from) }
         }
     }
 
@@ -139,11 +139,11 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
         when (App.get().options.chatRedesign) {
             ChatIntentCreator.DESIGN_V1 -> user?.let {
-                showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+                showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer, from) }
             }
             else -> if (App.get().profile.premium) {
                 user?.let {
-                    showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+                    showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer, from) }
                 }
             } else {
                 showPurchaseVip(from)

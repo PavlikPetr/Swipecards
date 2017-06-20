@@ -15,6 +15,7 @@ import com.topface.topface.requests.RestoreAccountRequest;
 import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.statistics.AuthStatistics;
 import com.topface.topface.ui.analytics.TrackedFragmentActivity;
+import com.topface.topface.ui.fragments.ToolbarActivity;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
@@ -22,7 +23,7 @@ import com.topface.topface.utils.social.AuthorizationManager;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
-public class RestoreAccountActivity extends TrackedFragmentActivity<RestoreAccountActivityBinding> {
+public class RestoreAccountActivity extends ToolbarActivity<RestoreAccountActivityBinding> {
 
     public static final int RESTORE_RESULT = 46452;
     public static final String RESTORE_ACCOUNT_SHOWN = "restore_account_shown";
