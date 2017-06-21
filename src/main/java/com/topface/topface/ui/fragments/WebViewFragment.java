@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -31,18 +31,24 @@ abstract public class WebViewFragment extends BaseFragment {
 
     protected View getView(LayoutInflater inflater) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.web_view_fragment, null, false);
-        mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding);
-        mBinding.wvWebFrame.setWebChromeClient(mFullScreenWebChromeClient);
-        mBinding.wvWebFrame.setInitialScale(1);
-        mBinding.wvWebFrame.getSettings().setLoadWithOverviewMode(true);
-        mBinding.wvWebFrame.getSettings().setUseWideViewPort(true);
-        mBinding.wvWebFrame.getSettings().setSupportZoom(true);
-        mBinding.wvWebFrame.getSettings().setDisplayZoomControls(false);
-        mBinding.wvWebFrame.getSettings().setBuiltInZoomControls(true);
-        mBinding.wvWebFrame.getSettings().setJavaScriptEnabled(true);
-        mBinding.wvWebFrame.setVerticalScrollbarOverlay(true);
-        mBinding.wvWebFrame.setWebViewClient(new LoaderClient(mBinding.wvWebFrame));
+        mFullScreenWebChromeClient = new FullScreenWebChromeClient(mBinding.fullscreenContainer, mBinding.wvWebFrame);
+        WebView webView = mBinding.wvWebFrame;
+        webView.setWebChromeClient(mFullScreenWebChromeClient);
+        prepareWebView(webView, new LoaderClient(webView));
         return mBinding.getRoot();
+    }
+
+    public static void prepareWebView(WebView view, WebViewClient client) {
+        WebSettings webSettings = view.getSettings();
+        view.setInitialScale(1);
+        view.setVerticalScrollbarOverlay(true);
+        view.setWebViewClient(client);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setDisplayZoomControls(false);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setJavaScriptEnabled(true);
     }
 
     @Override
@@ -106,55 +112,6 @@ abstract public class WebViewFragment extends BaseFragment {
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-        }
-    }
-
-    private static class FullScreenWebChromeClient extends WebChromeClient {
-        private WebChromeClient.CustomViewCallback mFullscreenViewCallback;
-        private View mFullScreenView;
-        private WebViewFragmentBinding mBinding;
-
-        public FullScreenWebChromeClient(WebViewFragmentBinding binding) {
-            super();
-            mBinding = binding;
-        }
-
-        @SuppressWarnings("deprecation")
-        @Override
-        public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
-            onShowCustomView(view, callback);
-        }
-
-        @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
-            if (mFullScreenView != null) {
-                callback.onCustomViewHidden();
-            } else {
-                mFullScreenView = view;
-                mBinding.wvWebFrame.setVisibility(View.GONE);
-                mBinding.fullscreenContainer.setVisibility(View.VISIBLE);
-                mBinding.fullscreenContainer.addView(view);
-                mFullscreenViewCallback = callback;
-            }
-        }
-
-        @Override
-        public void onHideCustomView() {
-            super.onHideCustomView();
-            if (mFullScreenView != null) {
-                mBinding.wvWebFrame.setVisibility(View.VISIBLE);
-                mFullScreenView.setVisibility(View.GONE);
-                mBinding.fullscreenContainer.setVisibility(View.GONE);
-                mBinding.fullscreenContainer.removeView(mFullScreenView);
-                mFullscreenViewCallback.onCustomViewHidden();
-                mFullScreenView = null;
-            }
-        }
-
-        public void release() {
-            mFullscreenViewCallback = null;
-            mBinding = null;
-            mFullScreenView = null;
         }
     }
 }

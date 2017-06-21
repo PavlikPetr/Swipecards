@@ -1,7 +1,5 @@
 package com.topface.topface.ui.analytics;
 
-import android.databinding.ViewDataBinding;
-
 import com.comscore.analytics.comScore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
@@ -16,7 +14,7 @@ import com.topface.topface.utils.FlurryManager;
 
 import org.jetbrains.annotations.Nullable;
 
-public abstract class TrackedFragmentActivity<T extends ViewDataBinding> extends TrackedLifeCycleActivity<T> {
+public abstract class TrackedFragmentActivity extends TrackedLifeCycleActivity {
     private IBackPressedListener mBackPressedListener;
 
     @Override

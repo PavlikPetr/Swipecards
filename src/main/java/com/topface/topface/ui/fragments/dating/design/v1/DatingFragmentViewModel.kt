@@ -275,7 +275,7 @@ class DatingFragmentViewModel(private val mContext: Context, val mNavigator: IFe
 
     fun updatePhotosCounter(position: Int) = photoCounter.set("${position + 1}/${currentUser?.photosCount}")
 
-    fun showChat() = mNavigator.showChat(currentUser, null)
+    fun showChat() = mNavigator.showChatIfPossible(currentUser, null, "Dating")
 
     fun showProfile() {
         mNavigator.showProfile(currentUser, "dating_fragment")

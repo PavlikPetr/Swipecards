@@ -11,8 +11,7 @@ import com.topface.billing.InstantPurchaseModel
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.banners.BannersController
-import com.topface.topface.banners.IPageWithAds
-import com.topface.topface.banners.PageInfo
+import com.topface.topface.banners.IBannerAds
 import com.topface.topface.databinding.DialogsFragmentLayoutBinding
 import com.topface.topface.statistics.FlurryOpenEvent
 import com.topface.topface.ui.ChatActivity
@@ -42,7 +41,7 @@ import org.jetbrains.anko.layoutInflater
  * Created by tiberal on 30.11.16.
  */
 @FlurryOpenEvent(name = PAGE_NAME)
-class DialogsFragment : BaseFragment(), IPageWithAds {
+class DialogsFragment : BaseFragment(), IBannerAds {
 
     companion object {
         const val PAGE_NAME = "Dialogs"
@@ -92,6 +91,8 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         initList()
         mBinding.viewModel = mViewModel
+        mBannersController = BannersController(this)
+        activity.registerLifeCycleDelegate(mBannersController)
         return mBinding.root
     }
 
@@ -104,6 +105,7 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(mAdapter.components.values)
         activity.unregisterLifeCycleDelegate(mViewModel)
+        activity.unregisterLifeCycleDelegate(mBannersController)
     }
 
     override fun onDestroyView() {
@@ -120,11 +122,9 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         }
         mViewModel.release()
         mAdapter.releaseComponents()
-        mBannersController.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        mViewModel.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ChatActivity.REQUEST_CHAT) {
             data?.let {
                 if (data.getBooleanExtra(ChatFragment.MUTUAL, false) && RateAppFragment.isApplicable(App.get().options.ratePopupNewVersion)) {
@@ -139,13 +139,6 @@ class DialogsFragment : BaseFragment(), IPageWithAds {
         addItemDecoration(mDecorator)
         adapter = mAdapter
     }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mBannersController = BannersController(this, App.get().options)
-    }
-
-    override fun getPageName() = PageInfo.PageName.MESSAGES_TABS
 
     override fun getContainerForAd() = mBinding.bannerContainerForFeeds as ViewGroup
 

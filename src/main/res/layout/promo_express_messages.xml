@@ -8,13 +8,17 @@
         <variable
             name="toolbarViewModel"
             type="com.topface.topface.ui.views.toolbar.view_models.BaseToolbarViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.topface.topface.experiments.promo_express_messages_3_1.PromoExpressMessagesViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        bind:backgroundColor="@{viewModel.customBackgroundColor}">
 
         <include
             android:id="@+id/toolbarInclude"
@@ -34,9 +38,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/bg_white"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="300dp"
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="32dp"
+                        android:layout_marginTop="72dp"
+                        android:visibility="@{viewModel.isCustomDesign, default=gone}"
+                        bind:glideFitCenter="@{viewModel.titleImageUrl}"
+                        bind:src="@drawable/fake_boy1" />
 
                     <LinearLayout
                         style="@style/LandscapePortraitImagesVisibility"
@@ -45,7 +57,8 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingBottom="44dp"
-                        android:paddingTop="72dp">
+                        android:paddingTop="72dp"
+                        android:visibility="@{!viewModel.isCustomDesign, default=visible}">
 
                         <com.topface.topface.ui.views.ImageViewRemote
                             android:id="@+id/firstFakeUser"
@@ -80,7 +93,8 @@
                         android:singleLine="false"
                         android:textColor="@color/eighty_seven_opacity_from_black"
                         android:textSize="16sp"
-                        android:textStyle="normal" />
+                        android:textStyle="normal"
+                        android:visibility="@{!viewModel.isCustomDesign, default=visible}" />
 
                     <Button
                         android:id="@+id/buyVip"

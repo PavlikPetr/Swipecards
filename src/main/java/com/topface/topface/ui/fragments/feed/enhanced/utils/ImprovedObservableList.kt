@@ -7,11 +7,12 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.topface.framework.utils.Debug
 import com.topface.topface.data.FeedItem
+import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import java.lang.ref.WeakReference
 import java.util.*
 
-typealias ChatData = ImprovedObservableList<Any>
+typealias ChatData = ImprovedObservableList<IChatItem>
 
 class ImprovedObservableList<T>(val observableList: ObservableArrayList<T> = ObservableArrayList())
     : ObservableList<T> by observableList {

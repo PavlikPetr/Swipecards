@@ -12,15 +12,15 @@ import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.BuildConfig;
 import com.topface.topface.R;
-import com.topface.topface.banners.PageInfo;
-import com.topface.topface.banners.ad_providers.AdProvidersFactory;
+import com.topface.topface.api.responses.OfferwallWithPlaces;
+import com.topface.topface.banners.AdProvidersFactory;
 import com.topface.topface.data.experiments.ForceOfferwallRedirect;
 import com.topface.topface.data.experiments.InstantMessagesForNewbies;
 import com.topface.topface.data.experiments.TopfaceOfferwallRedirect;
 import com.topface.topface.data.leftMenu.FragmentIdData;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.UserGetAppOptionsRequest;
-import com.topface.topface.ui.bonus.models.OfferwallsSettings;
+import com.topface.topface.ui.bonus.OfferwallsSettings;
 import com.topface.topface.ui.fragments.dating.DatingFragmentFactory;
 import com.topface.topface.ui.settings.payment_ninja.PaymentInfo;
 import com.topface.topface.utils.DateUtils;
@@ -34,7 +34,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import static com.topface.topface.data.leftMenu.FragmentIdData.DATING;
@@ -61,11 +60,6 @@ public class Options extends AbstractData {
     protected static final String INSTANT_MSG = "instantMessageFromSearch";
 
     private final static int TRIAL_VIP_MAX_SHOW_COUNT = 10;
-
-    /**
-     * Настройки для каждого типа страниц
-     */
-    private HashMap<String, PageInfo> pages = new HashMap<>();
 
     public boolean ratePopupEnabled = false;
     public long ratePopupTimeout = DateUtils.DAY_IN_MILLISECONDS;
@@ -152,7 +146,7 @@ public class Options extends AbstractData {
      */
     public PromoPopupEntity premiumAdmirations;
     public GetJar getJar;
-    public String fallbackTypeBanner = AdProvidersFactory.BANNER_ADMOB;
+    public String fallbackTypeBanner = AdProvidersFactory.BANNER_APPODEAL;
     public String gagTypeFullscreen = AdProvidersFactory.BANNER_NONE;
     public String helpUrl;
 
@@ -229,8 +223,27 @@ public class Options extends AbstractData {
      * {int} - номер версии чата, 0 - старая, 1 - новая и тд
      */
     private int chatRedesign;
+
     public int getChatRedesign() {
         return chatRedesign;
+    }
+
+    /**
+     * {boolean} - номер версии экрана покупки монет/лайков в GP, 0 - старая, 1 - новая и тд
+     */
+    private boolean coinPurchaseScreenRedesignEnabled;
+
+    public boolean isCoinPurchaseScreenRedesignEnabled() {
+        return coinPurchaseScreenRedesignEnabled;
+    }
+
+    private OfferwallWithPlaces offerwallWithPlaces;
+
+    public OfferwallWithPlaces getOfferwallWithPlaces() {
+        if (offerwallWithPlaces == null) {
+            offerwallWithPlaces = new OfferwallWithPlaces();
+        }
+        return offerwallWithPlaces;
     }
 
     /**
@@ -265,11 +278,6 @@ public class Options extends AbstractData {
             hidePreviewDialog = response.optBoolean("hidePreviewDialog", false);
             priceLeader = response.optInt("leaderPrice");
             minLeadersPercent = response.optInt("leaderPercent");
-            // Pages initialization
-            PageInfo[] pagesArr = JsonUtils.fromJson(response.optString("pages"), PageInfo[].class);
-            for (PageInfo pageInfo : pagesArr) {
-                pages.put(pageInfo.name, pageInfo);
-            }
             fillLeaderButtons(response.optJSONObject("photofeed"));
             JSONObject aboutAppJson = response.optJSONObject("aboutApp");
             updateUrl = response.optString("updateUrl", App.getContext().getString(R.string.app_update_url));
@@ -350,7 +358,7 @@ public class Options extends AbstractData {
             }
             isHideAdmirations = response.optBoolean("hideAdmirations", false);
 
-            fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_ADMOB);
+            fallbackTypeBanner = response.optString("gag_type_banner", AdProvidersFactory.BANNER_APPODEAL);
             gagTypeFullscreen = response.optString("gag_type_fullscreen", AdProvidersFactory.BANNER_NONE);
             scruffy = response.optBoolean("scruffy", false);
             App.isScruffyEnabled = scruffy;
@@ -413,6 +421,9 @@ public class Options extends AbstractData {
             }
 
             chatRedesign = response.optInt("chatRedesign");
+            coinPurchaseScreenRedesignEnabled = response.optBoolean("coinPurchaseScreenRedesignEnabled");
+
+            offerwallWithPlaces = JsonUtils.fromJson(response.optString("offerwallWithPlaces"), OfferwallWithPlaces.class);
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
             peopleNearbyRedesignEnabled = response.optBoolean("peopleNearbyRedesignEnabled");
             enableFacebookInvite = response.optBoolean("enableFacebookInvite");
@@ -474,14 +485,6 @@ public class Options extends AbstractData {
         return Integer.toString(type) + INNER_SEPARATOR + ((isMail) ? INNER_MAIL_CONST : INNER_APNS_CONST);
     }
 
-    public Map<String, PageInfo> getPagesInfo() {
-        return pages;
-    }
-
-    public void setPagesInfo(Map<String, PageInfo> pages) {
-        this.pages = new HashMap<>(pages);
-    }
-
     public static void sendUpdateOptionsBroadcast() {
         LocalBroadcastManager.getInstance(App.getContext())
                 .sendBroadcast(new Intent(UserGetAppOptionsRequest.OPTIONS_UPDATE_ACTION));
@@ -489,15 +492,6 @@ public class Options extends AbstractData {
 
     public String getPaymentwallLink() {
         return paymentwall;
-    }
-
-    public boolean containsBannerType(String bannerType) {
-        for (PageInfo page : pages.values()) {
-            if (page.getBanner().equals(bannerType)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static class AboutApp {
@@ -555,6 +549,30 @@ public class Options extends AbstractData {
         private static final int DEFAULT_TIMEOUT = 1000;
 
         /**
+         * Custom popups experiment settings
+         */
+        private boolean mCustomPopupEnabled; // Включен ли эксперимент
+        private String mCustomPopupId; // ID модификации попапа, который нужно будет добавить в plc
+        private String mTitleImageURL; // URL картинки
+        private int mBackgroundColor; // Цвет фона попапа в RGB
+
+        public boolean isCustomPopupEnabled() {
+            return mCustomPopupEnabled;
+        }
+
+        public String getCustomPopupId() {
+            return mCustomPopupId;
+        }
+
+        public String getTitleImageURL() {
+            return mTitleImageURL;
+        }
+
+        public int getBackgroundColor() {
+            return mBackgroundColor;
+        }
+
+        /**
          * визуализация попапа меняется в зависимости от версии
          */
         private int mPopupVersion;
@@ -590,6 +608,10 @@ public class Options extends AbstractData {
                 mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
                 mPageId = FragmentIdData.getFragmentId(premiumMessages.optString("page"), UNDEFINED);
                 mPopupVersion = premiumMessages.optInt("popupVersion", 0);
+                mCustomPopupEnabled = premiumMessages.optBoolean("customPopupEnabled");
+                mCustomPopupId = premiumMessages.optString("customPopupId");
+                mTitleImageURL = premiumMessages.optString("titleImageURL");
+                mBackgroundColor = premiumMessages.optInt("backgroundColor");
             }
         }
 
@@ -600,6 +622,7 @@ public class Options extends AbstractData {
             airType = type;
             mPageId = FragmentIdData.getFragmentId(page, UNDEFINED);
             mPopupVersion = popupVersion;
+            mCustomPopupEnabled = false;
         }
 
         public int getCount() {

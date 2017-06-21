@@ -21,6 +21,8 @@ class MutualFragment : BaseFeedFragment<FeedMutual, LayoutEmptyMutualBinding>() 
         const val PAGE_NAME = "Mutual"
     }
 
+    override val feedName = PAGE_NAME
+
     override val mViewModel by lazy {
         MutualFragmentViewModel(mBinding, mNavigator, mApi)
     }

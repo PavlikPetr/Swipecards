@@ -35,9 +35,6 @@ import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
 import com.topface.topface.R;
-import com.topface.topface.banners.BannersController;
-import com.topface.topface.banners.IPageWithAds;
-import com.topface.topface.banners.PageInfo;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.FeedItem;
 import com.topface.topface.data.FeedListData;
@@ -94,7 +91,7 @@ import butterknife.OnTouch;
 import static com.topface.topface.utils.CountersManager.NULL_METHOD;
 
 public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
-        implements FeedAdapter.OnAvatarClickListener<T>, IPageWithAds {
+        implements FeedAdapter.OnAvatarClickListener<T> {
 
     public static final boolean PAUSE_DOWNLOAD_ON_SCROLL = false;
     public static final boolean PAUSE_DOWNLOAD_ON_FLING = true;
@@ -119,7 +116,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     private BackgroundProgressBarController mBackgroundController = new BackgroundProgressBarController();
     private RetryViewCreator mRetryView;
     private BroadcastReceiver mReadItemReceiver;
-    private BannersController mBannersController;
     private TextView mActionModeTitle;
     private Boolean isNeedFirstShowListDelay = null;
     private CountDownTimer mListShowDelayCountDownTimer;
@@ -384,12 +380,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         }
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mBannersController = new BannersController(this, App.get().getOptions());
-    }
-
     private void registerGcmReceiver() {
         String action = getGcmUpdateAction();
         if (action != null) {
@@ -496,9 +486,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         super.onDestroy();
         if (mCountersDataProvider != null) {
             mCountersDataProvider.unsubscribe();
-        }
-        if (mBannersController != null) {
-            mBannersController.onDestroy();
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReadItemReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBlacklistedReceiver);
@@ -1130,20 +1117,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     }
 
     @Override
-    public PageInfo.PageName getPageName() {
-        return PageInfo.PageName.UNKNOWN_PAGE;
-    }
-
-    @Override
-    public ViewGroup getContainerForAd() {
-        View view = getView();
-        if (view != null) {
-            return (ViewGroup) getView().findViewById(R.id.banner_container_for_feeds);
-        }
-        return null;
-    }
-
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
@@ -1166,7 +1139,6 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         onChatActivityResult(resultCode, data);
     }
 

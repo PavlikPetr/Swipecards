@@ -32,34 +32,35 @@ data class ChatComplainEvent(var itemPosition: Int = 0)
  */
 class UserGift(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * итем чата - подарок от собеседника
  */
 class FriendGift(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * итем чата - сообщение от пользователя
  */
 class UserMessage(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * итем чата - сообщение от собеседника
  */
 class FriendMessage(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * заглушка чата про взаимные симпатии
  */
 class MutualStub : IChatItem {
     override fun getItemType() = STUB_MUTUAL
+    override fun isStubItem() = true
 }
 
 /**
@@ -67,6 +68,7 @@ class MutualStub : IChatItem {
  */
 class NotMutualBuyVipStub : IChatItem {
     override fun getItemType() = NOT_MUTUAL_BUY_VIP_STUB_MUTUAL
+    override fun isStubItem() = true
 }
 
 /**
@@ -74,11 +76,18 @@ class NotMutualBuyVipStub : IChatItem {
  */
 class BuyVipStub : IChatItem {
     override fun getItemType() = STUB_BUY_VIP
+    override fun isStubItem() = true
 }
 
 /**
- * интерфейс макирующий итемы чата, в частности для разбора базового HistoryItem
+ * интерфейс маскирующий итемы чата, в частности для разбора базового HistoryItem
  */
 interface IChatItem {
     fun getItemType(): Int
+    fun isStubItem() : Boolean  = false
 }
+
+/**
+ * Класс для ивента с требованием зарелизить компонент, вью модель и прочее
+ */
+class NeedRelease

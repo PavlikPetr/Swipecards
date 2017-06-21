@@ -8,11 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.topface.topface.App
 import com.topface.topface.R
-import com.topface.topface.banners.BannersController
-import com.topface.topface.banners.IPageWithAds
-import com.topface.topface.banners.PageInfo
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.FragmentFeedBaseBinding
 import com.topface.topface.ui.adapters.ItemEventListener
@@ -35,13 +31,12 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         ActionModeController.OnActionModeEventsListener,
         ItemEventListener.OnRecyclerViewItemLongClickListener<T>,
         ItemEventListener.OnRecyclerViewItemClickListener<T>,
-        IFeedUnlocked, IPageWithAds {
+        IFeedUnlocked {
 
     protected open val res: Int = R.layout.fragment_feed_base
     protected val mBinding: FragmentFeedBaseBinding by lazy {
         DataBindingUtil.inflate<FragmentFeedBaseBinding>(context.layoutInflater, res, null, false)
     }
-    private lateinit var mBannersController: BannersController
     private val mDelRequestFactory by lazy {
         DeleteFeedRequestFactory(context)
     }
@@ -66,6 +61,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     abstract val mAdapter: BaseFeedAdapter<*, T>
     abstract fun createLockerFactory(): BaseFeedLockerController.ILockScreenVMFactory<V>
     abstract fun getEmptyFeedLayout(): Int
+    abstract val feedName: String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -76,11 +72,6 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     }
 
     open fun getActionModeMenu() = R.menu.feed_context_menu
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mBannersController = BannersController(this, App.get().options)
-    }
 
     protected fun initScreenView(binding: FragmentFeedBaseBinding) {
         with(binding.feedList) {
@@ -134,7 +125,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
                 mMultiselectionController.handleSelected(data, view, itemPosition)
                 mAdapter.notifyItemChanged(itemPosition)
             } else {
-                mViewModel.itemClick(view, itemPosition, data)
+                mViewModel.itemClick(view, itemPosition, data, feedName)
             }
 
     override fun onFeedUnlocked() = mViewModel.update()
@@ -154,8 +145,4 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
         mViewModel.release()
         mLockerControllerBase.release()
     }
-
-    override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
-
-    override fun getContainerForAd() = view?.findViewById(R.id.banner_container_for_feeds) as ViewGroup
 }

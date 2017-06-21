@@ -59,7 +59,6 @@ import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.ISimpleCallback;
 import com.topface.topface.utils.NavigationManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.AdmobInterstitialUtils;
 import com.topface.topface.utils.ads.FullscreenController;
 import com.topface.topface.utils.config.UserConfig;
 import com.topface.topface.utils.config.WeakStorage;
@@ -97,6 +96,7 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     public static final String INTENT_CLEAN_COMPONENTS = "com.topface.topface.clean_components";
     private static final String PAGE_SWITCH = "Page switch: ";
     public static final String FRAGMENT_SETTINGS = "fragment_settings";
+    public static final String PROFILE_OR_OPTIONS_UPDATED = "profile_or_options_updated";
     public static final int EXIT_TIMEOUT = 3000;
 
     public static final String NAVIGATION_ACTIVITY_POPUPS_TAG = NavigationActivity.class.getSimpleName();
@@ -242,6 +242,18 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         tintManager.setStatusBarAlpha(0.25f);
         if (!AuthToken.getInstance().isEmpty()) {
             new FeedNavigator(this).showQuestionnaire();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra(PROFILE_OR_OPTIONS_UPDATED, false)) {
+            // чтобы не было повторного срабатывания
+            intent.putExtra(PROFILE_OR_OPTIONS_UPDATED, false);
+            hasNewOptionsOrProfile = true;
+            startPopupRush();
         }
     }
 
@@ -526,7 +538,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
             }
             Debug.log("Current User ID:" + profile.uid);
         }
-        AdmobInterstitialUtils.preloadInterstitials(this, App.from(this).getOptions().interstitial);
     }
 
     @Override
@@ -543,7 +554,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         PopupManager.INSTANCE.release();
         super.onDestroy();
-        AdmobInterstitialUtils.releaseInterstitials();
     }
 
     @Override

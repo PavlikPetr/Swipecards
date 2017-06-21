@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 
 import com.topface.topface.App;
 import com.topface.topface.R;
@@ -14,6 +16,8 @@ import com.topface.topface.data.AdsSettings;
 import com.topface.topface.databinding.OwnFullscreenLayoutBinding;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.PurchasesActivity;
+import com.topface.topface.ui.fragments.FullScreenWebChromeClient;
+import com.topface.topface.ui.fragments.WebViewFragment;
 import com.topface.topface.ui.fragments.buy.GpPurchaseActivity;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
 import com.topface.topface.ui.views.ImageViewRemote;
@@ -33,7 +37,9 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     public static final String TAG = "OwnFullscreenPopup";
     @Nullable
     private AdsSettings mAdsSettings;
+
     public static final String SCREEN_TYPE = "OwnFullscreenPopup";
+    private FullScreenWebChromeClient mFullScreenWebChromeClient;
 
     public static OwnFullscreenPopup newInstance(AdsSettings adsSettings) {
         Bundle args = new Bundle();
@@ -53,7 +59,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     @Override
     protected void initViews(View root) {
         OwnFullscreenLayoutBinding binding = DataBindingUtil.bind(root);
-        View bodyView = createBodyView();
+        View bodyView = createBodyView(binding.content);
         if (bodyView != null) {
             binding.content.addView(bodyView);
         } else {
@@ -71,7 +77,7 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
     }
 
     @Nullable
-    private View createBodyView() {
+    private View createBodyView(FrameLayout container) {
         if (mAdsSettings != null && !mAdsSettings.isEmpty()) {
             switch (mAdsSettings.banner.type) {
                 case AdsSettings.IMG:
@@ -91,8 +97,10 @@ public class OwnFullscreenPopup extends BaseDialog implements View.OnClickListen
                     return view;
                 case AdsSettings.WEB:
                     WebView webView = new WebView(getContext().getApplicationContext());
-                    webView.getSettings().setJavaScriptEnabled(true);
+                    mFullScreenWebChromeClient = new FullScreenWebChromeClient(container, webView);
+                    WebViewFragment.prepareWebView(webView, new WebViewClient());
                     webView.loadUrl(Utils.prepareUrl(mAdsSettings.banner.url));
+                    webView.setWebChromeClient(mFullScreenWebChromeClient);
                     return webView;
             }
         }

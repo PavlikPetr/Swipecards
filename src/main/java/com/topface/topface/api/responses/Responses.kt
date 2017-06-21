@@ -9,6 +9,7 @@ import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.IChatItem
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IAvatarVisible
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IDivider
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.IResendableItem
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.Utils.EMPTY
 import com.topface.topface.utils.extensions.readBoolean
@@ -37,12 +38,16 @@ data class Photo(val id: Int, val liked: Int, val added: Long, val canBecomeLead
 data class User(val id: Long, val firstName: String, val age: Int, val sex: Int, val online: Boolean,
                 val state: State, val city: City, val photo: Photo, val premium: Boolean,
                 val background: Int, val banned: Boolean, val deleted: Boolean, val inBlacklist: Boolean,
-                val photos: List<Photo>, val photosCount: Int, val status: String, val distance: Int)
+                val photos: List<Photo>, val photosCount: Int, val status: String, val distance: Int,
+                val bookmarked: Boolean)
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,
-                       val unread: Boolean = false, val link: String? = null) : IChatItem, Parcelable,
-        IAvatarVisible, IDivider {
+                       val unread: Boolean = false, val link: String? = null, var isMutual: Boolean = false)
+    : IChatItem, Parcelable, IAvatarVisible, IDivider, IResendableItem {
+    override val isErrorVisible = ObservableBoolean(false)
+    override val isSending = ObservableBoolean(false)
+    override val isRetrierVisible = ObservableBoolean(false)
 
     override val isAvatarVisible = ObservableBoolean(false)
     override val dividerText = ObservableField(Utils.EMPTY)
@@ -109,6 +114,8 @@ open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val l
             } ?: Unit
 }
 
+fun HistoryItem?.isFriendItem() = this != null && (this.getItemType() == HistoryItem.FRIEND_MESSAGE || this.getItemType() == HistoryItem.FRIEND_GIFT)
+
 data class History(val unread: Int, val more: Boolean, val isSuspiciousUser: Boolean, val user: User,
                    val items: ArrayList<HistoryItem>, val mutualTime: Int)
 
@@ -137,4 +144,14 @@ data class GetFeedBookmarkListResponse(val items: ArrayList<FeedBookmark> = Arra
     override fun getItemsList() = items
 }
 
+data class OfferwallPlace(val type: String, val name: String)
+data class OfferwallWithPlaces(val name: String? = "", private val places: List<OfferwallPlace>? = listOf(),
+                               private val leftMenu: List<String>? = listOf(),
+                               private val purchaseScreen: List<String>? = listOf(),
+                               private val purchaseScreenVip: List<String>? = listOf()) {
 
+    fun getPlaces(): List<OfferwallPlace> = places ?: listOf()
+    fun getLeftMenu(): List<String> = leftMenu ?: listOf()
+    fun getPurchaseScreen(): List<String> = purchaseScreen ?: listOf()
+    fun getPurchaseScreenVip(): List<String> = purchaseScreenVip ?: listOf()
+}

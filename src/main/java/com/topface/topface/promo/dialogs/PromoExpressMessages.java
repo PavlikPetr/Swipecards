@@ -4,6 +4,7 @@ import android.content.res.TypedArray;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.topface.topface.App;
@@ -16,6 +17,8 @@ import com.topface.topface.data.leftMenu.LeftMenuSettingsData;
 import com.topface.topface.data.leftMenu.NavigationState;
 import com.topface.topface.data.leftMenu.WrappedNavigationData;
 import com.topface.topface.databinding.PromoExpressMessagesBinding;
+import com.topface.topface.experiments.promo_express_messages_3_1.PromoExpressMessages3_1;
+import com.topface.topface.experiments.promo_express_messages_3_1.PromoExpressMessagesViewModel;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.views.toolbar.view_models.BackToolbarViewModel;
 import com.topface.topface.utils.Utils;
@@ -26,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import rx.Subscription;
-import rx.functions.Action1;
 
 import static com.topface.topface.R.drawable.fake_girl1;
 
@@ -125,7 +127,18 @@ public class PromoExpressMessages extends PromoDialog {
         if (promoPopupEntity != null) {
             popupVersion = promoPopupEntity.getPopupVersion();
         }
-        return "promo.key31".concat(popupVersion > 0 ? ".v".concat(String.valueOf(popupVersion)) : "");
+
+        String tag = PromoExpressMessages3_1.INSTANCE.getStatisticPlc();
+        if (TextUtils.isEmpty(tag)) {
+            return "promo.key31".concat(popupVersion > 0 ? ".v".concat(String.valueOf(popupVersion)) : "");
+        } else {
+            return tag;
+        }
+    }
+
+    @Override
+    protected void onButtonClick() {
+        PromoExpressMessages3_1.INSTANCE.storeViewedPopupID();
     }
 
     @Override
@@ -138,6 +151,7 @@ public class PromoExpressMessages extends PromoDialog {
         super.initViews(root);
         PromoExpressMessagesBinding binding = DataBindingUtil.bind(root);
         BackToolbarViewModel toolbarViewModel = new BackToolbarViewModel(binding.toolbarInclude, ResourceExtensionKt.getString(R.string.settings_messages));
+        binding.setViewModel(new PromoExpressMessagesViewModel());
         toolbarViewModel.getUpIcon().set(R.drawable.menu_gray_notification);
         binding.setToolbarViewModel(toolbarViewModel);
         if (getPremiumEntity().getPopupVersion() == 1) {

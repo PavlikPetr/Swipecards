@@ -41,6 +41,7 @@ import com.topface.topface.state.SimpleStateDataUpdater;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.adapters.ItemEventListener.OnRecyclerViewItemClickListener;
 import com.topface.topface.ui.adapters.LeftMenuRecyclerViewAdapter;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.WeakStorage;
 import com.topface.topface.utils.rx.RxUtils;
@@ -124,7 +125,7 @@ public class MenuFragment extends Fragment {
 
             // Добавление "Бонусного итема"
             data = getBonusItem();
-            if (options.offerwallsSettings.isEnable()) {
+            if (isBonusAvialable(options)) {
                 if (adapter.getDataPositionByFragmentId(data.getSettings().getUniqueKey()) == EMPTY_POS) {
                     adapter.addItemAfterFragment(data,
                             lastOfIntegrationItemsKey,
@@ -160,6 +161,11 @@ public class MenuFragment extends Fragment {
             updateBecomeVipItem(profile.premium);
         }
     };
+
+    private Boolean isBonusAvialable(Options options) {
+        return (!options.getOfferwallWithPlaces().getLeftMenu().isEmpty() && options.getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME));
+    }
+
     private OnViewClickListener<LeftMenuHeaderViewData> mOnHeaderClick = new OnViewClickListener<LeftMenuHeaderViewData>() {
         @Override
         public void onClick(View v, LeftMenuHeaderViewData data) {
@@ -392,7 +398,7 @@ public class MenuFragment extends Fragment {
             arrayList.add(getFbInvitation());
         }
         //  Item "Бонус"
-        if (options.offerwallsSettings.isEnable()) {
+        if (isBonusAvialable(options)) {
             arrayList.add(getBonusItem());
         }
         // Item "Баланс"

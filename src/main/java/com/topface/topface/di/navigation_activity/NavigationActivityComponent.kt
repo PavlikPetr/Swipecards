@@ -1,5 +1,7 @@
 package com.topface.topface.di.navigation_activity
 
+import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.feed.base.BaseFeedModule
 import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.di.feed.fans.FansModule
@@ -22,4 +24,6 @@ interface NavigationActivityComponent {
 
     fun add(visitorsModule: VisitorsModule, baseModule: BaseFeedModule): VisitorsComponent
     fun add(fansModule: FansModule, baseModule: BaseFeedModule): FansComponent
+    fun add(chatModule: ChatModule): ChatComponent
+
 }

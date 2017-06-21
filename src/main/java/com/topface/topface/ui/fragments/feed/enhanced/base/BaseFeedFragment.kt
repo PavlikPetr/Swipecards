@@ -7,10 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.appodeal.ads.g
 import com.topface.topface.R
-import com.topface.topface.banners.IPageWithAds
-import com.topface.topface.banners.PageInfo
 import com.topface.topface.data.FeedItem
 import com.topface.topface.databinding.NewFeedFragmentBaseBinding
 import com.topface.topface.ui.fragments.BaseFragment
@@ -32,7 +29,7 @@ import javax.inject.Inject
  */
 abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionListener,
         ActionModeController.OnActionModeEventsListener,
-        IFeedUnlocked, IPageWithAds {
+        IFeedUnlocked {
     /**
      * onSaveInstanceStateWasCalled - флаг того, что был вызван onSaveInstanceState, следовательно
      * мы или пересоздаем фрагмент либо свернули приложение
@@ -74,14 +71,14 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun itemClick(view: View?) {
+    protected fun itemClick(view: View?, from: String) {
         val itemPosition = mBinding.feedList.layoutManager.getPosition(view)
         val data = mAdapter.data[itemPosition] as T
         if (mActionModeController.isActionModeEnabled() && view != null) {
             mMultiselectionController.handleSelected(data, view, itemPosition)
             mAdapter.notifyItemChanged(itemPosition)
         } else {
-            mViewModel.itemClick(view, itemPosition, data)
+            mViewModel.itemClick(view, itemPosition, data, from)
         }
     }
 
@@ -194,7 +191,6 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
 
     override fun onDestroyView() {
         mBinding.feedList.stopScroll()
-        (mBinding.bannerContainerForFeeds as ViewGroup).removeViewInLayout(g.v)
         super.onDestroyView()
         //пока пусть будет так, похоже что это лишнее, на дестрое вьюхи не надо релизить модель.
         //mViewModel.release()
@@ -206,8 +202,4 @@ abstract class BaseFeedFragment<T : FeedItem> : BaseFragment(), IMultiSelectionL
         mActionModeController.finishIfEnabled()
         mLockerControllerBase.release()
     }
-
-    override fun getPageName() = PageInfo.PageName.VISITORS_TABS
-
-    override fun getContainerForAd() = mBinding.bannerContainerForFeeds as ViewGroup
 }

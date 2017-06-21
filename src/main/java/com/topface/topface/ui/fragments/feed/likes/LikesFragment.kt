@@ -34,6 +34,8 @@ class LikesFragment : BaseFeedFragment<FeedLike, LayoutEmptyLikesBinding>() {
         }
     }
 
+    override val feedName = PAGE_NAME
+
     override val mAdapter by lazy {
         LikesFeedAdapter(InstantPurchaseModel(mNavigator, PAGE_NAME), mApi)
     }

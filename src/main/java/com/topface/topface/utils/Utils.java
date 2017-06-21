@@ -49,6 +49,8 @@ import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
 import com.topface.topface.data.Profile;
+import com.topface.topface.di.ComponentManager;
+import com.topface.topface.di.chat.ChatComponent;
 import com.topface.topface.receivers.ConnectionChangeReceiver;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.DataApiHandler;
@@ -56,6 +58,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ProfileRequest;
 import com.topface.topface.ui.IEmailConfirmationListener;
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.social.AuthToken;
 
@@ -118,12 +121,15 @@ public class Utils {
     /**
      * Это было вынесено из ChatIntentCreator потому что похоже ломалась очередность генерации биндингов и жавки из котлина
      * и сложно(нереально) было собрать проект
+     *
      * @return class of chat based on server option
      */
     public static Class getChatClass() {
         switch (App.get().getOptions().getChatRedesign()) {
-            case ChatIntentCreator.DESIGN_V1: return com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.class;
-            default: return com.topface.topface.ui.ChatActivity.class;
+            case ChatIntentCreator.DESIGN_V1:
+                return com.topface.topface.ui.fragments.feed.enhanced.chat.ChatActivity.class;
+            default:
+                return com.topface.topface.ui.ChatActivity.class;
         }
     }
 

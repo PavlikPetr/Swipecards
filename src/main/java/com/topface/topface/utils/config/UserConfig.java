@@ -12,6 +12,7 @@ import com.topface.framework.JsonUtils;
 import com.topface.framework.utils.config.AbstractConfig;
 import com.topface.framework.utils.config.DailyConfigExtension;
 import com.topface.topface.data.Options;
+import com.topface.topface.data.experiments.ViewedSpecialPromos3_1;
 import com.topface.topface.ui.dialogs.PreloadPhotoSelectorTypes;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.notifications.MessageStack;
@@ -95,6 +96,7 @@ public class UserConfig extends AbstractConfig {
     private static final String SYMPATHES_COUNT = "symphates_count";
     private static final String TRIAL_SHOWS_IN_USER_PROFILE = "trial_shows_in_user_profile";
     private static final String TRIAL_SHOWS_IN_VISITORS = "trial_shows_in_visitors";
+    private static final String POPUP_3_1_VIEWED_IDS = "popup_3-1_viewed_ids";
     public static final String TRIAL_VIP_POPUP_SHOW_COUNTER = "trial_vip_popup_show_counter";
     public static final String PEOPLE_NEARBY_POPOVER_CLOSE_TIME = "people_nearby_popover_show_time";
     public static final String RATING_POPUP = "rating_pupup";
@@ -233,6 +235,8 @@ public class UserConfig extends AbstractConfig {
         addField(settingsMap,RATING_POPUP, -1L);
         // является ли оценка приложения ниже 4х
         addField(settingsMap, RATING_POPUP_VALUE, false);
+        // список айдишников специальных настроек попапа 3-1 _уже_ показанных пользователю
+        addField(settingsMap, POPUP_3_1_VIEWED_IDS, "");
     }
 
     @Override
@@ -249,6 +253,10 @@ public class UserConfig extends AbstractConfig {
                 PROFILE_CONFIG_SETTINGS + Utils.AMPERSAND + mUnique,
                 Context.MODE_PRIVATE
         );
+    }
+
+    public void resetFullscreenInterval() {
+        resetSettingsMap(FULLSCREEN_SETTINGS);
     }
 
     public void setFullscreenInterval(long interval) {
@@ -828,6 +836,19 @@ public class UserConfig extends AbstractConfig {
      */
     public int getStartPositionOfActions() {
         return getIntegerField(getSettingsMap(), START_POSITION_OF_ACTIONS);
+    }
+
+    public void setPopup3_1ViewedIds(ViewedSpecialPromos3_1 ids) {
+        setField(getSettingsMap(), POPUP_3_1_VIEWED_IDS, JsonUtils.toJson(ids));
+        saveConfig();
+    }
+
+    public ViewedSpecialPromos3_1 getPopup3_1viewedIds() {
+        String source = getStringField(getSettingsMap(), POPUP_3_1_VIEWED_IDS);
+        if (!TextUtils.isEmpty(source)) {
+            return JsonUtils.fromJson(source, ViewedSpecialPromos3_1.class);
+        }
+        return new ViewedSpecialPromos3_1();
     }
 
     /**

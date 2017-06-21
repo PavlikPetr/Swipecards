@@ -4,17 +4,16 @@ import android.app.Activity
 import android.content.Intent
 import android.text.TextUtils
 import bolts.AppLinks
-import com.facebook.FacebookSdk
 import com.facebook.applinks.AppLinkData
 import com.facebook.share.model.AppInviteContent
 import com.facebook.share.widget.AppInviteDialog
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.data.Options
 import com.topface.topface.state.EventBus
 import com.topface.topface.utils.rx.shortSubscription
-import com.topface.topface.utils.social.AuthToken
-import com.topface.topface.utils.social.FbAppLinkReadyEvent
-import com.topface.topface.utils.social.FbInviteTemplatesEvent
+import com.topface.topface.utils.social.*
 import rx.Observable
 import rx.Subscription
 
@@ -46,7 +45,7 @@ object FBInvitesUtils {
     fun onCreateActivity(intent: Intent) = App.getAppConfig().run {
         if (AuthToken.getInstance().isEmpty && fbInviteAppLink.isNullOrEmpty()) {
             val context = App.getContext()
-            FacebookSdk.sdkInitialize(context)
+            FbAuthorizer.initFB()
             AppLinks.getTargetUrlFromInboundIntent(context, intent)?.let {
                 verifyAppLink(it.toString())
             } ?:
@@ -70,10 +69,31 @@ object FBInvitesUtils {
             if (it.templates.isLinkValid(it.appLink)) {
                 with(App.getAppConfig()) {
                     fbInviteAppLink = it.appLink
+                    App.getAppComponent().eventBus().setData(FbAppLinkStoredEvent(fbInviteAppLink))
                     saveConfig()
                 }
             }
         })
+
+    fun createSendAuthStatusStatisticSubscription(eventBus: EventBus): Subscription = Observable.combineLatest(
+            eventBus.getObservable(FbAppLinkStoredEvent::class.java),
+            eventBus.getObservable(AuthStatusReadyEvent::class.java)) { event1, event2 ->
+                object {
+                    val appLink = event1.appLink
+                    val authStatus = event2.authStatus
+                }
+        }.first().subscribe(shortSubscription {
+            if (!it.appLink.isNullOrEmpty()) {
+                if (!it.authStatus.isNullOrEmpty()) {
+                    val slice = Slices().putSlice("val", it.appLink)
+                    when(it.authStatus) {
+                        "regular" -> FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_AUTHORIZE(slice)
+                        "created" -> FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_REGISTER(slice)
+                    }
+                }
+                FBInvitesUtils.AppLinkSended()
+            }
+    })
 
     /**
      * Валидными считать линки вида: http://topface.com/landingtf/?uid=*

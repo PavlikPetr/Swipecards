@@ -23,7 +23,6 @@ import com.nostra13.universalimageloader.core.ExtendedImageLoader;
 import com.squareup.leakcanary.LeakCanary;
 import com.topface.billing.OpenIabHelperManager;
 import com.topface.billing.StoresManager;
-import com.topface.framework.JsonUtils;
 import com.topface.framework.imageloader.DefaultImageLoader;
 import com.topface.framework.imageloader.ImageLoaderStaticFactory;
 import com.topface.framework.utils.BackgroundThread;
@@ -32,8 +31,6 @@ import com.topface.offerwall.common.TFCredentials;
 import com.topface.scruffy.ScruffyManager;
 import com.topface.statistics.ILogger;
 import com.topface.statistics.android.StatisticsTracker;
-import com.topface.topface.banners.ad_providers.AppodealProvider;
-import com.topface.topface.data.AdsSettings;
 import com.topface.topface.data.AppOptions;
 import com.topface.topface.data.AppsFlyerData;
 import com.topface.topface.data.InstallReferrerData;
@@ -48,7 +45,6 @@ import com.topface.topface.requests.ApiRequest;
 import com.topface.topface.requests.ApiResponse;
 import com.topface.topface.requests.AppGetOptionsRequest;
 import com.topface.topface.requests.AppGetSocialAppsIdsRequest;
-import com.topface.topface.requests.BannerSettingsRequest;
 import com.topface.topface.requests.DataApiHandler;
 import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.ParallelApiRequest;
@@ -79,7 +75,6 @@ import com.topface.topface.utils.GoogleMarketApiManager;
 import com.topface.topface.utils.LocaleConfig;
 import com.topface.topface.utils.RunningStateManager;
 import com.topface.topface.utils.Utils;
-import com.topface.topface.utils.ads.BannersConfig;
 import com.topface.topface.utils.config.AppConfig;
 import com.topface.topface.utils.config.Configurations;
 import com.topface.topface.utils.config.FeedsCache;
@@ -105,9 +100,6 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import static com.topface.topface.utils.ads.FullscreenController.AMPIRI;
-import static com.topface.topface.utils.ads.FullscreenController.APPODEAL_NEW;
 
 public class App extends ApplicationBase implements IStateDataUpdater {
 
@@ -336,10 +328,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         return getConfig().getLocaleConfig();
     }
 
-    public static BannersConfig getBannerConfig(Options options) {
-        return getConfig().getBannerConfig(options);
-    }
-
     public static AppOptions getAppOptions() {
         if (mAppOptions == null) {
             AppConfig config = App.getAppConfig();
@@ -393,39 +381,6 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
     }
 
-    public void sendBannerSettingsRequest(Context context) {
-        UserConfig config = App.getUserConfig();
-        long amount = config.getBannerInterval().getConfigFieldInfo().getAmount();
-        Debug.log("BANNER_SETTINGS : BannerSettingsRequest exec amount " + amount);
-        ApiRequest request = new BannerSettingsRequest(context, amount);
-        request.callback(new ApiHandler() {
-            @Override
-            public void success(IApiResponse response) {
-                AdsSettings settings = JsonUtils.fromJson(response.toString(), AdsSettings.class);
-                Debug.log("BANNER_SETTINGS : Catched new banner settings");
-                if (settings != null && settings.banner != null && AdsSettings.SDK.equals(settings.banner.type)) {
-                    switch (settings.banner.name) {
-                        case APPODEAL_NEW:
-                            App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
-                            mWeakStorage.setAppodealBannerSegmentName(settings.banner.adAppId);
-                            AppodealProvider.setCustomSegment();
-                            break;
-                        case AMPIRI:
-                            App.getUserConfig().setBannerInterval(settings.nextRequestNoEarlierThen);
-                            mWeakStorage.setAmpiriBannerSegmentName(settings.banner.adAppId);
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void fail(int codeError, IApiResponse response) {
-                Debug.error("BANNER_SETTINGS : BannerSettingsRequest return error " + codeError + "\n" + response);
-            }
-        });
-        request.exec();
-    }
-
     private static AppComponent appComponent;
 
     public static AppComponent getAppComponent() {
@@ -462,15 +417,14 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         mStateManager.registerAppChangeStateListener(new RunningStateManager.OnAppChangeStateListener() {
             @Override
             public void onAppForeground(long timeOnStart) {
+                mScruffyManager.startConnection();
                 AppStateStatistics.sendAppForegroundState();
                 FlurryManager.getInstance().sendAppInForegroundEvent();
-                if (!AuthToken.getInstance().isEmpty()) {
-                    sendBannerSettingsRequest(getContext());
-                }
             }
 
             @Override
             public void onAppBackground(long timeOnStop, long timeOnStart) {
+                mScruffyManager.stopConnection();
                 AppStateStatistics.sendAppBackgroundState();
                 FlurryManager.getInstance().sendAppInBackgroundEvent();
             }
@@ -516,6 +470,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
         FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
+        FBInvitesUtils.INSTANCE.createSendAuthStatusStatisticSubscription(mEventBus);
 
         sendUnauthorizedRequests();
 
