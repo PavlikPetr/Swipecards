@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.buy.design.v1.view_models.CoinItemViewModel" />
+            type="com.topface.topface.ui.fragments.buy.design.v1.view_models.CoinItemViewModel"/>
     </data>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{() -> viewModel.buy()}"
+        app:cardBackgroundColor="@color/purchase_v1_card_background_selector"
         app:cardCornerRadius="@dimen/purchase_v1_card_corner_radius"
         app:cardElevation="@dimen/purchase_v1_card_elevation"
         app:cardMaxElevation="@dimen/purchase_v1_card_max_elevation"
-        app:cardBackgroundColor="@color/purchase_v1_card_background_selector"
         app:cardPreventCornerOverlap="false">
 
         <View
@@ -25,7 +25,7 @@
             android:layout_height="49dp"
             android:layout_gravity="right|top"
             android:background="@drawable/ic_purchase_special_green"
-            android:visibility="@{viewModel.isSpecial, default=gone}" />
+            android:visibility="@{viewModel.isSpecial, default=gone}"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@{viewModel.coinsDrawable, default=@drawable/ic_purchase_coins_1}" />
+                    android:src="@{viewModel.coinsDrawable, default=@drawable/ic_purchase_coins_1}"/>
             </FrameLayout>
 
             <TextView
@@ -57,7 +57,7 @@
                 android:textColor="@color/dark_primary_text"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="15 монет" />
+                tools:text="15 монет"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
                 android:text="@{viewModel.priceText}"
                 android:textColor="@color/dark_secondary_text"
                 android:textSize="16sp"
-                tools:text="за 300 RUB" />
+                tools:text="за 300 RUB"/>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </layout>

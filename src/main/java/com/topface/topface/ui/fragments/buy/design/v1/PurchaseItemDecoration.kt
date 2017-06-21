@@ -17,10 +17,10 @@ class PurchaseItemDecoration : RecyclerView.ItemDecoration() {
             val position = parent.getChildAdapterPosition(view)
             if (position != RecyclerView.NO_POSITION) {
                 outRect?.set(
-                        R.dimen.base_indent.getDimen().toInt(),
-                        R.dimen.base_indent.getDimen().toInt(),
-                        R.dimen.base_indent.getDimen().toInt(),
-                        R.dimen.base_indent.getDimen().toInt()
+                        R.dimen.purchase_v1_card_padding.getDimen().toInt(),
+                        R.dimen.purchase_v1_card_padding.getDimen().toInt(),
+                        R.dimen.purchase_v1_card_padding.getDimen().toInt(),
+                        R.dimen.purchase_v1_card_padding.getDimen().toInt()
                 )
             }
         }

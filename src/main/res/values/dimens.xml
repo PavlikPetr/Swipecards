@@ -319,8 +319,10 @@
     <!-- Purchase GooglePlay product design v1 -->
     <integer name="purchase_v1_coins_on_row">2</integer>
     <dimen name="purchase_v1_card_elevation">4dp</dimen>
-    <dimen name="purchase_v1_card_max_elevation">10dp</dimen>
+    <dimen name="purchase_v1_card_max_elevation">4dp</dimen>
     <dimen name="purchase_v1_card_corner_radius">6dp</dimen>
+    <dimen name="purchase_v1_card_padding">4dp</dimen>
+    <dimen name="purchase_v1_card_likes_img_padding_left">8dp</dimen>
 
     <!-- ampiri -->
     <dimen name="ampiri_banner_width">320dp</dimen>
