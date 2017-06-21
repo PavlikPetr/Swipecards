@@ -15,6 +15,7 @@ import rx.Observable
 import rx.lang.kotlin.withIndex
 import rx.subscriptions.CompositeSubscription
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * ProgressBar для отравки статистики
@@ -43,32 +44,25 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
     private var mPlc = PLC_UNDEFINED
     private var mEmitter: Emitter<Boolean>? = null
     private var mSubscription = CompositeSubscription()
+    private var mIsNeedSendPost: AtomicBoolean = AtomicBoolean(false)
 
     init {
         mSubscription.add(Observable.fromEmitter<Boolean>({ emitter ->
             mEmitter = emitter
         }, Emitter.BackpressureMode.LATEST)
-//                .filter {
-////                    Debug.log("$TAG catch new value ui:$this isVisible:$it")
-//                    true
-//                }
-                .map {
-                    Debug.log("BeforeDistinct ui:$this state:$it")
-                    it
-                }
                 .distinctUntilChanged()
-                .map {
-                    Debug.log("AfterDistinct ui:$this state:$it")
-                    it
-                }
-//                .withIndex()
-//                .filter { it.index > 0 || it.value }
-//                .map { it.value }
+                .withIndex()
+                .filter { !(!it.value && it.index == 0) }
+                .map { it.value }
                 .timeInterval()
                 .subscribe(shortSubscription {
                     it?.let {
                         if (it.value) {
-                            sendShowEvent()
+                            if (mPlc == PLC_UNDEFINED) {
+                                mIsNeedSendPost.set(true)
+                            } else {
+                                sendShowEvent()
+                            }
                         } else {
                             sendHideEvent(it.intervalInMilliseconds)
                         }
@@ -119,6 +113,10 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
     fun setPlc(plc: String?) {
         if (mPlc.isNullOrEmpty() || mPlc == PLC_UNDEFINED) {
             mPlc = plc ?: PLC_UNDEFINED
+            if (mIsNeedSendPost.get()) {
+                mIsNeedSendPost.set(false)
+                sendShowEvent()
+            }
         }
     }
 

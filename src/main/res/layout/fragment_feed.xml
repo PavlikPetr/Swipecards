@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/feedContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_white">
-
-        <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
-            android:id="@+id/tvBackgroundText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:plc="fragment_feed_loader"
-            documentation:info="следует разделить по типам фидов" />
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ListView
-                android:id="@+id/lvFeedList"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:documentation="http://schemas.android.com/tools"
+                android:id="@+id/feedContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:cacheColorHint="@android:color/transparent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="0dp"
-                android:fadeScrollbars="true"
-                android:fadingEdge="none"
-                android:listSelector="@android:color/transparent"
-                android:visibility="gone" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+                android:background="@color/bg_white">
 
-        <com.topface.topface.ui.views.locker_view.LockerView
-            android:id="@+id/llvFeedLoading"
-            style="@style/LoadingLocker"
-            app:plc="@string/feed_fragment_locker_view" />
+    <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
+        android:id="@+id/tvBackgroundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:plc="fragment_feed_loader"
+        documentation:info="следует разделить по типам фидов"/>
 
-        <ViewStub
-            android:id="@+id/stubForEmptyFeed"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
-    </RelativeLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lvFeedList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:fadeScrollbars="true"
+            android:fadingEdge="none"
+            android:listSelector="@android:color/transparent"
+            android:visibility="gone"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.topface.topface.ui.views.locker_view.LockerView
+        android:id="@+id/llvFeedLoading"
+        style="@style/LoadingLocker"
+        app:plc="@string/feed_fragment_locker_view"/>
+
+    <ViewStub
+        android:id="@+id/stubForEmptyFeed"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+</RelativeLayout>
