@@ -61,6 +61,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
     abstract val mAdapter: BaseFeedAdapter<*, T>
     abstract fun createLockerFactory(): BaseFeedLockerController.ILockScreenVMFactory<V>
     abstract fun getEmptyFeedLayout(): Int
+    abstract val feedName: String
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -124,7 +125,7 @@ abstract class BaseFeedFragment<T : FeedItem, V : ViewDataBinding> :
                 mMultiselectionController.handleSelected(data, view, itemPosition)
                 mAdapter.notifyItemChanged(itemPosition)
             } else {
-                mViewModel.itemClick(view, itemPosition, data)
+                mViewModel.itemClick(view, itemPosition, data, feedName)
             }
 
     override fun onFeedUnlocked() = mViewModel.update()

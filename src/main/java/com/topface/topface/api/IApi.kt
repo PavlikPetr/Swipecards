@@ -40,4 +40,6 @@ interface IApi {
 
     fun callBannerGetCommon(startNumber: Long = App.getUserConfig().getBannerInterval<Long>()
             .getConfigFieldInfo().getAmount()): Observable<AdsSettings>
+
+    fun observeSendMessage(): Observable<History>
 }

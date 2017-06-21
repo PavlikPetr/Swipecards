@@ -32,7 +32,7 @@ import com.topface.topface.ui.ComplainsActivity;
 import com.topface.topface.ui.EditorProfileActionsActivity;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.fragments.feed.FeedFragment;
-import com.topface.topface.ui.fragments.profile.UserProfileFragment;
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
 import com.topface.topface.utils.IFragmentDelegate;
 import com.topface.topface.utils.RateController;
 import com.topface.topface.utils.Utils;
@@ -504,7 +504,7 @@ public class OverflowMenu {
                         LocalBroadcastManager.getInstance(mContext).
                                 sendBroadcast(new Intent(BlackListAndBookmarkHandler
                                         .getValuedActionsUpdateIntent(BlackListAndBookmarkHandler
-                                                .ActionTypes.BOOKMARK, false, getUserId())));
+                                                .ActionTypes.BOOKMARK, true, getUserId())));
                     }
 
                     @Override
@@ -626,7 +626,7 @@ public class OverflowMenu {
 
     @Nullable
     private Boolean isChatAvailable() {
-        return getOverflowMenuFieldsListener() == null ? null : getOverflowMenuFieldsListener().isOpenChatAvailable();
+        return getOverflowMenuFieldsListener() == null ? null : getOverflowMenuFieldsListener().isOpenChatAvailable() || App.get().getOptions().getChatRedesign() == ChatIntentCreator.DESIGN_V1;
     }
 
     @Nullable

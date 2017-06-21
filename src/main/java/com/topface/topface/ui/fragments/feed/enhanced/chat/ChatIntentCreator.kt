@@ -25,49 +25,61 @@ object ChatIntentCreator {
     const val ONLINE = "online"
     const val USER_TYPE = "type"
     const val WHOLE_USER = "whole_user"
+    const val FROM = "from"
 
     // Design versions
     const val DESIGN_V0 = 0
     const val DESIGN_V1 = 1
 
-    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> createIntent(user, answer, null)
-        else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
-                user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
+    fun createIntentForChatFromDating(user: FeedUser, answer: SendGiftAnswer?, from: String): Intent {
+
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> createIntent(user, answer, null, from)
+            else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null,
+                    user.photo, false, answer, user.inBlacklist, user.bookmarked, user.banned, user.online)
+        }
     }
 
-    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> createIntent(user, null, itemType)
-        else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+    fun createIntentForChatFromFeed(user: FeedUser, itemType: Int, from: String): Intent {
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> createIntent(user, null, itemType, from)
+            else -> ChatIntentCreator.createIntent(user.id, user.sex, user.nameAndAge, user.city.name, null, user.photo, false, itemType, user.inBlacklist, user.bookmarked, user.banned)
+        }
     }
 
     @JvmStatic
-    fun createIntentForChatFromProfile(profile: Profile, user: User) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null)
-        else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name, null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
+    fun createIntentForChatFromProfile(profile: Profile, user: User): Intent {
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> createIntent(FeedUser.createFeedUserFromUser(user), null, null, "profile")
+            else -> ChatIntentCreator.createIntent(profile.uid, profile.sex, profile.nameAndAge, profile.city.name,
+                                    null, profile.photo, false, null, user.inBlackList, user.bookmarked, user.banned)
+        }
     }
 
     @JvmStatic
-    fun createIntentForChatFromGCMUtils(user: GCMUtils.User?, itemType: Int) = when (App.get().options.chatRedesign) {
-        DESIGN_V1 -> {
-            createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType).apply {
-                putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
+    fun createIntentForChatFromGCMUtils(user: GCMUtils.User?, itemType: Int): Intent {
+        return when (App.get().options.chatRedesign) {
+            DESIGN_V1 -> {
+                createIntent(FeedUser.createFeedUserFromGCMUser(user), null, itemType, "FromGCM").apply {
+                    putExtra(App.INTENT_REQUEST_KEY, REQUEST_CHAT)
+                }
+            }
+            else -> if (user != null) {
+                createIntent(user.id, user.sex, user.nameAndAge, user.city,
+                        null, null, true, null, false, false, false, user.isOnline)
+            } else {
+                Intent(App.getContext(), NavigationActivity::class.java)
             }
         }
-        else -> if (user != null) {
-            createIntent(user.id, user.sex, user.nameAndAge, user.city,
-                    null, null, true, null, false, false, false, user.isOnline)
-        } else {
-            Intent(App.getContext(), NavigationActivity::class.java)
-        }
     }
 
     @JvmStatic
-    fun createIntent(user: FeedUser, answer: SendGiftAnswer?, itemType: Int?) = Intent(App.getContext(),
+    fun createIntent(user: FeedUser, answer: SendGiftAnswer?, itemType: Int?, from: String) = Intent(App.getContext(),
             getChatClass()).apply {
         putExtra(WHOLE_USER, user)
         answer?.let { putExtra(GIFT_DATA, it) }
         itemType?.let { putExtra(USER_TYPE, it) }
+        putExtra(FROM, from)
     }
 
     //Если itemType соответствует популярному юзеру не показываем клаву в чате
@@ -104,5 +116,4 @@ object ChatIntentCreator {
         photo?.let { intent.putExtra(INTENT_AVATAR, it) }
         return intent
     }
-
 }

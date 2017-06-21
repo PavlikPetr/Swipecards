@@ -38,7 +38,8 @@ data class Photo(val id: Int, val liked: Int, val added: Long, val canBecomeLead
 data class User(val id: Long, val firstName: String, val age: Int, val sex: Int, val online: Boolean,
                 val state: State, val city: City, val photo: Photo, val premium: Boolean,
                 val background: Int, val banned: Boolean, val deleted: Boolean, val inBlacklist: Boolean,
-                val photos: List<Photo>, val photosCount: Int, val status: String, val distance: Int)
+                val photos: List<Photo>, val photosCount: Int, val status: String, val distance: Int,
+                val bookmarked: Boolean)
 
 open class HistoryItem(val text: String = EMPTY, val latitude: Float = 0f, val longitude: Float = 0f,
                        val type: Int = 0, val id: Int = 0, val created: Long = 0L, val target: Int = 0,

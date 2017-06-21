@@ -44,7 +44,7 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
 
     override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
         compositeAdapter.addAdapterComponent(
-                VisitorAdapterComponent({ itemClick(it) }, { itemLongClick(it) }))
+                VisitorAdapterComponent({ itemClick(it, SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 
     override fun terminateImmortalComponent() {

@@ -1,6 +1,7 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat.stubs
 
 import android.databinding.ObservableField
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.R
 import com.topface.topface.data.FeedUser
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
@@ -10,6 +11,10 @@ class NotVipAndSympViewModel(feedUser: FeedUser, private var mFeedNavigator: Fee
 
     companion object{
         private const val TAG = "not_vip_and_symp_chat_stub"
+    }
+
+    init {
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_BLOCK_SHOW_NO_VIP_NO_MUTUAL()
     }
 
     override val title: ObservableField<String>

@@ -11,6 +11,8 @@ import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
 import com.topface.scruffy.utils.toJson
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
@@ -27,6 +29,8 @@ import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.FROM
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatStatistics.START_CHAT_FROM
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
 import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
@@ -79,6 +83,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     internal var chatResult: IChatResult? = null
     internal var overflowMenu: OverflowMenu? = null
     internal var activityFinisher: IActivityFinisher? = null
+    private var mStartChatFrom: String? = null
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
@@ -131,10 +136,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 createTimerUpdateObservable(),
                 createVipBoughtObservable(),
                 adapterUpdateObservable
-                /*,createP2RObservable()*/).
-                filter { it.first > 0 }.
-                filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
-                subscribe(shortSubscription { update(it) })
+                /*,createP2RObservable()*/)
+                .filter { it.first == mUser?.id }
+                .filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
+                .subscribe(shortSubscription { update(it) })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
@@ -169,6 +174,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             chatData.add(ChatLoader())
         }
         mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        mStartChatFrom = args?.getString(FROM, "undefined")
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
         takePhotoIfNeed()
         mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
             isSendButtonEnable.set(it.isNotBlank())
@@ -309,6 +316,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         val addToStart = updateContainer.second != null
         mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave())
                 .map {
+                    mUser = FeedUser.createFeedUserFromUser(it.user)
                     if (mBlockChatType == UNDEFINED) {
                         isSendGiftEnable.set(true)
                         isEditTextEnable.set(true)
@@ -326,6 +334,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         isStubs(chatData) -> {
                             when {
                                 isNewMessage(it) -> {
+                                    mBlockChatType = NO_BLOCK
                                     chatData.clear()
                                     addMessages(it)
                                 }
@@ -338,10 +347,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                                 isNewMessage(it) -> addMessages(it)
                                 isNeedStubs(it) -> getStubs(it)
                                 isNeedMessageStub(it) -> getStubMessages(it)
-                                else ->{
-
-                                    null
-                                }
+                                else -> null
                             }
                         }
                         else -> null
@@ -422,7 +428,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find {(it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
@@ -473,27 +479,33 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     fun onMessage() = mUser?.let {
         val message = message.get()
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
-            val item = wrapHistoryItem(HistoryItem(text = message,
-                    created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
-                    isMutual = mIsNeedShowMutualDivider))
-            mEventBus.setData(SendHistoryItemEvent(item))
-            this.message.set(EMPTY)
-            if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-                chatData.clear()
-                mBlockChatType = NO_BLOCK
-            }
-            chatData.add(0, item)
+            mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
+                    .doOnSubscribe {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                            chatData.clear()
+                            mBlockChatType = NO_BLOCK
+                        }
+                        if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                            ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+                        }
+                        chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
+                        this.message.set(EMPTY)
+                    }
+                    .subscribe(shortSubscription({
+                    }, {
+                        chatResult?.setResult(createResultIntent())
+                    })))
         } else {
             navigator?.showUserIsTooPopularLock(it)
         }
     }
 
     fun onGift() = mUser?.let {
-        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
-            chatData.clear()
-            mBlockChatType = NO_BLOCK
-        }
         if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
+            ChatStatisticsGeneratedStatistics.sendNow_CHAT_GIFT_ACTIVITY_OPEN(Slices().putSlice(START_CHAT_FROM, "chat"))
             navigator?.showGiftsActivity(it.id, "chat")
         } else {
             navigator?.showUserIsTooPopularLock(it)
@@ -511,6 +523,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         when (requestCode) {
             GiftsActivity.INTENT_REQUEST_GIFT -> {
                 if (resultCode == Activity.RESULT_OK) {
+                    if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                        chatData.clear()
+                        mBlockChatType = NO_BLOCK
+                    }
+                    if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                        ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+                    }
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
@@ -531,6 +550,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             }
             PurchasesActivity.INTENT_BUY_VIP -> {
                 chatData.clear()
+                isSendGiftEnable.set(true)
+                isEditTextEnable.set(true)
                 update(createUpdateObject(mUser?.id ?: -1))
             }
             ComplainsActivity.REQUEST_CODE -> {
