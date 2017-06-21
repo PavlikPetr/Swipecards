@@ -520,6 +520,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         giftAnswerToHistoryItem(sendGiftAnswer.apply { history.unread = false })?.let {
                             mHasStubItems = true
                             mIsSendMessage = true
+                            it.isMutual = mIsNeedShowMutualDivider
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
                         }
