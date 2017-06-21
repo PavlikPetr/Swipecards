@@ -234,7 +234,7 @@ public class Options extends AbstractData {
     private boolean coinPurchaseScreenRedesignEnabled;
 
     public boolean isCoinPurchaseScreenRedesignEnabled() {
-        return true;
+        return coinPurchaseScreenRedesignEnabled;
     }
 
     private OfferwallWithPlaces offerwallWithPlaces;
