@@ -549,6 +549,30 @@ public class Options extends AbstractData {
         private static final int DEFAULT_TIMEOUT = 1000;
 
         /**
+         * Custom popups experiment settings
+         */
+        private boolean mCustomPopupEnabled; // Включен ли эксперимент
+        private String mCustomPopupId; // ID модификации попапа, который нужно будет добавить в plc
+        private String mTitleImageURL; // URL картинки
+        private int mBackgroundColor; // Цвет фона попапа в RGB
+
+        public boolean isCustomPopupEnabled() {
+            return mCustomPopupEnabled;
+        }
+
+        public String getCustomPopupId() {
+            return mCustomPopupId;
+        }
+
+        public String getTitleImageURL() {
+            return mTitleImageURL;
+        }
+
+        public int getBackgroundColor() {
+            return mBackgroundColor;
+        }
+
+        /**
          * визуализация попапа меняется в зависимости от версии
          */
         private int mPopupVersion;
@@ -584,6 +608,10 @@ public class Options extends AbstractData {
                 mTimeout = premiumMessages.optInt("timeout", DEFAULT_TIMEOUT);
                 mPageId = FragmentIdData.getFragmentId(premiumMessages.optString("page"), UNDEFINED);
                 mPopupVersion = premiumMessages.optInt("popupVersion", 0);
+                mCustomPopupEnabled = premiumMessages.optBoolean("customPopupEnabled");
+                mCustomPopupId = premiumMessages.optString("customPopupId");
+                mTitleImageURL = premiumMessages.optString("titleImageURL");
+                mBackgroundColor = premiumMessages.optInt("backgroundColor");
             }
         }
 
@@ -594,6 +622,7 @@ public class Options extends AbstractData {
             airType = type;
             mPageId = FragmentIdData.getFragmentId(page, UNDEFINED);
             mPopupVersion = popupVersion;
+            mCustomPopupEnabled = false;
         }
 
         public int getCount() {

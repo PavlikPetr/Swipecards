@@ -470,6 +470,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         DefaultImageLoader.getInstance(getContext()).setErrorImageResId(R.drawable.im_photo_error);
 
         FBInvitesUtils.INSTANCE.createFbInvitesAppLinkSubscription(mEventBus);
+        FBInvitesUtils.INSTANCE.createSendAuthStatusStatisticSubscription(mEventBus);
 
         sendUnauthorizedRequests();
 
