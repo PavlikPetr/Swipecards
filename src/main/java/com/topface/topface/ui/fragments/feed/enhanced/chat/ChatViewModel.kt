@@ -491,7 +491,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
+                                isMutual = mIsNeedShowMutualDivider)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
