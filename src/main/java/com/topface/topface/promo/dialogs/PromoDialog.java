@@ -175,6 +175,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
                 PromoDialogStastics.promoDialogClickBuyVipSend(getMainTag());
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_BUY);
+                onButtonClick();
                 break;
             case R.id.deleteMessages:
                 if (mOnPromoDialogEventsListener != null) {
@@ -185,11 +186,14 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 PromoDialogStastics.promoDialogDismissSend(getMainTag());
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_DELETE);
                 closeFragment();
+                onButtonClick();
                 break;
             default:
 
         }
     }
+
+    protected void onButtonClick() {}
 
     @Override
     public void onDestroy() {
