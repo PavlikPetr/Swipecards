@@ -228,6 +228,18 @@ public class Options extends AbstractData {
         return chatRedesign;
     }
 
+    /**
+     * {int} - настройка отображения/реакиции свитчера "только красивые" в фильтре знакомств и мб потом где-то еще
+     * 0 - none: свитер не показываем
+     * 1 - control: пользователь в контрольной группе, свитер показываем и свободно даем переключить
+     * 2 - test: пользователь в тестовой группе, переключение свитчера доступно только VIP пользователю
+     */
+    private int attractionExperimentGroup;
+
+    public int getAttractionExperimentGroup() {
+        return attractionExperimentGroup;
+    }
+
     private OfferwallWithPlaces offerwallWithPlaces;
     public OfferwallWithPlaces getOfferwallWithPlaces() {
         if (offerwallWithPlaces == null) {
@@ -411,6 +423,7 @@ public class Options extends AbstractData {
             }
 
             chatRedesign = response.optInt("chatRedesign");
+            attractionExperimentGroup = response.optInt("attractionExperimentGroup");
 
             offerwallWithPlaces = JsonUtils.fromJson(response.optString("offerwallWithPlaces"), OfferwallWithPlaces.class);
             showRefillBalanceInSideMenu = response.optBoolean("showRefillBalanceInSideMenu");
