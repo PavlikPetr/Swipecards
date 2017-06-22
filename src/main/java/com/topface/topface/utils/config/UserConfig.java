@@ -257,6 +257,7 @@ public class UserConfig extends AbstractConfig {
 
     public void resetFullscreenInterval() {
         resetSettingsMap(FULLSCREEN_SETTINGS);
+        saveConfig();
     }
 
     public void setFullscreenInterval(long interval) {
