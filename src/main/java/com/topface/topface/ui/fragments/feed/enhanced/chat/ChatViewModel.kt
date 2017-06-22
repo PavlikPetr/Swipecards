@@ -100,6 +100,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mResendSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
+    private var mUpdateAdapterSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -126,16 +127,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    fun initUpdateSubscriptions(updateObservable: Observable<Bundle>?) {
-        val adapterUpdateObservable = updateObservable
-                ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
-                ?: Observable.empty()
+    init {
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
-                createVipBoughtObservable(),
-                adapterUpdateObservable
+                createVipBoughtObservable()
                 /*,createP2RObservable()*/)
                 .filter { it.first == mUser?.id }
                 .filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
@@ -166,6 +162,17 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     deleteComplete ->
                     removeByPredicate { deleteComplete.items.contains(it.id) }
                     chatResult?.setResult(createResultIntent())
+                })
+    }
+
+    fun initUpdateAdapterSubscription(updateObservable: Observable<Bundle>?) {
+        mUpdateAdapterSubscription = updateObservable
+                ?.distinct { it.getInt(LAST_ITEM_ID) }
+                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
+                ?.filter { it.first == mUser?.id }
+                ?.filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
+                ?.subscribe(shortSubscription {
+                    update(it)
                 })
     }
 
@@ -591,6 +598,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         navigator = null
         overflowMenu = null
         activityFinisher = null
+        mUpdateAdapterSubscription.safeUnsubscribe()
     }
 
     override fun release() {

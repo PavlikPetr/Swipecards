@@ -11,6 +11,7 @@ import android.view.*
 import com.topface.topface.App
 import com.topface.topface.BR
 import com.topface.topface.R
+import com.topface.topface.api.responses.History
 import com.topface.topface.data.FeedUser
 import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.databinding.NewChatToolbarAvatarBinding
@@ -33,6 +34,7 @@ import com.topface.topface.utils.actionbar.OverflowMenuUser
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
+import rx.Observable
 import rx.Subscription
 import javax.inject.Inject
 
@@ -76,7 +78,28 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                 })
         mKeyboardWasShown = savedInstanceState?.getBoolean(SOFT_KEYBOARD_LOCK_STATE) ?: false
         mUser = arguments?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        mSendRequestSubscription = createSendRequestObservable()
+                .subscribe(shortSubscription {
+                    mOverflowMenu?.let {
+                        initOverflowMenuActions(it)
+                    }
+                })
         ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
+    }
+
+    private fun createSendRequestObservable(): Observable<History> {
+        return App.getAppComponent().api().observeSendMessage()
+                .retry()
+                // отфильтровываем сообщения другим юзерам
+                .filter { it.user.id.toInt() == mUser?.id }
+                // обновляем объект mUser
+                .map { it.apply { mUser = FeedUser.createFeedUserFromUser(user) } }
+                .distinctUntilChanged { t1, t2 ->
+                    // ждем только тех изменений, которые влияют на overflow menu
+                    t1.user.bookmarked == t2.user.bookmarked
+                            && t1.user.inBlacklist == t2.user.inBlacklist
+                            && t1.user.id == t2.user.id
+                }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -104,10 +127,9 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
             chat.adapter = adapter
             chat.addItemDecoration(ChatItemDecoration())
             mViewModel.run {
-                initUpdateSubscriptions(adapter.updateObservable)
+                initUpdateAdapterSubscription(adapter.updateObservable)
                 overflowMenu = mOverflowMenu
                 setViewModel(BR.chatViewModel, this, arguments)
-                subscribeDialogRequest()
             }
             root.setKeyboardListener(this@ChatFragment)
         }
@@ -115,7 +137,6 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
 
     override fun terminateImmortalComponent() {
         ComponentManager.releaseComponent(ChatViewModelComponent::class.java)
-        mSendRequestSubscription.safeUnsubscribe()
     }
 
     override fun onPause() {
@@ -139,6 +160,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         super.onDestroy()
         mOverflowMenu?.onReleaseOverflowMenu()
         mReleaseSubscription.safeUnsubscribe()
+        mSendRequestSubscription.safeUnsubscribe()
     }
 
     private fun release() {
@@ -183,26 +205,6 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         if (isAdded) {
             activity.finish()
         }
-    }
-
-    private fun subscribeDialogRequest() {
-        mSendRequestSubscription = App.getAppComponent().api().observeSendMessage()
-                .retry()
-                // отфильтровываем сообщения другим юзерам
-                .filter { it.user.id.toInt() == mUser?.id }
-                // обновляем объект mUser
-                .map { it.apply { mUser = FeedUser.createFeedUserFromUser(user) } }
-                .distinctUntilChanged { t1, t2 ->
-                    // ждем только тех изменений, которые влияют на overflow menu
-                    t1.user.bookmarked == t2.user.bookmarked
-                            && t1.user.inBlacklist == t2.user.inBlacklist
-                            && t1.user.id == t2.user.id
-                }
-                .subscribe(shortSubscription {
-                    mOverflowMenu?.let {
-                        initOverflowMenuActions(it)
-                    }
-                })
     }
 
     fun initOverflowMenuActions(overflowMenu: OverflowMenu) {

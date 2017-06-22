@@ -74,7 +74,7 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
         super.onActivityResult(requestCode, resultCode, data)
         Utils.activityResultToNestedFragments(supportFragmentManager, requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_CANCELED) {
-           addPhotoHelper.processActivityResult(requestCode, resultCode, data)
+            addPhotoHelper.processActivityResult(requestCode, resultCode, data)
         }
     }
 
