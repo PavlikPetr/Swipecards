@@ -37,7 +37,7 @@ class LockerView constructor(context: Context, attrs: AttributeSet?,
         LockerViewViewModel(mPlc)
     }
 
-    private var mPlc: String = StatisticsProgressBar.PLC_UNDEFINED
+    private var mPlc = StatisticsProgressBar.PLC_UNDEFINED
 
     private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.StatisticsProgressBar, defStyleAttr, 0)

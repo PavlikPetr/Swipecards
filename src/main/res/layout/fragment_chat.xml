@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:key="http://schemas.android.com/apk/res-auto">
+        xmlns:key="http://schemas.android.com/apk/res-auto"
+        xmlns:p2r="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -36,25 +37,25 @@
                 key:complainVisibility="@{viewModel.complainVisibility}"
                 key:listener="@{viewModel.complainActionListener}"/>
 
-            <com.topface.PullToRefreshListView xmlns:p2r="http://schemas.android.com/apk/res-auto"
-                                               android:id="@+id/lvChatList"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="match_parent"
-                                               android:layout_above="@+id/loChatFooterSend"
-                                               android:layout_below="@+id/loChatHeaderComplain"
-                                               android:cacheColorHint="#00000000"
-                                               android:divider="@android:color/transparent"
-                                               android:dividerHeight="8dp"
-                                               android:fadeScrollbars="true"
-                                               android:fadingEdge="none"
-                                               android:listSelector="@android:color/transparent"
-                                               android:paddingLeft="2dp"
-                                               android:paddingRight="2dp"
-                                               android:stackFromBottom="true"
-                                               p2r:ptrHeaderTextColor="#8A8A8A"
-                                               p2r:ptrMode="pullUpFromBottom"
-                                               p2r:ptrOverScroll="false"
-                                               p2r:ptrShowIndicator="false"/>
+            <com.topface.PullToRefreshListView
+                android:id="@+id/lvChatList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/loChatFooterSend"
+                android:layout_below="@+id/loChatHeaderComplain"
+                android:cacheColorHint="#00000000"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="8dp"
+                android:fadeScrollbars="true"
+                android:fadingEdge="none"
+                android:listSelector="@android:color/transparent"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:stackFromBottom="true"
+                p2r:ptrHeaderTextColor="#8A8A8A"
+                p2r:ptrMode="pullUpFromBottom"
+                p2r:ptrOverScroll="false"
+                p2r:ptrShowIndicator="false"/>
 
             <ViewStub
                 android:id="@+id/llvLockScreen"
