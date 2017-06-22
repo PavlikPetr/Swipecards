@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -11,12 +12,13 @@
         android:text="@string/general_dialog_retry"
         android:textColor="#FFFFFF" />
 
-    <ProgressBar
+    <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
         android:id="@+id/prsLoader"
         style="@style/TopFaceProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:plc="@string/gift_list_loader" />
 
 </RelativeLayout>

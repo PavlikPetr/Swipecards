@@ -19,12 +19,13 @@
         android:layout_height="match_parent"
         android:background="@color/bg_white">
 
-        <ProgressBar
-            android:id="@+id/background_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="@{viewModel.isFeedProgressBarVisible}"/>
+            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
+                android:id="@+id/background_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:plc="new_feed_fragment_base_loader"
+                android:visibility="@{viewModel.isFeedProgressBarVisible}"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
@@ -45,10 +46,11 @@
                 app:bindDataToFeedRecycler="@{viewModel.data}"/>
         </android.support.v4.widget.SwipeRefreshLayout>
 
-        <com.topface.topface.ui.views.LockerView
-            android:id="@+id/loading_feed_locker"
-            style="@style/LoadingLocker"
-            android:visibility="@{viewModel.isLockViewVisible}"/>
+            <com.topface.topface.ui.views.locker_view.LockerView
+                android:id="@+id/loading_feed_locker"
+                style="@style/LoadingLocker"
+                app:plc="new_feed_fragment_base_locker_view"
+                android:visibility="@{viewModel.isLockViewVisible}"/>
 
         <ViewStub
             android:id="@+id/empty_feed_stub"

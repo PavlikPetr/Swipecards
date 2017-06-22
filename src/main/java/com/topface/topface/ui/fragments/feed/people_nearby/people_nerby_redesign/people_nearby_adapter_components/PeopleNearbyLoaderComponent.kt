@@ -11,10 +11,16 @@ import com.topface.topface.ui.new_adapter.enhanced.AdapterComponent
  */
 
 class PeopleNearbyLoaderComponent : AdapterComponent<ItemLoaderBinding, PeopleNearbyLoader>() {
+    companion object {
+        const val PLC = "people_nearby_main_loader"
+    }
+
     override val itemLayout: Int
         get() = R.layout.item_loader
     override val bindingClass: Class<ItemLoaderBinding>
         get() = ItemLoaderBinding::class.java
 
-    override fun bind(binding: ItemLoaderBinding, data: PeopleNearbyLoader?, position: Int) {}
+    override fun bind(binding: ItemLoaderBinding, data: PeopleNearbyLoader?, position: Int) {
+        binding.plc = PLC
+    }
 }

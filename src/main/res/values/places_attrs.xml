@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dating_fragment_loader">dating_buttons_next_user_loader</string>
+    <string name="album_image_loader">album_image_item_loader</string>
+    <string name="gift_list_loader">gift_item_loader</string>
+    <string name="feed_fragment_locker_view">feed_fragment_locker_view</string>
+    <string name="dating_fragment_loader_v2">dating_buttons_v2_next_user_loader</string>
+</resources>

@@ -17,6 +17,7 @@ class LoaderComponent : AdapterComponent<ItemLoaderBinding, Loader>() {
     override val bindingClass = ItemLoaderBinding::class.java
 
     override fun bind(binding: ItemLoaderBinding, data: Loader?, position: Int) {
+        binding.plc = "BonusScreenMainLoader"
         binding.root.layoutParams = StaggeredGridLayoutManager.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
     }

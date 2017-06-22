@@ -8,12 +8,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.topface.topface.R;
+import com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar;
 
 /**
  * Created by ppetr on 19.05.15.
  * progress bar contains oneshot alpha animation
  */
-public class ProgressBarWithAlpha extends ProgressBar {
+public class ProgressBarWithAlpha extends StatisticsProgressBar {
 
     private final static int ALPHA_ANIMATION_DURATION = 3000;
 

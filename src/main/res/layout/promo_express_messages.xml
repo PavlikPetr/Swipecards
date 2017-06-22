@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
@@ -118,12 +119,12 @@
 
                 </LinearLayout>
 
-                <com.topface.topface.ui.views.LockerView
+                <com.topface.topface.ui.views.locker_view.LockerView
                     android:id="@+id/ipLocker"
                     style="@style/LoadingLocker"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    app:plc="promo_express_message_locker_view" />
             </LinearLayout>
-
         </ScrollView>
     </LinearLayout>
 </layout>

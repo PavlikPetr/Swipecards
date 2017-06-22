@@ -21,12 +21,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center">
 
-            <ProgressBar
+            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
                 android:id="@+id/background_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="@{lockViewModel.likesAccessProgressVisibility}" />
+                android:visibility="@{lockViewModel.likesAccessProgressVisibility}"
+                app:plc="empty_likes_buy_vip_progress" />
 
             <ViewFlipper
                 android:id="@+id/vfEmptyViews"

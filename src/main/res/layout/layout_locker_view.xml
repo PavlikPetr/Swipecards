@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:documentation="http://schemas.android.com/tools"
-                style="@style/LoadingLocker">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:documentation="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="horizontal">
+    <data>
 
-        <ProgressBar
-            documentation:info="приложение не использует этот id, но он нужен для ui тестов, не удалять!!!"
-            android:id="@+id/progress_bar"
-            android:layout_gravity="center"
+        <variable
+            name="viewModel"
+            type="com.topface.topface.ui.views.locker_view.LockerViewViewModel"/>
+    </data>
+
+    <RelativeLayout
+        style="@style/LoadingLocker"
+        android:visibility="@{viewModel.visibility}">
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal"
+            android:visibility="@{viewModel.visibility}">
 
-        <TextView
-            android:id="@+id/text"
-            style="@style/LoadingLockerText"/>
-    </LinearLayout>
-</RelativeLayout>
+            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{viewModel.visibility}"
+                app:plc="@{viewModel.plc}"
+                documentation:info="приложение не использует этот id, но он нужен для ui тестов, не удалять!!!"/>
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/LoadingLockerText"
+                android:visibility="@{viewModel.visibility}"/>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

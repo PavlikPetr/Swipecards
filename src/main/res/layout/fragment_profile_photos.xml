@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.fragments.profile.ProfilePhotoFragmentViewModel"/>
+            type="com.topface.topface.ui.fragments.profile.ProfilePhotoFragmentViewModel" />
 
     </data>
 
@@ -32,7 +33,7 @@
                 android:horizontalSpacing="@dimen/add_to_leader_spacing_value"
                 android:listSelector="@android:color/transparent"
                 android:padding="@dimen/add_to_leader_spacing_value"
-                android:verticalSpacing="@dimen/add_to_leader_spacing_value"/>
+                android:verticalSpacing="@dimen/add_to_leader_spacing_value" />
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -52,7 +53,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
                         android:onClick="@{() -> viewModel.takeCameraPhoto.invoke()}"
-                        android:text="@string/profile_add_camera"/>
+                        android:text="@string/profile_add_camera" />
 
                     <Button
                         android:id="@+id/btnAddPhotoAlbum"
@@ -63,7 +64,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="14dp"
                         android:onClick="@{() -> viewModel.takeAlbumPhoto.invoke()}"
-                        android:text="@string/profile_add_album"/>
+                        android:text="@string/profile_add_album" />
 
                     <Button
                         android:id="@+id/btnCancel"
@@ -74,15 +75,15 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="26dp"
                         android:onClick="@{() -> viewModel.onCancelClick()}"
-                        android:text="@string/general_cancel"/>
+                        android:text="@string/general_cancel" />
                 </LinearLayout>
             </android.support.v4.widget.NestedScrollView>
         </ViewFlipper>
 
-        <com.topface.topface.ui.views.LockerView
+        <com.topface.topface.ui.views.locker_view.LockerView
             android:id="@+id/fppLocker"
             style="@style/LoadingLocker"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:plc="profile_photos_locker_view" />
     </RelativeLayout>
-
 </layout>
