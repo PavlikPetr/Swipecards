@@ -1,4 +1,5 @@
 build
+/libs/processor.jar
 /bin
 /gen
 /out
