@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/tvLoaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
         android:layout_centerInParent="true"
+        android:background="@drawable/btn_invite"
         android:text="@string/general_dialog_retry"
-        android:background="@drawable/btn_invite"/>
+        android:textColor="#FFFFFF" />
 
-    <ProgressBar
+    <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
         android:id="@+id/prsLoader"
         style="@style/TopFaceProgressBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        app:plc="chat_list_retrier_loader" />
 
 </RelativeLayout>

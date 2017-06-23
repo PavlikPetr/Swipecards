@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.likes
 
 import android.view.View
-import com.topface.topface.App
 import com.topface.topface.data.CountersData
 import com.topface.topface.data.FeedLike
 import com.topface.topface.databinding.FragmentFeedBaseBinding
@@ -11,7 +10,6 @@ import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
 import com.topface.topface.ui.fragments.feed.feed_base.BaseFeedFragmentViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.fragments.feed.feed_utils.getUserId
-import com.topface.topface.utils.ads.AdmobInterstitialUtils
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
@@ -55,7 +53,5 @@ class LikesFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedN
     override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?, from: String) {
         super.itemClick(view, itemPosition, data, TYPE_FEED_FRAGMENT)
         ReadLikeRequest(context, data.getUserId()).exec()
-        AdmobInterstitialUtils.
-                requestPreloadedInterstitial(context, App.get().options.interstitial)
     }
 }

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/bg_white"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -22,7 +23,7 @@
 
             <RelativeLayout
                 android:id="@+id/fieldContainer_layout"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="18dp"
                 android:layout_marginTop="18dp"
@@ -48,7 +49,7 @@
             <Button
                 android:id="@+id/btnChange"
                 style="@style/Widget.Topface.Button.Big.Blue"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/change_password"
                 android:visibility="gone" />
@@ -56,7 +57,7 @@
             <Button
                 android:id="@+id/btnChangeEmail"
                 style="@style/Widget.Topface.Button.Big.Gray"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/change_email"
@@ -65,7 +66,7 @@
             <Button
                 android:id="@+id/btnLogout"
                 style="@style/Widget.Topface.Button.Big.Gray"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/settings_logout"
@@ -74,7 +75,7 @@
             <Button
                 android:id="@+id/btnCodeWasSend"
                 style="@style/Widget.Topface.Button.Big.Gray"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/settings_email_was_confirmed"
@@ -82,7 +83,7 @@
 
             <TextView
                 android:id="@+id/txtCodeWasSend"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingTop="6dp"
@@ -95,7 +96,7 @@
 
         <TextView
             android:id="@+id/btnDeleteAccount"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingBottom="10dp"
@@ -105,10 +106,11 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <com.topface.topface.ui.views.LockerView
+    <com.topface.topface.ui.views.locker_view.LockerView
         android:id="@+id/llvLogoutLoading"
         style="@style/LoadingLocker"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:plc="topface_account_locker_view" />
 </RelativeLayout>

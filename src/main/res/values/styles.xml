@@ -2032,4 +2032,8 @@
         <item name="android:paddingRight">@dimen/empty_value</item>
     </style>
 
+    <style name="BonusButtonStyle">
+        <item name="android:background">@drawable/white_list_item_selector</item>
+    </style>
+
 </resources>

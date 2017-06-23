@@ -55,6 +55,5 @@
             android:layout_gravity="center"
             android:visibility="@{viewModel.progressVisibility}"
             tools:visibility="visible"/>
-
     </FrameLayout>
 </layout>

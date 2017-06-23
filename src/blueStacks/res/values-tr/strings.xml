@@ -128,6 +128,7 @@
     <item quantity="one">%d dakika</item>
   </plurals>
   <string name="general_error">HATA</string>
+  <string name="general_error_normal">Hata</string>
   <string name="general_yes">Evet</string>
   <string name="general_no">Hayır</string>
   <string name="general_cancel">İptal</string>
@@ -1040,4 +1041,6 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="get_vip">VIP Satın al</string>
   <string name="payment_ninja_autofill_title">Otomatik yükleme</string>
   <string name="payment_ninja_autofill_link">Servis Kuralları</string>
+  <string name="get_free">Ücretsiz Al</string>
+  <string name="product_coast">%s karşılığında</string>
 </resources>

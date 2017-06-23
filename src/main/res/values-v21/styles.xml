@@ -231,6 +231,10 @@
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
 
+    <style name="PopupGreenButtonBackground">
+        <item name="android:background">@drawable/green_button_selector_21</item>
+    </style>
+
     <style name="AddPaymentNinjaCardView" parent="AddPaymentNinjaCardViewBase">
         <item name="android:background">@drawable/green_button_selector_21</item>
     </style>
@@ -242,6 +246,10 @@
 
     <style name="FBBlueButton.Background">
         <item name="android:background">@drawable/blue_button_selector_21</item>
+    </style>
+
+    <style name="BonusButtonStyle">
+        <item name="android:background">@drawable/white_list_item_ripple</item>
     </style>
 
 </resources>

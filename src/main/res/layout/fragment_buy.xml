@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,13 +16,13 @@
 
             <TextView
                 android:id="@+id/payReasonFragmentBuy"
-                style="@style/PayReasonView" />
+                style="@style/PayReasonView"/>
 
             <ViewStub
                 android:id="@+id/EditorTestStub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout="@layout/fragment_buy_editor" />
+                android:layout="@layout/fragment_buy_editor"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -36,7 +37,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/general_buying_disabled"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/likes_title"
@@ -45,14 +46,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/buy_screen_products_likes_section_padding_bottom"
                     android:layout_marginTop="@dimen/buy_screen_products_likes_section_padding_top"
-                    android:text="@string/buying_sympathies" />
+                    android:text="@string/buying_sympathies"/>
 
                 <LinearLayout
                     android:id="@+id/fbLikes"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-
+                    android:orientation="vertical"/>
                 <!-- Money -->
                 <TextView
                     android:id="@+id/coins_title"
@@ -61,22 +61,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/buy_screen_products_coins_section_padding_bottom"
                     android:layout_marginTop="@dimen/buy_screen_products_coins_section_padding_top"
-                    android:text="@string/buying_money" />
+                    android:text="@string/buying_money"/>
 
                 <LinearLayout
                     android:id="@+id/fbCoins"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:orientation="vertical" />
+                    android:orientation="vertical"/>
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <ProgressBar
+    <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
         android:id="@+id/purchases_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:plc="fragment_buy_main_loader" />
 </RelativeLayout>

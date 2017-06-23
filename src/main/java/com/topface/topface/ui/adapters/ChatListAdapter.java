@@ -44,6 +44,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private static final int T_USER_POPULAR_2 = 9;
     private static final int T_AUTO_REPLY = 10;
     private static final int T_COUNT = 11;
+    private static final String PLC = "chat_list_loader";
     private HashMap<History, ApiRequest> mHashRequestByWaitingRetryItem = new HashMap<>();
     private ArrayList<History> mUnrealItems = new ArrayList<>();
     private ArrayList<History> mShowDatesList = new ArrayList<>();
@@ -84,6 +85,11 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
             default:
                 return output ? T_USER : T_FRIEND;
         }
+    }
+
+    @Override
+    String getPlc() {
+        return PLC;
     }
 
     @Override
@@ -463,7 +469,7 @@ public class ChatListAdapter extends LoadingListAdapter<History> implements AbsL
     private boolean setMessageHtmlContent(ViewHolder holder, History item) {
         if (holder != null && holder.message != null) {
             if (item.text != null && !item.text.equals(Utils.EMPTY)) {
-                holder.message.setText(Html.fromHtml(item.text.replace("\n","<br />")));
+                holder.message.setText(Html.fromHtml(item.text.replace("\n", "<br />")));
                 // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
                 // Если нашли, то добавим им кликабельность
                 // в остальных случаях holder.message будет кликаться на onItemClickListener

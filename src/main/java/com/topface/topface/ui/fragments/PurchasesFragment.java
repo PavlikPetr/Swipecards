@@ -347,16 +347,17 @@ public class PurchasesFragment extends BaseFragment {
     }
 
     private void sendResourceInfoTextBroadcast() {
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(getUpdateResourceInfoTextIntent(mResourceInfoText));
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(getUpdateResourceAndFromInfoTextIntent(mResourceInfoText));
     }
 
     private void setResourceInfoText() {
         setResourceInfoText(getInfoText());
     }
 
-    private Intent getUpdateResourceInfoTextIntent(String text) {
+    private Intent getUpdateResourceAndFromInfoTextIntent(String text) {
         Intent intent = new Intent(OpenIabFragment.UPDATE_RESOURCE_INFO);
         intent.putExtra(PurchasesConstants.ARG_RESOURCE_INFO_TEXT, text);
+        intent.putExtra(PurchasesConstants.ARG_TAG_SOURCE, getArguments().getString(PurchasesConstants.ARG_TAG_SOURCE,""));
         return intent;
     }
 }

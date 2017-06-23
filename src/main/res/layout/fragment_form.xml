@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/fragmentFormList"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        style="@style/FormListSelector"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:cacheColorHint="#00000000"
         android:divider="@drawable/gray_list_divider"
         android:dividerHeight="1dp"
         android:fadeScrollbars="true"
         android:fadingEdge="none"
-        android:headerDividersEnabled="false"
-        style="@style/FormListSelector" />
+        android:headerDividersEnabled="false" />
 
     <LinearLayout
         android:id="@+id/loEmptyForm"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:layout_centerInParent="true"
@@ -28,7 +29,7 @@
         <TextView
             android:id="@+id/tvEmptyForm"
             style="@style/GrayText"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -46,21 +47,22 @@
             android:text="@string/profile_ask_form" />
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <ProgressBar
+            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
                 android:id="@+id/pgbProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:plc="form_fragment_loader" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/emptyFormSuccess"
             style="@style/GrayText"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
@@ -68,7 +70,5 @@
             android:gravity="center"
             android:text="@string/profile_ask_sent"
             android:visibility="gone" />
-
     </LinearLayout>
-
 </RelativeLayout>

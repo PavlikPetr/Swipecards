@@ -97,8 +97,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mMessageChangeSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mResendSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
+    private var mUpdateAdapterSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -112,6 +114,12 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mBlockChatType: Int = UNDEFINED
 
     /**
+     * Флаг запоминающий надо или нет показывать в обрамлении самого старого элемента чата
+     * текст "Взаимная симпатия"
+     */
+    private var mIsNeedShowMutualDivider = false
+
+    /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
      * подарочков юзера в дейтинге. Как только дейтинг будет переделан на новый скраффи, там сразу
      * можно будет лофить ивент об успешном отправлении подарочка, и сразу его добавлять
@@ -119,16 +127,11 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    fun initUpdateSubscriptions(updateObservable: Observable<Bundle>?) {
-        val adapterUpdateObservable = updateObservable
-                ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
-                ?: Observable.empty()
+    init {
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
-                createVipBoughtObservable(),
-                adapterUpdateObservable
+                createVipBoughtObservable()
                 /*,createP2RObservable()*/)
                 .filter { it.first == mUser?.id }
                 .filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
@@ -136,6 +139,19 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
+
+        mResendSubscription = mEventBus.getObservable(SendHistoryItemEvent::class.java).subscribe(shortSubscription {
+            HistoryItemSender.send(mSendMessageSubscription, mApi, it.item, mUser?.id ?: 0,
+                    {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                    },
+                    {
+                        chatResult?.setResult(createResultIntent())
+                    }
+            )
+        })
+
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
                 .subscribe(shortSubscription { mIsPremium = it.premium })
@@ -146,6 +162,17 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     deleteComplete ->
                     removeByPredicate { deleteComplete.items.contains(it.id) }
                     chatResult?.setResult(createResultIntent())
+                })
+    }
+
+    fun initUpdateAdapterSubscription(updateObservable: Observable<Bundle>?) {
+        mUpdateAdapterSubscription = updateObservable
+                ?.distinct { it.getInt(LAST_ITEM_ID) }
+                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
+                ?.filter { it.first == mUser?.id }
+                ?.filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
+                ?.subscribe(shortSubscription {
+                    update(it)
                 })
     }
 
@@ -248,13 +275,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     /**
-     * Удаляем итемы с id = 0, т.к. на данный момент у нас есть нормальные итемы,
+     * Удаляем итемы с id = 0 (и только если они не отсылаются в данный момент),
+     * т.к. на данный момент у нас есть нормальные итемы,
      * которыми можно заменить заглушки(ну так серверные говрят по крайней мере)
      */
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate { it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate { (it.id == 0 && !it.isSending.get()) || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -301,6 +329,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         isEditTextEnable.set(true)
                         chatData.clear()
                     }
+                    mIsNeedShowMutualDivider = !it.more && (it.mutualTime != 0)
                     when {
                         isMessage(chatData) -> {
                             mBlockChatType = NO_BLOCK
@@ -360,7 +389,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun addMessages(newData: History): ArrayList<HistoryItem> {
         val items = ArrayList<HistoryItem>()
-        newData.items.forEach { items.add(wrapHistoryItem(it)) }
+        newData.items.forEach {
+            it.isMutual = mIsNeedShowMutualDivider
+            items.add(wrapHistoryItem(it))
+        }
         removeStubItems()
         return items
     }
@@ -466,7 +498,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION)))
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
+                                isMutual = mIsNeedShowMutualDivider)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
@@ -514,6 +547,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         giftAnswerToHistoryItem(sendGiftAnswer.apply { history.unread = false })?.let {
                             mHasStubItems = true
                             mIsSendMessage = true
+                            it.isMutual = mIsNeedShowMutualDivider
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
                         }
@@ -564,12 +598,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         navigator = null
         overflowMenu = null
         activityFinisher = null
+        mUpdateAdapterSubscription.safeUnsubscribe()
     }
 
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mMessageChangeSubscription, mUpdateHistorySubscription,
-                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
+                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription,
+                mResendSubscription).safeUnsubscribe()
     }
 
 }

@@ -176,6 +176,9 @@
     <color name="button_green_bg_pressed_color">#16e170</color>
     <color name="button_green_bg_released_color">#00c055</color>
     <color name="button_green_bg_disable_color">#a7faba</color>
+    <!-- purchase gp design version 1 -->
+    <color name="purchase_v1_card_background_normal">#FFFFFF</color>
+    <color name="purchase_v1_card_background_pressed">#F9F9F9</color>
 
     <!--Vip liberty info-->
     <color name="main_title_text_color">#212121</color>
@@ -342,4 +345,8 @@
     <color name="borderless_button_release">#FFFFFF</color>
     <color name="chat_input_hint_color">#61000000</color>
     <color name="chat_background">#f5f5f5</color>
+
+    <!--Offerwalls-->
+    <color name="offerwall_button_text_color">#1e1e1e</color>
+    <color name="offerwall_divider_color">#dbdbdb</color>
 </resources>

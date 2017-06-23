@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_white"
@@ -23,9 +23,9 @@
                 android:id="@+id/tvLocale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:text="@string/incorrect_locale"
                 android:textColor="#8A8A8A"
-                android:layout_marginBottom="24dp"
                 android:textSize="14sp" />
 
             <EditText
@@ -50,9 +50,9 @@
                 android:id="@+id/edEmail"
                 style="@style/FeedbackEditText"
                 android:layout_height="34dp"
+                android:layout_marginTop="20dp"
                 android:hint="@string/general_input_email"
                 android:inputType="textEmailAddress"
-                android:layout_marginTop="20dp"
                 android:singleLine="true"
                 android:visibility="visible" />
 
@@ -77,9 +77,9 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.topface.topface.ui.views.LockerView
+    <com.topface.topface.ui.views.locker_view.LockerView
         android:id="@+id/fbLoadingLocker"
         style="@style/LoadingLocker"
-        android:visibility="gone" />
-
+        android:visibility="gone"
+        app:plc="feedback_message_locker_view" />
 </RelativeLayout>

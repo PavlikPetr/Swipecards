@@ -58,6 +58,4 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
     }
 
     override fun closeFragmentByForm() = onFeedUnlocked()
-
-    override fun getPageName() = PageInfo.PageName.UNKNOWN_PAGE
 }

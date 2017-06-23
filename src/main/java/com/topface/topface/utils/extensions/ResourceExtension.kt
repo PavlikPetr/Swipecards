@@ -7,13 +7,11 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorRes
 import android.support.annotation.DimenRes
 import android.support.annotation.DrawableRes
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import com.topface.topface.App
 import com.topface.topface.R
 import java.util.*
-
-/**
- * Created by petrp on 09.10.2016.
- */
 
 @JvmOverloads
 fun Int.getString(default: String = ""): String {
@@ -77,6 +75,14 @@ fun Int.getDrawable(): Drawable? {
         res = null
     }
     return res
+}
+
+fun Int.getAnimation(): Animation? {
+    try {
+        return AnimationUtils.loadAnimation(App.getContext(), this)
+    } catch(e: Resources.NotFoundException) {
+        return null
+    }
 }
 
 fun Int.isHasNotification(): Boolean {

@@ -47,6 +47,7 @@ import com.topface.topface.ui.fragments.ChatFragment;
 import com.topface.topface.ui.fragments.EditorProfileActionsFragment;
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator;
 import com.topface.topface.ui.fragments.profile.photoswitcher.view.PhotoSwitcherActivity;
+import com.topface.topface.ui.views.ProgressBarWithAlpha;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager;
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData;
@@ -70,7 +71,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
     // views
     private RelativeLayout mLockScreen;
     private RetryViewCreator mRetryView;
-    private View mLoaderView;
+    private ProgressBarWithAlpha mLoaderView;
     private ArrayList<FeedGift> mNewGifts;
     private View mOutsideView;
     // for profile forwarding
@@ -127,7 +128,7 @@ public class UserProfileFragment extends AbstractProfileFragment {
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         }
         mRateController = new RateController(this, SendLikeRequest.FROM_PROFILE);
-        mLoaderView = root.findViewById(R.id.viewPagerLoader);
+        mLoaderView = (ProgressBarWithAlpha) root.findViewById(R.id.viewPagerLoader);
         mOutsideView = root.findViewById(R.id.outsideView);
         mOutsideView.setOnClickListener(new View.OnClickListener() {
             @Override

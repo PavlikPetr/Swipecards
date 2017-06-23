@@ -65,6 +65,9 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
             case 2:
                 mBtnHandler.titleTextColor.set(R.drawable.btn_blue_disable_text_color_selector);
                 return;
+            case 3:
+                mBtnHandler.titleTextColor.set(R.drawable.btn_blue_disable_text_color_selector);
+                return;
             default:
                 mBtnHandler.titleTextColor.set(R.drawable.btn_gray_text_color_selector);
         }
@@ -81,6 +84,9 @@ public class BuyButtonVer1 extends BuyButton<BuyButtonVer1.BuyButtonBuilder> {
                 return;
             case 2:
                 mBtnHandler.containerBackgroundRes.set(discount ? R.drawable.btn_sale_blue_disabled : R.drawable.btn_blue_shape_disabled);
+                return;
+            case 3:
+                mBtnHandler.containerBackgroundRes.set(R.drawable.btn_green_selector);
                 return;
             default:
                 mBtnHandler.containerBackgroundRes.set(discount ? R.drawable.btn_sale_gray_selector : R.drawable.btn_gray_selector);

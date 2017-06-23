@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/item_list_selector"
@@ -39,11 +40,12 @@
         android:layout_height="wrap_content"
         android:gravity="center">
 
-        <ProgressBar
+        <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
             android:id="@+id/contact_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            app:plc="sms_invite_in_progress"
             android:gravity="center" />
 
         <Button

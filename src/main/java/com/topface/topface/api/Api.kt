@@ -53,4 +53,6 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
     override fun observeSendMessage() = mScruffyManager.mEventManager
             .observeEventInBackground(DialogGetRequest.REQUEST_METHOD_NAME, History::class.java)
             .applySchedulers()
+
+    override fun callBannerGetCommon(startNumber: Long) = BannerSettingsRequest(startNumber).subscribe()
 }

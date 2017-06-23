@@ -221,6 +221,20 @@ public abstract class AbstractConfig {
         }
     }
 
+    public void registerOnChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        SharedPreferences prefs = getPreferences();
+        if (prefs != null && listener != null) {
+            prefs.registerOnSharedPreferenceChangeListener(listener);
+        }
+    }
+
+    public void unregisterOnChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        SharedPreferences prefs = getPreferences();
+        if (prefs != null && listener != null) {
+            prefs.unregisterOnSharedPreferenceChangeListener(listener);
+        }
+    }
+
     /**
      * Override to save additional data
      * Method is called when saveConfig obtain editor object

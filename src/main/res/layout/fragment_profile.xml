@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/bg_white"
@@ -15,6 +16,7 @@
         android:id="@+id/viewPagerLoader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:plc="profile_fragment_main_loader"
         android:layout_centerInParent="true" />
 
     <View
@@ -39,9 +41,10 @@
         android:background="@color/bg_white"
         android:visibility="gone" />
 
-    <com.topface.topface.ui.views.LockerView
+    <com.topface.topface.ui.views.locker_view.LockerView
         android:id="@+id/llvProfileLoading"
         style="@style/LoadingLocker"
+        app:plc="profile_locker_view"
         android:visibility="gone" />
 
 </RelativeLayout>

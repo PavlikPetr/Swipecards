@@ -32,28 +32,28 @@ data class ChatComplainEvent(var itemPosition: Int = 0)
  */
 class UserGift(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * итем чата - подарок от собеседника
  */
 class FriendGift(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * итем чата - сообщение от пользователя
  */
 class UserMessage(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * итем чата - сообщение от собеседника
  */
 class FriendMessage(item: HistoryItem) :
         HistoryItem(item.text, item.latitude, item.longitude, item.type,
-                item.id, item.created, item.target, item.unread, item.link)
+                item.id, item.created, item.target, item.unread, item.link, item.isMutual)
 
 /**
  * заглушка чата про взаимные симпатии
@@ -80,7 +80,7 @@ class BuyVipStub : IChatItem {
 }
 
 /**
- * интерфейс макирующий итемы чата, в частности для разбора базового HistoryItem
+ * интерфейс маскирующий итемы чата, в частности для разбора базового HistoryItem
  */
 interface IChatItem {
     fun getItemType(): Int
