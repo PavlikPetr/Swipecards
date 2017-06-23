@@ -15,29 +15,38 @@ import org.jetbrains.anko.layoutInflater
  * Кастомная вью лоадера с текстом
  * Created by petrp on 28.03.2017.
  */
-class LockerView constructor(context: Context, attrs: AttributeSet?,
-                             defStyleAttr: Int,
-                             defStyleRes: Int) : RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {
+class LockerView : RelativeLayout {
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0) {
-        attrs?.let {
-            parseAttribute(it, defStyleAttr)
-        }
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+        initialize(attrs, defStyleAttr)
     }
 
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        initialize(attrs, defStyleAttr)
+    }
 
-    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        initialize(attrs)
+    }
+
+    constructor(context: Context) : super(context) {
+        initialize()
+    }
+
+    private var mPlc = StatisticsProgressBar.PLC_UNDEFINED
+    private var mViewModel: LockerViewViewModel? = null
 
     private val mBinding by lazy {
         DataBindingUtil.inflate<LayoutLockerViewBinding>(context.layoutInflater, R.layout.layout_locker_view, null, false)
     }
 
-    private val mViewModel by lazy {
-        LockerViewViewModel(mPlc)
+    private fun initialize(attrs: AttributeSet? = null, defStyleAttr: Int = 0) {
+        mViewModel = LockerViewViewModel(mPlc)
+        attrs?.let {
+            parseAttribute(it, defStyleAttr)
+        }
+        mViewModel?.visibility?.set(visibility)
     }
-
-    private var mPlc = StatisticsProgressBar.PLC_UNDEFINED
 
     private fun parseAttribute(attrs: AttributeSet, defStyleAttr: Int) {
         val a = context.obtainStyledAttributes(attrs, R.styleable.StatisticsProgressBar, defStyleAttr, 0)
@@ -45,19 +54,21 @@ class LockerView constructor(context: Context, attrs: AttributeSet?,
         a.recycle()
     }
 
-    fun setPlc(plc: String) {
-        mPlc = plc
-        mViewModel.plc.set(plc)
+    fun setPlc(plc: String?) {
+        if (mPlc.isNullOrEmpty() || mPlc == StatisticsProgressBar.PLC_UNDEFINED) {
+            mPlc = plc ?: StatisticsProgressBar.PLC_UNDEFINED
+            mViewModel?.plc?.set(plc)
+        }
     }
 
     override fun onVisibilityChanged(changedView: View?, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
-        mViewModel.visibility.set(visibility)
+        mViewModel?.visibility?.set(visibility)
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        mBinding.viewModel = mViewModel.apply { visibility.set(this@LockerView.visibility) }
+        mBinding.viewModel = mViewModel?.apply { visibility.set(this@LockerView.visibility) }
         mBinding.executePendingBindings()
     }
 

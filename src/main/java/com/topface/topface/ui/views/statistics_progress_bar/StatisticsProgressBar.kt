@@ -21,20 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * ProgressBar для отравки статистики
  * Created by ppavlik on 24.03.17.
  */
-open class StatisticsProgressBar constructor(context: Context, attrs: AttributeSet?,
-                                             defStyleAttr: Int,
-                                             defStyleRes: Int) :
-        ProgressBar(context, attrs, defStyleAttr, defStyleRes) {
-
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : this(context, attrs, defStyleAttr, 0) {
-        attrs?.let {
-            parseAttribute(it, defStyleAttr)
-        }
-    }
-
-    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-
-    constructor(context: Context) : this(context, null)
+open class StatisticsProgressBar : ProgressBar {
 
     companion object {
         const val TAG = "StatisticsProgressBar"
@@ -45,6 +32,26 @@ open class StatisticsProgressBar constructor(context: Context, attrs: AttributeS
     private var mEmitter: Emitter<Boolean>? = null
     private var mSubscription = CompositeSubscription()
     private var mIsNeedSendPost: AtomicBoolean = AtomicBoolean(false)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
+        attrs?.let {
+            parseAttribute(it, defStyleAttr)
+        }
+    }
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        attrs?.let {
+            parseAttribute(it, defStyleAttr)
+        }
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        attrs?.let {
+            parseAttribute(it, 0)
+        }
+    }
+
+    constructor(context: Context) : super(context)
 
     init {
         mSubscription.add(Observable.fromEmitter<Boolean>({ emitter ->
