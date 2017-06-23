@@ -130,26 +130,24 @@ class ExperimentBoilerplateFragment : DialogFragmentWithSafeTransaction(), IRunn
         mBinding.content.addView(mContentBinding.root)
     }
 
-    private fun incrPopupShowCounter() = with(App.getUserConfig()) {
+    private fun incrementPopupShowCounter() = with(App.getUserConfig()) {
         setQueueTrialVipPopupCounter(queueTrialVipCounter + 1)
         saveConfig()
     }
 
     override fun onCancel(dialog: DialogInterface?) {
         super.onCancel(dialog)
-        TrialVipExperimentStatistics.sendPopupClose()
         cancelListener?.onCancel(dialog)
-        onFragmentFinishDelegate?.closeFragmentByForm()
     }
 
     override fun onDismiss(dialog: DialogInterface?) {
         super.onDismiss(dialog)
         dismissListener?.onDismiss(dialog)
-        with(arguments) {
-            if (this != null && !getBoolean(SKIP_SHOWING_CONDITION)) {
-                incrPopupShowCounter()
-            }
+        if (arguments?.getBoolean(SKIP_SHOWING_CONDITION)?.not() ?: false) {
+            incrementPopupShowCounter()
         }
+        TrialVipExperimentStatistics.sendPopupClose()
+        onFragmentFinishDelegate?.closeFragmentByForm()
     }
 
     override fun onDestroy() {
