@@ -1042,5 +1042,5 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
   <string name="payment_ninja_autofill_title">Otomatik yükleme</string>
   <string name="payment_ninja_autofill_link">Servis Kuralları</string>
   <string name="get_free">Ücretsiz Al</string>
-  <string name="product_coast">%s karşılığında</string>
+  <string name="product_coast">%s ücretinde</string>
 </resources>
