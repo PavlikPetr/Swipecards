@@ -387,6 +387,13 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         return appComponent;
     }
 
+    public void initComponents(){
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(mContext))
+                .build();
+        appComponent.inject(App.get());
+    }
+
     @Override
     public void onCreate() {
         /**
@@ -399,10 +406,7 @@ public class App extends ApplicationBase implements IStateDataUpdater {
         }
         super.onCreate();
         mContext = getApplicationContext();
-        appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(mContext))
-                .build();
-        appComponent.inject(this);
+        initComponents();
         LeakCanary.install(this);
         FlurryManager.getInstance().init();
         // Отправка ивента о запуске приложения, если пользователь авторизован в FB
