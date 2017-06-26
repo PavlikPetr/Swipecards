@@ -162,3 +162,6 @@ class InvisibleModeSwitch
 
 // Black list item on Payment Ninja purchase screen
 class BlackListItem
+
+// Description about different exchange rates for a different banks
+class CurrencyNotice

@@ -11,6 +11,7 @@ import com.topface.topface.data.*
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.ui.fragments.buy.pn_purchase.PaymentNinjaProduct
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomSheetData
+import java.util.*
 
 /**
  * Интерфейс навигации в  фидах
@@ -60,4 +61,5 @@ interface IFeedNavigator {
     fun showComplainScreen(userId: Int, feedId: String? = null, isNeedResult: Boolean? = null)
     fun showUserIsTooPopularLock(user: FeedUser)
     fun showBlackList()
+    fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit )
 }

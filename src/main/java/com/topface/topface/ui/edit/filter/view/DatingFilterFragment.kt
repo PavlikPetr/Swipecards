@@ -13,9 +13,12 @@ import com.topface.topface.databinding.DatingFilterBinding
 import com.topface.topface.ui.edit.AbstractEditFragment
 import com.topface.topface.ui.edit.filter.model.FilterData
 import com.topface.topface.ui.edit.filter.viewModel.DatingFilterViewModel
+import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.ui.views.toolbar.utils.ToolbarManager
 import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.utils.IActivityDelegate
+import com.topface.topface.utils.registerLifeCycleDelegate
+import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
 
 class DatingFilterFragment : AbstractEditFragment() {
@@ -27,6 +30,10 @@ class DatingFilterFragment : AbstractEditFragment() {
         const val PAGE_NAME = "Filter"
     }
 
+    private val mFeedNavigator by lazy {
+        FeedNavigator(activity as IActivityDelegate)
+    }
+
     private var mFilter: FilterData? = null
 
     private val preFilter by lazy {
@@ -36,7 +43,7 @@ class DatingFilterFragment : AbstractEditFragment() {
         DataBindingUtil.inflate<DatingFilterBinding>(context.layoutInflater, R.layout.dating_filter, null, false)
     }
 
-    private val mViewModel by lazy { DatingFilterViewModel(activity as IActivityDelegate, mFilter ?: initFilter()) }
+    private val mViewModel by lazy { DatingFilterViewModel(mFeedNavigator, mFilter ?: initFilter()) }
 
     override fun getScreenName(): String = PAGE_NAME
 
@@ -45,6 +52,7 @@ class DatingFilterFragment : AbstractEditFragment() {
         if (savedInstanceState != null && savedInstanceState.containsKey(CURRENT_FILTER_VALUE)) {
             mFilter = savedInstanceState.getParcelable<FilterData>(CURRENT_FILTER_VALUE)
         }
+        (activity as IActivityDelegate).registerLifeCycleDelegate(mViewModel)
         mBinding.viewModel = mViewModel
         return mBinding.root
     }
@@ -68,7 +76,7 @@ class DatingFilterFragment : AbstractEditFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mViewModel.release()
+        (activity as IActivityDelegate).unregisterLifeCycleDelegate(mViewModel)
     }
 
     override fun hasChanges() = mFilter != null && FilterData(mViewModel) != preFilter

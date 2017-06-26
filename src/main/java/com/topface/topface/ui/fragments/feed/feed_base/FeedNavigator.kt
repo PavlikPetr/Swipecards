@@ -25,6 +25,7 @@ import com.topface.topface.experiments.onboarding.question.QuestionnaireActivity
 import com.topface.topface.statistics.TakePhotoStatistics
 import com.topface.topface.ui.*
 import com.topface.topface.ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity
+import com.topface.topface.ui.dialogs.CitySearchPopup
 import com.topface.topface.ui.dialogs.new_rate.RateAppFragment
 import com.topface.topface.ui.dialogs.take_photo.TakePhotoPopup
 import com.topface.topface.ui.dialogs.trial_vip_experiment.base.ExperimentBoilerplateFragment
@@ -50,6 +51,7 @@ import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.ModalBottomShe
 import com.topface.topface.ui.settings.payment_ninja.bottom_sheet.SettingsPaymentNinjaModalBottomSheet
 import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.Utils
+import java.util.*
 
 /**
  * Класс для управления переходами между эркраними в фидах
@@ -327,4 +329,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     override fun showBlackList() {
         mActivityDelegate.startActivity(Intent(mActivityDelegate.applicationContext, BlackListActivity::class.java))
     }
+
+    override fun showSelectCityPopup(defaultCities: ArrayList<City>?, onCitySelectedAction: (City) -> Unit) =
+        with(CitySearchPopup.newInstance(null, defaultCities)) {
+            setOnCitySelected { onCitySelectedAction(it) }
+            show(mActivityDelegate.supportFragmentManager, CitySearchPopup.TAG)
+        }
 }

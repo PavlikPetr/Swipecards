@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.topface.topface.ui.edit.filter.viewModel.DatingFilterViewModel"/>
+            type="com.topface.topface.ui.edit.filter.viewModel.DatingFilterViewModel" />
 
     </data>
 
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:text="@string/filter_select_sex_title"/>
+                    android:text="@string/filter_select_sex_title" />
 
                 <CheckBox
                     android:id="@+id/sex_male"
@@ -45,20 +45,20 @@
                     android:layout_marginRight="20dp"
                     android:checked="@{viewModel.isMaleSelected}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{()->viewModel.onMaleCheckBoxClick()}"
-                    android:text="@string/filter_select_sex_male"/>
+                    android:onClick="@{() -> viewModel.onMaleCheckBoxClick()}"
+                    android:text="@string/filter_select_sex_male" />
 
                 <CheckBox
                     android:id="@+id/sex_female"
                     style="@style/DatingFilterCheckBox"
                     android:checked="@{!viewModel.isMaleSelected}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{()->viewModel.onFemaleCheckBoxClick()}"
-                    android:text="@string/filter_select_sex_female"/>
+                    android:onClick="@{() -> viewModel.onFemaleCheckBoxClick()}"
+                    android:text="@string/filter_select_sex_female" />
 
             </LinearLayout>
 
-            <FrameLayout style="@style/FilterDivider"/>
+            <FrameLayout style="@style/FilterDivider" />
 
             <TextView
                 style="@style/DatingFilterItemTextStyle.Title"
@@ -67,9 +67,9 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="@dimen/filter_both_side_item_padding"
                 android:paddingRight="@dimen/filter_both_side_item_padding"
-                android:text="@string/basic_information"/>
+                android:text="@string/basic_information" />
 
-            <FrameLayout style="@style/FilterDivider"/>
+            <FrameLayout style="@style/FilterDivider" />
 
             <LinearLayout
                 style="@style/DatingFilterItemView"
@@ -89,13 +89,13 @@
                     app:maxValueTitle="@{viewModel.MAX_AGE_TITLE}"
                     app:minValue="@{viewModel.MIN_AGE}"
                     app:minValueTitle="@{viewModel.MIN_AGE_TITLE}"
-                    app:setOnRangeSeekBarChangeListener="@{viewModel}"
                     app:range="5"
+                    app:setOnRangeSeekBarChangeListener="@{viewModel}"
                     app:textColor="@color/filter_item_text_color"
                     app:textPadding="@dimen/filter_value_padding"
-                    app:textSize="@dimen/filter_item_text_size"/>
+                    app:textSize="@dimen/filter_item_text_size" />
 
-                <FrameLayout style="@style/FilterDivider"/>
+                <FrameLayout style="@style/FilterDivider" />
 
                 <TextView
                     android:id="@+id/choose_city"
@@ -105,22 +105,37 @@
                     android:layout_weight="1"
                     android:drawableRight="@drawable/ic_next"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{()->viewModel.onSelectCityClick()}"
+                    android:onClick="@{() -> viewModel.onSelectCityClick()}"
                     android:paddingLeft="@dimen/filter_both_side_item_padding"
                     android:paddingRight="@dimen/filter_both_side_item_padding"
-                    android:text="@{viewModel.city.name}"/>
+                    android:text="@{viewModel.city.name}" />
 
-                <FrameLayout style="@style/FilterDivider"/>
+                <FrameLayout style="@style/FilterDivider" />
 
                 <CheckBox
                     android:id="@+id/online_only"
                     style="@style/DatingFilterSwitch"
                     android:checked="@{viewModel.onlineOnly}"
                     android:enabled="@{viewModel.isEnabled}"
-                    android:onClick="@{(view)->viewModel.onOnlineOnlyClick(view)}"
-                    android:text="@string/filter_only_online"/>
+                    android:onClick="@{(view) -> viewModel.onOnlineOnlyClick(view)}"
+                    android:text="@string/filter_only_online" />
 
-                <FrameLayout style="@style/FilterDivider"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onPrettyOnlyClick()}"
+                    android:visibility="@{viewModel.isPrettyVisible}">
+
+                    <CheckBox
+                        android:id="@+id/pretty_only"
+                        style="@style/DatingFilterSwitch"
+                        android:checked="@{viewModel.isPrettyOnly}"
+                        android:clickable="false"
+                        android:enabled="@{viewModel.isEnabled}"
+                        android:text="@string/filter_only_beautiful" />
+                </FrameLayout>
+
+                <FrameLayout style="@style/FilterDivider" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
