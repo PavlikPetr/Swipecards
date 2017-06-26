@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:key="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="chatViewModel"
-            type="com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel"/>
+            type="com.topface.topface.ui.fragments.feed.enhanced.chat.ChatViewModel" />
 
     </data>
 
@@ -17,86 +16,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_holo"
-        key:estimatedLayoutHeight="70">
+        app:estimatedLayoutHeight="70">
 
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                     layout="@layout/chat_header_complain"
-                     android:layout_width="match_parent"
-                     android:layout_height="48dp"
-                     android:layout_alignParentTop="true"
-                     android:background="@color/bg_white"
-                     android:visibility="@{chatViewModel.isComplainVisible}">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="top"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingRight="48dp">
-
-                <Button
-                    style="@style/PopupBorderlessButtonNoPadding"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="@{() -> chatViewModel.onBlock()}"
-                    android:text="@string/general_block_v2"/>
-
-                <Button
-                    style="@style/PopupBorderlessButtonNoPadding"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="@{() -> chatViewModel.onComplain()}"
-                    android:text="@string/general_complaint"/>
-
-            </LinearLayout>
-
-            <Button
-                style="@style/PopupBorderlessButtonNoPadding"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="end|center_vertical"
-                android:drawableLeft="@drawable/invite_popup_close_selector"
-                android:gravity="center"
-                android:onClick="@{() -> chatViewModel.onClose()}"
-                android:padding="16dp"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_gravity="bottom"
-                android:background="#dbdbdb"/>
-        </FrameLayout>
+        <include
+            android:id="@+id/complain_header"
+            layout="@layout/chat_header_complain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            app:complainVisibility="@{chatViewModel.complainVisibility}"
+            app:listener="@{chatViewModel.complainHeaderActionListener}" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/input_root_view"
+            android:layout_below="@+id/complain_header"
             android:background="@color/chat_background"
             android:fadeScrollbars="true"
             android:fadingEdge="none"
             android:visibility="@{chatViewModel.isChatVisible}"
-            app:bindDataToChatRecycler="@{chatViewModel.chatData}"/>
+            app:bindDataToChatRecycler="@{chatViewModel.chatData}" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:id="@+id/input_root_view"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:layout_alignParentBottom="true"
-                      android:background="@color/bg_white"
-                      android:descendantFocusability="beforeDescendants"
-                      android:focusableInTouchMode="true"
-                      android:minHeight="48dp"
-                      android:orientation="horizontal">
+            android:id="@+id/input_root_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/bg_white"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:minHeight="48dp"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/send_gift_button"
                 style="@style/InputGiftButton"
                 android:onClick="@{() -> chatViewModel.onGift()}"
-                app:enable="@{chatViewModel.isSendGiftEnable}"/>
+                app:enable="@{chatViewModel.isSendGiftEnable}" />
 
             <EditText
                 android:id="@+id/input"
@@ -122,14 +80,14 @@
                 android:textSize="16sp"
                 app:enable="@{chatViewModel.isEditTextEnable}">
 
-                <requestFocus/>
+                <requestFocus />
             </EditText>
 
             <ImageButton
                 android:id="@+id/send"
                 style="@style/InputSendButton"
                 android:onClick="@{() -> chatViewModel.onMessage()}"
-                app:enable="@{chatViewModel.isSendButtonEnable}"/>
+                app:enable="@{chatViewModel.isSendButtonEnable}" />
         </LinearLayout>
     </com.topface.topface.ui.views.KeyboardListenerLayout>
 
