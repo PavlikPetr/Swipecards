@@ -4,10 +4,7 @@ import android.location.Location
 import android.os.Bundle
 import com.topface.scruffy.ScruffyManager
 import com.topface.topface.api.requests.*
-import com.topface.topface.api.responses.Completed
-import com.topface.topface.api.responses.DeleteComplete
-import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.api.responses.IBaseFeedResponse
+import com.topface.topface.api.responses.*
 import com.topface.topface.data.FeedItem
 import com.topface.topface.ui.fragments.feed.feed_api.DeleteFeedRequestFactory
 import com.topface.topface.utils.config.FeedsCache
@@ -38,7 +35,7 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
     override fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T> =
             mFeedRequestFactory.construct(args, clazz).subscribe()
 
-    override fun callDialogGet(userId: Int, from: String?, to: String?) = DialogGetRequest(userId, from, to).subscribe()
+    override fun callDialogGet(userId: Int, from: String?, to: String?, leave: Boolean) = DialogGetRequest(userId, from, to, leave).subscribe()
 
     override fun callSendMessage(userId: Int, message: String, isInstant: Boolean) = SendMessageRequest(userId, message, isInstant).subscribe()
 
@@ -52,6 +49,10 @@ class Api(private val mDeleteRequestFactory: IRequestFactory<Completed>,
                                 status: String, background: Int, invisible: Boolean?, xstatus: Int,
                                 isAutoReplyAllowed: Boolean?): Observable<Completed> =
             SettingsRequest(name, age, sex, location, cityid, status, background, invisible, xstatus, isAutoReplyAllowed).subscribe()
+
+    override fun observeSendMessage() = mScruffyManager.mEventManager
+            .observeEventInBackground(DialogGetRequest.REQUEST_METHOD_NAME, History::class.java)
+            .applySchedulers()
 
     override fun callBannerGetCommon(startNumber: Long) = BannerSettingsRequest(startNumber).subscribe()
 }

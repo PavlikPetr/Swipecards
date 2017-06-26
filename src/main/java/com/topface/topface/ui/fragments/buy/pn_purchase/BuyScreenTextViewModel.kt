@@ -106,6 +106,13 @@ class BuyScreenTextViewModel(mText: String = "", val textColor: Int = R.color.bl
                 paddingRight = R.dimen.item_side_padding.getDimen(),
                 onClickListener = onClickListener)
 
+        // Настройки viewModel для итема "В данный момент покупка невозможна"
+        fun InAppBillingUnsupportedItem() = BuyScreenTextViewModel(
+                mText = R.string.general_buying_disabled.getString(),
+                textColor = R.color.text_color_gray.getColor(),
+                textSize = R.dimen.buy_screen_title_text_size.getDimen().toInt(),
+                mTextVisibility = View.VISIBLE)
+
         // Настройки viewModel для сообщения о том, что размер списания за продукт может отличаться от отображаемой цены
         fun CurrencyNotice() = BuyScreenTextViewModel(
                 mText = R.string.payment_ninja_currency_notice.getString(),

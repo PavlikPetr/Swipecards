@@ -23,6 +23,8 @@ class AdmirationFragment : BaseFeedFragment<FeedLike, LayoutEmptyAdmirationsBind
         const val PAGE_NAME = "Admirations"
     }
 
+    override val feedName = PAGE_NAME
+
     override val mViewModel by lazy {
         AdmirationFragmentViewModel(mBinding, mNavigator, mApi)
     }
@@ -31,9 +33,9 @@ class AdmirationFragment : BaseFeedFragment<FeedLike, LayoutEmptyAdmirationsBind
         AdmirationLockController(mBinding.emptyFeedStub as ViewStubProxy)
     }
 
-	override val mAdapter by lazy {
-		AdmirationsFeedAdapter(mNavigator, mApi)
-	}
+    override val mAdapter by lazy {
+        AdmirationsFeedAdapter(mNavigator, mApi)
+    }
 
     override fun createLockerFactory() = object : BaseFeedLockerController.ILockScreenVMFactory<LayoutEmptyAdmirationsBinding> {
         override fun construct(binding: ViewDataBinding): BaseViewModel<LayoutEmptyAdmirationsBinding> {

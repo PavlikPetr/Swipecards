@@ -64,7 +64,7 @@ class DialogItemNewViewModel(val item: FeedDialog, val navigator: IFeedNavigator
 
     fun getTag() = item.getUITestTag(feed_type)
 
-    fun onClick() = navigator.showChat(item)
+    fun onClick() = navigator.showChat(item, feed_type)
 
     fun onLongClick(): Boolean {
         navigator.showDialogpopupMenu(item)

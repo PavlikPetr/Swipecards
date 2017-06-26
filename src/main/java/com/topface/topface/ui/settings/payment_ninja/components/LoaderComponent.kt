@@ -12,12 +12,17 @@ import com.topface.topface.ui.settings.payment_ninja.PaymnetNinjaPurchasesLoader
  */
 
 class LoaderComponent : AdapterComponent<ItemLoaderBinding, PaymnetNinjaPurchasesLoader>() {
+    companion object {
+        const val PLC = "payment_ninja_purchases_main_loader"
+    }
+
     override val itemLayout: Int
         get() = R.layout.item_loader
     override val bindingClass: Class<ItemLoaderBinding>
         get() = ItemLoaderBinding::class.java
 
     override fun bind(binding: ItemLoaderBinding, data: PaymnetNinjaPurchasesLoader?, position: Int) {
+        binding.plc = PLC
         binding.root.layoutParams = StaggeredGridLayoutManager.LayoutParams(StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT,
                 StaggeredGridLayoutManager.LayoutParams.MATCH_PARENT).apply { isFullSpan = true }
     }

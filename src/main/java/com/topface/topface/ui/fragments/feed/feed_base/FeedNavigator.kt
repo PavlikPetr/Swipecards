@@ -40,6 +40,7 @@ import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.FabTran
 import com.topface.topface.ui.fragments.dating.mutual_popup.MutualPopupFragment
 import com.topface.topface.ui.fragments.feed.dialogs.DialogMenuFragment
 import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator
+import com.topface.topface.ui.fragments.feed.enhanced.chat.NeedRelease
 import com.topface.topface.ui.fragments.feed.enhanced.chat.chat_menu.ChatPopupMenu
 import com.topface.topface.ui.fragments.feed.enhanced.chat.message_36_dialog.ChatMessage36DialogFragment
 import com.topface.topface.ui.fragments.feed.photoblog.PhotoblogFragment
@@ -88,6 +89,18 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
         }
     }
 
+    // костыльный метод, позволяющий скрыть пункт "чат" на экране профиля,
+    // если он был открыт из чата версии 1
+    override fun showProfileNoChat(item: FeedUser?, from: String) =
+            item?.let {
+                if (!it.isEmpty) {
+                    mActivityDelegate.startActivity(UserProfileActivity.createIntent(null, it.photo,
+                            it.id, null, false, true, Utils.getNameAndAge(it.firstName, it.age),
+                            it.city.getName(), from)
+                            .putExtra(UserProfileActivity.INTENT_HIDE_CHAT_IN_OVERFLOw_MENU, true))
+                }
+            } ?: Unit
+
     override fun showProfile(item: FeedUser?, from: String) =
             item?.let {
                 if (!it.isEmpty) {
@@ -100,10 +113,10 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from feed
      */
-    override fun <T : FeedItem> showChat(item: T?) {
+    override fun <T : FeedItem> showChat(item: T?, from: String) {
         item?.let {
             it.user?.let {
-                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type) }
+                showChat(it) { ChatIntentCreator.createIntentForChatFromFeed(it, item.type, from) }
             }
         }
     }
@@ -111,15 +124,41 @@ class FeedNavigator(private val mActivityDelegate: IActivityDelegate) : IFeedNav
     /**
      * Show chat from dating
      */
-    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?) {
+    override fun showChat(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
         user?.let {
-            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer) }
+            showChat(user) { ChatIntentCreator.createIntentForChatFromDating(it, answer, from) }
+        }
+    }
+
+    /**
+     * Показываем чат только если, это версия с редизайном или пользователь уже VIP
+     * в остальных случаях отправим его на покупку статуса
+     *
+     * @param user - профиль пользователя с которым необходимо показать чат
+     * @param answer - объект подарка
+     * @param from  - место запуска, чтобы покупка содержала plc
+     */
+    override fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String) {
+        when (App.get().options.chatRedesign) {
+            ChatIntentCreator.DESIGN_V1 -> user?.let {
+                showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer, from) }
+            }
+            else -> if (App.get().profile.premium) {
+                user?.let {
+                    showChat(user) { com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.createIntentForChatFromDating(it, answer, from) }
+                }
+            } else {
+                showPurchaseVip(from)
+            }
         }
     }
 
     private inline fun <T : FeedUser> showChat(user: T, func: T.() -> Intent?) {
         if (!user.isEmpty) {
             user.func()?.let {
+                // пока не придумал кейс при котором возможна ситуация с запуском второго инстанса чата,
+                // но все же пусть будет, если нет запущенного чата, то это событие обработано не будет
+                App.getAppComponent().eventBus().setData(NeedRelease())
                 mActivityDelegate.startActivityForResult(it, ChatActivity.REQUEST_CHAT)
             }
         }

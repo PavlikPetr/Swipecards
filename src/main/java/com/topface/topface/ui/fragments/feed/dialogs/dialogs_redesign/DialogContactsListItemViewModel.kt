@@ -74,7 +74,7 @@ class DialogContactsListItemViewModel(private val mApi: FeedApi, private val mNa
         else -> GlideTransformationType.CROP_CIRCLE_TYPE
     }
 
-    fun goChat() = mNavigator.showChat(mItem.user, null)
+    fun goChat() = mNavigator.showChat(mItem.user, null, DialogsFragment.PAGE_NAME)
 
     fun release() = mItemUpdateEventSubscription.safeUnsubscribe()
 }

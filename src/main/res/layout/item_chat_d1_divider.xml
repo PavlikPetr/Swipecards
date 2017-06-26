@@ -10,7 +10,7 @@
 
         <variable
             name="isDividerVisible"
-            type="Boolean" />
+            type="boolean" />
     </data>
 
     <TextView

@@ -369,8 +369,8 @@ public class GCMUtils {
                     i.putExtra(App.INTENT_REQUEST_KEY, ChatActivity.REQUEST_CHAT);
                     i.putExtra(NEXT_INTENT, new LeftMenuSettingsData(TABBED_DIALOGS));
                 } else {
-                    return ChatIntentCreator.createIntent(user.id, user.sex, user.getNameAndAge(), user.city,
-                            null, null, true, null, false, false, false);
+                    return ChatIntentCreator.createIntentForChatFromGCMUtils(user, type);
+
                 }
                 return i;
             }
@@ -487,6 +487,7 @@ public class GCMUtils {
         public int sex;
         public int age;
         public String city;
+        public boolean isOnline;
 
         public User() {
             id = 0;
@@ -499,6 +500,7 @@ public class GCMUtils {
                 id = obj.optInt("id");
                 name = obj.optString("name");
                 sex = obj.optInt("sex", Profile.BOY);
+                isOnline = obj.optInt("online", 0) != 0;
                 JSONObject photo = obj.optJSONObject("photo");
                 if (photo != null && photo.has(Photo.SIZE_128)) {
                     photoUrl = obj.optJSONObject("photo").optString(Photo.SIZE_128);

@@ -14,8 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.ironsource.mediationsdk.IronSource;
 import com.topface.billing.OpenIabFragment;
 import com.topface.framework.utils.Debug;
 import com.topface.topface.App;
@@ -27,21 +25,29 @@ import com.topface.topface.requests.handlers.SimpleApiHandler;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager;
 import com.topface.topface.ui.external_libs.ironSource.IronSourceOfferwallEvent;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceStatistics;
 import com.topface.topface.ui.views.BuyButtonVer1;
+import com.topface.topface.utils.rx.RxUtils;
 
 import org.onepf.oms.appstore.googleUtils.Purchase;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import rx.Subscription;
+
 public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private LinkedList<View> purchaseButtons = new LinkedList<>();
     private TextView mResourceInfo;
-    private Boolean mIsNeedOfferwalls = !App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().isEmpty()
-            && App.get().getOptions().getOfferwallWithPlaces().getName().equalsIgnoreCase(IronSourceManager.NAME);
-    private IronSourceManager mIronSourceManager;
+    private Boolean mIsNeedOfferwalls = !App.get().getOptions()
+            .getOfferwallWithPlaces().getPurchaseScreen().isEmpty()
+            && App.get().getOptions().getOfferwallWithPlaces()
+            .getName().equalsIgnoreCase(IronSourceManager.NAME);
+
+    private IronSourceManager mIronSourceManager = App.getAppComponent().ironSourceManager();
     private BuyButtonVer1 coinsOfferwallBtn, sympOfferwallBtn;
     private String mResourceInfoText;
+    private Subscription mIronsrcSubscription;
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -66,9 +72,25 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mIronsrcSubscription = mIronSourceManager.getOfferwallObservable()
+                .compose(RxUtils.<IronSourceOfferwallEvent>applySchedulers())
+                .subscribe(new RxUtils.ShortSubscription<IronSourceOfferwallEvent>() {
+                    @Override
+                    public void onNext(IronSourceOfferwallEvent type) {
+                        super.onNext(type);
+                        long OfferwallType = type.getType();
+                        if (OfferwallType == IronSourceOfferwallEvent.OFFERWALL_CLOSED || OfferwallType == IronSourceOfferwallEvent.OFFERWALL_OPENED) {
+                            if (sympOfferwallBtn != null) {
+                                sympOfferwallBtn.stopWaiting();
+                            }
+                            if (coinsOfferwallBtn != null) {
+                                coinsOfferwallBtn.stopWaiting();
+                            }
+                        }
+                    }
+                });
         getDataFromIntent(getArguments());
         if (mIsNeedOfferwalls) {
-            mIronSourceManager = App.getAppComponent().ironSourceManager();
             mIronSourceManager.initSdk(getActivity());
         }
     }
@@ -89,15 +111,13 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (IronSource.isOfferwallAvailable()) {
-            if (sympOfferwallBtn != null) {
-                sympOfferwallBtn.stopWaiting();
-            }
-            if (coinsOfferwallBtn != null) {
-                coinsOfferwallBtn.stopWaiting();
-            }
-        }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxUtils.safeUnsubscribe(mIronsrcSubscription);
     }
 
     @Override
@@ -176,27 +196,28 @@ public abstract class CoinsBuyingFragment extends OpenIabFragment {
     private void initOfferwallButton(View root) {
         if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.SYMPATHIES_OFFERWALL)) {
             final LinearLayout sympContainer = (LinearLayout) root.findViewById(R.id.fbLikes);
-            sympOfferwallBtn = initbutton(IronSourceManager.SYMPATHIES_OFFERWALL);
+            sympOfferwallBtn = initButton(IronSourceManager.SYMPATHIES_OFFERWALL);
             sympContainer.addView(sympOfferwallBtn);
         }
         if (App.get().getOptions().getOfferwallWithPlaces().getPurchaseScreen().contains(IronSourceManager.COINS_OFFERWALL)) {
             final LinearLayout coinsContainer = (LinearLayout) root.findViewById(R.id.fbCoins);
-            coinsOfferwallBtn = initbutton(IronSourceManager.COINS_OFFERWALL);
+            coinsOfferwallBtn = initButton(IronSourceManager.COINS_OFFERWALL);
             coinsContainer.addView(coinsOfferwallBtn);
         }
     }
 
-    private BuyButtonVer1 initbutton(final String ironSrcType) {
+    private BuyButtonVer1 initButton(String ironSrcType) {
         final BuyButtonVer1 offerwallBtn;
         offerwallBtn = new BuyButtonVer1.BuyButtonBuilder().discount(false)
-                .tag("offerWall_button_tag")
+                .tag(ironSrcType)
                 .showType(3).title(getResources().getString(R.string.get_free))
                 .onClick(null).build(getContext());
+        offerwallBtn.setTag(ironSrcType);
         offerwallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mIronSourceManager.emmitNewState(IronSourceOfferwallEvent.Companion.getOnOfferwallCall());
-                mIronSourceManager.showOfferwallByType(ironSrcType);
+                mIronSourceManager.showOfferwallByType(String.valueOf(offerwallBtn.getTag()), IronSourceStatistics.BUY_LIKES_COINS_PLC);
                 offerwallBtn.startWaiting();
             }
         });

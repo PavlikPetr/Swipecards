@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_white">
+
     <TextView
         android:id="@+id/tvRedAlert"
         style="@style/RedAlertTextView"
@@ -17,47 +19,48 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingTop="20dp">
 
-        <TextView
-            android:id="@+id/setPasswordText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:text="@string/enter_email_from_registration"
-            android:textColor="#89000000"
-            android:textSize="13sp" />
-
-        <EditText
-            android:id="@+id/edEmail"
-            style="@style/SettingsAccountEditText"
-            android:paddingLeft="0dp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp">
-
-            <ProgressBar
-                android:id="@+id/prsRecoverSending"
-                style="@style/TopFaceProgressBar.Small"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/setPasswordText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
+                android:paddingBottom="16dp"
+                android:text="@string/enter_email_from_registration"
+                android:textColor="#89000000"
+                android:textSize="13sp" />
 
-            <Button
-                android:id="@+id/btnRecover"
-                style="@style/Widget.Topface.Button.Big.Blue"
-                android:layout_width="fill_parent"
+            <EditText
+                android:id="@+id/edEmail"
+                style="@style/SettingsAccountEditText"
+                android:paddingLeft="0dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/send_password" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:layout_marginTop="28dp">
+
+                <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
+                    android:id="@+id/prsRecoverSending"
+                    style="@style/TopFaceProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+                    app:plc="recover_pwd_loader" />
+
+                <Button
+                    android:id="@+id/btnRecover"
+                    style="@style/Widget.Topface.Button.Big.Blue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send_password" />
+            </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

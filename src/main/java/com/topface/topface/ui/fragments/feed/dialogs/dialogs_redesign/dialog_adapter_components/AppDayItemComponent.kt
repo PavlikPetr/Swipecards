@@ -54,6 +54,7 @@ class AppDayItemComponent(var mApi: FeedApi, private val mInstantPurchaseModel: 
             recycledViewPool = pool
         }
         binding.viewModelRedesign = AppDayViewModel()
+        binding.plc = "dialog_fragment_app_day_loader"
     } ?: Unit
 
     override fun release() {

@@ -23,6 +23,7 @@ import com.topface.topface.state.LifeCycleState;
 import com.topface.topface.statistics.FBInvitesStatistics;
 import com.topface.topface.ui.PurchasesActivity;
 import com.topface.topface.ui.bonus.BonusFragment;
+import com.topface.topface.ui.external_libs.ironSource.IronSourceStatistics;
 import com.topface.topface.ui.fragments.BaseFragment;
 import com.topface.topface.ui.fragments.IntegrationWebViewFragment;
 import com.topface.topface.ui.fragments.SettingsFragment;
@@ -187,7 +188,7 @@ public class NavigationManager {
                         new PeopleNearbyFragment();
                 break;
             case FragmentIdData.BONUS:
-                fragment = BonusFragment.Companion.newInstance(true);
+                fragment = BonusFragment.Companion.newInstance(true, IronSourceStatistics.LEFT_MENU_PLC);
                 break;
             case FragmentIdData.INTEGRATION_PAGE:
                 IntegrationSettingsData fragmentSettings = (IntegrationSettingsData) id;

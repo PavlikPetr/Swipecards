@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import com.topface.framework.imageloader.IPhoto;
 import com.topface.framework.utils.Debug;
+import com.topface.topface.utils.gcmutils.GCMUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -449,5 +450,22 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
         photo.isFakePhoto = true;
         return photo;
     }
+
+    public static Photo createPhotoFromGCMUser(GCMUtils.User user) {
+        Photo photo = new Photo();
+        photo.links.put(SIZE_128, user.photoUrl);
+        return photo;
+    }
+
+    public static Photo createPhotoFromResponsePhoto(com.topface.topface.api.responses.Photo responsePhoto) {
+        Photo photo = new Photo();
+        photo.canBecomeLeader = responsePhoto.getCanBecomeLeader();
+        photo.mId = responsePhoto.getId();
+        photo.liked = responsePhoto.getLiked();
+        photo.position = responsePhoto.getPosition();
+        photo.links = responsePhoto.getLinks();
+        return photo;
+    }
+
 
 }

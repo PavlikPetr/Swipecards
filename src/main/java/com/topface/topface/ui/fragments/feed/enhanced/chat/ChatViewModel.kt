@@ -10,14 +10,14 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import com.topface.framework.JsonUtils
-import com.topface.framework.utils.Debug
 import com.topface.scruffy.utils.toJson
+import com.topface.statistics.android.Slices
+import com.topface.statistics.generated.ChatStatisticsGeneratedStatistics
 import com.topface.topface.App
 import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
-import com.topface.topface.api.responses.isFriendItem
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -26,8 +26,13 @@ import com.topface.topface.state.EventBus
 import com.topface.topface.state.TopfaceAppState
 import com.topface.topface.ui.ComplainsActivity
 import com.topface.topface.ui.GiftsActivity
+import com.topface.topface.ui.PurchasesActivity
 import com.topface.topface.ui.fragments.feed.FeedFragment
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseViewModel
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatIntentCreator.FROM
+import com.topface.topface.ui.fragments.feed.enhanced.chat.ChatStatistics.START_CHAT_FROM
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareAvatars
+import com.topface.topface.ui.fragments.feed.enhanced.chat.items.prepareDividers
 import com.topface.topface.ui.fragments.feed.enhanced.utils.ChatData
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
 import com.topface.topface.utils.CountersManager
@@ -52,34 +57,50 @@ import java.util.concurrent.atomic.AtomicReference
 class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000
+        private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000L
+        private const val DEFAULT_CHAT_INIT_PERIOD = 300L
         private const val EMPTY = ""
         private const val MUTUAL_SYMPATHY = 7
         private const val LOCK_CHAT = 35
         private const val LOCK_MESSAGE_SEND = 36
         private const val SEND_MESSAGE = "send_message"
         private const val INTENT_USER_ID = "user_id"
+        const val SERVER_TIME_CORRECTION = 1000L
         const val LAST_ITEM_ID = "last id"
+
+        const val UNDEFINED = -1
+        const val SOMETHING_WRONG = -2
+        const val NO_BLOCK = 0
+        const val MUTUAL_SYMPATHY_LOCK = MUTUAL_SYMPATHY
+        const val MUTUAL_SYMPATHY_STUB = 8
+        const val NO_MUTUAL_NO_VIP_STUB = 9
+        const val LOCK_CHAT_STUB = LOCK_CHAT
+        const val LOCK_MESSAGE_FOR_SEND = LOCK_MESSAGE_SEND
+
     }
 
     internal var navigator: FeedNavigator? = null
     internal var chatResult: IChatResult? = null
     internal var overflowMenu: OverflowMenu? = null
     internal var activityFinisher: IActivityFinisher? = null
+    private var mStartChatFrom: String? = null
 
     val isComplainVisible = ObservableInt(View.VISIBLE)
     val isChatVisible = ObservableInt(View.VISIBLE)
-    val isButtonsEnable = ObservableBoolean(false)
+    val isSendButtonEnable = ObservableBoolean(false)
+    val isSendGiftEnable = ObservableBoolean(false)
+    val isEditTextEnable = ObservableBoolean(false)
     val message = RxObservableField<String>(Utils.EMPTY)
     val chatData = ChatData()
-    var updateObservable: Observable<Bundle>? = null
     private var mDialogGetSubscription = AtomicReference<Subscription>()
     private var mSendMessageSubscription: CompositeSubscription = CompositeSubscription()
     private var mMessageChangeSubscription: Subscription? = null
     private var mUpdateHistorySubscription: Subscription? = null
     private var mComplainSubscription: Subscription? = null
+    private var mResendSubscription: Subscription? = null
     private var mHasPremiumSubscription: Subscription? = null
     private var mDeleteSubscription: Subscription? = null
+    private var mUpdateAdapterSubscription: Subscription? = null
 
     private var mUser: FeedUser? = null
 
@@ -89,10 +110,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     private var mHasStubItems = false
     private var mIsPremium = false
-    private var mIsNeedToShowToPopularPopup = false
-    private var mIsNeedToBlockChat = false
-    private var mIsNeedToDeleteMutualStub = false
     private var mIsNeedShowAddPhoto = true
+    private var mBlockChatType: Int = UNDEFINED
+
+    /**
+     * Флаг запоминающий надо или нет показывать в обрамлении самого старого элемента чата
+     * текст "Взаимная симпатия"
+     */
+    private var mIsNeedShowMutualDivider = false
+
     /**
      * Коллекция отправленных из чатика подарочков. Нужны, чтобы обновльты изтем со списком
      * подарочков юзера в дейтинге. Как только дейтинг будет переделан на новый скраффи, там сразу
@@ -101,43 +127,34 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    override fun bind() {
-        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
-        val user = mUser
-        if (user?.photo != null && user.photo.isEmpty) {
-            takePhotoIfNeed()
-        }
-        val adapterUpdateObservable = updateObservable
-                ?.distinct { it.getInt(LAST_ITEM_ID) }
-                ?.map { createUpdateObject(mUser?.id ?: -1) }
-                ?: Observable.empty()
-
-        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
-            isButtonsEnable.set(it.isNotBlank() && !mIsNeedToBlockChat)
-        })
+    init {
         mUpdateHistorySubscription = Observable.merge(
                 createGCMUpdateObservable(),
                 createTimerUpdateObservable(),
-                createVipBoughtObservable(),
-                adapterUpdateObservable
-                /*,createP2RObservable()*/).
-                filter { it.first > 0 }.
-                filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }.
-                subscribe(shortSubscription {
-                    Debug.log("FUCKING_CHAT some update from merge $it")
-                    update(it)
-                })
+                createVipBoughtObservable()
+                /*,createP2RObservable()*/)
+                .filter { it.first == mUser?.id }
+                .filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
+                .subscribe(shortSubscription { update(it) })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
             mUser?.id?.let { id -> navigator?.showComplainScreen(id, it.itemPosition.toString()) }
         })
+
+        mResendSubscription = mEventBus.getObservable(SendHistoryItemEvent::class.java).subscribe(shortSubscription {
+            HistoryItemSender.send(mSendMessageSubscription, mApi, it.item, mUser?.id ?: 0,
+                    {
+                        mHasStubItems = true
+                        mIsSendMessage = true
+                    },
+                    {
+                        chatResult?.setResult(createResultIntent())
+                    }
+            )
+        })
+
         mHasPremiumSubscription = mState.getObservable(Profile::class.java)
                 .distinctUntilChanged { t1, t2 -> t1.premium == t2.premium }
-                .subscribe(shortSubscription {
-                    mIsPremium = it.premium
-                    if (mIsPremium) {
-                        mIsNeedToShowToPopularPopup = false
-                    }
-                })
+                .subscribe(shortSubscription { mIsPremium = it.premium })
         mDeleteSubscription = mApi.observeDeleteMessage()
                 .doOnError { R.string.cant_delete_fake_item.getString().showLongToast() }
                 .retry()
@@ -146,6 +163,30 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     removeByPredicate { deleteComplete.items.contains(it.id) }
                     chatResult?.setResult(createResultIntent())
                 })
+    }
+
+    fun initUpdateAdapterSubscription(updateObservable: Observable<Bundle>?) {
+        mUpdateAdapterSubscription = updateObservable
+                ?.distinct { it.getInt(LAST_ITEM_ID) }
+                ?.map { createUpdateObject(mUser?.id ?: -1, true) }
+                ?.filter { it.first == mUser?.id }
+                ?.filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
+                ?.subscribe(shortSubscription {
+                    update(it)
+                })
+    }
+
+    override fun bind() {
+        if (mBlockChatType == UNDEFINED) {
+            chatData.add(ChatLoader())
+        }
+        mUser = args?.getParcelable(ChatIntentCreator.WHOLE_USER)
+        mStartChatFrom = args?.getString(FROM, "undefined")
+        ChatStatisticsGeneratedStatistics.sendNow_CHAT_SHOW(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+        takePhotoIfNeed()
+        mMessageChangeSubscription = message.asRx.subscribe(shortSubscription {
+            isSendButtonEnable.set(it.isNotBlank())
+        })
     }
 
     private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
@@ -175,14 +216,15 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     }
 
     private fun createTimerUpdateObservable() = Observable.
-            interval(DEFAULT_CHAT_UPDATE_PERIOD.toLong(), DEFAULT_CHAT_UPDATE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            interval(DEFAULT_CHAT_INIT_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD, TimeUnit.MILLISECONDS)
             .map { createUpdateObject(mUser?.id ?: -1) }
 
     //todo заменить при имплементацию птр
     //private fun createP2RObservable() = Observable.just(createUpdateObject(-1))
 
     private fun takePhotoIfNeed() {
-        if (mIsNeedShowAddPhoto) {
+        val photo = App.get().profile.photo
+        if (mIsNeedShowAddPhoto && (photo == null || photo.isEmpty)) {
             mIsNeedShowAddPhoto = false
             if (isTakePhotoApplicable()) {
                 navigator?.showTakePhotoPopup()
@@ -233,13 +275,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     }
 
     /**
-     * Удаляем итемы с id = 0, т.к. на данный момент у нас есть нормальные итемы,
+     * Удаляем итемы с id = 0 (и только если они не отсылаются в данный момент),
+     * т.к. на данный момент у нас есть нормальные итемы,
      * которыми можно заменить заглушки(ну так серверные говрят по крайней мере)
      */
     private fun removeStubItems() {
         if (mHasStubItems) {
             mHasStubItems = false
-            removeByPredicate {it.id == 0 || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
+            removeByPredicate { (it.id == 0 && !it.isSending.get()) || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT }
         }
     }
 
@@ -249,105 +292,166 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             while (iterator.hasNext()) {
                 val item = iterator.next()
                 if (item is HistoryItem && predicate(item)) {
-                    updateNearAvatarBeforeDelete(chatData.indexOf(item))
                     iterator.remove()
+                    chatData.filterIsInstance<HistoryItem>().prepareDividers().prepareAvatars()
                 }
             }
         }
     }
 
-    private fun updateNearAvatarBeforeDelete(position: Int) {
-        if (position > 0) {
-            (chatData[position] as? HistoryItem)?.let { currentItem ->
-                if (currentItem.isFriendItem() && currentItem.isDividerVisible.get()) {
-                    (chatData[position - 1] as? HistoryItem)?.let { prevItem ->
-                        if (prevItem.isFriendItem()) prevItem.isAvatarVisible.set(true)
-                    }
-                }
-            }
-        }
-    }
+    private fun isMessage(currentData: ChatData) = currentData.isNotEmpty() && (currentData.find { !it.isStubItem() } != null && mBlockChatType != LOCK_MESSAGE_FOR_SEND)
+
+    private fun isStubs(currentData: ChatData) = currentData.isNotEmpty() && ((currentData.find { it.isStubItem() } != null))
+
+    private fun isEmptyState(currentData: ChatData) = currentData.isEmpty()
+
+    // новое сообщение
+    private fun isNewMessage(newData: History) =
+            newData.items.isNotEmpty() && newData.items.find { it.type == LOCK_MESSAGE_FOR_SEND || it.type == MUTUAL_SYMPATHY || it.type == LOCK_CHAT || it.type == LOCK_MESSAGE_SEND } == null
+
+    // установка стабов
+    private fun isNeedStubs(newData: History): Boolean = newData.items.isEmpty()
+
+    // установка stubMessage
+    private fun isNeedMessageStub(newData: History): Boolean = newData.items.isNotEmpty() && !mIsPremium && !mHasStubItems
 
     /**
      * Обновление по эмитам гцм, птр, таймера
      */
+
     private fun update(updateContainer: Triple<Int, String?, String?>) {
         val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third)
+        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave())
+                .map {
+                    mUser = FeedUser.createFeedUserFromUser(it.user)
+                    if (mBlockChatType == UNDEFINED) {
+                        isSendGiftEnable.set(true)
+                        isEditTextEnable.set(true)
+                        chatData.clear()
+                    }
+                    mIsNeedShowMutualDivider = !it.more && (it.mutualTime != 0)
+                    when {
+                        isMessage(chatData) -> {
+                            mBlockChatType = NO_BLOCK
+                            when {
+                                isNewMessage(it) -> addMessages(it)
+                                else -> null
+                            }
+                        }
+                        isStubs(chatData) -> {
+                            when {
+                                isNewMessage(it) -> {
+                                    mBlockChatType = NO_BLOCK
+                                    chatData.clear()
+                                    addMessages(it)
+                                }
+                                else -> null
+                            }
+                        }
+                        isEmptyState(chatData) -> {
+                            mBlockChatType = NO_BLOCK
+                            when {
+                                isNewMessage(it) -> addMessages(it)
+                                isNeedStubs(it) -> getStubs(it)
+                                isNeedMessageStub(it) -> getStubMessages(it)
+                                else -> null
+                            }
+                        }
+                        else -> null
+                    }
+                }
+                .filter { it != null }
                 .subscribe(shortSubscription({
                     mDialogGetSubscription.get()?.unsubscribe()
                 }, {
-                    setStubsIfNeed(it)
-                    if (it?.items?.isNotEmpty() ?: false) {
-                        val items = ArrayList<HistoryItem>()
-                        it.items.forEach {
-                            when (it.type) {
-                                LOCK_CHAT, MUTUAL_SYMPATHY -> mHasStubItems = true
-                            }
-                            if (it.type != LOCK_CHAT) {
-                                items.add(wrapHistoryItem(it))
-                            }
-                        }
-                        removeStubItems()
-                        if (addToStart) {
-                            chatData.addAll(0, items)
-                        } else {
-                            chatData.addAll(items)
-                        }
+                    chatResult?.setResult(createResultIntent())
+                    setBlockSettings()
+                    if (addToStart) {
+                        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+                        // сорян за это говно, но это единственный вариант без переписывания ChatData
+                        // зафиксить баг с *задваиванием*, т.к. при добавлении более одного итема в начало
+                        // происходит дублирование целого блока итемов
+                        it?.forEachReversedByIndex { chatData.add(0, it) }
+
+                    } else {
+                        it?.let { it -> chatData.addAll(it) }
                     }
                     mDialogGetSubscription.get()?.unsubscribe()
-                    Debug.log("FUCKING_CHAT " + it.items.count())
+                    // обновим превью только если запрос ушел с прочтением истории
+                    if (isNeedReadFeed()) {
+                        chatResult?.setResult(createResultIntent())
+                    }
+                    mDialogGetSubscription.get()?.unsubscribe()
                 }
                 )))
     }
 
-/*                          Условия показов заглушек и попапа-заглушки.
-*    Первоначально проверяем на наличие итемов в History, которые пришли с сервера и наличие итемов в уже существующем списке
-*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
-*          1) У юзера взаимная симпатия и он начинает диалог
-*    Если сообщения все-таки есть, то смотрим по типам сообщений, ктороые могу приходить
-*      Заглушку "У вас взаимная симпатия. Напишите первым!" показываем когда:
-*          1) У юзера нет премиума и ему приходит тип сообщения "mutual_symphaty"
-*
-*    Раз в сутки в рамках эксперимента 57-2 приходит сообщения из базы бомб от популярного пользователя
-*      Заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
-*          1) У юзера нет premium и ему приходит тип сообщения "LOCK_CHAT"(оно не показывается в чате)
-*      Попап-заглушку "Юзер очень популярен, купите VIP, чтобы написать ему" показываем когда:
-*          1) У юзера нет premium и ему приходит тип сообщения "LOCK_MESSAGE_SEND"(Оно показыватся в чате). Далее, при попытке ответить на это сообщение мы показываем попап-заглушку
-*/
 
-    private fun setStubsIfNeed(history: History) {
-        var stub: Any? = null
-        if (history.items.isEmpty() && chatData.isEmpty()) {
-            if (history.mutualTime != 0) {
-                mIsNeedToDeleteMutualStub = true
-                stub = MutualStub()
-            } else if (!mIsPremium) {
-                mIsNeedToBlockChat = true
-                stub = NotMutualBuyVipStub()
+    private fun addMessages(newData: History): ArrayList<HistoryItem> {
+        val items = ArrayList<HistoryItem>()
+        newData.items.forEach {
+            it.isMutual = mIsNeedShowMutualDivider
+            items.add(wrapHistoryItem(it))
+        }
+        removeStubItems()
+        return items
+    }
+
+    private fun getStubs(newData: History): ArrayList<IChatItem>? {
+        var stub: IChatItem? = null
+        if (newData.mutualTime != 0) {
+            mBlockChatType = MUTUAL_SYMPATHY_STUB
+            stub = MutualStub()
+        } else if (!mIsPremium) {
+            mBlockChatType = NO_MUTUAL_NO_VIP_STUB
+            stub = NotMutualBuyVipStub()
+        }
+        return stub?.let { arrayListOf<IChatItem>(it) }
+    }
+
+    private fun getStubMessages(newData: History): ArrayList<IChatItem>? {
+        var stub: IChatItem? = null
+        val lastItem = newData.items.lastOrNull()
+        stub = when (lastItem?.type) {
+            MUTUAL_SYMPATHY -> {
+                mBlockChatType = MUTUAL_SYMPATHY_STUB
+                MutualStub()
+            }
+            LOCK_CHAT -> {
+                mBlockChatType = LOCK_CHAT_STUB
+                BuyVipStub()
+            }
+            LOCK_MESSAGE_SEND -> {
+                mBlockChatType = LOCK_MESSAGE_FOR_SEND
+                FriendMessage(lastItem)
+            }
+            else -> {
+                mBlockChatType = SOMETHING_WRONG
+                null
             }
         }
-        if (history.items.isNotEmpty() && chatData.isEmpty() && !mIsPremium && !mHasStubItems) {
-            history.items.forEach {
-                stub = when (it.type) {
-                    MUTUAL_SYMPATHY -> {
-                        mIsNeedToDeleteMutualStub = true
-                        MutualStub()
-                    }
-                    LOCK_CHAT -> {
-                        mIsNeedToBlockChat = true
-                        BuyVipStub()
-                    }
-                    LOCK_MESSAGE_SEND -> {
-                        mIsNeedToShowToPopularPopup = true
-                        mHasStubItems = true
-                        null
-                    }
-                    else -> null
-                }
+        return stub?.let { arrayListOf<IChatItem>(it) }
+    }
+
+    private fun isNeedLeave() = isTakePhotoApplicable()
+
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
+
+    private fun setBlockSettings() {
+        when (mBlockChatType) {
+            MUTUAL_SYMPATHY_STUB, LOCK_MESSAGE_FOR_SEND, NO_BLOCK -> {
+                isSendGiftEnable.set(true)
+                isEditTextEnable.set(true)
+            }
+            NO_MUTUAL_NO_VIP_STUB, LOCK_CHAT_STUB -> {
+                isEditTextEnable.set(false)
+                isSendGiftEnable.set(false)
+            }
+            MUTUAL_SYMPATHY -> {
+                isEditTextEnable.set(true)
+                isSendGiftEnable.set(false)
             }
         }
-        stub?.let { chatData.add(stub) }
     }
 
     /**
@@ -381,68 +485,82 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     fun onMessage() = mUser?.let {
         val message = message.get()
-        if (!mIsNeedToShowToPopularPopup) {
+        if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
             mSendMessageSubscription.add(mApi.callSendMessage(it.id, message)
                     .doOnSubscribe {
                         mHasStubItems = true
                         mIsSendMessage = true
-                        if (mIsNeedToDeleteMutualStub){
+                        if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
                             chatData.clear()
+                            mBlockChatType = NO_BLOCK
+                        }
+                        if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                            ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                         }
                         chatData.add(0, wrapHistoryItem(HistoryItem(text = message,
-                                created = System.currentTimeMillis() / 1000L)))
+                                created = System.currentTimeMillis() / SERVER_TIME_CORRECTION,
+                                isMutual = mIsNeedShowMutualDivider)))
                         this.message.set(EMPTY)
                     }
                     .subscribe(shortSubscription({
-                        Debug.log("FUCKING_CHAT send fail")
                     }, {
                         chatResult?.setResult(createResultIntent())
                     })))
-        } else if (!mIsPremium) {
-            mUser?.let {
-                navigator?.showUserIsTooPopularLock(it)
-            }
+        } else {
+            navigator?.showUserIsTooPopularLock(it)
         }
     }
 
-    fun onGift() {
-        val immutableNavigator = navigator
-        val immutableUserId = mUser?.id
-        if (immutableNavigator != null && immutableUserId != null) {
-            immutableNavigator.showGiftsActivity(immutableUserId, "chat")
+    fun onGift() = mUser?.let {
+        if (mBlockChatType != LOCK_MESSAGE_FOR_SEND) {
+            ChatStatisticsGeneratedStatistics.sendNow_CHAT_GIFT_ACTIVITY_OPEN(Slices().putSlice(START_CHAT_FROM, "chat"))
+            navigator?.showGiftsActivity(it.id, "chat")
         } else {
-            Unit
+            navigator?.showUserIsTooPopularLock(it)
         }
     }
 
     private fun giftAnswerToHistoryItem(answer: SendGiftAnswer): UserGift? {
         return answer.history?.let {
-            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created,
+            UserGift(HistoryItem(it.text, 0f, 0f, it.type, it.id.toIntOrNull() ?: 0, it.created / SERVER_TIME_CORRECTION,
                     it.target, it.unread, it.link))
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             GiftsActivity.INTENT_REQUEST_GIFT -> {
                 if (resultCode == Activity.RESULT_OK) {
+                    if (mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                        chatData.clear()
+                        mBlockChatType = NO_BLOCK
+                    }
+                    if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
+                        ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
+                    }
                     isComplainVisible.set(View.INVISIBLE)
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
-                        giftAnswerToHistoryItem(sendGiftAnswer)?.let {
+                        sendGiftAnswer.history.mJsonForParse?.let {
+                            mDispatchedGifts.add(0, JsonUtils.fromJson(it, Gift::class.java))
+                        }
+                        giftAnswerToHistoryItem(sendGiftAnswer.apply { history.unread = false })?.let {
                             mHasStubItems = true
                             mIsSendMessage = true
+                            it.isMutual = mIsNeedShowMutualDivider
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
-                        }
-                        if (sendGiftAnswer.history != null && sendGiftAnswer.history.mJsonForParse != null) {
-                            mDispatchedGifts.add(0, JsonUtils.fromJson(sendGiftAnswer.history.mJsonForParse, Gift::class.java))
                         }
                         LocalBroadcastManager.getInstance(mContext)
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
                     }
                 }
+            }
+            PurchasesActivity.INTENT_BUY_VIP -> {
+                chatData.clear()
+                isSendGiftEnable.set(true)
+                isEditTextEnable.set(true)
+                update(createUpdateObject(mUser?.id ?: -1))
             }
             ComplainsActivity.REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
@@ -463,11 +581,13 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      * Новые модели только на этом экране, чтоб работал старый код нужен этот костыль
      */
     private fun toOldHistoryItem(item: HistoryItem?) = item?.let {
-        com.topface.topface.data.History(JSONObject(it.toJson()))
+        com.topface.topface.data.History(JSONObject(it.toJson())).apply { user = mUser }
     }
 
     internal fun createResultIntent() = Intent().apply {
-        putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(getFirstCorrectItemId()))
+        if (chatData.isNotEmpty() && !chatData.first().isStubItem()) {
+            putExtra(ChatActivity.LAST_MESSAGE, toOldHistoryItem(chatData.first() as HistoryItem))
+        }
         putParcelableArrayListExtra(ChatActivity.DISPATCHED_GIFTS, mDispatchedGifts)
         putExtra(SEND_MESSAGE, mIsSendMessage)
         putExtra(INTENT_USER_ID, mUser?.id ?: -1)
@@ -478,12 +598,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         navigator = null
         overflowMenu = null
         activityFinisher = null
+        mUpdateAdapterSubscription.safeUnsubscribe()
     }
 
     override fun release() {
         mDialogGetSubscription.get().safeUnsubscribe()
         arrayOf(mSendMessageSubscription, mMessageChangeSubscription, mUpdateHistorySubscription,
-                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription).safeUnsubscribe()
+                mComplainSubscription, mHasPremiumSubscription, mDeleteSubscription,
+                mResendSubscription).safeUnsubscribe()
     }
 
 }

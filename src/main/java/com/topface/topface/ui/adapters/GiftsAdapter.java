@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
+import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.data.FeedGift;
 import com.topface.topface.data.Gift;
@@ -24,8 +25,13 @@ public class GiftsAdapter extends LoadingListAdapter<FeedGift> implements AbsLis
     }
 
     @Override
+    String getPlc() {
+        return mContext.getResources().getString(R.string.gift_list_loader);
+    }
+
+    @Override
     protected LoadController initLoadController() {
-        return new FeedLoadController();
+        return App.getAppComponent().feedLoadController();
     }
 
 

@@ -23,8 +23,11 @@ interface IFeedNavigator {
     fun showPurchaseVip(from: String)
     fun <T : FeedItem> showProfile(item: T?, from: String)
     fun showProfile(item: FeedUser?, from: String)
-    fun <T : FeedItem> showChat(item: T?)
-    fun showChat(user: FeedUser?, answer: SendGiftAnswer?)
+    // костыльный метод
+    fun showProfileNoChat(item: FeedUser?, from: String)
+    fun <T : FeedItem> showChat(item: T?,from: String)
+    fun showChat(user: FeedUser?, answer: SendGiftAnswer?, from : String)
+    fun showChatIfPossible(user: FeedUser?, answer: SendGiftAnswer?, from: String)
     fun showDating()
     fun showAddToLeader()
     fun showOwnProfile()

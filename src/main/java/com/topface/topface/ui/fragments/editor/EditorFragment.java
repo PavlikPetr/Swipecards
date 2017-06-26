@@ -358,6 +358,7 @@ public class EditorFragment extends BaseFragment implements View.OnClickListener
         Options options = App.from(getActivity()).getOptions();
         switch (v.getId()) {
             case R.id.ReconnectWebSocket:
+                App.get().initComponents();
                 ScruffyRequestManager.getInstance().connect(new ScruffyRequestManager.ConnectedListener() {
                     @Override
                     public void onConnected() {

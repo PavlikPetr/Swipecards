@@ -33,7 +33,7 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
 
     override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
         compositeAdapter.addAdapterComponent(
-                FansAdapterComponent({ itemClick(it) }, { itemLongClick(it) }))
+                FansAdapterComponent({ itemClick(it, SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

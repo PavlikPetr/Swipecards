@@ -129,6 +129,7 @@
         <item quantity="one">%d min.</item>
     </plurals>
     <string name="general_error">ERROR</string>
+    <string name="general_error_normal">Error</string>
     <string name="general_yes">Sí</string>
     <string name="general_no">No</string>
     <string name="general_cancel">Cancelar</string>
@@ -1059,4 +1060,6 @@
     <string name="get_vip">Ser VIP</string>
     <string name="payment_ninja_autofill_title">Recargar saldo automáticamente</string>
     <string name="payment_ninja_autofill_link">Reglas del servicio</string>
+    <string name="get_free">Obtener gratis</string>
+    <string name="product_coast">por %s</string>
 </resources>

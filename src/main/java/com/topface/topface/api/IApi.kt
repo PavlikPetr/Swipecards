@@ -26,7 +26,7 @@ interface IApi {
 
     fun <D : FeedItem, T : IBaseFeedResponse> callGetList(args: Bundle, clazz: Class<T>, item: Class<D>): Observable<T>
 
-    fun callDialogGet(userId: Int, from: String? = null, to: String? = null): Observable<History>
+    fun callDialogGet(userId: Int, from: String? = null, to: String? = null, leave: Boolean = false): Observable<History>
 
     fun callSendMessage(userId: Int, message: String, isInstant: Boolean = false): Observable<HistoryItem>
 
@@ -40,4 +40,6 @@ interface IApi {
 
     fun callBannerGetCommon(startNumber: Long = App.getUserConfig().getBannerInterval<Long>()
             .getConfigFieldInfo().getAmount()): Observable<AdsSettings>
+
+    fun observeSendMessage(): Observable<History>
 }

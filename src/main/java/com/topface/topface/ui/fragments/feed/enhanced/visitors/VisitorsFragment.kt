@@ -11,7 +11,9 @@ import com.topface.topface.di.feed.visitors.VisitorsComponent
 import com.topface.topface.di.feed.visitors.VisitorsModelsComponent
 import com.topface.topface.di.feed.visitors.VisitorsModule
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
+import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.dialogs.trial_vip_experiment.IOnFragmentFinishDelegate
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
@@ -32,7 +34,9 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
     override fun onCreate(savedInstanceState: Bundle?) {
         ComponentManager.releaseComponent(VisitorsComponent::class.java)
         ComponentManager.obtainComponent(VisitorsComponent::class.java) {
-            ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity));
+            }
                     .add(VisitorsModule(this@VisitorsFragment), BaseFeedModule(this@VisitorsFragment))
         }.inject(this@VisitorsFragment)
         super.onCreate(savedInstanceState)
@@ -40,7 +44,7 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
 
     override fun attachAdapterComponents(compositeAdapter: CompositeAdapter) {
         compositeAdapter.addAdapterComponent(
-                VisitorAdapterComponent({ itemClick(it) }, { itemLongClick(it) }))
+                VisitorAdapterComponent({ itemClick(it, SCREEN_TYPE) }, { itemLongClick(it) }))
     }
 
     override fun terminateImmortalComponent() {

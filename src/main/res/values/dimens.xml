@@ -51,6 +51,8 @@
 
     <dimen name="base_indent">8dp</dimen>
 
+    <dimen name="base_indent_double">16dp</dimen>
+
     <dimen name="avatar_rounded_padding">4dp</dimen>
 
     <item name="actionbar_elevation" format="float" type="dimen">0.0</item>
@@ -317,6 +319,13 @@
     <dimen name="buy_screen_products_coins_section_padding_top">10dp</dimen>
     <dimen name="buy_screen_products_coins_section_padding_bottom">2dp</dimen>
     <dimen name="buy_screen_products_list_padding">10dp</dimen>
+    <!-- Purchase GooglePlay product design v1 -->
+    <integer name="purchase_v1_coins_on_row">2</integer>
+    <dimen name="purchase_v1_card_elevation">4dp</dimen>
+    <dimen name="purchase_v1_card_max_elevation">4dp</dimen>
+    <dimen name="purchase_v1_card_corner_radius">6dp</dimen>
+    <dimen name="purchase_v1_card_padding">4dp</dimen>
+    <dimen name="purchase_v1_card_likes_img_padding_left">8dp</dimen>
 
     <!-- ampiri -->
     <dimen name="ampiri_banner_width">320dp</dimen>

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.topface.framework.utils.Debug;
-import com.topface.statistics.android.Slices;
-import com.topface.statistics.generated.FBInvitesStatisticsGeneratedStatistics;
 import com.topface.topface.App;
 import com.topface.topface.R;
 import com.topface.topface.Ssid;
@@ -35,9 +32,9 @@ import com.topface.topface.ui.external_libs.kochava.KochavaManager;
 import com.topface.topface.ui.views.RetryViewCreator;
 import com.topface.topface.utils.CacheProfile;
 import com.topface.topface.utils.EasyTracker;
-import com.topface.topface.utils.FBInvitesUtils;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.AppConfig;
+import com.topface.topface.utils.social.AuthStatusReadyEvent;
 import com.topface.topface.utils.social.AuthToken;
 import com.topface.topface.utils.social.AuthorizationManager;
 
@@ -165,18 +162,7 @@ public abstract class BaseAuthFragment extends BaseFragment {
                     sendFirstAuthUser(authRequest.getPlatform(), authStatus);
                 }
                 mAuthState.setData(new AuthTokenStateData(AuthTokenStateData.TOKEN_AUTHORIZED));
-                String appLink = FBInvitesUtils.INSTANCE.getAppLinkToSend();
-                if (!TextUtils.isEmpty(appLink)) {
-                    if (authStatus != null) {
-                        Slices slice = new Slices().putSlice("val", appLink);
-                        if (authStatus.equals("regular")) {
-                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_AUTHORIZE(slice);
-                        } else if (authStatus.equals("created")) {
-                            FBInvitesStatisticsGeneratedStatistics.sendNow_FB_INVITE_REGISTER(slice);
-                        }
-                    }
-                    FBInvitesUtils.INSTANCE.AppLinkSended();
-                }
+                App.getAppComponent().eventBus().setData(new AuthStatusReadyEvent(authStatus));
             }
 
             @Override

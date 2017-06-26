@@ -27,7 +27,7 @@
             android:layout_gravity="right|top"
             android:layout_marginLeft="56dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/chat_item_d1_bg_user"
+            android:background="@drawable/chat_item_d1_bg_friend"
             bind:onLongClickListener="@{() -> viewModel.onLongClick()}"
             bind:remoteSrcGlide="@{viewModel.link}"
             tools:src="@drawable/feed_banned_female_avatar" />

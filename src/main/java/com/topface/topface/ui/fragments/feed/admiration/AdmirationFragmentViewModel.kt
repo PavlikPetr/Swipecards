@@ -19,6 +19,10 @@ import com.topface.topface.utils.gcmutils.GCMUtils
 class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: IFeedNavigator, api: FeedApi) :
         BaseFeedFragmentViewModel<FeedLike>(binding, navigator, api) {
 
+    companion object {
+        private const val ADMIRATION = "admiration_feeds"
+    }
+
     override fun isCountersChanged(newCounters: CountersData, currentCounters: CountersData) =
             newCounters.admirations > currentCounters.admirations
 
@@ -43,8 +47,8 @@ class AdmirationFragmentViewModel(binding: FragmentFeedBaseBinding, navigator: I
     override val feedsType: FeedsCache.FEEDS_TYPE
         get() = FeedsCache.FEEDS_TYPE.DATA_ADMIRATION_FEEDS
 
-    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?) {
-        super.itemClick(view, itemPosition, data)
+    override fun itemClick(view: View?, itemPosition: Int, data: FeedLike?, from: String) {
+        super.itemClick(view, itemPosition, data, ADMIRATION)
         data?.id?.toInt()?.let {
             ReadAdmirationRequest(context, listOf(it)).exec()
         }

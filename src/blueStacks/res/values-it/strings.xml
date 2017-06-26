@@ -127,6 +127,7 @@
     <item quantity="one">%d minuto</item>
   </plurals>
   <string name="general_error">ERRORE</string>
+  <string name="general_error_normal">Errore</string>
   <string name="general_yes">Sì</string>
   <string name="general_no">No</string>
   <string name="general_cancel">Annulla</string>
@@ -1054,4 +1055,6 @@ Allow the system to automatically start a conversation with a greeting when you 
   <string name="get_vip">Diventa VIP</string>
   <string name="payment_ninja_autofill_title">Ricarica automatica</string>
   <string name="payment_ninja_autofill_link">Regole del Servizio</string>
+  <string name="get_free">Ottienilo gratuitamente</string>
+  <string name="product_coast">a %s</string>
 </resources>

@@ -15,7 +15,7 @@ import com.topface.topface.utils.popups.start_actions.*
  * Фабрика для создания действий на запуск попапов
  * Created by tiberal on 31.08.16.
  */
-class StartActionFactory() : IStartActionFactory {
+class StartActionFactory : IStartActionFactory {
 
     override fun construct(actionHolder: PopupSequence.ActionHolder, activity: FragmentActivity, from: String): IStartAction? {
         val action: IStartAction? = when (actionHolder.actionsClass) {

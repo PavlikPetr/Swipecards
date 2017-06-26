@@ -37,15 +37,16 @@
                 android:gravity="center"
                 android:paddingLeft="10dp"
                 android:text="@{handler.titleText}"
-                app:textColorSelector="@{handler.titleTextColor}"
-                android:visibility="@{handler.titleVisibility}" />
+                android:visibility="@{handler.titleVisibility}"
+                app:textColorSelector="@{handler.titleTextColor}" />
 
-            <ProgressBar
+            <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
                 android:id="@+id/marketWaiter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="@{handler.progressVisibility}" />
+                android:visibility="@{handler.progressVisibility}"
+                app:plc="buy_button_waiting_loader" />
         </RelativeLayout>
     </RelativeLayout>
 </layout>

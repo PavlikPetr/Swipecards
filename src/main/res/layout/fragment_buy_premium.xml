@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,7 +14,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingBottom="10dp">
-
 
             <LinearLayout
                 android:id="@+id/fbpContainer"
@@ -71,10 +71,11 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <ProgressBar
+    <com.topface.topface.ui.views.statistics_progress_bar.StatisticsProgressBar
         android:id="@+id/purchases_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:plc="buy_premium_main_loader" />
 </RelativeLayout>

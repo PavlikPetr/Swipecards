@@ -46,14 +46,17 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
 
     private var mTakePhotoSubscription: Subscription? = null
 
+    private var mChatModule: ChatModule? = null
+
     override fun getToolbarBinding(binding: AcFragmentFrameBinding): ToolbarViewBinding = binding.toolbarInclude
 
     override fun getLayout() = R.layout.ac_fragment_frame
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
+        mChatModule = ChatModule(this, user)
         ComponentManager.obtainComponent(ChatComponent::class.java) {
-            App.getAppComponent().add(ChatModule(this, user))
+            App.getAppComponent().add(mChatModule as ChatModule)
         }.inject(this)
         super.onCreate(savedInstanceState)
         user?.let {
@@ -74,12 +77,13 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
         super.onActivityResult(requestCode, resultCode, data)
         Utils.activityResultToNestedFragments(supportFragmentManager, requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_CANCELED) {
-           addPhotoHelper.processActivityResult(requestCode, resultCode, data)
+            addPhotoHelper.processActivityResult(requestCode, resultCode, data)
         }
     }
 
     override fun onDestroy() {
         ComponentManager.releaseComponent(ChatComponent::class.java)
+        mChatModule = null
         addPhotoHelper.releaseHelper()
         mTakePhotoSubscription.safeUnsubscribe()
         super.onDestroy()

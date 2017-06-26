@@ -1,4 +1,4 @@
-package com.topface.topface.utils;
+package com.topface.topface.utils.databinding.binding_adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -24,7 +24,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,6 +42,8 @@ import com.topface.topface.ui.fragments.feed.toolbar.CustomCoordinatorLayout;
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter;
 import com.topface.topface.ui.views.ImageViewRemote;
 import com.topface.topface.ui.views.RangeSeekBar;
+import com.topface.topface.utils.BindingsUtils;
+import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.databinding.IArrayListChange;
 import com.topface.topface.utils.databinding.MultiObservableArrayList;
 import com.topface.topface.utils.databinding.SingleObservableArrayList;
@@ -414,6 +415,29 @@ public class BindingsAdapters {
     public static void setTag(View view, String tag) {
         //если ты собрался юзать эту хуйню, то посмотри в реализацию setUiTestTag
         UiTestsExtensionKt.setUiTestTag(view, tag);
+    }
+
+    /**
+     * Запускает/останавливает выбранную анимацию на вьюшке
+     * анимация "as is" приоритетнее
+     * @param view              вьха, которая будет анимирована
+     * @param animate           флаг - анимировать или нет
+     * @param animationResId    опциональный интовый идентификатор анимации в ресурсах - проще передавать из вьюмоделей
+     * @param animation         опциональная анимация "as is" - проще передавать из xml
+     */
+    @BindingAdapter(value = {"animateLoader", "animationResourceId", "animationResource"}, requireAll = false)
+    public static void setLoaderAnimation(View view, boolean animate, Integer animationResId, Animation animation) {
+        if (animate) {
+            Animation anim;
+            if (animation != null) {
+                anim = animation;
+            } else {
+                anim = ResourceExtensionKt.getAnimation(animationResId != null ? animationResId : R.anim.loader_rotate);
+            }
+            setAnimationSrc(view, anim);
+        } else {
+            view.clearAnimation();
+        }
     }
 
     @BindingAdapter("animationSrc")
