@@ -54,7 +54,7 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val user by objectArg<FeedUser>(ChatIntentCreator.WHOLE_USER)
-        mChatModule = ChatModule(this,user)
+        mChatModule = ChatModule(this, user)
         ComponentManager.obtainComponent(ChatComponent::class.java) {
             App.getAppComponent().add(mChatModule as ChatModule)
         }.inject(this)
