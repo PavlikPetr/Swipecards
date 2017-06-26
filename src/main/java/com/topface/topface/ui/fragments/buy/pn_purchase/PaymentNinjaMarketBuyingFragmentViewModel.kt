@@ -147,6 +147,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                     if (size > 0) {
                         this@apply.add(BuyScreenTitle())
                         this@apply.addAll(this)
+                        this@apply.add(CurrencyNotice())
                     } else {
                         this@apply.add(BuyScreenProductUnavailable())
                     }
@@ -165,6 +166,7 @@ class PaymentNinjaMarketBuyingFragmentViewModel(private val mNavigator: IFeedNav
                             this@apply.add(BuyScreenCoinsSection())
                             this@apply.addAll(this.second)
                         } else Unit
+                        this@apply.add(CurrencyNotice())
                     } else {
                         this@apply.add(BuyScreenProductUnavailable())
                     }

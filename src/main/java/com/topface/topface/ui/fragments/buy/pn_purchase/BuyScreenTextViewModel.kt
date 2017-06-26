@@ -105,5 +105,14 @@ class BuyScreenTextViewModel(mText: String = "", val textColor: Int = R.color.bl
                 paddingLeft = R.dimen.item_side_padding.getDimen(),
                 paddingRight = R.dimen.item_side_padding.getDimen(),
                 onClickListener = onClickListener)
+
+        // Настройки viewModel для сообщения о том, что размер списания за продукт может отличаться от отображаемой цены
+        fun CurrencyNotice() = BuyScreenTextViewModel(
+                mText = R.string.payment_ninja_currency_notice.getString(),
+                textColor = R.color.payment_ninja_description_text_color.getColor(),
+                textSize = R.dimen.payment_ninja_description_text_size.getDimen().toInt(),
+                mTextVisibility = View.VISIBLE,
+                paddingTop = R.dimen.payment_ninja_currency_notice_padding_top.getDimen(),
+                paddingBottom = R.dimen.payment_ninja_currency_notice_padding_bottom.getDimen())
     }
 }
