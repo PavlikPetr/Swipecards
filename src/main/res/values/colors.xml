@@ -337,6 +337,7 @@
     <color name="ninja_payments_screen_item_divider">#dbdbdb</color>
     <color name="add_card_text_color_release">#FFFFFF</color>
     <color name="add_card_text_color_disabled">#e4e4e4</color>
+    <color name="payment_ninja_description_text_color">#9a9999</color>
 
     <color name="borderless_button_pressed">#f5f5f5</color>
     <color name="borderless_button_release">#FFFFFF</color>

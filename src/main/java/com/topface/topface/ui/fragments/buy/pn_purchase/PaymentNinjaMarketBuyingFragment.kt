@@ -78,6 +78,7 @@ class PaymentNinjaMarketBuyingFragment : BaseFragment() {
                 .addAdapterComponent(ThreeDSecureComponent())
                 .addAdapterComponent(InvisibleModeSwitchComponent(mApi))
                 .addAdapterComponent(BlackListItemComponent(mFeedNavigator))
+                .addAdapterComponent(CurrencyNoticeComponent())
     }
 
     private fun initList() = with(mBinding.buttonsRecyclerView) {
