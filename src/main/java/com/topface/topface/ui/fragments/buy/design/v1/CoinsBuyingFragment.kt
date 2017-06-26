@@ -10,10 +10,12 @@ import com.topface.billing.OpenIabFragment
 import com.topface.topface.R
 import com.topface.topface.data.Products
 import com.topface.topface.databinding.FragmentOpeniabBuyBinding
-import com.topface.topface.ui.fragments.buy.design.v1.adapter_components.*
+import com.topface.topface.ui.fragments.buy.design.v1.adapter_components.CoinItemComponent
+import com.topface.topface.ui.fragments.buy.design.v1.adapter_components.InAppBillingUnsupportedComponent
+import com.topface.topface.ui.fragments.buy.design.v1.adapter_components.LikeItemComponent
+import com.topface.topface.ui.fragments.buy.design.v1.adapter_components.TestPurchaseSwitchItemComponent
 import com.topface.topface.ui.fragments.buy.design.v1.view_models.CoinsBuyingViewModel
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator
-import com.topface.topface.ui.fragments.feed.feed_base.IFeedNavigator
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 import com.topface.topface.utils.CacheProfile
 import com.topface.topface.utils.IActivityDelegate
@@ -30,7 +32,7 @@ class CoinsBuyingFragment : OpenIabFragment() {
     companion object {
         const val FROM = "CoinsBuyingFragment.Extra.From"
         const val TEXT = "CoinsBuyingFragment.Extra.Text"
-        fun newInstance(text: String?, from: String?) =
+        fun newInstance(from: String?, text: String?) =
                 CoinsBuyingFragment().apply {
                     arguments = Bundle().apply {
                         putString(TEXT, text)
