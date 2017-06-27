@@ -10,10 +10,10 @@ public class PromoDialogUniqueStatistics {
 
     public static final String PROMO_DIALOG_SHOW_UNIQUE = "promo_dialog_show_unique";
 
-    public static void send(String tag, String type) {
+    public static void send(String tag) {
         StatisticsTracker
                 .getInstance()
                 .setContext(App.getContext())
-                .sendUniqueEvent(PROMO_DIALOG_SHOW_UNIQUE, 1, PromoDialogStatistics.getSlices(tag, type), Integer.toString(App.get().getProfile().uid) + "_" + tag);
+                .sendUniqueEvent(PROMO_DIALOG_SHOW_UNIQUE, 1, PromoDialogStatistics.getSlices(tag), Integer.toString(App.get().getProfile().uid) + "_" + tag);
     }
 }
