@@ -16,7 +16,7 @@ import com.topface.topface.R;
 import com.topface.topface.data.CountersData;
 import com.topface.topface.data.Options;
 import com.topface.topface.state.CountersDataProvider;
-import com.topface.topface.statistics.PromoDialogStastics;
+import com.topface.topface.statistics.PromoDialogStatistics;
 import com.topface.topface.statistics.PromoDialogUniqueStatistics;
 import com.topface.topface.ui.NavigationActivity;
 import com.topface.topface.ui.PurchasesActivity;
@@ -131,8 +131,8 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
 
         FlurryManager.getInstance().sendPayWallEvent(getPopupName(), SHOW);
         EasyTracker.sendEvent(getMainTag(), "Show", "", 0L);
-        PromoDialogStastics.promoDialogShowSend(getMainTag());
-        PromoDialogUniqueStatistics.send(getMainTag());
+        PromoDialogStatistics.promoDialogShowSend(getMainTag(), getPopupId());
+        PromoDialogUniqueStatistics.send(getMainTag(), getPopupId());
     }
 
     private BroadcastReceiver mVipPurchasedReceiver = new BroadcastReceiver() {
@@ -144,7 +144,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
             }
             closeFragment();
             EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterBuyVip", 1L);
-            PromoDialogStastics.promoDialogCloseAfterBuyVipSend(getMainTag());
+            PromoDialogStatistics.promoDialogCloseAfterBuyVipSend(getMainTag(), getPopupId());
         }
     };
     private BroadcastReceiver mProfileReceiver = new BroadcastReceiver() {
@@ -155,7 +155,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 Debug.log("Promo: Close fragment after profile update");
                 closeFragment();
                 EasyTracker.sendEvent(getMainTag(), "VipClose", "CloseAfterUpdateProfile", 1L);
-                PromoDialogStastics.promoDialogCloseAfterUpdateProfileSend(getMainTag());
+                PromoDialogStatistics.promoDialogCloseAfterUpdateProfileSend(getMainTag(), getPopupId());
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), PRODUCT_BOUGHT);
             }
         }
@@ -173,7 +173,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                         PurchasesActivity.INTENT_BUY_VIP
                 );
                 EasyTracker.sendEvent(getMainTag(), "ClickBuyVip", "", 0L);
-                PromoDialogStastics.promoDialogClickBuyVipSend(getMainTag());
+                PromoDialogStatistics.promoDialogClickBuyVipSend(getMainTag(), getPopupId());
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_BUY);
                 onButtonClick();
                 break;
@@ -183,7 +183,7 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
                 }
                 deleteMessages();
                 EasyTracker.sendEvent(getMainTag(), "Dismiss", "Delete", 0L);
-                PromoDialogStastics.promoDialogDismissSend(getMainTag());
+                PromoDialogStatistics.promoDialogDismissSend(getMainTag(), getPopupId());
                 FlurryManager.getInstance().sendPayWallEvent(getPopupName(), CLICK_DELETE);
                 closeFragment();
                 onButtonClick();
@@ -193,7 +193,8 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
         }
     }
 
-    protected void onButtonClick() {}
+    protected void onButtonClick() {
+    }
 
     @Override
     public void onDestroy() {
@@ -246,5 +247,9 @@ public abstract class PromoDialog extends AbstractDialogFragment implements View
 
     public void setPromoPopupEventsListener(OnPromoDialogEventsListener listener) {
         mOnPromoDialogEventsListener = listener;
+    }
+
+    private String getPopupId() {
+        return PromoDialogStatistics.getPopupId(getPremiumEntity().getCustomPopupId());
     }
 }
