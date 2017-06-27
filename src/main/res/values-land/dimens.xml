@@ -20,4 +20,7 @@
 
     <!-- Purchase GooglePlay product design v1 -->
     <integer name="purchase_v1_coins_on_row">4</integer>
+
+    <fraction name="promo_express_messages_aspect_ration">400%</fraction>
+
 </resources>
