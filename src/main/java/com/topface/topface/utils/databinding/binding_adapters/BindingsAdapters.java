@@ -468,7 +468,6 @@ public class BindingsAdapters {
         int height = imageView.getLayoutParams().height;
         String suitableLink = photo.getSuitableLink(height, width);
         String defaultLink = photo.getDefaultLink();
-        suitableLink = "http://advetime.ru/uploads/2015/11/tumblr_nx697kaddh1td1x01o1_12801.gif";
         SimpleTarget target = new SimpleTarget<Drawable>(width, height) {
             @Override
             public void onResourceReady(Drawable resource, GlideAnimation<? super Drawable> glideAnimation) {
