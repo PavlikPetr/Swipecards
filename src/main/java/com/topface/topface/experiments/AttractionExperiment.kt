@@ -15,14 +15,20 @@ fun Int.isSwitchPrettyControlVisible():Boolean = when(this) {
 object AttractionExperiment {
     fun isSwitchPrettyControlVisible() = App.get().options.attractionExperimentGroup.isSwitchPrettyControlVisible()
 
-    fun doClickAction(unknownGroupAction: () -> Unit, switchAction: () -> Unit, blockedAction: () -> Unit)
+    fun doClickAction(isSwitcherOn: Boolean, unknownGroupAction: () -> Unit, switchAction: () -> Unit, blockedAction: () -> Unit)
             = when(App.get().options.attractionExperimentGroup) {
         AttractionExperimentGroup.CONTROL -> switchAction()
         AttractionExperimentGroup.TEST -> {
-            if (App.get().profile.premium) {
+            if (isSwitcherOn) {
+                // выключить переключатель может кто угодно, даже без вип
                 switchAction()
             } else {
-                blockedAction()
+                // только випы могут включить поиск красивых
+                if (App.get().profile.premium) {
+                    switchAction()
+                } else {
+                    blockedAction()
+                }
             }
         }
         else -> unknownGroupAction()
