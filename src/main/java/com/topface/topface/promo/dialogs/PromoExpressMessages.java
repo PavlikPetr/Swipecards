@@ -123,6 +123,11 @@ public class PromoExpressMessages extends PromoDialog {
     @Override
     public String getMainTag() {
         Options.PromoPopupEntity promoPopupEntity = getPremiumEntity();
+        if (promoPopupEntity != null && promoPopupEntity.isCustomPopupEnabled()
+                && promoPopupEntity.getCustomPopupId() != null
+                && !promoPopupEntity.getCustomPopupId().equals(Utils.EMPTY)) {
+            return promoPopupEntity.getCustomPopupId();
+        }
         int popupVersion = 0;
         if (promoPopupEntity != null) {
             popupVersion = promoPopupEntity.getPopupVersion();
