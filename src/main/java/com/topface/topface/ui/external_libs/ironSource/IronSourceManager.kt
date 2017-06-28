@@ -75,8 +75,8 @@ class IronSourceManager {
     }
 
     fun initSdk(activity: Activity) {
-        IronSource.init(activity, APP_KEY, IronSource.AD_UNIT.OFFERWALL)
         IronSource.setUserId(App.get().profile.uid.toString())
+        IronSource.init(activity, APP_KEY, IronSource.AD_UNIT.OFFERWALL)
         IntegrationHelper.validateIntegration(activity);
     }
 
