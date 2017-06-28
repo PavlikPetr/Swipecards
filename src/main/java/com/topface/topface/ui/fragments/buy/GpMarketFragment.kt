@@ -18,7 +18,7 @@ class GpMarketFragment : GoogleMarketBuyingFragment() {
         fun newInstance(skuId: String, isSubscription: Boolean, from: String) = GpMarketFragment().apply {
             arguments = Bundle().apply {
                 putString(GpPurchaseActivity.SKU_ID, skuId)
-                putString(GpPurchaseActivity.FROM, from)
+                putString(PurchasesConstants.ARG_TAG_SOURCE, from)
                 putBoolean(GpPurchaseActivity.IS_SUBSCRIPTION, isSubscription)
             }
         }
@@ -35,7 +35,7 @@ class GpMarketFragment : GoogleMarketBuyingFragment() {
         retainInstance = true
         with(arguments) {
             mSkuId = getString(GpPurchaseActivity.SKU_ID)
-            mFrom = getString(GpPurchaseActivity.FROM)
+            mFrom = getString(PurchasesConstants.ARG_TAG_SOURCE)
             mIsSubscription = getBoolean(GpPurchaseActivity.IS_SUBSCRIPTION, false)
         }
         super.onCreate(savedInstanceState)
