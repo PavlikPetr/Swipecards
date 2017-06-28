@@ -193,6 +193,18 @@ public class Options extends AbstractData {
     public boolean peopleNearbyRedesignEnabled;
 
     /**
+     * {Boolean} cropAndGalleryEnabled - флаг включающий crop фотографий в дейтинге по принципу
+     * 1. вписываем по границам ImageView
+     * 2. картинка слишком высокая - вписываем верхнуюю часть
+     * 3. картинка слишком широкая - вписываем центральную часть
+     */
+    private boolean cropAndGalleryEnabled;
+
+    public boolean getCropAndGalleryEnabled() {
+        return cropAndGalleryEnabled;
+    }
+
+    /**
      * {int} datingRedesign - версия дизайна экрана "Знакомства"
      * 0 - дейтинг со скролящейся анкетой
      * 1 - дейтинг без анкеты, с полупрозрачным тулбаром
@@ -400,6 +412,7 @@ public class Options extends AbstractData {
             forceOfferwallRedirect.init(response);
             topfaceOfferwallRedirect.init(response);
             datingRedesign = response.optInt("datingRedesign");
+            cropAndGalleryEnabled = response.optBoolean("cropAndGalleryEnabled");
 
             instantMessageFromSearch = JsonUtils.optFromJson(response.optString(INSTANT_MSG),
                     InstantMessageFromSearch.class, new InstantMessageFromSearch());
