@@ -128,7 +128,6 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
             chat.addItemDecoration(ChatItemDecoration())
             mViewModel.run {
                 initUpdateAdapterSubscription(adapter.updateObservable)
-                overflowMenu = mOverflowMenu
                 setViewModel(BR.chatViewModel, this, arguments)
             }
             root.setKeyboardListener(this@ChatFragment)
@@ -185,6 +184,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         mOverflowMenu = OverflowMenu(this, menu).apply {
             initOverflowMenuActions(this)
         }
+        mViewModel.overflowMenu = mOverflowMenu
         val user = mUser
         if (user != null) {
             val view = MenuItemCompat.getActionView(item)

@@ -18,6 +18,7 @@ import com.topface.topface.R
 import com.topface.topface.api.Api
 import com.topface.topface.api.responses.History
 import com.topface.topface.api.responses.HistoryItem
+import com.topface.topface.chat.IComplainHeaderActionListener
 import com.topface.topface.data.FeedUser
 import com.topface.topface.data.Gift
 import com.topface.topface.data.Profile
@@ -54,7 +55,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus, private val mState: TopfaceAppState) : BaseViewModel() {
+class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus,
+                    private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
         private const val DEFAULT_CHAT_UPDATE_PERIOD = 10000L
@@ -85,7 +87,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     internal var activityFinisher: IActivityFinisher? = null
     private var mStartChatFrom: String? = null
 
-    val isComplainVisible = ObservableInt(View.VISIBLE)
+    val complainVisibility
+        get() = App.getAppComponent().suspiciousUserCache().getIsUserSuspicious(mUser?.id ?: 0)
     val isChatVisible = ObservableInt(View.VISIBLE)
     val isSendButtonEnable = ObservableBoolean(false)
     val isSendGiftEnable = ObservableBoolean(false)
@@ -126,6 +129,23 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
      */
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
+
+    val complainHeaderActionListener = object: IComplainHeaderActionListener {
+        override fun onComplain() {
+            val immutableUserId = mUser?.id
+            if (navigator != null && immutableUserId != null) {
+                navigator?.showComplainScreen(immutableUserId, isNeedResult = true)
+            }
+        }
+
+        override fun onBlock() {
+            overflowMenu?.processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION)
+            hideComplainHeader()
+            activityFinisher?.finish()
+        }
+
+        override fun onClose() = hideComplainHeader()
+    }
 
     init {
         mUpdateHistorySubscription = Observable.merge(
@@ -465,21 +485,6 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         else -> item
     }
 
-    fun onComplain() {
-        val immutableUserId = mUser?.id
-        if (navigator != null && immutableUserId != null) {
-            navigator?.showComplainScreen(immutableUserId, isNeedResult = true)
-        }
-    }
-
-    fun onBlock() {
-        overflowMenu?.processOverFlowMenuItem(OverflowMenu.OverflowMenuItem.ADD_TO_BLACK_LIST_ACTION)
-        isComplainVisible.set(View.GONE)
-        activityFinisher?.finish()
-    }
-
-    fun onClose() = isComplainVisible.set(View.GONE)
-
     /**
      * В ответе приходит HistoryItem, id которого 0 так как на сервере очередь сообщений
      */
@@ -538,7 +543,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                     if (isEmptyState(chatData) || mBlockChatType == MUTUAL_SYMPATHY_STUB) {
                         ChatStatisticsGeneratedStatistics.sendNow_CHAT_FIRST_MESSAGE_SEND(Slices().putSlice(START_CHAT_FROM, mStartChatFrom))
                     }
-                    isComplainVisible.set(View.INVISIBLE)
+                    hideComplainHeader()
                     data?.extras?.let {
                         val sendGiftAnswer = it.getParcelable<SendGiftAnswer>(GiftsActivity.INTENT_SEND_GIFT_ANSWER)
                         sendGiftAnswer.history.mJsonForParse?.let {
@@ -564,9 +569,8 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             }
             ComplainsActivity.REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    isComplainVisible.set(View.INVISIBLE)
                     // after success complain sent - block user
-                    onBlock()
+                    complainHeaderActionListener.onBlock()
                 }
             }
             else -> {
@@ -575,6 +579,10 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                 }
             }
         }
+    }
+
+    private fun hideComplainHeader() {
+        App.getAppComponent().suspiciousUserCache().setUserIsSuspicious(mUser?.id ?: 0, false)
     }
 
     /**
