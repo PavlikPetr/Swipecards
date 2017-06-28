@@ -35,7 +35,7 @@ class VisitorsFragment : BaseFeedFragment<Visitor>(), IOnFragmentFinishDelegate 
         ComponentManager.releaseComponent(VisitorsComponent::class.java)
         ComponentManager.obtainComponent(VisitorsComponent::class.java) {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
-                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity));
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
             }
                     .add(VisitorsModule(this@VisitorsFragment), BaseFeedModule(this@VisitorsFragment))
         }.inject(this@VisitorsFragment)

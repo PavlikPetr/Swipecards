@@ -42,7 +42,7 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
         ComponentManager.releaseComponent(FansComponent::class.java)
         ComponentManager.obtainComponent(FansComponent::class.java) {
             ComponentManager.obtainComponent(NavigationActivityComponent::class.java){
-                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity));
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
             }
                     .add(FansModule(this@FansFragment), BaseFeedModule(this@FansFragment))
         }.inject(this@FansFragment)
