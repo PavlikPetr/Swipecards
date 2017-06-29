@@ -459,13 +459,14 @@ public class Photo extends AbstractData implements Parcelable, SerializableToJso
 
     public static Photo createPhotoFromResponsePhoto(com.topface.topface.api.responses.Photo responsePhoto) {
         Photo photo = new Photo();
-        photo.canBecomeLeader = responsePhoto.getCanBecomeLeader();
-        photo.mId = responsePhoto.getId();
-        photo.liked = responsePhoto.getLiked();
-        photo.position = responsePhoto.getPosition();
-        photo.links = responsePhoto.getLinks();
+        if (responsePhoto != null) {
+            photo.canBecomeLeader = responsePhoto.getCanBecomeLeader();
+            photo.mId = responsePhoto.getId();
+            photo.liked = responsePhoto.getLiked();
+            photo.position = responsePhoto.getPosition();
+            photo.links = responsePhoto.getLinks();
+        }
         return photo;
     }
-
 
 }
