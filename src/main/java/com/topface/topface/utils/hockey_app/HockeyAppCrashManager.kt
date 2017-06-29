@@ -1,5 +1,6 @@
 package com.topface.topface.utils.hockey_app
 
+import com.topface.topface.App
 import net.hockeyapp.android.CrashManagerListener
 
 /**
@@ -7,5 +8,10 @@ import net.hockeyapp.android.CrashManagerListener
  * Settings of crash manager of HA for our project
  */
 class HockeyAppCrashManager : CrashManagerListener() {
+
     override fun shouldAutoUploadCrashes() = true
+
+    override fun getUserID(): String {
+        return App.get().profile.uid.toString()
+    }
 }
