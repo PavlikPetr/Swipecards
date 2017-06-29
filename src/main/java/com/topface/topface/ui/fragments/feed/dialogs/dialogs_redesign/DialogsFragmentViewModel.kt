@@ -2,6 +2,7 @@ package com.topface.topface.ui.fragments.feed.dialogs.dialogs_redesign
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.databinding.ObservableBoolean
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
@@ -26,6 +27,7 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.gcmutils.GCMUtils.*
+import com.topface.topface.utils.rx.observeBroadcast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Observable
@@ -46,6 +48,7 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
     var isEnable = ObservableBoolean(true)
 
     private var mLoadTopSubscription: Subscription? = null
+    private var mGCMSubscription: Subscription? = null
     private var mIsAllDataLoaded: Boolean = false
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
     private val mPushHandler = FeedPushHandler(this, mContext)
@@ -95,18 +98,11 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
                         deleteDialogItemFromList(it.feedForDelete.user.id)
                     }
                 })
-        clearNotifications()
+        mGCMSubscription = mContext.observeBroadcast(IntentFilter(GCM_NOTIFICATION))
+                .map { it.getIntExtra(GCMUtils.GCM_TYPE, GCM_TYPE_UNKNOWN) }
+                .filter { it == GCM_TYPE_MESSAGE || it == GCM_TYPE_GIFT || it == GCM_TYPE_ADMIRATION || it == GCM_TYPE_MUTUAL }
+                .subscribe(shortSubscription { GCMUtils.cancelNotification(mContext, it) })
     }
-
-    /**
-     * Если диалоги открыли по пушу,то чисти нотификации
-     */
-    private fun clearNotifications() {
-        arrayOf(GCM_TYPE_GIFT, GCM_TYPE_MESSAGE, GCM_TYPE_DIALOGS).forEach {
-            GCMUtils.cancelNotification(mContext, it)
-        }
-    }
-
 
     private fun bindUpdater() {
         val appDayRequest = mApi.callAppDayRequest(AppDayViewModel.TYPE_FEED_FRAGMENT)
@@ -313,7 +309,7 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
 
     fun release() {
         arrayOf(mLoadTopSubscription, mContentAvailableSubscription,
-                mUpdaterSubscription, mAppDayRequestSubscription, mUpdateFromPopupMenuSubscription).safeUnsubscribe()
+                mUpdaterSubscription, mAppDayRequestSubscription, mUpdateFromPopupMenuSubscription, mGCMSubscription).safeUnsubscribe()
         mPushHandler.release()
         isRefreshing.set(false)
         data.removeListener()

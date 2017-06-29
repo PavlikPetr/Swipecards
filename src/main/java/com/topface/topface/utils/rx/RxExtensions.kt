@@ -12,7 +12,7 @@ import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-fun Context.observeBroabcast(filter: IntentFilter): Observable<Intent>
+fun Context.observeBroadcast(filter: IntentFilter): Observable<Intent>
         = Observable.fromEmitter<Intent>({ emitter ->
     val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {

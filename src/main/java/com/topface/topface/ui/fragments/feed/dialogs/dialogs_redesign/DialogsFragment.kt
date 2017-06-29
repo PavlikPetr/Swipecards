@@ -32,6 +32,7 @@ import com.topface.topface.utils.Utils
 import com.topface.topface.utils.adapter_utils.DividerDecoration
 import com.topface.topface.utils.extensions.getColor
 import com.topface.topface.utils.extensions.getDimen
+import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.registerLifeCycleDelegate
 import com.topface.topface.utils.unregisterLifeCycleDelegate
 import org.jetbrains.anko.layoutInflater
@@ -99,6 +100,9 @@ class DialogsFragment : BaseFragment(), IBannerAds {
     override fun onResume() {
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.settings_messages)))
+        arrayOf(GCMUtils.GCM_TYPE_GIFT, GCMUtils.GCM_TYPE_MESSAGE, GCMUtils.GCM_TYPE_DIALOGS, GCMUtils.GCM_TYPE_ADMIRATION).forEach {
+            GCMUtils.cancelNotification(context, it)
+        }
     }
 
     override fun onDetach() {

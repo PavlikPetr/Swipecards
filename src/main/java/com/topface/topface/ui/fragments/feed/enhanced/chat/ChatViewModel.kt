@@ -43,7 +43,7 @@ import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
-import com.topface.topface.utils.rx.observeBroabcast
+import com.topface.topface.utils.rx.observeBroadcast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.collections.forEachReversedByIndex
@@ -130,7 +130,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    val complainHeaderActionListener = object: IComplainHeaderActionListener {
+    val complainHeaderActionListener = object : IComplainHeaderActionListener {
         override fun onComplain() {
             val immutableUserId = mUser?.id
             if (navigator != null && immutableUserId != null) {
@@ -209,7 +209,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         })
     }
 
-    private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
+    private fun createVipBoughtObservable() = mContext.observeBroadcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
             .filter { it.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false) }
             .map {
                 chatData.clear()
@@ -217,14 +217,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             }
 
     private fun createGCMUpdateObservable() =
-            mContext.observeBroabcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
+            mContext.observeBroadcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
                     .map {
                         val id = try {
                             Integer.parseInt(it.getStringExtra(GCMUtils.USER_ID_EXTRA))
                         } catch (e: NumberFormatException) {
                             -1
                         }
-                        val type = it.getIntExtra(GCMUtils.GCM_TYPE, -1)
+                        val type = it.getIntExtra(GCMUtils.GCM_TYPE, GCMUtils.GCM_TYPE_UNKNOWN)
                         Pair(id, type)
                     }
                     .filter {
@@ -455,7 +455,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND || (it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
