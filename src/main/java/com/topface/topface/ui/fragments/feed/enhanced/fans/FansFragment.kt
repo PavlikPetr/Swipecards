@@ -11,7 +11,9 @@ import com.topface.topface.di.feed.fans.FansComponent
 import com.topface.topface.di.feed.fans.FansModule
 import com.topface.topface.di.feed.fans.FansViewModelsComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.statistics.FlurryOpenEvent
+import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragment
 import com.topface.topface.ui.new_adapter.enhanced.CompositeAdapter
 
@@ -39,7 +41,9 @@ class FansFragment : BaseFeedFragment<FeedBookmark>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         ComponentManager.releaseComponent(FansComponent::class.java)
         ComponentManager.obtainComponent(FansComponent::class.java) {
-            ComponentManager.obtainComponent(NavigationActivityComponent::class.java)
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java){
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
+            }
                     .add(FansModule(this@FansFragment), BaseFeedModule(this@FansFragment))
         }.inject(this@FansFragment)
         super.onCreate(savedInstanceState)

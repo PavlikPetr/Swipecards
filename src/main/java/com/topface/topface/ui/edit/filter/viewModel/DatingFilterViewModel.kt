@@ -88,7 +88,7 @@ class DatingFilterViewModel(private val mFeedNavigator: IFeedNavigator, filter: 
     fun onOnlineOnlyClick(view: View) = onlineOnly.set((view as CheckBox).isChecked)
 
     fun onPrettyOnlyClick() {
-        AttractionExperiment.doClickAction(
+        AttractionExperiment.doClickAction(isPrettyOnly.get(),
                 {
                     // do nothing when group is unknown
                 },

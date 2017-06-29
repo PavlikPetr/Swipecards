@@ -9,6 +9,7 @@ import com.ironsource.mediationsdk.sdk.OfferwallListener
 import com.topface.framework.utils.Debug
 import com.topface.statistics.android.Slices
 import com.topface.statistics.generated.IronSourceStatisticsGeneratedStatistics
+import com.topface.topface.App
 import com.topface.topface.utils.rx.shortSubscription
 import rx.Emitter
 import rx.Observable
@@ -74,6 +75,7 @@ class IronSourceManager {
     }
 
     fun initSdk(activity: Activity) {
+        IronSource.setUserId(App.get().profile.uid.toString())
         IronSource.init(activity, APP_KEY, IronSource.AD_UNIT.OFFERWALL)
         IntegrationHelper.validateIntegration(activity);
     }

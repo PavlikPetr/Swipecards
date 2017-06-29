@@ -420,10 +420,11 @@ public class BindingsAdapters {
     /**
      * Запускает/останавливает выбранную анимацию на вьюшке
      * анимация "as is" приоритетнее
-     * @param view              вьха, которая будет анимирована
-     * @param animate           флаг - анимировать или нет
-     * @param animationResId    опциональный интовый идентификатор анимации в ресурсах - проще передавать из вьюмоделей
-     * @param animation         опциональная анимация "as is" - проще передавать из xml
+     *
+     * @param view           вьха, которая будет анимирована
+     * @param animate        флаг - анимировать или нет
+     * @param animationResId опциональный интовый идентификатор анимации в ресурсах - проще передавать из вьюмоделей
+     * @param animation      опциональная анимация "as is" - проще передавать из xml
      */
     @BindingAdapter(value = {"animateLoader", "animationResourceId", "animationResource"}, requireAll = false)
     public static void setLoaderAnimation(View view, boolean animate, Integer animationResId, Animation animation) {
@@ -466,10 +467,12 @@ public class BindingsAdapters {
         int height = imageView.getLayoutParams().height;
         String suitableLink = photo.getSuitableLink(height, width);
         String defaultLink = photo.getDefaultLink();
-        SimpleTarget target = new SimpleTarget<GlideBitmapDrawable>(width, height) {
+        SimpleTarget target = new SimpleTarget<Drawable>(width, height) {
             @Override
-            public void onResourceReady(GlideBitmapDrawable resource, GlideAnimation<? super GlideBitmapDrawable> glideAnimation) {
-                imageView.setImageBitmap(resource.getBitmap());
+            public void onResourceReady(Drawable resource, GlideAnimation<? super Drawable> glideAnimation) {
+                if (resource instanceof GlideBitmapDrawable) {
+                    imageView.setImageBitmap(((GlideBitmapDrawable) resource).getBitmap());
+                }
             }
         };
         if (suitableLink != null && size > 0) {
@@ -525,6 +528,7 @@ public class BindingsAdapters {
             view.getLayoutManager().onRestoreInstanceState(state);
         }
     }
+
     @BindingAdapter("setJavaScriptEnabled")
     public static void setJavaScriptEnabled(WebView view, boolean isEnabled) {
         view.getSettings().setJavaScriptEnabled(isEnabled);

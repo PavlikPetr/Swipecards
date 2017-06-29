@@ -1060,6 +1060,7 @@
     <string name="get_vip">Ser VIP</string>
     <string name="payment_ninja_autofill_title">Recargar saldo automáticamente</string>
     <string name="payment_ninja_autofill_link">Reglas del servicio</string>
+    <string name="payment_ninja_currency_notice">* El precio en el momento del pago puede cambiar debido al tipo de cambio</string>
     <string name="get_free">Obtener gratis</string>
     <string name="product_coast">por %s</string>
 </resources>

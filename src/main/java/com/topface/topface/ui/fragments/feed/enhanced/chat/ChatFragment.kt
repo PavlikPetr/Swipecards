@@ -17,8 +17,12 @@ import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.databinding.NewChatToolbarAvatarBinding
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.chat.ChatViewModelComponent
 import com.topface.topface.di.chat.DaggerChatViewModelComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityModule
+import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
 import com.topface.topface.ui.fragments.feed.enhanced.base.setViewModel
@@ -84,7 +88,12 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                         initOverflowMenuActions(it)
                     }
                 })
-        ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
+        ComponentManager.obtainComponent(ChatComponent::class.java) {
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
+            }
+                    .add(ChatModule(this@ChatFragment.activity as ChatActivity, mUser))
+        }.inject(this)
     }
 
     private fun createSendRequestObservable(): Observable<History> {
