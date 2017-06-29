@@ -82,11 +82,11 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         ComponentManager.releaseComponent(ChatComponent::class.java)
         mChatModule = null
         addPhotoHelper.releaseHelper()
         mTakePhotoSubscription.safeUnsubscribe()
-        super.onDestroy()
     }
 
     override fun getFragmentTag(): String = ChatFragment::class.java.simpleName
@@ -120,9 +120,4 @@ class ChatActivity : CheckAuthActivity<ChatFragment, AcFragmentFrameBinding>() {
                     upIcon.set(settings.icon)
                 }
             }
-
-    override fun finish() {
-        super.finish()
-        overridePendingTransition(0, 0)
-    }
 }
