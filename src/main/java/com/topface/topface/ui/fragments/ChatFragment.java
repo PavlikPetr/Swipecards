@@ -161,7 +161,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             if (!TextUtils.isEmpty(id) && userId == mUserId) {
                 update(true, ChatUpdateType.UPDATE_COUNTERS);
                 startTimer();
-                GCMUtils.cancelNotification(App.getContext(), type);
+                GCMUtils.cancelNotification(type);
             }
         }
     };
@@ -407,8 +407,8 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             onUserLoaded(mUser);
         }
         if (!AuthToken.getInstance().isEmpty()) {
-            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_GIFT);
-            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+            GCMUtils.cancelNotification(GCMUtils.GCM_TYPE_GIFT);
+            GCMUtils.cancelNotification(GCMUtils.GCM_TYPE_MESSAGE);
         }
         return mRootLayout;
     }
@@ -998,7 +998,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
         startTimer();
 
         if (!AuthToken.getInstance().isEmpty()) {
-            GCMUtils.cancelNotification(getActivity().getApplicationContext(), GCMUtils.GCM_TYPE_MESSAGE);
+            GCMUtils.cancelNotification(GCMUtils.GCM_TYPE_MESSAGE);
         }
     }
 

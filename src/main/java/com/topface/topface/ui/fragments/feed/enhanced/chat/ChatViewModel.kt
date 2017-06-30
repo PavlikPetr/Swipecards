@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.ObservableBoolean
@@ -43,7 +42,7 @@ import com.topface.topface.utils.extensions.getString
 import com.topface.topface.utils.extensions.showLongToast
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.RxObservableField
-import com.topface.topface.utils.rx.observeBroabcast
+import com.topface.topface.utils.rx.observeBroadcast
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.collections.forEachReversedByIndex
@@ -55,7 +54,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus,
+class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
                     private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
@@ -130,7 +129,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
     private var mDispatchedGifts: ArrayList<Gift> = ArrayList()
     private var mIsSendMessage = false
 
-    val complainHeaderActionListener = object: IComplainHeaderActionListener {
+    val complainHeaderActionListener = object : IComplainHeaderActionListener {
         override fun onComplain() {
             val immutableUserId = mUser?.id
             if (navigator != null && immutableUserId != null) {
@@ -209,31 +208,30 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         })
     }
 
-    private fun createVipBoughtObservable() = mContext.observeBroabcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
+    private fun createVipBoughtObservable() = observeBroadcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
             .filter { it.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false) }
             .map {
                 chatData.clear()
                 createUpdateObject(mUser?.id ?: -1)
             }
 
-    private fun createGCMUpdateObservable() =
-            mContext.observeBroabcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
-                    .map {
-                        val id = try {
-                            Integer.parseInt(it.getStringExtra(GCMUtils.USER_ID_EXTRA))
-                        } catch (e: NumberFormatException) {
-                            -1
-                        }
-                        val type = it.getIntExtra(GCMUtils.GCM_TYPE, -1)
-                        Pair(id, type)
-                    }
-                    .filter {
-                        it.first != -1 && mUser?.id == it.first
-                    }
-                    .map {
-                        GCMUtils.cancelNotification(mContext, it.second)
-                        createUpdateObject(it.first)
-                    }
+    private fun createGCMUpdateObservable() = observeBroadcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
+            .map {
+                val id = try {
+                    Integer.parseInt(it.getStringExtra(GCMUtils.USER_ID_EXTRA))
+                } catch (e: NumberFormatException) {
+                    -1
+                }
+                val type = it.getIntExtra(GCMUtils.GCM_TYPE, GCMUtils.GCM_TYPE_UNKNOWN)
+                Pair(id, type)
+            }
+            .filter {
+                it.first != -1 && mUser?.id == it.first
+            }
+            .map {
+                GCMUtils.cancelNotification(it.second)
+                createUpdateObject(it.first)
+            }
 
     private fun createTimerUpdateObservable() = Observable.
             interval(DEFAULT_CHAT_INIT_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD, TimeUnit.MILLISECONDS)
@@ -455,7 +453,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
 
     private fun isNeedLeave() = isTakePhotoApplicable()
 
-    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND||(it as? HistoryItem)?.type == LOCK_CHAT } == null
+    private fun isNeedReadFeed() = !isNeedLeave() && chatData.find { (it as? HistoryItem)?.type == LOCK_MESSAGE_SEND || (it as? HistoryItem)?.type == LOCK_CHAT } == null
 
     private fun setBlockSettings() {
         when (mBlockChatType) {
@@ -556,7 +554,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
                         }
-                        LocalBroadcastManager.getInstance(mContext)
+                        LocalBroadcastManager.getInstance(App.getContext())
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
                     }
                 }

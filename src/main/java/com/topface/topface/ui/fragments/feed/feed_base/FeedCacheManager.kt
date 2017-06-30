@@ -14,9 +14,9 @@ import java.util.*
  * Реализация кэша фидов на основе нашего конфига
  * Created by tiberal on 15.08.16.
  */
-class FeedCacheManager<T : FeedItem>(val mContext: Context, private val mFeedType: FeedsCache.FEEDS_TYPE) : IFeedCache<T> {
+class FeedCacheManager<T : FeedItem>(private val mFeedType: FeedsCache.FEEDS_TYPE) : IFeedCache<T> {
 
-    val mCacheItemsCount = mContext.resources.getIntArray(R.array.feed_limit)[CONNECTION_WIFI.int]
+    val mCacheItemsCount = App.getContext().resources.getIntArray(R.array.feed_limit)[CONNECTION_WIFI.int]
 
     private val mCache by lazy {
         App.getFeedsCache()

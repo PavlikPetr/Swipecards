@@ -24,7 +24,7 @@ import com.topface.topface.utils.extensions.getDimen
  * Компонент хедера диалогов с симпатиями/восхищениями. Начинает новую переписку.
  * Created by tiberal on 01.12.16.
  */
-class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val mContext: Context, private val mApi: FeedApi)
+class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val mApi: FeedApi)
     : AdapterComponent<DialogContactsItemBinding, DialogContactsStubItem>(), ILifeCycle {
     override val itemLayout: Int
         get() = R.layout.dialog_contacts_item
@@ -46,7 +46,7 @@ class ContactsItemComponent(private val mNavigator: IFeedNavigator, private val 
                         .addAdapterComponent(UForeverAloneContactsListItemComponent(mNavigator))
                 adapter = mAdapter
             }
-            mModel = DialogContactsItemViewModel(mContext, it, mApi, mAdapter.updateObservable, mNavigator)
+            mModel = DialogContactsItemViewModel(it, mApi, mAdapter.updateObservable, mNavigator)
             binding.model = mModel
         }
     }
