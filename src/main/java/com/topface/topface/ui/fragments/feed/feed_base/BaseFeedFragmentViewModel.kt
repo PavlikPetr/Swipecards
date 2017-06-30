@@ -83,7 +83,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         CountersData()
     }
     private val mCache by lazy {
-        FeedCacheManager<T>(context, feedsType)
+        FeedCacheManager<T>(feedsType)
     }
     private var mCallUpdateSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null

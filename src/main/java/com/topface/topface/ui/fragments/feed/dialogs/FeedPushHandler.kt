@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.text.TextUtils
-import com.topface.topface.App
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.FeedFragment
@@ -19,8 +18,6 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * Created by siberia87 on 01.12.16.
  */
 class FeedPushHandler(private var mListener: IFeedPushHandlerListener?) {
-
-    private val mContext = App.getContext()
 
     private var mFeedDialogsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {

@@ -1,6 +1,5 @@
 package com.topface.topface.di.chat
 
-import android.content.Context
 import com.topface.topface.api.Api
 import com.topface.topface.di.scope.ScreenScope
 import com.topface.topface.state.EventBus
@@ -15,6 +14,6 @@ class ChatViewModelModule {
 
     @Provides
     @ScreenScope
-    fun provideChatViewModel(context: Context, api: Api, eventBus: EventBus, state: TopfaceAppState): ChatViewModel = ChatViewModel(context, api, eventBus, state)
+    fun provideChatViewModel(api: Api, eventBus: EventBus, state: TopfaceAppState): ChatViewModel = ChatViewModel(api, eventBus, state)
 
 }

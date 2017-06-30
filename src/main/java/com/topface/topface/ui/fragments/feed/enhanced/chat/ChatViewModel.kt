@@ -1,7 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.chat
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.ObservableBoolean
@@ -55,7 +54,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
-class ChatViewModel(private val mContext: Context, private val mApi: Api, private val mEventBus: EventBus,
+class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
                     private val mState: TopfaceAppState) : BaseViewModel() {
 
     companion object {
@@ -217,22 +216,22 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
             }
 
     private fun createGCMUpdateObservable() = observeBroadcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
-                    .map {
-                        val id = try {
-                            Integer.parseInt(it.getStringExtra(GCMUtils.USER_ID_EXTRA))
-                        } catch (e: NumberFormatException) {
-                            -1
-                        }
-                        val type = it.getIntExtra(GCMUtils.GCM_TYPE, GCMUtils.GCM_TYPE_UNKNOWN)
-                        Pair(id, type)
-                    }
-                    .filter {
-                        it.first != -1 && mUser?.id == it.first
-                    }
-                    .map {
-                        GCMUtils.cancelNotification(it.second)
-                        createUpdateObject(it.first)
-                    }
+            .map {
+                val id = try {
+                    Integer.parseInt(it.getStringExtra(GCMUtils.USER_ID_EXTRA))
+                } catch (e: NumberFormatException) {
+                    -1
+                }
+                val type = it.getIntExtra(GCMUtils.GCM_TYPE, GCMUtils.GCM_TYPE_UNKNOWN)
+                Pair(id, type)
+            }
+            .filter {
+                it.first != -1 && mUser?.id == it.first
+            }
+            .map {
+                GCMUtils.cancelNotification(it.second)
+                createUpdateObject(it.first)
+            }
 
     private fun createTimerUpdateObservable() = Observable.
             interval(DEFAULT_CHAT_INIT_PERIOD, DEFAULT_CHAT_UPDATE_PERIOD, TimeUnit.MILLISECONDS)
@@ -555,7 +554,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                             chatData.add(0, it)
                             chatResult?.setResult(createResultIntent())
                         }
-                        LocalBroadcastManager.getInstance(mContext)
+                        LocalBroadcastManager.getInstance(App.getContext())
                                 .sendBroadcast(Intent(FeedFragment.REFRESH_DIALOGS))
                     }
                 }

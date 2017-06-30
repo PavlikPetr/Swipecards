@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicReference
  */
 typealias LockerStubLastState = Pair<Long, Int>
 
-abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context, private val mApi: IApi) :
+abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         BaseViewModel(), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     var navigator: IFeedNavigator? = null
@@ -104,7 +104,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         CountersData()
     }
     private val mCache by lazy {
-        FeedCacheManager<T>(mContext, feedsType)
+        FeedCacheManager<T>(feedsType)
     }
     private var mAppDayRequestSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
