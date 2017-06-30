@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * VM for new and improved dialogs
  * Created by tiberal on 30.11.16.
  */
-class DialogsFragmentViewModel(private val mContext: Context, private val mApi: FeedApi,
+class DialogsFragmentViewModel(private val mApi: FeedApi,
                                private val updater: () -> Observable<Bundle>)
     : SwipeRefreshLayout.OnRefreshListener, ILifeCycle, IFeedPushHandlerListener {
 
@@ -51,7 +51,7 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
     private var mGCMSubscription: Subscription? = null
     private var mIsAllDataLoaded: Boolean = false
     private val mUnreadState = FeedRequest.UnreadStatePair(true, false)
-    private val mPushHandler = FeedPushHandler(this, mContext)
+    private val mPushHandler = FeedPushHandler(this)
     private var isTopFeedsLoading = AtomicBoolean(false)
 
     private val mEventBus by lazy {
@@ -98,10 +98,10 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
                         deleteDialogItemFromList(it.feedForDelete.user.id)
                     }
                 })
-        mGCMSubscription = mContext.observeBroadcast(IntentFilter(GCM_NOTIFICATION))
+        mGCMSubscription = observeBroadcast(IntentFilter(GCM_NOTIFICATION))
                 .map { it.getIntExtra(GCMUtils.GCM_TYPE, GCM_TYPE_UNKNOWN) }
                 .filter { it == GCM_TYPE_MESSAGE || it == GCM_TYPE_GIFT || it == GCM_TYPE_ADMIRATION || it == GCM_TYPE_MUTUAL }
-                .subscribe(shortSubscription { GCMUtils.cancelNotification(mContext, it) })
+                .subscribe(shortSubscription { GCMUtils.cancelNotification(it) })
     }
 
     private fun bindUpdater() {

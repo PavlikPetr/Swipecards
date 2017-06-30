@@ -160,7 +160,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard()
         if (!AuthToken.getInstance().isEmpty) {
-            GCMUtils.cancelNotification(activity.applicationContext, GCMUtils.GCM_TYPE_MESSAGE)
+            GCMUtils.cancelNotification(GCMUtils.GCM_TYPE_MESSAGE)
         }
     }
 

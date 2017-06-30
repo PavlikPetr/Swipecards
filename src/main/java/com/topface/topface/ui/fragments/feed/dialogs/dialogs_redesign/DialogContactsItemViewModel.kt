@@ -31,7 +31,7 @@ import rx.Subscription
  * Моедь итема хедера
  * Created by tiberal on 01.12.16.
  */
-class DialogContactsItemViewModel(private val mContext: Context, private val mContactsStubItem: DialogContactsStubItem, private val mApi: FeedApi, updateObservable: Observable<Bundle>, private val mFeedNavigator: IFeedNavigator)
+class DialogContactsItemViewModel(private val mContactsStubItem: DialogContactsStubItem, private val mApi: FeedApi, updateObservable: Observable<Bundle>, private val mFeedNavigator: IFeedNavigator)
     : ILifeCycle, IOnListChangedCallbackBinded, IFeedPushHandlerListener {
 
     val data = SingleObservableArrayList<Any>()
@@ -42,7 +42,7 @@ class DialogContactsItemViewModel(private val mContext: Context, private val mCo
     private var mUpdateInProgress = false
     private var mUpdateSubscription: Subscription
     private var mMutualBandSubscription: Subscription? = null
-    private val mPushHandler = FeedPushHandler(this, mContext)
+    private val mPushHandler = FeedPushHandler(this)
     private var mContactsItemReadSubscription: Subscription? = null
 
     private val mEventBus by lazy {

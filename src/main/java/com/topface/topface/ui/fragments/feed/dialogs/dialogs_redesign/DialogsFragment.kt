@@ -81,10 +81,10 @@ class DialogsFragment : BaseFragment(), IBannerAds {
                 .addAdapterComponent(DialogItemComponent(mNavigator))
                 .addAdapterComponent(EmptyDialogsComponent())
                 .addAdapterComponent(EmptyDialogsFragmentComponent(mNavigator))
-                .addAdapterComponent(activity.registerLifeCycleDelegate(ContactsItemComponent(mNavigator, context.applicationContext, mApi)))
+                .addAdapterComponent(activity.registerLifeCycleDelegate(ContactsItemComponent(mNavigator, mApi)))
     }
     private val mViewModel by lazy {
-        DialogsFragmentViewModel(context, mApi) { mAdapter.updateObservable }.apply {
+        DialogsFragmentViewModel(mApi) { mAdapter.updateObservable }.apply {
             activity.registerLifeCycleDelegate(this)
         }
     }
@@ -101,7 +101,7 @@ class DialogsFragment : BaseFragment(), IBannerAds {
         super.onResume()
         ToolbarManager.setToolbarSettings(ToolbarSettingsData(getString(R.string.settings_messages)))
         arrayOf(GCMUtils.GCM_TYPE_GIFT, GCMUtils.GCM_TYPE_MESSAGE, GCMUtils.GCM_TYPE_DIALOGS, GCMUtils.GCM_TYPE_ADMIRATION).forEach {
-            GCMUtils.cancelNotification(context, it)
+            GCMUtils.cancelNotification(it)
         }
     }
 

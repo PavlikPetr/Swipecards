@@ -209,15 +209,14 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
         })
     }
 
-    private fun createVipBoughtObservable() = mContext.observeBroadcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
+    private fun createVipBoughtObservable() = observeBroadcast(IntentFilter(CountersManager.UPDATE_VIP_STATUS))
             .filter { it.getBooleanExtra(CountersManager.VIP_STATUS_EXTRA, false) }
             .map {
                 chatData.clear()
                 createUpdateObject(mUser?.id ?: -1)
             }
 
-    private fun createGCMUpdateObservable() =
-            mContext.observeBroadcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
+    private fun createGCMUpdateObservable() = observeBroadcast(IntentFilter(GCMUtils.GCM_NOTIFICATION))
                     .map {
                         val id = try {
                             Integer.parseInt(it.getStringExtra(GCMUtils.USER_ID_EXTRA))
@@ -231,7 +230,7 @@ class ChatViewModel(private val mContext: Context, private val mApi: Api, privat
                         it.first != -1 && mUser?.id == it.first
                     }
                     .map {
-                        GCMUtils.cancelNotification(mContext, it.second)
+                        GCMUtils.cancelNotification(it.second)
                         createUpdateObject(it.first)
                     }
 

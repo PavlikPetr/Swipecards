@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.text.TextUtils
+import com.topface.topface.App
 import com.topface.topface.requests.handlers.BlackListAndBookmarkHandler
 import com.topface.topface.ui.fragments.ChatFragment
 import com.topface.topface.ui.fragments.feed.FeedFragment
@@ -17,7 +18,9 @@ import com.topface.topface.utils.gcmutils.GCMUtils
  * Класс реализующий поддержку/обработку пушей ADMIRATION, MUTUAL и DIALOGS
  * Created by siberia87 on 01.12.16.
  */
-class FeedPushHandler(private var mListener: IFeedPushHandlerListener?, val mContext: Context) {
+class FeedPushHandler(private var mListener: IFeedPushHandlerListener?) {
+
+    private val mContext = App.getContext()
 
     private var mFeedDialogsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -67,12 +70,12 @@ class FeedPushHandler(private var mListener: IFeedPushHandlerListener?, val mCon
     }
 
     init {
-        mBlackListAddReceiver.registerReceiver(mContext, IntentFilter(FeedFragment.REFRESH_DIALOGS))
-        mAddToBookmarksReceiver.registerReceiver(mContext, IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY))
-        mFeedDialogsReceiver.registerReceiver(mContext, IntentFilter(GCMUtils.GCM_DIALOGS_UPDATE))
-        mFeedMutualReceiver.registerReceiver(mContext, IntentFilter(GCMUtils.GCM_MUTUAL_UPDATE))
-        mFeedAdmirationReceiver.registerReceiver(mContext, IntentFilter(GCMUtils.GCM_ADMIRATION_UPDATE))
-        mReadItemReceiver.registerReceiver(mContext, IntentFilter(ChatFragment.MAKE_ITEM_READ).apply {
+        mBlackListAddReceiver.registerReceiver(IntentFilter(FeedFragment.REFRESH_DIALOGS))
+        mAddToBookmarksReceiver.registerReceiver(IntentFilter(BlackListAndBookmarkHandler.UPDATE_USER_CATEGORY))
+        mFeedDialogsReceiver.registerReceiver(IntentFilter(GCMUtils.GCM_DIALOGS_UPDATE))
+        mFeedMutualReceiver.registerReceiver(IntentFilter(GCMUtils.GCM_MUTUAL_UPDATE))
+        mFeedAdmirationReceiver.registerReceiver(IntentFilter(GCMUtils.GCM_ADMIRATION_UPDATE))
+        mReadItemReceiver.registerReceiver(IntentFilter(ChatFragment.MAKE_ITEM_READ).apply {
             addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
         })
     }
@@ -80,7 +83,7 @@ class FeedPushHandler(private var mListener: IFeedPushHandlerListener?, val mCon
     fun release() {
         arrayOf(mFeedDialogsReceiver, mFeedMutualReceiver, mFeedAdmirationReceiver,
                 mReadItemReceiver, mBlackListAddReceiver, mAddToBookmarksReceiver)
-                .unregisterReceiver(mContext)
+                .unregisterReceiver()
         mListener = null
     }
 }

@@ -151,7 +151,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         public void onReceive(Context context, Intent intent) {
             if (isResumed()) {
                 for (int type : getTypesForGCM()) {
-                    GCMUtils.cancelNotification(getActivity(), type);
+                    GCMUtils.cancelNotification(type);
                 }
             }
             if (getUserVisibleHint()) {
@@ -317,7 +317,7 @@ public abstract class FeedFragment<T extends FeedItem> extends BaseFragment
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mReadItemReceiver, filter);
         for (int type : getTypesForGCM()) {
-            GCMUtils.cancelNotification(getActivity(), type);
+            GCMUtils.cancelNotification(type);
         }
         allViewsInitialized();
         return root;

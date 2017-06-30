@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
+import com.topface.topface.App
 import rx.Emitter
 import rx.Observable
 import rx.Subscriber
@@ -12,7 +13,7 @@ import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-fun Context.observeBroadcast(filter: IntentFilter): Observable<Intent>
+fun observeBroadcast(filter: IntentFilter): Observable<Intent>
         = Observable.fromEmitter<Intent>({ emitter ->
     val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -22,11 +23,10 @@ fun Context.observeBroadcast(filter: IntentFilter): Observable<Intent>
         }
     }
     emitter.setCancellation {
-        LocalBroadcastManager.getInstance(applicationContext).unregisterReceiver(receiver)
+        LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(receiver)
     }
-    LocalBroadcastManager.getInstance(applicationContext).registerReceiver(receiver, filter)
+    LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(receiver, filter)
 }, Emitter.BackpressureMode.LATEST)
-
 
 fun Subscription?.safeUnsubscribe() {
     if (this != null && !isUnsubscribed) {
