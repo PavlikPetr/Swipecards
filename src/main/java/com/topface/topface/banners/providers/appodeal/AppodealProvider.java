@@ -41,7 +41,6 @@ public class AppodealProvider extends AbstractAdsProvider {
                         UserSettings.Gender.MALE :
                         UserSettings.Gender.FEMALE)
                 .setAge(App.get().getProfile().age);
-        fillAdditionalUserSettings(userSettings);
         if (Appodeal.isLoaded(Appodeal.BANNER_VIEW)) {
             bannerLoaded(page, callbacks, adView);
         }
@@ -85,59 +84,6 @@ public class AppodealProvider extends AbstractAdsProvider {
         Appodeal.show(page.getActivity(), Appodeal.BANNER_VIEW);
         if (callbacks != null) {
             callbacks.onAdLoadSuccess(adView);
-        }
-    }
-
-    private void fillAdditionalUserSettings(UserSettings userSettings) {
-        setUserSettingsSmoking(userSettings);
-        setUserSettingsAlcohol(userSettings);
-        setUserSettingsOcupation(userSettings);
-    }
-
-    private void setUserSettingsAlcohol(UserSettings userSettings) {
-        if (userSettings != null) {
-            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.ALCOHOL);
-            if (formItem != null) {
-                String currentValue = formItem.value;
-                UserSettings.Alcohol alcohol = UserSettings.Alcohol.NEGATIVE;
-                for (AppodealUserSettingsRules.Alcohol item : AppodealUserSettingsRules.Alcohol.values()) {
-                    if (isContainedEquals(currentValue, item.getIdsArray())) {
-                        alcohol = item.getAlcohol();
-                    }
-                }
-                userSettings.setAlcohol(alcohol);
-            }
-        }
-    }
-
-    private void setUserSettingsSmoking(UserSettings userSettings) {
-        if (userSettings != null) {
-            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.SMOKING);
-            if (formItem != null) {
-                String currentValue = formItem.value;
-                UserSettings.Smoking smoking = UserSettings.Smoking.NEGATIVE;
-                for (AppodealUserSettingsRules.Smoking item : AppodealUserSettingsRules.Smoking.values()) {
-                    if (isContainedEquals(currentValue, item.getIdsArray())) {
-                        smoking = item.getSmoking();
-                    }
-                }
-                userSettings.setSmoking(smoking);
-            }
-        }
-    }
-
-    private void setUserSettingsOcupation(UserSettings userSettings) {
-        if (userSettings != null) {
-            FormItem formItem = App.get().getProfile().getFormByType(FormItem.DATA_TYPE.EDUCATION);
-            if (formItem != null) {
-                String currentValue = formItem.value;
-                Resources res = App.getContext().getResources();
-                userSettings.setOccupation(
-                        res.getString(R.string.profile_form_education_female_1).equals(currentValue)
-                                || res.getString(R.string.profile_form_education_male_1).equals(currentValue)
-                                ? UserSettings.Occupation.UNIVERSITY
-                                : UserSettings.Occupation.OTHER);
-            }
         }
     }
 

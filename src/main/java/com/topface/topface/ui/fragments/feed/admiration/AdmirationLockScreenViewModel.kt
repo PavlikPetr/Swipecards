@@ -27,7 +27,7 @@ class AdmirationLockScreenViewModel(binding: LayoutEmptyAdmirationsBinding, priv
     val thirdMuzzle = ObservableInt(getMuzzleIcon(3))
     val flipperVisibility = ObservableInt(View.VISIBLE)
 
-    fun onBuyCoins() = mNavigator.showPurchaseCoins("EmptyAdmirations")
+    fun onBuyCoins() = mNavigator.showPurchaseCoins("Admirations")
 
     fun onBuyVipClick() = mNavigator.showPurchaseVip("Admirations")
 
