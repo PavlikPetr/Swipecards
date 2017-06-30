@@ -1,5 +1,6 @@
 package com.topface.topface.ui.fragments.feed.enhanced.visitors
 
+import android.view.View
 import com.topface.topface.api.FeedRequestFactory
 import com.topface.topface.api.IApi
 import com.topface.topface.api.responses.GetVisitorsListResponse
@@ -29,4 +30,6 @@ class VisitorsViewModel(api: IApi) : BaseFeedFragmentModel<Visitor>(api) {
             newCounters.visitors > currentCounters.visitors
 
     override fun considerDuplicates(first: Visitor, second: Visitor) = first.user?.id == second.user?.id
+    
+    override fun itemClick(view: View?, itemPosition: Int, data: Visitor?, from: String) = navigator?.showProfile(data, from)
 }
