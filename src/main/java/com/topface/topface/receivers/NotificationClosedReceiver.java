@@ -23,7 +23,7 @@ public class NotificationClosedReceiver extends BroadcastReceiver {
             NotificationStatistics.sendDeleted(type, intent.getStringExtra(GCMUtils.GCM_LABEL));
             Debug.log("Notification deleted" + type + " " +
                     intent.getStringExtra(GCMUtils.GCM_LABEL));
-            GCMUtils.cancelNotification(App.getContext(), type);
+            GCMUtils.cancelNotification(type);
         }
     }
 }

@@ -83,7 +83,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         CountersData()
     }
     private val mCache by lazy {
-        FeedCacheManager<T>(context, feedsType)
+        FeedCacheManager<T>(feedsType)
     }
     private var mCallUpdateSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
@@ -153,7 +153,7 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         mGcmReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 for (type in gcmType) {
-                    GCMUtils.cancelNotification(context, type)
+                    GCMUtils.cancelNotification(type)
                 }
                 loadTopFeeds()
             }
@@ -173,9 +173,9 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        mReadItemReceiver.registerReceiver(context, filter)
+        mReadItemReceiver.registerReceiver(filter)
         gcmTypeUpdateAction?.let {
-            mGcmReceiver.registerReceiver(context, IntentFilter(it))
+            mGcmReceiver.registerReceiver(IntentFilter(it))
         }
     }
 
@@ -433,19 +433,19 @@ abstract class BaseFeedFragmentViewModel<T : FeedItem>(binding: FragmentFeedBase
                 } ?: Unit
     }
 
-    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver(context)
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver()
 
     override fun onAppForeground(timeOnStart: Long) {
         gcmTypeUpdateAction?.let {
-            mGcmReceiver.registerReceiver(context, IntentFilter(it))
+            mGcmReceiver.registerReceiver(IntentFilter(it))
         }
         for (type in gcmType) {
-            GCMUtils.cancelNotification(context, type)
+            GCMUtils.cancelNotification(type)
         }
     }
 
     override fun release() {
-        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(context)
+        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver()
         super.release()
         arrayOf(mUpdaterSubscription, mCallUpdateSubscription, mDeleteSubscription,
                 mBlackListSubscription, mCountersSubscription, mAppDayRequestSubscription).safeUnsubscribe()

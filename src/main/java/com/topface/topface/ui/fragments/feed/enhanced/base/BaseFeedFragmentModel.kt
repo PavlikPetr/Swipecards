@@ -59,7 +59,7 @@ import java.util.concurrent.atomic.AtomicReference
  */
 typealias LockerStubLastState = Pair<Long, Int>
 
-abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context, private val mApi: IApi) :
+abstract class BaseFeedFragmentModel<T : FeedItem>(private val mApi: IApi) :
         BaseViewModel(), SwipeRefreshLayout.OnRefreshListener, RunningStateManager.OnAppChangeStateListener {
 
     var navigator: IFeedNavigator? = null
@@ -104,7 +104,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         CountersData()
     }
     private val mCache by lazy {
-        FeedCacheManager<T>(mContext, feedsType)
+        FeedCacheManager<T>(feedsType)
     }
     private var mAppDayRequestSubscription: Subscription? = null
     private var mUpdaterSubscription: Subscription? = null
@@ -182,7 +182,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         mGcmReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 for (type in gcmType) {
-                    GCMUtils.cancelNotification(context, type)
+                    GCMUtils.cancelNotification(type)
                 }
                 loadTopFeeds()
             }
@@ -202,9 +202,9 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         }
         val filter = IntentFilter(ChatFragment.MAKE_ITEM_READ)
         filter.addAction(ChatFragment.MAKE_ITEM_READ_BY_UID)
-        mReadItemReceiver.registerReceiver(mContext, filter)
+        mReadItemReceiver.registerReceiver(filter)
         gcmTypeUpdateAction?.let {
-            mGcmReceiver.registerReceiver(mContext, IntentFilter(it))
+            mGcmReceiver.registerReceiver(IntentFilter(it))
         }
     }
 
@@ -459,14 +459,14 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
         }
     }
 
-    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver(mContext)
+    override fun onAppBackground(timeOnStop: Long, timeOnStart: Long) = mGcmReceiver.unregisterReceiver()
 
     override fun onAppForeground(timeOnStart: Long) {
         gcmTypeUpdateAction?.let {
-            mGcmReceiver.registerReceiver(mContext, IntentFilter(it))
+            mGcmReceiver.registerReceiver(IntentFilter(it))
         }
         for (type in gcmType) {
-            GCMUtils.cancelNotification(mContext, type)
+            GCMUtils.cancelNotification(type)
         }
     }
 
@@ -479,7 +479,7 @@ abstract class BaseFeedFragmentModel<T : FeedItem>(private val mContext: Context
 
     override fun release() {
         unbind()
-        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver(mContext)
+        arrayOf(mReadItemReceiver, mGcmReceiver).unregisterReceiver()
         arrayOf(mUpdaterSubscription, mDeleteSubscription, mBlackListSubscription, mCountersSubscription,
                 mAppDayRequestSubscription).safeUnsubscribe()
         if (isNeedCacheItems) {
