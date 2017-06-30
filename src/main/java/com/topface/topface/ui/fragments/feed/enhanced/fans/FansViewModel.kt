@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.feed.enhanced.fans
 
-import android.content.Context
 import com.topface.topface.api.FeedRequestFactory
 import com.topface.topface.api.IApi
 import com.topface.topface.api.responses.FeedBookmark
@@ -11,7 +10,7 @@ import com.topface.topface.ui.fragments.feed.enhanced.base.BaseFeedFragmentModel
 import com.topface.topface.utils.config.FeedsCache
 import com.topface.topface.utils.gcmutils.GCMUtils
 
-class FansViewModel(context: Context, api: IApi) : BaseFeedFragmentModel<FeedBookmark>(context, api) {
+class FansViewModel(api: IApi) : BaseFeedFragmentModel<FeedBookmark>(api) {
     override val responseClass: Class<out IBaseFeedResponse>
         get() = GetFeedBookmarkListResponse::class.java
     override val feedsType: FeedsCache.FEEDS_TYPE

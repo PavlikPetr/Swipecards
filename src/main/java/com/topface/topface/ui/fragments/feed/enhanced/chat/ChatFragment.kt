@@ -35,8 +35,10 @@ import com.topface.topface.utils.Device
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.actionbar.OverflowMenuUser
+import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import com.topface.topface.utils.social.AuthToken
 import org.jetbrains.anko.layoutInflater
 import rx.Observable
 import rx.Subscription
@@ -137,7 +139,6 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
             chat.addItemDecoration(ChatItemDecoration())
             mViewModel.run {
                 initUpdateAdapterSubscription(adapter.updateObservable)
-                overflowMenu = mOverflowMenu
                 setViewModel(BR.chatViewModel, this, arguments)
             }
             root.setKeyboardListener(this@ChatFragment)
@@ -158,6 +159,9 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         super.onResume()
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard()
+        if (!AuthToken.getInstance().isEmpty) {
+            GCMUtils.cancelNotification(GCMUtils.GCM_TYPE_MESSAGE)
+        }
     }
 
     override fun onDestroyView() {
@@ -194,6 +198,7 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         mOverflowMenu = OverflowMenu(this, menu).apply {
             initOverflowMenuActions(this)
         }
+        mViewModel.overflowMenu = mOverflowMenu
         val user = mUser
         if (user != null) {
             val view = MenuItemCompat.getActionView(item)
