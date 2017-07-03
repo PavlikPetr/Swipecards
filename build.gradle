@@ -556,6 +556,10 @@ dependencies {
 
     // ironsrc sdk
     compile 'com.ironsource.sdk:mediationsdk:6.6.1@jar'
+
+    /*APPODEAL start*/
+    compile 'com.squareup.picasso:picasso:2.5.2' //for Inmobi
+    /*APPODEAL end*/
 }
 
 task processorTask(type: Exec) {

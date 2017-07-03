@@ -258,7 +258,6 @@ public class FullscreenController {
 
     private void requestAppodealFullscreen() {
         Appodeal.setAutoCache(Appodeal.INTERSTITIAL, false);
-        Appodeal.disableNetwork(mActivity.getApplicationContext(), AppodealProvider.CHEETAH_NETWORK);
         Appodeal.initialize(mActivity, AppodealProvider.APPODEAL_APP_KEY, Appodeal.INTERSTITIAL);
         Appodeal.setTesting(false);
         Appodeal.setLogLevel(Log.LogLevel.verbose);

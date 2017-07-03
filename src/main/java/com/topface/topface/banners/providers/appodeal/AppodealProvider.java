@@ -22,16 +22,12 @@ import com.topface.topface.utils.FormItem;
 public class AppodealProvider extends AbstractAdsProvider {
 
     public static final String APPODEAL_APP_KEY = "2f48418b677cf24a3fa37eacfc7a4e76d385db08b51bd328";
-    private static final String YANDEX_NETWORK = "yandex";
-    public static final String CHEETAH_NETWORK = "cheetah";
 
     @Override
     public boolean injectBannerInner(final IBannerAds page, final IAdProviderCallbacks callbacks) {
         Activity activity = page.getActivity();
         Appodeal.setTesting(false);
         Appodeal.setLogLevel(Log.LogLevel.verbose);
-        Appodeal.disableNetwork(activity.getApplicationContext(), CHEETAH_NETWORK);
-        Appodeal.disableNetwork(activity.getApplicationContext(), YANDEX_NETWORK, Appodeal.BANNER_VIEW);
         Appodeal.initialize(activity, APPODEAL_APP_KEY, Appodeal.BANNER_VIEW);
         final BannerView adView = Appodeal.getBannerView(page.getActivity());
         page.getContainerForAd().addView(adView);
