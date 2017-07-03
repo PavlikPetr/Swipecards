@@ -8,7 +8,7 @@ import com.ironsource.mediationsdk.logger.IronSourceError
  * Created by ppavlik on 30.05.17.
  * Объект события IronSource Offerwall
  */
-data class IronSourceOfferwallEvent(@OfferwallState var type: Long = IronSourceOfferwallEvent.UNDEFINED, var extra: Bundle = Bundle()) {
+data class IronSourceOfferwallEvent(@OfferwallState val type: Long = IronSourceOfferwallEvent.UNDEFINED, var extra: Bundle = Bundle()) {
     companion object {
         @IntDef(UNDEFINED, OFFERWALL_AVAILABLE, OFFERWALL_SHOW_FAILED, OFFERWALL_CLOSED,
                 OFFERWALL_AD_CREDITED, OFFERWALL_OPENED, GET_OFFERWALL_CREDITS_FAILED, CALL_OFFERWALL)

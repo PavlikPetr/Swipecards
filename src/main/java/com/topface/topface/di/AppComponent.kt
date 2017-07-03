@@ -13,6 +13,7 @@ import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.navigation_activity.NavigationActivityComponent
 import com.topface.topface.di.navigation_activity.NavigationActivityModule
 import com.topface.topface.state.*
+import com.topface.topface.ui.external_libs.appodeal.AppodealManager
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.NavigationManager
@@ -48,6 +49,7 @@ interface AppComponent {
     fun kochavaManager(): KochavaManager
     fun ironSourceManager(): IronSourceManager
     fun suspiciousUserCache(): SuspiciousUserCache
+    fun appodealManager(): AppodealManager
 
     fun inject(app: App)
     fun inject(manager: NavigationManager)

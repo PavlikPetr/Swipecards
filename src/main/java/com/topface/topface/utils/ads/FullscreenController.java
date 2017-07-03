@@ -29,6 +29,7 @@ import com.topface.topface.requests.IApiResponse;
 import com.topface.topface.requests.handlers.ApiHandler;
 import com.topface.topface.statistics.AdStatistics;
 import com.topface.topface.ui.dialogs.OwnFullscreenPopup;
+import com.topface.topface.ui.external_libs.appodeal.AppodealManager;
 import com.topface.topface.utils.IStateSaverRegistratorKt;
 import com.topface.topface.utils.Utils;
 import com.topface.topface.utils.config.UserConfig;
@@ -37,6 +38,8 @@ import com.topface.topface.utils.http.IRequestClient;
 import com.topface.topface.utils.popups.PopupManager;
 
 import org.jetbrains.annotations.NotNull;
+
+import javax.inject.Inject;
 
 /**
  */
@@ -49,6 +52,9 @@ public class FullscreenController {
     public static final String AMPIRI = "AMPIRI";
     private static final String FROM = "from";
     private static final String APPODEAL_IN_PROGRESS = "appodeal_in_progress";
+
+    @Inject
+    AppodealManager mAppodealManager;
 
     private String mFrom;
     private Activity mActivity;

@@ -83,16 +83,6 @@ public class AppodealProvider extends AbstractAdsProvider {
         }
     }
 
-    private boolean isContainedEquals(String currentValue, @StringRes int... idsArray) {
-        Resources res = App.getContext().getResources();
-        for (int id : idsArray) {
-            if (res.getString(id).equals(currentValue)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static void setCustomSegment() {
         String fullscreenSegment = App.getAppComponent().weakStorage().getAppodealFullscreenSegmentName();
         if (TextUtils.isEmpty(fullscreenSegment)) {
