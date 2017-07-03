@@ -267,7 +267,7 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
         tempItem.text = newItem.text
         tempItem.target = newItem.target
         tempItem.createdRelative = DateUtils.getRelativeDate(newItem.created, true)
-        if (newItem.type != 35) {
+        if (newItem.type != ChatStabsController.LOCK_CHAT) {
             tempItem.unread = newItem.unread
         }
         this@DialogsFragmentViewModel.data.observableList[targetItemPosition] = tempItem
