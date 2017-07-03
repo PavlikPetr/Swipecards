@@ -23,6 +23,7 @@ import com.topface.topface.ui.fragments.feed.feed_utils.isEmpty
 import com.topface.topface.utils.DateUtils
 import com.topface.topface.utils.ILifeCycle
 import com.topface.topface.utils.Utils
+import com.topface.topface.utils.controllers.chatStubs.ChatStabsController
 import com.topface.topface.utils.databinding.SingleObservableArrayList
 import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.gcmutils.GCMUtils.*
@@ -266,7 +267,9 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
         tempItem.text = newItem.text
         tempItem.target = newItem.target
         tempItem.createdRelative = DateUtils.getRelativeDate(newItem.created, true)
-        tempItem.unread = newItem.unread
+        if (newItem.type != 35) {
+            tempItem.unread = newItem.unread
+        }
         this@DialogsFragmentViewModel.data.observableList[targetItemPosition] = tempItem
     }
 
@@ -344,7 +347,12 @@ class DialogsFragmentViewModel(private val mContext: Context, private val mApi: 
         data.observableList.forEachIndexed { position, dataItem ->
             if (dataItem.user != null && dataItem.user.id == userId && dataItem.unread) {
                 itemForRead = dataItem
-                itemForRead.unread = false
+                // хитрая цепочка приведет нас сюда, когда из старого чата мы выйдем,
+                // оставив там сообщение типа "купи вип чтоб прочитать"
+                // и такое сообщение не должно прочитаться в списке диалогов
+                if (dataItem.type != ChatStabsController.LOCK_CHAT) {
+                    itemForRead.unread = false
+                }
                 itemForRead.unreadCounter = 0
                 data.observableList[position] = itemForRead
                 return
