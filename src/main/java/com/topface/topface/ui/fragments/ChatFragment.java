@@ -355,11 +355,7 @@ public class ChatFragment extends AnimatedFragment implements View.OnClickListen
             sendGiftAnswer.setLoaderType(IListLoader.ItemType.TEMP_MESSAGE);
             mAdapter.addGift(sendGiftAnswer);
         }
-        // only DialogsFragment will hear this
-        Intent intent = new Intent(ChatFragment.MAKE_ITEM_READ_BY_UID);
-        intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
-        sendReadDialogsBroadcast(intent);
-        intent = new Intent();
+        Intent intent = new Intent();
         intent.putExtra(ChatFragment.INTENT_USER_ID, mUserId);
         getActivity().setResult(Activity.RESULT_OK, intent);
     }
