@@ -152,7 +152,7 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
                 createTimerUpdateObservable(),
                 createVipBoughtObservable()
                 /*,createP2RObservable()*/)
-                .filter { it.first == mUser?.id }
+                .filter { params -> params?.let { return@let it.first == mUser?.id } ?: false }
                 .filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
                 .subscribe(shortSubscription { update(it) })
         mComplainSubscription = mEventBus.getObservable(ChatComplainEvent::class.java).subscribe(shortSubscription {
@@ -188,7 +188,7 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
         mUpdateAdapterSubscription = updateObservable
                 ?.distinct { it.getInt(LAST_ITEM_ID) }
                 ?.map { createUpdateObject(mUser?.id ?: -1, true) }
-                ?.filter { it.first == mUser?.id }
+                ?.filter { params -> params?.let { return@let it.first == mUser?.id } ?: false }
                 ?.filter { mDialogGetSubscription.get()?.isUnsubscribed ?: true }
                 ?.subscribe(shortSubscription {
                     update(it)
@@ -253,13 +253,24 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
     private fun isTakePhotoApplicable() = !App.getConfig().userConfig.isUserAvatarAvailable &&
             App.get().profile.photo == null
 
+    /**
+     * Больше дичи в обновления
+     * сей метод вернет набор userId, from, to, либо null, если изначальный список пуст
+     * и обновление "дергается" снизу экрана, в том числе всякими таймерами/пушами
+     * если обновление дергается сверху, и список пуст, то будет сгенерирован "первичный" запрос,
+     * без указания from/to и в дальнейшем, в методе update это будет учтено, чтобы запрос не "прочитал"
+     *
+     * @return params for server Triple<userId, from, to>?
+     */
     private fun createUpdateObject(userId: Int, isBottom: Boolean = false) =
             if (isBottom) {
-                val to = getLastCorrectItemId()?.id.toString()
-                Triple<Int, String?, String?>(userId, null, to)
+                getLastCorrectItemId()?.let {
+                    return@let Triple<Int, String?, String?>(userId, null, it.id.toString())
+                } ?: Triple<Int, String?, String?>(userId, null, null)
             } else {
-                val from = getFirstCorrectItemId()?.id.toString()
-                Triple<Int, String?, String?>(userId, from, null)
+                getFirstCorrectItemId()?.let {
+                    return@let Triple<Int, String?, String?>(userId, it.id.toString(), null)
+                }
             }
 
     /**
@@ -337,9 +348,10 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
      * Обновление по эмитам гцм, птр, таймера
      */
 
-    private fun update(updateContainer: Triple<Int, String?, String?>) {
-        val addToStart = updateContainer.second != null
-        mDialogGetSubscription.set(mApi.callDialogGet(updateContainer.first, updateContainer.second, updateContainer.third, isNeedLeave())
+    private fun update(updateContainer: Triple<Int, String?, String?>?) = updateContainer?.let { (userId, from, to) ->
+        val addToStart = from != null
+        fun isReallyNeedLeave() = isNeedLeave() || (from == null && to == null)
+        mDialogGetSubscription.set(mApi.callDialogGet(userId, from, to, isReallyNeedLeave())
                 .map {
                     mUser = FeedUser.createFeedUserFromUser(it.user)
                     if (mBlockChatType == UNDEFINED) {
@@ -587,7 +599,15 @@ class ChatViewModel(private val mApi: Api, private val mEventBus: EventBus,
      * Новые модели только на этом экране, чтоб работал старый код нужен этот костыль
      */
     private fun toOldHistoryItem(item: HistoryItem?) = item?.let {
-        com.topface.topface.data.History(JSONObject(it.toJson())).apply { user = mUser }
+        // данная перепаковка с промежуточной обработкой нужна ибо
+        // History внутри себя хранит json-строку из которой был собран
+        // и использует ее для создания Parcelable
+        // переделывать внутренности этого элемента тупо страшно
+        val tempHistory = com.topface.topface.data.History(JSONObject(it.toJson())).apply {
+            user = mUser
+            if (it.type != LOCK_CHAT) unread = false
+        }
+        com.topface.topface.data.History(JSONObject(JsonUtils.toJson(tempHistory)))
     }
 
     internal fun createResultIntent() = Intent().apply {
