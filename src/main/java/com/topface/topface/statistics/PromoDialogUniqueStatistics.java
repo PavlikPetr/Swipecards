@@ -2,7 +2,6 @@ package com.topface.topface.statistics;
 
 import com.topface.statistics.android.StatisticsTracker;
 import com.topface.topface.App;
-import com.topface.topface.utils.CacheProfile;
 
 /**
  * Promo popup show unique statistics
@@ -15,6 +14,6 @@ public class PromoDialogUniqueStatistics {
         StatisticsTracker
                 .getInstance()
                 .setContext(App.getContext())
-                .sendUniqueEvent(PROMO_DIALOG_SHOW_UNIQUE, 1, PromoDialogStastics.getSlices(tag), Integer.toString(App.get().getProfile().uid) + "_" + tag);
+                .sendUniqueEvent(PROMO_DIALOG_SHOW_UNIQUE, 1, PromoDialogStatistics.getSlices(tag), Integer.toString(App.get().getProfile().uid) + "_" + tag);
     }
 }

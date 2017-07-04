@@ -32,7 +32,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
             } else {
                 Intent(App.getContext(), GpPurchaseActivity::class.java).apply {
                     putExtra(SKU_ID, skuId)
-                    putExtra(FROM, from)
+                    putExtra(PurchasesConstants.ARG_TAG_SOURCE, from)
                     putExtra(IS_SUBSCRIPTION, isSubscription)
                 }
             }
@@ -71,7 +71,7 @@ class GpPurchaseActivity : SingleFragmentActivity<GpMarketFragment, AcFragmentFr
     override fun onCreate(savedInstanceState: Bundle?) {
         with(intent) {
             mSkuId = getStringExtra(SKU_ID)
-            mFrom = getStringExtra(FROM) ?: FROM_DEFAULT
+            mFrom = getStringExtra(PurchasesConstants.ARG_TAG_SOURCE) ?: FROM_DEFAULT
             mIsSubscription = getBooleanExtra(IS_SUBSCRIPTION, false)
         }
         super.onCreate(savedInstanceState)

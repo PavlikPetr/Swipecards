@@ -30,4 +30,4 @@ fun String.getIronSourceType(array: List<OfferwallPlace>) = array.find { it.name
 /**
  * Get IronSource type by offers place. Places array from userGetAppOptions
  */
-fun String.getIronSourceType() = getIronSourcePlc(App.get().options.offerwallWithPlaces.getPlaces())
+fun String.getIronSourceType() = getIronSourceType(App.get().options.offerwallWithPlaces.getPlaces())

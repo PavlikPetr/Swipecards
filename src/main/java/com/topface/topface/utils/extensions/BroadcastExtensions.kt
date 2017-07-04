@@ -1,9 +1,9 @@
 package com.topface.topface.utils.extensions
 
 import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
+import com.topface.topface.App
 
 
 /**
@@ -11,12 +11,12 @@ import android.support.v4.content.LocalBroadcastManager
  * Created by siberia87 on 01.12.16.
  */
 
-fun BroadcastReceiver.unregisterReceiver(c: Context) =
-        LocalBroadcastManager.getInstance(c).unregisterReceiver(this)
+fun BroadcastReceiver.unregisterReceiver() =
+        LocalBroadcastManager.getInstance(App.getContext()).unregisterReceiver(this)
 
-fun Array<BroadcastReceiver>.unregisterReceiver(c: Context) =
-        forEach { it.unregisterReceiver(c) }
+fun Array<BroadcastReceiver>.unregisterReceiver() =
+        forEach { it.unregisterReceiver() }
 
-fun BroadcastReceiver.registerReceiver(c: Context, intentFilter: IntentFilter) =
-        LocalBroadcastManager.getInstance(c).registerReceiver(this, intentFilter)
+fun BroadcastReceiver.registerReceiver(intentFilter: IntentFilter) =
+        LocalBroadcastManager.getInstance(App.getContext()).registerReceiver(this, intentFilter)
 

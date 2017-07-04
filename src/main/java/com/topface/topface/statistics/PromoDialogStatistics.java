@@ -2,11 +2,12 @@ package com.topface.topface.statistics;
 
 import com.topface.statistics.android.Slices;
 import com.topface.statistics.android.StatisticsTracker;
+import com.topface.topface.utils.Utils;
 
 /**
  * Promo popup statistics
  */
-public class PromoDialogStastics {
+public class PromoDialogStatistics {
 
     public static final String PROMO_DIALOG_SHOW = "promo_dialog_show";
     public static final String PROMO_DIALOG_CLOSE_AFTER_BUY_VIP = "promo_dialog_close_after_buy_vip";

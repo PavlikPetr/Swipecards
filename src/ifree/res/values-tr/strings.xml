@@ -1059,6 +1059,7 @@ Her ay aboneliğiniz otomatik olarak yenilenecektir ve kredi kartınız sonraki 
     <string name="get_vip">VIP Satın al</string>
     <string name="payment_ninja_autofill_title">Otomatik yükleme</string>
     <string name="payment_ninja_autofill_link">Servis Kuralları</string>
+    <string name="payment_ninja_currency_notice">* Bir ödeme zamanındaki fiyat, döviz kurları sebebiyle değişebilir</string>
     <string name="get_free">Ücretsiz Al</string>
     <string name="product_coast">%s ücretinde</string>
 </resources>

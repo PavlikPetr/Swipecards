@@ -40,7 +40,7 @@
                 android:layout_marginRight="16dp"
                 android:autoLink="all"
                 android:background="@drawable/chat_item_d1_bg_user"
-                android:text="@{viewModel.text}"
+                bind:autoLinkText="@{viewModel.text}"
                 android:textColor="@color/white_primary_text"
                 android:textSize="16sp"
                 bind:onLongClickListener="@{() -> viewModel.onLongClick()}"

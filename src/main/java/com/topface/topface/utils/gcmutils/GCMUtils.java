@@ -448,10 +448,7 @@ public class GCMUtils {
         return i;
     }
 
-    public static void cancelNotification(final Context context, final int type) {
-        if (context == null) {
-            return;
-        }
+    public static void cancelNotification(final int type) {
         //Отменяем уведомления с небольшой задержкой,
         //что бы на ICS успело доиграть уведомление (длинные не успеют. но не страшно. все стандартные - короткие)
         new Timer().schedule(new TimerTask() {

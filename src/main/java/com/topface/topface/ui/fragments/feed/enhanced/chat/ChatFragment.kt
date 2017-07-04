@@ -17,8 +17,12 @@ import com.topface.topface.databinding.NewChatFragmentBinding
 import com.topface.topface.databinding.NewChatToolbarAvatarBinding
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
+import com.topface.topface.di.chat.ChatModule
 import com.topface.topface.di.chat.ChatViewModelComponent
 import com.topface.topface.di.chat.DaggerChatViewModelComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityComponent
+import com.topface.topface.di.navigation_activity.NavigationActivityModule
+import com.topface.topface.ui.NavigationActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.feed.enhanced.base.IViewModelLifeCycle
 import com.topface.topface.ui.fragments.feed.enhanced.base.setViewModel
@@ -31,8 +35,10 @@ import com.topface.topface.utils.Device
 import com.topface.topface.utils.Utils
 import com.topface.topface.utils.actionbar.OverflowMenu
 import com.topface.topface.utils.actionbar.OverflowMenuUser
+import com.topface.topface.utils.gcmutils.GCMUtils
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
+import com.topface.topface.utils.social.AuthToken
 import org.jetbrains.anko.layoutInflater
 import rx.Observable
 import rx.Subscription
@@ -84,7 +90,12 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
                         initOverflowMenuActions(it)
                     }
                 })
-        ComponentManager.obtainComponent(ChatComponent::class.java).inject(this)
+        ComponentManager.obtainComponent(ChatComponent::class.java) {
+            ComponentManager.obtainComponent(NavigationActivityComponent::class.java) {
+                App.getAppComponent().add(NavigationActivityModule(activity as NavigationActivity))
+            }
+                    .add(ChatModule(this@ChatFragment.activity as ChatActivity, mUser))
+        }.inject(this)
     }
 
     private fun createSendRequestObservable(): Observable<History> {
@@ -148,6 +159,9 @@ class ChatFragment : DaggerFragment(), KeyboardListenerLayout.KeyboardListener, 
         super.onResume()
         //показать клавиатуру, если она была показаны до этого(перешли в другой фрагмент, и вернулись обратно)
         showKeyboard()
+        if (!AuthToken.getInstance().isEmpty) {
+            GCMUtils.cancelNotification(GCMUtils.GCM_TYPE_MESSAGE)
+        }
     }
 
     override fun onDestroyView() {

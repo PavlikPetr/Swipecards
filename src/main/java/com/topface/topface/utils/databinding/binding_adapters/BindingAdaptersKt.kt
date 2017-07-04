@@ -19,17 +19,17 @@ fun setAutoLinkText(textView: TextView, text: String) {
     textView.text = Html.fromHtml(text.replace("\n", "<br />"))
     // Проверяем наличие в textView WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES;
     // Если нашли, то добавим им кликабельность
-    if (Linkify.addLinks(textView, Linkify.ALL)) {
-        textView.movementMethod = ComponentManager.obtainComponent(ChatComponent::class.java).customMovementMethod()
-        textView.isFocusable = false
+    (ComponentManager.componentsMap.get(ChatComponent::class.java) as? ChatComponent)?.let {
+        textView.movementMethod = it.customMovementMethod()
     }
+    textView.isFocusable = false
 }
 
 @BindingAdapter("backgroundColor")
 fun setViewBackgroundColor(view: View, backgroundColor: Int) =
-    view.setBackgroundColor(0xFF000000.toInt() or backgroundColor)
+        view.setBackgroundColor(0xFF000000.toInt() or backgroundColor)
 
 @BindingAdapter("glideFitCenter")
 fun setImageByGlideWithFitCenter(view: ImageView, res: String) =
-    Glide.with(view.context.applicationContext).load(res).fitCenter().into(view)
+        Glide.with(view.context.applicationContext).load(res).fitCenter().into(view)
 

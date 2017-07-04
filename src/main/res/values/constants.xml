@@ -39,6 +39,8 @@
     <!--show keyboard in chat, when screen height more than this value-->
     <integer name="min_screen_height_chat_fragment">479</integer>
 
+    <fraction name="promo_express_messages_aspect_ration">150%</fraction>
+
     <!-- intent-filters configuration -->
     <string name="default_sheme" translatable="false">topface</string>
     <string name="offerwall_host" translatable="false">offerwall</string>
