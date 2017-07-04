@@ -1,10 +1,11 @@
 package com.topface.topface.ui.views.image_switcher
 
+import android.databinding.ObservableBoolean
+import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import android.view.View
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.topface.topface.App
 import com.topface.topface.state.EventBus
-import javax.inject.Inject
 
 /**
  * VM для картинки альбома
@@ -17,5 +18,7 @@ class AlbumImageViewModel {
     }
     val isProgressVisible = ObservableInt()
 
+    val preloadedDrawable = ObservableField<GlideDrawable>()
+    val isCropTopEnabled = ObservableBoolean(App.get().options.cropAndGalleryEnabled)
     fun onClick() = mEventBus.setData(ImageClick())
 }

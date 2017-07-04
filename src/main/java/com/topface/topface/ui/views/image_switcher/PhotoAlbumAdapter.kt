@@ -81,7 +81,7 @@ class PhotoAlbumAdapter(private val mRequest: DrawableRequestBuilder<String>, pr
                             override fun onResourceReady(resource: GlideDrawable?, glideAnimation: GlideAnimation<in GlideDrawable>?) {
                                 resource?.let {
                                     viewModel.isProgressVisible.set(View.GONE)
-                                    binding.image.setImageDrawable(it)
+                                    viewModel.preloadedDrawable.set(it)
                                 }
                             }
 
