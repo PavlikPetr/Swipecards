@@ -22,52 +22,51 @@ class BannerInjector : IBannerInjector {
         mPage = container
         mBannerName = bannerName
         mCurrentAdsProvider = provider
-        showAd(container, provider)
+        showAd(provider)
     }
 
-    override fun cleanUp() {
-        mPage?.let {
-            cleanUp(it)
-        }
-    }
+    override fun cleanUp() =
+            mPage?.let { page ->
+                page.getContainerForAd()?.let {
+                    mCurrentAdsProvider?.clean(page)
+                    unbindDrawables(it)
+                    it.removeAllViews()
+                }
+            } ?: Unit
 
-    private fun showAd(page: IBannerAds, provider: IAdsProvider) = showAd(page, provider, false)
 
-    private fun showAd(page: IBannerAds, provider: IAdsProvider?, isFallbackAd: Boolean) {
-        provider?.let {
-            val injectInitiated = it.injectBanner(page,
-                    object : IAdsProvider.IAdProviderCallbacks {
-                        override fun onAdLoadSuccess(adView: View) {}
+    private fun showAd(provider: IAdsProvider) = showAd(provider, false)
 
-                        override fun onFailedToLoadAd(codeError: Int?) {
-                            AdStatistics.sendBannerFailedToLoad(mBannerName, codeError)
-                            cleanUp(page)
-                            if (!isFallbackAd) {
-                                injectGag(page)
+    private fun showAd(provider: IAdsProvider?, isFallbackAd: Boolean) {
+        provider?.let { provider ->
+            mPage?.let {
+                val injectInitiated = provider.injectBanner(it,
+                        object : IAdsProvider.IAdProviderCallbacks {
+                            override fun onAdLoadSuccess(adView: View) {}
+
+                            override fun onFailedToLoadAd(codeError: Int?) {
+                                AdStatistics.sendBannerFailedToLoad(mBannerName, codeError)
+                                cleanUp()
+                                if (!isFallbackAd) {
+                                    injectGag()
+                                }
                             }
-                        }
 
-                        override fun onAdClick() = AdStatistics.sendBannerClicked(mBannerName)
+                            override fun onAdClick() = AdStatistics.sendBannerClicked(mBannerName)
 
-                        override fun onAdShow() = AdStatistics.sendBannerShown(mBannerName)
-                    })
-            if (!injectInitiated && !isFallbackAd) {
-                injectGag(page)
+                            override fun onAdShow() = AdStatistics.sendBannerShown(mBannerName)
+                        })
+                if (!injectInitiated && !isFallbackAd) {
+                    injectGag()
+                }
             }
         }
     }
 
-    private fun injectGag(page: IBannerAds) {
+    private fun injectGag() {
         mCurrentAdsProvider = mProvidersFactory.createProvider(App.get().options.fallbackTypeBanner)
-        showAd(page, mCurrentAdsProvider, true)
+        showAd(mCurrentAdsProvider, true)
     }
-
-    private fun cleanUp(page: IBannerAds) =
-            page.getContainerForAd()?.let {
-                mCurrentAdsProvider?.clean(page)
-                unbindDrawables(it)
-                it.removeAllViews()
-            }
 
     private fun unbindDrawables(view: View?) {
         view?.background?.callback = null

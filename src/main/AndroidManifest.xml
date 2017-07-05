@@ -187,31 +187,31 @@
             android:theme="@style/FullyTranslucent"/>
         <!-- Активити попапа восхищения -->
         <activity
-                android:name=".ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:theme="@style/AdmirationPurchasePopupStyle">
+            android:name=".ui.fragments.dating.admiration_purchase_popup.AdmirationPurchasePopupActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/AdmirationPurchasePopupStyle">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
 
         <activity
-                android:name=".ui.AddToPhotoBlogActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.AddToPhotoBlogActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.add_to_photo_blog.AddToPhotoBlogRedesignActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.InviteVkFriendsActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.InviteVkFriendsActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
@@ -232,9 +232,9 @@
             android:name=".ui.edit.EditContainerActivity"
             android:theme="@style/Theme.Topface.Light"/>
         <activity
-                android:name=".ui.settings.SettingsContainerActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:theme="@style/Theme.Topface">
+            android:name=".ui.settings.SettingsContainerActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/Theme.Topface">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
@@ -248,10 +248,10 @@
         <activity android:name=".ui.BlackListActivity"/>
         <activity android:name=".ui.bonus.BonusActivity"/>
         <activity
-                android:name=".ui.ChatActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:theme="@style/Theme.Topface.Chat"
-                android:windowSoftInputMode="stateAlwaysHidden">
+            android:name=".ui.ChatActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/Theme.Topface.Chat"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
@@ -268,87 +268,80 @@
         </activity>
 
         <activity
-                android:name=".ui.UserProfileActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:theme="@style/NoWindowAnimation"
-                android:windowSoftInputMode="stateAlwaysHidden">
+            android:name=".ui.UserProfileActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/NoWindowAnimation"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.OwnProfileActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:theme="@style/NoWindowAnimation">
+            android:name=".ui.OwnProfileActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/NoWindowAnimation">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.OwnGiftsActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:theme="@style/Theme.Topface.Gifts">
+            android:name=".ui.OwnGiftsActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:theme="@style/Theme.Topface.Gifts">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.ComplainsActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.ComplainsActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.EditorBannersActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.EditorProfileActionsActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.EditorProfileActionsActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.RegistrationActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.RegistrationActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:windowSoftInputMode="stateHidden|adjustResize">
+            android:name=".ui.PasswordRecoverActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.PasswordRecoverActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:windowSoftInputMode="stateHidden|adjustResize">
+            android:name=".ui.PurchasesActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
         <activity
-                android:name=".ui.PurchasesActivity"
-                android:parentActivityName=".ui.NavigationActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NavigationActivity"/>
-        </activity>
-        <activity
-                android:name=".ui.ComplainsMessageActivity"
-                android:parentActivityName=".ui.ComplainsActivity"
-                android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+            android:name=".ui.ComplainsMessageActivity"
+            android:parentActivityName=".ui.ComplainsActivity"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.ComplainsActivity"/>
         </activity>
         <activity android:name=".ui.PaymentwallActivity"/>
         <activity
-                android:name="ru.ok.android.sdk.OkAuthActivity"
-                android:configChanges="orientation"
-                android:launchMode="singleTask">
+            android:name="ru.ok.android.sdk.OkAuthActivity"
+            android:configChanges="orientation"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -364,22 +357,22 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".ui.SMSInviteActivity"
-                android:parentActivityName=".ui.NavigationActivity">
+            android:name=".ui.SMSInviteActivity"
+            android:parentActivityName=".ui.NavigationActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.NavigationActivity"/>
         </activity>
 
         <activity
-                android:name="com.topface.billing.ninja.NinjaAddCardActivity"
-                android:parentActivityName=".ui.NavigationActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/NinjaTheme"
-                android:windowSoftInputMode="adjustResize">
+            android:name="com.topface.billing.ninja.NinjaAddCardActivity"
+            android:parentActivityName=".ui.NavigationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NinjaTheme"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".ui.NavigationActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.NavigationActivity"/>
         </activity>
 
         <!-- ADS -->
@@ -407,8 +400,8 @@
             android:parentActivityName=".ui.PurchasesActivity"/>
 
         <receiver
-                android:name=".receivers.TestNotificationsReceiver"
-                tools:ignore="ExportedReceiver">
+            android:name=".receivers.TestNotificationsReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.actions.NOTIFY"/>
                 <action android:name="com.topface.topface.actions.TEST_NETWORK_ERRORS_ON"/>
@@ -420,8 +413,8 @@
         <!-- Amazon In-App Purchasing -->
         <!-- suppress AndroidDomInspection -->
         <receiver
-                android:name="com.amazon.inapp.purchasing.ResponseReceiver"
-                tools:ignore="ExportedReceiver">
+            android:name="com.amazon.inapp.purchasing.ResponseReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action
                     android:name="com.amazon.inapp.purchasing.NOTIFY"
@@ -429,9 +422,9 @@
             </intent-filter>
         </receiver>
         <receiver
-                android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
@@ -439,9 +432,9 @@
 
         <!-- Topface install referrer receiver -->
         <receiver
-                android:name=".receivers.InstallReferrerReceiver"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name=".receivers.InstallReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
@@ -449,43 +442,43 @@
 
         <!-- AdWords -->
         <receiver
-                android:name="com.google.ads.conversiontracking.InstallReceiver"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name="com.google.ads.conversiontracking.InstallReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
         <receiver
-                android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name="com.google.android.gms.analytics.CampaignTrackingReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
         <receiver
-                android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name="com.sponsorpay.advertiser.InstallReferrerReceiver"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
         <receiver
-                android:name="com.yandex.metrica.MetricaEventHandler"
-                android:enabled="true"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name="com.yandex.metrica.MetricaEventHandler"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
         <!--kochava receiver-->
         <receiver
-                android:name="com.kochava.android.tracker.ReferralCapture"
-                android:exported="true"
-                tools:ignore="ExportedReceiver">
+            android:name="com.kochava.android.tracker.ReferralCapture"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
@@ -494,8 +487,8 @@
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService"/>
 
         <receiver
-                android:name=".receivers.NotificationClosedReceiver"
-                tools:ignore="ExportedReceiver">
+            android:name=".receivers.NotificationClosedReceiver"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.topface.topface.NOTIFICATION_CLOSED"/>
             </intent-filter>
@@ -509,9 +502,9 @@
         <!-- gcm -->
 
         <receiver
-                android:name="com.google.android.gms.gcm.GcmReceiver"
-                android:exported="true"
-                android:permission="com.google.android.c2dm.permission.SEND">
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
@@ -521,15 +514,15 @@
         </receiver>
 
         <service
-                android:name=".utils.gcmutils.GcmListenerService"
-                android:exported="false">
+            android:name=".utils.gcmutils.GcmListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
             </intent-filter>
         </service>
         <service
-                android:name=".utils.gcmutils.InstanceIDListenerService"
-                android:exported="false">
+            android:name=".utils.gcmutils.InstanceIDListenerService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID"/>
             </intent-filter>
@@ -542,179 +535,265 @@
         <!-- все это нужно выпилить, быстро, решительно! -->
         <!-- НАЧАЛО ТУТ -->
 
-        <receiver android:name="com.appodeal.ads.AppodealPackageAddedReceiver" android:exported="true" android:enabled="true">
+        <receiver
+            android:name="com.appodeal.ads.AppodealPackageAddedReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <data android:scheme="package" />
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
-        <activity android:name="com.appodeal.ads.TestActivity"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.appodeal.ads.InterstitialActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.appodeal.ads.VideoActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.appodeal.ads.LoaderActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.appodeal.ads.VideoPlayerActivity"
-                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
 
-        <activity android:name="com.chartboost.sdk.CBImpressionActivity" android:excludeFromRecents="true"
-                  android:hardwareAccelerated="true" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
-                  android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.appodeal.ads.TestActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.appodeal.ads.InterstitialActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.appodeal.ads.VideoActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.appodeal.ads.LoaderActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+        <activity
+            android:name="com.appodeal.ads.VideoPlayerActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
 
-        <activity android:name="com.applovin.adview.AppLovinInterstitialActivity"
-                  android:configChanges="orientation|screenSize"
-                  android:theme="@android:style/Theme.Translucent" />
-        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity" />
+        <activity
+            android:name="com.chartboost.sdk.CBImpressionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
 
+        <activity
+            android:name="com.applovin.adview.AppLovinInterstitialActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent"/>
+        <activity android:name="com.applovin.adview.AppLovinConfirmationActivity"/>
 
-        <activity android:name="com.mopub.mobileads.MoPubActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:theme="@android:style/Theme.Translucent" />
-        <activity android:name="com.mopub.common.MoPubBrowser"
-                  android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="com.mopub.mobileads.MraidActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.mopub.mobileads.MoPubActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent"/>
+        <activity
+            android:name="com.mopub.common.MoPubBrowser"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name="com.mopub.mobileads.MraidActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name="com.mopub.mobileads.MraidVideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
-        <activity android:name="org.nexage.sourcekit.vast.activity.VASTActivity"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="org.nexage.sourcekit.vast.activity.VASTActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
-        <activity android:name="org.nexage.sourcekit.vast.activity.VPAIDActivity"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="org.nexage.sourcekit.vast.activity.VPAIDActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
-        <activity android:name="com.appodeal.ads.networks.vpaid.VPAIDActivity"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.appodeal.ads.networks.vpaid.VPAIDActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
-        <activity android:name="com.amazon.device.ads.AdActivity" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name="com.amazon.device.ads.AdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
-        <activity android:name="com.my.target.ads.MyTargetActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-                  android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.my.target.ads.MyTargetActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:hardwareAccelerated="true"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.facebook.ads.InterstitialAdActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.facebook.ads.InterstitialAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.facebook.ads.AudienceNetworkActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.facebook.ads.AudienceNetworkActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.startapp.android.publish.list3d.List3DActivity"
-                  android:theme="@android:style/Theme" />
+        <activity
+            android:name="com.startapp.android.publish.list3d.List3DActivity"
+            android:theme="@android:style/Theme"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.startapp.android.publish.OverlayActivity"
-                  android:theme="@android:style/Theme.Translucent"
-                  android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.startapp.android.publish.OverlayActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.startapp.android.publish.FullScreenActivity"
-                  android:theme="@android:style/Theme"
-                  android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity
+            android:name="com.startapp.android.publish.FullScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme"/>
 
-        <service android:name="com.yandex.metrica.MetricaService" android:enabled="true"
-                 android:exported="true" android:process=":Metrica">
+        <service
+            android:name="com.yandex.metrica.MetricaService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":Metrica">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
-                <action android:name="com.yandex.metrica.IMetricaService" />
-                <data android:scheme="metrica" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="com.yandex.metrica.IMetricaService"/>
+                <data android:scheme="metrica"/>
             </intent-filter>
-            <meta-data android:name="metrica:api:level" android:value="52" />
+            <meta-data
+                android:name="metrica:api:level"
+                android:value="52"/>
         </service>
-        <receiver android:name="com.yandex.metrica.MetricaEventHandler"
-                  android:enabled="true" android:exported="true">
+        <receiver
+            android:name="com.yandex.metrica.MetricaEventHandler"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.yandex.mobile.ads.AdActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
+            android:name="com.yandex.mobile.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
-        <activity android:name="com.unity3d.ads.adunit.AdUnitActivity"
-                  android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:hardwareAccelerated="true" />
-        <activity android:name="com.unity3d.ads.adunit.AdUnitSoftwareActivity"
-                  android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:hardwareAccelerated="false" />
-        <activity android:name="com.unity3d.ads2.adunit.AdUnitActivity"
-                  android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:hardwareAccelerated="true" />
-        <activity android:name="com.unity3d.ads2.adunit.AdUnitSoftwareActivity"
-                  android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:hardwareAccelerated="false" />
-
-        <!--suppress AndroidDomInspection -->
-        <activity android:name="com.jirbo.adcolony.AdColonyOverlay"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-        <!--suppress AndroidDomInspection -->
-        <activity android:name="com.jirbo.adcolony.AdColonyFullscreen"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-        <!--suppress AndroidDomInspection -->
-        <activity android:name="com.jirbo.adcolony.AdColonyBrowser"
-                  android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+        <activity
+            android:name="com.unity3d.ads.adunit.AdUnitActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity
+            android:name="com.unity3d.ads.adunit.AdUnitSoftwareActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:hardwareAccelerated="false"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity
+            android:name="com.unity3d.ads2.adunit.AdUnitActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity
+            android:name="com.unity3d.ads2.adunit.AdUnitSoftwareActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+            android:hardwareAccelerated="false"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.vungle.publisher.VideoFullScreenAdActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity
+            android:name="com.jirbo.adcolony.AdColonyOverlay"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.vungle.publisher.MraidFullScreenAdActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+        <activity
+            android:name="com.jirbo.adcolony.AdColonyFullscreen"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.jirbo.adcolony.AdColonyBrowser"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <activity
+            android:name="com.vungle.publisher.VideoFullScreenAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.vungle.publisher.MraidFullScreenAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.tapjoy.TJAdUnitActivity" android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:hardwareAccelerated="true" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-        <!--suppress AndroidDomInspection -->
-        <activity android:name="com.tapjoy.mraid.view.ActionHandler" android:configChanges="orientation|keyboardHidden|screenSize" />
-        <!--suppress AndroidDomInspection -->
-        <activity android:name="com.tapjoy.mraid.view.Browser" android:configChanges="orientation|keyboardHidden|screenSize" />
-        <!--suppress AndroidDomInspection -->
-        <activity android:name="com.tapjoy.TJContentActivity" android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar" android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.supersonicads.sdk.controller.ControllerActivity" android:configChanges="orientation|screenSize"
-                  android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.tapjoy.TJAdUnitActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.supersonicads.sdk.controller.InterstitialActivity" android:configChanges="orientation|screenSize"
-                  android:hardwareAccelerated="true" android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.tapjoy.mraid.view.ActionHandler"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.supersonicads.sdk.controller.OpenUrlActivity" android:configChanges="orientation|screenSize"
-                  android:hardwareAccelerated="true" android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.tapjoy.mraid.view.Browser"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.tapjoy.TJContentActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
 
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.adcolony.sdk.AdColonyInterstitialActivity" android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.supersonicads.sdk.controller.ControllerActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"/>
         <!--suppress AndroidDomInspection -->
-        <activity android:name="com.adcolony.sdk.AdColonyAdViewActivity" android:configChanges="keyboardHidden|orientation|screenSize"
-                  android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.supersonicads.sdk.controller.InterstitialActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent"/>
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.supersonicads.sdk.controller.OpenUrlActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.Translucent"/>
 
-        <activity android:name="com.inmobi.rendering.InMobiAdActivity" android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
-                  android:hardwareAccelerated="true" android:resizeableActivity="false" android:theme="@android:style/Theme.NoTitleBar" />
-        <receiver android:name="com.inmobi.commons.core.utilities.uid.ImIdShareBroadCastReceiver" android:enabled="true" android:exported="true">
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.adcolony.sdk.AdColonyInterstitialActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true"/>
+        <!--suppress AndroidDomInspection -->
+        <activity
+            android:name="com.adcolony.sdk.AdColonyAdViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true"/>
+
+        <activity
+            android:name="com.inmobi.rendering.InMobiAdActivity"
+            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:resizeableActivity="false"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <receiver
+            android:name="com.inmobi.commons.core.utilities.uid.ImIdShareBroadCastReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.inmobi.share.id"/>
             </intent-filter>
         </receiver>
 
-        <meta-data android:name="presage_key" android:value="000000"/>
+        <meta-data
+            android:name="presage_key"
+            android:value="000000"/>
         <service android:name="io.presage.services.PresageServiceImp"/>
-        <activity android:name="io.presage.activities.PresageActivity"
-                  android:configChanges="keyboard|keyboardHidden|orientation|screenSize" android:hardwareAccelerated="true">
+        <activity
+            android:name="io.presage.activities.PresageActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated="true">
             <intent-filter>
-                <action android:name="io.presage.intent.action.LAUNCH_WEBVIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="io.presage.intent.action.LAUNCH_WEBVIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <receiver android:name="io.presage.receivers.BootReceiver">
@@ -730,19 +809,17 @@
         <activity
             android:name="com.ironsource.sdk.controller.ControllerActivity"
             android:configChanges="orientation|screenSize"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true"/>
         <activity
             android:name="com.ironsource.sdk.controller.InterstitialActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent"/>
         <activity
             android:name="com.ironsource.sdk.controller.OpenUrlActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
-            android:theme="@android:style/Theme.Translucent" />
+            android:theme="@android:style/Theme.Translucent"/>
         <!--IronSrc END-->
-
     </application>
-
 </manifest>
