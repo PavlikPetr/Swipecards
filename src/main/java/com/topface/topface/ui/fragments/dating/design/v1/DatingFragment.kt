@@ -13,6 +13,7 @@ import com.topface.topface.R
 import com.topface.topface.data.search.CachableSearchList
 import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingReredesignBinding
+import com.topface.topface.experiments.CropTopDatingPhotoExperiment
 import com.topface.topface.ui.fragments.BaseFragment
 import com.topface.topface.ui.fragments.dating.IEmptySearchVisibility
 import com.topface.topface.ui.fragments.feed.feed_api.FeedApi
@@ -22,7 +23,6 @@ import com.topface.topface.utils.IActivityDelegate
 import com.topface.topface.utils.IStateSaverRegistrator
 import com.topface.topface.utils.LocaleConfig
 import com.topface.topface.utils.extensions.getDrawable
-import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.loadcontollers.AlbumLoadController
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
@@ -42,7 +42,7 @@ class DatingFragment : BaseFragment(), IEmptySearchVisibility {
         DatingFragmentViewModel(context, mNavigator, mApi, this, mController, mUserSearchList) {
             with(mBinding.albumRoot) {
                 mLoadBackgroundSubscription.safeUnsubscribe()
-                mLoadBackgroundSubscription = loadBackground(it)
+                mLoadBackgroundSubscription = CropTopDatingPhotoExperiment.getLoadBackgroundObservable(this, it)
                         .retry(2)
                         .applySchedulers()
                         .subscribe(shortSubscription {

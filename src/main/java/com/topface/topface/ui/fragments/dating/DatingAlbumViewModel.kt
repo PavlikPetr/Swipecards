@@ -288,6 +288,8 @@ class DatingAlbumViewModel(private val mContext: Context, private val mApi: Feed
     }
 
     fun onShowProgress() {
+        //TODO НИЖЕ ГОВНО ПОПРАВЬ ПАРЯ
+        // похоже это приводит к нескольким исключениям в логах, но мы не падаем
         albumDefaultBackground.set(R.drawable.bg_blur.getDrawable())
     }
 
