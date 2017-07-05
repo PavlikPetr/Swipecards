@@ -51,7 +51,7 @@ buildscript {
         kotlin_version = '1.1.2'
         anko_version = '0.9'
         permissionsdispatcher_version = '2.2.0'
-        flurry_version = '6.5.0'
+        flurry_version = '6.6.0'
         dagger = '2.8'
         leakcanary = '1.4'
         hockeyAppReleaseAppId = '817b00ae731c4a663272b4c4e53e4b61'
@@ -504,10 +504,11 @@ dependencies {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
     }
-    compile("com.ampiri.sdk:ampiri-sdk-mediation-unityads:$ampiri") {
-        exclude group: 'com.google.android.gms'
-        exclude group: 'javax.inject'
-    }
+//    Временно отключаю до решения конфликта с версией unity_ads в appodeal
+//    compile("com.ampiri.sdk:ampiri-sdk-mediation-unityads:$ampiri") {
+//        exclude group: 'com.google.android.gms'
+//        exclude group: 'javax.inject'
+//    }
     compile("com.ampiri.sdk:ampiri-sdk-mediation-applovin:$ampiri") {
         exclude group: 'com.google.android.gms'
         exclude group: 'javax.inject'
@@ -556,6 +557,10 @@ dependencies {
 
     // ironsrc sdk
     compile 'com.ironsource.sdk:mediationsdk:6.6.1@jar'
+
+    /*APPODEAL start*/
+    compile 'com.squareup.picasso:picasso:2.5.2' //for Inmobi
+    /*APPODEAL end*/
 }
 
 task processorTask(type: Exec) {

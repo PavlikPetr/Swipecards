@@ -109,7 +109,6 @@ class DialogsFragment : BaseFragment(), IBannerAds {
         super.onDetach()
         activity.unregisterLifeCycleDelegate(mAdapter.components.values)
         activity.unregisterLifeCycleDelegate(mViewModel)
-        activity.unregisterLifeCycleDelegate(mBannersController)
     }
 
     override fun onDestroyView() {
@@ -124,6 +123,8 @@ class DialogsFragment : BaseFragment(), IBannerAds {
             destroyDrawingCache()
             clearAnimation()
         }
+        mBannersController.release()
+        activity.unregisterLifeCycleDelegate(mBannersController)
         mViewModel.release()
         mAdapter.releaseComponents()
     }

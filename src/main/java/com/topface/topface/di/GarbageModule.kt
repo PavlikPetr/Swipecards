@@ -1,6 +1,7 @@
 package com.topface.topface.di
 
 import com.topface.topface.chat.SuspiciousUserCache
+import com.topface.topface.ui.external_libs.appodeal.AppodealManager
 import com.topface.topface.ui.external_libs.ironSource.IronSourceManager
 import com.topface.topface.ui.external_libs.kochava.KochavaManager
 import com.topface.topface.utils.RunningStateManager
@@ -26,4 +27,8 @@ class GarbageModule {
     @Provides
     @Singleton
     fun providesIronSourceManager() = IronSourceManager()
+
+    @Provides
+    @Singleton
+    fun providesAppodealManager() = AppodealManager()
 }
