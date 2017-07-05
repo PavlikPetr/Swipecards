@@ -1,6 +1,5 @@
 package com.topface.topface.ui.fragments.dating
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -22,8 +21,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.databinding.DatingButtonsLayoutBinding
 import com.topface.topface.databinding.FragmentDatingLayoutBinding
-import com.topface.topface.ui.GiftsActivity
-import com.topface.topface.ui.edit.EditContainerActivity
+import com.topface.topface.experiments.CropTopDatingPhotoExperiment
 import com.topface.topface.ui.fragments.ToolbarActivity
 import com.topface.topface.ui.fragments.dating.admiration_purchase_popup.IStartAdmirationPurchasePopup
 import com.topface.topface.ui.fragments.dating.form.gift.GiftListItemComponent
@@ -36,7 +34,6 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.utils.*
 import com.topface.topface.utils.extensions.getDrawable
-import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
 import com.topface.topface.utils.rx.shortSubscription
@@ -78,11 +75,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutBinding, Dating
         DatingAlbumViewModel(context, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
             with(mCollapseBinding.albumRoot) {
                 mLoadBackgroundSubscription.safeUnsubscribe()
-                mLoadBackgroundSubscription = loadBackground(it)
+                mLoadBackgroundSubscription = CropTopDatingPhotoExperiment.getLoadBackgroundObservable(this, it)
                         .retry(2)
                         .applySchedulers()
                         .subscribe(shortSubscription {
-                            android.graphics.drawable.TransitionDrawable(kotlin.arrayOf((background as? TransitionDrawable)
+                            TransitionDrawable(kotlin.arrayOf((background as? TransitionDrawable)
                                     ?.getDrawable(1) ?: com.topface.topface.R.drawable.bg_blur.getDrawable() ?: it, it)).apply {
                                 if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                                     @Suppress("DEPRECATION")

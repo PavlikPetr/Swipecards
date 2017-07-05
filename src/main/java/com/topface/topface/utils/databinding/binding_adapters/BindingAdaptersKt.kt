@@ -1,12 +1,14 @@
 package com.topface.topface.utils.databinding.binding_adapters
 
 import android.databinding.BindingAdapter
+import android.graphics.Matrix
+import android.graphics.PointF
 import android.text.Html
-import android.text.util.Linkify
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.GlideDrawable
 import com.topface.topface.di.ComponentManager
 import com.topface.topface.di.chat.ChatComponent
 
@@ -33,3 +35,29 @@ fun setViewBackgroundColor(view: View, backgroundColor: Int) =
 fun setImageByGlideWithFitCenter(view: ImageView, res: String) =
         Glide.with(view.context.applicationContext).load(res).fitCenter().into(view)
 
+@BindingAdapter(value = *arrayOf("glidePreloadedSrc", "isCropTopEnabled"), requireAll = false)
+fun setPreloadedGlideImageWithCrop(view: ImageView, resource: GlideDrawable?, isCropTopEnabled: Boolean = false) = resource?.let {
+
+    fun getCropTopMatrix(dest: PointF, source: PointF) = Matrix().apply {
+        val scale: Float
+        var dx = 0f
+        if (source.x * dest.y > dest.x * source.y) {
+            scale = dest.y / source.y
+            dx = (dest.x - source.x * scale) * 0.5f
+        } else {
+            scale = dest.x / source.x
+        }
+
+        setScale(scale, scale)
+        postTranslate((dx + 0.5f).toInt().toFloat(), 0f)
+    }
+
+    view.post {
+        if (isCropTopEnabled) {
+            view.imageMatrix = getCropTopMatrix(PointF(view.measuredWidth.toFloat(), view.measuredHeight.toFloat())
+                    , PointF(it.minimumWidth.toFloat(), it.minimumHeight.toFloat()))
+            view.scaleType = ImageView.ScaleType.MATRIX
+        }
+        view.setImageDrawable(it)
+    }
+}

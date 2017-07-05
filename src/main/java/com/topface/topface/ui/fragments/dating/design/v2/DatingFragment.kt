@@ -22,6 +22,7 @@ import com.topface.topface.data.search.SearchUser
 import com.topface.topface.databinding.DatingAlbumLayoutBinding
 import com.topface.topface.databinding.DatingButtonsLayoutV2Binding
 import com.topface.topface.databinding.FragmentDatingV2Binding
+import com.topface.topface.experiments.CropTopDatingPhotoExperiment
 import com.topface.topface.ui.GiftsActivity
 import com.topface.topface.ui.edit.EditContainerActivity
 import com.topface.topface.ui.fragments.ToolbarActivity
@@ -37,9 +38,9 @@ import com.topface.topface.ui.views.toolbar.utils.ToolbarSettingsData
 import com.topface.topface.ui.views.toolbar.view_models.NavigationToolbarViewModel
 import com.topface.topface.utils.*
 import com.topface.topface.utils.extensions.getDrawable
-import com.topface.topface.utils.extensions.loadBackground
 import com.topface.topface.utils.rx.applySchedulers
 import com.topface.topface.utils.rx.safeUnsubscribe
+import com.topface.topface.utils.rx.shortSubscription
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.support.v4.dimen
 import rx.Subscription
@@ -78,11 +79,11 @@ class DatingFragment : PrimalCollapseFragment<DatingButtonsLayoutV2Binding, Dati
         DatingAlbumViewModel(context, mApi, mUserSearchList, mNavigator, mAlbumActionsListener = this) {
             with(mCollapseBinding.albumRoot) {
                 mLoadBackgroundSubscription.safeUnsubscribe()
-                mLoadBackgroundSubscription = loadBackground(it)
+                mLoadBackgroundSubscription = CropTopDatingPhotoExperiment.getLoadBackgroundObservable(this, it)
                         .retry(2)
                         .applySchedulers()
-                        .subscribe(com.topface.topface.utils.rx.shortSubscription {
-                            android.graphics.drawable.TransitionDrawable(kotlin.arrayOf((background as? TransitionDrawable)
+                        .subscribe(shortSubscription {
+                            TransitionDrawable(kotlin.arrayOf((background as? TransitionDrawable)
                                     ?.getDrawable(1) ?: com.topface.topface.R.drawable.bg_blur.getDrawable() ?: it, it)).apply {
                                 if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
                                     @Suppress("DEPRECATION")
