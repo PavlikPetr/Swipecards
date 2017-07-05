@@ -45,7 +45,6 @@ import com.topface.topface.state.DrawerLayoutState;
 import com.topface.topface.state.TopfaceAppState;
 import com.topface.topface.ui.dialogs.NotificationsDisableStartAction;
 import com.topface.topface.ui.dialogs.SetAgeDialog;
-import com.topface.topface.ui.external_libs.appodeal.AppodealManager;
 import com.topface.topface.ui.fragments.IOnBackPressed;
 import com.topface.topface.ui.fragments.MenuFragment;
 import com.topface.topface.ui.fragments.feed.feed_base.FeedNavigator;
@@ -117,8 +116,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
     DrawerLayoutState mDrawerLayoutState;
     @Inject
     WeakStorage mWeakStorage;
-    @Inject
-    AppodealManager appodealManager;
     private AtomicBoolean mBackPressedOnce = new AtomicBoolean(false);
     public static boolean isPhotoAsked;
     private CompositeSubscription mSubscription = new CompositeSubscription();
@@ -215,7 +212,6 @@ public class NavigationActivity extends ParentNavigationActivity<ViewDataBinding
         }
         initNavigationManager(savedInstanceState);
         initDrawerLayout();
-        appodealManager.initAppodeal(this);
         initFullscreen();
         initAppsFlyer();
         isPhotoAsked = false;
