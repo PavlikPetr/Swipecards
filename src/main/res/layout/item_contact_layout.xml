@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/item_list_selector"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/item_list_selector"
+              android:gravity="center_vertical"
+              android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/contact_photo"
         style="@style/ListAvatar"
         android:layout_marginRight="10dp"
-        android:background="@drawable/rect_avatar_male" />
+        android:background="@drawable/rect_avatar_male"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -25,14 +25,14 @@
             style="@style/ContactsListName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Mr. Smith" />
+            tools:text="Mr. Smith"/>
 
         <TextView
             android:id="@+id/contact_content"
             style="@style/ListMessageText.InviteContact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="+79876543210" />
+            tools:text="+79876543210"/>
     </LinearLayout>
 
     <FrameLayout
@@ -45,8 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:plc="sms_invite_in_progress"
-            android:gravity="center" />
+            android:gravity="center"
+            android:visibility="gone"
+            app:plc="sms_invite_in_progress"/>
 
         <Button
             android:id="@+id/contact_invite_button"
@@ -55,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:singleLine="false" />
+            android:singleLine="false"/>
 
         <TextView
             android:id="@+id/contact_invited_text"
@@ -64,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:singleLine="false" />
+            android:singleLine="false"/>
     </FrameLayout>
 
 </LinearLayout>

@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 app:plc="new_feed_fragment_base_loader"
-                android:visibility="@{viewModel.isFeedProgressBarVisible}"/>
+                android:visibility="@{viewModel.isFeedProgressBarVisible, default = gone}"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/refresh"

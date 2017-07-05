@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:visibility="@{handler.progressVisibility}"
+                android:visibility="@{handler.progressVisibility, default = gone}"
                 app:plc="buy_button_waiting_loader" />
         </RelativeLayout>
     </RelativeLayout>

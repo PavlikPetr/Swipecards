@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="@{viewModel.isFeedProgressBarVisible}"
+            android:visibility="@{viewModel.isFeedProgressBarVisible, default = gone}"
             app:plc="fragment_feed_base_loader"
             documentation:info="следует разделить по типам фидов"/>
 

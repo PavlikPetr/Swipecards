@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="@{handler.progressVisibility}"
+            android:visibility="@{handler.progressVisibility, default = gone}"
             app:plc="ok_profile_main_loader" />
     </RelativeLayout>
 </layout>
